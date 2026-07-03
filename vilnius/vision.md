@@ -73,14 +73,15 @@ The meetup's differentiator from Berlin and other mature markets is **"we are bu
 
 **Concrete Actions**:
 
-1. **Set a regular cadence: Every 6–8 weeks** (vs. ad-hoc now)
-   - Manageable for organizers; enough frequency to build habit for attendees
-   - 6 events/year = credible signal of commitment
+1. **Set a sustainable cadence: Every 4 months** (3 events/year)
+   - Realistic for volunteer organizers in an emerging market
+   - Still frequent enough to build habit and continuity for attendees
+   - 3 events/year = predictable rhythm without burnout risk
 
-2. **Expand geographically: Alternate venues or invite Riga/Tallinn speakers**
-   - Host some events in Vilnius (dbt Labs will support), some in Riga or as virtual hybrid
-   - Framing: "Baltic dbt Meetup" already implies multi-country scope — lean into it
-   - Reach Riga's tech community (Latvian startups, Airbnb-era companies) early, before they build competing groups
+2. **Expand geographically (longer-term): Test Riga/Tallinn after establishing Vilnius rhythm**
+   - Focus on Vilnius through 2026 to build momentum and a stable core
+   - 2027+: Once the 3–4 annual Vilnius event cadence is established, consider Riga satellite or hybrid events
+   - Framing: "Baltic dbt Meetup" already implies multi-country scope — but prove the model locally first
 
 3. **Recruit founders & early-stage data leaders as speakers**
    - Not just established companies like Vinted/Surfshark, but also Series A/B startups at the inflection point
@@ -136,10 +137,11 @@ The meetup's differentiator from Berlin and other mature markets is **"we are bu
 - Q4 2026: Consider a Riga satellite event or virtual hybrid to test regional reach
 - Long-term: Rotate venues to Riga, Tallinn annually (once infrastructure exists)
 
-**Recruitment**:
+**Recruitment** (every 4 months):
 - Target speakers from companies at 50–500 headcount inflection point (building their first AE team or scaling)
 - Invite 1–2 "primer" talks per event (newcomer-focused; dbt fundamentals, career paths, "what is analytics engineering anyway")
 - Leverage local dbt Labs connection for occasional speaker support (but keep it peer-led; avoid over-dependence on dbt Labs talks)
+- Plan speaker recruitment ~6–8 weeks before each event to give them ample notice
 
 **Marketing**:
 - Meetup.com (existing group; already at meetup.com/vilnius-dbt-meetup)
@@ -165,17 +167,18 @@ The meetup's role is to accelerate that maturation — be the venue where the re
 
 ## Next Actions
 
-1. **Lock in a regular cadence** (monthly or every 6 weeks) and publish a tentative calendar through end of 2026
+1. **Lock in a sustainable cadence** (every 4 months; ~3 events/year) and publish a tentative calendar through end of 2026
+   - Suggested timing: May/June, Sept/Oct, Nov/Dec (spreads events, avoids summer/holiday slumps)
 
-2. **Recruit speakers for the next 3 events** — mix of TeraSky/Vinted/Kilo Health (established voices) + emerging scale-ups (founders, early-stage data leaders)
+2. **Recruit speakers for the next 2–3 events** — mix of TeraSky/Vinted/Kilo Health (established voices) + emerging scale-ups (founders, early-stage data leaders)
 
-3. **Plan a Big Data Conference Europe 2026 partnership** — pitch a dbt/AE track or session to conference organizers; drive conference attendees to the regular meetup
+3. **Plan a Big Data Conference Europe 2026 partnership** — pitch a dbt/AE track or session to conference organizers (Nov 24–27); drive conference attendees to the regular meetup
 
-4. **Explore Riga satellite event or hybrid** — test interest in bringing Baltics practitioners together beyond Vilnius
+4. **Set up Slack infrastructure** — create #local-baltic channel in dbt Community Slack for async discussion between events
 
-5. **Set up Slack infrastructure** — create #local-baltic channel in dbt Community Slack for async discussion between events
+5. **Reach out to Baltics tech communities** (startup associations, universities, incubators) to spread awareness of the meetup as an entry point for data professionals new to analytics engineering
 
-6. **Reach out to Baltics tech communities** (startup associations, universities, incubators) to spread awareness of the meetup as an entry point for data professionals new to analytics engineering
+6. **Revisit geographic expansion in 2027** — once Vilnius 4-month rhythm is proven, explore Riga satellite or hybrid events
 
 ---
 
