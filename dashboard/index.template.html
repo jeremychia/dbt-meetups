@@ -1,0 +1,794 @@
+<title>dbt Meetup Community Dashboard</title>
+<style>
+  .viz-root {
+    --surface-1:      #fcfcfb;
+    --surface-2:      #f4f3f0;
+    --border:         #e4e2dc;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #6b6a63;
+    --series-1: #2a78d6; /* dbt engineering practices */
+    --series-2: #1baf7a; /* dbt product */
+    --series-3: #eda100; /* platform & architecture */
+    --series-4: #008300; /* data quality & governance */
+    --series-5: #4a3aa7; /* orchestration & delivery */
+    --series-6: #e34948; /* people & organization */
+    --series-7: #e87ba4; /* analytics & bi */
+    --series-8: #eb6834; /* emerging & trends */
+    --accent-highlight: #2a78d6;
+    --map-land: #d8d6cf;
+    --map-ocean: #eef0f4;
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      --surface-1:      #171716;
+      --surface-2:      #201f1d;
+      --border:         #34322e;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #8f8d84;
+      --series-1: #3987e5;
+      --series-2: #199e70;
+      --series-3: #c98500;
+      --series-4: #008300;
+      --series-5: #9085e9;
+      --series-6: #e66767;
+      --series-7: #d55181;
+      --series-8: #d95926;
+      --map-land: #3a3936;
+      --map-ocean: #121211;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    --surface-1:      #171716;
+    --surface-2:      #201f1d;
+    --border:         #34322e;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #8f8d84;
+    --series-1: #3987e5;
+    --series-2: #199e70;
+    --series-3: #c98500;
+    --series-4: #008300;
+    --series-5: #9085e9;
+    --series-6: #e66767;
+    --series-7: #d55181;
+    --series-8: #d95926;
+    --map-land: #3a3936;
+    --map-ocean: #121211;
+  }
+  :root[data-theme="light"] .viz-root {
+    --surface-1:      #fcfcfb;
+    --surface-2:      #f4f3f0;
+    --border:         #e4e2dc;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #6b6a63;
+    --series-1: #2a78d6;
+    --series-2: #1baf7a;
+    --series-3: #eda100;
+    --series-4: #008300;
+    --series-5: #4a3aa7;
+    --series-6: #e34948;
+    --series-7: #e87ba4;
+    --series-8: #eb6834;
+    --map-land: #d8d6cf;
+    --map-ocean: #eef0f4;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .viz-root {
+    background: var(--surface-1);
+    color: var(--text-primary);
+    color-scheme: light dark;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 32px 20px 80px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  header.page-head { margin-bottom: 28px; }
+  header.page-head h1 { font-size: 26px; margin: 0 0 6px; font-weight: 700; }
+  header.page-head p { margin: 0; color: var(--text-secondary); font-size: 14.5px; max-width: 720px; line-height: 1.5; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stat-tile {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .stat-tile .stat-value { font-size: 26px; font-weight: 700; line-height: 1.1; }
+  .stat-tile .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  section { margin-bottom: 36px; }
+  section h2 {
+    font-size: 16px; font-weight: 700; margin: 0 0 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  section .section-sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; max-width: 780px; line-height: 1.5; }
+
+  .card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* category bar (part-to-whole, ordered horizontal bars per skill guidance over donut) */
+  .cat-bar-row { display: flex; align-items: center; gap: 10px; margin: 9px 0; }
+  .cat-bar-label { width: 190px; flex-shrink: 0; font-size: 13px; color: var(--text-primary); text-align: right; }
+  .cat-bar-track { flex: 1; background: var(--surface-1); border-radius: 4px; height: 18px; position: relative; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 4px; }
+  .cat-bar-value { width: 80px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+  /* chapter comparison table */
+  table.cmp {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    color: var(--text-primary); color-scheme: light dark;
+  }
+  table.cmp th {
+    text-align: left; font-weight: 600; color: var(--text-secondary);
+    font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 6px 10px; border-bottom: 1px solid var(--border);
+    cursor: pointer; user-select: none; white-space: nowrap;
+  }
+  table.cmp th:hover { color: var(--text-primary); }
+  table.cmp th.sorted::after { content: " \25BC"; font-size: 9px; }
+  table.cmp th.sorted.asc::after { content: " \25B2"; }
+  table.cmp td {
+    padding: 7px 10px; border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  table.cmp tbody tr:hover { background: var(--surface-1); }
+  table.cmp tbody tr.highlight-row { background: color-mix(in srgb, var(--accent-highlight) 12%, transparent); }
+  table.cmp tbody tr.highlight-row td:first-child { font-weight: 700; }
+  .mini-bar-cell { display: flex; align-items: center; gap: 6px; }
+  .mini-bar-track { width: 70px; height: 8px; background: var(--surface-1); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+  .mini-bar-fill { height: 100%; background: var(--series-1); border-radius: 3px; }
+  .chip {
+    display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 999px;
+    background: var(--surface-1); border: 1px solid var(--border); color: var(--text-secondary);
+  }
+  .badge-mine {
+    display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px;
+    background: #1c5cab; color: white; margin-left: 6px; vertical-align: middle;
+  }
+
+  .search-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+  input.search-input {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 12px; font-size: 13px; color: var(--text-primary); flex: 1; min-width: 200px;
+  }
+  select.chapter-select {
+    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 12px; font-size: 13px; color: var(--text-primary);
+  }
+
+  /* growth line chart */
+  .line-chart-wrap { position: relative; }
+  .line-chart-tooltip {
+    position: absolute; display: none; pointer-events: none; background: var(--surface-1);
+    border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15); z-index: 10; white-space: nowrap; color: var(--text-primary);
+  }
+  .line-chart-axis-label { font-size: 10.5px; fill: var(--text-secondary); }
+  .line-chart-gridline { stroke: var(--border); stroke-width: 1; }
+
+  /* speaker list */
+  .speaker-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .speaker-row:last-child { border-bottom: none; }
+  .speaker-name { font-weight: 600; }
+  .speaker-chapters { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+  .speaker-count { font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: 12.5px; white-space: nowrap; }
+
+  /* event history drill-down */
+  .event-row {
+    border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .event-row:last-child { border-bottom: none; }
+  .event-row-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 4px; cursor: pointer;
+  }
+  .event-row-head:hover { background: var(--surface-1); }
+  .event-row-head .event-title { font-weight: 600; }
+  .event-row-head .event-meta { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+  .event-row-head .event-caret { color: var(--text-muted); font-size: 11px; transition: transform 0.15s; flex-shrink: 0; margin-left: 8px; }
+  .event-row.expanded .event-caret { transform: rotate(90deg); }
+  .event-row-body { display: none; padding: 4px 4px 14px 4px; }
+  .event-row.expanded .event-row-body { display: block; }
+  .event-talk { padding: 8px 12px; background: var(--surface-1); border-radius: 8px; margin-top: 6px; }
+  .event-talk .talk-title { font-weight: 600; font-size: 13px; }
+  .event-talk .talk-speaker { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+  .event-talk .talk-topics { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .event-link { color: var(--series-1); font-size: 12px; text-decoration: none; }
+  .event-link:hover { text-decoration: underline; }
+
+  .legend-row { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px; font-size: 12px; color: var(--text-secondary); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  .table-toggle {
+    font-size: 12px; color: var(--text-secondary); background: none; border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 10px; cursor: pointer; margin-left: auto;
+  }
+  .table-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+  .hidden { display: none !important; }
+
+  .footnote { font-size: 11.5px; color: var(--text-muted); margin-top: 24px; line-height: 1.6; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+</style>
+
+<div class="viz-root">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>dbt Meetup Community Dashboard</h1>
+      <p>Cross-chapter view of 478 events and 978 talks across 73 dbt Meetup chapters (2019–2026), built for meetup organisers to benchmark chapter health, spot topic trends, and find speakers worth inviting. Pick your chapter below to compare it against the wider community.</p>
+    </header>
+
+    <div class="stat-row" id="stat-row"></div>
+
+    <section>
+      <div class="flex-between">
+        <div>
+          <h2>What the community is talking about</h2>
+          <p class="section-sub">All 978 talks rolled up into 8 top-level categories (each talk counted once, by its primary topic). Use this to spot gaps in your own chapter's agenda vs. what peers are covering community-wide.</p>
+        </div>
+      </div>
+      <div class="card" id="category-bar-card"></div>
+    </section>
+
+    <section>
+      <div class="flex-between">
+        <h2>Growth over time</h2>
+        <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
+      </div>
+      <p class="section-sub" id="growth-sub">Events per year across all chapters — the community has grown roughly 15x since 2019, with 2023–2025 as the busiest years. Select a chapter above to overlay its own trend.</p>
+      <div class="card">
+        <div class="line-chart-wrap">
+          <svg id="growth-chart" viewBox="0 0 900 260" style="width:100%; height:auto; display:block;"></svg>
+          <div class="line-chart-tooltip" id="growth-tooltip"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="flex-between">
+        <h2>Where the community meets</h2>
+        <div class="legend-row" id="map-legend" style="margin-top:0;"></div>
+      </div>
+      <p class="section-sub">Every chapter plotted by location; marker size and color intensity both scale with total events held (a density heatmap over the map). Hover a marker for chapter stats.</p>
+      <div class="card">
+        <div style="position:relative;">
+          <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block;"></svg>
+          <div id="map-tooltip" style="position:absolute; display:none; pointer-events:none; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12.5px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:10; white-space:nowrap;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="flex-between">
+        <h2>Chapter comparison</h2>
+        <select class="chapter-select" id="my-chapter-select">
+          <option value="">Select your chapter…</option>
+        </select>
+      </div>
+      <p class="section-sub">Every active chapter, sortable by any column. Click a header to sort; click a row (or use the dropdown) to see that chapter's topic mix below and pin it to the top of the table.</p>
+      <div class="card">
+        <div class="search-row">
+          <input class="search-input" id="chapter-search" placeholder="Search chapters…" />
+          <button class="table-toggle" id="toggle-dormant">Show dormant chapters</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="cmp" id="chapter-table">
+            <thead><tr>
+              <th data-key="slug">Chapter</th>
+              <th data-key="total_events">Events</th>
+              <th data-key="total_talks">Talks</th>
+              <th data-key="avg_talks_per_event">Talks/Event</th>
+              <th data-key="avg_attendees">Avg Attendees</th>
+              <th data-key="unique_speakers">Unique Speakers</th>
+              <th data-key="last_event_date">Last Event</th>
+            </tr></thead>
+            <tbody id="chapter-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="chapter-detail-title">Chapter detail</h2>
+      <p class="section-sub" id="chapter-detail-sub"></p>
+      <div class="two-col">
+        <div class="card">
+          <div class="flex-between"><strong style="font-size:13px;">Topic mix</strong></div>
+          <div id="chapter-topic-bars" style="margin-top:10px;"></div>
+        </div>
+        <div class="card">
+          <div class="flex-between"><strong style="font-size:13px;">At a glance</strong></div>
+          <div id="chapter-glance" style="margin-top:10px; font-size:13px; line-height:2;"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <div class="flex-between"><strong style="font-size:13px;">Event history</strong></div>
+        <p class="section-sub" style="margin:4px 0 12px;">Click an event to see its talks and speakers.</p>
+        <div id="chapter-events-list"></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Speakers who travel the circuit</h2>
+      <p class="section-sub">Speakers who have presented at more than one chapter (name-deduplicated for typos/diacritics — see <code>speaker-identities.json</code>). Useful as a shortlist when you're short a speaker: someone who has already spoken at 3+ chapters knows the format and is likely open to another invite.</p>
+      <div class="card" id="speaker-list"></div>
+    </section>
+
+    <div class="footnote">
+      Generated 2026-07-05 from <code>analysis/dbt-meetups/enriched/*.json</code> and <code>speaker-identities.json</code>. Topic categories per <code>past-meetups.md</code> §"topic categories". 5 chapters (Bangalore, Cluj, Detroit, Perth, Salt Lake City) have no recorded events yet and are excluded from rankings by default — toggle "Show dormant chapters" to include them.
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = __DATA_JSON__;
+const WORLD_PATH = "__WORLD_PATH__";
+
+const CATEGORY_ORDER = [
+  ['dbt engineering practices', 'var(--series-1)'],
+  ['dbt product', 'var(--series-2)'],
+  ['platform & architecture', 'var(--series-3)'],
+  ['data quality & governance', 'var(--series-4)'],
+  ['orchestration & delivery', 'var(--series-5)'],
+  ['people & organization', 'var(--series-6)'],
+  ['analytics & bi', 'var(--series-7)'],
+  ['emerging & trends', 'var(--series-8)'],
+];
+
+let selectedChapter = null;
+let showDormant = false;
+let sortKey = 'total_events';
+let sortAsc = false;
+
+function fmt(n) { return n === null || n === undefined ? '—' : n.toLocaleString(); }
+function titleCase(slug) {
+  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+function chapterName(slug) {
+  const c = DATA.chapters[slug];
+  return (c && c.display_name) ? c.display_name : titleCase(slug);
+}
+
+function renderStatRow() {
+  const s = DATA.summary;
+  const tiles = [
+    ['Chapters', fmt(s.total_chapters)],
+    ['Events', fmt(s.total_events)],
+    ['Talks', fmt(s.total_talks)],
+    ['Unique speakers', fmt(s.total_unique_speakers)],
+    ['In-person events', fmt(s.format_split['in-person']) + ` (${Math.round(100*s.format_split['in-person']/s.total_events)}%)`],
+    ['Date range', s.date_range[0] + ' → ' + s.date_range[1]],
+  ];
+  document.getElementById('stat-row').innerHTML = tiles.map(([label, val]) => `
+    <div class="stat-tile">
+      <div class="stat-value">${val}</div>
+      <div class="stat-label">${label}</div>
+    </div>
+  `).join('');
+}
+
+function renderCategoryBar() {
+  const total = DATA.category_distribution.reduce((a, [,c]) => a + c, 0);
+  const max = Math.max(...DATA.category_distribution.map(([,c]) => c));
+  const colorMap = Object.fromEntries(CATEGORY_ORDER);
+  let html = '';
+  // ranked by value for the bar chart; each category's color slot (CATEGORY_ORDER) stays fixed regardless of rank
+  const byOrder = CATEGORY_ORDER.map(([name]) => {
+    const found = DATA.category_distribution.find(([n]) => n === name);
+    return [name, found ? found[1] : 0];
+  }).sort((a,b) => b[1]-a[1]);
+
+  byOrder.forEach(([name, count]) => {
+    const pct = Math.round(100 * count / total);
+    const width = Math.round(100 * count / max);
+    html += `
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">${name}</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${width}%; background:${colorMap[name]};"></div></div>
+        <div class="cat-bar-value">${count} talks (${pct}%)</div>
+      </div>`;
+  });
+  document.getElementById('category-bar-card').innerHTML = html;
+}
+
+function renderGrowthChart() {
+  const svg = document.getElementById('growth-chart');
+  const tooltip = document.getElementById('growth-tooltip');
+  const years = Object.keys(DATA.yearly_event_counts).sort();
+
+  const communitySeries = years.map(y => DATA.yearly_event_counts[y] || 0);
+  let chapterSeries = null;
+  let chapterLabel = null;
+  if (selectedChapter && DATA.chapters[selectedChapter]) {
+    const c = DATA.chapters[selectedChapter];
+    chapterSeries = years.map(y => c.yearly_events[y] || 0);
+    chapterLabel = chapterName(selectedChapter);
+  }
+
+  const W = 900, H = 260;
+  const padL = 36, padR = 16, padT = 16, padB = 28;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  const maxVal = Math.max(1, ...communitySeries, ...(chapterSeries || [0]));
+  const niceMax = Math.ceil(maxVal / 10) * 10 || maxVal;
+
+  function xFor(i) { return padL + (i / (years.length - 1 || 1)) * plotW; }
+  function yFor(v) { return padT + plotH - (v / niceMax) * plotH; }
+
+  function pathFor(series) {
+    return series.map((v, i) => `${i === 0 ? 'M' : 'L'}${xFor(i).toFixed(1)},${yFor(v).toFixed(1)}`).join(' ');
+  }
+
+  // gridlines + y-axis labels (4 steps)
+  let gridHtml = '';
+  const steps = 4;
+  for (let s = 0; s <= steps; s++) {
+    const v = Math.round((niceMax / steps) * s);
+    const y = yFor(v);
+    gridHtml += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" class="line-chart-gridline"></line>`;
+    gridHtml += `<text x="${padL - 8}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="line-chart-axis-label">${v}</text>`;
+  }
+
+  let xLabelsHtml = '';
+  years.forEach((y, i) => {
+    xLabelsHtml += `<text x="${xFor(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="line-chart-axis-label">${y}</text>`;
+  });
+
+  const communityPath = pathFor(communitySeries);
+  const communityMarkers = communitySeries.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3.5" fill="var(--series-1)" class="growth-point" data-idx="${i}" data-series="community"></circle>`).join('');
+
+  let chapterHtml = '';
+  if (chapterSeries) {
+    const chapterPath = pathFor(chapterSeries);
+    chapterHtml = `
+      <path d="${chapterPath}" fill="none" stroke="var(--series-6)" stroke-width="2" stroke-linejoin="round"></path>
+      ${chapterSeries.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3.5" fill="var(--series-6)" class="growth-point" data-idx="${i}" data-series="chapter"></circle>`).join('')}
+    `;
+  }
+
+  svg.innerHTML = `
+    ${gridHtml}
+    <path d="${communityPath}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"></path>
+    ${communityMarkers}
+    ${chapterHtml}
+    ${xLabelsHtml}
+    <line id="growth-crosshair" x1="0" y1="${padT}" x2="0" y2="${H - padB}" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3,3" style="display:none;"></line>
+  `;
+
+  const crosshair = document.getElementById('growth-crosshair');
+  const hitAreas = years.map((y, i) => {
+    const x0 = i === 0 ? padL : (xFor(i - 1) + xFor(i)) / 2;
+    const x1 = i === years.length - 1 ? W - padR : (xFor(i) + xFor(i + 1)) / 2;
+    return { i, y, x0, x1 };
+  });
+
+  svg.querySelectorAll('.growth-point').forEach(el => { el.style.pointerEvents = 'none'; });
+
+  const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  hitAreas.forEach(({ i, y, x0, x1 }) => {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', x0.toFixed(1));
+    rect.setAttribute('y', padT);
+    rect.setAttribute('width', (x1 - x0).toFixed(1));
+    rect.setAttribute('height', plotH);
+    rect.setAttribute('fill', 'transparent');
+    rect.style.cursor = 'crosshair';
+    rect.addEventListener('mouseenter', () => {
+      crosshair.style.display = 'block';
+      crosshair.setAttribute('x1', xFor(i).toFixed(1));
+      crosshair.setAttribute('x2', xFor(i).toFixed(1));
+      const communityV = communitySeries[i];
+      const chapterV = chapterSeries ? chapterSeries[i] : null;
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `<strong>${y}</strong><br>All chapters: ${communityV} events${chapterV !== null ? `<br>${chapterLabel}: ${chapterV} events` : ''}`;
+      const rectBox = svg.getBoundingClientRect();
+      const px = (xFor(i) / W) * rectBox.width;
+      tooltip.style.left = Math.min(px + 10, rectBox.width - 160) + 'px';
+      tooltip.style.top = '10px';
+    });
+    rect.addEventListener('mouseleave', () => {
+      crosshair.style.display = 'none';
+      tooltip.style.display = 'none';
+    });
+    overlay.appendChild(rect);
+  });
+  svg.appendChild(overlay);
+
+  document.getElementById('growth-legend').innerHTML = `
+    <div class="legend-item"><span class="legend-swatch" style="background:var(--series-1);"></span>All chapters</div>
+    ${chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--series-6);"></span>${chapterLabel}</div>` : ''}
+  `;
+}
+
+// sequential blue ramp, light -> dark, per dataviz skill palette (one hue for magnitude)
+const SEQUENTIAL_RAMP = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#1c5cab', '#104281'];
+
+function projectLonLat(lon, lat) {
+  const x = (lon + 180) / 360 * 960;
+  const y = (90 - lat) / 180 * 500;
+  return [x, y];
+}
+
+function renderMap() {
+  const svg = document.getElementById('world-map');
+  const chapters = Object.values(DATA.chapters).filter(c => c.total_events > 0);
+  const maxEvents = Math.max(...chapters.map(c => c.total_events));
+
+  function rampColor(count) {
+    const t = count / maxEvents;
+    const idx = Math.min(SEQUENTIAL_RAMP.length - 1, Math.floor(t * SEQUENTIAL_RAMP.length));
+    return SEQUENTIAL_RAMP[idx];
+  }
+  function markerRadius(count) {
+    const t = count / maxEvents;
+    return 4 + Math.sqrt(t) * 12;
+  }
+
+  const tooltip = document.getElementById('map-tooltip');
+  const wrapEl = svg.parentElement;
+
+  let markersHtml = '';
+  chapters.forEach(c => {
+    const [x, y] = projectLonLat(c.lon, c.lat);
+    const r = markerRadius(c.total_events);
+    const color = rampColor(c.total_events);
+    markersHtml += `
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}"
+        fill="${color}" fill-opacity="0.82" stroke="var(--surface-1)" stroke-width="1.5"
+        class="chapter-marker" data-slug="${c.slug}" style="cursor:pointer;"></circle>`;
+  });
+
+  svg.innerHTML = `
+    <rect x="0" y="0" width="960" height="500" fill="var(--map-ocean)"></rect>
+    <path d="${WORLD_PATH}" fill="var(--map-land)" stroke="var(--border)" stroke-width="0.6" fill-rule="evenodd"></path>
+    ${markersHtml}
+  `;
+
+  svg.querySelectorAll('.chapter-marker').forEach(el => {
+    const slug = el.dataset.slug;
+    const c = DATA.chapters[slug];
+    el.addEventListener('mouseenter', (e) => {
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `<strong>${chapterName(c.slug)}</strong><br>${c.city}, ${c.country}<br>${c.total_events} events · ${c.total_talks} talks · avg ${fmt(c.avg_attendees)} attendees`;
+      const rect = wrapEl.getBoundingClientRect();
+      const cx = (parseFloat(el.getAttribute('cx')) / 960) * rect.width;
+      const cy = (parseFloat(el.getAttribute('cy')) / 500) * rect.height;
+      tooltip.style.left = Math.min(cx + 12, rect.width - 200) + 'px';
+      tooltip.style.top = Math.max(cy - 40, 0) + 'px';
+    });
+    el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    el.addEventListener('click', () => {
+      selectedChapter = slug;
+      document.getElementById('my-chapter-select').value = slug;
+      renderChapterTable();
+      renderChapterDetail();
+      renderGrowthChart();
+    });
+  });
+
+  const legendSteps = [
+    [Math.round(maxEvents * 0.15), SEQUENTIAL_RAMP[1]],
+    [Math.round(maxEvents * 0.5), SEQUENTIAL_RAMP[3]],
+    [maxEvents, SEQUENTIAL_RAMP[5]],
+  ];
+  document.getElementById('map-legend').innerHTML = legendSteps.map(([v, color]) => `
+    <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>~${v} events</div>
+  `).join('');
+}
+
+function activeChapters() {
+  return Object.values(DATA.chapters).filter(c => showDormant || c.total_events > 0);
+}
+
+function populateChapterSelect() {
+  const sel = document.getElementById('my-chapter-select');
+  const chapters = Object.values(DATA.chapters).filter(c => c.total_events > 0)
+    .sort((a,b) => chapterName(a.slug).localeCompare(chapterName(b.slug)));
+  sel.innerHTML = '<option value="">Select your chapter…</option>' + chapters.map(c =>
+    `<option value="${c.slug}" ${c.slug === selectedChapter ? 'selected' : ''}>${chapterName(c.slug)}</option>`
+  ).join('');
+  sel.addEventListener('change', () => {
+    selectedChapter = sel.value || null;
+    renderChapterTable();
+    renderChapterDetail();
+    renderGrowthChart();
+  });
+}
+
+function renderChapterTable() {
+  const searchVal = (document.getElementById('chapter-search').value || '').toLowerCase();
+  let rows = activeChapters().filter(c => c.slug.toLowerCase().includes(searchVal) || chapterName(c.slug).toLowerCase().includes(searchVal));
+
+  rows.sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (sortKey === 'slug' || sortKey === 'last_event_date') {
+      av = av || ''; bv = bv || '';
+      return sortAsc ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+    }
+    av = av || 0; bv = bv || 0;
+    return sortAsc ? av - bv : bv - av;
+  });
+
+  // pin selected chapter to top
+  const pinned = rows.find(c => c.slug === selectedChapter);
+  rows = rows.filter(c => c.slug !== selectedChapter);
+  if (pinned) rows.unshift(pinned);
+
+  const maxAttendees = Math.max(...activeChapters().map(c => c.avg_attendees || 0));
+
+  document.getElementById('chapter-tbody').innerHTML = rows.map(c => {
+    const isMine = c.slug === selectedChapter;
+    const barWidth = c.avg_attendees ? Math.round(100 * c.avg_attendees / maxAttendees) : 0;
+    return `
+      <tr class="${isMine ? 'highlight-row' : ''}" data-slug="${c.slug}" style="cursor:pointer;">
+        <td>${chapterName(c.slug)}${isMine ? '<span class="badge-mine">selected</span>' : ''}</td>
+        <td>${fmt(c.total_events)}</td>
+        <td>${fmt(c.total_talks)}</td>
+        <td>${c.avg_talks_per_event}</td>
+        <td><div class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${barWidth}%;"></div></div>${fmt(c.avg_attendees)}</div></td>
+        <td>${fmt(c.unique_speakers)}</td>
+        <td>${c.last_event_date || '—'}</td>
+      </tr>`;
+  }).join('');
+
+  document.querySelectorAll('#chapter-tbody tr').forEach(tr => {
+    tr.addEventListener('click', () => {
+      selectedChapter = tr.dataset.slug;
+      document.getElementById('my-chapter-select').value = selectedChapter;
+      renderChapterTable();
+      renderChapterDetail();
+      renderGrowthChart();
+    });
+  });
+
+  document.querySelectorAll('table.cmp th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.key === sortKey);
+    th.classList.toggle('asc', th.dataset.key === sortKey && sortAsc);
+  });
+}
+
+function renderChapterDetail() {
+  const c = selectedChapter ? DATA.chapters[selectedChapter] : null;
+  if (!c) {
+    document.getElementById('chapter-detail-title').textContent = 'Chapter detail';
+    document.getElementById('chapter-detail-sub').textContent = 'Select a chapter above or click any row in the comparison table to see its topic mix and stats here.';
+    document.getElementById('chapter-topic-bars').innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No chapter selected.</div>';
+    document.getElementById('chapter-glance').innerHTML = '';
+    document.getElementById('chapter-events-list').innerHTML = '';
+    return;
+  }
+  document.getElementById('chapter-detail-title').textContent = `Chapter detail — ${chapterName(c.slug)}`;
+  document.getElementById('chapter-detail-sub').textContent =
+    c.total_events > 0
+      ? `Active from ${c.first_event_date} to ${c.last_event_date}. ${c.online_events} online / ${c.in_person_events} in-person events.`
+      : 'No events recorded yet for this chapter.';
+
+  const colorMap = Object.fromEntries(CATEGORY_ORDER);
+  const maxCat = c.top_categories.length ? Math.max(...c.top_categories.map(([,v]) => v)) : 1;
+  document.getElementById('chapter-topic-bars').innerHTML = c.top_categories.length
+    ? c.top_categories.map(([name, count]) => {
+        const width = Math.round(100 * count / maxCat);
+        return `
+          <div class="cat-bar-row">
+            <div class="cat-bar-label">${name}</div>
+            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${width}%; background:${colorMap[name] || 'var(--series-1)'};"></div></div>
+            <div class="cat-bar-value">${count}</div>
+          </div>`;
+      }).join('')
+    : '<div style="color:var(--text-secondary); font-size:13px;">No talks recorded.</div>';
+
+  document.getElementById('chapter-glance').innerHTML = `
+    <div>Total events: <strong>${fmt(c.total_events)}</strong></div>
+    <div>Total talks: <strong>${fmt(c.total_talks)}</strong></div>
+    <div>Avg talks/event: <strong>${c.avg_talks_per_event}</strong></div>
+    <div>Avg attendees: <strong>${fmt(c.avg_attendees)}</strong></div>
+    <div>Max attendees (single event): <strong>${fmt(c.max_attendees)}</strong></div>
+    <div>Unique speakers: <strong>${fmt(c.unique_speakers)}</strong></div>
+    <div>Top single topic: <strong>${c.top_topics.length ? c.top_topics[0][0] : '—'}</strong></div>
+  `;
+
+  renderChapterEventsList(c);
+}
+
+function renderChapterEventsList(c) {
+  const events = c.events_detail || [];
+  const container = document.getElementById('chapter-events-list');
+  if (!events.length) {
+    container.innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No events recorded.</div>';
+    return;
+  }
+  container.innerHTML = events.map((ev, idx) => {
+    const talksHtml = (ev.talks || []).map(t => `
+      <div class="event-talk">
+        <div class="talk-title">${t.title || 'Untitled talk'}</div>
+        ${t.speaker ? `<div class="talk-speaker">${t.speaker}</div>` : ''}
+        <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${topic}</span>`).join('')}</div>
+      </div>
+    `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px; padding:6px 0;">No talk details recorded for this event.</div>';
+
+    return `
+      <div class="event-row" data-idx="${idx}">
+        <div class="event-row-head">
+          <div>
+            <div class="event-title">${ev.event_name || ev.date || 'Untitled event'}</div>
+            <div class="event-meta">${ev.date || '—'} · ${ev.location || 'Unknown location'} · ${ev.attendees != null ? ev.attendees + ' attendees' : 'attendance unknown'} · ${(ev.talks || []).length} talk${(ev.talks||[]).length === 1 ? '' : 's'}</div>
+          </div>
+          <div class="event-caret">▶</div>
+        </div>
+        <div class="event-row-body">
+          ${talksHtml}
+          ${ev.event_url ? `<a class="event-link" href="${ev.event_url}" target="_blank" rel="noopener">View on Meetup.com →</a>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  container.querySelectorAll('.event-row-head').forEach(head => {
+    head.addEventListener('click', () => {
+      head.parentElement.classList.toggle('expanded');
+    });
+  });
+}
+
+function renderSpeakerList() {
+  const speakers = DATA.repeat_speakers.slice(0, 20);
+  document.getElementById('speaker-list').innerHTML = speakers.map(sp => `
+    <div class="speaker-row">
+      <div>
+        <div class="speaker-name">${sp.name}</div>
+        <div class="speaker-chapters">${sp.chapters.map(chapterName).join(', ')}</div>
+      </div>
+      <div class="speaker-count">${sp.chapter_count} chapters · ${sp.talk_count} talks</div>
+    </div>
+  `).join('');
+}
+
+function attachSortHandlers() {
+  document.querySelectorAll('table.cmp th').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.key;
+      if (sortKey === key) { sortAsc = !sortAsc; }
+      else { sortKey = key; sortAsc = false; }
+      renderChapterTable();
+    });
+  });
+}
+
+document.getElementById('chapter-search').addEventListener('input', renderChapterTable);
+document.getElementById('toggle-dormant').addEventListener('click', (e) => {
+  showDormant = !showDormant;
+  e.target.textContent = showDormant ? 'Hide dormant chapters' : 'Show dormant chapters';
+  renderChapterTable();
+});
+
+renderStatRow();
+renderCategoryBar();
+renderGrowthChart();
+renderMap();
+populateChapterSelect();
+attachSortHandlers();
+renderChapterTable();
+renderChapterDetail();
+renderSpeakerList();
+</script>

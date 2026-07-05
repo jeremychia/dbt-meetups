@@ -66,15 +66,66 @@ After initial data extraction, enrich each talk with:
 
 **Step 6: Zero-shot topic classification**
 - For each talk, classify topics covered using data-related terminology
-- Include 2-4 relevant topics per talk from this vocabulary:
-  - **Data modeling**: data modeling, model design, incremental models, dbt fundamentals
-  - **Data quality & testing**: data testing, data quality, testing best practices, dbt tests
-  - **Analytics engineering**: analytics engineering, team management, junior engineer training, project structure
-  - **Modern data stack**: modern data stack, data stack architecture, dbt ecosystem, computational notebooks
-  - **Organizational**: dbt migration, organizational adoption, change management, team operations
-  - **Technical**: CI/CD pipeline, data orchestration, scalability, performance optimization
-  - **Tools & ecosystem**: tool comparison, dbt API, dbt cloud, dbt core, visualization tools
-  - **Domain-specific**: marketing analytics, e-commerce, real-world implementation, case studies
+- Assign 1-3 relevant topics per talk from this standardized vocabulary only (do not invent new topic strings):
+  - `dbt best practices`
+  - `dbt fundamentals`
+  - `dbt product features` (dbt Core, Cloud, Fusion, Python models — which part of the product)
+  - `dbt product updates`
+  - `dbt migration & adoption`
+  - `data modeling`
+  - `data quality & testing`
+  - `data governance`
+  - `data mesh`
+  - `data engineering`
+  - `analytics engineering`
+  - `business intelligence`
+  - `semantic layer`
+  - `orchestration & ci/cd`
+  - `performance & scale`
+  - `modern data stack`
+  - `tools & ecosystem`
+  - `developer workflow`
+  - `project structure`
+  - `genai & llm`
+  - `team & org design`
+  - `career development`
+  - `community`
+  - `industry trends`
+  - `domain-specific use cases`
+  - `data warehouse & platforms` (Snowflake, BigQuery, Databricks, DuckDB, other cloud platforms — which vendor)
+
+Notes:
+- This list was derived 2026-07-05 by clustering ~195 raw topic strings found across `analysis/dbt-meetups/enriched/*.json`, first down to 35 standardized topics, then condensed further to 26 by merging umbrella pairs that didn't lose discriminating power: `data quality`+`data testing`; `dbt core`/`dbt cloud`/`dbt fusion`/`dbt python models` (all "which part of dbt"); `snowflake`/`bigquery`/`databricks`/`duckdb`/`cloud platforms` (all "which vendor"); `ci/cd`+`orchestration` (both "how work gets run/deployed"). See `git log` for the consolidation commits.
+- `case studies` / `case study` / `real-world implementation` / `real-world application` were deliberately dropped as topic tags — almost every talk is some form of case study, so the tag wasn't discriminating. Talks that only had a case-study tag were re-tagged with their actual subject matter instead.
+- When a new talk's true topic isn't covered by this vocabulary, propose a new standardized topic to the user for approval before adding it, rather than free-texting a one-off tag.
+
+## topic categories (roll-up for high-level reporting, e.g. donut charts)
+
+The 26 topics above are the source of truth stored in each talk's `topics` array in `enriched/*.json` — do not replace them. For high-level reporting (e.g. a donut chart with readable slice counts), roll each topic up into one of these 8 categories via lookup; do not persist the category onto the talk records themselves.
+
+| Category | Topics included |
+|---|---|
+| `dbt engineering practices` | dbt best practices, dbt fundamentals, data modeling, developer workflow, project structure |
+| `data quality & governance` | data quality & testing, data governance |
+| `platform & architecture` | modern data stack, data warehouse & platforms, data engineering, performance & scale, data mesh |
+| `orchestration & delivery` | orchestration & ci/cd, semantic layer, tools & ecosystem |
+| `dbt product` | dbt product features, dbt product updates, dbt migration & adoption |
+| `analytics & bi` | analytics engineering, business intelligence, domain-specific use cases |
+| `people & organization` | team & org design, career development, community |
+| `emerging & trends` | genai & llm, industry trends |
+
+Notes:
+- A talk can have multiple topics spanning multiple categories. For a single-category-per-talk view (e.g. donut chart slice counts), use the talk's **first-listed topic** in its `topics` array as the primary category — topics are ordered by relevance from the enrichment step (Step 6).
+- Derived 2026-07-05. Verified against all 73 enriched files: primary-category distribution across 978 talks ranges 6%-21% per category (no single category dominates or is negligible), suitable for an 8-slice donut chart.
+
+## speaker identity resolution
+
+`speaker_name` in the enriched files is raw/as-scraped and not deduplicated across chapters — the same person can appear with slightly different spellings (typos, missing diacritics, capitalization). `analysis/dbt-meetups/speaker-identities.json` (generated 2026-07-05, via fuzzy matching with rapidfuzz on single-speaker name strings, cross-checked against `speaker_title`/company/event context) contains:
+- `canonical_merges`: confirmed name variants of the same person, with a canonical name to use for identity/attendance analysis
+- `confirmed_different_people`: near-matches (fuzzy-matched but different surname/given name) that were reviewed and confirmed to be different people, not merged
+- `repeat_speakers_across_chapters`: speakers (post-canonicalization) who have spoken at more than one chapter, useful for identifying a recurring/traveling speaker circuit
+
+This file does not modify `enriched/*.json` — apply the canonical mapping at analysis time if you need deduplicated speaker counts.
 
 ## processing notes for replication
 
