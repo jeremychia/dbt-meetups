@@ -48,6 +48,13 @@ once the change has been made, append what the action taken was in the subsectio
 
 **Action taken (follow-up):** Unique speakers tile now shows a count for the slider's window (computed client-side by splitting each talk's speaker string the same way the backend does, filtered to talks whose event date falls in the window), with all-time in the subtext. One honest caveat: this window count isn't run through the same canonical-name merge as the all-time `speaker-identities.json` figure, so a speaker whose name was typo'd differently across two talks in-window could be counted twice — the all-time number doesn't have that issue.
 
+**further comments 2**:
+- for score cards, show the period on period comparison for all
+- add explainer to say what the % changes represent
+- if i click on the scorecard, i would like it to direct me to a particular section so i can see more information about it
+
+**Action taken (follow-up):** Talks, attendees, and unique speakers now show a period-on-period % change too (previously only events and active-chapters did) — all five tiles use the same comparison logic now. Added a line next to the dataset disclaimer explaining the % is against "the equal-length period immediately before it" (e.g. last 12mo vs. the 12mo before that). Every tile is now clickable (and keyboard-focusable) and jumps to the page with more detail: Chapters and Attendees go to the Chapters page, Events stays on Overview where the growth chart lives, Talks and Unique speakers go to Talks & Speakers.
+
 ## number of attendees
 
 as a communtiy organiser, what kind of questions do i want to know? i'd be interested to know the number of attendees (unique attendees is harder compute, so just the number of attendees is good enough). is there a way you can compute and show this somewhere?
@@ -77,6 +84,9 @@ the visualisation should be a donut chart with tooltips instead of a bar chart i
 
 **Action taken (follow-up):** Section is now two columns: donut + legend on the left, definition + sample talks on the right. Clicking a slice/legend row shows the real list of topics that roll into that category (sourced directly from the `CATEGORY_MAP` lookup table used to build the data, not hand-written text, so it can't drift out of sync) plus sample talks with their descriptions and a link to the source event. Implemented the category breakdown as chips under a heading rather than literal leader-lines pointing from the donut — SVG leader-lines that stay legible across chart sizes and both themes are a lot more fragile than a definitions list, and the effect (know which topics are in which category) is the same.
 
+**further comments 2**:
+- some of the colours are too close to one another (like people and organisation, analytics & bi, etc.) i can't see the difference between them. maybe if possible you could change the colour
+
 ## growth over time
 
 the line chart is nice. maybe allow for a possibility to see the events by region? so that we can see americas, europe, africa, asia, etc. you can do the classification of cities before putting this together. it's still good to see the total.
@@ -88,6 +98,9 @@ since we're doing line charts for time comparison, it would be nice to see other
 - time which the event started (this is more for trivia for people to see)
 
 **Action taken:** Growth line chart now splits by region (Americas / Europe / Asia / Africa / Oceania / Middle East — classified from each chapter's country), with the region legend toggleable and the selected chapter still overlaid as its own line. Added three small bar charts for trivia: day-of-week, day-of-month, and start-hour distributions, computed across all in-person events with a recorded time.
+
+**further comments 2**:
+- when filtering, i see the berlin line, but the other chapters go to zero. shouldn't i be able to still the values?
 
 ## where the community meets:
 
@@ -107,6 +120,11 @@ i want you to keep the map which also reflects the proportions of the land mass 
 **Action taken (follow-up):** The growth chart and the three timing charts (day of week/month, start hour) now share one client-side pool of raw per-event records and cross-filter each other: clicking a year bar filters the three timing charts to that year; clicking a weekday/day-of-month/hour bar filters the other three charts (including growth-over-time) to that value. A "Clear filters" control appears whenever any filter is active. Timing charts gained y-axis gridlines with tick labels and styled hover tooltips (previously a bare native `title` attribute).
 
 Russia: you were right, it did still have a problem — my first fix only handled the ring-splitting at the seam but left the two fragments unclosed, and (the deeper bug) `shapely.simplify()` was running on the raw wrapped coordinates *before* the seam split even happened, so it drew a straight line connecting a point near +178° directly to one near -180°, corrupting the shape into a flat chord across the country instead of following its real Arctic coastline. Fixed by unwrapping antimeridian-crossing rings (letting longitude run past 180° instead of wrapping) before simplification, then splitting into per-seam fragments afterward. Verified by rendering Russia in isolation and diffing pixel colors across where the old tear was.
+
+**further comments 2**:
+- there seems like there is a problem with the rendering with the top though :o
+- can the bubble size scale proportionately too? i can't see the bubbles when i zoom in because they're too zoomed in the bubbles are too big
+- maybe some helpers which will zoom in to the region?
 
 ## chapters
 
@@ -129,6 +147,12 @@ for the "at a glance", it would be nice to have "cockpit" similar to the top.
 with the addresses of the events, i'm also curious to see where the events are held within a city. so it would be good if you could possibly plot these on a map. check whether each address can be plotted to a coordinate and see if there are venues (this is more on a chapter level) which get used often and more than once. and what their capacity is.
 
 **Action taken:** Added a "venues used more than once" card to chapter detail: a small map with markers sized by reuse count, plus a ranked list. Important caveat — this does **not** use real street-level geocoding. There's no geocoding API in the build pipeline (kept offline/reproducible on purpose), so each venue gets a deterministic small offset from the chapter's city center, just enough to plot distinct, stable markers and show which venues repeat — the marker positions are not their real locations within the city. Flagged this clearly in the section subtext and footnote. Capacity isn't in the enriched data (only `attendees` per event, not venue capacity), so it isn't shown; if you want it, the enrichment prompt would need to start extracting a capacity field where mentioned.
+
+**further comments 2**:
+- i can't see the placement on the map though. 
+- can you check? for singapore, i expect that open sourced is also a venue that appears more than once. is it because you did not do the geocoding?
+- for the average, don't you think there is a more suitable visualisation for this?
+- also for the "at a glance", what is the difference between the scorecards at the top?
 
 ## talks and speakers: 
 
