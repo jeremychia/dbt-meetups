@@ -78,6 +78,35 @@ for geom in geoms:
                 holes.append(ring)
         if not exterior:
             continue
+
+        # A ring whose raw longitudes span most of the globe (e.g. Russia,
+        # whose Chukotka peninsula dips just past -180 while the rest of the
+        # country sits at positive longitudes) doesn't actually span the
+        # globe - it crosses the antimeridian. Left as-is, Polygon()/simplify()
+        # would connect a point near +180 straight to one near -180 in raw
+        # coordinate space, corrupting the shape with a spurious ~360deg-wide
+        # edge. Unwrap first (extend eastward past +180 instead of wrapping
+        # to -180) so simplification operates on a topologically sane ring,
+        # then split back into left/right-of-seam pieces at emit time.
+        def unwrap_ring(ring):
+            if not ring:
+                return ring
+            out = [ring[0]]
+            for prev, cur in zip(ring, ring[1:]):
+                lon, lat = cur
+                while lon - out[-1][0] > 180:
+                    lon -= 360
+                while lon - out[-1][0] < -180:
+                    lon += 360
+                out.append((lon, lat))
+            return out
+
+        all_lons = [c[0] for c in exterior]
+        crosses_seam = max(all_lons) - min(all_lons) > 180
+        if crosses_seam:
+            exterior = unwrap_ring(exterior)
+            holes = [unwrap_ring(h) for h in holes]
+
         try:
             shp = Polygon(exterior, holes)
             if not shp.is_valid:
@@ -90,33 +119,57 @@ for geom in geoms:
             global kept_rings
             if len(coords) < 3:
                 return
-            # Split at antimeridian crossings (lon jump > 180deg between consecutive
-            # points), inserting an interpolated point exactly at +/-180 so each
-            # side of a real landmass (e.g. Russia, which spans ~170deg of
-            # longitude) is cut precisely at the seam rather than discarded by a
-            # blunt "span > 90deg" heuristic, which drops genuine wide landmasses
-            # along with true degenerate slivers.
-            segments = [[coords[0]]]
+            is_closed_ring = coords[0] == coords[-1]
+
+            # coords may now be unwrapped (lon outside [-180, 180]) if this
+            # ring crossed the seam. Cut it back into map-space fragments at
+            # each +/-180 crossing, inserting the interpolated seam point on
+            # both sides, and re-wrap each fragment's longitudes into
+            # [-180, 180] for projection.
+            fragments = [[coords[0]]]
             for prev, cur in zip(coords, coords[1:]):
-                if abs(cur[0] - prev[0]) > 180:
-                    # interpolate the crossing point at the seam on both sides
-                    edge = 180 if prev[0] > 0 else -180
-                    other_edge = -edge
-                    # linear interpolation in unwrapped space
-                    prev_unwrapped = prev[0]
-                    cur_unwrapped = cur[0] + (360 if cur[0] < 0 else -360)
-                    t = (edge - prev_unwrapped) / (cur_unwrapped - prev_unwrapped) if cur_unwrapped != prev_unwrapped else 0.5
+                # In unwrapped space, "which copy of the seam" a point falls
+                # after is floor((lon+180)/360). A ring segment crosses a
+                # +/-180 meridian whenever consecutive points land in
+                # different copies.
+                seam_n_prev = (prev[0] + 180) // 360
+                seam_n_cur = (cur[0] + 180) // 360
+                if seam_n_prev != seam_n_cur:
+                    seam_lon = max(seam_n_prev, seam_n_cur) * 360 - 180 if cur[0] > prev[0] else min(seam_n_prev, seam_n_cur) * 360 + 180
+                    t = (seam_lon - prev[0]) / (cur[0] - prev[0]) if cur[0] != prev[0] else 0.5
                     lat_at_seam = prev[1] + t * (cur[1] - prev[1])
-                    segments[-1].append((edge, lat_at_seam))
-                    segments.append([(other_edge, lat_at_seam)])
-                segments[-1].append(cur)
-            for seg in segments:
-                if len(seg) < 2:
+                    fragments[-1].append((seam_lon, lat_at_seam))
+                    fragments.append([(seam_lon, lat_at_seam)])
+                fragments[-1].append(cur)
+
+            if is_closed_ring and len(fragments) > 1:
+                # The ring's start point is arbitrary, so the first and last
+                # fragments are actually one continuous physical piece
+                # (connected through the wrap-around) - stitch them.
+                first = fragments.pop(0)
+                fragments[-1].extend(first[1:])
+
+            def rewrap(lon):
+                while lon > 180:
+                    lon -= 360
+                while lon < -180:
+                    lon += 360
+                return lon
+
+            for frag in fragments:
+                if len(frag) < 2:
                     continue
+                frag = [(rewrap(lon), lat) for lon, lat in frag]
+                on_seam = abs(frag[0][0]) == 180 and abs(frag[-1][0]) == 180
+                if on_seam and frag[0] != frag[-1] and frag[0][0] == frag[-1][0]:
+                    # Both ends sit on the same seam meridian at different
+                    # latitudes - close the polygon by running along that
+                    # meridian back to the start, or the fill renders torn.
+                    frag = frag + [frag[0]]
                 kept_rings += 1
-                pts = [project(lon, lat) for lon, lat in seg]
+                pts = [project(lon, lat) for lon, lat in frag]
                 d = f"M{pts[0][0]:.0f},{pts[0][1]:.0f} " + " ".join(f"L{x:.0f},{y:.0f}" for x, y in pts[1:])
-                if len(seg) > 2 and seg[0] == coords[0] and seg[-1] == coords[-1]:
+                if frag[0] == frag[-1]:
                     d += " Z"
                 path_parts.append(d)
 
