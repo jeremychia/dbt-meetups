@@ -1,13 +1,14 @@
-import json, glob, re, os
+import json, glob, re, os, time
 from collections import Counter, defaultdict
 from chapter_geo import CHAPTER_GEO
 from chapter_names import CHAPTER_DISPLAY_NAMES
 
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
 ANALYSIS_DIR = os.path.dirname(DASHBOARD_DIR)
-ENRICHED_DIR = os.path.join(ANALYSIS_DIR, 'enriched')
-SPEAKER_ID_FILE = os.path.join(ANALYSIS_DIR, 'speaker-identities.json')
-OUTPUT_FILE = os.path.join(DASHBOARD_DIR, 'dashboard_data.json')
+# Env overrides let the pipeline build against a copy of the data (tests).
+ENRICHED_DIR = os.environ.get('DASHBOARD_ENRICHED_DIR', os.path.join(ANALYSIS_DIR, 'enriched'))
+SPEAKER_ID_FILE = os.environ.get('DASHBOARD_SPEAKER_FILE', os.path.join(ANALYSIS_DIR, 'pipeline', 'speaker-identities.json'))
+OUTPUT_FILE = os.environ.get('DASHBOARD_OUTPUT_FILE', os.path.join(DASHBOARD_DIR, 'dashboard_data.json'))
 
 CATEGORY_MAP = {
     'dbt best practices': 'dbt engineering practices',
@@ -63,6 +64,8 @@ format_counter = Counter()  # online vs in-person
 
 for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
     fname = path.split('/')[-1]
+    if fname.startswith('_'):  # pipeline state files, not chapter data
+        continue
     slug = chapter_slug(fname)
     data = json.load(open(path))
     events = data.get('events', [])
@@ -154,10 +157,13 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
             'talks': event_talks_detail,
         })
 
-    geo = CHAPTER_GEO[slug]
+    geo = CHAPTER_GEO.get(slug)
+    if geo is None:
+        print(f'WARNING: {slug} missing from chapter_geo.py — add it (skipping map placement)')
+        geo = {'city': slug, 'country': None, 'lat': None, 'lon': None}
     chapters[slug] = {
         'slug': slug,
-        'display_name': CHAPTER_DISPLAY_NAMES[slug],
+        'display_name': CHAPTER_DISPLAY_NAMES.get(slug, slug),
         'city': geo['city'],
         'country': geo['country'],
         'lat': geo['lat'],
@@ -192,7 +198,7 @@ for name, chs in speaker_chapters.items():
 repeat_speakers.sort(key=lambda x: (-x['chapter_count'], -x['talk_count']))
 
 output = {
-    'generated': '2026-07-05',
+    'generated': time.strftime('%Y-%m-%d'),
     'summary': {
         'total_chapters': len(chapters),
         'total_events': sum(c['total_events'] for c in chapters.values()),

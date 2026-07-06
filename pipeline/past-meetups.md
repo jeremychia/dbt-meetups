@@ -120,7 +120,7 @@ Notes:
 
 ## speaker identity resolution
 
-`speaker_name` in the enriched files is raw/as-scraped and not deduplicated across chapters — the same person can appear with slightly different spellings (typos, missing diacritics, capitalization). `analysis/dbt-meetups/speaker-identities.json` (generated 2026-07-05, via fuzzy matching with rapidfuzz on single-speaker name strings, cross-checked against `speaker_title`/company/event context) contains:
+`speaker_name` in the enriched files is raw/as-scraped and not deduplicated across chapters — the same person can appear with slightly different spellings (typos, missing diacritics, capitalization). `pipeline/speaker-identities.json` (first generated 2026-07-05 via fuzzy matching with rapidfuzz on single-speaker name strings, cross-checked against `speaker_title`/company/event context; now maintained by `pipeline/update_speakers.py`) contains:
 - `canonical_merges`: confirmed name variants of the same person, with a canonical name to use for identity/attendance analysis
 - `confirmed_different_people`: near-matches (fuzzy-matched but different surname/given name) that were reviewed and confirmed to be different people, not merged
 - `repeat_speakers_across_chapters`: speakers (post-canonicalization) who have spoken at more than one chapter, useful for identifying a recurring/traveling speaker circuit
@@ -139,12 +139,19 @@ This file does not modify `enriched/*.json` — apply the canonical mapping at a
 
 **File structure for multi-chapter analysis:**
 ```
-analysis/dbt-meetups/
-├── berlin/
-│   └── events.json
-├── nyc/
-│   └── events.json
-├── sf/
-│   └── events.json
-└── past-meetups.md (this file)
+dbt-meetups/
+├── raw_events/<slug>.json        # scraped page text per chapter (pipeline step 1)
+├── enriched/<slug>.json          # structured events per chapter (pipeline step 2)
+├── enriched/_enrichment_state.json  # event_ids deliberately not enriched, with reasons
+├── pipeline/                     # executable incremental pipeline — see pipeline/README.md
+│   ├── dbt-meetup-groups.json    # the chapter list the scraper iterates
+│   ├── speaker-identities.json   # canonical merges + repeat speakers (pipeline step 3)
+│   └── past-meetups.md (this file)
+└── dashboard/                    # dashboard build (pipeline step 4)
 ```
+
+**Automation note (2026-07-06):** the manual steps above are now automated by
+`pipeline/run_pipeline.sh` — an incremental, idempotent pipeline (scrape →
+enrich via `claude -p` → speaker identities → dashboard). This file remains the
+source of truth for the schema, topic vocabulary, and enrichment rules the
+pipeline's prompt is built from (`pipeline/enrich.py`).

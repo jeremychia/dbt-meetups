@@ -1,15 +1,19 @@
 """
 One-time (or occasional) login helper. Launches a visible Chromium window
-with a persistent profile stored in .browser-profile/. Log into meetup.com
-manually in the window. The script polls until it detects a logged-in state
-(presence of an account/avatar menu), then saves the session to the profile
-directory for reuse by scrape.py.
+with a persistent profile stored in .browser-profile/ at the repo root.
+Log into meetup.com manually in the window. The script polls until it detects
+a logged-in state (presence of an account/avatar menu), then saves the session
+to the profile directory for reuse by scrape.py.
+
+Note: the scraper currently works anonymously for public groups; login is only
+needed if Meetup starts gating event pages.
 """
 import time
-from pathlib import Path
+
 from playwright.sync_api import sync_playwright
 
-PROFILE_DIR = Path(__file__).parent / ".browser-profile"
+import config
+
 TIMEOUT_SECONDS = 300
 
 def is_logged_in(page) -> bool:
@@ -23,7 +27,7 @@ def is_logged_in(page) -> bool:
 def main():
     with sync_playwright() as p:
         context = p.chromium.launch_persistent_context(
-            str(PROFILE_DIR),
+            str(config.PROFILE_DIR),
             headless=False,
         )
         page = context.new_page()
@@ -42,7 +46,7 @@ def main():
 
         time.sleep(2)
         context.close()
-        print(f"Session saved to {PROFILE_DIR}")
+        print(f"Session saved to {config.PROFILE_DIR}")
 
 if __name__ == "__main__":
     main()

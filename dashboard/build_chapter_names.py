@@ -2,7 +2,7 @@ import json, re, os
 
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
 ANALYSIS_DIR = os.path.dirname(DASHBOARD_DIR)
-GROUPS_FILE = os.path.join(ANALYSIS_DIR, 'dbt-meetup-groups.json')
+GROUPS_FILE = os.path.join(ANALYSIS_DIR, 'pipeline', 'dbt-meetup-groups.json')
 OUTPUT_FILE = os.path.join(DASHBOARD_DIR, 'chapter_names.py')
 
 def slug_from_url(url):
