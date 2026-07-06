@@ -166,6 +166,10 @@ with the addresses of the events, i'm also curious to see where the events are h
 
 **Action taken (follow-up 2):** Checked further and the name-based dedup fix above wasn't enough — Taipei has "DCard" / "Dcard office" / "Dcard" all at the identical address, just with different capitalization and an extra word across events, so what should read as one venue used ~29 times was still splitting into three separate low-count entries. Getting venue matching genuinely right needs real fuzzy-name matching per chapter (case folding, stripping generic suffixes like "office," etc.), not another quick key change, so removed the feature entirely — including its geocoding data files — rather than ship something still inaccurate. Replaced chapter detail's topic mix with two 100%-stacked bars (this chapter vs. community average) in matching category colors and order, so the comparison reads directly off segment sizes instead of a column of bars each with a "(avg X%)" aside.
 
+**further comments 4**: for topic mix, i want to see a comparison to the region mix too. can you allow tooltips to make it easier to see
+
+**Action taken (follow-up 3):** Added a third 100%-stacked bar for the chapter's region average (e.g. "Asia avg" for Singapore), sitting between the chapter's own bar and the community-wide average — same category colors and order as before, computed from a new region-scoped category breakdown. Replaced the native tooltip (the browser's built-in `title` attribute, slow to appear and unstyled) with a proper styled hover tooltip matching the rest of the dashboard, showing the exact talk count and share for whichever segment you're over; segments also brighten slightly on hover so it's clear they're interactive.
+
 ## talks and speakers: 
 
 i want to be able to do more filtering and sort by, for example, by date, sort bys, etc.
@@ -173,6 +177,12 @@ i want to be able to do more filtering and sort by, for example, by date, sort b
 for the speaker, allow me to expand to see which were teh talks that they did. if possible, if you can find their public profile (on linkedin), include a link to that as well, and state what they do. most of them are vendors so they have some interests.
 
 **Action taken:** Added a sort dropdown to talk search (newest/oldest/most attended/speaker A–Z), on top of the existing chapter filter and text search. Each speaker in "speakers who travel the circuit" is now expandable (click the row) to show their talk history with dates, chapters, and event links. **Not done:** LinkedIn profile lookup and "what they do" bios. That's a manual research task across ~45 repeat speakers, not something I can generate or guess reliably — doing it properly means actually looking each person up, and I didn't want to fabricate plausible-looking bios/links. Happy to do a real pass on this if you want it as a separate task, ideally scoped to a shortlist (e.g. speakers with 3+ chapters) rather than all 45.
+
+**further comments**:
+- please allow for filtering by topic (broad topic, and the sub topic)
+- also allow for filtering by region
+- yes, only focus on those with more than 3+ chapters
+- think of some personas when searching the talks: i'm someone who wants to reach out to look for a new speaker for example
 
 ## good visualisation principles:
 
