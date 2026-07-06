@@ -30,7 +30,7 @@ def deterministic_offset(key):
     return dx, dy
 
 
-venues = {}  # (slug, venue_str) -> {lat, lon, name}
+venues = {}  # "<slug>::<venue name>" -> {lat, lon, name, venue}
 
 for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
     fname = path.split('/')[-1]
@@ -45,11 +45,17 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
         loc = (event.get('location') or '').strip()
         if not loc or 'online' in loc.lower():
             continue
-        key = f'{slug}::{loc}'
+        # Key on venue name (before the first comma), not the full address:
+        # the same venue can appear with slightly different address strings
+        # across events (e.g. with/without a neighborhood name), and should
+        # still resolve to one consistent point.
+        venue_name = loc.split(',')[0].strip()
+        if not venue_name:
+            continue
+        key = f'{slug}::{venue_name}'
         if key in venues:
             continue
         dx, dy = deterministic_offset(key)
-        venue_name = loc.split(',')[0].strip()
         venues[key] = {
             'venue': loc,
             'name': venue_name,

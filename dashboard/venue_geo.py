@@ -2,65 +2,65 @@
 # Deterministic per-venue coordinates jittered around each chapter's
 # city center (no network geocoding). Keyed "<chapter_slug>::<venue address>".
 VENUE_GEO = {
-  "amsterdam::JetBrains Amsterdam Terrace Tower office, Gelrestraat 16, Amsterdam": {
+  "amsterdam::JetBrains Amsterdam Terrace Tower office": {
     "venue": "JetBrains Amsterdam Terrace Tower office, Gelrestraat 16, Amsterdam",
     "name": "JetBrains Amsterdam Terrace Tower office",
-    "lat": 52.38264,
-    "lon": 4.93202
+    "lat": 52.3878,
+    "lon": 4.88666
   },
-  "amsterdam::TicketSwap, Rokin 75-3, Amsterdam": {
+  "amsterdam::TicketSwap": {
     "venue": "TicketSwap, Rokin 75-3, Amsterdam",
     "name": "TicketSwap",
-    "lat": 52.34178,
-    "lon": 4.92519
+    "lat": 52.34325,
+    "lon": 4.89005
   },
-  "amsterdam::Motherduck HQ, Oostelijke Handelskade 749, Amsterdam": {
+  "amsterdam::Motherduck HQ": {
     "venue": "Motherduck HQ, Oostelijke Handelskade 749, Amsterdam",
     "name": "Motherduck HQ",
-    "lat": 52.38779,
-    "lon": 4.91815
+    "lat": 52.34552,
+    "lon": 4.93266
   },
-  "amsterdam::Snowflake Amsterdam Office, Gustav Mahlerlaan 300-314, Amsterdam": {
+  "amsterdam::Snowflake Amsterdam Office": {
     "venue": "Snowflake Amsterdam Office, Gustav Mahlerlaan 300-314, Amsterdam",
     "name": "Snowflake Amsterdam Office",
-    "lat": 52.33939,
-    "lon": 4.88721
+    "lat": 52.38108,
+    "lon": 4.88947
   },
-  "amsterdam::Werkspot, Herengracht 469, Amsterdam": {
+  "amsterdam::Werkspot": {
     "venue": "Werkspot, Herengracht 469, Amsterdam",
     "name": "Werkspot",
-    "lat": 52.362,
-    "lon": 4.91821
+    "lat": 52.37678,
+    "lon": 4.8881
   },
-  "amsterdam::Floryn, Walpoort 10, 's-Hertogenbosch": {
+  "amsterdam::Floryn": {
     "venue": "Floryn, Walpoort 10, 's-Hertogenbosch",
     "name": "Floryn",
-    "lat": 52.37723,
-    "lon": 4.912
+    "lat": 52.36681,
+    "lon": 4.89359
   },
-  "amsterdam::Nimbus Intelligence, Haaksbergweg 75, Amsterdam": {
+  "amsterdam::Nimbus Intelligence": {
     "venue": "Nimbus Intelligence, Haaksbergweg 75, Amsterdam",
     "name": "Nimbus Intelligence",
-    "lat": 52.39026,
-    "lon": 4.87487
+    "lat": 52.3966,
+    "lon": 4.92732
   },
-  "amsterdam::Miele X, Beethovenstraat 517, Amsterdam": {
+  "amsterdam::Miele X": {
     "venue": "Miele X, Beethovenstraat 517, Amsterdam",
     "name": "Miele X",
-    "lat": 52.39025,
-    "lon": 4.92731
+    "lat": 52.35436,
+    "lon": 4.91452
   },
-  "amsterdam::Xebia Amsterdam, Wibautstraat 200/202, Amsterdam": {
+  "amsterdam::Xebia Amsterdam": {
     "venue": "Xebia Amsterdam, Wibautstraat 200/202, Amsterdam",
     "name": "Xebia Amsterdam",
-    "lat": 52.36201,
-    "lon": 4.90216
+    "lat": 52.38801,
+    "lon": 4.92243
   },
-  "amsterdam::Instapro Group (Amsterdam), Herengracht 469, Amsterdam": {
+  "amsterdam::Instapro Group (Amsterdam)": {
     "venue": "Instapro Group (Amsterdam), Herengracht 469, Amsterdam",
     "name": "Instapro Group (Amsterdam)",
-    "lat": 52.33895,
-    "lon": 4.87887
+    "lat": 52.37347,
+    "lon": 4.91114
   },
   "amsterdam::Databricks Amsterdam": {
     "venue": "Databricks Amsterdam",
@@ -68,1654 +68,1594 @@ VENUE_GEO = {
     "lat": 52.35201,
     "lon": 4.91195
   },
-  "amsterdam::Snowflake Amsterdam, Gustav Mahlerlaan 300-314, Amsterdam": {
+  "amsterdam::Snowflake Amsterdam": {
     "venue": "Snowflake Amsterdam, Gustav Mahlerlaan 300-314, Amsterdam",
     "name": "Snowflake Amsterdam",
-    "lat": 52.36574,
-    "lon": 4.92985
+    "lat": 52.38068,
+    "lon": 4.90356
   },
-  "amsterdam::OrangeValley, De Corridor 27, Breukelen": {
+  "amsterdam::OrangeValley": {
     "venue": "OrangeValley, De Corridor 27, Breukelen",
     "name": "OrangeValley",
-    "lat": 52.35845,
-    "lon": 4.92475
+    "lat": 52.33924,
+    "lon": 4.91008
   },
-  "amsterdam::Vandebron, Grote Bickersstraat 2a, Amsterdam": {
+  "amsterdam::Vandebron": {
     "venue": "Vandebron, Grote Bickersstraat 2a, Amsterdam",
     "name": "Vandebron",
-    "lat": 52.34971,
-    "lon": 4.91333
+    "lat": 52.36987,
+    "lon": 4.87738
   },
-  "amsterdam::Van Marwijk Kooystraat 15, Amsterdam": {
+  "amsterdam::Van Marwijk Kooystraat 15": {
     "venue": "Van Marwijk Kooystraat 15, Amsterdam",
     "name": "Van Marwijk Kooystraat 15",
-    "lat": 52.36207,
-    "lon": 4.93039
+    "lat": 52.38769,
+    "lon": 4.92973
   },
-  "amsterdam::Wibautstraat 202, Amsterdam": {
+  "amsterdam::Wibautstraat 202": {
     "venue": "Wibautstraat 202, Amsterdam",
     "name": "Wibautstraat 202",
-    "lat": 52.35575,
-    "lon": 4.87981
+    "lat": 52.36345,
+    "lon": 4.87672
   },
-  "analytics-engineering-belgium::De Hoorn, Sluisstraat 79, Leuven": {
+  "analytics-engineering-belgium::De Hoorn": {
     "venue": "De Hoorn, Sluisstraat 79, Leuven",
     "name": "De Hoorn",
-    "lat": 50.82638,
-    "lon": 4.35714
+    "lat": 50.82947,
+    "lon": 4.37297
   },
-  "analytics-engineering-belgium::OTA Insight, Gaston Crommenlaan 6, Gent": {
+  "analytics-engineering-belgium::OTA Insight": {
     "venue": "OTA Insight, Gaston Crommenlaan 6, Gent",
     "name": "OTA Insight",
-    "lat": 50.83022,
-    "lon": 4.35703
+    "lat": 50.87523,
+    "lon": 4.36845
   },
-  "analytics-engineering-belgium::Silversquare Delta, Av. Arnaud Fraiteur 15, Ixelles": {
+  "analytics-engineering-belgium::Silversquare Delta": {
     "venue": "Silversquare Delta, Av. Arnaud Fraiteur 15, Ixelles",
     "name": "Silversquare Delta",
-    "lat": 50.86978,
-    "lon": 4.35758
+    "lat": 50.83192,
+    "lon": 4.32782
   },
-  "analytics-engineering-belgium::Datashift NV, Oude Brusselsestraat 14, Mechelen": {
+  "analytics-engineering-belgium::Datashift NV": {
     "venue": "Datashift NV, Oude Brusselsestraat 14, Mechelen",
     "name": "Datashift NV",
-    "lat": 50.83135,
-    "lon": 4.3344
+    "lat": 50.86198,
+    "lon": 4.35808
   },
-  "analytics-engineering-belgium::Officenter Hasselt, Hendrik van Veldekesingel 150, Hasselt": {
+  "analytics-engineering-belgium::Officenter Hasselt": {
     "venue": "Officenter Hasselt, Hendrik van Veldekesingel 150, Hasselt",
     "name": "Officenter Hasselt",
-    "lat": 50.82967,
-    "lon": 4.32612
+    "lat": 50.83727,
+    "lon": 4.33785
   },
-  "analytics-engineering-belgium::Dataroots, Tiensevest 132, Leuven": {
+  "analytics-engineering-belgium::Dataroots": {
     "venue": "Dataroots, Tiensevest 132, Leuven",
     "name": "Dataroots",
-    "lat": 50.87323,
-    "lon": 4.35039
+    "lat": 50.83049,
+    "lon": 4.35491
   },
-  "analytics-engineering-belgium::DPG Media, Medialaan 1, Vilvoorde": {
+  "analytics-engineering-belgium::DPG Media": {
     "venue": "DPG Media, Medialaan 1, Vilvoorde",
     "name": "DPG Media",
-    "lat": 50.82354,
-    "lon": 4.37867
+    "lat": 50.83584,
+    "lon": 4.37894
   },
-  "analytics-engineering-belgium::DataSense, Corda Campus, Kempische Steenweg 309, Hasselt": {
+  "analytics-engineering-belgium::DataSense": {
     "venue": "DataSense, Corda Campus, Kempische Steenweg 309, Hasselt",
     "name": "DataSense",
-    "lat": 50.82792,
-    "lon": 4.35168
+    "lat": 50.83435,
+    "lon": 4.35651
   },
-  "analytics-engineering-belgium::Lighthouse, Zuiderpoort, Gaston Crommenlaan 6, Ghent": {
+  "analytics-engineering-belgium::Lighthouse": {
     "venue": "Lighthouse, Zuiderpoort, Gaston Crommenlaan 6, Ghent",
     "name": "Lighthouse",
-    "lat": 50.87872,
-    "lon": 4.35465
+    "lat": 50.84658,
+    "lon": 4.33313
   },
-  "analytics-engineering-belgium::Dataminded, Vismarkt 17, Leuven": {
+  "analytics-engineering-belgium::Dataminded": {
     "venue": "Dataminded, Vismarkt 17, Leuven",
     "name": "Dataminded",
-    "lat": 50.84144,
-    "lon": 4.33413
+    "lat": 50.83789,
+    "lon": 4.33587
   },
-  "analytics-engineering-belgium::Antwerp Port House, Zaha Hadidplein 1, Antwerp": {
+  "analytics-engineering-belgium::Antwerp Port House": {
     "venue": "Antwerp Port House, Zaha Hadidplein 1, Antwerp",
     "name": "Antwerp Port House",
-    "lat": 50.82578,
-    "lon": 4.35042
+    "lat": 50.87152,
+    "lon": 4.36117
   },
-  "analytics-engineering-belgium::IBA International Headquarters, Chemin du Cyclotron 3, Ottignies-Louvain-la-Neuve": {
+  "analytics-engineering-belgium::IBA International Headquarters": {
     "venue": "IBA International Headquarters, Chemin du Cyclotron 3, Ottignies-Louvain-la-Neuve",
     "name": "IBA International Headquarters",
-    "lat": 50.8529,
-    "lon": 4.3524
+    "lat": 50.85146,
+    "lon": 4.33114
   },
-  "analytics-engineering-belgium::Telenet Hoofdkantoor, Liersesteenweg 4, Mechelen": {
+  "analytics-engineering-belgium::Telenet Hoofdkantoor": {
     "venue": "Telenet Hoofdkantoor, Liersesteenweg 4, Mechelen",
     "name": "Telenet Hoofdkantoor",
-    "lat": 50.86745,
-    "lon": 4.35083
+    "lat": 50.84216,
+    "lon": 4.33422
   },
-  "analytics-engineering-belgium::BeCentral, Cantersteen 12, Brussels": {
+  "analytics-engineering-belgium::BeCentral": {
     "venue": "BeCentral, Cantersteen 12, Brussels",
     "name": "BeCentral",
-    "lat": 50.85805,
-    "lon": 4.36113
+    "lat": 50.85161,
+    "lon": 4.35522
   },
-  "athens::Kaizen Campus, Neratziotissis 101, 15124, Marousi, Athens": {
+  "athens::Kaizen Campus": {
     "venue": "Kaizen Campus, Neratziotissis 101, 15124, Marousi, Athens",
     "name": "Kaizen Campus",
-    "lat": 38.00352,
-    "lon": 23.75217
+    "lat": 37.98054,
+    "lon": 23.71375
   },
-  "athens::Agile Actors, Ethnikis Antistaseos 62A, Chalandri, Athens": {
+  "athens::Agile Actors": {
     "venue": "Agile Actors, Ethnikis Antistaseos 62A, Chalandri, Athens",
     "name": "Agile Actors",
-    "lat": 37.96132,
-    "lon": 23.72082
+    "lat": 37.99661,
+    "lon": 23.74888
   },
-  "atlanta::7000 Central Pkwy, Sandy Springs, GA": {
+  "atlanta::7000 Central Pkwy": {
     "venue": "7000 Central Pkwy, Sandy Springs, GA",
     "name": "7000 Central Pkwy",
-    "lat": 33.74121,
-    "lon": -84.39968
+    "lat": 33.75764,
+    "lon": -84.39053
   },
-  "atlanta::Mutation Brewing Company, 5825 Roswell Rd NE, Sandy Springs, GA": {
+  "atlanta::Mutation Brewing Company": {
     "venue": "Mutation Brewing Company, 5825 Roswell Rd NE, Sandy Springs, GA",
     "name": "Mutation Brewing Company",
-    "lat": 33.72105,
-    "lon": -84.36196
+    "lat": 33.73387,
+    "lon": -84.3682
   },
-  "atlanta::NCR Voyix - Global Headquarters, 864 Spring St NW, Atlanta, GA": {
+  "atlanta::NCR Voyix - Global Headquarters": {
     "venue": "NCR Voyix - Global Headquarters, 864 Spring St NW, Atlanta, GA",
     "name": "NCR Voyix - Global Headquarters",
-    "lat": 33.76369,
-    "lon": -84.40184
+    "lat": 33.75629,
+    "lon": -84.36202
   },
-  "austin::Easy Tiger, 1501 E 7th St, Austin, TX": {
+  "austin::Easy Tiger": {
     "venue": "Easy Tiger, 1501 E 7th St, Austin, TX",
     "name": "Easy Tiger",
-    "lat": 30.29356,
-    "lon": -97.76993
+    "lat": 30.28279,
+    "lon": -97.73715
   },
-  "austin::Capital Factory, 701 Brazos St, Austin, TX": {
+  "austin::Capital Factory": {
     "venue": "Capital Factory, 701 Brazos St, Austin, TX",
     "name": "Capital Factory",
-    "lat": 30.26112,
-    "lon": -97.75658
+    "lat": 30.2451,
+    "lon": -97.75512
   },
-  "austin::dbt Labs office - Austin, 522 Congress Ave. #700, Austin, TX": {
+  "austin::dbt Labs office - Austin": {
     "venue": "dbt Labs office - Austin, 522 Congress Ave. #700, Austin, TX",
     "name": "dbt Labs office - Austin",
-    "lat": 30.29372,
-    "lon": -97.73561
+    "lat": 30.26142,
+    "lon": -97.7548
   },
-  "austin::dbt Labs, 522 Congress Avenue, Suite 700, Austin, TX": {
+  "austin::dbt Labs": {
     "venue": "dbt Labs, 522 Congress Avenue, Suite 700, Austin, TX",
     "name": "dbt Labs",
-    "lat": 30.24143,
-    "lon": -97.7268
+    "lat": 30.2829,
+    "lon": -97.74865
   },
-  "barcelona::Spaces 22 Arroba Mar, Carrer de la Marina, 16-18, Barcelona": {
+  "barcelona::Spaces 22 Arroba Mar": {
     "venue": "Spaces 22 Arroba Mar, Carrer de la Marina, 16-18, Barcelona",
     "name": "Spaces 22 Arroba Mar",
-    "lat": 41.41563,
-    "lon": 2.17676
+    "lat": 41.39857,
+    "lon": 2.18189
   },
-  "barcelona::Ironhack Barcelona Tech bootcamps, C/ de Pamplona, 96, Barcelona": {
+  "barcelona::Ironhack Barcelona Tech bootcamps": {
     "venue": "Ironhack Barcelona Tech bootcamps, C/ de Pamplona, 96, Barcelona",
     "name": "Ironhack Barcelona Tech bootcamps",
-    "lat": 41.37388,
-    "lon": 2.18505
+    "lat": 41.38938,
+    "lon": 2.17726
   },
-  "barcelona::Scopely - Sant Gervasi, Carrer de Folgueroles 17-25, Barcelona": {
+  "barcelona::Scopely - Sant Gervasi": {
     "venue": "Scopely - Sant Gervasi, Carrer de Folgueroles 17-25, Barcelona",
     "name": "Scopely - Sant Gervasi",
-    "lat": 41.37292,
-    "lon": 2.19551
+    "lat": 41.40808,
+    "lon": 2.15628
   },
-  "barcelona::Spaces 22 Arroba, C. de Pallars, 193, Barcelona": {
+  "barcelona::Spaces 22 Arroba": {
     "venue": "Spaces 22 Arroba, C. de Pallars, 193, Barcelona",
     "name": "Spaces 22 Arroba",
-    "lat": 41.4168,
-    "lon": 2.16276
+    "lat": 41.39052,
+    "lon": 2.14089
   },
-  "barcelona::Spaces - Barcelona, Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona": {
+  "barcelona::Spaces - Barcelona": {
     "venue": "Spaces - Barcelona, Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
     "name": "Spaces - Barcelona",
-    "lat": 41.35873,
-    "lon": 2.14475
+    "lat": 41.3643,
+    "lon": 2.17909
   },
-  "barcelona::Spaces - Barcelona, Spaces 22 Arroba Mar, Carrer de la Marina, 16-18, Barcelona": {
-    "venue": "Spaces - Barcelona, Spaces 22 Arroba Mar, Carrer de la Marina, 16-18, Barcelona",
-    "name": "Spaces - Barcelona",
-    "lat": 41.41173,
-    "lon": 2.17093
-  },
-  "barcelona::Spaces - Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona": {
+  "barcelona::Spaces - Plaza Universitat": {
     "venue": "Spaces - Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
     "name": "Spaces - Plaza Universitat",
-    "lat": 41.36458,
-    "lon": 2.16189
+    "lat": 41.3863,
+    "lon": 2.14773
   },
-  "barcelona::Scopely Office, Carrer de Zamora, 70, Barcelona": {
+  "barcelona::Scopely Office": {
     "venue": "Scopely Office, Carrer de Zamora, 70, Barcelona",
     "name": "Scopely Office",
-    "lat": 41.37272,
-    "lon": 2.14637
+    "lat": 41.37158,
+    "lon": 2.15232
   },
-  "barcelona::Pier01 / IFCO Digital Hub, Plaza de Pau Vila 1, Barcelona": {
+  "barcelona::Pier01 / IFCO Digital Hub": {
     "venue": "Pier01 / IFCO Digital Hub, Plaza de Pau Vila 1, Barcelona",
     "name": "Pier01 / IFCO Digital Hub",
-    "lat": 41.41228,
-    "lon": 2.14238
+    "lat": 41.40582,
+    "lon": 2.15289
   },
-  "berlin::Jugendherberge Berlin Ostkreuz, Marktstraße 9-12, Berlin": {
+  "berlin::Jugendherberge Berlin Ostkreuz": {
     "venue": "Jugendherberge Berlin Ostkreuz, Marktstraße 9-12, Berlin",
     "name": "Jugendherberge Berlin Ostkreuz",
-    "lat": 52.51997,
-    "lon": 13.38519
+    "lat": 52.49991,
+    "lon": 13.41378
   },
-  "berlin::Contentful GmbH, Max-Urich-Straße 3, 13355 Berlin": {
+  "berlin::Contentful GmbH": {
     "venue": "Contentful GmbH, Max-Urich-Straße 3, 13355 Berlin",
     "name": "Contentful GmbH",
-    "lat": 52.54489,
-    "lon": 13.4087
+    "lat": 52.53725,
+    "lon": 13.40282
   },
-  "berlin::Vinted Office, Unter den Linden 14, 10117 Berlin": {
+  "berlin::Vinted Office": {
     "venue": "Vinted Office, Unter den Linden 14, 10117 Berlin",
     "name": "Vinted Office",
-    "lat": 52.49519,
-    "lon": 13.37552
+    "lat": 52.5087,
+    "lon": 13.40663
   },
-  "berlin::Umspannwerk Ampere, Sonnenburger Str. 73, 10437 Berlin, Germany": {
+  "berlin::Umspannwerk Ampere": {
     "venue": "Umspannwerk Ampere, Sonnenburger Str. 73, 10437 Berlin, Germany",
     "name": "Umspannwerk Ampere",
-    "lat": 52.51686,
-    "lon": 13.40972
+    "lat": 52.51387,
+    "lon": 13.38323
   },
-  "berlin::Taxfix, Köpenicker Str. 122, 10179 Berlin, Germany": {
+  "berlin::Taxfix": {
     "venue": "Taxfix, Köpenicker Str. 122, 10179 Berlin, Germany",
     "name": "Taxfix",
-    "lat": 52.49174,
-    "lon": 13.37978
+    "lat": 52.52824,
+    "lon": 13.41288
   },
-  "berlin::Neugelb Studios, Zeughofstraße 20, Berlin (Kreuzberg)": {
+  "berlin::Neugelb Studios": {
     "venue": "Neugelb Studios, Zeughofstraße 20, Berlin (Kreuzberg)",
     "name": "Neugelb Studios",
-    "lat": 52.52624,
-    "lon": 13.38683
+    "lat": 52.49615,
+    "lon": 13.42355
   },
-  "berlin::Enpal GmbH, Koppenstraße 8, 10243 Berlin, Germany (5th/6th floors)": {
+  "berlin::Enpal GmbH": {
     "venue": "Enpal GmbH, Koppenstraße 8, 10243 Berlin, Germany (5th/6th floors)",
     "name": "Enpal GmbH",
-    "lat": 52.52719,
-    "lon": 13.39799
+    "lat": 52.54734,
+    "lon": 13.39191
   },
-  "berlin::NEUGELB Studios GmbH, Zeughofstraße 20, Berlin": {
+  "berlin::NEUGELB Studios GmbH": {
     "venue": "NEUGELB Studios GmbH, Zeughofstraße 20, Berlin",
     "name": "NEUGELB Studios GmbH",
-    "lat": 52.51901,
-    "lon": 13.39869
+    "lat": 52.5139,
+    "lon": 13.42454
   },
-  "berlin::Contentful, Ackerstraße 78, Berlin, BE": {
+  "berlin::Contentful": {
     "venue": "Contentful, Ackerstraße 78, Berlin, BE",
     "name": "Contentful",
-    "lat": 52.49915,
-    "lon": 13.40187
+    "lat": 52.4921,
+    "lon": 13.43151
   },
-  "berlin::DEPT®, Hagelberger Str. 53-54, Berlin, BE": {
+  "berlin::DEPT®": {
     "venue": "DEPT®, Hagelberger Str. 53-54, Berlin, BE",
     "name": "DEPT®",
-    "lat": 52.54667,
-    "lon": 13.38041
+    "lat": 52.53856,
+    "lon": 13.40766
   },
-  "berlin::TIER Mobility SE, Eichhornstraße 3, Berlin, BE": {
+  "berlin::TIER Mobility SE": {
     "venue": "TIER Mobility SE, Eichhornstraße 3, Berlin, BE",
     "name": "TIER Mobility SE",
-    "lat": 52.51896,
-    "lon": 13.41852
+    "lat": 52.50321,
+    "lon": 13.39386
   },
-  "berlin::Prater Beer Garden, Kastanienallee 7-9, Berlin, BE": {
+  "berlin::Prater Beer Garden": {
     "venue": "Prater Beer Garden, Kastanienallee 7-9, Berlin, BE",
     "name": "Prater Beer Garden",
-    "lat": 52.54131,
-    "lon": 13.38215
+    "lat": 52.50549,
+    "lon": 13.38301
   },
-  "bogota::WeWork Usaquén, Carrera 7 #116-50, Bogotá": {
+  "bogota::WeWork Usaquén": {
     "venue": "WeWork Usaquén, Carrera 7 #116-50, Bogotá",
     "name": "WeWork Usaquén",
-    "lat": 4.71016,
-    "lon": -74.06731
+    "lat": 4.71998,
+    "lon": -74.09333
   },
-  "boston::Convene, 201 Washington St, Boston, MA": {
+  "boston::Convene": {
     "venue": "Convene, 201 Washington St, Boston, MA",
     "name": "Convene",
-    "lat": 42.36399,
-    "lon": -71.03856
+    "lat": 42.35353,
+    "lon": -71.0616
   },
-  "boston::1 Lincoln St, Boston, MA": {
+  "boston::1 Lincoln St": {
     "venue": "1 Lincoln St, Boston, MA",
     "name": "1 Lincoln St",
-    "lat": 42.35639,
-    "lon": -71.06367
+    "lat": 42.33274,
+    "lon": -71.03183
   },
-  "boston::Rapid7, 120 Causeway St, Boston, MA": {
+  "boston::Rapid7": {
     "venue": "Rapid7, 120 Causeway St, Boston, MA",
     "name": "Rapid7",
-    "lat": 42.34514,
-    "lon": -71.06186
+    "lat": 42.3352,
+    "lon": -71.06929
   },
-  "boston::2 Canal Park, Cambridge, MA": {
+  "boston::2 Canal Park": {
     "venue": "2 Canal Park, Cambridge, MA",
     "name": "2 Canal Park",
-    "lat": 42.34572,
-    "lon": -71.08164
+    "lat": 42.33508,
+    "lon": -71.08601
   },
-  "boston::125 Summer Street, Boston, MA": {
+  "boston::125 Summer Street": {
     "venue": "125 Summer Street, Boston, MA",
     "name": "125 Summer Street",
-    "lat": 42.33137,
-    "lon": -71.06337
+    "lat": 42.35552,
+    "lon": -71.0435
   },
-  "boston::Klaviyo, 125 Summer Street, Boston, MA": {
+  "boston::Klaviyo": {
     "venue": "Klaviyo, 125 Summer Street, Boston, MA",
     "name": "Klaviyo",
-    "lat": 42.35586,
-    "lon": -71.06715
+    "lat": 42.38373,
+    "lon": -71.0678
   },
-  "boston::One Kenmore Square, Boston, MA": {
+  "boston::One Kenmore Square": {
     "venue": "One Kenmore Square, Boston, MA",
     "name": "One Kenmore Square",
-    "lat": 42.38166,
-    "lon": -71.05215
+    "lat": 42.34936,
+    "lon": -71.03744
   },
-  "bratislava::The Spot, Bottova 2/A, Bratislava-Staré Mesto": {
+  "bratislava::The Spot": {
     "venue": "The Spot, Bottova 2/A, Bratislava-Staré Mesto",
     "name": "The Spot",
-    "lat": 48.1531,
-    "lon": 17.08134
+    "lat": 48.15276,
+    "lon": 17.13111
   },
-  "bratislava::HubHub Twin City C, Mlynské nivy 16, Bratislava-Staré Mesto": {
+  "bratislava::HubHub Twin City C": {
     "venue": "HubHub Twin City C, Mlynské nivy 16, Bratislava-Staré Mesto",
     "name": "HubHub Twin City C",
-    "lat": 48.13755,
-    "lon": 17.13725
+    "lat": 48.16522,
+    "lon": 17.13758
   },
-  "bratislava::HB Reavis Twin City C, Mlynské Nivy 12, Bratislava": {
+  "bratislava::HB Reavis Twin City C": {
     "venue": "HB Reavis Twin City C, Mlynské Nivy 12, Bratislava",
     "name": "HB Reavis Twin City C",
-    "lat": 48.12573,
-    "lon": 17.10215
+    "lat": 48.16602,
+    "lon": 17.09653
   },
-  "bratislava::Apollo Business Center II, Block A, Prievozská 4, Bratislava": {
+  "bratislava::Apollo Business Center II": {
     "venue": "Apollo Business Center II, Block A, Prievozská 4, Bratislava",
     "name": "Apollo Business Center II",
-    "lat": 48.13424,
-    "lon": 17.0867
+    "lat": 48.15673,
+    "lon": 17.11603
   },
-  "brisbane::KeyData, 344 Queen St, Brisbane City": {
+  "brisbane::KeyData": {
     "venue": "KeyData, 344 Queen St, Brisbane City",
     "name": "KeyData",
-    "lat": -27.49133,
-    "lon": 153.03831
+    "lat": -27.48219,
+    "lon": 153.01244
   },
-  "brisbane::Grand Central Hotel, 270 Ann St, Brisbane City": {
+  "brisbane::Grand Central Hotel": {
     "venue": "Grand Central Hotel, 270 Ann St, Brisbane City",
     "name": "Grand Central Hotel",
-    "lat": -27.44868,
-    "lon": 153.01915
+    "lat": -27.44649,
+    "lon": 153.02886
   },
-  "brisbane::Morgan's Financials, Level 29, Riverside Centre, 123 Eagle St, Brisbane": {
+  "brisbane::Morgan's Financials": {
     "venue": "Morgan's Financials, Level 29, Riverside Centre, 123 Eagle St, Brisbane",
     "name": "Morgan's Financials",
-    "lat": -27.46646,
-    "lon": 153.0143
+    "lat": -27.44515,
+    "lon": 153.01138
   },
-  "brisbane::Vivianti Consulting, Level 23/300 Queen St, Brisbane": {
+  "brisbane::Vivianti Consulting": {
     "venue": "Vivianti Consulting, Level 23/300 Queen St, Brisbane",
     "name": "Vivianti Consulting",
-    "lat": -27.47387,
-    "lon": 153.01584
+    "lat": -27.46239,
+    "lon": 153.01839
   },
-  "budapest::Hubhub, 26 Király Street, Budapest": {
+  "budapest::Hubhub": {
     "venue": "Hubhub, 26 Király Street, Budapest",
     "name": "Hubhub",
-    "lat": 47.50738,
-    "lon": 19.01113
+    "lat": 47.49339,
+    "lon": 19.05523
   },
-  "budapest::The Spot Budapest, Király utca 26, Budapest": {
+  "budapest::The Spot Budapest": {
     "venue": "The Spot Budapest, Király utca 26, Budapest",
     "name": "The Spot Budapest",
-    "lat": 47.49454,
-    "lon": 19.02302
+    "lat": 47.50389,
+    "lon": 19.01203
   },
-  "budapest::Create26, Király, 1061, Unit 26, Budapest": {
+  "budapest::Create26": {
     "venue": "Create26, Király, 1061, Unit 26, Budapest",
     "name": "Create26",
-    "lat": 47.50445,
-    "lon": 19.04904
+    "lat": 47.50622,
+    "lon": 19.0688
   },
-  "buenos-aires::Mutt Data, Av. Sta. Fe 1752 PB B, Buenos Aires": {
+  "buenos-aires::Mutt Data": {
     "venue": "Mutt Data, Av. Sta. Fe 1752 PB B, Buenos Aires",
     "name": "Mutt Data",
-    "lat": -34.58229,
-    "lon": -58.37567
+    "lat": -34.58026,
+    "lon": -58.36927
   },
-  "chicago::Convene, 333 N Green St, Chicago, IL": {
+  "chicago::Convene": {
     "venue": "Convene, 333 N Green St, Chicago, IL",
     "name": "Convene",
-    "lat": 41.86658,
-    "lon": -87.60949
+    "lat": 41.861,
+    "lon": -87.63637
   },
-  "chicago::150 N Michigan Ave, Chicago, IL": {
+  "chicago::150 N Michigan Ave": {
     "venue": "150 N Michigan Ave, Chicago, IL",
     "name": "150 N Michigan Ave",
-    "lat": 41.89112,
-    "lon": -87.61825
+    "lat": 41.87691,
+    "lon": -87.60594
   },
-  "chicago::55 E Monroe St suite 2950 c, Chicago, IL": {
+  "chicago::55 E Monroe St suite 2950 c": {
     "venue": "55 E Monroe St suite 2950 c, Chicago, IL",
     "name": "55 E Monroe St suite 2950 c",
-    "lat": 41.87914,
-    "lon": -87.63583
+    "lat": 41.86659,
+    "lon": -87.65491
   },
-  "copenhagen::Møntergade 19, Copenhagen": {
+  "copenhagen::Møntergade 19": {
     "venue": "Møntergade 19, Copenhagen",
     "name": "Møntergade 19",
-    "lat": 55.70431,
-    "lon": 12.59045
+    "lat": 55.64688,
+    "lon": 12.5611
   },
-  "copenhagen::Lederne, Vermlandsgade 65, Copenhagen": {
+  "copenhagen::Lederne": {
     "venue": "Lederne, Vermlandsgade 65, Copenhagen",
     "name": "Lederne",
-    "lat": 55.7053,
-    "lon": 12.53895
+    "lat": 55.66932,
+    "lon": 12.58151
   },
-  "copenhagen::Veo Technologies, Rovsingsgade 68, Copenhagen": {
+  "copenhagen::Veo Technologies": {
     "venue": "Veo Technologies, Rovsingsgade 68, Copenhagen",
     "name": "Veo Technologies",
-    "lat": 55.68388,
-    "lon": 12.56584
+    "lat": 55.67806,
+    "lon": 12.57714
   },
-  "copenhagen::Lunar, Bredgade 43, Copenhagen": {
+  "copenhagen::Lunar": {
     "venue": "Lunar, Bredgade 43, Copenhagen",
     "name": "Lunar",
-    "lat": 55.69265,
-    "lon": 12.58849
+    "lat": 55.67674,
+    "lon": 12.5515
   },
-  "copenhagen::group.ONE, Kalvebod Brygge 24, Copenhagen": {
+  "copenhagen::group.ONE": {
     "venue": "group.ONE, Kalvebod Brygge 24, Copenhagen",
     "name": "group.ONE",
-    "lat": 55.68539,
-    "lon": 12.55388
+    "lat": 55.65745,
+    "lon": 12.54297
   },
-  "copenhagen::Pleo HQ, Sortedam Dossering 7, Copenhagen": {
+  "copenhagen::Pleo HQ": {
     "venue": "Pleo HQ, Sortedam Dossering 7, Copenhagen",
     "name": "Pleo HQ",
-    "lat": 55.66803,
-    "lon": 12.57405
+    "lat": 55.66837,
+    "lon": 12.55427
   },
-  "dallas::Venture X Dallas - Braniff Centre, 7701 Lemmon Ave Ste 260, Dallas, TX": {
+  "dallas::Venture X Dallas - Braniff Centre": {
     "venue": "Venture X Dallas - Braniff Centre, 7701 Lemmon Ave Ste 260, Dallas, TX",
     "name": "Venture X Dallas - Braniff Centre",
-    "lat": 32.79178,
-    "lon": -96.79785
+    "lat": 32.75401,
+    "lon": -96.7734
   },
-  "dallas::17746 Preston Rd Suite 200, Dallas, TX": {
+  "dallas::17746 Preston Rd Suite 200": {
     "venue": "17746 Preston Rd Suite 200, Dallas, TX",
     "name": "17746 Preston Rd Suite 200",
-    "lat": 32.77181,
-    "lon": -96.79692
+    "lat": 32.80497,
+    "lon": -96.81138
   },
-  "dc::Excella, 2300 Wilson Blvd Suite 600, Arlington, VA": {
+  "dc::Excella": {
     "venue": "Excella, 2300 Wilson Blvd Suite 600, Arlington, VA",
     "name": "Excella",
-    "lat": 38.92215,
-    "lon": -77.04656
+    "lat": 38.8941,
+    "lon": -77.06524
   },
-  "dc::Fundrise, 11 Dupont Cir NW, Washington, DC": {
+  "dc::Fundrise": {
     "venue": "Fundrise, 11 Dupont Cir NW, Washington, DC",
     "name": "Fundrise",
-    "lat": 38.92418,
-    "lon": -77.06138
+    "lat": 38.91193,
+    "lon": -77.03098
   },
-  "dc::NuAxis Innovations, 1919 Gallows Rd Suite 610, Vienna, VA": {
+  "dc::NuAxis Innovations": {
     "venue": "NuAxis Innovations, 1919 Gallows Rd Suite 610, Vienna, VA",
     "name": "NuAxis Innovations",
-    "lat": 38.9018,
-    "lon": -77.02594
+    "lat": 38.90745,
+    "lon": -77.01024
   },
-  "dc::Caboose Brewing Co & Tavern, 520 Mill St NE, Vienna, VA": {
+  "dc::Caboose Brewing Co & Tavern": {
     "venue": "Caboose Brewing Co & Tavern, 520 Mill St NE, Vienna, VA",
     "name": "Caboose Brewing Co & Tavern",
-    "lat": 38.90604,
-    "lon": -77.06666
+    "lat": 38.88656,
+    "lon": -77.05548
   },
-  "dc::NuAxis Innovations, 8605 Westwood Center Dr #300, Vienna, VA": {
-    "venue": "NuAxis Innovations, 8605 Westwood Center Dr #300, Vienna, VA",
-    "name": "NuAxis Innovations",
-    "lat": 38.93527,
-    "lon": -77.06079
-  },
-  "denver::Fivetran, 1401 Zuni St, Denver, CO": {
+  "denver::Fivetran": {
     "venue": "Fivetran, 1401 Zuni St, Denver, CO",
     "name": "Fivetran",
-    "lat": 39.73707,
-    "lon": -104.96663
+    "lat": 39.71859,
+    "lon": -104.99311
   },
-  "denver::Slalom, 1899 Wynkoop St, #800, Denver, CO": {
+  "denver::Slalom": {
     "venue": "Slalom, 1899 Wynkoop St, #800, Denver, CO",
     "name": "Slalom",
-    "lat": 39.75659,
-    "lon": -104.98196
+    "lat": 39.72265,
+    "lon": -104.99246
   },
-  "dubai::Cander, 2205 AA1 Tower, Mazaya Business Avenue, Jumeirah Lake Towers, Dubai": {
+  "dubai::Cander": {
     "venue": "Cander, 2205 AA1 Tower, Mazaya Business Avenue, Jumeirah Lake Towers, Dubai",
     "name": "Cander",
-    "lat": 25.22949,
-    "lon": 55.29454
+    "lat": 25.22639,
+    "lon": 55.29061
   },
-  "dubai::Cander Group DMCC, Jumeirah Lake Towers, Dubai": {
+  "dubai::Cander Group DMCC": {
     "venue": "Cander Group DMCC, Jumeirah Lake Towers, Dubai",
     "name": "Cander Group DMCC",
-    "lat": 25.17846,
-    "lon": 55.2766
+    "lat": 25.22366,
+    "lon": 55.26116
   },
-  "dubai::The Black Sheep, Pullman Hotel, Dubai": {
+  "dubai::The Black Sheep": {
     "venue": "The Black Sheep, Pullman Hotel, Dubai",
     "name": "The Black Sheep",
-    "lat": 25.17505,
-    "lon": 55.30031
+    "lat": 25.22957,
+    "lon": 55.2769
   },
-  "dublin::dbt Labs office, 57-59 Sir John Rogerson's Quay, Dublin 2": {
+  "dublin::dbt Labs office": {
     "venue": "dbt Labs office, 57-59 Sir John Rogerson's Quay, Dublin 2",
     "name": "dbt Labs office",
-    "lat": 53.37081,
-    "lon": -6.24237
+    "lat": 53.32338,
+    "lon": -6.28748
   },
-  "dublin::dbt Labs Ireland, 4th Floor, Bloodstone Building, Sir John Rogerson's Quay, Dublin": {
+  "dublin::dbt Labs Ireland": {
     "venue": "dbt Labs Ireland, 4th Floor, Bloodstone Building, Sir John Rogerson's Quay, Dublin",
     "name": "dbt Labs Ireland",
-    "lat": 53.33039,
-    "lon": -6.25752
+    "lat": 53.36436,
+    "lon": -6.24566
   },
-  "florianopolis::ACATE, Rodovia SC 401, Florianópolis, SC": {
+  "florianopolis::ACATE": {
     "venue": "ACATE, Rodovia SC 401, Florianópolis, SC",
     "name": "ACATE",
-    "lat": -27.58776,
-    "lon": -48.55409
+    "lat": -27.62191,
+    "lon": -48.55305
   },
-  "florianopolis::Lemonadde Coworking + Offices, Rod. Admar Gonzaga, 440, Florianópolis, SC": {
+  "florianopolis::Lemonadde Coworking + Offices": {
     "venue": "Lemonadde Coworking + Offices, Rod. Admar Gonzaga, 440, Florianópolis, SC",
     "name": "Lemonadde Coworking + Offices",
-    "lat": -27.62233,
-    "lon": -48.54848
+    "lat": -27.60606,
+    "lon": -48.52904
   },
-  "florianopolis::ACATE | Centro de Inovação, Florianópolis, SC": {
+  "florianopolis::ACATE | Centro de Inovação": {
     "venue": "ACATE | Centro de Inovação, Florianópolis, SC",
     "name": "ACATE | Centro de Inovação",
-    "lat": -27.59013,
-    "lon": -48.54982
+    "lat": -27.59898,
+    "lon": -48.54392
   },
-  "florianopolis::Wooden Tap Beer, Travessa Albertina Ganzo, 33, Florianópolis, SC": {
+  "florianopolis::Wooden Tap Beer": {
     "venue": "Wooden Tap Beer, Travessa Albertina Ganzo, 33, Florianópolis, SC",
     "name": "Wooden Tap Beer",
-    "lat": -27.60287,
-    "lon": -48.55656
+    "lat": -27.57432,
+    "lon": -48.5212
   },
-  "florianopolis::Auditório ACATE, SC401, km4, Florianópolis": {
+  "florianopolis::Auditório ACATE": {
     "venue": "Auditório ACATE, SC401, km4, Florianópolis",
     "name": "Auditório ACATE",
-    "lat": -27.59745,
-    "lon": -48.53905
+    "lat": -27.58486,
+    "lon": -48.55967
   },
-  "halifax::CoWork Halifax, 6156 Quinpool Rd, Halifax, NS": {
+  "halifax::CoWork Halifax": {
     "venue": "CoWork Halifax, 6156 Quinpool Rd, Halifax, NS",
     "name": "CoWork Halifax",
-    "lat": 44.66665,
-    "lon": -63.59054
+    "lat": 44.65,
+    "lon": -63.56145
   },
-  "helsinki::Fredrikinkatu 51, Helsinki": {
+  "helsinki::Fredrikinkatu 51": {
     "venue": "Fredrikinkatu 51, Helsinki",
     "name": "Fredrikinkatu 51",
-    "lat": 60.15142,
-    "lon": 24.95265
+    "lat": 60.19551,
+    "lon": 24.93964
   },
-  "helsinki::Smartly.io Event Space, Elielinaukio 2, Helsinki": {
+  "helsinki::Smartly.io Event Space": {
     "venue": "Smartly.io Event Space, Elielinaukio 2, Helsinki",
     "name": "Smartly.io Event Space",
-    "lat": 60.17396,
-    "lon": 24.92525
+    "lat": 60.17389,
+    "lon": 24.95403
   },
-  "helsinki::Dylan Marmoripiha, Keskuskatu 3, Helsinki": {
+  "helsinki::Dylan Marmoripiha": {
     "venue": "Dylan Marmoripiha, Keskuskatu 3, Helsinki",
     "name": "Dylan Marmoripiha",
-    "lat": 60.14126,
-    "lon": 24.94361
+    "lat": 60.1737,
+    "lon": 24.95274
   },
-  "ho-chi-minh-city::Dreamplex Ngo Quang Huy, 42 Ngô Quang Huy, District 2, Ho Chi Minh City": {
+  "ho-chi-minh-city::Dreamplex Ngo Quang Huy": {
     "venue": "Dreamplex Ngo Quang Huy, 42 Ngô Quang Huy, District 2, Ho Chi Minh City",
     "name": "Dreamplex Ngo Quang Huy",
-    "lat": 10.83485,
-    "lon": 106.65488
+    "lat": 10.82924,
+    "lon": 106.65228
   },
-  "ho-chi-minh-city::3 Đường số 46, District 2, Ho Chi Minh City": {
+  "ho-chi-minh-city::3 Đường số 46": {
     "venue": "3 Đường số 46, District 2, Ho Chi Minh City",
     "name": "3 Đường số 46",
-    "lat": 10.81898,
-    "lon": 106.6407
+    "lat": 10.8478,
+    "lon": 106.6302
   },
-  "ho-chi-minh-city::Chotot Office, UOA Tower, District 7, Ho Chi Minh City": {
+  "ho-chi-minh-city::Chotot Office": {
     "venue": "Chotot Office, UOA Tower, District 7, Ho Chi Minh City",
     "name": "Chotot Office",
-    "lat": 10.85267,
-    "lon": 106.64171
+    "lat": 10.81077,
+    "lon": 106.64726
   },
-  "ho-chi-minh-city::DHC Vietnam, 15 Phạm Hùng, Hà Nội": {
+  "ho-chi-minh-city::DHC Vietnam": {
     "venue": "DHC Vietnam, 15 Phạm Hùng, Hà Nội",
     "name": "DHC Vietnam",
-    "lat": 10.83628,
-    "lon": 106.64393
+    "lat": 10.84266,
+    "lon": 106.65056
   },
-  "ho-chi-minh-city::THINK Training Space, 116 Đ. Nguyễn Văn Thủ, District 1, Ho Chi Minh City": {
+  "ho-chi-minh-city::THINK Training Space": {
     "venue": "THINK Training Space, 116 Đ. Nguyễn Văn Thủ, District 1, Ho Chi Minh City",
     "name": "THINK Training Space",
-    "lat": 10.82099,
-    "lon": 106.64571
+    "lat": 10.83458,
+    "lon": 106.63775
   },
-  "ho-chi-minh-city::Holistics Vietnam office, 457 Nguyễn Đình Chiểu, District 3, Ho Chi Minh City": {
+  "ho-chi-minh-city::Holistics Vietnam office": {
     "venue": "Holistics Vietnam office, 457 Nguyễn Đình Chiểu, District 3, Ho Chi Minh City",
     "name": "Holistics Vietnam office",
-    "lat": 10.83738,
-    "lon": 106.63875
+    "lat": 10.81701,
+    "lon": 106.64081
   },
-  "ho-chi-minh-city::Family Garden 2, 28 Đ. Thảo Điền, District 2, Ho Chi Minh City": {
+  "ho-chi-minh-city::Family Garden 2": {
     "venue": "Family Garden 2, 28 Đ. Thảo Điền, District 2, Ho Chi Minh City",
     "name": "Family Garden 2",
-    "lat": 10.81777,
-    "lon": 106.65266
+    "lat": 10.83755,
+    "lon": 106.60508
   },
-  "ho-chi-minh-city::C-Space Coworking Office, 62 Võ Văn Tần, District 3, Ho Chi Minh City": {
+  "ho-chi-minh-city::C-Space Coworking Office": {
     "venue": "C-Space Coworking Office, 62 Võ Văn Tần, District 3, Ho Chi Minh City",
     "name": "C-Space Coworking Office",
-    "lat": 10.83979,
-    "lon": 106.63373
+    "lat": 10.84379,
+    "lon": 106.62816
   },
-  "ho-chi-minh-city::Foundry AI Academy, Binh Thanh District, Ho Chi Minh City": {
+  "ho-chi-minh-city::Foundry AI Academy": {
     "venue": "Foundry AI Academy, Binh Thanh District, Ho Chi Minh City",
     "name": "Foundry AI Academy",
-    "lat": 10.84543,
-    "lon": 106.62483
+    "lat": 10.83138,
+    "lon": 106.62764
   },
-  "houston::Karbach Brewing Co., 2032 Karbach St, Houston, TX": {
+  "houston::Karbach Brewing Co.": {
     "venue": "Karbach Brewing Co., 2032 Karbach St, Houston, TX",
     "name": "Karbach Brewing Co.",
-    "lat": 29.74112,
-    "lon": -95.3431
+    "lat": 29.75735,
+    "lon": -95.34771
   },
-  "houston::Buffalo Bayou Brewing Company, 2101 Summer St, Houston, TX": {
+  "houston::Buffalo Bayou Brewing Company": {
     "venue": "Buffalo Bayou Brewing Company, 2101 Summer St, Houston, TX",
     "name": "Buffalo Bayou Brewing Company",
-    "lat": 29.7624,
-    "lon": -95.34926
+    "lat": 29.77019,
+    "lon": -95.38903
   },
-  "houston::Axelrad Beer Garden, 1517 Alabama Street, Houston, TX": {
+  "houston::Axelrad Beer Garden": {
     "venue": "Axelrad Beer Garden, 1517 Alabama Street, Houston, TX",
     "name": "Axelrad Beer Garden",
-    "lat": 29.75505,
-    "lon": -95.35378
+    "lat": 29.73311,
+    "lon": -95.36522
   },
-  "lagos::(DSN) Data Scientists Network / Data Science Nigeria AI Hub, 33 Queen St, Lagos": {
+  "lagos::(DSN) Data Scientists Network / Data Science Nigeria AI Hub": {
     "venue": "(DSN) Data Scientists Network / Data Science Nigeria AI Hub, 33 Queen St, Lagos",
     "name": "(DSN) Data Scientists Network / Data Science Nigeria AI Hub",
-    "lat": 6.506,
-    "lon": 3.37395
+    "lat": 6.49798,
+    "lon": 3.40492
   },
-  "lagos::Cafe One by Sterling, Commercial Ave, Lagos": {
+  "lagos::Cafe One by Sterling": {
     "venue": "Cafe One by Sterling, Commercial Ave, Lagos",
     "name": "Cafe One by Sterling",
-    "lat": 6.51905,
-    "lon": 3.37793
+    "lat": 6.52008,
+    "lon": 3.38028
   },
-  "lagos::The Nest Innovation Hub, 1a Hughes Avenue, Yaba, Lagos": {
+  "lagos::The Nest Innovation Hub": {
     "venue": "The Nest Innovation Hub, 1a Hughes Avenue, Yaba, Lagos",
     "name": "The Nest Innovation Hub",
-    "lat": 6.4977,
-    "lon": 3.37552
+    "lat": 6.54795,
+    "lon": 3.36967
   },
-  "lagos::Bridge by Obsidian, 6 University Road, Onike, Yaba, Lagos": {
+  "lagos::Bridge by Obsidian": {
     "venue": "Bridge by Obsidian, 6 University Road, Onike, Yaba, Lagos",
     "name": "Bridge by Obsidian",
-    "lat": 6.55193,
-    "lon": 3.35756
+    "lat": 6.50271,
+    "lon": 3.36261
   },
-  "lagos::The Nest Innovation Technology Park, 1a Hughes Avenue, Yaba, Lagos": {
+  "lagos::The Nest Innovation Technology Park": {
     "venue": "The Nest Innovation Technology Park, 1a Hughes Avenue, Yaba, Lagos",
     "name": "The Nest Innovation Technology Park",
-    "lat": 6.5022,
-    "lon": 3.35696
+    "lat": 6.51231,
+    "lon": 3.39212
   },
-  "london::The Information Lab, 25 Watling St, City of London, London EC4M 9BR": {
+  "london::The Information Lab": {
     "venue": "The Information Lab, 25 Watling St, City of London, London EC4M 9BR",
     "name": "The Information Lab",
-    "lat": 51.5275,
-    "lon": -0.14895
+    "lat": 51.48716,
+    "lon": -0.12169
   },
-  "london::The Information Lab, 25 Watling St, London EC4M 9BR": {
-    "venue": "The Information Lab, 25 Watling St, London EC4M 9BR",
-    "name": "The Information Lab",
-    "lat": 51.51372,
-    "lon": -0.1438
-  },
-  "london::Snowflake Office, One Crown Place, London, EC2A 4EF": {
+  "london::Snowflake Office": {
     "venue": "Snowflake Office, One Crown Place, London, EC2A 4EF",
     "name": "Snowflake Office",
-    "lat": 51.51456,
-    "lon": -0.14252
+    "lat": 51.51514,
+    "lon": -0.10714
   },
-  "london::The Anthologist Bar & Club, 58 Gresham St, London EC2V 7BB": {
+  "london::The Anthologist Bar & Club": {
     "venue": "The Anthologist Bar & Club, 58 Gresham St, London EC2V 7BB",
     "name": "The Anthologist Bar & Club",
-    "lat": 51.5083,
-    "lon": -0.13632
+    "lat": 51.48268,
+    "lon": -0.10549
   },
-  "london::Datatonic, 1 Canada Square, London": {
+  "london::Datatonic": {
     "venue": "Datatonic, 1 Canada Square, London",
     "name": "Datatonic",
-    "lat": 51.52602,
-    "lon": -0.10442
+    "lat": 51.50537,
+    "lon": -0.13577
   },
-  "london::Level39, Canary Wharf, London": {
+  "london::Level39": {
     "venue": "Level39, Canary Wharf, London",
     "name": "Level39",
-    "lat": 51.52694,
-    "lon": -0.0978
+    "lat": 51.52625,
+    "lon": -0.10022
   },
-  "london::Receipt Bank, 99 Clifton Street, London": {
+  "london::Receipt Bank": {
     "venue": "Receipt Bank, 99 Clifton Street, London",
     "name": "Receipt Bank",
-    "lat": 51.47973,
-    "lon": -0.12548
+    "lat": 51.50845,
+    "lon": -0.10096
   },
-  "london::RVU, 5 Copper Row, London": {
+  "london::RVU": {
     "venue": "RVU, 5 Copper Row, London",
     "name": "RVU",
-    "lat": 51.53689,
-    "lon": -0.13014
+    "lat": 51.48331,
+    "lon": -0.14478
   },
-  "london::Simply Business, 99 Gresham Street, London": {
+  "london::Simply Business": {
     "venue": "Simply Business, 99 Gresham Street, London",
     "name": "Simply Business",
-    "lat": 51.4908,
-    "lon": -0.10125
+    "lat": 51.52016,
+    "lon": -0.10077
   },
-  "london::Growth Street, 22-30 Dukes Place, London": {
+  "london::Growth Street": {
     "venue": "Growth Street, 22-30 Dukes Place, London",
     "name": "Growth Street",
-    "lat": 51.51398,
-    "lon": -0.1547
+    "lat": 51.49885,
+    "lon": -0.11587
   },
-  "los-angeles::FanDuel, 6701 Center Dr W, Los Angeles, CA": {
+  "los-angeles::FanDuel": {
     "venue": "FanDuel, 6701 Center Dr W, Los Angeles, CA",
     "name": "FanDuel",
-    "lat": 34.04746,
-    "lon": -118.26905
+    "lat": 34.0726,
+    "lon": -118.27096
   },
-  "los-angeles::11520 W Pico Blvd, Los Angeles, CA": {
+  "los-angeles::11520 W Pico Blvd": {
     "venue": "11520 W Pico Blvd, Los Angeles, CA",
     "name": "11520 W Pico Blvd",
-    "lat": 34.02971,
-    "lon": -118.21454
+    "lat": 34.0343,
+    "lon": -118.26863
   },
-  "madrid::Utopicus Paseo de la Habana, Paseo de la Habana 9-11, Madrid": {
+  "madrid::Utopicus Paseo de la Habana": {
     "venue": "Utopicus Paseo de la Habana, Paseo de la Habana 9-11, Madrid",
     "name": "Utopicus Paseo de la Habana",
-    "lat": 40.41096,
-    "lon": -3.70779
+    "lat": 40.43494,
+    "lon": -3.71133
   },
-  "madrid::Utopicus Habana, P.º de La Habana 9-11, Madrid": {
+  "madrid::Utopicus Habana": {
     "venue": "Utopicus Habana, P.º de La Habana 9-11, Madrid",
     "name": "Utopicus Habana",
-    "lat": 40.39406,
-    "lon": -3.72451
+    "lat": 40.43649,
+    "lon": -3.73182
   },
-  "madrid::Utopicus Principe de Vergara, C. del Príncipe de Vergara 112, Madrid": {
+  "madrid::Utopicus Principe de Vergara": {
     "venue": "Utopicus Principe de Vergara, C. del Príncipe de Vergara 112, Madrid",
     "name": "Utopicus Principe de Vergara",
-    "lat": 40.4105,
-    "lon": -3.72585
+    "lat": 40.40691,
+    "lon": -3.69889
   },
-  "madrid::P.º de La Habana 9-11, Madrid": {
+  "madrid::P.º de La Habana 9-11": {
     "venue": "P.º de La Habana 9-11, Madrid",
     "name": "P.º de La Habana 9-11",
-    "lat": 40.42776,
-    "lon": -3.72738
+    "lat": 40.39209,
+    "lon": -3.70723
   },
-  "manila::Good Neighbor, Unit 9, Ground Floor, Verve One, Taguig, Metro Manila": {
+  "manila::Good Neighbor": {
     "venue": "Good Neighbor, Unit 9, Ground Floor, Verve One, Taguig, Metro Manila",
     "name": "Good Neighbor",
-    "lat": 14.58853,
-    "lon": 120.98164
+    "lat": 14.59104,
+    "lon": 120.97791
   },
-  "marseille::Le Mangrove, 154 Rue de Rome, Marseille": {
+  "marseille::Le Mangrove": {
     "venue": "Le Mangrove, 154 Rue de Rome, Marseille",
     "name": "Le Mangrove",
-    "lat": 43.29917,
-    "lon": 5.37974
+    "lat": 43.28865,
+    "lon": 5.34737
   },
-  "medellin::WeWork Los Balsos, Carrera 42 #5 Sur-145, Medellín": {
+  "medellin::WeWork Los Balsos": {
     "venue": "WeWork Los Balsos, Carrera 42 #5 Sur-145, Medellín",
     "name": "WeWork Los Balsos",
-    "lat": 6.26762,
-    "lon": -75.57666
+    "lat": 6.24887,
+    "lon": -75.57295
   },
-  "melbourne::Mantel Group, Level 2, 452 Flinders St, Melbourne VIC": {
+  "melbourne::Mantel Group": {
     "venue": "Mantel Group, Level 2, 452 Flinders St, Melbourne VIC",
     "name": "Mantel Group",
-    "lat": -37.83917,
-    "lon": 144.9826
+    "lat": -37.80004,
+    "lon": 144.97691
   },
-  "milan::Data Reply, Via Robert Koch 1/4, Milano": {
+  "milan::Data Reply": {
     "venue": "Data Reply, Via Robert Koch 1/4, Milano",
     "name": "Data Reply",
-    "lat": 45.47407,
-    "lon": 9.19345
+    "lat": 45.44247,
+    "lon": 9.18791
   },
-  "minneapolis::Sky Lounge @ North Loop Green 360, 360 N 5th St, Minneapolis, MN": {
+  "minneapolis::Sky Lounge @ North Loop Green 360": {
     "venue": "Sky Lounge @ North Loop Green 360, 360 N 5th St, Minneapolis, MN",
     "name": "Sky Lounge @ North Loop Green 360",
-    "lat": 44.96644,
-    "lon": -93.24528
+    "lat": 44.99433,
+    "lon": -93.27899
   },
-  "minneapolis::Improving, 1515 Central Ave NE Suite 100, Minneapolis, MN": {
+  "minneapolis::Improving": {
     "venue": "Improving, 1515 Central Ave NE Suite 100, Minneapolis, MN",
     "name": "Improving",
-    "lat": 44.95203,
-    "lon": -93.28588
+    "lat": 44.95137,
+    "lon": -93.25994
   },
-  "minneapolis::FINNEGANS Brew Co., 817 5th Ave S, Minneapolis, MN": {
+  "minneapolis::FINNEGANS Brew Co.": {
     "venue": "FINNEGANS Brew Co., 817 5th Ave S, Minneapolis, MN",
     "name": "FINNEGANS Brew Co.",
-    "lat": 44.99973,
-    "lon": -93.25172
+    "lat": 44.94971,
+    "lon": -93.2614
   },
-  "montreal::Solution BI Canada, 4200 Boul. Saint-Laurent Suite 425, Montréal, QC": {
+  "montreal::Solution BI Canada": {
     "venue": "Solution BI Canada, 4200 Boul. Saint-Laurent Suite 425, Montréal, QC",
     "name": "Solution BI Canada",
-    "lat": 45.48323,
-    "lon": -73.54939
+    "lat": 45.50437,
+    "lon": -73.53912
   },
-  "montreal::Dialogue, 455 Rue Sainte-Hélène Suite 200, Montréal, QC": {
+  "montreal::Dialogue": {
     "venue": "Dialogue, 455 Rue Sainte-Hélène Suite 200, Montréal, QC",
     "name": "Dialogue",
-    "lat": 45.52614,
-    "lon": -73.57973
+    "lat": 45.49618,
+    "lon": -73.53938
   },
-  "montreal::Unito, 1265 Rue Berri 7th floor, Montreal, QC": {
+  "montreal::Unito": {
     "venue": "Unito, 1265 Rue Berri 7th floor, Montreal, QC",
     "name": "Unito",
-    "lat": 45.52748,
-    "lon": -73.55308
+    "lat": 45.50974,
+    "lon": -73.58336
   },
-  "munich::Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München": {
+  "munich::Synabi Business Solutions GmbH": {
     "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
     "name": "Synabi Business Solutions GmbH",
-    "lat": 48.14607,
-    "lon": 11.56042
+    "lat": 48.14272,
+    "lon": 11.5621
   },
-  "munich::Daiichi Sankyo, Zielstattstraße 48, Munich": {
+  "munich::Daiichi Sankyo": {
     "venue": "Daiichi Sankyo, Zielstattstraße 48, Munich",
     "name": "Daiichi Sankyo",
-    "lat": 48.14182,
-    "lon": 11.57676
+    "lat": 48.13737,
+    "lon": 11.60264
   },
-  "norther-germany::HDI Versicherung AG, HDI-Platz 1, Hanover": {
+  "norther-germany::HDI Versicherung AG": {
     "venue": "HDI Versicherung AG, HDI-Platz 1, Hanover",
     "name": "HDI Versicherung AG",
-    "lat": 52.36832,
-    "lon": 9.71326
+    "lat": 52.3678,
+    "lon": 9.73278
   },
-  "norther-germany::House of New Work - by Blackboat, Königstraße 28, Hamburg": {
+  "norther-germany::House of New Work - by Blackboat": {
     "venue": "House of New Work - by Blackboat, Königstraße 28, Hamburg",
     "name": "House of New Work - by Blackboat",
-    "lat": 52.40163,
-    "lon": 9.72335
+    "lat": 52.37875,
+    "lon": 9.70369
   },
-  "nyc::Datadog, 620 8th Ave, 47th floor, New York, NY 10018": {
+  "nyc::Datadog": {
     "venue": "Datadog, 620 8th Ave, 47th floor, New York, NY 10018",
     "name": "Datadog",
-    "lat": 40.71892,
-    "lon": -73.97856
+    "lat": 40.70688,
+    "lon": -74.01454
   },
-  "nyc::Datadog, 620 8th Ave, 45th floor, New York, NY 10018": {
-    "venue": "Datadog, 620 8th Ave, 45th floor, New York, NY 10018",
-    "name": "Datadog",
-    "lat": 40.72173,
-    "lon": -74.0186
-  },
-  "nyc::DoubleVerify Headquarters, 28 Crosby Street, floor 6, New York, NY 10013": {
+  "nyc::DoubleVerify Headquarters": {
     "venue": "DoubleVerify Headquarters, 28 Crosby Street, floor 6, New York, NY 10013",
     "name": "DoubleVerify Headquarters",
-    "lat": 40.7105,
-    "lon": -74.00134
+    "lat": 40.69352,
+    "lon": -74.02642
   },
-  "nyc::Datadog, 620 8th Ave, 45th floor, New York, NY": {
-    "venue": "Datadog, 620 8th Ave, 45th floor, New York, NY",
-    "name": "Datadog",
-    "lat": 40.71591,
-    "lon": -73.97755
-  },
-  "nyc::Sixth Floor Loft (2nd floor), 873 Broadway, New York, NY": {
+  "nyc::Sixth Floor Loft (2nd floor)": {
     "venue": "Sixth Floor Loft (2nd floor), 873 Broadway, New York, NY",
     "name": "Sixth Floor Loft (2nd floor)",
-    "lat": 40.72547,
-    "lon": -73.98292
+    "lat": 40.73321,
+    "lon": -74.01219
   },
-  "nyc::Materialize, 436 Lafayette St floor 6, New York, NY 10003": {
+  "nyc::Materialize": {
     "venue": "Materialize, 436 Lafayette St floor 6, New York, NY 10003",
     "name": "Materialize",
-    "lat": 40.71894,
-    "lon": -74.01631
+    "lat": 40.72633,
+    "lon": -73.98446
   },
-  "nyc::GameChanger, 124 E 14th St 17th floor, New York, NY": {
+  "nyc::GameChanger": {
     "venue": "GameChanger, 124 E 14th St 17th floor, New York, NY",
     "name": "GameChanger",
-    "lat": 40.71057,
-    "lon": -74.03276
+    "lat": 40.70301,
+    "lon": -74.01603
   },
-  "nyc::Sigma Computing, 124 E 14th St 9th floor, New York, NY": {
+  "nyc::Sigma Computing": {
     "venue": "Sigma Computing, 124 E 14th St 9th floor, New York, NY",
     "name": "Sigma Computing",
-    "lat": 40.72063,
-    "lon": -74.02234
+    "lat": 40.71843,
+    "lon": -73.97999
   },
-  "nyc::Fanduel, New York, NY (exact address released day-of)": {
+  "nyc::Fanduel": {
     "venue": "Fanduel, New York, NY (exact address released day-of)",
     "name": "Fanduel",
-    "lat": 40.74029,
-    "lon": -73.98167
+    "lat": 40.70328,
+    "lon": -73.98276
   },
-  "nyc::FanDuel office, Chelsea-Flatiron area, New York, NY": {
+  "nyc::FanDuel office": {
     "venue": "FanDuel office, Chelsea-Flatiron area, New York, NY",
     "name": "FanDuel office",
-    "lat": 40.69956,
-    "lon": -74.0117
+    "lat": 40.73463,
+    "lon": -73.98212
   },
-  "nyc::Convene, 530 5th Ave floor 9, New York, NY": {
+  "nyc::Convene": {
     "venue": "Convene, 530 5th Ave floor 9, New York, NY",
     "name": "Convene",
-    "lat": 40.73535,
-    "lon": -74.00934
+    "lat": 40.69195,
+    "lon": -74.02435
   },
-  "nyc::Bowery Farming HQ, 151 W 26th St 12th floor, New York, NY": {
+  "nyc::Bowery Farming HQ": {
     "venue": "Bowery Farming HQ, 151 W 26th St 12th floor, New York, NY",
     "name": "Bowery Farming HQ",
-    "lat": 40.69963,
-    "lon": -73.99607
+    "lat": 40.70954,
+    "lon": -73.99031
   },
-  "nyc::Warby Parker HQ and Showroom, 233 Spring St 6th Floor E, New York, NY": {
+  "nyc::Warby Parker HQ and Showroom": {
     "venue": "Warby Parker HQ and Showroom, 233 Spring St 6th Floor E, New York, NY",
     "name": "Warby Parker HQ and Showroom",
-    "lat": 40.71056,
-    "lon": -74.0001
+    "lat": 40.69963,
+    "lon": -74.01658
   },
-  "nyc::230 Park Ave S, New York, NY": {
+  "nyc::230 Park Ave S": {
     "venue": "230 Park Ave S, New York, NY",
     "name": "230 Park Ave S",
-    "lat": 40.71857,
-    "lon": -74.03425
+    "lat": 40.71417,
+    "lon": -74.00082
   },
-  "oslo-dbt-group::Sundtkvartalet, Lakkegata 53, Oslo": {
+  "oslo-dbt-group::Sundtkvartalet": {
     "venue": "Sundtkvartalet, Lakkegata 53, Oslo",
     "name": "Sundtkvartalet",
-    "lat": 59.93303,
-    "lon": 10.75012
+    "lat": 59.91504,
+    "lon": 10.77536
   },
-  "oslo-dbt-group::Rebel, Universitetsgata 2, Oslo": {
+  "oslo-dbt-group::Rebel": {
     "venue": "Rebel, Universitetsgata 2, Oslo",
     "name": "Rebel",
-    "lat": 59.89123,
-    "lon": 10.7397
+    "lat": 59.93331,
+    "lon": 10.77356
   },
-  "oslo-dbt-group::Telenor, Snarøyveien 30, Fornebu, Oslo": {
+  "oslo-dbt-group::Telenor": {
     "venue": "Telenor, Snarøyveien 30, Fornebu, Oslo",
     "name": "Telenor",
-    "lat": 59.89577,
-    "lon": 10.74918
+    "lat": 59.88578,
+    "lon": 10.72434
   },
-  "oslo-dbt-group::Akersgata 34, Oslo": {
+  "oslo-dbt-group::Akersgata 34": {
     "venue": "Akersgata 34, Oslo",
     "name": "Akersgata 34",
-    "lat": 59.9116,
-    "lon": 10.76244
+    "lat": 59.92377,
+    "lon": 10.74215
   },
-  "oslo-dbt-group::Computashuset, Akersgata 35, Oslo": {
+  "oslo-dbt-group::Computashuset": {
     "venue": "Computashuset, Akersgata 35, Oslo",
     "name": "Computashuset",
-    "lat": 59.91317,
-    "lon": 10.77865
+    "lat": 59.90096,
+    "lon": 10.76307
   },
-  "paris::Deskeo, 32 Rue René Boulanger, Paris": {
+  "paris::Deskeo": {
     "venue": "Deskeo, 32 Rue René Boulanger, Paris",
     "name": "Deskeo",
-    "lat": 48.82835,
-    "lon": 2.3694
+    "lat": 48.85355,
+    "lon": 2.34723
   },
-  "paris::Coolandworkers, 2 rue de Dahomey, Paris": {
+  "paris::Coolandworkers": {
     "venue": "Coolandworkers, 2 rue de Dahomey, Paris",
     "name": "Coolandworkers",
-    "lat": 48.88501,
-    "lon": 2.36311
+    "lat": 48.85647,
+    "lon": 2.3585
   },
-  "paris::Founders Café, STATION F, Paris": {
+  "paris::Founders Café": {
     "venue": "Founders Café, STATION F, Paris",
     "name": "Founders Café",
-    "lat": 48.84616,
-    "lon": 2.33453
+    "lat": 48.84058,
+    "lon": 2.32255
   },
-  "paris::Payfit, 1 Rue de Saint-Pétersbourg, Paris": {
+  "paris::Payfit": {
     "venue": "Payfit, 1 Rue de Saint-Pétersbourg, Paris",
     "name": "Payfit",
-    "lat": 48.84823,
-    "lon": 2.35572
+    "lat": 48.87382,
+    "lon": 2.37041
   },
-  "paris::Stuart offices, 43-45 Avenue de Clichy, Paris": {
+  "paris::Stuart offices": {
     "venue": "Stuart offices, 43-45 Avenue de Clichy, Paris",
     "name": "Stuart offices",
-    "lat": 48.86459,
-    "lon": 2.32936
+    "lat": 48.85935,
+    "lon": 2.3405
   },
-  "paris::The Red Balloon, 51 Rue Notre Dame de Nazareth, Paris": {
+  "paris::The Red Balloon": {
     "venue": "The Red Balloon, 51 Rue Notre Dame de Nazareth, Paris",
     "name": "The Red Balloon",
-    "lat": 48.82916,
-    "lon": 2.36237
+    "lat": 48.8419,
+    "lon": 2.33542
   },
-  "philadelphia::dbt Labs office, 915 Spring Garden St #500, Philadelphia, PA": {
+  "philadelphia::dbt Labs office": {
     "venue": "dbt Labs office, 915 Spring Garden St #500, Philadelphia, PA",
     "name": "dbt Labs office",
-    "lat": 39.97469,
-    "lon": -75.13955
+    "lat": 39.93579,
+    "lon": -75.16383
   },
-  "philadelphia::Slalom Consulting, 100 N 18th St Suite 2000, Philadelphia, PA": {
+  "philadelphia::Slalom Consulting": {
     "venue": "Slalom Consulting, 100 N 18th St Suite 2000, Philadelphia, PA",
     "name": "Slalom Consulting",
-    "lat": 39.96739,
-    "lon": -75.19458
+    "lat": 39.9381,
+    "lon": -75.19021
   },
-  "phoenix::Slalom Consulting, 7150 E Camelback Rd #200, Scottsdale, AZ": {
+  "phoenix::Slalom Consulting": {
     "venue": "Slalom Consulting, 7150 E Camelback Rd #200, Scottsdale, AZ",
     "name": "Slalom Consulting",
-    "lat": 33.45573,
-    "lon": -112.04683
+    "lat": 33.44541,
+    "lon": -112.10156
   },
-  "portland::InterWorks @ Kiln, 1120 Southeast Madison Street, Portland, OR": {
+  "portland::InterWorks @ Kiln": {
     "venue": "InterWorks @ Kiln, 1120 Southeast Madison Street, Portland, OR",
     "name": "InterWorks @ Kiln",
-    "lat": 45.54417,
-    "lon": -122.68238
+    "lat": 45.50603,
+    "lon": -122.70064
   },
-  "prague::Philip Morris, Karlovo nám. 2097, Prague": {
+  "prague::Philip Morris": {
     "venue": "Philip Morris, Karlovo nám. 2097, Prague",
     "name": "Philip Morris",
-    "lat": 50.09699,
-    "lon": 14.40781
+    "lat": 50.07674,
+    "lon": 14.42371
   },
-  "prague::MSD IT, FIVE Building, Na Valentince 3336/4, Prague": {
+  "prague::MSD IT": {
     "venue": "MSD IT, FIVE Building, Na Valentince 3336/4, Prague",
     "name": "MSD IT",
-    "lat": 50.09682,
-    "lon": 14.41426
+    "lat": 50.04794,
+    "lon": 14.46627
   },
-  "prague::STRV, Rohanské nábřeží 678/23, Prague": {
+  "prague::STRV": {
     "venue": "STRV, Rohanské nábřeží 678/23, Prague",
     "name": "STRV",
-    "lat": 50.09982,
-    "lon": 14.42755
+    "lat": 50.05933,
+    "lon": 14.4524
   },
-  "raleigh-d::Boxyard RTP, 842-898 Park Offices Dr, Morrisville, NC": {
+  "raleigh-d::Boxyard RTP": {
     "venue": "Boxyard RTP, 842-898 Park Offices Dr, Morrisville, NC",
     "name": "Boxyard RTP",
-    "lat": 35.77999,
-    "lon": -78.63434
+    "lat": 35.75076,
+    "lon": -78.62102
   },
-  "rhein-ruhr::taod Consulting GmbH, Oskar-Jäger-Str. 173, K4, Cologne": {
+  "rhein-ruhr::taod Consulting GmbH": {
     "venue": "taod Consulting GmbH, Oskar-Jäger-Str. 173, K4, Cologne",
     "name": "taod Consulting GmbH",
-    "lat": 50.91405,
-    "lon": 6.9725
+    "lat": 50.96251,
+    "lon": 6.96751
   },
-  "rhein-ruhr::adesso SE, Agrippinawerft 26, Köln": {
+  "rhein-ruhr::adesso SE": {
     "venue": "adesso SE, Agrippinawerft 26, Köln",
     "name": "adesso SE",
-    "lat": 50.95814,
-    "lon": 6.94805
+    "lat": 50.92098,
+    "lon": 6.94762
   },
-  "riyadh::Grand Plaza Dhabab Hotel, Riyadh": {
+  "riyadh::Grand Plaza Dhabab Hotel": {
     "venue": "Grand Plaza Dhabab Hotel, Riyadh",
     "name": "Grand Plaza Dhabab Hotel",
-    "lat": 24.68464,
-    "lon": 46.69567
+    "lat": 24.73137,
+    "lon": 46.68068
   },
-  "san-francisco::The Academy, 2166 Market Street, San Francisco, CA": {
+  "san-francisco::The Academy": {
     "venue": "The Academy, 2166 Market Street, San Francisco, CA",
     "name": "The Academy",
-    "lat": 37.79901,
-    "lon": -122.43754
+    "lat": 37.80458,
+    "lon": -122.39202
   },
-  "san-francisco::Trellis Coworking, Events, Cafe & Bar, 981 Mission St, San Francisco, CA": {
+  "san-francisco::Trellis Coworking": {
     "venue": "Trellis Coworking, Events, Cafe & Bar, 981 Mission St, San Francisco, CA",
     "name": "Trellis Coworking",
-    "lat": 37.75687,
-    "lon": -122.40234
+    "lat": 37.77365,
+    "lon": -122.44757
   },
-  "san-francisco::dbt Labs, 650 California St suite 1501, San Francisco, CA": {
+  "san-francisco::dbt Labs": {
     "venue": "dbt Labs, 650 California St suite 1501, San Francisco, CA",
     "name": "dbt Labs",
-    "lat": 37.7643,
-    "lon": -122.44583
+    "lat": 37.75978,
+    "lon": -122.44343
   },
-  "san-francisco::Thoughtspot, 444 Castro St suite 1000, Mountain View, CA": {
+  "san-francisco::Thoughtspot": {
     "venue": "Thoughtspot, 444 Castro St suite 1000, Mountain View, CA",
     "name": "Thoughtspot",
-    "lat": 37.78921,
-    "lon": -122.41488
+    "lat": 37.77463,
+    "lon": -122.40368
   },
-  "san-francisco::dbt Labs, 650 California St, San Francisco, CA": {
-    "venue": "dbt Labs, 650 California St, San Francisco, CA",
-    "name": "dbt Labs",
-    "lat": 37.80084,
-    "lon": -122.40397
-  },
-  "san-francisco::Envoy, 410 Townsend St 4th floor, San Francisco, CA": {
+  "san-francisco::Envoy": {
     "venue": "Envoy, 410 Townsend St 4th floor, San Francisco, CA",
     "name": "Envoy",
-    "lat": 37.80133,
-    "lon": -122.44815
+    "lat": 37.76389,
+    "lon": -122.41791
   },
-  "san-francisco::Grove Collaborative, 1301 Sansome St, San Francisco, CA": {
+  "san-francisco::Grove Collaborative": {
     "venue": "Grove Collaborative, 1301 Sansome St, San Francisco, CA",
     "name": "Grove Collaborative",
-    "lat": 37.7878,
-    "lon": -122.42146
+    "lat": 37.75231,
+    "lon": -122.43522
   },
-  "sao-paulo::ESPM São Paulo, R. Joaquim Távora, 1240, São Paulo": {
+  "sao-paulo::ESPM São Paulo": {
     "venue": "ESPM São Paulo, R. Joaquim Távora, 1240, São Paulo",
     "name": "ESPM São Paulo",
-    "lat": -23.52211,
-    "lon": -46.65096
+    "lat": -23.57331,
+    "lon": -46.63681
   },
-  "sao-paulo::Oracle do Brasil, Rua Dr Jose Aureo Bustamante 455, São Paulo": {
+  "sao-paulo::Oracle do Brasil": {
     "venue": "Oracle do Brasil, Rua Dr Jose Aureo Bustamante 455, São Paulo",
     "name": "Oracle do Brasil",
-    "lat": -23.56197,
-    "lon": -46.61723
+    "lat": -23.52509,
+    "lon": -46.64166
   },
-  "sao-paulo::FIAP - Paulista, 1106 Avenida Paulista, São Paulo": {
+  "sao-paulo::FIAP - Paulista": {
     "venue": "FIAP - Paulista, 1106 Avenida Paulista, São Paulo",
     "name": "FIAP - Paulista",
-    "lat": -23.55165,
-    "lon": -46.64697
+    "lat": -23.52067,
+    "lon": -46.66183
   },
-  "sao-paulo::FIAP, Av. Paulista, 1106, São Paulo": {
+  "sao-paulo::FIAP": {
     "venue": "FIAP, Av. Paulista, 1106, São Paulo",
     "name": "FIAP",
-    "lat": -23.54653,
-    "lon": -46.61027
+    "lat": -23.52563,
+    "lon": -46.62061
   },
-  "sao-paulo::FIA Business School, Av. Dra. Ruth Cardoso, 7221, São Paulo": {
+  "sao-paulo::FIA Business School": {
     "venue": "FIA Business School, Av. Dra. Ruth Cardoso, 7221, São Paulo",
     "name": "FIA Business School",
-    "lat": -23.5224,
-    "lon": -46.62513
+    "lat": -23.55461,
+    "lon": -46.65497
   },
-  "seattle::Docusign Tower, 999 3rd Ave #1000, Seattle, WA": {
+  "seattle::Docusign Tower": {
     "venue": "Docusign Tower, 999 3rd Ave #1000, Seattle, WA",
     "name": "Docusign Tower",
-    "lat": 47.6305,
-    "lon": -122.32638
+    "lat": 47.62189,
+    "lon": -122.31697
   },
-  "seattle::Madrona Ventures, 999 Third Avenue, 33rd floor, Seattle, WA": {
+  "seattle::Madrona Ventures": {
     "venue": "Madrona Ventures, 999 Third Avenue, 33rd floor, Seattle, WA",
     "name": "Madrona Ventures",
-    "lat": 47.62644,
-    "lon": -122.33347
+    "lat": 47.59124,
+    "lon": -122.314
   },
-  "seattle::WeWork Holyoke Building, 107 Spring St, Seattle, WA": {
+  "seattle::WeWork Holyoke Building": {
     "venue": "WeWork Holyoke Building, 107 Spring St, Seattle, WA",
     "name": "WeWork Holyoke Building",
-    "lat": 47.62483,
-    "lon": -122.35061
+    "lat": 47.59974,
+    "lon": -122.35538
   },
-  "seattle::Foundations, 1605 Boylston Ave, Seattle, WA": {
+  "seattle::Foundations": {
     "venue": "Foundations, 1605 Boylston Ave, Seattle, WA",
     "name": "Foundations",
-    "lat": 47.61652,
-    "lon": -122.35431
+    "lat": 47.62545,
+    "lon": -122.33106
   },
-  "seattle::999 3rd Ave, Seattle, WA (Docusign Tower)": {
+  "seattle::999 3rd Ave": {
     "venue": "999 3rd Ave, Seattle, WA (Docusign Tower)",
     "name": "999 3rd Ave",
-    "lat": 47.61346,
-    "lon": -122.3281
+    "lat": 47.60206,
+    "lon": -122.30948
   },
-  "seattle::1425 4th Ave, Seattle, WA": {
+  "seattle::1425 4th Ave": {
     "venue": "1425 4th Ave, Seattle, WA",
     "name": "1425 4th Ave",
-    "lat": 47.59005,
-    "lon": -122.31513
+    "lat": 47.6276,
+    "lon": -122.3243
   },
-  "seattle::2107 Elliott Ave #302, Seattle, WA": {
+  "seattle::2107 Elliott Ave #302": {
     "venue": "2107 Elliott Ave #302, Seattle, WA",
     "name": "2107 Elliott Ave #302",
-    "lat": 47.57657,
-    "lon": -122.31628
+    "lat": 47.59923,
+    "lon": -122.35941
   },
-  "seoul::MARU360, B1, 172 Yeoksam-ro, Gangnam-gu, Seoul": {
+  "seoul::MARU360": {
     "venue": "MARU360, B1, 172 Yeoksam-ro, Gangnam-gu, Seoul",
     "name": "MARU360",
-    "lat": 37.58659,
-    "lon": 126.96536
+    "lat": 37.57805,
+    "lon": 126.99169
   },
-  "seoul::Snowflake Korea Office, 134 Teheran-ro, Gangnam-gu, Seoul": {
+  "seoul::Snowflake Korea Office": {
     "venue": "Snowflake Korea Office, 134 Teheran-ro, Gangnam-gu, Seoul",
     "name": "Snowflake Korea Office",
-    "lat": 37.55615,
-    "lon": 126.9547
+    "lat": 37.5431,
+    "lon": 126.95549
   },
-  "seoul::Berry Space, 28 Bongeunsa-ro 16-gil, Gangnam-gu, Seoul": {
+  "seoul::Berry Space": {
     "venue": "Berry Space, 28 Bongeunsa-ro 16-gil, Gangnam-gu, Seoul",
     "name": "Berry Space",
-    "lat": 37.5465,
-    "lon": 126.97526
+    "lat": 37.55045,
+    "lon": 126.99501
   },
-  "seoul::Jidining Company, 629-1 Yeoksam-dong, Gangnam-gu, Seoul": {
+  "seoul::Jidining Company": {
     "venue": "Jidining Company, 629-1 Yeoksam-dong, Gangnam-gu, Seoul",
     "name": "Jidining Company",
-    "lat": 37.55935,
-    "lon": 127.0072
+    "lat": 37.57647,
+    "lon": 126.95554
   },
-  "seoul::OrangePlanet, 4th Floor, Gangnam-gu, Seoul": {
+  "seoul::OrangePlanet": {
     "venue": "OrangePlanet, 4th Floor, Gangnam-gu, Seoul",
     "name": "OrangePlanet",
-    "lat": 37.58827,
-    "lon": 126.98944
+    "lat": 37.58198,
+    "lon": 126.99598
   },
-  "seoul::Cafe en Travel, 45 Gangnam-daero 102-gil, Gangnam-gu, Seoul": {
+  "seoul::Cafe en Travel": {
     "venue": "Cafe en Travel, 45 Gangnam-daero 102-gil, Gangnam-gu, Seoul",
     "name": "Cafe en Travel",
-    "lat": 37.56671,
-    "lon": 126.99044
+    "lat": 37.57043,
+    "lon": 126.95001
   },
-  "seoul::Sebasi Demaco Hall, B1, 16 Teheran-ro 53-gil, Gangnam-gu, Seoul": {
+  "seoul::Sebasi Demaco Hall": {
     "venue": "Sebasi Demaco Hall, B1, 16 Teheran-ro 53-gil, Gangnam-gu, Seoul",
     "name": "Sebasi Demaco Hall",
-    "lat": 37.5778,
-    "lon": 126.96019
+    "lat": 37.56771,
+    "lon": 126.98682
   },
-  "seoul::Allday Sound Bar, 34 Dosan-daero 11-gil, Gangnam-gu, Seoul": {
+  "seoul::Allday Sound Bar": {
     "venue": "Allday Sound Bar, 34 Dosan-daero 11-gil, Gangnam-gu, Seoul",
     "name": "Allday Sound Bar",
-    "lat": 37.55412,
-    "lon": 126.96058
+    "lat": 37.58042,
+    "lon": 126.97166
   },
-  "singapore::foodpanda SG, 63 Robinson Road, Singapore": {
+  "singapore::foodpanda SG": {
     "venue": "foodpanda SG, 63 Robinson Road, Singapore",
     "name": "foodpanda SG",
-    "lat": 1.36171,
-    "lon": 103.79815
+    "lat": 1.34848,
+    "lon": 103.81555
   },
-  "singapore::Open Sourced, 10A Perak Rd, Rochor, Singapore": {
+  "singapore::Open Sourced": {
     "venue": "Open Sourced, 10A Perak Rd, Rochor, Singapore",
     "name": "Open Sourced",
-    "lat": 1.36272,
-    "lon": 103.81411
+    "lat": 1.34423,
+    "lon": 103.79797
   },
-  "singapore::Open Sourced, 10A Perak Rd, Singapore": {
-    "venue": "Open Sourced, 10A Perak Rd, Singapore",
-    "name": "Open Sourced",
-    "lat": 1.33125,
-    "lon": 103.79646
-  },
-  "singapore::Space99, 606 Serangoon Rd, Singapore 218214": {
+  "singapore::Space99": {
     "venue": "Space99, 606 Serangoon Rd, Singapore 218214",
     "name": "Space99",
-    "lat": 1.38154,
-    "lon": 103.84516
+    "lat": 1.3545,
+    "lon": 103.83196
   },
-  "singapore::Room2F | Events & Gallery Space, 231 Bras Basah Complex, Singapore": {
+  "singapore::Room2F | Events & Gallery Space": {
     "venue": "Room2F | Events & Gallery Space, 231 Bras Basah Complex, Singapore",
     "name": "Room2F | Events & Gallery Space",
-    "lat": 1.37217,
-    "lon": 103.79388
+    "lat": 1.34779,
+    "lon": 103.82942
   },
-  "singapore::Traveloka Services Pte. Ltd., Robinson 77, Singapore": {
+  "singapore::Traveloka Services Pte. Ltd.": {
     "venue": "Traveloka Services Pte. Ltd., Robinson 77, Singapore",
     "name": "Traveloka Services Pte. Ltd.",
-    "lat": 1.33883,
-    "lon": 103.79237
+    "lat": 1.37792,
+    "lon": 103.8213
   },
-  "singapore::ShopBack SG, 65 Pasir Panjang Rd, Singapore": {
+  "singapore::ShopBack SG": {
     "venue": "ShopBack SG, 65 Pasir Panjang Rd, Singapore",
     "name": "ShopBack SG",
-    "lat": 1.33455,
-    "lon": 103.81802
+    "lat": 1.36894,
+    "lon": 103.8375
   },
-  "singapore::Hyper Island Asia, 991B Alexandra Rd, Singapore": {
+  "singapore::Hyper Island Asia": {
     "venue": "Hyper Island Asia, 991B Alexandra Rd, Singapore",
     "name": "Hyper Island Asia",
-    "lat": 1.37886,
-    "lon": 103.80254
+    "lat": 1.34647,
+    "lon": 103.81995
   },
-  "singapore::WeWork, 21 Collyer Quay, Singapore": {
+  "singapore::WeWork": {
     "venue": "WeWork, 21 Collyer Quay, Singapore",
     "name": "WeWork",
-    "lat": 1.33506,
-    "lon": 103.79953
+    "lat": 1.36694,
+    "lon": 103.80803
   },
-  "singapore::OCBC Campus, 260 Tg Pagar Rd, Singapore": {
+  "singapore::OCBC Campus": {
     "venue": "OCBC Campus, 260 Tg Pagar Rd, Singapore",
     "name": "OCBC Campus",
-    "lat": 1.36272,
-    "lon": 103.82257
+    "lat": 1.33941,
+    "lon": 103.84888
   },
-  "singapore::The Great Room, 18th Floor, Centennial Tower, Singapore": {
+  "singapore::The Great Room": {
     "venue": "The Great Room, 18th Floor, Centennial Tower, Singapore",
     "name": "The Great Room",
-    "lat": 1.38206,
-    "lon": 103.82781
+    "lat": 1.32431,
+    "lon": 103.83967
   },
-  "singapore::Spenmo, 15A Duxton Hill, Singapore": {
+  "singapore::Spenmo": {
     "venue": "Spenmo, 15A Duxton Hill, Singapore",
     "name": "Spenmo",
-    "lat": 1.36085,
-    "lon": 103.81692
+    "lat": 1.33226,
+    "lon": 103.8209
   },
-  "singapore::Super Loco Robertson Quay, 60 Robertson Quay, Singapore": {
+  "singapore::Super Loco Robertson Quay": {
     "venue": "Super Loco Robertson Quay, 60 Robertson Quay, Singapore",
     "name": "Super Loco Robertson Quay",
-    "lat": 1.33189,
-    "lon": 103.8084
+    "lat": 1.37327,
+    "lon": 103.8352
   },
-  "stockholm::Solita Ab, Lästmakargatan 10, Stockholm": {
+  "stockholm::Solita Ab": {
     "venue": "Solita Ab, Lästmakargatan 10, Stockholm",
     "name": "Solita Ab",
-    "lat": 59.32176,
-    "lon": 18.05731
+    "lat": 59.34718,
+    "lon": 18.09077
   },
-  "stockholm::Regeringsgatan 25, Stockholm": {
+  "stockholm::Regeringsgatan 25": {
     "venue": "Regeringsgatan 25, Stockholm",
     "name": "Regeringsgatan 25",
-    "lat": 59.3377,
-    "lon": 18.04606
+    "lat": 59.30902,
+    "lon": 18.06
   },
-  "swiss::EF Education AG, Selnaustrasse 30, Zürich": {
+  "swiss::EF Education AG": {
     "venue": "EF Education AG, Selnaustrasse 30, Zürich",
     "name": "EF Education AG",
-    "lat": 47.35662,
-    "lon": 8.53793
+    "lat": 47.39111,
+    "lon": 8.53794
   },
-  "swiss::Spaces - Zurich, Bleicherweg 10, Zürich": {
+  "swiss::Spaces - Zurich": {
     "venue": "Spaces - Zurich, Bleicherweg 10, Zürich",
     "name": "Spaces - Zurich",
-    "lat": 47.35518,
-    "lon": 8.56953
+    "lat": 47.4054,
+    "lon": 8.5608
   },
-  "swiss::Quai de l'Ile 13, Genève": {
+  "swiss::Quai de l'Ile 13": {
     "venue": "Quai de l'Ile 13, Genève",
     "name": "Quai de l'Ile 13",
-    "lat": 47.38877,
-    "lon": 8.55376
+    "lat": 47.37082,
+    "lon": 8.54969
   },
-  "swiss::Pl. de la Gare 12, Lausanne": {
+  "swiss::Pl. de la Gare 12": {
     "venue": "Pl. de la Gare 12, Lausanne",
     "name": "Pl. de la Gare 12",
-    "lat": 47.37448,
-    "lon": 8.52966
+    "lat": 47.38535,
+    "lon": 8.51296
   },
-  "sydney::Mantel Group, Level 21, 580 George Street, Sydney NSW 2000": {
+  "sydney::Mantel Group": {
     "venue": "Mantel Group, Level 21, 580 George Street, Sydney NSW 2000",
     "name": "Mantel Group",
-    "lat": -33.85934,
-    "lon": 151.21097
+    "lat": -33.87839,
+    "lon": 151.20513
   },
-  "sydney::Mantel Group, 580 George St, Sydney NSW 2000": {
-    "venue": "Mantel Group, 580 George St, Sydney NSW 2000",
-    "name": "Mantel Group",
-    "lat": -33.87364,
-    "lon": 151.19613
-  },
-  "sydney::CBA Foundry, 1 Locomotive St, Eveleigh, NSW": {
+  "sydney::CBA Foundry": {
     "venue": "CBA Foundry, 1 Locomotive St, Eveleigh, NSW",
     "name": "CBA Foundry",
-    "lat": -33.88359,
-    "lon": 151.22989
+    "lat": -33.88896,
+    "lon": 151.18869
   },
-  "sydney::Rokt, 300 Elizabeth St, Surry Hills, NSW": {
+  "sydney::Rokt": {
     "venue": "Rokt, 300 Elizabeth St, Surry Hills, NSW",
     "name": "Rokt",
-    "lat": -33.8977,
-    "lon": 151.20158
+    "lat": -33.85155,
+    "lon": 151.22617
   },
-  "sydney::Nearmap, Barangaroo, NSW": {
+  "sydney::Nearmap": {
     "venue": "Nearmap, Barangaroo, NSW",
     "name": "Nearmap",
-    "lat": -33.85787,
-    "lon": 151.22815
+    "lat": -33.87342,
+    "lon": 151.21872
   },
-  "sydney::SafetyCulture, 72 Foveaux St, Surry Hills, NSW": {
+  "sydney::SafetyCulture": {
     "venue": "SafetyCulture, 72 Foveaux St, Surry Hills, NSW",
     "name": "SafetyCulture",
-    "lat": -33.83934,
-    "lon": 151.22654
+    "lat": -33.88379,
+    "lon": 151.23435
   },
-  "sydney::Assembly Payments, Level 12, 201 Kent Street, Sydney": {
+  "sydney::Assembly Payments": {
     "venue": "Assembly Payments, Level 12, 201 Kent Street, Sydney",
     "name": "Assembly Payments",
-    "lat": -33.87574,
-    "lon": 151.19764
+    "lat": -33.87152,
+    "lon": 151.19442
   },
-  "sydney::Canva, 110 Kippax St, Surry Hills, NSW": {
+  "sydney::Canva": {
     "venue": "Canva, 110 Kippax St, Surry Hills, NSW",
     "name": "Canva",
-    "lat": -33.87693,
-    "lon": 151.22698
+    "lat": -33.85069,
+    "lon": 151.21201
   },
-  "sydney::Thoughtworks, 50 Carrington St, Sydney": {
+  "sydney::Thoughtworks": {
     "venue": "Thoughtworks, 50 Carrington St, Sydney",
     "name": "Thoughtworks",
-    "lat": -33.84289,
-    "lon": 151.2201
+    "lat": -33.88239,
+    "lon": 151.23467
   },
-  "sydney::Microsoft Reactor Sydney, 11 York St, Sydney": {
+  "sydney::Microsoft Reactor Sydney": {
     "venue": "Microsoft Reactor Sydney, 11 York St, Sydney",
     "name": "Microsoft Reactor Sydney",
-    "lat": -33.87562,
-    "lon": 151.22168
+    "lat": -33.85611,
+    "lon": 151.18533
   },
-  "taipei::DCard, 台北市大安區光復南路102號14樓, Taipei": {
+  "taipei::DCard": {
     "venue": "DCard, 台北市大安區光復南路102號14樓, Taipei",
     "name": "DCard",
-    "lat": 25.02661,
-    "lon": 121.56018
+    "lat": 25.04297,
+    "lon": 121.54675
   },
-  "taipei::DCard, 台北市大安區光復南路102號14樓 (originally 14樓, moved to 5樓 due to projector issue, then back to 14樓), Taipei": {
-    "venue": "DCard, 台北市大安區光復南路102號14樓 (originally 14樓, moved to 5樓 due to projector issue, then back to 14樓), Taipei",
-    "name": "DCard",
-    "lat": 25.02591,
-    "lon": 121.54896
-  },
-  "taipei::Dcard office, 台北市大安區光復南路102號14樓, Taipei": {
+  "taipei::Dcard office": {
     "venue": "Dcard office, 台北市大安區光復南路102號14樓, Taipei",
     "name": "Dcard office",
-    "lat": 25.00715,
-    "lon": 121.56884
+    "lat": 25.02485,
+    "lon": 121.56074
   },
-  "taipei::AppWorks School, 台北市仁愛路二段99號10樓, Taipei": {
+  "taipei::AppWorks School": {
     "venue": "AppWorks School, 台北市仁愛路二段99號10樓, Taipei",
     "name": "AppWorks School",
-    "lat": 25.0113,
-    "lon": 121.55327
+    "lat": 25.00576,
+    "lon": 121.53721
   },
-  "taipei::均一教育平台, No. 25, Baoqing Rd, Zhongzheng District, Taipei": {
+  "taipei::均一教育平台": {
     "venue": "均一教育平台, No. 25, Baoqing Rd, Zhongzheng District, Taipei",
     "name": "均一教育平台",
-    "lat": 25.04818,
-    "lon": 121.59293
+    "lat": 25.05784,
+    "lon": 121.54848
   },
-  "taipei::Partipost office, 104 台北市中山區中山北路二段20巷16號, Taipei": {
+  "taipei::Partipost office": {
     "venue": "Partipost office, 104 台北市中山區中山北路二段20巷16號, Taipei",
     "name": "Partipost office",
-    "lat": 25.03008,
-    "lon": 121.57731
+    "lat": 25.02259,
+    "lon": 121.58635
   },
-  "taipei::Dcard, 台北市大安區光復南路102號14樓, Taipei": {
+  "taipei::Dcard": {
     "venue": "Dcard, 台北市大安區光復南路102號14樓, Taipei",
     "name": "Dcard",
-    "lat": 25.06017,
-    "lon": 121.53977
+    "lat": 25.03657,
+    "lon": 121.5567
   },
-  "taipei::iCHEF office, 106465 台北市大安區仁愛路三段136號15樓, Taipei": {
+  "taipei::iCHEF office": {
     "venue": "iCHEF office, 106465 台北市大安區仁愛路三段136號15樓, Taipei",
     "name": "iCHEF office",
-    "lat": 25.05919,
-    "lon": 121.56055
+    "lat": 25.03016,
+    "lon": 121.55957
   },
-  "taipei::Gandi 內湖辦公室, 台北市內湖區洲子街196號6樓, Taipei": {
+  "taipei::Gandi 內湖辦公室": {
     "venue": "Gandi 內湖辦公室, 台北市內湖區洲子街196號6樓, Taipei",
     "name": "Gandi 內湖辦公室",
-    "lat": 25.02113,
-    "lon": 121.58444
+    "lat": 25.01768,
+    "lon": 121.53974
   },
-  "taipei::Mozilla Community Space Taipei, 100, Taipei City, Zhongzheng District, Section 1, Bade Rd, No. 94, 3F, Taipei": {
+  "taipei::Mozilla Community Space Taipei": {
     "venue": "Mozilla Community Space Taipei, 100, Taipei City, Zhongzheng District, Section 1, Bade Rd, No. 94, 3F, Taipei",
     "name": "Mozilla Community Space Taipei",
-    "lat": 25.06016,
-    "lon": 121.55879
+    "lat": 25.03117,
+    "lon": 121.57408
   },
-  "taipei::Garage+, 台北市中山區中山北路二段96號後棟9樓918室, Taipei": {
+  "taipei::Garage+": {
     "venue": "Garage+, 台北市中山區中山北路二段96號後棟9樓918室, Taipei",
     "name": "Garage+",
-    "lat": 25.0341,
-    "lon": 121.5443
+    "lat": 25.05019,
+    "lon": 121.54225
   },
-  "tel-aviv::monday.com, Yitzhak Sadeh St 6, Tel Aviv-Yafo": {
+  "tel-aviv::monday.com": {
     "venue": "monday.com, Yitzhak Sadeh St 6, Tel Aviv-Yafo",
     "name": "monday.com",
-    "lat": 32.08071,
-    "lon": 34.75383
+    "lat": 32.09044,
+    "lon": 34.81126
   },
-  "tel-aviv::Elementor, Tuval 40, floor 15, Ramat Gan": {
+  "tel-aviv::Elementor": {
     "venue": "Elementor, Tuval 40, floor 15, Ramat Gan",
     "name": "Elementor",
-    "lat": 32.11388,
-    "lon": 34.77166
+    "lat": 32.07886,
+    "lon": 34.75766
   },
-  "tokyo::DATUM STUDIO Inc. (Meguro HQ), Meguro Arco Tower 16F, Shimo-Meguro 1-8-1, Meguro City, Tokyo": {
+  "tokyo::DATUM STUDIO Inc. (Meguro HQ)": {
     "venue": "DATUM STUDIO Inc. (Meguro HQ), Meguro Arco Tower 16F, Shimo-Meguro 1-8-1, Meguro City, Tokyo",
     "name": "DATUM STUDIO Inc. (Meguro HQ)",
-    "lat": 35.66304,
-    "lon": 139.66117
+    "lat": 35.68123,
+    "lon": 139.64255
   },
-  "tokyo::primeNumber Inc., JR Toku Meguro Building 5F, Kamiosaki 3-1-1, Shinagawa City, Tokyo": {
+  "tokyo::primeNumber Inc.": {
     "venue": "primeNumber Inc., JR Toku Meguro Building 5F, Kamiosaki 3-1-1, Shinagawa City, Tokyo",
     "name": "primeNumber Inc.",
-    "lat": 35.69462,
-    "lon": 139.65495
+    "lat": 35.67735,
+    "lon": 139.64437
   },
-  "tokyo::Yappli Inc. Tokyo Office, Sumitomo Fudosan Roppongi Grand Tower 41F, Roppongi 3-2-1, Minato City, Tokyo": {
+  "tokyo::Yappli Inc. Tokyo Office": {
     "venue": "Yappli Inc. Tokyo Office, Sumitomo Fudosan Roppongi Grand Tower 41F, Roppongi 3-2-1, Minato City, Tokyo",
     "name": "Yappli Inc. Tokyo Office",
-    "lat": 35.69299,
-    "lon": 139.65935
+    "lat": 35.66526,
+    "lon": 139.67173
   },
-  "tokyo::Classmethod Inc. office, Hibiya Fort Tower 26F, Nishishimbashi 1-1-1, Minato City, Tokyo": {
+  "tokyo::Classmethod Inc. office": {
     "venue": "Classmethod Inc. office, Hibiya Fort Tower 26F, Nishishimbashi 1-1-1, Minato City, Tokyo",
     "name": "Classmethod Inc. office",
-    "lat": 35.67915,
-    "lon": 139.62217
+    "lat": 35.67262,
+    "lon": 139.64338
   },
-  "tokyo::CARTA HOLDINGS Inc. HQ, Toranomon Hills Station Tower 36F, Toranomon 2-6-1, Minato City, Tokyo": {
+  "tokyo::CARTA HOLDINGS Inc. HQ": {
     "venue": "CARTA HOLDINGS Inc. HQ, Toranomon Hills Station Tower 36F, Toranomon 2-6-1, Minato City, Tokyo",
     "name": "CARTA HOLDINGS Inc. HQ",
-    "lat": 35.65718,
-    "lon": 139.62494
+    "lat": 35.6685,
+    "lon": 139.67302
   },
-  "tokyo::Timee Inc. Tokyo HQ, Shiodome City Center 35F, Higashi-Shimbashi 1-5-2, Minato City, Tokyo": {
+  "tokyo::Timee Inc. Tokyo HQ": {
     "venue": "Timee Inc. Tokyo HQ, Shiodome City Center 35F, Higashi-Shimbashi 1-5-2, Minato City, Tokyo",
     "name": "Timee Inc. Tokyo HQ",
-    "lat": 35.65849,
-    "lon": 139.67939
+    "lat": 35.65752,
+    "lon": 139.6786
   },
-  "tokyo::CARTA HOLDINGS Inc. HQ, Toranomon Hills Station Tower 36F, Toranomon, Minato City, Tokyo": {
-    "venue": "CARTA HOLDINGS Inc. HQ, Toranomon Hills Station Tower 36F, Toranomon, Minato City, Tokyo",
-    "name": "CARTA HOLDINGS Inc. HQ",
-    "lat": 35.70058,
-    "lon": 139.65436
-  },
-  "tokyo::DATUM STUDIO Inc., Toranomon Twin Building East Tower 12F, Toranomon 2-10-1, Minato City, Tokyo": {
+  "tokyo::DATUM STUDIO Inc.": {
     "venue": "DATUM STUDIO Inc., Toranomon Twin Building East Tower 12F, Toranomon 2-10-1, Minato City, Tokyo",
     "name": "DATUM STUDIO Inc.",
-    "lat": 35.69623,
-    "lon": 139.66905
+    "lat": 35.64721,
+    "lon": 139.62315
   },
-  "tokyo::MIXI Group Collaboration Space, Shibuya Scramble Square 36F, Shibuya 2-24-12, Shibuya City, Tokyo": {
+  "tokyo::MIXI Group Collaboration Space": {
     "venue": "MIXI Group Collaboration Space, Shibuya Scramble Square 36F, Shibuya 2-24-12, Shibuya City, Tokyo",
     "name": "MIXI Group Collaboration Space",
-    "lat": 35.66744,
-    "lon": 139.64268
+    "lat": 35.68774,
+    "lon": 139.6648
   },
-  "tokyo::CARTA HOLDINGS Inc. Shibuya Office, Shibuya Solasta 15F, Dogenzaka 1-21-1, Shibuya City, Tokyo": {
+  "tokyo::CARTA HOLDINGS Inc. Shibuya Office": {
     "venue": "CARTA HOLDINGS Inc. Shibuya Office, Shibuya Solasta 15F, Dogenzaka 1-21-1, Shibuya City, Tokyo",
     "name": "CARTA HOLDINGS Inc. Shibuya Office",
-    "lat": 35.70454,
-    "lon": 139.64631
+    "lat": 35.66925,
+    "lon": 139.67789
   },
-  "toronto::OneEleven, 325 Front Street W, Suite 4, Toronto, ON": {
+  "toronto::OneEleven": {
     "venue": "OneEleven, 325 Front Street W, Suite 4, Toronto, ON",
     "name": "OneEleven",
-    "lat": 43.67222,
-    "lon": -79.37735
+    "lat": 43.62447,
+    "lon": -79.3833
   },
-  "toronto::New Stadium, 83 Walnut Avenue, Toronto, ON": {
+  "toronto::New Stadium": {
     "venue": "New Stadium, 83 Walnut Avenue, Toronto, ON",
     "name": "New Stadium",
-    "lat": 43.67289,
-    "lon": -79.36643
+    "lat": 43.65335,
+    "lon": -79.37578
   },
-  "toronto::Village by the Grange Food Court, 105 McCaul Street, Toronto, ON": {
+  "toronto::Village by the Grange Food Court": {
     "venue": "Village by the Grange Food Court, 105 McCaul Street, Toronto, ON",
     "name": "Village by the Grange Food Court",
-    "lat": 43.62679,
-    "lon": -79.40614
+    "lat": 43.66228,
+    "lon": -79.39726
   },
-  "uyo::theBUNKer Uyo, 32 B G Bassey Ave, Uyo": {
+  "uyo::theBUNKer Uyo": {
     "venue": "theBUNKer Uyo, 32 B G Bassey Ave, Uyo",
     "name": "theBUNKer Uyo",
-    "lat": 5.01517,
-    "lon": 7.903
+    "lat": 5.02812,
+    "lon": 7.91021
   },
-  "uyo::Future Labs, 3 Chubb Rd, Ikot Ekpene, Akwa Ibom": {
+  "uyo::Future Labs": {
     "venue": "Future Labs, 3 Chubb Rd, Ikot Ekpene, Akwa Ibom",
     "name": "Future Labs",
-    "lat": 5.06042,
-    "lon": 7.93216
+    "lat": 5.01236,
+    "lon": 7.88845
   },
-  "vancouver::Talk Shop Media, 1498 W 5th Ave, Vancouver, BC": {
+  "vancouver::Talk Shop Media": {
     "venue": "Talk Shop Media, 1498 W 5th Ave, Vancouver, BC",
     "name": "Talk Shop Media",
-    "lat": 49.29817,
-    "lon": -123.10696
+    "lat": 49.25391,
+    "lon": -123.13287
   },
-  "vienna::Sclable Business Solutions GmbH, Marc-Aurel-Straße 10-12, Vienna": {
+  "vienna::Sclable Business Solutions GmbH": {
     "venue": "Sclable Business Solutions GmbH, Marc-Aurel-Straße 10-12, Vienna",
     "name": "Sclable Business Solutions GmbH",
-    "lat": 48.22458,
-    "lon": 16.37081
+    "lat": 48.23653,
+    "lon": 16.40219
   },
-  "vienna::MeisterLabs, Mariahilferstraße 97/4, Vienna": {
+  "vienna::MeisterLabs": {
     "venue": "MeisterLabs, Mariahilferstraße 97/4, Vienna",
     "name": "MeisterLabs",
-    "lat": 48.185,
-    "lon": 16.40014
+    "lat": 48.20302,
+    "lon": 16.34672
   },
-  "vilnius::Cyber City Building C, Švitrigailos str. 32, Vilnius, Lithuania": {
+  "vilnius::Cyber City Building C": {
     "venue": "Cyber City Building C, Švitrigailos str. 32, Vilnius, Lithuania",
     "name": "Cyber City Building C",
-    "lat": 54.71143,
-    "lon": 25.26845
+    "lat": 54.70282,
+    "lon": 25.25023
   },
-  "vilnius::Vinted Vilnius HQ, Švitrigailos 13, Vilnius": {
+  "vilnius::Vinted Vilnius HQ": {
     "venue": "Vinted Vilnius HQ, Švitrigailos 13, Vilnius",
     "name": "Vinted Vilnius HQ",
-    "lat": 54.67156,
-    "lon": 25.29436
+    "lat": 54.67965,
+    "lon": 25.25335
   },
-  "wellington::Qrious (Spark), Level One, 42-52 Willis Street, Wellington": {
+  "wellington::Qrious (Spark)": {
     "venue": "Qrious (Spark), Level One, 42-52 Willis Street, Wellington",
     "name": "Qrious (Spark)",
-    "lat": -41.2642,
-    "lon": 174.75142
+    "lat": -41.29658,
+    "lon": 174.75532
   }
 }

@@ -120,6 +120,7 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
     ch_yearly = Counter()
     ch_events_detail = []
     ch_venue_counts = Counter()
+    ch_venue_example_address = {}
     ch_trailing_events = 0
     ch_prior_trailing_events = 0
     ch_trailing_talks = 0
@@ -157,7 +158,14 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
         else:
             ch_inperson += 1
             format_counter['in-person'] += 1
-            ch_venue_counts[loc] += 1
+            # Key on venue name (before the first comma) rather than the
+            # full address string: the same venue sometimes gets a slightly
+            # different address across events (e.g. with/without a
+            # neighborhood name), which would otherwise undercount reuse.
+            venue_name = loc.split(',')[0].strip()
+            if venue_name:
+                ch_venue_counts[venue_name] += 1
+                ch_venue_example_address.setdefault(venue_name, loc)
         a = event.get('attendees')
         if a is not None:
             ch_attendees.append(a)
@@ -246,10 +254,10 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
     is_at_risk = is_active and last_event_date < (TODAY - datetime.timedelta(days=270)).isoformat()
 
     reused_venues = [
-        {'venue': v, 'name': v.split(',')[0].strip(), 'count': c, **{
-            k: val for k, val in VENUE_GEO.get(f'{slug}::{v}', {}).items() if k in ('lat', 'lon')
+        {'venue': ch_venue_example_address.get(name, name), 'name': name, 'count': c, **{
+            k: val for k, val in VENUE_GEO.get(f'{slug}::{name}', {}).items() if k in ('lat', 'lon')
         }}
-        for v, c in ch_venue_counts.most_common() if c > 1
+        for name, c in ch_venue_counts.most_common() if c > 1
     ]
 
     chapters[slug] = {
@@ -265,6 +273,7 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
         'total_talks': ch_talks,
         'avg_talks_per_event': round(ch_talks / len(events), 2) if events else 0,
         'avg_attendees': round(sum(ch_attendees) / len(ch_attendees), 1) if ch_attendees else None,
+        'min_attendees': min(ch_attendees) if ch_attendees else None,
         'max_attendees': max(ch_attendees) if ch_attendees else None,
         'total_attendee_appearances': sum(ch_attendees) if ch_attendees else 0,
         'unique_speakers': len(ch_speakers),
