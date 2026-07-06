@@ -87,6 +87,8 @@ the visualisation should be a donut chart with tooltips instead of a bar chart i
 **further comments 2**:
 - some of the colours are too close to one another (like people and organisation, analytics & bi, etc.) i can't see the difference between them. maybe if possible you could change the colour
 
+**Action taken (follow-up):** Kept the validated 8-color palette itself, but reassigned which fixed color each category uses. In the legend's count-sorted order, people & organization and analytics & bi are no longer next to each other — orchestration & delivery now sits between them on a different hue, so the two colors you flagged aren't rendered as adjacent swatches anymore.
+
 ## growth over time
 
 the line chart is nice. maybe allow for a possibility to see the events by region? so that we can see americas, europe, africa, asia, etc. you can do the classification of cities before putting this together. it's still good to see the total.
@@ -101,6 +103,8 @@ since we're doing line charts for time comparison, it would be nice to see other
 
 **further comments 2**:
 - when filtering, i see the berlin line, but the other chapters go to zero. shouldn't i be able to still the values?
+
+**Action taken (follow-up):** That was a real bug — selecting a chapter was computing every region's line from a pool already filtered down to that one chapter, so every other region's series went to zero. Region lines now always reflect the whole community (only the active time-filters narrow them); only the dashed chapter-overlay line is chapter-scoped, same as before.
 
 ## where the community meets:
 
@@ -125,6 +129,8 @@ Russia: you were right, it did still have a problem — my first fix only handle
 - there seems like there is a problem with the rendering with the top though :o
 - can the bubble size scale proportionately too? i can't see the bubbles when i zoom in because they're too zoomed in the bubbles are too big
 - maybe some helpers which will zoom in to the region?
+
+**Action taken (follow-up):** The "problem at the top" and the oversized bubbles were the same bug — scaling the whole map viewport on zoom scaled marker radius right along with the landmass, so at high zoom a marker could balloon large enough to bury the coastline detail zooming in was supposed to reveal (that's what looked like a rendering glitch). Markers now sit in their own per-marker group with a dampened counter-scale, so they grow a little with zoom without taking over the screen. Also added World / Africa / Americas / Asia / Europe / Middle East / Oceania jump buttons above the map that pan and zoom to fit that region's chapters in one click.
 
 ## chapters
 
@@ -153,6 +159,8 @@ with the addresses of the events, i'm also curious to see where the events are h
 - can you check? for singapore, i expect that open sourced is also a venue that appears more than once. is it because you did not do the geocoding?
 - for the average, don't you think there is a more suitable visualisation for this?
 - also for the "at a glance", what is the difference between the scorecards at the top?
+
+**Action taken (follow-up):** You were right about Singapore — "Open Sourced" was being counted as two different one-off venues instead of one reused venue, because the same real venue had two slightly different address strings across events (one included the "Rochor" neighborhood, one didn't), and venue reuse was keyed on the exact address string. Fixed the counting (and the geocoding jitter, same bug) to key on the venue name instead, so it's no longer sensitive to that kind of formatting drift — Singapore's "Open Sourced, ×2" now shows up correctly. Also added a visible text label above each marker (it was hover-tooltip-only before, so with just one or two dots on an otherwise-empty map it was easy to miss or assume nothing had rendered). For the average: replaced the bare "avg attendees" number with a min–avg–max range bar, which was the same feedback in spirit as the earlier "distribution variance" ask under the chapters section — a single average without its spread doesn't say much on its own. For the cockpit vs. scorecards question: added an explicit note in the cockpit header — the top scorecards are trailing-window and community-wide by default, the cockpit is all-time totals for just the one selected chapter, which wasn't obvious since both show similar-looking metrics.
 
 ## talks and speakers: 
 
