@@ -135,7 +135,10 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 14px 16px;
+    transition: border-color 0.12s, background 0.12s;
   }
+  .stat-tile:hover, .stat-tile:focus-visible { border-color: var(--text-secondary); background: var(--surface-1); }
+  .stat-tile:focus-visible { outline: 2px solid var(--accent-highlight); outline-offset: 1px; }
   .stat-tile .stat-value { font-size: 24px; font-weight: 700; line-height: 1.1; display: flex; align-items: baseline; gap: 6px; }
   .stat-tile .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
   .stat-tile .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
@@ -752,7 +755,8 @@ function computeWindowStats(months) {
 
   const chapters = selectedChapter ? [DATA.chapters[selectedChapter]] : Object.values(DATA.chapters);
 
-  let events = 0, priorEvents = 0, talks = 0, attendeesSum = 0, attendeesCount = 0;
+  let events = 0, priorEvents = 0, talks = 0, priorTalks = 0;
+  let attendeesSum = 0, attendeesCount = 0, priorAttendeesSum = 0, priorAttendeesCount = 0;
   let activeChapterSlugs = new Set(), priorActiveChapterSlugs = new Set();
 
   chapters.forEach(c => {
@@ -766,32 +770,46 @@ function computeWindowStats(months) {
       } else if (ev.date >= priorStart && ev.date < priorEnd) {
         priorEvents++;
         priorActiveChapterSlugs.add(c.slug);
+        priorTalks += (ev.talks || []).length;
+        if (ev.attendees != null) { priorAttendeesSum += ev.attendees; priorAttendeesCount++; }
       }
     });
   });
 
-  // Unique speakers in the window, split the same way build_dashboard_data.py
-  // splits multi-speaker strings server-side. Not identity-merged against
-  // speaker-identities.json (that canonicalization only ships for the
-  // all-time repeat_speakers list), so this can slightly over-count typo'd
-  // duplicates of the same person - a reasonable trade for being able to
-  // recompute per any slider window client-side.
-  const speakerSet = new Set();
+  // Unique speakers in the window (and the prior window, for the YoY-style
+  // delta), split the same way build_dashboard_data.py splits multi-speaker
+  // strings server-side. Not identity-merged against speaker-identities.json
+  // (that canonicalization only ships for the all-time repeat_speakers
+  // list), so this can slightly over-count typo'd duplicates of the same
+  // person - a reasonable trade for being able to recompute per any slider
+  // window client-side.
+  const speakerSet = new Set(), priorSpeakerSet = new Set();
   DATA.all_talks.forEach(t => {
-    if (!t.date || t.date < windowStart || t.date > today) return;
+    if (!t.date) return;
     if (selectedChapter && t.chapter !== selectedChapter) return;
     if (!t.speaker) return;
-    t.speaker.split(/,| & |\band\b/).map(s => s.trim()).filter(Boolean).forEach(s => speakerSet.add(s));
+    const names = t.speaker.split(/,| & |\band\b/).map(s => s.trim()).filter(Boolean);
+    if (t.date >= windowStart && t.date <= today) {
+      names.forEach(s => speakerSet.add(s));
+    } else if (t.date >= priorStart && t.date < priorEnd) {
+      names.forEach(s => priorSpeakerSet.add(s));
+    }
   });
 
   return {
-    events, priorEvents, talks, attendeesSum,
+    events, priorEvents, talks, priorTalks, attendeesSum, priorAttendeesSum,
     avgAttendeesPerEvent: attendeesCount ? Math.round(10 * attendeesSum / attendeesCount) / 10 : null,
+    priorAvgAttendeesPerEvent: priorAttendeesCount ? Math.round(10 * priorAttendeesSum / priorAttendeesCount) / 10 : null,
     activeChapters: activeChapterSlugs.size,
     priorActiveChapters: priorActiveChapterSlugs.size,
     uniqueSpeakers: speakerSet.size,
+    priorUniqueSpeakers: priorSpeakerSet.size,
     windowStart, today,
   };
+}
+
+function pctChange(current, prior) {
+  return prior ? Math.round(1000 * (current - prior) / prior) / 10 : null;
 }
 
 function renderStatRow() {
@@ -801,49 +819,62 @@ function renderStatRow() {
 
   const eventsAllTime = c ? c.total_events : s.total_events;
   const talksAllTime = c ? c.total_talks : s.total_talks;
-  const eventsYoy = w.priorEvents ? Math.round(1000 * (w.events - w.priorEvents) / w.priorEvents) / 10 : null;
+  const eventsPop = pctChange(w.events, w.priorEvents);
+  const talksPop = pctChange(w.talks, w.priorTalks);
+  const attendeesPop = pctChange(w.attendeesSum, w.priorAttendeesSum);
+  const speakersPop = pctChange(w.uniqueSpeakers, w.priorUniqueSpeakers);
   const avgTalksPerEvent = w.events ? Math.round(100 * w.talks / w.events) / 100 : null;
   const dormantChapters = c ? null : s.total_chapters - w.activeChapters;
-  const activeYoyPct = w.priorActiveChapters ? Math.round(1000 * (w.activeChapters - w.priorActiveChapters) / w.priorActiveChapters) / 10 : null;
+  const activeChaptersPop = pctChange(w.activeChapters, w.priorActiveChapters);
   const windowLabel = trailingMonths >= 24 ? `last ${Math.round(trailingMonths / 12)}yr` : `last ${trailingMonths}mo`;
 
   const tiles = [
     {
       label: 'Chapters',
       value: fmt(c ? 1 : s.total_chapters),
-      sub: c ? chapterName(c.slug) : `${fmt(w.activeChapters)} active (${windowLabel}) · ${fmt(dormantChapters)} dormant ${fmtDelta(activeYoyPct)}`,
+      sub: c ? chapterName(c.slug) : `${fmt(w.activeChapters)} active (${windowLabel}) · ${fmt(dormantChapters)} dormant ${fmtDelta(activeChaptersPop)}`,
+      page: 'group-chapters',
     },
     {
       label: `Events (${windowLabel})`,
-      value: fmt(w.events) + ' ' + fmtDelta(eventsYoy),
+      value: fmt(w.events) + ' ' + fmtDelta(eventsPop),
       sub: `${fmt(eventsAllTime)} all-time`,
+      page: 'group-overview',
     },
     {
       label: `Talks (${windowLabel})`,
-      value: fmt(w.talks),
+      value: fmt(w.talks) + ' ' + fmtDelta(talksPop),
       sub: `${fmt(talksAllTime)} all-time · avg ${avgTalksPerEvent ?? '—'}/event`,
+      page: 'group-talks',
     },
     {
       label: `Attendees (${windowLabel})`,
-      value: fmt(w.attendeesSum),
+      value: fmt(w.attendeesSum) + ' ' + fmtDelta(attendeesPop),
       sub: `avg ${w.avgAttendeesPerEvent ?? '—'}/event, ${windowLabel}`,
+      page: 'group-chapters',
     },
     {
       label: `Unique speakers (${windowLabel})`,
-      value: fmt(w.uniqueSpeakers),
+      value: fmt(w.uniqueSpeakers) + ' ' + fmtDelta(speakersPop),
       sub: `${fmt(c ? c.unique_speakers : s.total_unique_speakers)} all-time`,
+      page: 'group-talks',
     },
   ];
   document.getElementById('stat-row').innerHTML = tiles.map(t => `
-    <div class="stat-tile">
+    <div class="stat-tile" data-page="${t.page}" style="cursor:pointer;" tabindex="0" role="button">
       <div class="stat-value">${t.value}</div>
       <div class="stat-label">${t.label}</div>
       <div class="stat-sub">${t.sub}</div>
     </div>
   `).join('');
+  document.querySelectorAll('#stat-row .stat-tile').forEach(el => {
+    el.addEventListener('click', () => showPage(el.dataset.page));
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPage(el.dataset.page); } });
+  });
 
   document.getElementById('dataset-disclaimer').textContent =
-    `Dataset covers events from ${s.date_range[0]} to ${s.date_range[1]}, generated ${DATA.generated}.`;
+    `Dataset covers events from ${s.date_range[0]} to ${s.date_range[1]}, generated ${DATA.generated}. ` +
+    `% changes compare the selected window to the equal-length period immediately before it (e.g. last 12mo vs. the 12mo before that).`;
 }
 
 function renderCategoryDonut() {
