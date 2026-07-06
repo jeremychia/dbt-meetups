@@ -493,6 +493,7 @@
         </div>
         <p class="section-sub">Every chapter plotted by location; marker size and color intensity scale with total events held. Scroll or use the +/− controls to zoom, drag to pan, and click a marker to select that chapter everywhere on this page.</p>
         <div class="card">
+          <div class="search-row" id="map-region-jump" style="margin-bottom:12px;"></div>
           <div style="position:relative;">
             <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block; cursor:grab;"></svg>
             <div class="map-controls">
@@ -621,13 +622,21 @@
 const DATA = __DATA_JSON__;
 const WORLD_PATH = "__WORLD_PATH__";
 
+// Slot assignment (which fixed palette color goes with which category, not
+// the palette itself) is chosen so that when the legend renders sorted by
+// count, no two adjacent rows land on colors that are close together (by
+// RGB distance) or that users reported as hard to tell apart. In the render
+// order (by count: engineering, product, platform, quality, orchestration,
+// people&org, analytics&bi, emerging), people & organization now sits on
+// violet between orchestration's red and analytics & bi's magenta, instead
+// of red and magenta being adjacent to each other.
 const CATEGORY_ORDER = [
   ['dbt engineering practices', 'var(--series-1)'],
   ['dbt product', 'var(--series-2)'],
   ['platform & architecture', 'var(--series-3)'],
   ['data quality & governance', 'var(--series-4)'],
-  ['orchestration & delivery', 'var(--series-5)'],
-  ['people & organization', 'var(--series-6)'],
+  ['orchestration & delivery', 'var(--series-6)'],
+  ['people & organization', 'var(--series-5)'],
   ['analytics & bi', 'var(--series-7)'],
   ['emerging & trends', 'var(--series-8)'],
 ];
@@ -682,9 +691,9 @@ function buildEventPool() {
 const DAY_NAMES_JS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-function filteredEventPool(excludeDimension) {
+function filteredEventPool(excludeDimension, ignoreChapter) {
   let pool = EVENT_POOL;
-  if (selectedChapter) pool = pool.filter(e => e.chapter === selectedChapter);
+  if (selectedChapter && !ignoreChapter) pool = pool.filter(e => e.chapter === selectedChapter);
   Object.entries(timeFilters).forEach(([dim, val]) => {
     if (val !== null && dim !== excludeDimension) pool = pool.filter(e => e[dim] === val);
   });
@@ -972,7 +981,11 @@ function renderTopicSamples() {
 function renderGrowthChart() {
   const svg = document.getElementById('growth-chart');
   const tooltip = document.getElementById('growth-tooltip');
-  const pool = filteredEventPool('year');
+  // Region lines always reflect the whole community (only the active
+  // time-filters narrow them) - selecting a chapter shouldn't zero out every
+  // other region, it should only add that chapter's own line on top.
+  const communityPool = filteredEventPool('year', true);
+  const chapterPool = filteredEventPool('year');
   const years = [...new Set(EVENT_POOL.map(e => e.year))].sort();
 
   const regionNames = Object.keys(DATA.region_yearly_events).sort((a, b) => {
@@ -983,14 +996,14 @@ function renderGrowthChart() {
   const visibleRegions = regionNames.filter(r => !hiddenRegions.has(r));
 
   function regionSeries(region) {
-    return years.map(y => pool.filter(e => e.year === y && e.region === region).length);
+    return years.map(y => communityPool.filter(e => e.year === y && e.region === region).length);
   }
 
   let chapterSeries = null;
   let chapterLabel = null;
   if (selectedChapter && DATA.chapters[selectedChapter]) {
     chapterLabel = chapterName(selectedChapter);
-    chapterSeries = years.map(y => pool.filter(e => e.year === y && e.chapter === selectedChapter).length);
+    chapterSeries = years.map(y => chapterPool.filter(e => e.year === y && e.chapter === selectedChapter).length);
   }
 
   const W = 900, H = 260;
@@ -1181,6 +1194,16 @@ let mapDragging = false, mapDragStart = null;
 function applyMapTransform() {
   const g = document.getElementById('map-viewport');
   if (g) g.setAttribute('transform', `translate(${mapPanX},${mapPanY}) scale(${mapZoom})`);
+  // Position each marker at its zoomed/panned map coordinate, but counter-
+  // scale it by 1/zoom so its radius stays visually constant instead of
+  // growing with the map.
+  document.querySelectorAll('#map-markers .marker-wrap').forEach(wrap => {
+    const cx = parseFloat(wrap.dataset.cx), cy = parseFloat(wrap.dataset.cy);
+    const screenX = cx * mapZoom + mapPanX;
+    const screenY = cy * mapZoom + mapPanY;
+    const invScale = 1 / Math.sqrt(mapZoom);
+    wrap.setAttribute('transform', `translate(${screenX},${screenY}) scale(${invScale}) translate(${-cx},${-cy})`);
+  });
 }
 
 function renderMap() {
@@ -1201,6 +1224,12 @@ function renderMap() {
   const tooltip = document.getElementById('map-tooltip');
   const wrapEl = svg.parentElement;
 
+  // Markers each get their own inverse-scaled wrapper (translate to the
+  // marker's map position, scale by 1/zoom, translate back) so their radius
+  // stays roughly constant on screen as the map zooms in - without this,
+  // scaling the whole viewport group blows a marker up along with the
+  // landmass, and at high zoom the bubbles get big enough to bury the
+  // detail underneath them that zooming in was supposed to reveal.
   let markersHtml = '';
   chapters.forEach(c => {
     const [x, y] = projectLonLat(c.lon, c.lat);
@@ -1208,17 +1237,19 @@ function renderMap() {
     const color = rampColor(c.total_events);
     const isSelected = c.slug === selectedChapter;
     markersHtml += `
-      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}"
-        fill="${color}" fill-opacity="0.82" stroke="${isSelected ? 'var(--text-primary)' : 'var(--surface-1)'}" stroke-width="${isSelected ? 2.5 : 1.5}"
-        class="chapter-marker" data-slug="${c.slug}" style="cursor:pointer;"></circle>`;
+      <g class="marker-wrap" data-cx="${x.toFixed(1)}" data-cy="${y.toFixed(1)}">
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}"
+          fill="${color}" fill-opacity="0.82" stroke="${isSelected ? 'var(--text-primary)' : 'var(--surface-1)'}" stroke-width="${isSelected ? 2.5 : 1.5}"
+          class="chapter-marker" data-slug="${c.slug}" style="cursor:pointer;"></circle>
+      </g>`;
   });
 
   svg.innerHTML = `
     <g id="map-viewport">
       <rect x="0" y="0" width="960" height="500" fill="var(--map-ocean)"></rect>
       <path d="${WORLD_PATH}" fill="var(--map-land)" stroke="var(--border)" stroke-width="0.6" fill-rule="evenodd"></path>
-      ${markersHtml}
     </g>
+    <g id="map-markers">${markersHtml}</g>
   `;
   applyMapTransform();
 
@@ -1247,7 +1278,45 @@ function renderMap() {
     <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>~${v} events</div>
   `).join('');
 
+  renderMapRegionJump(chapters, wrapEl);
   setupMapInteraction(svg, wrapEl, tooltip);
+}
+
+function renderMapRegionJump(chapters, wrapEl) {
+  const el = document.getElementById('map-region-jump');
+  const regions = [...new Set(chapters.map(c => c.region_group).filter(Boolean))].sort();
+  el.innerHTML = `<button class="table-toggle" id="map-zoom-world" style="margin-left:0;">World</button>` +
+    regions.map(r => `<button class="table-toggle" data-region-jump="${r}">${r}</button>`).join('');
+  el.querySelectorAll('button').forEach(btn => btn.style.marginLeft = '0');
+
+  document.getElementById('map-zoom-world').addEventListener('click', () => {
+    mapZoom = 1; mapPanX = 0; mapPanY = 0; applyMapTransform();
+  });
+  el.querySelectorAll('[data-region-jump]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const region = btn.dataset.regionJump;
+      const pts = chapters.filter(c => c.region_group === region).map(c => projectLonLat(c.lon, c.lat));
+      if (!pts.length) return;
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      const minX = Math.min(...xs), maxX = Math.max(...xs);
+      const minY = Math.min(...ys), maxY = Math.max(...ys);
+      const boxW = Math.max(maxX - minX, 40), boxH = Math.max(maxY - minY, 40);
+      const pad = 1.4; // headroom so edge markers aren't flush against the frame
+      const zoom = Math.min(8, Math.max(1, Math.min(960 / (boxW * pad), 500 / (boxH * pad))));
+      mapZoom = zoom;
+      mapPanX = -((minX + maxX) / 2) * zoom + 960 / 2;
+      mapPanY = -((minY + maxY) / 2) * zoom + 500 / 2;
+      clampMapPan();
+      applyMapTransform();
+    });
+  });
+}
+
+function clampMapPan() {
+  const maxPanX = 960 * (mapZoom - 1);
+  const maxPanY = 500 * (mapZoom - 1);
+  mapPanX = Math.min(0, Math.max(-maxPanX, mapPanX));
+  mapPanY = Math.min(0, Math.max(-maxPanY, mapPanY));
 }
 
 function setupMapInteraction(svg, wrapEl, tooltip) {
@@ -1259,14 +1328,8 @@ function setupMapInteraction(svg, wrapEl, tooltip) {
     mapPanX = localX - (localX - mapPanX) * (newZoom / mapZoom);
     mapPanY = localY - (localY - mapPanY) * (newZoom / mapZoom);
     mapZoom = newZoom;
-    clampPan();
+    clampMapPan();
     applyMapTransform();
-  }
-  function clampPan() {
-    const maxPanX = 960 * (mapZoom - 1);
-    const maxPanY = 500 * (mapZoom - 1);
-    mapPanX = Math.min(0, Math.max(-maxPanX, mapPanX));
-    mapPanY = Math.min(0, Math.max(-maxPanY, mapPanY));
   }
 
   svg.onwheel = (e) => {
@@ -1285,7 +1348,7 @@ function setupMapInteraction(svg, wrapEl, tooltip) {
     const dy = (e.clientY - mapDragStart.y) / rect.height * 500;
     mapPanX = mapDragStart.panX + dx;
     mapPanY = mapDragStart.panY + dy;
-    clampPan();
+    clampMapPan();
     applyMapTransform();
   });
   window.addEventListener('mouseup', () => { mapDragging = false; svg.style.cursor = 'grab'; });
