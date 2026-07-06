@@ -93,6 +93,10 @@ the visualisation should be a donut chart with tooltips instead of a bar chart i
 
 **Action taken (follow-up):** The donut center showed a static "8 categories" (always 8, not useful) when no slice was selected. Now shows the total talk count instead, and switching between "total talks" and "talks in this category" (when a slice is selected) both use the same "talks" unit label, so the number in the middle is always meaningful.
 
+**further comments 4**: donut chart should be cross-filtered by the graphs below too
+
+**Action taken (follow-up):** The donut now recomputes its counts from a talk-level pool (each talk tagged with its date-derived weekday/day-of-month/start-hour, same as the growth and timing charts) instead of the old fixed, all-time `category_distribution`. Clicking a year/weekday/day-of-month/start-hour bar below — or picking your chapter at the top — now also narrows the donut; "Clear filters" resets it back to all-time/all-chapters too. Verified the no-filter case still reproduces the exact original numbers (978 talks, same per-category breakdown), and spot-checked a filtered case (Thursday-only: 405 talks) against the raw data directly. Left the "sample talks" list on the right as an all-time representative sample rather than also cross-filtering it — narrowing samples down to a handful of very specific filter combinations would often leave nothing to show, and the ask was specifically about the donut.
+
 ## growth over time
 
 the line chart is nice. maybe allow for a possibility to see the events by region? so that we can see americas, europe, africa, asia, etc. you can do the classification of cities before putting this together. it's still good to see the total.
@@ -187,6 +191,8 @@ for the speaker, allow me to expand to see which were teh talks that they did. i
 - also allow for filtering by region
 - yes, only focus on those with more than 3+ chapters
 - think of some personas when searching the talks: i'm someone who wants to reach out to look for a new speaker for example
+
+**Action taken (partial):** Added a "Topic" dropdown to Explore Talks, listing all 26 sub-topics (alphabetical), combinable with the existing chapter filter and free-text search — an exact-tag filter, as opposed to free-text search which already matched topic names as a side effect (loosely, since it also matches descriptions that happen to mention the term) since topics were already included in the search haystack. This covers the "sub topic" half of the ask. **Not done yet:** broad-category filtering (the 8 rollup categories, separate from the 26 topics), region filter, the 3+-chapters threshold for the speaker list, and reframing search around personas (e.g. "find a new speaker"). Queued as a separate follow-up per our earlier agreement to keep this scoped apart from the production-grade repo work.
 
 ## good visualisation principles:
 

@@ -488,7 +488,7 @@
         <div class="flex-between">
           <h2>What the community is talking about</h2>
         </div>
-        <p class="section-sub">Every talk is tagged with topics, then rolled up into one of 8 categories by its primary topic. Click a slice or legend row to see which topics it contains and sample talks, so you can validate the classification yourself.</p>
+        <p class="section-sub">Every talk is tagged with topics, then rolled up into one of 8 categories by its primary topic. Click a slice or legend row to see which topics it contains and sample talks, so you can validate the classification yourself. Cross-filtered by your chapter selection and any year/weekday/day-of-month/start-hour filter set below.</p>
         <details class="method-note"><summary>How this is computed</summary>Each talk's topic list comes from AI-assisted enrichment of the meetup description; the first topic listed is treated as the "primary" topic and mapped to one of 8 categories via a fixed lookup table. A talk is counted once, under its primary category only.</details>
         <div class="two-col">
           <div class="card">
@@ -678,7 +678,7 @@
         <div class="flex-between">
           <div>
             <h2>Explore talks</h2>
-            <p class="section-sub">Search by title, description, speaker, or topic — useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
+            <p class="section-sub">Search by title, description, speaker, or topic, or filter to one of the 26 topics directly — useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
           </div>
         </div>
         <div class="card">
@@ -686,6 +686,9 @@
             <input class="search-input" id="talk-search" placeholder="Search talk titles, descriptions, speakers, topics…" />
             <select class="chapter-select" id="talk-chapter-filter">
               <option value="">All chapters</option>
+            </select>
+            <select class="filter-select" id="talk-topic-filter">
+              <option value="">All topics</option>
             </select>
             <select class="filter-select" id="talk-sort">
               <option value="date-desc">Newest first</option>
@@ -783,6 +786,56 @@ function buildEventPool() {
 const DAY_NAMES_JS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+// topic (e.g. "data modeling") -> category (e.g. "dbt engineering
+// practices"), derived from DATA.category_topics (the reverse mapping)
+// rather than duplicating CATEGORY_MAP client-side.
+function buildTopicToCategory() {
+  const map = {};
+  Object.entries(DATA.category_topics).forEach(([category, topics]) => {
+    topics.forEach(topic => { map[topic] = category; });
+  });
+  return map;
+}
+
+// Every talk, with the same date-derived dimensions as EVENT_POOL
+// (weekday/dayOfMonth/startHour/region/year) plus its primary category, so
+// the topic donut can cross-filter against the same year/weekday/day-of-
+// month/start-hour selections as the growth and timing charts.
+function buildTalkPool() {
+  const pool = [];
+  Object.values(DATA.chapters).forEach(c => {
+    (c.events_detail || []).forEach(ev => {
+      if (!ev.date) return;
+      const d = new Date(ev.date + 'T00:00:00Z');
+      const base = {
+        date: ev.date,
+        year: ev.date.slice(0, 4),
+        weekday: DAY_NAMES_JS[d.getUTCDay()],
+        dayOfMonth: String(d.getUTCDate()),
+        startHour: ev.start_hour != null ? String(ev.start_hour) : null,
+        region: c.region_group,
+        chapter: c.slug,
+      };
+      (ev.talks || []).forEach(t => {
+        const primaryTopic = (t.topics || [])[0];
+        const category = primaryTopic ? TOPIC_TO_CATEGORY[primaryTopic] : null;
+        if (!category) return;
+        pool.push({ ...base, category });
+      });
+    });
+  });
+  return pool;
+}
+
+function filteredTalkPool() {
+  let pool = TALK_POOL;
+  if (selectedChapter) pool = pool.filter(t => t.chapter === selectedChapter);
+  Object.entries(timeFilters).forEach(([dim, val]) => {
+    if (val !== null) pool = pool.filter(t => t[dim] === val);
+  });
+  return pool;
+}
+
 function filteredEventPool(excludeDimension, ignoreChapter) {
   let pool = EVENT_POOL;
   if (selectedChapter && !ignoreChapter) pool = pool.filter(e => e.chapter === selectedChapter);
@@ -796,6 +849,7 @@ function setTimeFilter(dim, value) {
   timeFilters[dim] = timeFilters[dim] === value ? null : value;
   renderGrowthChart();
   renderTimingCharts();
+  renderCategoryDonut();
 }
 
 function anyTimeFilterActive() {
@@ -818,6 +872,7 @@ function setSelectedChapter(slug) {
   renderChapterDetail();
   renderGrowthChart();
   renderTimingCharts();
+  renderCategoryDonut();
   renderStatRow();
 }
 function titleCase(slug) {
@@ -987,17 +1042,34 @@ function renderStatRow() {
 }
 
 function renderCategoryDonut() {
-  const total = DATA.category_distribution.reduce((a, [,c]) => a + c, 0);
+  // Cross-filtered by the same year/weekday/day-of-month/start-hour
+  // selections (and chapter) as the growth and timing charts below, so
+  // clicking a bar there also narrows what this donut shows.
+  const pool = filteredTalkPool();
+  const counts = {};
+  pool.forEach(t => { counts[t.category] = (counts[t.category] || 0) + 1; });
+  const total = pool.length;
   const colorMap = Object.fromEntries(CATEGORY_ORDER);
-  const byOrder = CATEGORY_ORDER.map(([name]) => {
-    const found = DATA.category_distribution.find(([n]) => n === name);
-    return [name, found ? found[1] : 0];
-  }).sort((a,b) => b[1]-a[1]);
+  const byOrder = CATEGORY_ORDER.map(([name]) => [name, counts[name] || 0])
+    .sort((a,b) => b[1]-a[1]);
 
   const cx = 110, cy = 110, r = 90, innerR = 55;
+
+  if (!total) {
+    document.getElementById('category-donut').innerHTML = `
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border)" stroke-width="${r - innerR}"></circle>
+      <text x="${cx}" y="${cy - 4}" text-anchor="middle" class="donut-center-value">0</text>
+      <text x="${cx}" y="${cy + 14}" text-anchor="middle" class="donut-center-label">talks</text>
+    `;
+    document.getElementById('category-legend').innerHTML = `<div style="color:var(--text-secondary); font-size:13px;">No talks match the current filters.</div>`;
+    renderTopicSamples();
+    return;
+  }
+
   let angle = -Math.PI / 2;
   let segsHtml = '';
   byOrder.forEach(([name, count]) => {
+    if (!count) return;
     const frac = count / total;
     const sweep = frac * Math.PI * 2;
     const x0 = cx + r * Math.cos(angle), y0 = cy + r * Math.sin(angle);
@@ -1011,15 +1083,12 @@ function renderCategoryDonut() {
     angle += sweep;
   });
 
-  const centerValue = selectedCategory
-    ? byOrder.find(([n]) => n === selectedCategory)[1]
-    : total;
-  const centerSub = 'talks';
+  const centerValue = selectedCategory ? (counts[selectedCategory] || 0) : total;
 
   document.getElementById('category-donut').innerHTML = `
     ${segsHtml}
     <text x="${cx}" y="${cy - 4}" text-anchor="middle" class="donut-center-value">${centerValue}</text>
-    <text x="${cx}" y="${cy + 14}" text-anchor="middle" class="donut-center-label">${centerSub}</text>
+    <text x="${cx}" y="${cy + 14}" text-anchor="middle" class="donut-center-label">talks</text>
   `;
 
   document.getElementById('category-legend').innerHTML = byOrder.map(([name, count]) => {
@@ -1214,6 +1283,7 @@ function renderGrowthChart() {
     Object.keys(timeFilters).forEach(k => timeFilters[k] = null);
     renderGrowthChart();
     renderTimingCharts();
+    renderCategoryDonut();
   });
 }
 
@@ -1883,14 +1953,25 @@ function populateTalkChapterFilter() {
   sel.addEventListener('change', renderTalkResults);
 }
 
+function populateTalkTopicFilter() {
+  const sel = document.getElementById('talk-topic-filter');
+  const topics = DATA.topic_distribution.map(([name]) => name).sort();
+  sel.innerHTML = '<option value="">All topics</option>' + topics.map(t =>
+    `<option value="${t}">${t}</option>`
+  ).join('');
+  sel.addEventListener('change', renderTalkResults);
+}
+
 function renderTalkResults() {
   const query = (document.getElementById('talk-search').value || '').trim().toLowerCase();
   const chapterFilter = document.getElementById('talk-chapter-filter').value;
+  const topicFilter = document.getElementById('talk-topic-filter').value;
   const countEl = document.getElementById('talk-results-count');
   const listEl = document.getElementById('talk-results-list');
 
   let results = DATA.all_talks;
   if (chapterFilter) results = results.filter(t => t.chapter === chapterFilter);
+  if (topicFilter) results = results.filter(t => (t.topics || []).includes(topicFilter));
   if (query) {
     results = results.filter(t => {
       const haystack = [t.title, t.description, t.speaker, t.speaker_title, ...(t.topics || [])]
@@ -1909,7 +1990,7 @@ function renderTalkResults() {
 
   const MAX_RESULTS = 30;
 
-  if (!query && !chapterFilter) {
+  if (!query && !chapterFilter && !topicFilter) {
     countEl.textContent = `${DATA.all_talks.length} talks total — search by title, description, speaker, or topic to browse.`;
     listEl.innerHTML = '';
     return;
@@ -2034,6 +2115,8 @@ window.addEventListener('hashchange', () => showPage(window.location.hash.slice(
 
 const EVENT_POOL = buildEventPool();
 const EVENTS_BY_DATE = buildEventsByDate();
+const TOPIC_TO_CATEGORY = buildTopicToCategory();
+const TALK_POOL = buildTalkPool();
 
 renderStatRow();
 renderCategoryDonut();
@@ -2047,6 +2130,7 @@ renderAtRiskCallout();
 renderChapterTable();
 renderChapterDetail();
 populateTalkChapterFilter();
+populateTalkTopicFilter();
 renderTalkResults();
 renderSpeakerList();
 populateCalendarChapterFilter();
