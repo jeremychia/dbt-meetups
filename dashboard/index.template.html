@@ -346,7 +346,7 @@
   .footnote { font-size: 11.5px; color: var(--text-muted); margin-top: 24px; line-height: 1.6; }
   .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 
-  /* group nav + group headers */
+  /* page tabs + page bodies */
   .group-nav {
     position: sticky; top: 0; z-index: 20;
     display: flex; gap: 4px; margin: 0 0 32px;
@@ -355,16 +355,18 @@
     padding: 10px 0;
     flex-wrap: wrap;
   }
-  .group-nav a {
-    font-size: 13px; font-weight: 600; color: var(--text-secondary);
+  .group-nav button {
+    font: inherit; font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    background: none; border: none; cursor: pointer;
     text-decoration: none; padding: 6px 12px; border-radius: 7px;
   }
-  .group-nav a:hover { color: var(--text-primary); background: var(--surface-2); }
-  .content-group { scroll-margin-top: 56px; margin-bottom: 12px; }
+  .group-nav button:hover { color: var(--text-primary); background: var(--surface-2); }
+  .group-nav button.active { color: var(--text-primary); background: var(--surface-2); }
+  .content-group { margin-bottom: 12px; }
+  .content-group.hidden { display: none; }
   .group-head { margin-bottom: 20px; }
   .group-head h2.group-title { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
   .group-head p { margin: 0; color: var(--text-secondary); font-size: 13px; max-width: 720px; line-height: 1.5; }
-  .content-group + .content-group { padding-top: 28px; border-top: 1px solid var(--border); }
 
   .glance-cockpit { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
   .glance-tile { background: var(--surface-1); border-radius: 8px; padding: 10px 12px; }
@@ -380,9 +382,9 @@
     </header>
 
     <div class="persona-row">
-      <a class="persona-chip" href="#group-chapters"><strong>Community organiser</strong> — chapter health, at-risk status</a>
-      <a class="persona-chip" href="#group-overview"><strong>Community manager</strong> — topic mix, growth trends</a>
-      <a class="persona-chip" href="#group-talks"><strong>Just here for trivia</strong> — speakers, talk search, when we meet</a>
+      <a class="persona-chip" href="#" data-page="group-chapters"><strong>Community organiser</strong> — chapter health, at-risk status</a>
+      <a class="persona-chip" href="#" data-page="group-overview"><strong>Community manager</strong> — topic mix, growth trends</a>
+      <a class="persona-chip" href="#" data-page="group-talks"><strong>Just here for trivia</strong> — speakers, talk search, when we meet</a>
     </div>
 
     <div class="picker-bar">
@@ -401,9 +403,9 @@
     <div class="stat-row" id="stat-row"></div>
 
     <nav class="group-nav">
-      <a href="#group-overview">Overview</a>
-      <a href="#group-chapters">Chapters</a>
-      <a href="#group-talks">Talks &amp; Speakers</a>
+      <button type="button" data-page="group-overview">Overview</button>
+      <button type="button" data-page="group-chapters">Chapters</button>
+      <button type="button" data-page="group-talks">Talks &amp; Speakers</button>
     </nav>
 
     <div class="content-group" id="group-overview">
@@ -416,22 +418,31 @@
         <div class="flex-between">
           <h2>What the community is talking about</h2>
         </div>
-        <p class="section-sub">Every talk is tagged with topics, then rolled up into one of 8 categories by its primary topic. Click a slice or legend row to see sample talks in that category. Use this to compare your own chapter's agenda against what peers are covering.</p>
+        <p class="section-sub">Every talk is tagged with topics, then rolled up into one of 8 categories by its primary topic. Click a slice or legend row to see which topics it contains and sample talks, so you can validate the classification yourself.</p>
         <details class="method-note"><summary>How this is computed</summary>Each talk's topic list comes from AI-assisted enrichment of the meetup description; the first topic listed is treated as the "primary" topic and mapped to one of 8 categories via a fixed lookup table. A talk is counted once, under its primary category only.</details>
-        <div class="card">
-          <div class="donut-wrap">
-            <svg id="category-donut" class="donut-svg" width="220" height="220" viewBox="0 0 220 220"></svg>
-            <div class="donut-legend" id="category-legend"></div>
+        <div class="two-col">
+          <div class="card">
+            <div class="donut-wrap">
+              <svg id="category-donut" class="donut-svg" width="220" height="220" viewBox="0 0 220 220"></svg>
+              <div class="donut-legend" id="category-legend"></div>
+            </div>
           </div>
-          <div class="topic-samples hidden" id="topic-samples-wrap">
-            <div class="flex-between">
-              <strong style="font-size:13px;" id="topic-samples-title"></strong>
-              <div class="sample-sort-row">
-                <button class="sample-sort-btn active" data-sort="recent">Most recent</button>
-                <button class="sample-sort-btn" data-sort="attendees">Most attended</button>
+          <div class="card">
+            <div id="topic-samples-wrap">
+              <div id="topic-samples-empty" style="color:var(--text-secondary); font-size:13px;">Click a category on the left to see its definition and sample talks.</div>
+              <div id="topic-samples-content" class="hidden">
+                <strong style="font-size:13px;" id="topic-samples-title"></strong>
+                <div id="topic-samples-definition" class="method-note" style="margin:6px 0 12px;"></div>
+                <div class="flex-between">
+                  <span style="font-size:12px; color:var(--text-secondary);">Sample talks</span>
+                  <div class="sample-sort-row">
+                    <button class="sample-sort-btn active" data-sort="recent">Most recent</button>
+                    <button class="sample-sort-btn" data-sort="attendees">Most attended</button>
+                  </div>
+                </div>
+                <div id="topic-samples-list"></div>
               </div>
             </div>
-            <div id="topic-samples-list"></div>
           </div>
         </div>
       </section>
@@ -452,19 +463,22 @@
 
       <section>
         <h2>When the community meets</h2>
-        <p class="section-sub">For trivia: which day of the week, day of the month, and hour meetups tend to start, across all in-person events with a recorded time.</p>
+        <p class="section-sub">Which day of the week, day of the month, and hour meetups tend to start, across all in-person events with a recorded time. Click a bar to filter it (and the growth chart above) by that value; click again to clear.</p>
         <div class="three-col">
-          <div class="card">
+          <div class="card" style="position:relative;">
             <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Day of week</div>
             <svg id="weekday-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+            <div class="line-chart-tooltip mini-bar-tooltip"></div>
           </div>
-          <div class="card">
+          <div class="card" style="position:relative;">
             <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Day of month</div>
             <svg id="daymonth-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+            <div class="line-chart-tooltip mini-bar-tooltip"></div>
           </div>
-          <div class="card">
+          <div class="card" style="position:relative;">
             <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Start hour (local time)</div>
             <svg id="starthour-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+            <div class="line-chart-tooltip mini-bar-tooltip"></div>
           </div>
         </div>
       </section>
@@ -635,6 +649,55 @@ let trailingMonths = 12;
 let hiddenRegions = new Set();
 let talkSort = 'date-desc';
 
+// Cross-filter state shared by the growth chart and the three "when the
+// community meets" bar charts: clicking a year, weekday, day-of-month, or
+// start-hour bar filters the event pool that every other one of these four
+// charts renders from. Only one selection per dimension at a time; clicking
+// the same bar again clears that dimension.
+const timeFilters = { year: null, weekday: null, dayOfMonth: null, startHour: null };
+
+function buildEventPool() {
+  const pool = [];
+  Object.values(DATA.chapters).forEach(c => {
+    (c.events_detail || []).forEach(ev => {
+      if (!ev.date) return;
+      const d = new Date(ev.date + 'T00:00:00Z');
+      pool.push({
+        date: ev.date,
+        year: ev.date.slice(0, 4),
+        weekday: DAY_NAMES_JS[d.getUTCDay()],
+        dayOfMonth: String(d.getUTCDate()),
+        startHour: ev.start_hour != null ? String(ev.start_hour) : null,
+        region: c.region_group,
+        chapter: c.slug,
+        attendees: ev.attendees,
+      });
+    });
+  });
+  return pool;
+}
+const DAY_NAMES_JS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+function filteredEventPool(excludeDimension) {
+  let pool = EVENT_POOL;
+  if (selectedChapter) pool = pool.filter(e => e.chapter === selectedChapter);
+  Object.entries(timeFilters).forEach(([dim, val]) => {
+    if (val !== null && dim !== excludeDimension) pool = pool.filter(e => e[dim] === val);
+  });
+  return pool;
+}
+
+function setTimeFilter(dim, value) {
+  timeFilters[dim] = timeFilters[dim] === value ? null : value;
+  renderGrowthChart();
+  renderTimingCharts();
+}
+
+function anyTimeFilterActive() {
+  return Object.values(timeFilters).some(v => v !== null);
+}
+
 function fmt(n) { return n === null || n === undefined ? '—' : n.toLocaleString(); }
 function fmtDelta(pct) {
   if (pct === null || pct === undefined) return '';
@@ -650,6 +713,7 @@ function setSelectedChapter(slug) {
   renderChapterTable();
   renderChapterDetail();
   renderGrowthChart();
+  renderTimingCharts();
   renderStatRow();
 }
 function titleCase(slug) {
@@ -670,43 +734,104 @@ function statusChip(c) {
   return `<span class="chip status-${s}">${label}</span>`;
 }
 
+// All dates are ISO strings ("YYYY-MM-DD"), so string comparison sorts correctly.
+function addMonths(date, months) {
+  const d = new Date(date);
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString().slice(0, 10);
+}
+
+// Recomputes trailing-window stats client-side from raw per-event data so the
+// range slider actually changes the numbers, instead of relying on a fixed
+// 12mo window baked in at build time.
+function computeWindowStats(months) {
+  const today = DATA.date_computed_as_of || DATA.generated;
+  const windowStart = addMonths(today, -months);
+  const priorStart = addMonths(today, -months * 2);
+  const priorEnd = windowStart;
+
+  const chapters = selectedChapter ? [DATA.chapters[selectedChapter]] : Object.values(DATA.chapters);
+
+  let events = 0, priorEvents = 0, talks = 0, attendeesSum = 0, attendeesCount = 0;
+  let activeChapterSlugs = new Set(), priorActiveChapterSlugs = new Set();
+
+  chapters.forEach(c => {
+    (c.events_detail || []).forEach(ev => {
+      if (!ev.date) return;
+      if (ev.date >= windowStart && ev.date <= today) {
+        events++;
+        activeChapterSlugs.add(c.slug);
+        talks += (ev.talks || []).length;
+        if (ev.attendees != null) { attendeesSum += ev.attendees; attendeesCount++; }
+      } else if (ev.date >= priorStart && ev.date < priorEnd) {
+        priorEvents++;
+        priorActiveChapterSlugs.add(c.slug);
+      }
+    });
+  });
+
+  // Unique speakers in the window, split the same way build_dashboard_data.py
+  // splits multi-speaker strings server-side. Not identity-merged against
+  // speaker-identities.json (that canonicalization only ships for the
+  // all-time repeat_speakers list), so this can slightly over-count typo'd
+  // duplicates of the same person - a reasonable trade for being able to
+  // recompute per any slider window client-side.
+  const speakerSet = new Set();
+  DATA.all_talks.forEach(t => {
+    if (!t.date || t.date < windowStart || t.date > today) return;
+    if (selectedChapter && t.chapter !== selectedChapter) return;
+    if (!t.speaker) return;
+    t.speaker.split(/,| & |\band\b/).map(s => s.trim()).filter(Boolean).forEach(s => speakerSet.add(s));
+  });
+
+  return {
+    events, priorEvents, talks, attendeesSum,
+    avgAttendeesPerEvent: attendeesCount ? Math.round(10 * attendeesSum / attendeesCount) / 10 : null,
+    activeChapters: activeChapterSlugs.size,
+    priorActiveChapters: priorActiveChapterSlugs.size,
+    uniqueSpeakers: speakerSet.size,
+    windowStart, today,
+  };
+}
+
 function renderStatRow() {
   const s = DATA.summary;
   const c = selectedChapter ? DATA.chapters[selectedChapter] : null;
+  const w = computeWindowStats(trailingMonths);
 
   const eventsAllTime = c ? c.total_events : s.total_events;
   const talksAllTime = c ? c.total_talks : s.total_talks;
-  const trailingEvents = c ? c.trailing_12mo_events : s.trailing_12mo_events;
-  const priorEvents = c ? c.prior_trailing_12mo_events : s.prior_trailing_12mo_events;
-  const eventsYoy = priorEvents ? Math.round(1000 * (trailingEvents - priorEvents) / priorEvents) / 10 : null;
-  const trailingTalks = c ? c.trailing_12mo_talks : s.trailing_12mo_talks;
-  const avgTalksPerEvent = trailingEvents ? Math.round(100 * trailingTalks / trailingEvents) / 100 : null;
+  const eventsYoy = w.priorEvents ? Math.round(1000 * (w.events - w.priorEvents) / w.priorEvents) / 10 : null;
+  const avgTalksPerEvent = w.events ? Math.round(100 * w.talks / w.events) / 100 : null;
+  const dormantChapters = c ? null : s.total_chapters - w.activeChapters;
+  const activeYoyPct = w.priorActiveChapters ? Math.round(1000 * (w.activeChapters - w.priorActiveChapters) / w.priorActiveChapters) / 10 : null;
+  const windowLabel = trailingMonths >= 24 ? `last ${Math.round(trailingMonths / 12)}yr` : `last ${trailingMonths}mo`;
 
   const tiles = [
     {
       label: 'Chapters',
       value: fmt(c ? 1 : s.total_chapters),
-      sub: c ? chapterName(c.slug) : `${fmt(s.active_chapters)} active now · ${fmt(s.dormant_chapters)} dormant ${fmtDelta(s.active_chapters_yoy_pct)} active YoY`,
+      sub: c ? chapterName(c.slug) : `${fmt(w.activeChapters)} active (${windowLabel}) · ${fmt(dormantChapters)} dormant ${fmtDelta(activeYoyPct)}`,
     },
     {
-      label: 'Events (last 12mo)',
-      value: fmt(trailingEvents) + ' ' + fmtDelta(eventsYoy),
+      label: `Events (${windowLabel})`,
+      value: fmt(w.events) + ' ' + fmtDelta(eventsYoy),
       sub: `${fmt(eventsAllTime)} all-time`,
     },
     {
-      label: 'Talks (last 12mo)',
-      value: fmt(trailingTalks),
+      label: `Talks (${windowLabel})`,
+      value: fmt(w.talks),
       sub: `${fmt(talksAllTime)} all-time · avg ${avgTalksPerEvent ?? '—'}/event`,
     },
     {
-      label: 'Attendees (last 12mo)',
-      value: fmt(c ? c.trailing_12mo_avg_attendees : s.trailing_12mo_attendees),
-      sub: c ? 'avg per event, trailing 12mo' : 'total attendee count, trailing 12mo',
+      label: `Attendees (${windowLabel})`,
+      value: fmt(w.attendeesSum),
+      sub: `avg ${w.avgAttendeesPerEvent ?? '—'}/event, ${windowLabel}`,
     },
     {
-      label: 'Unique speakers',
-      value: fmt(c ? c.unique_speakers : s.total_unique_speakers),
-      sub: 'all-time',
+      label: `Unique speakers (${windowLabel})`,
+      value: fmt(w.uniqueSpeakers),
+      sub: `${fmt(c ? c.unique_speakers : s.total_unique_speakers)} all-time`,
     },
   ];
   document.getElementById('stat-row').innerHTML = tiles.map(t => `
@@ -782,13 +907,19 @@ function renderCategoryDonut() {
 }
 
 function renderTopicSamples() {
-  const wrap = document.getElementById('topic-samples-wrap');
+  const emptyEl = document.getElementById('topic-samples-empty');
+  const contentEl = document.getElementById('topic-samples-content');
   if (!selectedCategory) {
-    wrap.classList.add('hidden');
+    emptyEl.classList.remove('hidden');
+    contentEl.classList.add('hidden');
     return;
   }
-  wrap.classList.remove('hidden');
-  document.getElementById('topic-samples-title').textContent = `Sample talks — ${selectedCategory}`;
+  emptyEl.classList.add('hidden');
+  contentEl.classList.remove('hidden');
+  document.getElementById('topic-samples-title').textContent = selectedCategory;
+  const topics = DATA.category_topics[selectedCategory] || [];
+  document.getElementById('topic-samples-definition').innerHTML =
+    `Includes talks tagged with: ${topics.map(t => `<span class="chip">${t}</span>`).join(' ')}`;
   document.querySelectorAll('.sample-sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sampleSort));
 
   let talks = (DATA.topic_sample_talks[selectedCategory] || []).slice();
@@ -801,7 +932,8 @@ function renderTopicSamples() {
   document.getElementById('topic-samples-list').innerHTML = talks.map(t => `
     <div class="topic-sample-item">
       <div class="ts-title">${t.title || 'Untitled talk'}</div>
-      <div class="ts-meta">${t.speaker || 'Unknown speaker'} · ${chapterName(t.chapter)} · ${t.date || '—'}${t.attendees != null ? ` · ${t.attendees} attendees` : ''}</div>
+      <div class="ts-meta">${t.speaker || 'Unknown speaker'} · ${chapterName(t.chapter)} · ${t.date || '—'}${t.attendees != null ? ` · ${t.attendees} attendees` : ''}${t.event_url ? ` · <a class="event-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}</div>
+      ${t.description ? `<div class="talk-desc" style="margin-top:4px;">${t.description}</div>` : ''}
     </div>
   `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px;">No sample talks recorded.</div>';
 }
@@ -809,28 +941,33 @@ function renderTopicSamples() {
 function renderGrowthChart() {
   const svg = document.getElementById('growth-chart');
   const tooltip = document.getElementById('growth-tooltip');
-  const years = Object.keys(DATA.yearly_event_counts).sort();
+  const pool = filteredEventPool('year');
+  const years = [...new Set(EVENT_POOL.map(e => e.year))].sort();
 
   const regionNames = Object.keys(DATA.region_yearly_events).sort((a, b) => {
     const totalA = Object.values(DATA.region_yearly_events[a]).reduce((x,y)=>x+y, 0);
     const totalB = Object.values(DATA.region_yearly_events[b]).reduce((x,y)=>x+y, 0);
     return totalB - totalA;
   });
+  const visibleRegions = regionNames.filter(r => !hiddenRegions.has(r));
+
+  function regionSeries(region) {
+    return years.map(y => pool.filter(e => e.year === y && e.region === region).length);
+  }
 
   let chapterSeries = null;
   let chapterLabel = null;
   if (selectedChapter && DATA.chapters[selectedChapter]) {
-    const c = DATA.chapters[selectedChapter];
-    chapterSeries = years.map(y => c.yearly_events[y] || 0);
     chapterLabel = chapterName(selectedChapter);
+    chapterSeries = years.map(y => pool.filter(e => e.year === y && e.chapter === selectedChapter).length);
   }
 
   const W = 900, H = 260;
   const padL = 36, padR = 16, padT = 16, padB = 28;
   const plotW = W - padL - padR, plotH = H - padT - padB;
 
-  const visibleRegions = regionNames.filter(r => !hiddenRegions.has(r));
-  const allValues = visibleRegions.flatMap(r => years.map(y => DATA.region_yearly_events[r][y] || 0));
+  const seriesByRegion = Object.fromEntries(visibleRegions.map(r => [r, regionSeries(r)]));
+  const allValues = visibleRegions.flatMap(r => seriesByRegion[r]);
   const maxVal = Math.max(1, ...allValues, ...(chapterSeries || [0]));
   const niceMax = Math.ceil(maxVal / 10) * 10 || maxVal;
 
@@ -851,12 +988,13 @@ function renderGrowthChart() {
 
   let xLabelsHtml = '';
   years.forEach((y, i) => {
-    xLabelsHtml += `<text x="${xFor(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="line-chart-axis-label">${y}</text>`;
+    const isSelected = timeFilters.year === y;
+    xLabelsHtml += `<text x="${xFor(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="line-chart-axis-label" font-weight="${isSelected ? 700 : 400}" fill="${isSelected ? 'var(--text-primary)' : ''}">${y}</text>`;
   });
 
   let regionsHtml = '';
   visibleRegions.forEach(region => {
-    const series = years.map(y => DATA.region_yearly_events[region][y] || 0);
+    const series = seriesByRegion[region];
     const color = REGION_COLORS[region] || 'var(--series-1)';
     regionsHtml += `<path d="${pathFor(series)}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"></path>`;
     regionsHtml += series.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3" fill="${color}" class="growth-point"></circle>`).join('');
@@ -891,12 +1029,12 @@ function renderGrowthChart() {
     rect.setAttribute('width', (x1 - x0).toFixed(1));
     rect.setAttribute('height', plotH);
     rect.setAttribute('fill', 'transparent');
-    rect.style.cursor = 'crosshair';
+    rect.style.cursor = 'pointer';
     rect.addEventListener('mouseenter', () => {
       crosshair.style.display = 'block';
       crosshair.setAttribute('x1', xFor(i).toFixed(1));
       crosshair.setAttribute('x2', xFor(i).toFixed(1));
-      const regionLines = visibleRegions.map(r => `${r}: ${DATA.region_yearly_events[r][y] || 0}`).join('<br>');
+      const regionLines = visibleRegions.map(r => `${r}: ${seriesByRegion[r][i]}`).join('<br>');
       const chapterV = chapterSeries ? chapterSeries[i] : null;
       tooltip.style.display = 'block';
       tooltip.innerHTML = `<strong>${y}</strong><br>${regionLines}${chapterV !== null ? `<br>${chapterLabel}: ${chapterV} events` : ''}`;
@@ -909,6 +1047,7 @@ function renderGrowthChart() {
       crosshair.style.display = 'none';
       tooltip.style.display = 'none';
     });
+    rect.addEventListener('click', () => setTimeFilter('year', y));
     overlay.appendChild(rect);
   });
   svg.appendChild(overlay);
@@ -917,7 +1056,8 @@ function renderGrowthChart() {
     <div class="legend-item ${hiddenRegions.has(region) ? 'muted' : ''}" data-region="${region}">
       <span class="legend-swatch" style="background:${REGION_COLORS[region] || 'var(--series-1)'};"></span>${region}
     </div>
-  `).join('') + (chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--text-primary);"></span>${chapterLabel}</div>` : '');
+  `).join('') + (chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--text-primary);"></span>${chapterLabel}</div>` : '') +
+    (anyTimeFilterActive() ? `<button class="table-toggle" id="clear-time-filters" style="margin-left:0;">Clear filters</button>` : '');
 
   document.querySelectorAll('#growth-legend .legend-item[data-region]').forEach(el => {
     el.addEventListener('click', () => {
@@ -926,35 +1066,73 @@ function renderGrowthChart() {
       renderGrowthChart();
     });
   });
+  const clearBtn = document.getElementById('clear-time-filters');
+  if (clearBtn) clearBtn.addEventListener('click', () => {
+    Object.keys(timeFilters).forEach(k => timeFilters[k] = null);
+    renderGrowthChart();
+    renderTimingCharts();
+  });
 }
 
-function renderMiniBarChart(svgId, dataObj, labelFn) {
+function renderMiniBarChart(svgId, dimension, entries, labelFn) {
   const svg = document.getElementById(svgId);
-  const entries = Object.entries(dataObj);
-  const W = 280, H = 160, padL = 20, padR = 8, padT = 8, padB = 24;
+  const tooltip = svg.parentElement.querySelector('.mini-bar-tooltip');
+  const W = 280, H = 160, padL = 26, padR = 8, padT = 8, padB = 24;
   const plotW = W - padL - padR, plotH = H - padT - padB;
   const max = Math.max(1, ...entries.map(([,v]) => v));
+  const niceMax = Math.ceil(max / 5) * 5 || max;
   const barW = plotW / entries.length;
 
-  let html = '';
+  let gridHtml = '';
+  const steps = 2;
+  for (let s = 0; s <= steps; s++) {
+    const v = Math.round((niceMax / steps) * s);
+    const y = padT + plotH - (v / niceMax) * plotH;
+    gridHtml += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" class="line-chart-gridline"></line>`;
+    gridHtml += `<text x="${padL - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="mini-bar-chart-value">${v}</text>`;
+  }
+
+  let barsHtml = '';
   entries.forEach(([k, v], i) => {
-    const h = (v / max) * plotH;
+    const h = (v / niceMax) * plotH;
     const x = padL + i * barW;
     const y = padT + plotH - h;
-    html += `<rect x="${(x + barW * 0.12).toFixed(1)}" y="${y.toFixed(1)}" width="${(barW * 0.76).toFixed(1)}" height="${h.toFixed(1)}" class="mini-bar-chart-bar" rx="2"><title>${labelFn(k)}: ${v}</title></rect>`;
+    const isSelected = timeFilters[dimension] === k;
+    barsHtml += `<rect x="${(x + barW * 0.12).toFixed(1)}" y="${y.toFixed(1)}" width="${(barW * 0.76).toFixed(1)}" height="${h.toFixed(1)}" class="mini-bar-chart-bar" rx="2" data-key="${k}" data-label="${labelFn(k)}" data-value="${v}" opacity="${isSelected ? 1 : (timeFilters[dimension] ? 0.4 : 1)}" style="cursor:pointer; ${isSelected ? 'stroke:var(--text-primary); stroke-width:1.5;' : ''}"></rect>`;
     if (entries.length <= 12 || i % 5 === 0 || i === entries.length - 1) {
-      html += `<text x="${(x + barW/2).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="mini-bar-chart-label">${labelFn(k)}</text>`;
+      barsHtml += `<text x="${(x + barW/2).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="mini-bar-chart-label">${labelFn(k)}</text>`;
     }
   });
-  svg.innerHTML = html;
+
+  svg.innerHTML = gridHtml + barsHtml;
+
+  svg.querySelectorAll('.mini-bar-chart-bar').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (!tooltip) return;
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `<strong>${el.dataset.label}</strong>: ${el.dataset.value} events`;
+      const rectBox = svg.getBoundingClientRect();
+      const cx = (parseFloat(el.getAttribute('x')) + parseFloat(el.getAttribute('width'))/2) / W * rectBox.width;
+      tooltip.style.left = Math.min(Math.max(cx - 40, 0), rectBox.width - 120) + 'px';
+      tooltip.style.top = '0px';
+    });
+    el.addEventListener('mouseleave', () => { if (tooltip) tooltip.style.display = 'none'; });
+    el.addEventListener('click', () => setTimeFilter(dimension, el.dataset.key));
+  });
 }
 
 function renderTimingCharts() {
-  renderMiniBarChart('weekday-chart', DATA.weekday_event_counts, k => k.slice(0, 3));
-  renderMiniBarChart('daymonth-chart', DATA.day_of_month_event_counts, k => k);
-  const hourLabels = {};
-  Object.entries(DATA.start_hour_event_counts).forEach(([h, v]) => { hourLabels[h] = v; });
-  renderMiniBarChart('starthour-chart', hourLabels, k => `${k}:00`);
+  const weekdayPool = filteredEventPool('weekday');
+  const dayOfMonthPool = filteredEventPool('dayOfMonth');
+  const startHourPool = filteredEventPool('startHour');
+
+  const weekdayCounts = DAY_NAMES.map(d => [d, weekdayPool.filter(e => e.weekday === d).length]);
+  const dayOfMonthCounts = Array.from({length: 31}, (_, i) => String(i + 1)).map(d => [d, dayOfMonthPool.filter(e => e.dayOfMonth === d).length]);
+  const startHourCounts = Array.from({length: 24}, (_, i) => String(i)).map(h => [h, startHourPool.filter(e => e.startHour === h).length]);
+
+  renderMiniBarChart('weekday-chart', 'weekday', weekdayCounts, k => k.slice(0, 3));
+  renderMiniBarChart('daymonth-chart', 'dayOfMonth', dayOfMonthCounts, k => k);
+  renderMiniBarChart('starthour-chart', 'startHour', startHourCounts, k => `${k}:00`);
 }
 
 // sequential blue ramp, light -> dark, per dataviz skill palette (one hue for magnitude)
@@ -1426,12 +1604,39 @@ document.getElementById('date-range-slider').addEventListener('input', (e) => {
   trailingMonths = parseInt(e.target.value, 10);
   const label = trailingMonths >= 24 ? `Last ${Math.round(trailingMonths/12)} years` : `Last ${trailingMonths} months`;
   document.getElementById('range-label').textContent = label;
+  renderStatRow();
 });
 
 document.getElementById('footnote').innerHTML =
   `Generated ${DATA.generated} from <code>enriched/*.json</code> and <code>speaker-identities.json</code>. ` +
   `Topic categories per <code>past-meetups.md</code> §"topic categories". Venue positions on the per-chapter map are approximate (offset from the chapter's city center, not geocoded street addresses). ` +
   `${DATA.summary.dormant_chapters} chapters have had no event in the trailing 12 months and are excluded from rankings by default — toggle "Show dormant chapters" to include them.`;
+
+const PAGE_IDS = ['group-overview', 'group-chapters', 'group-talks'];
+
+function showPage(pageId, updateHash) {
+  if (!PAGE_IDS.includes(pageId)) pageId = PAGE_IDS[0];
+  PAGE_IDS.forEach(id => {
+    document.getElementById(id).classList.toggle('hidden', id !== pageId);
+  });
+  document.querySelectorAll('.group-nav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === pageId);
+  });
+  if (updateHash !== false && window.location.hash.slice(1) !== pageId) {
+    window.location.hash = pageId;
+  }
+  window.scrollTo({ top: 0 });
+}
+
+document.querySelectorAll('.group-nav button, .persona-chip').forEach(el => {
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    showPage(el.dataset.page);
+  });
+});
+window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1), false));
+
+const EVENT_POOL = buildEventPool();
 
 renderStatRow();
 renderCategoryDonut();
@@ -1446,4 +1651,5 @@ renderChapterDetail();
 populateTalkChapterFilter();
 renderTalkResults();
 renderSpeakerList();
+showPage(window.location.hash.slice(1) || 'group-overview', false);
 </script>
