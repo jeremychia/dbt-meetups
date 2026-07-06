@@ -184,10 +184,12 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
                 ch_categories[primary_cat] += 1
                 topic_sample_talks[primary_cat].append({
                     'title': talk.get('title'),
+                    'description': talk.get('description'),
                     'speaker': talk.get('speaker_name'),
                     'chapter': slug,
                     'date': d,
                     'attendees': a,
+                    'event_url': event.get('event_url'),
                 })
 
             raw_speaker = talk.get('speaker_name')
@@ -231,6 +233,8 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
             'location': loc,
             'attendees': a,
             'talks': event_talks_detail,
+            'start_hour': hour,
+            'is_online': is_online,
         })
 
     if geo is None:
@@ -334,6 +338,10 @@ output = {
     'chapters': chapters,
     'topic_distribution': topic_counter.most_common(),
     'category_distribution': category_counter.most_common(),
+    'category_topics': {
+        cat: sorted(t for t, c in CATEGORY_MAP.items() if c == cat)
+        for cat in sorted(set(CATEGORY_MAP.values()))
+    },
     'topic_sample_talks': {
         cat: sorted(talks, key=lambda t: t['date'] or '', reverse=True)[:8]
         for cat, talks in topic_sample_talks.items()
