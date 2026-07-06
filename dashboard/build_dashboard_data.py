@@ -126,16 +126,22 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
 
             all_talks.append({
                 'chapter': slug,
+                'event_name': event.get('event_name'),
+                'event_url': event.get('event_url'),
                 'date': d,
                 'title': talk.get('title'),
+                'description': talk.get('description'),
                 'speaker': raw_speaker,
+                'speaker_title': talk.get('speaker_title'),
                 'topics': topics,
                 'category': primary_cat,
             })
 
             event_talks_detail.append({
                 'title': talk.get('title'),
+                'description': talk.get('description'),
                 'speaker': raw_speaker,
+                'speaker_title': talk.get('speaker_title'),
                 'topics': topics,
             })
 
@@ -201,7 +207,7 @@ output = {
     'monthly_event_counts': dict(sorted(monthly_events.items())),
     'yearly_event_counts': dict(sorted(yearly_events.items())),
     'repeat_speakers': repeat_speakers,
-    'talks_per_event_note': 'see enriched files directly for full talk-level detail',
+    'all_talks': all_talks,
 }
 
 # fix total_unique_speakers properly

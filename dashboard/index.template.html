@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>dbt Meetup Community Dashboard</title>
 <style>
   .viz-root {
@@ -218,6 +219,15 @@
   .event-link { color: var(--series-1); font-size: 12px; text-decoration: none; }
   .event-link:hover { text-decoration: underline; }
 
+  /* talk search results */
+  .talk-result { padding: 12px 4px; border-bottom: 1px solid var(--border); }
+  .talk-result:last-child { border-bottom: none; }
+  .talk-result .talk-title { font-weight: 600; font-size: 13.5px; }
+  .talk-result .talk-meta { color: var(--text-secondary); font-size: 12px; margin-top: 3px; }
+  .talk-result .talk-desc { font-size: 12.5px; color: var(--text-primary); margin-top: 6px; line-height: 1.5; }
+  .talk-result .talk-topics { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .talk-result mark { background: color-mix(in srgb, var(--accent-highlight) 35%, transparent); color: inherit; border-radius: 2px; }
+
   .legend-row { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px; font-size: 12px; color: var(--text-secondary); }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
@@ -231,6 +241,25 @@
 
   .footnote { font-size: 11.5px; color: var(--text-muted); margin-top: 24px; line-height: 1.6; }
   .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+  /* group nav + group headers */
+  .group-nav {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; gap: 4px; margin: 0 0 32px;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+  }
+  .group-nav a {
+    font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    text-decoration: none; padding: 6px 12px; border-radius: 7px;
+  }
+  .group-nav a:hover { color: var(--text-primary); background: var(--surface-2); }
+  .content-group { scroll-margin-top: 56px; margin-bottom: 12px; }
+  .group-head { margin-bottom: 20px; }
+  .group-head h2.group-title { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+  .group-head p { margin: 0; color: var(--text-secondary); font-size: 13.5px; max-width: 720px; line-height: 1.5; }
+  .content-group + .content-group { padding-top: 28px; border-top: 1px solid var(--border); }
 </style>
 
 <div class="viz-root">
@@ -242,99 +271,146 @@
 
     <div class="stat-row" id="stat-row"></div>
 
-    <section>
-      <div class="flex-between">
-        <div>
-          <h2>What the community is talking about</h2>
-          <p class="section-sub">All 978 talks rolled up into 8 top-level categories (each talk counted once, by its primary topic). Use this to spot gaps in your own chapter's agenda vs. what peers are covering community-wide.</p>
-        </div>
-      </div>
-      <div class="card" id="category-bar-card"></div>
-    </section>
+    <nav class="group-nav">
+      <a href="#group-overview">Overview</a>
+      <a href="#group-chapters">Chapters</a>
+      <a href="#group-talks">Talks &amp; Speakers</a>
+    </nav>
 
-    <section>
-      <div class="flex-between">
-        <h2>Growth over time</h2>
-        <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
+    <div class="content-group" id="group-overview">
+      <div class="group-head">
+        <h2 class="group-title">Overview</h2>
+        <p>Community-wide trends across all 73 chapters — what's being talked about, how fast the community is growing, and where it meets.</p>
       </div>
-      <p class="section-sub" id="growth-sub">Events per year across all chapters — the community has grown roughly 15x since 2019, with 2023–2025 as the busiest years. Select a chapter above to overlay its own trend.</p>
-      <div class="card">
-        <div class="line-chart-wrap">
-          <svg id="growth-chart" viewBox="0 0 900 260" style="width:100%; height:auto; display:block;"></svg>
-          <div class="line-chart-tooltip" id="growth-tooltip"></div>
-        </div>
-      </div>
-    </section>
 
-    <section>
-      <div class="flex-between">
-        <h2>Where the community meets</h2>
-        <div class="legend-row" id="map-legend" style="margin-top:0;"></div>
-      </div>
-      <p class="section-sub">Every chapter plotted by location; marker size and color intensity both scale with total events held (a density heatmap over the map). Hover a marker for chapter stats.</p>
-      <div class="card">
-        <div style="position:relative;">
-          <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block;"></svg>
-          <div id="map-tooltip" style="position:absolute; display:none; pointer-events:none; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12.5px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:10; white-space:nowrap;"></div>
+      <section>
+        <div class="flex-between">
+          <div>
+            <h2>What the community is talking about</h2>
+            <p class="section-sub">All 978 talks rolled up into 8 top-level categories (each talk counted once, by its primary topic). Use this to spot gaps in your own chapter's agenda vs. what peers are covering community-wide.</p>
+          </div>
         </div>
-      </div>
-    </section>
+        <div class="card" id="category-bar-card"></div>
+      </section>
 
-    <section>
-      <div class="flex-between">
-        <h2>Chapter comparison</h2>
-        <select class="chapter-select" id="my-chapter-select">
-          <option value="">Select your chapter…</option>
-        </select>
-      </div>
-      <p class="section-sub">Every active chapter, sortable by any column. Click a header to sort; click a row (or use the dropdown) to see that chapter's topic mix below and pin it to the top of the table.</p>
-      <div class="card">
-        <div class="search-row">
-          <input class="search-input" id="chapter-search" placeholder="Search chapters…" />
-          <button class="table-toggle" id="toggle-dormant">Show dormant chapters</button>
+      <section>
+        <div class="flex-between">
+          <h2>Growth over time</h2>
+          <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
         </div>
-        <div style="overflow-x:auto;">
-          <table class="cmp" id="chapter-table">
-            <thead><tr>
-              <th data-key="slug">Chapter</th>
-              <th data-key="total_events">Events</th>
-              <th data-key="total_talks">Talks</th>
-              <th data-key="avg_talks_per_event">Talks/Event</th>
-              <th data-key="avg_attendees">Avg Attendees</th>
-              <th data-key="unique_speakers">Unique Speakers</th>
-              <th data-key="last_event_date">Last Event</th>
-            </tr></thead>
-            <tbody id="chapter-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 id="chapter-detail-title">Chapter detail</h2>
-      <p class="section-sub" id="chapter-detail-sub"></p>
-      <div class="two-col">
+        <p class="section-sub" id="growth-sub">Events per year across all chapters — the community has grown roughly 15x since 2019, with 2023–2025 as the busiest years. Select a chapter below to overlay its own trend.</p>
         <div class="card">
-          <div class="flex-between"><strong style="font-size:13px;">Topic mix</strong></div>
-          <div id="chapter-topic-bars" style="margin-top:10px;"></div>
+          <div class="line-chart-wrap">
+            <svg id="growth-chart" viewBox="0 0 900 260" style="width:100%; height:auto; display:block;"></svg>
+            <div class="line-chart-tooltip" id="growth-tooltip"></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex-between">
+          <h2>Where the community meets</h2>
+          <div class="legend-row" id="map-legend" style="margin-top:0;"></div>
+        </div>
+        <p class="section-sub">Every chapter plotted by location; marker size and color intensity both scale with total events held (a density heatmap over the map). Hover a marker for chapter stats.</p>
+        <div class="card">
+          <div style="position:relative;">
+            <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block;"></svg>
+            <div id="map-tooltip" style="position:absolute; display:none; pointer-events:none; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12.5px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:10; white-space:nowrap;"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="content-group" id="group-chapters">
+      <div class="group-head">
+        <h2 class="group-title">Chapters</h2>
+        <p>Compare every chapter side by side, then drill into any one of them for its topic mix, stats, and full event history.</p>
+      </div>
+
+      <section>
+        <div class="flex-between">
+          <h2>Chapter comparison</h2>
+          <select class="chapter-select" id="my-chapter-select">
+            <option value="">Select your chapter…</option>
+          </select>
+          <button class="table-toggle hidden" id="clear-chapter-select" style="margin-left:0;">Clear selection</button>
+        </div>
+        <p class="section-sub">Every active chapter, sortable by any column. Click a header to sort; click a row (or use the dropdown) to see that chapter's topic mix below and pin it to the top of the table.</p>
+        <div class="card">
+          <div class="search-row">
+            <input class="search-input" id="chapter-search" placeholder="Search chapters…" />
+            <button class="table-toggle" id="toggle-dormant">Show dormant chapters</button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="cmp" id="chapter-table">
+              <thead><tr>
+                <th data-key="slug">Chapter</th>
+                <th data-key="total_events">Events</th>
+                <th data-key="total_talks">Talks</th>
+                <th data-key="avg_talks_per_event">Talks/Event</th>
+                <th data-key="avg_attendees">Avg Attendees</th>
+                <th data-key="unique_speakers">Unique Speakers</th>
+                <th data-key="last_event_date">Last Event</th>
+              </tr></thead>
+              <tbody id="chapter-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 id="chapter-detail-title">Chapter detail</h2>
+        <p class="section-sub" id="chapter-detail-sub"></p>
+        <div class="two-col">
+          <div class="card">
+            <div class="flex-between"><strong style="font-size:13px;">Topic mix</strong></div>
+            <div id="chapter-topic-bars" style="margin-top:10px;"></div>
+          </div>
+          <div class="card">
+            <div class="flex-between"><strong style="font-size:13px;">At a glance</strong></div>
+            <div id="chapter-glance" style="margin-top:10px; font-size:13px; line-height:2;"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px;">
+          <div class="flex-between"><strong style="font-size:13px;">Event history</strong></div>
+          <p class="section-sub" style="margin:4px 0 12px;">Click an event to see its talks and speakers.</p>
+          <div id="chapter-events-list"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="content-group" id="group-talks">
+      <div class="group-head">
+        <h2 class="group-title">Talks &amp; speakers</h2>
+        <p>Search individual talks by keyword, or find speakers who've presented at multiple chapters.</p>
+      </div>
+
+      <section>
+        <div class="flex-between">
+          <div>
+            <h2>Explore talks</h2>
+            <p class="section-sub">Search all 978 talks by title, description, speaker, or topic. Useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
+          </div>
         </div>
         <div class="card">
-          <div class="flex-between"><strong style="font-size:13px;">At a glance</strong></div>
-          <div id="chapter-glance" style="margin-top:10px; font-size:13px; line-height:2;"></div>
+          <div class="search-row">
+            <input class="search-input" id="talk-search" placeholder="Search talk titles, descriptions, speakers, topics…" />
+            <select class="chapter-select" id="talk-chapter-filter">
+              <option value="">All chapters</option>
+            </select>
+          </div>
+          <div class="section-sub" id="talk-results-count" style="margin-bottom:10px;"></div>
+          <div id="talk-results-list"></div>
         </div>
-      </div>
-      <div class="card" style="margin-top:16px;">
-        <div class="flex-between"><strong style="font-size:13px;">Event history</strong></div>
-        <p class="section-sub" style="margin:4px 0 12px;">Click an event to see its talks and speakers.</p>
-        <div id="chapter-events-list"></div>
-      </div>
-    </section>
+      </section>
 
-    <section>
-      <h2>Speakers who travel the circuit</h2>
-      <p class="section-sub">Speakers who have presented at more than one chapter (name-deduplicated for typos/diacritics — see <code>speaker-identities.json</code>). Useful as a shortlist when you're short a speaker: someone who has already spoken at 3+ chapters knows the format and is likely open to another invite.</p>
-      <div class="card" id="speaker-list"></div>
-    </section>
+      <section>
+        <h2>Speakers who travel the circuit</h2>
+        <p class="section-sub">Speakers who have presented at more than one chapter (name-deduplicated for typos/diacritics — see <code>speaker-identities.json</code>). Useful as a shortlist when you're short a speaker: someone who has already spoken at 3+ chapters knows the format and is likely open to another invite.</p>
+        <div class="card" id="speaker-list"></div>
+      </section>
+    </div>
 
     <div class="footnote">
       Generated 2026-07-05 from <code>analysis/dbt-meetups/enriched/*.json</code> and <code>speaker-identities.json</code>. Topic categories per <code>past-meetups.md</code> §"topic categories". 5 chapters (Bangalore, Cluj, Detroit, Perth, Salt Lake City) have no recorded events yet and are excluded from rankings by default — toggle "Show dormant chapters" to include them.
@@ -363,6 +439,15 @@ let sortKey = 'total_events';
 let sortAsc = false;
 
 function fmt(n) { return n === null || n === undefined ? '—' : n.toLocaleString(); }
+
+function setSelectedChapter(slug) {
+  selectedChapter = slug || null;
+  document.getElementById('my-chapter-select').value = selectedChapter || '';
+  document.getElementById('clear-chapter-select').classList.toggle('hidden', !selectedChapter);
+  renderChapterTable();
+  renderChapterDetail();
+  renderGrowthChart();
+}
 function titleCase(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
@@ -579,13 +664,7 @@ function renderMap() {
       tooltip.style.top = Math.max(cy - 40, 0) + 'px';
     });
     el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
-    el.addEventListener('click', () => {
-      selectedChapter = slug;
-      document.getElementById('my-chapter-select').value = slug;
-      renderChapterTable();
-      renderChapterDetail();
-      renderGrowthChart();
-    });
+    el.addEventListener('click', () => setSelectedChapter(slug));
   });
 
   const legendSteps = [
@@ -609,12 +688,7 @@ function populateChapterSelect() {
   sel.innerHTML = '<option value="">Select your chapter…</option>' + chapters.map(c =>
     `<option value="${c.slug}" ${c.slug === selectedChapter ? 'selected' : ''}>${chapterName(c.slug)}</option>`
   ).join('');
-  sel.addEventListener('change', () => {
-    selectedChapter = sel.value || null;
-    renderChapterTable();
-    renderChapterDetail();
-    renderGrowthChart();
-  });
+  sel.addEventListener('change', () => setSelectedChapter(sel.value));
 }
 
 function renderChapterTable() {
@@ -654,13 +728,7 @@ function renderChapterTable() {
   }).join('');
 
   document.querySelectorAll('#chapter-tbody tr').forEach(tr => {
-    tr.addEventListener('click', () => {
-      selectedChapter = tr.dataset.slug;
-      document.getElementById('my-chapter-select').value = selectedChapter;
-      renderChapterTable();
-      renderChapterDetail();
-      renderGrowthChart();
-    });
+    tr.addEventListener('click', () => setSelectedChapter(tr.dataset.slug));
   });
 
   document.querySelectorAll('table.cmp th').forEach(th => {
@@ -751,6 +819,75 @@ function renderChapterEventsList(c) {
   });
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function highlight(text, query) {
+  if (!text) return '';
+  const escaped = escapeHtml(text);
+  if (!query) return escaped;
+  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escaped.replace(new RegExp('(' + escapedQuery + ')', 'ig'), '<mark>$1</mark>');
+}
+
+function populateTalkChapterFilter() {
+  const sel = document.getElementById('talk-chapter-filter');
+  const slugs = [...new Set(DATA.all_talks.map(t => t.chapter))]
+    .sort((a, b) => chapterName(a).localeCompare(chapterName(b)));
+  sel.innerHTML = '<option value="">All chapters</option>' + slugs.map(s =>
+    `<option value="${s}">${chapterName(s)}</option>`
+  ).join('');
+  sel.addEventListener('change', renderTalkResults);
+}
+
+function renderTalkResults() {
+  const query = (document.getElementById('talk-search').value || '').trim().toLowerCase();
+  const chapterFilter = document.getElementById('talk-chapter-filter').value;
+  const countEl = document.getElementById('talk-results-count');
+  const listEl = document.getElementById('talk-results-list');
+
+  let results = DATA.all_talks;
+  if (chapterFilter) results = results.filter(t => t.chapter === chapterFilter);
+  if (query) {
+    results = results.filter(t => {
+      const haystack = [t.title, t.description, t.speaker, t.speaker_title, ...(t.topics || [])]
+        .filter(Boolean).join(' ').toLowerCase();
+      return haystack.includes(query);
+    });
+  }
+  results = results.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  const MAX_RESULTS = 30;
+
+  if (!query && !chapterFilter) {
+    countEl.textContent = `${DATA.all_talks.length} talks total — search by title, description, speaker, or topic to browse.`;
+    listEl.innerHTML = '';
+    return;
+  }
+
+  const shown = results.slice(0, MAX_RESULTS);
+  countEl.textContent = `${results.length} matching talk${results.length === 1 ? '' : 's'}` +
+    (results.length > MAX_RESULTS ? ` (showing first ${MAX_RESULTS})` : '');
+
+  if (!shown.length) {
+    listEl.innerHTML = '<div style="color:var(--text-secondary); font-size:13px; padding:8px 4px;">No talks match.</div>';
+    return;
+  }
+
+  listEl.innerHTML = shown.map(t => `
+    <div class="talk-result">
+      <div class="talk-title">${highlight(t.title || 'Untitled talk', query)}</div>
+      <div class="talk-meta">
+        ${highlight(t.speaker || 'Unknown speaker', query)}${t.speaker_title ? ' · ' + highlight(t.speaker_title, query) : ''}
+        · ${chapterName(t.chapter)} · ${t.date || '—'}
+        ${t.event_url ? ` · <a class="event-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}
+      </div>
+      ${t.description ? `<div class="talk-desc">${highlight(t.description, query)}</div>` : ''}
+      <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${highlight(topic, query)}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
 function renderSpeakerList() {
   const speakers = DATA.repeat_speakers.slice(0, 20);
   document.getElementById('speaker-list').innerHTML = speakers.map(sp => `
@@ -775,7 +912,9 @@ function attachSortHandlers() {
   });
 }
 
+document.getElementById('clear-chapter-select').addEventListener('click', () => setSelectedChapter(null));
 document.getElementById('chapter-search').addEventListener('input', renderChapterTable);
+document.getElementById('talk-search').addEventListener('input', renderTalkResults);
 document.getElementById('toggle-dormant').addEventListener('click', (e) => {
   showDormant = !showDormant;
   e.target.textContent = showDormant ? 'Hide dormant chapters' : 'Show dormant chapters';
@@ -790,5 +929,7 @@ populateChapterSelect();
 attachSortHandlers();
 renderChapterTable();
 renderChapterDetail();
+populateTalkChapterFilter();
+renderTalkResults();
 renderSpeakerList();
 </script>
