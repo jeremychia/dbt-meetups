@@ -120,6 +120,10 @@ for the "at a glance", it would be nice to have "cockpit" similar to the top.
 
 **Action taken:** Chapter comparison table now has a Status column (Active / At risk / Dormant) with a "what counts as..." definitions note, plus a region filter dropdown (using the same region classification as the growth chart). Chapter detail's topic mix bars now show this chapter's % alongside the community average % for the same category, so you can see over/under-indexing at a glance. "At a glance" is now a cockpit-style tile grid matching the top score-row style, instead of a plain list. Did not add distribution variance (e.g. stddev band) beyond the average comparison — flagging as a possible follow-up if the simple over/under % isn't enough.
 
+**further comment**: "show/hide dormant chapters" doesn't work
+
+**Action taken (follow-up):** It was filtering on the old definition of dormant (`total_events > 0`) left over from before the Status column existed, so most chapters that are dormant under the new trailing-12mo definition were never being hidden. Now filters using the same `chapterStatus()` the Status column itself uses, so the toggle and the column agree.
+
 ## chapter details
 
 with the addresses of the events, i'm also curious to see where the events are held within a city. so it would be good if you could possibly plot these on a map. check whether each address can be plotted to a coordinate and see if there are venues (this is more on a chapter level) which get used often and more than once. and what their capacity is.
