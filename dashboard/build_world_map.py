@@ -90,19 +90,28 @@ for geom in geoms:
             global kept_rings
             if len(coords) < 3:
                 return
-            # split at antimeridian crossings (lon jump > 180deg between consecutive points)
-            # to avoid a horizontal seam line across the projected map
+            # Split at antimeridian crossings (lon jump > 180deg between consecutive
+            # points), inserting an interpolated point exactly at +/-180 so each
+            # side of a real landmass (e.g. Russia, which spans ~170deg of
+            # longitude) is cut precisely at the seam rather than discarded by a
+            # blunt "span > 90deg" heuristic, which drops genuine wide landmasses
+            # along with true degenerate slivers.
             segments = [[coords[0]]]
             for prev, cur in zip(coords, coords[1:]):
                 if abs(cur[0] - prev[0]) > 180:
-                    segments.append([])
+                    # interpolate the crossing point at the seam on both sides
+                    edge = 180 if prev[0] > 0 else -180
+                    other_edge = -edge
+                    # linear interpolation in unwrapped space
+                    prev_unwrapped = prev[0]
+                    cur_unwrapped = cur[0] + (360 if cur[0] < 0 else -360)
+                    t = (edge - prev_unwrapped) / (cur_unwrapped - prev_unwrapped) if cur_unwrapped != prev_unwrapped else 0.5
+                    lat_at_seam = prev[1] + t * (cur[1] - prev[1])
+                    segments[-1].append((edge, lat_at_seam))
+                    segments.append([(other_edge, lat_at_seam)])
                 segments[-1].append(cur)
             for seg in segments:
                 if len(seg) < 2:
-                    continue
-                seg_lons = [c[0] for c in seg]
-                if max(seg_lons) - min(seg_lons) > 90:
-                    # degenerate sliver spanning the antimeridian seam itself, not a real landmass fragment
                     continue
                 kept_rings += 1
                 pts = [project(lon, lat) for lon, lat in seg]
