@@ -373,8 +373,13 @@
 
   .glance-cockpit { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
   .glance-tile { background: var(--surface-1); border-radius: 8px; padding: 10px 12px; }
+  .glance-tile.wide { grid-column: span 2; }
   .glance-tile .g-value { font-size: 18px; font-weight: 700; }
   .glance-tile .g-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+  .range-bar-track { position: relative; height: 6px; background: var(--border); border-radius: 3px; margin: 8px 0 4px; }
+  .range-bar-fill { position: absolute; height: 100%; background: var(--series-1); border-radius: 3px; }
+  .range-bar-avg { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text-primary); }
+  .range-bar-labels { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 </style>
 
 <div class="viz-root">
@@ -553,7 +558,10 @@
         <h2 id="chapter-detail-title">Chapter detail</h2>
         <p class="section-sub" id="chapter-detail-sub"></p>
         <div class="card hidden" id="chapter-cockpit-card">
-          <div style="font-size:13px; font-weight:700; margin-bottom:10px;">At a glance</div>
+          <div class="flex-between" style="margin-bottom:10px;">
+            <strong style="font-size:13px;">At a glance</strong>
+            <span style="font-size:11px; color:var(--text-muted);">all-time totals for this chapter — the score cards above are trailing-window, community-wide by default</span>
+          </div>
           <div class="glance-cockpit" id="chapter-glance"></div>
         </div>
         <div class="two-col" style="margin-top:16px;">
@@ -1451,12 +1459,29 @@ function renderChapterDetail() {
       : 'No events recorded yet for this chapter.') + ' ' + statusChip(c);
 
   cockpitCard.classList.remove('hidden');
+
+  let attendeesTile;
+  if (c.min_attendees != null && c.max_attendees != null && c.max_attendees > c.min_attendees) {
+    const span = c.max_attendees - c.min_attendees;
+    const avgPct = Math.round(100 * (c.avg_attendees - c.min_attendees) / span);
+    attendeesTile = `
+      <div class="glance-tile wide">
+        <div class="g-value">${fmt(c.avg_attendees)} <span style="font-size:11px; font-weight:400; color:var(--text-secondary);">avg</span></div>
+        <div class="range-bar-track">
+          <div class="range-bar-fill" style="left:0; width:100%;"></div>
+          <div class="range-bar-avg" style="left:${avgPct}%;"></div>
+        </div>
+        <div class="range-bar-labels"><span>${fmt(c.min_attendees)} min</span><span>${fmt(c.max_attendees)} max</span></div>
+      </div>`;
+  } else {
+    attendeesTile = `<div class="glance-tile"><div class="g-value">${fmt(c.avg_attendees)}</div><div class="g-label">Avg attendees</div></div>`;
+  }
+
   document.getElementById('chapter-glance').innerHTML = `
     <div class="glance-tile"><div class="g-value">${fmt(c.total_events)}</div><div class="g-label">Total events</div></div>
     <div class="glance-tile"><div class="g-value">${fmt(c.total_talks)}</div><div class="g-label">Total talks</div></div>
     <div class="glance-tile"><div class="g-value">${c.avg_talks_per_event}</div><div class="g-label">Avg talks/event</div></div>
-    <div class="glance-tile"><div class="g-value">${fmt(c.avg_attendees)}</div><div class="g-label">Avg attendees</div></div>
-    <div class="glance-tile"><div class="g-value">${fmt(c.max_attendees)}</div><div class="g-label">Max attendees</div></div>
+    ${attendeesTile}
     <div class="glance-tile"><div class="g-value">${fmt(c.unique_speakers)}</div><div class="g-label">Unique speakers</div></div>
   `;
 
@@ -1503,13 +1528,16 @@ function renderVenueMap(c) {
     const lonC = (Math.min(...lons) + Math.max(...lons)) / 2;
     const latSpan = Math.max(0.02, Math.max(...lats) - Math.min(...lats));
     const lonSpan = Math.max(0.02, Math.max(...lons) - Math.min(...lons));
-    const scale = Math.min(120 / latSpan, 120 / lonSpan);
+    const scale = Math.min(90 / latSpan, 90 / lonSpan);
     const maxCount = Math.max(...withCoords.map(v => v.count));
     svg.innerHTML = withCoords.map(v => {
       const x = 150 + (v.lon - lonC) * scale;
       const y = 110 - (v.lat - latC) * scale;
       const r = 6 + 10 * (v.count / maxCount);
-      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="var(--series-1)" fill-opacity="0.7" stroke="var(--surface-1)" stroke-width="1.5"><title>${v.name} — used ${v.count} times</title></circle>`;
+      const labelY = y - r - 6;
+      return `
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="var(--series-1)" fill-opacity="0.7" stroke="var(--surface-1)" stroke-width="1.5"><title>${v.name} — used ${v.count} times</title></circle>
+        <text x="${x.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-size="10" fill="var(--text-secondary)">${escapeHtml(v.name)}</text>`;
     }).join('');
   } else {
     svg.style.display = 'none';
