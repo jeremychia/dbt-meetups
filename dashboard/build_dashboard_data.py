@@ -82,6 +82,7 @@ chapters = {}
 all_talks = []  # flat list with chapter, date, topics, category, speaker
 topic_counter = Counter()
 category_counter = Counter()
+region_category_counter = defaultdict(Counter)  # region_group -> {category: count}
 topic_sample_talks = defaultdict(list)  # category -> [{title, speaker, chapter, date, attendees}], newest first
 speaker_chapters = defaultdict(set)
 speaker_talk_count = Counter()
@@ -179,6 +180,8 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
             if primary_cat:
                 category_counter[primary_cat] += 1
                 ch_categories[primary_cat] += 1
+                if region_info['region_group']:
+                    region_category_counter[region_info['region_group']][primary_cat] += 1
                 topic_sample_talks[primary_cat].append({
                     'title': talk.get('title'),
                     'description': talk.get('description'),
@@ -328,6 +331,9 @@ output = {
     'chapters': chapters,
     'topic_distribution': topic_counter.most_common(),
     'category_distribution': category_counter.most_common(),
+    'region_category_distribution': {
+        region: counter.most_common() for region, counter in region_category_counter.items()
+    },
     'category_topics': {
         cat: sorted(t for t, c in CATEGORY_MAP.items() if c == cat)
         for cat in sorted(set(CATEGORY_MAP.values()))

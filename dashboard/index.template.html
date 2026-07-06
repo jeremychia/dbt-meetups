@@ -183,7 +183,8 @@
   .stack-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
   .stack-row-label { width: 120px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); text-align: right; }
   .stack-bar { flex: 1; display: flex; height: 28px; border-radius: 6px; overflow: hidden; background: var(--surface-1); }
-  .stack-seg { height: 100%; }
+  .stack-seg { height: 100%; cursor: pointer; transition: filter 0.1s; }
+  .stack-seg:hover { filter: brightness(1.15); }
   .stack-seg + .stack-seg { border-left: 2px solid var(--surface-2); }
 
   /* donut chart */
@@ -573,8 +574,8 @@
         </div>
         <div class="card" style="margin-top:16px;">
           <div class="flex-between"><strong style="font-size:13px;">Topic mix — this chapter vs. community average</strong></div>
-          <p class="section-sub" style="margin:4px 0 10px;">Two 100%-stacked bars, same category order and colors — this chapter's talk mix on top, the community-wide mix below, so you can compare segment sizes directly.</p>
-          <div id="chapter-topic-bars" style="margin-top:10px;"></div>
+          <p class="section-sub" style="margin:4px 0 10px;">100%-stacked bars, same category order and colors — this chapter's talk mix vs. its region's average vs. the community-wide average, so you can compare segment sizes directly. Hover a segment for the exact count and share.</p>
+          <div id="chapter-topic-bars" style="margin-top:10px; position:relative;"></div>
         </div>
         <div class="card" style="margin-top:16px;">
           <div class="flex-between"><strong style="font-size:13px;">Event history</strong></div>
@@ -1487,9 +1488,11 @@ function renderChapterDetail() {
   renderChapterEventsList(c);
 }
 
-// Two 100%-stacked bars (this chapter vs. community), same category order
-// and colors as the donut, so composition is compared directly rather than
-// via separate per-category rows with a text "(avg X%)" aside.
+// 100%-stacked bars (this chapter vs. its region vs. the whole community),
+// same category order and colors as the donut, so composition is compared
+// directly rather than via separate per-category rows with a text
+// "(avg X%)" aside. Region row is omitted if the chapter has no
+// region_group or the region has no categorized talks.
 function renderTopicMixStackedBars(c) {
   const el = document.getElementById('chapter-topic-bars');
   const colorMap = Object.fromEntries(CATEGORY_ORDER);
@@ -1502,30 +1505,54 @@ function renderTopicMixStackedBars(c) {
   const chByCat = Object.fromEntries(c.top_categories);
   const commByCat = Object.fromEntries(DATA.category_distribution);
 
-  function stackedBar(byCat, total) {
+  const regionDist = c.region_group ? (DATA.region_category_distribution[c.region_group] || []) : [];
+  const regionByCat = Object.fromEntries(regionDist);
+  const regionTotal = regionDist.reduce((a, [,v]) => a + v, 0);
+
+  function stackedBar(byCat, total, rowLabel) {
     return CATEGORY_ORDER.map(([name]) => {
       const count = byCat[name] || 0;
       if (!count) return '';
       const pct = 100 * count / total;
-      return `<div class="stack-seg" style="width:${pct}%; background:${colorMap[name]};" title="${name}: ${Math.round(pct)}%"></div>`;
+      return `<div class="stack-seg" style="width:${pct}%; background:${colorMap[name]};" data-cat="${name}" data-count="${count}" data-pct="${Math.round(pct)}" data-row="${rowLabel}"></div>`;
     }).join('');
   }
 
   el.innerHTML = `
     <div class="stack-row">
       <div class="stack-row-label">${chapterName(c.slug)}</div>
-      <div class="stack-bar">${stackedBar(chByCat, chTotal)}</div>
+      <div class="stack-bar">${stackedBar(chByCat, chTotal, chapterName(c.slug))}</div>
     </div>
+    ${regionTotal ? `
+    <div class="stack-row">
+      <div class="stack-row-label">${c.region_group} avg</div>
+      <div class="stack-bar">${stackedBar(regionByCat, regionTotal, c.region_group + ' avg')}</div>
+    </div>` : ''}
     <div class="stack-row">
       <div class="stack-row-label">Community avg</div>
-      <div class="stack-bar">${stackedBar(commByCat, communityTotal)}</div>
+      <div class="stack-bar">${stackedBar(commByCat, communityTotal, 'Community avg')}</div>
     </div>
     <div class="legend-row" style="margin-top:14px;">
       ${CATEGORY_ORDER.filter(([name]) => chByCat[name] || commByCat[name]).map(([name, color]) => `
         <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>${name}</div>
       `).join('')}
     </div>
+    <div class="line-chart-tooltip" id="topic-mix-tooltip"></div>
   `;
+
+  const tooltip = document.getElementById('topic-mix-tooltip');
+  el.querySelectorAll('.stack-seg').forEach(seg => {
+    seg.addEventListener('mouseenter', (e) => {
+      tooltip.style.display = 'block';
+      tooltip.innerHTML = `<strong>${seg.dataset.cat}</strong><br>${seg.dataset.row}: ${seg.dataset.count} talks (${seg.dataset.pct}%)`;
+    });
+    seg.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      tooltip.style.left = Math.min(e.clientX - rect.left + 12, rect.width - 180) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 40) + 'px';
+    });
+    seg.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
 }
 
 function renderChapterEventsList(c) {
