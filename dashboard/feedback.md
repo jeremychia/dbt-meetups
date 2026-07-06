@@ -89,6 +89,10 @@ the visualisation should be a donut chart with tooltips instead of a bar chart i
 
 **Action taken (follow-up):** Kept the validated 8-color palette itself, but reassigned which fixed color each category uses. In the legend's count-sorted order, people & organization and analytics & bi are no longer next to each other — orchestration & delivery now sits between them on a different hue, so the two colors you flagged aren't rendered as adjacent swatches anymore.
 
+**further comments 3**: instead of number of categories, put number of talks (in the donut center)
+
+**Action taken (follow-up):** The donut center showed a static "8 categories" (always 8, not useful) when no slice was selected. Now shows the total talk count instead, and switching between "total talks" and "talks in this category" (when a slice is selected) both use the same "talks" unit label, so the number in the middle is always meaningful.
+
 ## growth over time
 
 the line chart is nice. maybe allow for a possibility to see the events by region? so that we can see americas, europe, africa, asia, etc. you can do the classification of cities before putting this together. it's still good to see the total.
@@ -197,3 +201,9 @@ Effective data visualization relies on clarity, accuracy, and purpose. Prioritiz
 there's a difference between information that is "insightful" nice to know and information which action can be taken on. it's good to be able to differentiate the two when designing the dashboard. a good mix is nice to keep the reader engaged, but it's good to have multiple sections so as not to overwhelm someone.
 
 **Action taken:** Score cards now carry an explicit `Insight` or `Action` tag (text label, not color alone, so it survives grayscale/print) — of the five, only "Chapters" currently has a real go-do-something signal (at-risk chapters trending toward dormant), surfaced right in its subtext ("7 at risk"); the rest (events, talks, attendees, speakers) are volume/trend context. A one-line legend under the score row explains the distinction once rather than labeling every tile with an explanation. Also added a "Chapters at risk" callout box at the top of the Chapters page — previously that signal only existed buried in a sortable table column; now it's a standalone, sorted-by-urgency list, click-through to that chapter's detail, that only appears when there's actually something to flag.
+
+## calendar of events
+
+request: a calendar of events that people can see the historical events on.
+
+**Action taken:** Added an "Event calendar" section to the Overview page — a literal month-grid calendar (not just a chronological list), covering every historical event across every chapter. Opens on the most recent month with any events. Days with events show a dot per event and a count; click a day to expand a detail card for each event on that date (venue, attendees, talk count), which itself expands further to show talks/speakers/topics and a link to the Meetup event page — same interaction pattern as the existing per-chapter event history, just aggregated across all chapters and organized by calendar date instead of a flat list. Filterable by chapter via a dropdown, which also re-jumps to that chapter's latest event month.

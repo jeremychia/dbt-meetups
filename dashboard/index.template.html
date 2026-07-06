@@ -352,6 +352,30 @@
   .event-link { color: var(--series-1); font-size: 12px; text-decoration: none; }
   .event-link:hover { text-decoration: underline; }
 
+  /* event calendar */
+  .calendar-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .calendar-nav strong { font-size: 14px; min-width: 130px; text-align: center; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .calendar-weekday { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; text-align: center; padding-bottom: 4px; }
+  .calendar-cell {
+    aspect-ratio: 1; border-radius: 6px; background: var(--surface-1); border: 1px solid transparent;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding: 4px 2px; font-size: 11px; color: var(--text-muted);
+  }
+  .calendar-cell.empty { background: transparent; }
+  .calendar-cell.has-events {
+    cursor: pointer; color: var(--text-primary); border-color: var(--border);
+    background: color-mix(in srgb, var(--accent-highlight) 10%, var(--surface-1));
+  }
+  .calendar-cell.has-events:hover { background: color-mix(in srgb, var(--accent-highlight) 20%, var(--surface-1)); }
+  .calendar-cell.selected-day { border-color: var(--accent-highlight); border-width: 2px; }
+  .calendar-cell .cal-daynum { font-weight: 600; font-size: 12px; }
+  .calendar-cell .cal-dots { display: flex; gap: 2px; margin-top: 3px; flex-wrap: wrap; justify-content: center; }
+  .calendar-cell .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-highlight); }
+  .calendar-cell .cal-count { font-size: 9.5px; color: var(--text-secondary); margin-top: 2px; }
+  #calendar-day-detail { margin-top: 16px; }
+  #calendar-day-detail:empty { margin-top: 0; }
+
   /* talk search results */
   .talk-result { padding: 12px 4px; border-bottom: 1px solid var(--border); }
   .talk-result:last-child { border-bottom: none; }
@@ -547,6 +571,26 @@
             <div class="map-hint">Scroll to zoom · drag to pan · click a chapter to select it</div>
             <div id="map-tooltip" style="position:absolute; display:none; pointer-events:none; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12.5px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:10; white-space:nowrap;"></div>
           </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex-between">
+          <h2>Event calendar</h2>
+          <select class="filter-select" id="calendar-chapter-filter">
+            <option value="">All chapters</option>
+          </select>
+        </div>
+        <p class="section-sub">Every historical event across every chapter, by month. Click a day with events to see what happened.</p>
+        <div class="card">
+          <div class="calendar-nav">
+            <button class="table-toggle" id="calendar-prev" style="margin-left:0;">‹ Prev</button>
+            <strong id="calendar-month-label"></strong>
+            <button class="table-toggle" id="calendar-next" style="margin-left:0;">Next ›</button>
+            <button class="table-toggle" id="calendar-today">Latest</button>
+          </div>
+          <div class="calendar-grid" id="calendar-grid"></div>
+          <div id="calendar-day-detail"></div>
         </div>
       </section>
     </div>
@@ -967,11 +1011,10 @@ function renderCategoryDonut() {
     angle += sweep;
   });
 
-  const centerLabel = selectedCategory || `${total} talks`;
   const centerValue = selectedCategory
     ? byOrder.find(([n]) => n === selectedCategory)[1]
-    : DATA.category_distribution.length;
-  const centerSub = selectedCategory ? 'talks' : 'categories';
+    : total;
+  const centerSub = 'talks';
 
   document.getElementById('category-donut').innerHTML = `
     ${segsHtml}
@@ -1414,6 +1457,162 @@ function setupMapInteraction(svg, wrapEl, tooltip) {
   document.getElementById('map-zoom-reset').onclick = () => { mapZoom = 1; mapPanX = 0; mapPanY = 0; applyMapTransform(); };
 }
 
+// Every historical event across every chapter, indexed by date, with full
+// display detail (name, url, talks) - separate from EVENT_POOL, which only
+// keeps the slim fields needed for chart aggregation.
+function buildEventsByDate() {
+  const byDate = {};
+  Object.values(DATA.chapters).forEach(c => {
+    (c.events_detail || []).forEach(ev => {
+      if (!ev.date) return;
+      if (!byDate[ev.date]) byDate[ev.date] = [];
+      byDate[ev.date].push({ ...ev, chapter: c.slug });
+    });
+  });
+  return byDate;
+}
+
+let calendarYear = null, calendarMonth = null; // calendarMonth is 0-indexed
+let calendarChapterFilter = '';
+let calendarSelectedDate = null;
+
+function calendarEventsForMonth(year, month) {
+  const prefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+  const out = {};
+  Object.entries(EVENTS_BY_DATE).forEach(([date, evs]) => {
+    if (!date.startsWith(prefix)) return;
+    const filtered = calendarChapterFilter ? evs.filter(e => e.chapter === calendarChapterFilter) : evs;
+    if (filtered.length) out[date] = filtered;
+  });
+  return out;
+}
+
+function jumpToLatestEventMonth() {
+  const dates = Object.keys(EVENTS_BY_DATE).sort();
+  const relevant = calendarChapterFilter
+    ? dates.filter(d => EVENTS_BY_DATE[d].some(e => e.chapter === calendarChapterFilter))
+    : dates;
+  const latest = relevant[relevant.length - 1];
+  if (latest) {
+    calendarYear = parseInt(latest.slice(0, 4), 10);
+    calendarMonth = parseInt(latest.slice(5, 7), 10) - 1;
+  } else {
+    const today = new Date();
+    calendarYear = today.getFullYear();
+    calendarMonth = today.getMonth();
+  }
+}
+
+function renderCalendar() {
+  const monthEvents = calendarEventsForMonth(calendarYear, calendarMonth);
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calendar-month-label').textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+
+  const firstOfMonth = new Date(Date.UTC(calendarYear, calendarMonth, 1));
+  const startWeekday = (firstOfMonth.getUTCDay() + 6) % 7; // Monday-first
+  const daysInMonth = new Date(Date.UTC(calendarYear, calendarMonth + 1, 0)).getUTCDate();
+
+  let html = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<div class="calendar-weekday">${d}</div>`).join('');
+  for (let i = 0; i < startWeekday; i++) html += '<div class="calendar-cell empty"></div>';
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dateStr = `${calendarYear}-${String(calendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const evs = monthEvents[dateStr] || [];
+    const hasEvents = evs.length > 0;
+    const isSelected = dateStr === calendarSelectedDate;
+    const dots = evs.slice(0, 4).map(() => '<span class="cal-dot"></span>').join('');
+    html += `
+      <div class="calendar-cell${hasEvents ? ' has-events' : ''}${isSelected ? ' selected-day' : ''}" data-date="${dateStr}">
+        <span class="cal-daynum">${day}</span>
+        ${hasEvents ? `<div class="cal-dots">${dots}</div><div class="cal-count">${evs.length} event${evs.length === 1 ? '' : 's'}</div>` : ''}
+      </div>`;
+  }
+  document.getElementById('calendar-grid').innerHTML = html;
+
+  document.querySelectorAll('.calendar-cell.has-events').forEach(cell => {
+    cell.addEventListener('click', () => {
+      calendarSelectedDate = cell.dataset.date === calendarSelectedDate ? null : cell.dataset.date;
+      renderCalendar();
+      renderCalendarDayDetail();
+    });
+  });
+}
+
+function renderCalendarDayDetail() {
+  const el = document.getElementById('calendar-day-detail');
+  if (!calendarSelectedDate) { el.innerHTML = ''; return; }
+  const evs = (EVENTS_BY_DATE[calendarSelectedDate] || []).filter(e => !calendarChapterFilter || e.chapter === calendarChapterFilter);
+  if (!evs.length) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `<div class="card" style="background:var(--surface-1);">` + evs.map((ev, idx) => {
+    const talksHtml = (ev.talks || []).map(t => `
+      <div class="event-talk">
+        <div class="talk-title">${t.title || 'Untitled talk'}</div>
+        ${t.speaker ? `<div class="talk-speaker">${t.speaker}</div>` : ''}
+        <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${topic}</span>`).join('')}</div>
+      </div>
+    `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px; padding:6px 0;">No talk details recorded for this event.</div>';
+
+    return `
+      <div class="event-row" data-idx="cal-${idx}">
+        <div class="event-row-head">
+          <div>
+            <div class="event-title">${chapterName(ev.chapter)} — ${ev.event_name || calendarSelectedDate}</div>
+            <div class="event-meta">${ev.location || 'Unknown location'} · ${ev.attendees != null ? ev.attendees + ' attendees' : 'attendance unknown'} · ${(ev.talks || []).length} talk${(ev.talks||[]).length === 1 ? '' : 's'}</div>
+          </div>
+          <div class="event-caret">▶</div>
+        </div>
+        <div class="event-row-body">
+          ${talksHtml}
+          ${ev.event_url ? `<a class="event-link" href="${ev.event_url}" target="_blank" rel="noopener">View on Meetup.com →</a>` : ''}
+        </div>
+      </div>`;
+  }).join('') + `</div>`;
+
+  el.querySelectorAll('.event-row-head').forEach(head => {
+    head.addEventListener('click', () => head.parentElement.classList.toggle('expanded'));
+  });
+}
+
+function populateCalendarChapterFilter() {
+  const sel = document.getElementById('calendar-chapter-filter');
+  const chapters = Object.values(DATA.chapters).filter(c => c.total_events > 0)
+    .sort((a,b) => chapterName(a.slug).localeCompare(chapterName(b.slug)));
+  sel.innerHTML = '<option value="">All chapters</option>' + chapters.map(c =>
+    `<option value="${c.slug}">${chapterName(c.slug)}</option>`
+  ).join('');
+  sel.addEventListener('change', () => {
+    calendarChapterFilter = sel.value;
+    calendarSelectedDate = null;
+    jumpToLatestEventMonth();
+    renderCalendar();
+    renderCalendarDayDetail();
+  });
+}
+
+function setupCalendarControls() {
+  document.getElementById('calendar-prev').addEventListener('click', () => {
+    calendarMonth--;
+    if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+    calendarSelectedDate = null;
+    renderCalendar();
+    renderCalendarDayDetail();
+  });
+  document.getElementById('calendar-next').addEventListener('click', () => {
+    calendarMonth++;
+    if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+    calendarSelectedDate = null;
+    renderCalendar();
+    renderCalendarDayDetail();
+  });
+  document.getElementById('calendar-today').addEventListener('click', () => {
+    calendarSelectedDate = null;
+    jumpToLatestEventMonth();
+    renderCalendar();
+    renderCalendarDayDetail();
+  });
+}
+
 function activeChapters() {
   return Object.values(DATA.chapters).filter(c => showDormant || chapterStatus(c) !== 'dormant');
 }
@@ -1834,6 +2033,7 @@ document.querySelectorAll('.group-nav button, .persona-chip').forEach(el => {
 window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1), false));
 
 const EVENT_POOL = buildEventPool();
+const EVENTS_BY_DATE = buildEventsByDate();
 
 renderStatRow();
 renderCategoryDonut();
@@ -1849,5 +2049,10 @@ renderChapterDetail();
 populateTalkChapterFilter();
 renderTalkResults();
 renderSpeakerList();
+populateCalendarChapterFilter();
+setupCalendarControls();
+jumpToLatestEventMonth();
+renderCalendar();
+renderCalendarDayDetail();
 showPage(window.location.hash.slice(1) || 'group-overview', false);
 </script>
