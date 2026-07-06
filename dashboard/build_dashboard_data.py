@@ -3,7 +3,6 @@ from collections import Counter, defaultdict
 from chapter_geo import CHAPTER_GEO
 from chapter_names import CHAPTER_DISPLAY_NAMES
 from regions import region_for
-from venue_geo import VENUE_GEO
 
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
 ANALYSIS_DIR = os.path.dirname(DASHBOARD_DIR)
@@ -119,8 +118,6 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
     ch_inperson = 0
     ch_yearly = Counter()
     ch_events_detail = []
-    ch_venue_counts = Counter()
-    ch_venue_example_address = {}
     ch_trailing_events = 0
     ch_prior_trailing_events = 0
     ch_trailing_talks = 0
@@ -158,14 +155,6 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
         else:
             ch_inperson += 1
             format_counter['in-person'] += 1
-            # Key on venue name (before the first comma) rather than the
-            # full address string: the same venue sometimes gets a slightly
-            # different address across events (e.g. with/without a
-            # neighborhood name), which would otherwise undercount reuse.
-            venue_name = loc.split(',')[0].strip()
-            if venue_name:
-                ch_venue_counts[venue_name] += 1
-                ch_venue_example_address.setdefault(venue_name, loc)
         a = event.get('attendees')
         if a is not None:
             ch_attendees.append(a)
@@ -253,13 +242,6 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
     is_active = bool(last_event_date) and last_event_date >= TRAILING_START
     is_at_risk = is_active and last_event_date < (TODAY - datetime.timedelta(days=270)).isoformat()
 
-    reused_venues = [
-        {'venue': ch_venue_example_address.get(name, name), 'name': name, 'count': c, **{
-            k: val for k, val in VENUE_GEO.get(f'{slug}::{name}', {}).items() if k in ('lat', 'lon')
-        }}
-        for name, c in ch_venue_counts.most_common() if c > 1
-    ]
-
     chapters[slug] = {
         'slug': slug,
         'display_name': CHAPTER_DISPLAY_NAMES.get(slug, slug),
@@ -291,7 +273,6 @@ for path in sorted(glob.glob(f'{ENRICHED_DIR}/*.json')):
         'prior_trailing_12mo_events': ch_prior_trailing_events,
         'trailing_12mo_talks': ch_trailing_talks,
         'trailing_12mo_avg_attendees': round(sum(ch_trailing_attendees) / len(ch_trailing_attendees), 1) if ch_trailing_attendees else None,
-        'reused_venues': reused_venues,
     }
 
 # repeat speakers across chapters, sorted

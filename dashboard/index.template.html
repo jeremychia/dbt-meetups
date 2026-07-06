@@ -179,6 +179,13 @@
   .cat-bar-fill { height: 100%; border-radius: 4px; }
   .cat-bar-value { width: 80px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
 
+  /* topic mix: two 100%-stacked comparison bars */
+  .stack-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+  .stack-row-label { width: 120px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); text-align: right; }
+  .stack-bar { flex: 1; display: flex; height: 28px; border-radius: 6px; overflow: hidden; background: var(--surface-1); }
+  .stack-seg { height: 100%; }
+  .stack-seg + .stack-seg { border-left: 2px solid var(--surface-2); }
+
   /* donut chart */
   .donut-wrap { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
   .donut-svg { flex-shrink: 0; }
@@ -564,17 +571,10 @@
           </div>
           <div class="glance-cockpit" id="chapter-glance"></div>
         </div>
-        <div class="two-col" style="margin-top:16px;">
-          <div class="card">
-            <div class="flex-between"><strong style="font-size:13px;">Topic mix — this chapter vs. community average</strong></div>
-            <div id="chapter-topic-bars" style="margin-top:10px;"></div>
-          </div>
-          <div class="card">
-            <div class="flex-between"><strong style="font-size:13px;">Venues used more than once</strong></div>
-            <p class="section-sub" style="margin:4px 0 10px;">Repeat venues plotted around the chapter's city (approximate placement — see note).</p>
-            <svg id="venue-map" viewBox="0 0 300 220" style="width:100%; height:auto; display:none;"></svg>
-            <div id="venue-list" style="margin-top:8px;"></div>
-          </div>
+        <div class="card" style="margin-top:16px;">
+          <div class="flex-between"><strong style="font-size:13px;">Topic mix — this chapter vs. community average</strong></div>
+          <p class="section-sub" style="margin:4px 0 10px;">Two 100%-stacked bars, same category order and colors — this chapter's talk mix on top, the community-wide mix below, so you can compare segment sizes directly.</p>
+          <div id="chapter-topic-bars" style="margin-top:10px;"></div>
         </div>
         <div class="card" style="margin-top:16px;">
           <div class="flex-between"><strong style="font-size:13px;">Event history</strong></div>
@@ -1448,8 +1448,6 @@ function renderChapterDetail() {
     document.getElementById('chapter-topic-bars').innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No chapter selected.</div>';
     cockpitCard.classList.add('hidden');
     document.getElementById('chapter-events-list').innerHTML = '';
-    document.getElementById('venue-list').innerHTML = '';
-    document.getElementById('venue-map').style.display = 'none';
     return;
   }
   document.getElementById('chapter-detail-title').textContent = `Chapter detail — ${chapterName(c.slug)}`;
@@ -1485,68 +1483,49 @@ function renderChapterDetail() {
     <div class="glance-tile"><div class="g-value">${fmt(c.unique_speakers)}</div><div class="g-label">Unique speakers</div></div>
   `;
 
-  const colorMap = Object.fromEntries(CATEGORY_ORDER);
-  const communityTotal = DATA.category_distribution.reduce((a, [,v]) => a + v, 0);
-  const maxCat = c.top_categories.length ? Math.max(...c.top_categories.map(([,v]) => v)) : 1;
-  const chTotal = c.top_categories.reduce((a, [,v]) => a + v, 0) || 1;
-  document.getElementById('chapter-topic-bars').innerHTML = c.top_categories.length
-    ? CATEGORY_ORDER.map(([name]) => {
-        const found = c.top_categories.find(([n]) => n === name);
-        const count = found ? found[1] : 0;
-        if (!count) return '';
-        const width = Math.round(100 * count / maxCat);
-        const chPct = Math.round(100 * count / chTotal);
-        const commFound = DATA.category_distribution.find(([n]) => n === name);
-        const commPct = commFound ? Math.round(100 * commFound[1] / communityTotal) : 0;
-        return `
-          <div class="cat-bar-row">
-            <div class="cat-bar-label">${name}</div>
-            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${width}%; background:${colorMap[name] || 'var(--series-1)'};"></div></div>
-            <div class="cat-bar-value">${chPct}% <span style="color:var(--text-muted);">(avg ${commPct}%)</span></div>
-          </div>`;
-      }).join('')
-    : '<div style="color:var(--text-secondary); font-size:13px;">No talks recorded.</div>';
-
-  renderVenueMap(c);
+  renderTopicMixStackedBars(c);
   renderChapterEventsList(c);
 }
 
-function renderVenueMap(c) {
-  const venues = c.reused_venues || [];
-  const svg = document.getElementById('venue-map');
-  const listEl = document.getElementById('venue-list');
-  if (!venues.length) {
-    svg.style.display = 'none';
-    listEl.innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No venue used more than once.</div>';
+// Two 100%-stacked bars (this chapter vs. community), same category order
+// and colors as the donut, so composition is compared directly rather than
+// via separate per-category rows with a text "(avg X%)" aside.
+function renderTopicMixStackedBars(c) {
+  const el = document.getElementById('chapter-topic-bars');
+  const colorMap = Object.fromEntries(CATEGORY_ORDER);
+  const chTotal = c.top_categories.reduce((a, [,v]) => a + v, 0);
+  if (!chTotal) {
+    el.innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No talks recorded.</div>';
     return;
   }
-  const withCoords = venues.filter(v => v.lat != null && v.lon != null);
-  if (withCoords.length) {
-    svg.style.display = 'block';
-    const lats = withCoords.map(v => v.lat), lons = withCoords.map(v => v.lon);
-    const latC = (Math.min(...lats) + Math.max(...lats)) / 2;
-    const lonC = (Math.min(...lons) + Math.max(...lons)) / 2;
-    const latSpan = Math.max(0.02, Math.max(...lats) - Math.min(...lats));
-    const lonSpan = Math.max(0.02, Math.max(...lons) - Math.min(...lons));
-    const scale = Math.min(90 / latSpan, 90 / lonSpan);
-    const maxCount = Math.max(...withCoords.map(v => v.count));
-    svg.innerHTML = withCoords.map(v => {
-      const x = 150 + (v.lon - lonC) * scale;
-      const y = 110 - (v.lat - latC) * scale;
-      const r = 6 + 10 * (v.count / maxCount);
-      const labelY = y - r - 6;
-      return `
-        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="var(--series-1)" fill-opacity="0.7" stroke="var(--surface-1)" stroke-width="1.5"><title>${v.name} — used ${v.count} times</title></circle>
-        <text x="${x.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-size="10" fill="var(--text-secondary)">${escapeHtml(v.name)}</text>`;
+  const communityTotal = DATA.category_distribution.reduce((a, [,v]) => a + v, 0);
+  const chByCat = Object.fromEntries(c.top_categories);
+  const commByCat = Object.fromEntries(DATA.category_distribution);
+
+  function stackedBar(byCat, total) {
+    return CATEGORY_ORDER.map(([name]) => {
+      const count = byCat[name] || 0;
+      if (!count) return '';
+      const pct = 100 * count / total;
+      return `<div class="stack-seg" style="width:${pct}%; background:${colorMap[name]};" title="${name}: ${Math.round(pct)}%"></div>`;
     }).join('');
-  } else {
-    svg.style.display = 'none';
   }
-  listEl.innerHTML = venues.map(v => `
-    <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:5px 0; border-bottom:1px solid var(--border);">
-      <span>${v.name}</span><span style="color:var(--text-secondary);">${v.count}×</span>
+
+  el.innerHTML = `
+    <div class="stack-row">
+      <div class="stack-row-label">${chapterName(c.slug)}</div>
+      <div class="stack-bar">${stackedBar(chByCat, chTotal)}</div>
     </div>
-  `).join('');
+    <div class="stack-row">
+      <div class="stack-row-label">Community avg</div>
+      <div class="stack-bar">${stackedBar(commByCat, communityTotal)}</div>
+    </div>
+    <div class="legend-row" style="margin-top:14px;">
+      ${CATEGORY_ORDER.filter(([name]) => chByCat[name] || commByCat[name]).map(([name, color]) => `
+        <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>${name}</div>
+      `).join('')}
+    </div>
+  `;
 }
 
 function renderChapterEventsList(c) {
@@ -1731,7 +1710,7 @@ document.getElementById('date-range-slider').addEventListener('input', (e) => {
 
 document.getElementById('footnote').innerHTML =
   `Generated ${DATA.generated} from <code>enriched/*.json</code> and <code>speaker-identities.json</code>. ` +
-  `Topic categories per <code>past-meetups.md</code> §"topic categories". Venue positions on the per-chapter map are approximate (offset from the chapter's city center, not geocoded street addresses). ` +
+  `Topic categories per <code>past-meetups.md</code> §"topic categories". ` +
   `${DATA.summary.dormant_chapters} chapters have had no event in the trailing 12 months and are excluded from rankings by default — toggle "Show dormant chapters" to include them.`;
 
 const PAGE_IDS = ['group-overview', 'group-chapters', 'group-talks'];
