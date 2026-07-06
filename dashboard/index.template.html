@@ -19,6 +19,8 @@
     --accent-highlight: #2a78d6;
     --map-land: #d8d6cf;
     --map-ocean: #eef0f4;
+    --positive: #1baf7a;
+    --negative: #e34948;
   }
   @media (prefers-color-scheme: dark) {
     .viz-root {
@@ -38,6 +40,8 @@
       --series-8: #d95926;
       --map-land: #3a3936;
       --map-ocean: #121211;
+      --positive: #199e70;
+      --negative: #e66767;
     }
   }
   :root[data-theme="dark"] .viz-root {
@@ -57,6 +61,8 @@
     --series-8: #d95926;
     --map-land: #3a3936;
     --map-ocean: #121211;
+    --positive: #199e70;
+    --negative: #e66767;
   }
   :root[data-theme="light"] .viz-root {
     --surface-1:      #fcfcfb;
@@ -75,6 +81,8 @@
     --series-8: #eb6834;
     --map-land: #d8d6cf;
     --map-ocean: #eef0f4;
+    --positive: #1baf7a;
+    --negative: #e34948;
   }
 
   * { box-sizing: border-box; }
@@ -89,13 +97,36 @@
   }
   .wrap { max-width: 1180px; margin: 0 auto; }
 
-  header.page-head { margin-bottom: 28px; }
-  header.page-head h1 { font-size: 26px; margin: 0 0 6px; font-weight: 700; }
-  header.page-head p { margin: 0; color: var(--text-secondary); font-size: 14.5px; max-width: 720px; line-height: 1.5; }
+  header.page-head { margin-bottom: 20px; }
+  header.page-head h1 { font-size: 24px; margin: 0 0 4px; font-weight: 700; }
+  header.page-head p { margin: 0; color: var(--text-secondary); font-size: 13.5px; max-width: 720px; line-height: 1.5; }
+
+  /* persona quick-links */
+  .persona-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+  .persona-chip {
+    font-size: 12.5px; color: var(--text-secondary); background: var(--surface-2);
+    border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px;
+    text-decoration: none;
+  }
+  .persona-chip:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+  .persona-chip strong { color: var(--text-primary); }
+
+  /* chapter picker bar - top of page, drives everything below */
+  .picker-bar {
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .picker-bar label { font-size: 12.5px; color: var(--text-secondary); font-weight: 600; }
+  .picker-bar select.chapter-select { font-size: 14px; padding: 8px 14px; min-width: 220px; }
+  .picker-bar .picker-sub { font-size: 12px; color: var(--text-muted); flex-basis: 100%; }
+  .range-control { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .range-control input[type=range] { width: 140px; }
+  .range-control .range-label { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 
   .stat-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 12px;
     margin-bottom: 28px;
   }
@@ -105,15 +136,26 @@
     border-radius: 10px;
     padding: 14px 16px;
   }
-  .stat-tile .stat-value { font-size: 26px; font-weight: 700; line-height: 1.1; }
+  .stat-tile .stat-value { font-size: 24px; font-weight: 700; line-height: 1.1; display: flex; align-items: baseline; gap: 6px; }
   .stat-tile .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .stat-tile .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+  .delta { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .delta.pos { color: var(--positive); }
+  .delta.neg { color: var(--negative); }
+  .delta.flat { color: var(--text-muted); }
 
   section { margin-bottom: 36px; }
   section h2 {
     font-size: 16px; font-weight: 700; margin: 0 0 4px;
     display: flex; align-items: center; gap: 8px;
   }
-  section .section-sub { font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; max-width: 780px; line-height: 1.5; }
+  section .section-sub { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 16px; max-width: 780px; line-height: 1.5; }
+  .method-note {
+    font-size: 11.5px; color: var(--text-muted); margin: 6px 0 16px; line-height: 1.5; max-width: 780px;
+  }
+  .method-note summary { cursor: pointer; color: var(--text-secondary); font-size: 12px; }
+  .method-note summary:hover { color: var(--text-primary); }
+  .method-note[open] summary { margin-bottom: 6px; }
 
   .card {
     background: var(--surface-2);
@@ -124,6 +166,8 @@
 
   .two-col { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; align-items: start; }
   @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+  .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .three-col { grid-template-columns: 1fr; } }
 
   /* category bar (part-to-whole, ordered horizontal bars per skill guidance over donut) */
   .cat-bar-row { display: flex; align-items: center; gap: 10px; margin: 9px 0; }
@@ -131,6 +175,36 @@
   .cat-bar-track { flex: 1; background: var(--surface-1); border-radius: 4px; height: 18px; position: relative; overflow: hidden; }
   .cat-bar-fill { height: 100%; border-radius: 4px; }
   .cat-bar-value { width: 80px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+
+  /* donut chart */
+  .donut-wrap { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .donut-svg { flex-shrink: 0; }
+  .donut-seg { cursor: pointer; transition: opacity 0.1s; }
+  .donut-seg:hover { opacity: 0.8; }
+  .donut-center-value { font-size: 22px; font-weight: 700; fill: var(--text-primary); }
+  .donut-center-label { font-size: 11px; fill: var(--text-secondary); }
+  .donut-legend { flex: 1; min-width: 220px; }
+  .donut-legend-row {
+    display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12.5px; cursor: pointer;
+    border-radius: 6px; padding-left: 6px;
+  }
+  .donut-legend-row:hover { background: var(--surface-1); }
+  .donut-legend-row .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .donut-legend-row .name { flex: 1; }
+  .donut-legend-row .val { color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* topic sample talks */
+  .topic-samples { margin-top: 14px; }
+  .topic-sample-item { padding: 8px 4px; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .topic-sample-item:last-child { border-bottom: none; }
+  .topic-sample-item .ts-title { font-weight: 600; }
+  .topic-sample-item .ts-meta { color: var(--text-secondary); font-size: 11.5px; margin-top: 2px; }
+  .sample-sort-row { display: flex; gap: 6px; margin-bottom: 8px; }
+  .sample-sort-btn {
+    font-size: 11px; color: var(--text-secondary); background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 6px; padding: 3px 9px; cursor: pointer;
+  }
+  .sample-sort-btn.active { color: var(--text-primary); border-color: var(--text-secondary); font-weight: 600; }
 
   /* chapter comparison table */
   table.cmp {
@@ -161,6 +235,11 @@
     display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 999px;
     background: var(--surface-1); border: 1px solid var(--border); color: var(--text-secondary);
   }
+  .chip.status-active { background: color-mix(in srgb, var(--positive) 18%, transparent); color: var(--positive); border-color: transparent; }
+  .chip.status-at-risk { background: color-mix(in srgb, #eda100 20%, transparent); color: #a66c00; border-color: transparent; }
+  .chip.status-dormant { background: var(--surface-1); color: var(--text-muted); }
+  @media (prefers-color-scheme: dark) { .chip.status-at-risk { color: #eda100; } }
+  :root[data-theme="dark"] .chip.status-at-risk { color: #eda100; }
   .badge-mine {
     display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px;
     background: #1c5cab; color: white; margin-left: 6px; vertical-align: middle;
@@ -171,7 +250,7 @@
     background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
     padding: 7px 12px; font-size: 13px; color: var(--text-primary); flex: 1; min-width: 200px;
   }
-  select.chapter-select {
+  select.chapter-select, select.filter-select {
     background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
     padding: 7px 12px; font-size: 13px; color: var(--text-primary);
   }
@@ -186,15 +265,29 @@
   .line-chart-axis-label { font-size: 10.5px; fill: var(--text-secondary); }
   .line-chart-gridline { stroke: var(--border); stroke-width: 1; }
 
+  /* small bar charts (day-of-week, day-of-month, start-hour) */
+  .mini-bar-chart-label { font-size: 9.5px; fill: var(--text-secondary); }
+  .mini-bar-chart-bar { fill: var(--series-1); }
+  .mini-bar-chart-bar:hover { fill: var(--accent-highlight); }
+  .mini-bar-chart-value { font-size: 9px; fill: var(--text-muted); }
+
   /* speaker list */
   .speaker-row {
-    display: flex; justify-content: space-between; align-items: center;
     padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
   }
   .speaker-row:last-child { border-bottom: none; }
+  .speaker-row-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
   .speaker-name { font-weight: 600; }
   .speaker-chapters { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
-  .speaker-count { font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: 12.5px; white-space: nowrap; }
+  .speaker-count { font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: 12.5px; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .speaker-caret { color: var(--text-muted); font-size: 10px; transition: transform 0.15s; }
+  .speaker-row.expanded .speaker-caret { transform: rotate(90deg); }
+  .speaker-talks-body { display: none; padding-top: 8px; }
+  .speaker-row.expanded .speaker-talks-body { display: block; }
+  .speaker-talk-item { padding: 6px 10px; background: var(--surface-1); border-radius: 8px; margin-top: 6px; font-size: 12.5px; }
+  .speaker-talk-item .st-meta { color: var(--text-secondary); font-size: 11.5px; margin-top: 2px; }
+  .speaker-link { color: var(--series-1); font-size: 12px; text-decoration: none; }
+  .speaker-link:hover { text-decoration: underline; }
 
   /* event history drill-down */
   .event-row {
@@ -229,7 +322,8 @@
   .talk-result mark { background: color-mix(in srgb, var(--accent-highlight) 35%, transparent); color: inherit; border-radius: 2px; }
 
   .legend-row { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px; font-size: 12px; color: var(--text-secondary); }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .legend-item.muted { opacity: 0.4; }
   .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 
   .table-toggle {
@@ -237,7 +331,17 @@
     border-radius: 6px; padding: 4px 10px; cursor: pointer; margin-left: auto;
   }
   .table-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+  .table-toggle.active { color: var(--text-primary); border-color: var(--text-secondary); background: var(--surface-1); }
   .hidden { display: none !important; }
+
+  /* map controls */
+  .map-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; z-index: 5; }
+  .map-btn {
+    width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-1);
+    color: var(--text-primary); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .map-btn:hover { background: var(--surface-2); }
+  .map-hint { position: absolute; bottom: 10px; left: 10px; font-size: 11px; color: var(--text-muted); background: var(--surface-1); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border); }
 
   .footnote { font-size: 11.5px; color: var(--text-muted); margin-top: 24px; line-height: 1.6; }
   .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
@@ -249,6 +353,7 @@
     background: var(--surface-1);
     border-bottom: 1px solid var(--border);
     padding: 10px 0;
+    flex-wrap: wrap;
   }
   .group-nav a {
     font-size: 13px; font-weight: 600; color: var(--text-secondary);
@@ -258,16 +363,40 @@
   .content-group { scroll-margin-top: 56px; margin-bottom: 12px; }
   .group-head { margin-bottom: 20px; }
   .group-head h2.group-title { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
-  .group-head p { margin: 0; color: var(--text-secondary); font-size: 13.5px; max-width: 720px; line-height: 1.5; }
+  .group-head p { margin: 0; color: var(--text-secondary); font-size: 13px; max-width: 720px; line-height: 1.5; }
   .content-group + .content-group { padding-top: 28px; border-top: 1px solid var(--border); }
+
+  .glance-cockpit { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+  .glance-tile { background: var(--surface-1); border-radius: 8px; padding: 10px 12px; }
+  .glance-tile .g-value { font-size: 18px; font-weight: 700; }
+  .glance-tile .g-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 </style>
 
 <div class="viz-root">
   <div class="wrap">
     <header class="page-head">
       <h1>dbt Meetup Community Dashboard</h1>
-      <p>Cross-chapter view of 478 events and 978 talks across 73 dbt Meetup chapters (2019–2026), built for meetup organisers to benchmark chapter health, spot topic trends, and find speakers worth inviting. Pick your chapter below to compare it against the wider community.</p>
+      <p>Cross-chapter data from every dbt Meetup chapter's event history. Pick your chapter below to benchmark it against the rest of the community, or jump straight to the section relevant to you.</p>
     </header>
+
+    <div class="persona-row">
+      <a class="persona-chip" href="#group-chapters"><strong>Community organiser</strong> — chapter health, at-risk status</a>
+      <a class="persona-chip" href="#group-overview"><strong>Community manager</strong> — topic mix, growth trends</a>
+      <a class="persona-chip" href="#group-talks"><strong>Just here for trivia</strong> — speakers, talk search, when we meet</a>
+    </div>
+
+    <div class="picker-bar">
+      <label for="my-chapter-select">Your chapter</label>
+      <select class="chapter-select" id="my-chapter-select">
+        <option value="">Select your chapter…</option>
+      </select>
+      <button class="table-toggle hidden" id="clear-chapter-select" style="margin-left:0;">Clear</button>
+      <div class="range-control">
+        <span class="range-label" id="range-label">Last 12 months</span>
+        <input type="range" id="date-range-slider" min="3" max="96" step="1" value="12">
+      </div>
+      <div class="picker-sub" id="dataset-disclaimer"></div>
+    </div>
 
     <div class="stat-row" id="stat-row"></div>
 
@@ -280,17 +409,31 @@
     <div class="content-group" id="group-overview">
       <div class="group-head">
         <h2 class="group-title">Overview</h2>
-        <p>Community-wide trends across all 73 chapters — what's being talked about, how fast the community is growing, and where it meets.</p>
+        <p>Community-wide trends — what's being talked about, how fast the community is growing, and where it meets.</p>
       </div>
 
       <section>
         <div class="flex-between">
-          <div>
-            <h2>What the community is talking about</h2>
-            <p class="section-sub">All 978 talks rolled up into 8 top-level categories (each talk counted once, by its primary topic). Use this to spot gaps in your own chapter's agenda vs. what peers are covering community-wide.</p>
+          <h2>What the community is talking about</h2>
+        </div>
+        <p class="section-sub">Every talk is tagged with topics, then rolled up into one of 8 categories by its primary topic. Click a slice or legend row to see sample talks in that category. Use this to compare your own chapter's agenda against what peers are covering.</p>
+        <details class="method-note"><summary>How this is computed</summary>Each talk's topic list comes from AI-assisted enrichment of the meetup description; the first topic listed is treated as the "primary" topic and mapped to one of 8 categories via a fixed lookup table. A talk is counted once, under its primary category only.</details>
+        <div class="card">
+          <div class="donut-wrap">
+            <svg id="category-donut" class="donut-svg" width="220" height="220" viewBox="0 0 220 220"></svg>
+            <div class="donut-legend" id="category-legend"></div>
+          </div>
+          <div class="topic-samples hidden" id="topic-samples-wrap">
+            <div class="flex-between">
+              <strong style="font-size:13px;" id="topic-samples-title"></strong>
+              <div class="sample-sort-row">
+                <button class="sample-sort-btn active" data-sort="recent">Most recent</button>
+                <button class="sample-sort-btn" data-sort="attendees">Most attended</button>
+              </div>
+            </div>
+            <div id="topic-samples-list"></div>
           </div>
         </div>
-        <div class="card" id="category-bar-card"></div>
       </section>
 
       <section>
@@ -298,7 +441,7 @@
           <h2>Growth over time</h2>
           <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
         </div>
-        <p class="section-sub" id="growth-sub">Events per year across all chapters — the community has grown roughly 15x since 2019, with 2023–2025 as the busiest years. Select a chapter below to overlay its own trend.</p>
+        <p class="section-sub" id="growth-sub">Events per year, split by region. Select a chapter above to overlay its own trend on top.</p>
         <div class="card">
           <div class="line-chart-wrap">
             <svg id="growth-chart" viewBox="0 0 900 260" style="width:100%; height:auto; display:block;"></svg>
@@ -308,14 +451,39 @@
       </section>
 
       <section>
+        <h2>When the community meets</h2>
+        <p class="section-sub">For trivia: which day of the week, day of the month, and hour meetups tend to start, across all in-person events with a recorded time.</p>
+        <div class="three-col">
+          <div class="card">
+            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Day of week</div>
+            <svg id="weekday-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+          </div>
+          <div class="card">
+            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Day of month</div>
+            <svg id="daymonth-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+          </div>
+          <div class="card">
+            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Start hour (local time)</div>
+            <svg id="starthour-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+          </div>
+        </div>
+      </section>
+
+      <section>
         <div class="flex-between">
           <h2>Where the community meets</h2>
           <div class="legend-row" id="map-legend" style="margin-top:0;"></div>
         </div>
-        <p class="section-sub">Every chapter plotted by location; marker size and color intensity both scale with total events held (a density heatmap over the map). Hover a marker for chapter stats.</p>
+        <p class="section-sub">Every chapter plotted by location; marker size and color intensity scale with total events held. Scroll or use the +/− controls to zoom, drag to pan, and click a marker to select that chapter everywhere on this page.</p>
         <div class="card">
           <div style="position:relative;">
-            <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block;"></svg>
+            <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block; cursor:grab;"></svg>
+            <div class="map-controls">
+              <button class="map-btn" id="map-zoom-in">+</button>
+              <button class="map-btn" id="map-zoom-out">−</button>
+              <button class="map-btn" id="map-zoom-reset" title="Reset view">⟲</button>
+            </div>
+            <div class="map-hint">Scroll to zoom · drag to pan · click a chapter to select it</div>
             <div id="map-tooltip" style="position:absolute; display:none; pointer-events:none; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12.5px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:10; white-space:nowrap;"></div>
           </div>
         </div>
@@ -331,12 +499,15 @@
       <section>
         <div class="flex-between">
           <h2>Chapter comparison</h2>
-          <select class="chapter-select" id="my-chapter-select">
-            <option value="">Select your chapter…</option>
+          <select class="filter-select" id="region-filter">
+            <option value="">All regions</option>
           </select>
-          <button class="table-toggle hidden" id="clear-chapter-select" style="margin-left:0;">Clear selection</button>
         </div>
-        <p class="section-sub">Every active chapter, sortable by any column. Click a header to sort; click a row (or use the dropdown) to see that chapter's topic mix below and pin it to the top of the table.</p>
+        <p class="section-sub">Every chapter, sortable by any column. Click a header to sort; click a row (or use the picker above) to see that chapter's detail below and pin it to the top of the table.</p>
+        <details class="method-note">
+          <summary>What counts as active / at-risk / dormant</summary>
+          <strong>Active</strong>: at least one event in the trailing 12 months. <strong>At-risk</strong>: active, but no event in the last 9 months (trending toward dormant). <strong>Dormant</strong>: no event in the trailing 12 months.
+        </details>
         <div class="card">
           <div class="search-row">
             <input class="search-input" id="chapter-search" placeholder="Search chapters…" />
@@ -346,6 +517,7 @@
             <table class="cmp" id="chapter-table">
               <thead><tr>
                 <th data-key="slug">Chapter</th>
+                <th data-key="status">Status</th>
                 <th data-key="total_events">Events</th>
                 <th data-key="total_talks">Talks</th>
                 <th data-key="avg_talks_per_event">Talks/Event</th>
@@ -362,14 +534,20 @@
       <section>
         <h2 id="chapter-detail-title">Chapter detail</h2>
         <p class="section-sub" id="chapter-detail-sub"></p>
-        <div class="two-col">
+        <div class="card hidden" id="chapter-cockpit-card">
+          <div style="font-size:13px; font-weight:700; margin-bottom:10px;">At a glance</div>
+          <div class="glance-cockpit" id="chapter-glance"></div>
+        </div>
+        <div class="two-col" style="margin-top:16px;">
           <div class="card">
-            <div class="flex-between"><strong style="font-size:13px;">Topic mix</strong></div>
+            <div class="flex-between"><strong style="font-size:13px;">Topic mix — this chapter vs. community average</strong></div>
             <div id="chapter-topic-bars" style="margin-top:10px;"></div>
           </div>
           <div class="card">
-            <div class="flex-between"><strong style="font-size:13px;">At a glance</strong></div>
-            <div id="chapter-glance" style="margin-top:10px; font-size:13px; line-height:2;"></div>
+            <div class="flex-between"><strong style="font-size:13px;">Venues used more than once</strong></div>
+            <p class="section-sub" style="margin:4px 0 10px;">Repeat venues plotted around the chapter's city (approximate placement — see note).</p>
+            <svg id="venue-map" viewBox="0 0 300 220" style="width:100%; height:auto; display:none;"></svg>
+            <div id="venue-list" style="margin-top:8px;"></div>
           </div>
         </div>
         <div class="card" style="margin-top:16px;">
@@ -390,7 +568,7 @@
         <div class="flex-between">
           <div>
             <h2>Explore talks</h2>
-            <p class="section-sub">Search all 978 talks by title, description, speaker, or topic. Useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
+            <p class="section-sub">Search by title, description, speaker, or topic — useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
           </div>
         </div>
         <div class="card">
@@ -398,6 +576,12 @@
             <input class="search-input" id="talk-search" placeholder="Search talk titles, descriptions, speakers, topics…" />
             <select class="chapter-select" id="talk-chapter-filter">
               <option value="">All chapters</option>
+            </select>
+            <select class="filter-select" id="talk-sort">
+              <option value="date-desc">Newest first</option>
+              <option value="date-asc">Oldest first</option>
+              <option value="attendees-desc">Most attended</option>
+              <option value="speaker-asc">Speaker A–Z</option>
             </select>
           </div>
           <div class="section-sub" id="talk-results-count" style="margin-bottom:10px;"></div>
@@ -407,14 +591,12 @@
 
       <section>
         <h2>Speakers who travel the circuit</h2>
-        <p class="section-sub">Speakers who have presented at more than one chapter (name-deduplicated for typos/diacritics — see <code>speaker-identities.json</code>). Useful as a shortlist when you're short a speaker: someone who has already spoken at 3+ chapters knows the format and is likely open to another invite.</p>
+        <p class="section-sub">Speakers who have presented at more than one chapter (name-deduplicated for typos/diacritics). A shortlist for when you're short a speaker — someone who has already spoken at 3+ chapters knows the format. Click a speaker to see their talks.</p>
         <div class="card" id="speaker-list"></div>
       </section>
     </div>
 
-    <div class="footnote">
-      Generated 2026-07-05 from <code>analysis/dbt-meetups/enriched/*.json</code> and <code>speaker-identities.json</code>. Topic categories per <code>past-meetups.md</code> §"topic categories". 5 chapters (Bangalore, Cluj, Detroit, Perth, Salt Lake City) have no recorded events yet and are excluded from rankings by default — toggle "Show dormant chapters" to include them.
-    </div>
+    <div class="footnote" id="footnote"></div>
   </div>
 </div>
 
@@ -433,12 +615,33 @@ const CATEGORY_ORDER = [
   ['emerging & trends', 'var(--series-8)'],
 ];
 
+const REGION_COLORS = {
+  'Americas': 'var(--series-1)',
+  'Europe': 'var(--series-3)',
+  'Asia': 'var(--series-6)',
+  'Africa': 'var(--series-4)',
+  'Oceania': 'var(--series-5)',
+  'Middle East': 'var(--series-7)',
+};
+
 let selectedChapter = null;
 let showDormant = false;
 let sortKey = 'total_events';
 let sortAsc = false;
+let regionFilter = '';
+let selectedCategory = null;
+let sampleSort = 'recent';
+let trailingMonths = 12;
+let hiddenRegions = new Set();
+let talkSort = 'date-desc';
 
 function fmt(n) { return n === null || n === undefined ? '—' : n.toLocaleString(); }
+function fmtDelta(pct) {
+  if (pct === null || pct === undefined) return '';
+  const cls = pct > 0 ? 'pos' : pct < 0 ? 'neg' : 'flat';
+  const sign = pct > 0 ? '+' : '';
+  return `<span class="delta ${cls}">${sign}${pct}%</span>`;
+}
 
 function setSelectedChapter(slug) {
   selectedChapter = slug || null;
@@ -447,6 +650,7 @@ function setSelectedChapter(slug) {
   renderChapterTable();
   renderChapterDetail();
   renderGrowthChart();
+  renderStatRow();
 }
 function titleCase(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -455,47 +659,151 @@ function chapterName(slug) {
   const c = DATA.chapters[slug];
   return (c && c.display_name) ? c.display_name : titleCase(slug);
 }
+function chapterStatus(c) {
+  if (c.is_at_risk) return 'at-risk';
+  if (c.is_active) return 'active';
+  return 'dormant';
+}
+function statusChip(c) {
+  const s = chapterStatus(c);
+  const label = s === 'at-risk' ? 'At risk' : s === 'active' ? 'Active' : 'Dormant';
+  return `<span class="chip status-${s}">${label}</span>`;
+}
 
 function renderStatRow() {
   const s = DATA.summary;
+  const c = selectedChapter ? DATA.chapters[selectedChapter] : null;
+
+  const eventsAllTime = c ? c.total_events : s.total_events;
+  const talksAllTime = c ? c.total_talks : s.total_talks;
+  const trailingEvents = c ? c.trailing_12mo_events : s.trailing_12mo_events;
+  const priorEvents = c ? c.prior_trailing_12mo_events : s.prior_trailing_12mo_events;
+  const eventsYoy = priorEvents ? Math.round(1000 * (trailingEvents - priorEvents) / priorEvents) / 10 : null;
+  const trailingTalks = c ? c.trailing_12mo_talks : s.trailing_12mo_talks;
+  const avgTalksPerEvent = trailingEvents ? Math.round(100 * trailingTalks / trailingEvents) / 100 : null;
+
   const tiles = [
-    ['Chapters', fmt(s.total_chapters)],
-    ['Events', fmt(s.total_events)],
-    ['Talks', fmt(s.total_talks)],
-    ['Unique speakers', fmt(s.total_unique_speakers)],
-    ['In-person events', fmt(s.format_split['in-person']) + ` (${Math.round(100*s.format_split['in-person']/s.total_events)}%)`],
-    ['Date range', s.date_range[0] + ' → ' + s.date_range[1]],
+    {
+      label: 'Chapters',
+      value: fmt(c ? 1 : s.total_chapters),
+      sub: c ? chapterName(c.slug) : `${fmt(s.active_chapters)} active now · ${fmt(s.dormant_chapters)} dormant ${fmtDelta(s.active_chapters_yoy_pct)} active YoY`,
+    },
+    {
+      label: 'Events (last 12mo)',
+      value: fmt(trailingEvents) + ' ' + fmtDelta(eventsYoy),
+      sub: `${fmt(eventsAllTime)} all-time`,
+    },
+    {
+      label: 'Talks (last 12mo)',
+      value: fmt(trailingTalks),
+      sub: `${fmt(talksAllTime)} all-time · avg ${avgTalksPerEvent ?? '—'}/event`,
+    },
+    {
+      label: 'Attendees (last 12mo)',
+      value: fmt(c ? c.trailing_12mo_avg_attendees : s.trailing_12mo_attendees),
+      sub: c ? 'avg per event, trailing 12mo' : 'total attendee count, trailing 12mo',
+    },
+    {
+      label: 'Unique speakers',
+      value: fmt(c ? c.unique_speakers : s.total_unique_speakers),
+      sub: 'all-time',
+    },
   ];
-  document.getElementById('stat-row').innerHTML = tiles.map(([label, val]) => `
+  document.getElementById('stat-row').innerHTML = tiles.map(t => `
     <div class="stat-tile">
-      <div class="stat-value">${val}</div>
-      <div class="stat-label">${label}</div>
+      <div class="stat-value">${t.value}</div>
+      <div class="stat-label">${t.label}</div>
+      <div class="stat-sub">${t.sub}</div>
     </div>
   `).join('');
+
+  document.getElementById('dataset-disclaimer').textContent =
+    `Dataset covers events from ${s.date_range[0]} to ${s.date_range[1]}, generated ${DATA.generated}.`;
 }
 
-function renderCategoryBar() {
+function renderCategoryDonut() {
   const total = DATA.category_distribution.reduce((a, [,c]) => a + c, 0);
-  const max = Math.max(...DATA.category_distribution.map(([,c]) => c));
   const colorMap = Object.fromEntries(CATEGORY_ORDER);
-  let html = '';
-  // ranked by value for the bar chart; each category's color slot (CATEGORY_ORDER) stays fixed regardless of rank
   const byOrder = CATEGORY_ORDER.map(([name]) => {
     const found = DATA.category_distribution.find(([n]) => n === name);
     return [name, found ? found[1] : 0];
   }).sort((a,b) => b[1]-a[1]);
 
+  const cx = 110, cy = 110, r = 90, innerR = 55;
+  let angle = -Math.PI / 2;
+  let segsHtml = '';
   byOrder.forEach(([name, count]) => {
-    const pct = Math.round(100 * count / total);
-    const width = Math.round(100 * count / max);
-    html += `
-      <div class="cat-bar-row">
-        <div class="cat-bar-label">${name}</div>
-        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${width}%; background:${colorMap[name]};"></div></div>
-        <div class="cat-bar-value">${count} talks (${pct}%)</div>
-      </div>`;
+    const frac = count / total;
+    const sweep = frac * Math.PI * 2;
+    const x0 = cx + r * Math.cos(angle), y0 = cy + r * Math.sin(angle);
+    const x1 = cx + r * Math.cos(angle + sweep), y1 = cy + r * Math.sin(angle + sweep);
+    const ix0 = cx + innerR * Math.cos(angle), iy0 = cy + innerR * Math.sin(angle);
+    const ix1 = cx + innerR * Math.cos(angle + sweep), iy1 = cy + innerR * Math.sin(angle + sweep);
+    const large = sweep > Math.PI ? 1 : 0;
+    const d = `M${ix0.toFixed(2)},${iy0.toFixed(2)} L${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 ${large} 1 ${x1.toFixed(2)},${y1.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${innerR},${innerR} 0 ${large} 0 ${ix0.toFixed(2)},${iy0.toFixed(2)} Z`;
+    const dimmed = selectedCategory && selectedCategory !== name;
+    segsHtml += `<path d="${d}" fill="${colorMap[name]}" class="donut-seg" data-cat="${name}" opacity="${dimmed ? 0.3 : 1}"></path>`;
+    angle += sweep;
   });
-  document.getElementById('category-bar-card').innerHTML = html;
+
+  const centerLabel = selectedCategory || `${total} talks`;
+  const centerValue = selectedCategory
+    ? byOrder.find(([n]) => n === selectedCategory)[1]
+    : DATA.category_distribution.length;
+  const centerSub = selectedCategory ? 'talks' : 'categories';
+
+  document.getElementById('category-donut').innerHTML = `
+    ${segsHtml}
+    <text x="${cx}" y="${cy - 4}" text-anchor="middle" class="donut-center-value">${centerValue}</text>
+    <text x="${cx}" y="${cy + 14}" text-anchor="middle" class="donut-center-label">${centerSub}</text>
+  `;
+
+  document.getElementById('category-legend').innerHTML = byOrder.map(([name, count]) => {
+    const pct = Math.round(100 * count / total);
+    const dimmed = selectedCategory && selectedCategory !== name;
+    return `
+      <div class="donut-legend-row" data-cat="${name}" style="${dimmed ? 'opacity:0.4;' : ''}">
+        <span class="swatch" style="background:${colorMap[name]};"></span>
+        <span class="name">${name}</span>
+        <span class="val">${count} (${pct}%)</span>
+      </div>`;
+  }).join('');
+
+  document.querySelectorAll('.donut-seg, .donut-legend-row').forEach(el => {
+    el.addEventListener('click', () => {
+      const cat = el.dataset.cat;
+      selectedCategory = selectedCategory === cat ? null : cat;
+      renderCategoryDonut();
+      renderTopicSamples();
+    });
+  });
+
+  renderTopicSamples();
+}
+
+function renderTopicSamples() {
+  const wrap = document.getElementById('topic-samples-wrap');
+  if (!selectedCategory) {
+    wrap.classList.add('hidden');
+    return;
+  }
+  wrap.classList.remove('hidden');
+  document.getElementById('topic-samples-title').textContent = `Sample talks — ${selectedCategory}`;
+  document.querySelectorAll('.sample-sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sampleSort));
+
+  let talks = (DATA.topic_sample_talks[selectedCategory] || []).slice();
+  if (sampleSort === 'attendees') {
+    talks.sort((a, b) => (b.attendees || 0) - (a.attendees || 0));
+  } else {
+    talks.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  }
+
+  document.getElementById('topic-samples-list').innerHTML = talks.map(t => `
+    <div class="topic-sample-item">
+      <div class="ts-title">${t.title || 'Untitled talk'}</div>
+      <div class="ts-meta">${t.speaker || 'Unknown speaker'} · ${chapterName(t.chapter)} · ${t.date || '—'}${t.attendees != null ? ` · ${t.attendees} attendees` : ''}</div>
+    </div>
+  `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px;">No sample talks recorded.</div>';
 }
 
 function renderGrowthChart() {
@@ -503,7 +811,12 @@ function renderGrowthChart() {
   const tooltip = document.getElementById('growth-tooltip');
   const years = Object.keys(DATA.yearly_event_counts).sort();
 
-  const communitySeries = years.map(y => DATA.yearly_event_counts[y] || 0);
+  const regionNames = Object.keys(DATA.region_yearly_events).sort((a, b) => {
+    const totalA = Object.values(DATA.region_yearly_events[a]).reduce((x,y)=>x+y, 0);
+    const totalB = Object.values(DATA.region_yearly_events[b]).reduce((x,y)=>x+y, 0);
+    return totalB - totalA;
+  });
+
   let chapterSeries = null;
   let chapterLabel = null;
   if (selectedChapter && DATA.chapters[selectedChapter]) {
@@ -516,17 +829,17 @@ function renderGrowthChart() {
   const padL = 36, padR = 16, padT = 16, padB = 28;
   const plotW = W - padL - padR, plotH = H - padT - padB;
 
-  const maxVal = Math.max(1, ...communitySeries, ...(chapterSeries || [0]));
+  const visibleRegions = regionNames.filter(r => !hiddenRegions.has(r));
+  const allValues = visibleRegions.flatMap(r => years.map(y => DATA.region_yearly_events[r][y] || 0));
+  const maxVal = Math.max(1, ...allValues, ...(chapterSeries || [0]));
   const niceMax = Math.ceil(maxVal / 10) * 10 || maxVal;
 
   function xFor(i) { return padL + (i / (years.length - 1 || 1)) * plotW; }
   function yFor(v) { return padT + plotH - (v / niceMax) * plotH; }
-
   function pathFor(series) {
     return series.map((v, i) => `${i === 0 ? 'M' : 'L'}${xFor(i).toFixed(1)},${yFor(v).toFixed(1)}`).join(' ');
   }
 
-  // gridlines + y-axis labels (4 steps)
   let gridHtml = '';
   const steps = 4;
   for (let s = 0; s <= steps; s++) {
@@ -541,38 +854,37 @@ function renderGrowthChart() {
     xLabelsHtml += `<text x="${xFor(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="line-chart-axis-label">${y}</text>`;
   });
 
-  const communityPath = pathFor(communitySeries);
-  const communityMarkers = communitySeries.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3.5" fill="var(--series-1)" class="growth-point" data-idx="${i}" data-series="community"></circle>`).join('');
+  let regionsHtml = '';
+  visibleRegions.forEach(region => {
+    const series = years.map(y => DATA.region_yearly_events[region][y] || 0);
+    const color = REGION_COLORS[region] || 'var(--series-1)';
+    regionsHtml += `<path d="${pathFor(series)}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round"></path>`;
+    regionsHtml += series.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3" fill="${color}" class="growth-point"></circle>`).join('');
+  });
 
   let chapterHtml = '';
   if (chapterSeries) {
-    const chapterPath = pathFor(chapterSeries);
     chapterHtml = `
-      <path d="${chapterPath}" fill="none" stroke="var(--series-6)" stroke-width="2" stroke-linejoin="round"></path>
-      ${chapterSeries.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3.5" fill="var(--series-6)" class="growth-point" data-idx="${i}" data-series="chapter"></circle>`).join('')}
+      <path d="${pathFor(chapterSeries)}" fill="none" stroke="var(--text-primary)" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="4,3"></path>
+      ${chapterSeries.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3.5" fill="var(--text-primary)" class="growth-point"></circle>`).join('')}
     `;
   }
 
   svg.innerHTML = `
     ${gridHtml}
-    <path d="${communityPath}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"></path>
-    ${communityMarkers}
+    ${regionsHtml}
     ${chapterHtml}
     ${xLabelsHtml}
     <line id="growth-crosshair" x1="0" y1="${padT}" x2="0" y2="${H - padB}" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3,3" style="display:none;"></line>
   `;
 
   const crosshair = document.getElementById('growth-crosshair');
-  const hitAreas = years.map((y, i) => {
-    const x0 = i === 0 ? padL : (xFor(i - 1) + xFor(i)) / 2;
-    const x1 = i === years.length - 1 ? W - padR : (xFor(i) + xFor(i + 1)) / 2;
-    return { i, y, x0, x1 };
-  });
-
   svg.querySelectorAll('.growth-point').forEach(el => { el.style.pointerEvents = 'none'; });
 
   const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  hitAreas.forEach(({ i, y, x0, x1 }) => {
+  years.forEach((y, i) => {
+    const x0 = i === 0 ? padL : (xFor(i - 1) + xFor(i)) / 2;
+    const x1 = i === years.length - 1 ? W - padR : (xFor(i) + xFor(i + 1)) / 2;
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     rect.setAttribute('x', x0.toFixed(1));
     rect.setAttribute('y', padT);
@@ -584,13 +896,13 @@ function renderGrowthChart() {
       crosshair.style.display = 'block';
       crosshair.setAttribute('x1', xFor(i).toFixed(1));
       crosshair.setAttribute('x2', xFor(i).toFixed(1));
-      const communityV = communitySeries[i];
+      const regionLines = visibleRegions.map(r => `${r}: ${DATA.region_yearly_events[r][y] || 0}`).join('<br>');
       const chapterV = chapterSeries ? chapterSeries[i] : null;
       tooltip.style.display = 'block';
-      tooltip.innerHTML = `<strong>${y}</strong><br>All chapters: ${communityV} events${chapterV !== null ? `<br>${chapterLabel}: ${chapterV} events` : ''}`;
+      tooltip.innerHTML = `<strong>${y}</strong><br>${regionLines}${chapterV !== null ? `<br>${chapterLabel}: ${chapterV} events` : ''}`;
       const rectBox = svg.getBoundingClientRect();
       const px = (xFor(i) / W) * rectBox.width;
-      tooltip.style.left = Math.min(px + 10, rectBox.width - 160) + 'px';
+      tooltip.style.left = Math.min(px + 10, rectBox.width - 180) + 'px';
       tooltip.style.top = '10px';
     });
     rect.addEventListener('mouseleave', () => {
@@ -601,10 +913,48 @@ function renderGrowthChart() {
   });
   svg.appendChild(overlay);
 
-  document.getElementById('growth-legend').innerHTML = `
-    <div class="legend-item"><span class="legend-swatch" style="background:var(--series-1);"></span>All chapters</div>
-    ${chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--series-6);"></span>${chapterLabel}</div>` : ''}
-  `;
+  document.getElementById('growth-legend').innerHTML = regionNames.map(region => `
+    <div class="legend-item ${hiddenRegions.has(region) ? 'muted' : ''}" data-region="${region}">
+      <span class="legend-swatch" style="background:${REGION_COLORS[region] || 'var(--series-1)'};"></span>${region}
+    </div>
+  `).join('') + (chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--text-primary);"></span>${chapterLabel}</div>` : '');
+
+  document.querySelectorAll('#growth-legend .legend-item[data-region]').forEach(el => {
+    el.addEventListener('click', () => {
+      const r = el.dataset.region;
+      if (hiddenRegions.has(r)) hiddenRegions.delete(r); else hiddenRegions.add(r);
+      renderGrowthChart();
+    });
+  });
+}
+
+function renderMiniBarChart(svgId, dataObj, labelFn) {
+  const svg = document.getElementById(svgId);
+  const entries = Object.entries(dataObj);
+  const W = 280, H = 160, padL = 20, padR = 8, padT = 8, padB = 24;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const max = Math.max(1, ...entries.map(([,v]) => v));
+  const barW = plotW / entries.length;
+
+  let html = '';
+  entries.forEach(([k, v], i) => {
+    const h = (v / max) * plotH;
+    const x = padL + i * barW;
+    const y = padT + plotH - h;
+    html += `<rect x="${(x + barW * 0.12).toFixed(1)}" y="${y.toFixed(1)}" width="${(barW * 0.76).toFixed(1)}" height="${h.toFixed(1)}" class="mini-bar-chart-bar" rx="2"><title>${labelFn(k)}: ${v}</title></rect>`;
+    if (entries.length <= 12 || i % 5 === 0 || i === entries.length - 1) {
+      html += `<text x="${(x + barW/2).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="mini-bar-chart-label">${labelFn(k)}</text>`;
+    }
+  });
+  svg.innerHTML = html;
+}
+
+function renderTimingCharts() {
+  renderMiniBarChart('weekday-chart', DATA.weekday_event_counts, k => k.slice(0, 3));
+  renderMiniBarChart('daymonth-chart', DATA.day_of_month_event_counts, k => k);
+  const hourLabels = {};
+  Object.entries(DATA.start_hour_event_counts).forEach(([h, v]) => { hourLabels[h] = v; });
+  renderMiniBarChart('starthour-chart', hourLabels, k => `${k}:00`);
 }
 
 // sequential blue ramp, light -> dark, per dataviz skill palette (one hue for magnitude)
@@ -614,6 +964,14 @@ function projectLonLat(lon, lat) {
   const x = (lon + 180) / 360 * 960;
   const y = (90 - lat) / 180 * 500;
   return [x, y];
+}
+
+let mapZoom = 1, mapPanX = 0, mapPanY = 0;
+let mapDragging = false, mapDragStart = null;
+
+function applyMapTransform() {
+  const g = document.getElementById('map-viewport');
+  if (g) g.setAttribute('transform', `translate(${mapPanX},${mapPanY}) scale(${mapZoom})`);
 }
 
 function renderMap() {
@@ -639,17 +997,21 @@ function renderMap() {
     const [x, y] = projectLonLat(c.lon, c.lat);
     const r = markerRadius(c.total_events);
     const color = rampColor(c.total_events);
+    const isSelected = c.slug === selectedChapter;
     markersHtml += `
       <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}"
-        fill="${color}" fill-opacity="0.82" stroke="var(--surface-1)" stroke-width="1.5"
+        fill="${color}" fill-opacity="0.82" stroke="${isSelected ? 'var(--text-primary)' : 'var(--surface-1)'}" stroke-width="${isSelected ? 2.5 : 1.5}"
         class="chapter-marker" data-slug="${c.slug}" style="cursor:pointer;"></circle>`;
   });
 
   svg.innerHTML = `
-    <rect x="0" y="0" width="960" height="500" fill="var(--map-ocean)"></rect>
-    <path d="${WORLD_PATH}" fill="var(--map-land)" stroke="var(--border)" stroke-width="0.6" fill-rule="evenodd"></path>
-    ${markersHtml}
+    <g id="map-viewport">
+      <rect x="0" y="0" width="960" height="500" fill="var(--map-ocean)"></rect>
+      <path d="${WORLD_PATH}" fill="var(--map-land)" stroke="var(--border)" stroke-width="0.6" fill-rule="evenodd"></path>
+      ${markersHtml}
+    </g>
   `;
+  applyMapTransform();
 
   svg.querySelectorAll('.chapter-marker').forEach(el => {
     const slug = el.dataset.slug;
@@ -658,13 +1020,13 @@ function renderMap() {
       tooltip.style.display = 'block';
       tooltip.innerHTML = `<strong>${chapterName(c.slug)}</strong><br>${c.city}, ${c.country}<br>${c.total_events} events · ${c.total_talks} talks · avg ${fmt(c.avg_attendees)} attendees`;
       const rect = wrapEl.getBoundingClientRect();
-      const cx = (parseFloat(el.getAttribute('cx')) / 960) * rect.width;
-      const cy = (parseFloat(el.getAttribute('cy')) / 500) * rect.height;
+      const cx = ((parseFloat(el.getAttribute('cx')) * mapZoom + mapPanX) / 960) * rect.width;
+      const cy = ((parseFloat(el.getAttribute('cy')) * mapZoom + mapPanY) / 500) * rect.height;
       tooltip.style.left = Math.min(cx + 12, rect.width - 200) + 'px';
       tooltip.style.top = Math.max(cy - 40, 0) + 'px';
     });
     el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
-    el.addEventListener('click', () => setSelectedChapter(slug));
+    el.addEventListener('click', (e) => { e.stopPropagation(); setSelectedChapter(slug === selectedChapter ? null : slug); });
   });
 
   const legendSteps = [
@@ -675,6 +1037,53 @@ function renderMap() {
   document.getElementById('map-legend').innerHTML = legendSteps.map(([v, color]) => `
     <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>~${v} events</div>
   `).join('');
+
+  setupMapInteraction(svg, wrapEl, tooltip);
+}
+
+function setupMapInteraction(svg, wrapEl, tooltip) {
+  function zoomAt(factor, clientX, clientY) {
+    const rect = wrapEl.getBoundingClientRect();
+    const localX = ((clientX - rect.left) / rect.width) * 960;
+    const localY = ((clientY - rect.top) / rect.height) * 500;
+    const newZoom = Math.min(8, Math.max(1, mapZoom * factor));
+    mapPanX = localX - (localX - mapPanX) * (newZoom / mapZoom);
+    mapPanY = localY - (localY - mapPanY) * (newZoom / mapZoom);
+    mapZoom = newZoom;
+    clampPan();
+    applyMapTransform();
+  }
+  function clampPan() {
+    const maxPanX = 960 * (mapZoom - 1);
+    const maxPanY = 500 * (mapZoom - 1);
+    mapPanX = Math.min(0, Math.max(-maxPanX, mapPanX));
+    mapPanY = Math.min(0, Math.max(-maxPanY, mapPanY));
+  }
+
+  svg.onwheel = (e) => {
+    e.preventDefault();
+    zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, e.clientX, e.clientY);
+  };
+  svg.onmousedown = (e) => {
+    mapDragging = true;
+    mapDragStart = { x: e.clientX, y: e.clientY, panX: mapPanX, panY: mapPanY };
+    svg.style.cursor = 'grabbing';
+  };
+  window.addEventListener('mousemove', (e) => {
+    if (!mapDragging) return;
+    const rect = wrapEl.getBoundingClientRect();
+    const dx = (e.clientX - mapDragStart.x) / rect.width * 960;
+    const dy = (e.clientY - mapDragStart.y) / rect.height * 500;
+    mapPanX = mapDragStart.panX + dx;
+    mapPanY = mapDragStart.panY + dy;
+    clampPan();
+    applyMapTransform();
+  });
+  window.addEventListener('mouseup', () => { mapDragging = false; svg.style.cursor = 'grab'; });
+
+  document.getElementById('map-zoom-in').onclick = () => zoomAt(1.4, wrapEl.getBoundingClientRect().left + wrapEl.clientWidth/2, wrapEl.getBoundingClientRect().top + wrapEl.clientHeight/2);
+  document.getElementById('map-zoom-out').onclick = () => zoomAt(1/1.4, wrapEl.getBoundingClientRect().left + wrapEl.clientWidth/2, wrapEl.getBoundingClientRect().top + wrapEl.clientHeight/2);
+  document.getElementById('map-zoom-reset').onclick = () => { mapZoom = 1; mapPanX = 0; mapPanY = 0; applyMapTransform(); };
 }
 
 function activeChapters() {
@@ -691,11 +1100,24 @@ function populateChapterSelect() {
   sel.addEventListener('change', () => setSelectedChapter(sel.value));
 }
 
+function populateRegionFilter() {
+  const sel = document.getElementById('region-filter');
+  const regions = [...new Set(Object.values(DATA.chapters).map(c => c.region_group).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">All regions</option>' + regions.map(r => `<option value="${r}">${r}</option>`).join('');
+  sel.addEventListener('change', () => { regionFilter = sel.value; renderChapterTable(); });
+}
+
 function renderChapterTable() {
   const searchVal = (document.getElementById('chapter-search').value || '').toLowerCase();
   let rows = activeChapters().filter(c => c.slug.toLowerCase().includes(searchVal) || chapterName(c.slug).toLowerCase().includes(searchVal));
+  if (regionFilter) rows = rows.filter(c => c.region_group === regionFilter);
 
   rows.sort((a, b) => {
+    if (sortKey === 'status') {
+      const order = { 'active': 0, 'at-risk': 1, 'dormant': 2 };
+      const av = order[chapterStatus(a)], bv = order[chapterStatus(b)];
+      return sortAsc ? av - bv : bv - av;
+    }
     let av = a[sortKey], bv = b[sortKey];
     if (sortKey === 'slug' || sortKey === 'last_event_date') {
       av = av || ''; bv = bv || '';
@@ -705,7 +1127,6 @@ function renderChapterTable() {
     return sortAsc ? av - bv : bv - av;
   });
 
-  // pin selected chapter to top
   const pinned = rows.find(c => c.slug === selectedChapter);
   rows = rows.filter(c => c.slug !== selectedChapter);
   if (pinned) rows.unshift(pinned);
@@ -718,6 +1139,7 @@ function renderChapterTable() {
     return `
       <tr class="${isMine ? 'highlight-row' : ''}" data-slug="${c.slug}" style="cursor:pointer;">
         <td>${chapterName(c.slug)}${isMine ? '<span class="badge-mine">selected</span>' : ''}</td>
+        <td>${statusChip(c)}</td>
         <td>${fmt(c.total_events)}</td>
         <td>${fmt(c.total_talks)}</td>
         <td>${c.avg_talks_per_event}</td>
@@ -739,45 +1161,92 @@ function renderChapterTable() {
 
 function renderChapterDetail() {
   const c = selectedChapter ? DATA.chapters[selectedChapter] : null;
+  const cockpitCard = document.getElementById('chapter-cockpit-card');
   if (!c) {
     document.getElementById('chapter-detail-title').textContent = 'Chapter detail';
     document.getElementById('chapter-detail-sub').textContent = 'Select a chapter above or click any row in the comparison table to see its topic mix and stats here.';
     document.getElementById('chapter-topic-bars').innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No chapter selected.</div>';
-    document.getElementById('chapter-glance').innerHTML = '';
+    cockpitCard.classList.add('hidden');
     document.getElementById('chapter-events-list').innerHTML = '';
+    document.getElementById('venue-list').innerHTML = '';
+    document.getElementById('venue-map').style.display = 'none';
     return;
   }
   document.getElementById('chapter-detail-title').textContent = `Chapter detail — ${chapterName(c.slug)}`;
-  document.getElementById('chapter-detail-sub').textContent =
-    c.total_events > 0
+  document.getElementById('chapter-detail-sub').innerHTML =
+    (c.total_events > 0
       ? `Active from ${c.first_event_date} to ${c.last_event_date}. ${c.online_events} online / ${c.in_person_events} in-person events.`
-      : 'No events recorded yet for this chapter.';
+      : 'No events recorded yet for this chapter.') + ' ' + statusChip(c);
+
+  cockpitCard.classList.remove('hidden');
+  document.getElementById('chapter-glance').innerHTML = `
+    <div class="glance-tile"><div class="g-value">${fmt(c.total_events)}</div><div class="g-label">Total events</div></div>
+    <div class="glance-tile"><div class="g-value">${fmt(c.total_talks)}</div><div class="g-label">Total talks</div></div>
+    <div class="glance-tile"><div class="g-value">${c.avg_talks_per_event}</div><div class="g-label">Avg talks/event</div></div>
+    <div class="glance-tile"><div class="g-value">${fmt(c.avg_attendees)}</div><div class="g-label">Avg attendees</div></div>
+    <div class="glance-tile"><div class="g-value">${fmt(c.max_attendees)}</div><div class="g-label">Max attendees</div></div>
+    <div class="glance-tile"><div class="g-value">${fmt(c.unique_speakers)}</div><div class="g-label">Unique speakers</div></div>
+  `;
 
   const colorMap = Object.fromEntries(CATEGORY_ORDER);
+  const communityTotal = DATA.category_distribution.reduce((a, [,v]) => a + v, 0);
   const maxCat = c.top_categories.length ? Math.max(...c.top_categories.map(([,v]) => v)) : 1;
+  const chTotal = c.top_categories.reduce((a, [,v]) => a + v, 0) || 1;
   document.getElementById('chapter-topic-bars').innerHTML = c.top_categories.length
-    ? c.top_categories.map(([name, count]) => {
+    ? CATEGORY_ORDER.map(([name]) => {
+        const found = c.top_categories.find(([n]) => n === name);
+        const count = found ? found[1] : 0;
+        if (!count) return '';
         const width = Math.round(100 * count / maxCat);
+        const chPct = Math.round(100 * count / chTotal);
+        const commFound = DATA.category_distribution.find(([n]) => n === name);
+        const commPct = commFound ? Math.round(100 * commFound[1] / communityTotal) : 0;
         return `
           <div class="cat-bar-row">
             <div class="cat-bar-label">${name}</div>
             <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${width}%; background:${colorMap[name] || 'var(--series-1)'};"></div></div>
-            <div class="cat-bar-value">${count}</div>
+            <div class="cat-bar-value">${chPct}% <span style="color:var(--text-muted);">(avg ${commPct}%)</span></div>
           </div>`;
       }).join('')
     : '<div style="color:var(--text-secondary); font-size:13px;">No talks recorded.</div>';
 
-  document.getElementById('chapter-glance').innerHTML = `
-    <div>Total events: <strong>${fmt(c.total_events)}</strong></div>
-    <div>Total talks: <strong>${fmt(c.total_talks)}</strong></div>
-    <div>Avg talks/event: <strong>${c.avg_talks_per_event}</strong></div>
-    <div>Avg attendees: <strong>${fmt(c.avg_attendees)}</strong></div>
-    <div>Max attendees (single event): <strong>${fmt(c.max_attendees)}</strong></div>
-    <div>Unique speakers: <strong>${fmt(c.unique_speakers)}</strong></div>
-    <div>Top single topic: <strong>${c.top_topics.length ? c.top_topics[0][0] : '—'}</strong></div>
-  `;
-
+  renderVenueMap(c);
   renderChapterEventsList(c);
+}
+
+function renderVenueMap(c) {
+  const venues = c.reused_venues || [];
+  const svg = document.getElementById('venue-map');
+  const listEl = document.getElementById('venue-list');
+  if (!venues.length) {
+    svg.style.display = 'none';
+    listEl.innerHTML = '<div style="color:var(--text-secondary); font-size:13px;">No venue used more than once.</div>';
+    return;
+  }
+  const withCoords = venues.filter(v => v.lat != null && v.lon != null);
+  if (withCoords.length) {
+    svg.style.display = 'block';
+    const lats = withCoords.map(v => v.lat), lons = withCoords.map(v => v.lon);
+    const latC = (Math.min(...lats) + Math.max(...lats)) / 2;
+    const lonC = (Math.min(...lons) + Math.max(...lons)) / 2;
+    const latSpan = Math.max(0.02, Math.max(...lats) - Math.min(...lats));
+    const lonSpan = Math.max(0.02, Math.max(...lons) - Math.min(...lons));
+    const scale = Math.min(120 / latSpan, 120 / lonSpan);
+    const maxCount = Math.max(...withCoords.map(v => v.count));
+    svg.innerHTML = withCoords.map(v => {
+      const x = 150 + (v.lon - lonC) * scale;
+      const y = 110 - (v.lat - latC) * scale;
+      const r = 6 + 10 * (v.count / maxCount);
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="var(--series-1)" fill-opacity="0.7" stroke="var(--surface-1)" stroke-width="1.5"><title>${v.name} — used ${v.count} times</title></circle>`;
+    }).join('');
+  } else {
+    svg.style.display = 'none';
+  }
+  listEl.innerHTML = venues.map(v => `
+    <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:5px 0; border-bottom:1px solid var(--border);">
+      <span>${v.name}</span><span style="color:var(--text-secondary);">${v.count}×</span>
+    </div>
+  `).join('');
 }
 
 function renderChapterEventsList(c) {
@@ -855,7 +1324,14 @@ function renderTalkResults() {
       return haystack.includes(query);
     });
   }
-  results = results.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  results = results.slice().sort((a, b) => {
+    switch (talkSort) {
+      case 'date-asc': return (a.date || '').localeCompare(b.date || '');
+      case 'attendees-desc': return (b.attendees || 0) - (a.attendees || 0);
+      case 'speaker-asc': return (a.speaker || '').localeCompare(b.speaker || '');
+      default: return (b.date || '').localeCompare(a.date || '');
+    }
+  });
 
   const MAX_RESULTS = 30;
 
@@ -879,7 +1355,7 @@ function renderTalkResults() {
       <div class="talk-title">${highlight(t.title || 'Untitled talk', query)}</div>
       <div class="talk-meta">
         ${highlight(t.speaker || 'Unknown speaker', query)}${t.speaker_title ? ' · ' + highlight(t.speaker_title, query) : ''}
-        · ${chapterName(t.chapter)} · ${t.date || '—'}
+        · ${chapterName(t.chapter)} · ${t.date || '—'}${t.attendees != null ? ` · ${t.attendees} attendees` : ''}
         ${t.event_url ? ` · <a class="event-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}
       </div>
       ${t.description ? `<div class="talk-desc">${highlight(t.description, query)}</div>` : ''}
@@ -890,15 +1366,36 @@ function renderTalkResults() {
 
 function renderSpeakerList() {
   const speakers = DATA.repeat_speakers.slice(0, 20);
-  document.getElementById('speaker-list').innerHTML = speakers.map(sp => `
-    <div class="speaker-row">
-      <div>
-        <div class="speaker-name">${sp.name}</div>
-        <div class="speaker-chapters">${sp.chapters.map(chapterName).join(', ')}</div>
+  document.getElementById('speaker-list').innerHTML = speakers.map((sp, idx) => {
+    const talks = DATA.all_talks.filter(t => {
+      if (!t.speaker) return false;
+      return t.speaker.split(/,| & |\band\b/).map(s => s.trim()).includes(sp.name)
+        || t.speaker.trim() === sp.name;
+    }).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    const talksHtml = talks.map(t => `
+      <div class="speaker-talk-item">
+        <div>${t.title || 'Untitled talk'}</div>
+        <div class="st-meta">${chapterName(t.chapter)} · ${t.date || '—'}${t.event_url ? ` · <a class="speaker-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}</div>
       </div>
-      <div class="speaker-count">${sp.chapter_count} chapters · ${sp.talk_count} talks</div>
-    </div>
-  `).join('');
+    `).join('') || '<div style="color:var(--text-secondary); font-size:12px;">No talk details recorded.</div>';
+
+    return `
+      <div class="speaker-row" data-idx="${idx}">
+        <div class="speaker-row-head">
+          <div>
+            <div class="speaker-name">${sp.name}</div>
+            <div class="speaker-chapters">${sp.chapters.map(chapterName).join(', ')}</div>
+          </div>
+          <div class="speaker-count">${sp.chapter_count} chapters · ${sp.talk_count} talks <span class="speaker-caret">▶</span></div>
+        </div>
+        <div class="speaker-talks-body">${talksHtml}</div>
+      </div>`;
+  }).join('');
+
+  document.querySelectorAll('.speaker-row-head').forEach(head => {
+    head.addEventListener('click', () => head.parentElement.classList.toggle('expanded'));
+  });
 }
 
 function attachSortHandlers() {
@@ -915,17 +1412,34 @@ function attachSortHandlers() {
 document.getElementById('clear-chapter-select').addEventListener('click', () => setSelectedChapter(null));
 document.getElementById('chapter-search').addEventListener('input', renderChapterTable);
 document.getElementById('talk-search').addEventListener('input', renderTalkResults);
+document.getElementById('talk-sort').addEventListener('change', (e) => { talkSort = e.target.value; renderTalkResults(); });
 document.getElementById('toggle-dormant').addEventListener('click', (e) => {
   showDormant = !showDormant;
+  e.target.classList.toggle('active', showDormant);
   e.target.textContent = showDormant ? 'Hide dormant chapters' : 'Show dormant chapters';
   renderChapterTable();
 });
+document.querySelectorAll('.sample-sort-btn').forEach(btn => {
+  btn.addEventListener('click', () => { sampleSort = btn.dataset.sort; renderTopicSamples(); });
+});
+document.getElementById('date-range-slider').addEventListener('input', (e) => {
+  trailingMonths = parseInt(e.target.value, 10);
+  const label = trailingMonths >= 24 ? `Last ${Math.round(trailingMonths/12)} years` : `Last ${trailingMonths} months`;
+  document.getElementById('range-label').textContent = label;
+});
+
+document.getElementById('footnote').innerHTML =
+  `Generated ${DATA.generated} from <code>enriched/*.json</code> and <code>speaker-identities.json</code>. ` +
+  `Topic categories per <code>past-meetups.md</code> §"topic categories". Venue positions on the per-chapter map are approximate (offset from the chapter's city center, not geocoded street addresses). ` +
+  `${DATA.summary.dormant_chapters} chapters have had no event in the trailing 12 months and are excluded from rankings by default — toggle "Show dormant chapters" to include them.`;
 
 renderStatRow();
-renderCategoryBar();
+renderCategoryDonut();
 renderGrowthChart();
+renderTimingCharts();
 renderMap();
 populateChapterSelect();
+populateRegionFilter();
 attachSortHandlers();
 renderChapterTable();
 renderChapterDetail();
