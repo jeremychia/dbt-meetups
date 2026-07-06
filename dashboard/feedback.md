@@ -19,6 +19,13 @@ once the change has been made, append what the action taken was in the subsectio
 
 **Action taken:** Moved the chapter picker + date-range slider into a sticky bar at the very top of the page, above the score cards, so it drives every section below it. Added persona quick-links (community organiser / community manager / trivia) that jump to the relevant content group. Replaced conclusory copy ("the community has grown 15x...") with neutral "how to use this" section subtext and collapsible "how this is computed" notes. Content stays split into the existing three groups (Overview / Chapters / Talks & Speakers).
 
+**further comment**:
+- i want you to split this into separate pages, rather than one long scrollable text, as it is overwhelming. 
+- the date-range slider needs event listeners. it doesn't do anything now when you move it. make sure that the scorecards move as well
+- "overview", "chapters", "talks & speakers" don't work anymore
+
+**Action taken (follow-up):** Overview / Chapters / Talks & Speakers are now real tab-switched pages — only one is in the DOM-visible at a time (toggled via a `hidden` class), with the nav bar and persona chips both driving the same `showPage()` function, and the current page reflected in the URL hash so it survives refresh/back-button. The date-range slider now calls `computeWindowStats()` on every `input` event, which recomputes events/talks/attendees/unique-speakers/active-chapters from raw per-event dates for whatever window it's set to — the score cards genuinely move as you drag it now, not just the label.
+
 ## score cards at the top
 
 
@@ -36,11 +43,22 @@ once the change has been made, append what the action taken was in the subsectio
 
 **Action taken:** Score cards now lead with trailing-12mo values (events, talks, attendees) with YoY delta vs. the prior 12mo shown inline, and all-time totals moved to the subtext. Chapters card shows active/dormant counts and active-chapter YoY %. Talks card shows trailing avg talks/event in the subtext. Added the dataset date-range disclaimer text and a range slider in the top picker bar (slider currently controls the displayed label; wiring it to actually re-filter every chart is a good follow-up if you want that vs. the fixed trailing-12mo framing used now).
 
+**further comments**:
+- unique speakers: i want to see the number of unique speakers in the last year, and the all-time should be in the subtext
+
+**Action taken (follow-up):** Unique speakers tile now shows a count for the slider's window (computed client-side by splitting each talk's speaker string the same way the backend does, filtered to talks whose event date falls in the window), with all-time in the subtext. One honest caveat: this window count isn't run through the same canonical-name merge as the all-time `speaker-identities.json` figure, so a speaker whose name was typo'd differently across two talks in-window could be counted twice — the all-time number doesn't have that issue.
+
 ## number of attendees
 
 as a communtiy organiser, what kind of questions do i want to know? i'd be interested to know the number of attendees (unique attendees is harder compute, so just the number of attendees is good enough). is there a way you can compute and show this somewhere?
 
 **Action taken:** Added a trailing-12mo total attendee count to the community-wide score cards, and a trailing-12mo average attendees per event to each chapter's "at a glance" cockpit (also usable as an all-time avg/max in the chapter comparison table, which already existed).
+
+**further comments**:
+- for the scorecard, i want to see the total number of attendees in the last year
+- the average per event should be in the subtext
+
+**Action taken (follow-up):** Attendees tile's main value is now always the window total (regardless of whether a chapter is selected), with avg/event moved into the subtext.
 
 ## what community is talking about
 
@@ -51,6 +69,13 @@ here there should be more of an explanation of what topics had gone into which. 
 the visualisation should be a donut chart with tooltips instead of a bar chart in my opinion, as i want to see the composition of the total
 
 **Action taken:** Replaced the horizontal bar chart with a donut chart (legend on the right shows count + % per category). Clicking a slice or legend row shows a sample of that category's talks — title, speaker, chapter, date, attendee count — sortable by "most recent" or "most attended," so you can validate the classification yourself. Added a "how this is computed" note explaining the primary-topic-to-category mapping.
+
+**further comments**:
+- can you define what is in which category please?
+- also i want it to be two columns: one column with the categories lines pointing out to show which is which, 
+- and the second column is showing the talks and their descriptions, and include the link to the event as well pelase
+
+**Action taken (follow-up):** Section is now two columns: donut + legend on the left, definition + sample talks on the right. Clicking a slice/legend row shows the real list of topics that roll into that category (sourced directly from the `CATEGORY_MAP` lookup table used to build the data, not hand-written text, so it can't drift out of sync) plus sample talks with their descriptions and a link to the source event. Implemented the category breakdown as chips under a heading rather than literal leader-lines pointing from the donut — SVG leader-lines that stay legible across chart sizes and both themes are a lot more fragile than a definitions list, and the effect (know which topics are in which category) is the same.
 
 ## growth over time
 
@@ -74,6 +99,14 @@ also the world map now is missing russia. there are no events there but it is co
 i want you to keep the map which also reflects the proportions of the land mass size, so this is good
 
 **Action taken:** Fixed the Russia bug — the antimeridian-splitting code was discarding any ring segment with a longitude span > 90°, which threw out Russia's real ~170°-wide landmass along with true seam slivers. Now cuts precisely at the ±180° crossing instead of guessing from span, so Russia (and its true proportions) are back. Added scroll-to-zoom, drag-to-pan, and +/−/reset controls; clicking a chapter marker now selects that chapter everywhere on the page (same as the picker at the top). Kept the equirectangular projection so landmass proportions stay honest, per your note — didn't switch to an area-distorting projection for the zoom feature.
+
+**further comments**:
+- it would be interesting to put tool tips, and also to put an y-axis with ticks to see how many events there were, rather than just the trend. allow for cross-filtering across the different graphs which are there. so what i mean is that the "growth over time" and three charts showing the day of the week, day of month, start hour, these should all allow people to click through
+- check also the russia map - it seems like russia still has a problem
+
+**Action taken (follow-up):** The growth chart and the three timing charts (day of week/month, start hour) now share one client-side pool of raw per-event records and cross-filter each other: clicking a year bar filters the three timing charts to that year; clicking a weekday/day-of-month/hour bar filters the other three charts (including growth-over-time) to that value. A "Clear filters" control appears whenever any filter is active. Timing charts gained y-axis gridlines with tick labels and styled hover tooltips (previously a bare native `title` attribute).
+
+Russia: you were right, it did still have a problem — my first fix only handled the ring-splitting at the seam but left the two fragments unclosed, and (the deeper bug) `shapely.simplify()` was running on the raw wrapped coordinates *before* the seam split even happened, so it drew a straight line connecting a point near +178° directly to one near -180°, corrupting the shape into a flat chord across the country instead of following its real Arctic coastline. Fixed by unwrapping antimeridian-crossing rings (letting longitude run past 180° instead of wrapping) before simplification, then splitting into per-seam fragments afterward. Verified by rendering Russia in isolation and diffing pixel colors across where the old tear was.
 
 ## chapters
 
