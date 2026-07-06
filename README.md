@@ -132,8 +132,3 @@ its complexity. This project hasn't reached that point yet.
   known, accepted tradeoff of scraping public event pages as-is rather than
   scrubbing them — worth being aware of before treating `raw_events/` as
   safe to share more widely than the repo already is.
-
-## License
-
-No license file is currently included, which by default means all rights
-reserved — add one (e.g. MIT) before inviting outside use or contributions.
