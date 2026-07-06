@@ -17,9 +17,12 @@ cd "$(dirname "$0")/.."
 
 PY=".venv/bin/python"
 if [ ! -x "$PY" ]; then
-  echo "No .venv found — creating one with playwright..."
+  echo "No .venv found — creating one..."
   python3 -m venv .venv
-  .venv/bin/pip install -q playwright
+fi
+if ! "$PY" -c "import playwright, numpy, shapely" >/dev/null 2>&1; then
+  echo "Installing pipeline dependencies (requirements.txt)..."
+  .venv/bin/pip install -q -r requirements.txt
   .venv/bin/python -m playwright install chromium
 fi
 
