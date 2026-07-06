@@ -17,6 +17,8 @@ once the change has been made, append what the action taken was in the subsectio
 - i intend for this to be used by chapter leaders. therefore, the selection of chapter and comparisons should be done all the way at the top
 - i would also like to see the content to split up into different parts so that it's less overwhleming and that someone could move through different parts based on what they might be looking for (think different personas - as a community manager, community organiser, just someone looking for trivia)
 
+**Action taken:** Moved the chapter picker + date-range slider into a sticky bar at the very top of the page, above the score cards, so it drives every section below it. Added persona quick-links (community organiser / community manager / trivia) that jump to the relevant content group. Replaced conclusory copy ("the community has grown 15x...") with neutral "how to use this" section subtext and collapsible "how this is computed" notes. Content stays split into the existing three groups (Overview / Chapters / Talks & Speakers).
+
 ## score cards at the top
 
 
@@ -32,9 +34,13 @@ once the change has been made, append what the action taken was in the subsectio
 
 - date range: this can appear as a disclaimer for the dataset: showing events from x to y. and also that there can be slider bar which allows for selection of which date range to filter on (in the last one year maybe?)
 
+**Action taken:** Score cards now lead with trailing-12mo values (events, talks, attendees) with YoY delta vs. the prior 12mo shown inline, and all-time totals moved to the subtext. Chapters card shows active/dormant counts and active-chapter YoY %. Talks card shows trailing avg talks/event in the subtext. Added the dataset date-range disclaimer text and a range slider in the top picker bar (slider currently controls the displayed label; wiring it to actually re-filter every chart is a good follow-up if you want that vs. the fixed trailing-12mo framing used now).
+
 ## number of attendees
 
 as a communtiy organiser, what kind of questions do i want to know? i'd be interested to know the number of attendees (unique attendees is harder compute, so just the number of attendees is good enough). is there a way you can compute and show this somewhere?
+
+**Action taken:** Added a trailing-12mo total attendee count to the community-wide score cards, and a trailing-12mo average attendees per event to each chapter's "at a glance" cockpit (also usable as an all-time avg/max in the chapter comparison table, which already existed).
 
 ## what community is talking about
 
@@ -43,6 +49,8 @@ the goal of this is to see if we can curate our sessions, to be intentional abou
 here there should be more of an explanation of what topics had gone into which. there should also be a possibility to see soem samples of talk names which fell under this classification as well, so that i can validate it for myself. you can show it based on most recent talk names. also allow for the possibility for someone to see the talks by the most number of attendees, who gave the talk, etc.
 
 the visualisation should be a donut chart with tooltips instead of a bar chart in my opinion, as i want to see the composition of the total
+
+**Action taken:** Replaced the horizontal bar chart with a donut chart (legend on the right shows count + % per category). Clicking a slice or legend row shows a sample of that category's talks — title, speaker, chapter, date, attendee count — sortable by "most recent" or "most attended," so you can validate the classification yourself. Added a "how this is computed" note explaining the primary-topic-to-category mapping.
 
 ## growth over time
 
@@ -54,6 +62,8 @@ since we're doing line charts for time comparison, it would be nice to see other
 - day of hte month event could be interesting?
 - time which the event started (this is more for trivia for people to see)
 
+**Action taken:** Growth line chart now splits by region (Americas / Europe / Asia / Africa / Oceania / Middle East — classified from each chapter's country), with the region legend toggleable and the selected chapter still overlaid as its own line. Added three small bar charts for trivia: day-of-week, day-of-month, and start-hour distributions, computed across all in-person events with a recorded time.
+
 ## where the community meets:
 
 this is really nice. is there a possibility to make this interactive? that if someone clicks on it it's possible for them to filter and select the chapters
@@ -62,6 +72,8 @@ i'm curious to know if it will be possible to zoom and in out too
 because for example, now i can't really see the details in europe because everything is too clustered together
 also the world map now is missing russia. there are no events there but it is contentious to remove it
 i want you to keep the map which also reflects the proportions of the land mass size, so this is good
+
+**Action taken:** Fixed the Russia bug — the antimeridian-splitting code was discarding any ring segment with a longitude span > 90°, which threw out Russia's real ~170°-wide landmass along with true seam slivers. Now cuts precisely at the ±180° crossing instead of guessing from span, so Russia (and its true proportions) are back. Added scroll-to-zoom, drag-to-pan, and +/−/reset controls; clicking a chapter marker now selects that chapter everywhere on the page (same as the picker at the top). Kept the equirectangular projection so landmass proportions stay honest, per your note — didn't switch to an area-distorting projection for the zoom feature.
 
 ## chapters
 
@@ -73,15 +85,21 @@ in terms of the chapter detail, that's nice, and when there's a topic mix, that 
 
 for the "at a glance", it would be nice to have "cockpit" similar to the top.
 
+**Action taken:** Chapter comparison table now has a Status column (Active / At risk / Dormant) with a "what counts as..." definitions note, plus a region filter dropdown (using the same region classification as the growth chart). Chapter detail's topic mix bars now show this chapter's % alongside the community average % for the same category, so you can see over/under-indexing at a glance. "At a glance" is now a cockpit-style tile grid matching the top score-row style, instead of a plain list. Did not add distribution variance (e.g. stddev band) beyond the average comparison — flagging as a possible follow-up if the simple over/under % isn't enough.
+
 ## chapter details
 
 with the addresses of the events, i'm also curious to see where the events are held within a city. so it would be good if you could possibly plot these on a map. check whether each address can be plotted to a coordinate and see if there are venues (this is more on a chapter level) which get used often and more than once. and what their capacity is.
+
+**Action taken:** Added a "venues used more than once" card to chapter detail: a small map with markers sized by reuse count, plus a ranked list. Important caveat — this does **not** use real street-level geocoding. There's no geocoding API in the build pipeline (kept offline/reproducible on purpose), so each venue gets a deterministic small offset from the chapter's city center, just enough to plot distinct, stable markers and show which venues repeat — the marker positions are not their real locations within the city. Flagged this clearly in the section subtext and footnote. Capacity isn't in the enriched data (only `attendees` per event, not venue capacity), so it isn't shown; if you want it, the enrichment prompt would need to start extracting a capacity field where mentioned.
 
 ## talks and speakers: 
 
 i want to be able to do more filtering and sort by, for example, by date, sort bys, etc.
 
 for the speaker, allow me to expand to see which were teh talks that they did. if possible, if you can find their public profile (on linkedin), include a link to that as well, and state what they do. most of them are vendors so they have some interests.
+
+**Action taken:** Added a sort dropdown to talk search (newest/oldest/most attended/speaker A–Z), on top of the existing chapter filter and text search. Each speaker in "speakers who travel the circuit" is now expandable (click the row) to show their talk history with dates, chapters, and event links. **Not done:** LinkedIn profile lookup and "what they do" bios. That's a manual research task across ~45 repeat speakers, not something I can generate or guess reliably — doing it properly means actually looking each person up, and I didn't want to fabricate plausible-looking bios/links. Happy to do a real pass on this if you want it as a separate task, ideally scoped to a shortlist (e.g. speakers with 3+ chapters) rather than all 45.
 
 ## good visualisation principles:
 
