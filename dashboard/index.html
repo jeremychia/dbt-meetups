@@ -149,23 +149,6 @@
   .stat-tile .stat-value { font-size: 24px; font-weight: 700; line-height: 1.1; display: flex; align-items: baseline; gap: 6px; }
   .stat-tile .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; display: flex; align-items: center; gap: 5px; }
   .stat-tile .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
-  .stat-tile.has-action .stat-label { color: #cc5511; }
-  @media (prefers-color-scheme: dark) { .stat-tile.has-action .stat-label { color: #ffb84d; } }
-  :root[data-theme="dark"] .stat-tile.has-action .stat-label { color: #ffb84d; }
-  :root[data-theme="light"] .stat-tile.has-action .stat-label { color: #cc5511; }
-
-  /* insight vs. action framing: a plain-text tag rather than color alone,
-     so the distinction survives grayscale/print and doesn't rely on the
-     same amber used for at-risk status chips carrying two meanings. */
-  .insight-tag, .action-tag {
-    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.02em;
-    padding: 1px 6px; border-radius: 4px; text-transform: uppercase;
-  }
-  .insight-tag { background: var(--surface-1); color: var(--text-muted); border: 1px solid var(--border); }
-  .action-tag { background: color-mix(in srgb, #d68a00 20%, transparent); color: #cc5511; }
-  @media (prefers-color-scheme: dark) { .action-tag { background: color-mix(in srgb, #ffb84d 25%, transparent); color: #ffb84d; } }
-  :root[data-theme="dark"] .action-tag { background: color-mix(in srgb, #ffb84d 25%, transparent); color: #ffb84d; }
-  :root[data-theme="light"] .action-tag { background: color-mix(in srgb, #d68a00 20%, transparent); color: #cc5511; }
 
   .action-dot {
     width: 8px; height: 8px; border-radius: 50%; background: var(--series-3); flex-shrink: 0;
@@ -504,7 +487,6 @@
     </div>
 
     <div class="stat-row" id="stat-row"></div>
-    <p class="section-sub" style="margin:-14px 0 20px;"><span class="insight-tag">Insight</span> tiles are context to be aware of; <span class="action-tag">Action</span> tiles flag something worth following up on.</p>
 
     <nav class="group-nav">
       <button type="button" data-page="group-overview">Overview</button>
@@ -1060,20 +1042,12 @@ function renderStatRow() {
   const activeChaptersPop = pctChange(w.activeChapters, w.priorActiveChapters);
   const windowLabel = trailingMonths >= 24 ? `last ${Math.round(trailingMonths / 12)}yr` : `last ${trailingMonths}mo`;
 
-  // The Chapters tile is the one score card with a genuine "go do
-  // something" signal (at-risk chapters trending toward dormant); the
-  // rest are volume/trend context. Tagged Action vs. Insight rather than
-  // color alone, per the "differentiate insightful vs. actionable"
-  // dashboard-design note.
-  const chaptersIsAction = c ? c.is_at_risk : s.at_risk_chapters > 0;
-
   const tiles = [
     {
       label: 'Chapters',
       value: fmt(c ? 1 : s.total_chapters),
       sub: c ? chapterName(c.slug) : `${fmt(w.activeChapters)} active (${windowLabel}) · ${fmt(dormantChapters)} dormant ${fmtDelta(activeChaptersPop)}${s.at_risk_chapters ? ` · ${s.at_risk_chapters} at risk` : ''}`,
       page: 'group-chapters',
-      isAction: chaptersIsAction,
     },
     {
       label: `Events (${windowLabel})`,
@@ -1101,9 +1075,9 @@ function renderStatRow() {
     },
   ];
   document.getElementById('stat-row').innerHTML = tiles.map(t => `
-    <div class="stat-tile${t.isAction ? ' has-action' : ''}" data-page="${t.page}" style="cursor:pointer;" tabindex="0" role="button">
+    <div class="stat-tile" data-page="${t.page}" style="cursor:pointer;" tabindex="0" role="button">
       <div class="stat-value">${t.value}</div>
-      <div class="stat-label">${t.label}${t.isAction ? ' <span class="action-tag">Action</span>' : ' <span class="insight-tag">Insight</span>'}</div>
+      <div class="stat-label">${t.label}</div>
       <div class="stat-sub">${t.sub}</div>
     </div>
   `).join('');
