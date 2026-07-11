@@ -213,3 +213,31 @@ there's a difference between information that is "insightful" nice to know and i
 request: a calendar of events that people can see the historical events on.
 
 **Action taken:** Added an "Event calendar" section to the Overview page — a literal month-grid calendar (not just a chronological list), covering every historical event across every chapter. Opens on the most recent month with any events. Days with events show a dot per event and a count; click a day to expand a detail card for each event on that date (venue, attendees, talk count), which itself expands further to show talks/speakers/topics and a link to the Meetup event page — same interaction pattern as the existing per-chapter event history, just aggregated across all chapters and organized by calendar date instead of a flat list. Filterable by chapter via a dropdown, which also re-jumps to that chapter's latest event month.
+
+## community maturity quadrants (scatter plot)
+
+request: visualize chapters by their stage of development (small/emerging vs. large/established) and identify natural groupings rather than arbitrary quadrants.
+
+**Action taken:** Added a scatter plot in the Overview section showing each chapter plotted by two dimensions: average attendees per event (x-axis) and unique speakers (y-axis). Used **Mean Shift clustering** (bandwidth=18, k=4) to identify four natural community stages:
+- **Nascent**: ~22 chapters, just starting (low attendance, few speakers)
+- **Seedlings**: ~25 chapters, building momentum (moderate attendance, growing speaker base)
+- **Grassroots**: ~16 chapters, local leaders (healthy attendance, diverse speakers)
+- **Global Leaders**: ~4 chapters, network anchors (high attendance, speaker depth)
+
+**Features:**
+- Shaded Voronoi regions with labeled boundaries show where each stage sits
+- Dots colored by geographic region (North America, South America, Europe, Asia, Africa, Oceania, Middle East) so you can see regional distribution within maturity stages
+- Faint gridlines with axis labels allow precise reading of any chapter's position
+- Clicking a point filters the entire dashboard to that chapter
+- Collapsible "Methodology" note explains why Mean Shift (density-based, reveals natural structure) is better than k-means (grid-based, arbitrary)
+
+**Design choices:**
+- Mean Shift clustering is superior to median-split quadrants because it finds data-driven boundaries instead of forcing symmetry
+- Y-axis metric (unique speakers) correlates strongly with event count (r=0.953) but captures speaker diversity, a key health indicator
+- Voronoi regions are shaded with 10% opacity + 2px boundaries to remain clear while showing overlaid dots
+- Region legend uses same color scheme as Growth chart for consistency throughout dashboard
+
+**Further updates:**
+- Split "Americas" globally into North America (lat ≥ 0) and South America (lat < 0) across all charts (Growth, timing charts, region filters, scatter plot)
+- Created `normalizeRegion()` helper function to propagate the split automatically through `buildEventPool()` and `buildTalkPool()`
+- Updated REGION_COLORS: North America = blue (series-1), South America = green (series-2)

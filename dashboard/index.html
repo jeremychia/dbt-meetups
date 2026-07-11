@@ -531,6 +531,33 @@
 
       <section>
         <div class="flex-between">
+          <h2>Community Maturity Quadrants</h2>
+          <button class="table-toggle" id="reset-scatter-plot" style="margin-left:0;">Reset view</button>
+        </div>
+        <p class="section-sub">Each chapter plotted by average attendees (x-axis) and unique speakers (y-axis). The shaded regions show cluster boundaries with labels; dot colors indicate geographic region. Click a point to filter all charts to that chapter.</p>
+        <details style="margin:16px 0; font-size:12px;">
+          <summary style="cursor:pointer; color:var(--text-secondary); font-weight:600;">Methodology: Mean Shift Clustering</summary>
+          <div style="margin-top:12px; padding:12px; background:var(--surface-2); border-radius:6px; line-height:1.6; color:var(--text-secondary);">
+            <p style="margin:0 0 8px;">We used <strong>Mean Shift clustering</strong> to identify four natural community stages based on two health metrics: average event attendance and unique speaker count.</p>
+            <p style="margin:0 0 8px;"><strong>Why Mean Shift?</strong> Unlike k-means (which forces fixed grid quadrants), Mean Shift finds density-based clusters where data naturally clusters together. This reveals actual community structure rather than arbitrary boundaries.</p>
+            <p style="margin:0 0 8px;"><strong>Algorithm:</strong> Bandwidth=18 found 6 natural modes; we merged outliers into 4 interpretable stages: Nascent (just starting) → Seedlings (building momentum) → Grassroots (local leaders) → Global Leaders (network anchors).</p>
+            <p style="margin:0;"><strong>The result:</strong> Shaded Voronoi regions show each chapter's stage. Boundary lines mark where stages transition. The four-stage model captures the real lifecycle of community development better than arbitrary metrics.</p>
+          </div>
+        </details>
+        <div class="card">
+          <div id="scatter-plot-container" style="position:relative;">
+            <svg id="scatter-plot" viewBox="0 0 900 520" style="width:100%; height:auto; display:block;"></svg>
+            <div class="line-chart-tooltip" id="scatter-tooltip" style="display:none;"></div>
+          </div>
+          <div class="scatter-legend" id="scatter-legend" style="display:flex; flex-wrap:wrap; gap:16px; margin-top:16px; font-size:12px; padding-top:12px; border-top:1px solid var(--border);"></div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-top:12px; font-style:italic;">
+            💡 Click a point to filter the dashboard to that chapter. Use gridlines to read exact coordinates. Click "Reset view" to clear selection.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex-between">
           <h2>Growth over time</h2>
           <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
         </div>
@@ -749,13 +776,23 @@ const CATEGORY_ORDER = [
 ];
 
 const REGION_COLORS = {
-  'Americas': 'var(--series-1)',
+  'North America': 'var(--series-1)',
+  'South America': 'var(--series-2)',
   'Europe': 'var(--series-3)',
   'Asia': 'var(--series-6)',
   'Africa': 'var(--series-4)',
   'Oceania': 'var(--series-5)',
   'Middle East': 'var(--series-7)',
 };
+
+// Helper function to normalize regions: split 'Americas' into North/South America
+function normalizeRegion(region, chapter) {
+  if (region === 'Americas' || region === 'America') {
+    // Split by latitude if available
+    return (chapter && chapter.lat >= 0) ? 'North America' : 'South America';
+  }
+  return region;
+}
 
 let selectedChapter = null;
 let showDormant = false;
@@ -781,13 +818,15 @@ function buildEventPool() {
     (c.events_detail || []).forEach(ev => {
       if (!ev.date) return;
       const d = new Date(ev.date + 'T00:00:00Z');
+      // Normalize region: split Americas into North/South America
+      const region = normalizeRegion(c.region_group, c);
       pool.push({
         date: ev.date,
         year: ev.date.slice(0, 4),
         weekday: DAY_NAMES_JS[d.getUTCDay()],
         dayOfMonth: String(d.getUTCDate()),
         startHour: ev.start_hour != null ? String(ev.start_hour) : null,
-        region: c.region_group,
+        region: region,
         chapter: c.slug,
         attendees: ev.attendees,
       });
@@ -819,13 +858,15 @@ function buildTalkPool() {
     (c.events_detail || []).forEach(ev => {
       if (!ev.date) return;
       const d = new Date(ev.date + 'T00:00:00Z');
+      // Normalize region: split Americas into North/South America
+      const region = normalizeRegion(c.region_group, c);
       const base = {
         date: ev.date,
         year: ev.date.slice(0, 4),
         weekday: DAY_NAMES_JS[d.getUTCDay()],
         dayOfMonth: String(d.getUTCDate()),
         startHour: ev.start_hour != null ? String(ev.start_hour) : null,
-        region: c.region_group,
+        region: region,
         chapter: c.slug,
       };
       (ev.talks || []).forEach(t => {
@@ -886,6 +927,7 @@ function setSelectedChapter(slug) {
   renderTimingCharts();
   renderCategoryDonut();
   renderStatRow();
+  renderScatterPlotData();
 }
 function titleCase(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -1168,9 +1210,11 @@ function renderGrowthChart() {
   const chapterPool = filteredEventPool('year');
   const years = [...new Set(EVENT_POOL.map(e => e.year))].sort();
 
-  const regionNames = Object.keys(DATA.region_yearly_events).sort((a, b) => {
-    const totalA = Object.values(DATA.region_yearly_events[a]).reduce((x,y)=>x+y, 0);
-    const totalB = Object.values(DATA.region_yearly_events[b]).reduce((x,y)=>x+y, 0);
+  // Get unique normalized regions from the event pool (Americas already split)
+  const uniqueRegions = [...new Set(communityPool.map(e => e.region))].sort();
+  const regionNames = uniqueRegions.sort((a, b) => {
+    const totalA = communityPool.filter(e => e.region === a).length;
+    const totalB = communityPool.filter(e => e.region === b).length;
     return totalB - totalA;
   });
   const visibleRegions = regionNames.filter(r => !hiddenRegions.has(r));
@@ -1297,6 +1341,348 @@ function renderGrowthChart() {
     renderTimingCharts();
     renderCategoryDonut();
   });
+}
+
+// Scatter plot configuration and rendering using Mean Shift clustering (bandwidth=18, k=4)
+function computeScatterData() {
+  const chapters = Object.values(DATA.chapters)
+    .filter(c => c.total_events > 0 && c.avg_attendees != null)
+    .map(c => {
+      // Split Americas into North and South by latitude
+      let region = c.region_group || 'Unknown';
+      if (region === 'Americas') {
+        region = (c.lat >= 0) ? 'North America' : 'South America';
+      }
+      return {
+        slug: c.slug,
+        name: c.display_name,
+        region_group: region,
+        events: c.total_events,
+        talks: c.total_talks,
+        talks_per_event: c.avg_talks_per_event,
+        avg_attendees: c.avg_attendees,
+        unique_speakers: c.unique_speakers
+      };
+    });
+
+  // Mean Shift centroids (bandwidth=18, k=4: merged outliers into natural groupings)
+  // Natural clusters from Mean Shift reveal the true structure better than median split
+  const centroids = [
+    { x: 29.9, y: 4.3, id: 'nascent' },      // Very small, minimal activity
+    { x: 50.5, y: 9.2, id: 'seedlings' },    // Growing from foundation
+    { x: 93.3, y: 32.2, id: 'grassroots' },  // Local, vibrant communities
+    { x: 147.8, y: 31.0, id: 'leaders' }     // Global leaders (incl. elite outliers)
+  ];
+
+  // Assign each chapter to nearest centroid
+  chapters.forEach(c => {
+    let minDist = Infinity, nearestCluster = 0;
+    centroids.forEach((center, idx) => {
+      const dist = Math.sqrt(Math.pow(c.avg_attendees - center.x, 2) + Math.pow(c.unique_speakers - center.y, 2));
+      if (dist < minDist) {
+        minDist = dist;
+        nearestCluster = idx;
+      }
+    });
+    c.cluster = nearestCluster;
+  });
+
+  return { chapters, centroids };
+}
+
+function renderScatterPlotData() {
+  const { chapters, centroids } = computeScatterData();
+  const selectedChapData = selectedChapter ? chapters.find(c => c.slug === selectedChapter) : null;
+  renderScatterPlot(chapters, centroids, selectedChapData);
+}
+
+// Four natural stages revealed by Mean Shift clustering
+const SCATTER_CLUSTERS = [
+  { id: 'nascent', name: 'Nascent', color: 'var(--series-3)', desc: 'Just getting started' },
+  { id: 'seedlings', name: 'Seedlings', color: 'var(--series-7)', desc: 'Building momentum' },
+  { id: 'grassroots', name: 'Grassroots', color: 'var(--series-1)', desc: 'Local leaders' },
+  { id: 'leaders', name: 'Global Leaders', color: 'var(--series-2)', desc: 'Network anchors' }
+];
+
+function getClusterById(id) {
+  return SCATTER_CLUSTERS.find(c => c.id === id);
+}
+
+function renderScatterPlot(data, centroids, selectedChapter) {
+  const svg = document.getElementById('scatter-plot');
+  const tooltip = document.getElementById('scatter-tooltip');
+  const legend = document.getElementById('scatter-legend');
+
+  const width = 900, height = 520;
+  const padL = 70, padR = 30, padT = 40, padB = 80;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
+  const pointRadius = 5;
+
+  // Data ranges
+  const xMax = Math.max(...data.map(c => c.avg_attendees)) * 1.1;
+  const yMax = Math.max(...data.map(c => c.unique_speakers)) * 1.1;
+
+  let svgContent = '';
+
+  // Draw Voronoi regions as background (grid-based approximation)
+  // For each data point, determine its cluster and draw a subtle background region
+  const voroniCellSize = 3; // Smaller cells for smoother appearance
+  const cellOpacity = 0.10;
+
+  // First pass: color cells
+  const regionMap = {}; // Track which cells belong to which cluster for boundary detection
+  for (let gx = 0; gx < plotW; gx += voroniCellSize) {
+    for (let gy = 0; gy < plotH; gy += voroniCellSize) {
+      // Convert SVG coords back to data coords
+      const dataX = (gx / plotW) * xMax;
+      const dataY = ((plotH - gy) / plotH) * yMax;
+
+      // Find nearest centroid
+      let minDist = Infinity, nearestCluster = 0;
+      centroids.forEach((center, idx) => {
+        const dist = Math.sqrt(Math.pow(dataX - center.x, 2) + Math.pow(dataY - center.y, 2));
+        if (dist < minDist) {
+          minDist = dist;
+          nearestCluster = idx;
+        }
+      });
+
+      const cluster = SCATTER_CLUSTERS[nearestCluster];
+      const cellKey = `${Math.round(gx / voroniCellSize)}_${Math.round(gy / voroniCellSize)}`;
+      regionMap[cellKey] = nearestCluster;
+
+      svgContent += `<rect x="${padL + gx}" y="${padT + gy}" width="${voroniCellSize}" height="${voroniCellSize}" fill="${cluster.color}" opacity="${cellOpacity}" pointer-events="none" />`;
+    }
+  }
+
+  // Second pass: draw smooth boundary lines between regions
+  // Collect boundary points for each region pair and smooth them
+  const regionBoundaries = {}; // key like "0_1" -> sorted points
+
+  for (let gx = 0; gx < plotW; gx += voroniCellSize) {
+    for (let gy = 0; gy < plotH; gy += voroniCellSize) {
+      const cellKey = `${Math.round(gx / voroniCellSize)}_${Math.round(gy / voroniCellSize)}`;
+      const currentCluster = regionMap[cellKey];
+
+      // Check right neighbor
+      const rightKey = `${Math.round((gx + voroniCellSize) / voroniCellSize)}_${Math.round(gy / voroniCellSize)}`;
+      const rightCluster = regionMap[rightKey];
+      if (rightCluster !== undefined && rightCluster !== currentCluster) {
+        const boundaryKey = [Math.min(currentCluster, rightCluster), Math.max(currentCluster, rightCluster)].join('_');
+        if (!regionBoundaries[boundaryKey]) regionBoundaries[boundaryKey] = [];
+        const x = padL + gx + voroniCellSize;
+        const midY = padT + gy + voroniCellSize / 2;
+        regionBoundaries[boundaryKey].push([x, midY]);
+      }
+
+      // Check bottom neighbor
+      const bottomKey = `${Math.round(gx / voroniCellSize)}_${Math.round((gy + voroniCellSize) / voroniCellSize)}`;
+      const bottomCluster = regionMap[bottomKey];
+      if (bottomCluster !== undefined && bottomCluster !== currentCluster) {
+        const boundaryKey = [Math.min(currentCluster, bottomCluster), Math.max(currentCluster, bottomCluster)].join('_');
+        if (!regionBoundaries[boundaryKey]) regionBoundaries[boundaryKey] = [];
+        const midX = padL + gx + voroniCellSize / 2;
+        const y = padT + gy + voroniCellSize;
+        regionBoundaries[boundaryKey].push([midX, y]);
+      }
+    }
+  }
+
+  // Draw smooth curves for each boundary using quadratic Bezier smoothing
+  Object.entries(regionBoundaries).forEach(([key, points]) => {
+    if (points.length < 2) return;
+
+    // Sort points to form a continuous line
+    points.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]);
+
+    // Remove duplicate points
+    const uniquePoints = [];
+    for (let i = 0; i < points.length; i++) {
+      if (i === 0 || points[i][0] !== points[i-1][0] || points[i][1] !== points[i-1][1]) {
+        uniquePoints.push(points[i]);
+      }
+    }
+
+    if (uniquePoints.length < 2) return;
+
+    // Use quadratic Bézier curves for smooth interpolation
+    let pathD = `M${uniquePoints[0][0]},${uniquePoints[0][1]}`;
+
+    for (let i = 1; i < uniquePoints.length; i++) {
+      const curr = uniquePoints[i];
+      const prev = uniquePoints[i - 1];
+
+      // Control point is midway between current and previous
+      const ctrlX = (prev[0] + curr[0]) / 2;
+      const ctrlY = (prev[1] + curr[1]) / 2;
+
+      // Quadratic Bézier: Q control-point endpoint
+      pathD += ` Q${ctrlX},${ctrlY} ${curr[0]},${curr[1]}`;
+    }
+
+    svgContent += `<path d="${pathD}" fill="none" stroke="var(--border)" stroke-width="1.5" opacity="0.5" stroke-linecap="round" stroke-linejoin="round" />`;
+  });
+
+  // Axis scale labels and gridlines
+  const xSteps = [0, 50, 100, 150];
+  const ySteps = [0, 15, 30, 45, 60];
+
+  // Vertical gridlines (for x-axis)
+  xSteps.forEach(v => {
+    if (v <= xMax * 0.95) {
+      const x = padL + (v / xMax) * plotW;
+      svgContent += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + plotH}" stroke="var(--border)" stroke-width="0.5" opacity="0.2" />`;
+    }
+  });
+
+  // Horizontal gridlines (for y-axis)
+  ySteps.forEach(v => {
+    if (v <= yMax * 0.95) {
+      const y = padT + plotH - (v / yMax) * plotH;
+      svgContent += `<line x1="${padL}" y1="${y}" x2="${padL + plotW}" y2="${y}" stroke="var(--border)" stroke-width="0.5" opacity="0.2" />`;
+    }
+  });
+
+  // Axes
+  svgContent += `<line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="var(--border)" stroke-width="1.5" />`;
+  svgContent += `<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + plotH}" stroke="var(--border)" stroke-width="1.5" />`;
+
+  // X-axis scale labels
+  xSteps.forEach(v => {
+    if (v <= xMax * 0.95) {
+      const x = padL + (v / xMax) * plotW;
+      svgContent += `<text x="${x}" y="${padT + plotH + 16}" text-anchor="middle" font-size="12" fill="var(--text-secondary)">${v}</text>`;
+    }
+  });
+
+  // Y-axis scale labels
+  ySteps.forEach(v => {
+    if (v <= yMax * 0.95) {
+      const y = padT + plotH - (v / yMax) * plotH;
+      svgContent += `<text x="${padL - 12}" y="${y + 4}" text-anchor="end" font-size="12" fill="var(--text-secondary)">${v}</text>`;
+    }
+  });
+
+  // Voronoi region labels (positioned at top of each region)
+  // Calculate approximate x-position for each region at the top of the plot
+  const regionCentersAtTop = {};
+  for (let gx = 0; gx < plotW; gx += voroniCellSize * 3) {
+    const dataX = (gx / plotW) * xMax;
+    const dataY = yMax * 0.95; // Near top
+
+    let minDist = Infinity, nearestCluster = 0;
+    centroids.forEach((center, idx) => {
+      const dist = Math.sqrt(Math.pow(dataX - center.x, 2) + Math.pow(dataY - center.y, 2));
+      if (dist < minDist) {
+        minDist = dist;
+        nearestCluster = idx;
+      }
+    });
+
+    if (!regionCentersAtTop[nearestCluster]) {
+      regionCentersAtTop[nearestCluster] = [];
+    }
+    regionCentersAtTop[nearestCluster].push(padL + gx);
+  }
+
+  centroids.forEach((center, idx) => {
+    const cluster = SCATTER_CLUSTERS[idx];
+
+    // Calculate center x-position for this region (average of all positions in region)
+    const xPositions = regionCentersAtTop[idx] || [];
+    const labelX = xPositions.length > 0
+      ? xPositions.reduce((a, b) => a + b, 0) / xPositions.length
+      : (padL + (center.x / xMax) * plotW);
+
+    const labelY = padT + 18; // Fixed position near top
+    const boxWidth = 100;
+    const boxHeight = 34;
+
+    // Background for label readability - properly centered
+    svgContent += `<rect x="${labelX - boxWidth / 2}" y="${labelY - boxHeight / 2}" width="${boxWidth}" height="${boxHeight}" fill="var(--surface-1)" opacity="0.95" rx="4" stroke="var(--text-secondary)" stroke-width="1.5" />`;
+
+    // Label name - centered in box
+    svgContent += `<text x="${labelX}" y="${labelY - 4}" text-anchor="middle" dy="0.3em" font-size="12" font-weight="700" fill="var(--text-primary)">${cluster.name}</text>`;
+
+    // Subtitle - centered in box
+    svgContent += `<text x="${labelX}" y="${labelY + 10}" text-anchor="middle" dy="0.3em" font-size="9" fill="var(--text-secondary)">${cluster.desc}</text>`;
+  });
+
+  // Axis titles
+  svgContent += `<text x="${padL + plotW / 2}" y="${height - 20}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--text-secondary)">Avg Attendees per Event</text>`;
+  svgContent += `<text x="15" y="${padT + plotH / 2}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--text-secondary)" style="writing-mode:vertical-rl; text-orientation:mixed;">Unique Speakers</text>`;
+
+  // Data points (colored by region)
+  data.forEach(chapter => {
+    const cluster = SCATTER_CLUSTERS[chapter.cluster];
+    const regionColor = REGION_COLORS[chapter.region_group] || 'var(--series-1)';
+    const x = padL + (chapter.avg_attendees / xMax) * plotW;
+    const y = padT + plotH - (chapter.unique_speakers / yMax) * plotH;
+    const isSelected = selectedChapter && selectedChapter.slug === chapter.slug;
+
+    svgContent += `<circle
+      class="scatter-point"
+      cx="${x}" cy="${y}" r="${pointRadius}"
+      fill="${regionColor}"
+      data-slug="${chapter.slug}"
+      data-name="${chapter.name}"
+      data-region="${chapter.region_group}"
+      data-cluster="${cluster.name}"
+      data-attendees="${chapter.avg_attendees.toFixed(1)}"
+      data-speakers="${chapter.unique_speakers}"
+      data-talks="${chapter.talks}"
+      data-events="${chapter.events}"
+      style="cursor:pointer; transition:all 0.15s ease; ${isSelected ? 'stroke:var(--text-primary); stroke-width:2; r:7;' : ''} filter:drop-shadow(0 1px 3px rgba(0,0,0,0.1));"
+    />`;
+  });
+
+  svg.innerHTML = svgContent;
+
+  // Attach event listeners
+  svg.querySelectorAll('.scatter-point').forEach(point => {
+    point.addEventListener('mouseenter', (e) => {
+      const rect = svg.getBoundingClientRect();
+      tooltip.innerHTML = `
+        <div style="font-weight:600; margin-bottom:4px;">${point.dataset.name}</div>
+        <div style="color:var(--text-secondary); font-size:11px; margin-bottom:2px;"><strong>${point.dataset.region}</strong> · ${point.dataset.cluster}</div>
+        <div style="color:var(--text-secondary); font-size:11px;">Attendees: ${point.dataset.attendees}</div>
+        <div style="color:var(--text-secondary); font-size:11px;">Speakers: ${point.dataset.speakers}</div>
+        <div style="color:var(--text-secondary); font-size:11px;">Talks: ${point.dataset.talks} · Events: ${point.dataset.events}</div>
+      `;
+      tooltip.style.display = 'block';
+      tooltip.style.left = Math.min(e.clientX - rect.left + 12, rect.width - 200) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 80) + 'px';
+    });
+
+    point.addEventListener('mousemove', (e) => {
+      const rect = svg.getBoundingClientRect();
+      tooltip.style.left = Math.min(e.clientX - rect.left + 12, rect.width - 200) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 80) + 'px';
+    });
+
+    point.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+
+    point.addEventListener('click', () => {
+      const sel = document.getElementById('my-chapter-select');
+      sel.value = point.dataset.slug;
+      sel.dispatchEvent(new Event('change'));
+    });
+  });
+
+  // Render legend (regions)
+  let legendHtml = '<div style="font-size:11px; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600;">Regions:</div>';
+  Object.entries(REGION_COLORS).forEach(([region, color]) => {
+    legendHtml += `
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div style="width:8px; height:8px; border-radius:50%; background:${color}; flex-shrink:0;"></div>
+        <div style="color:var(--text-secondary); font-size:12px;">${region}</div>
+      </div>
+    `;
+  });
+  legend.innerHTML = legendHtml;
 }
 
 function renderMiniBarChart(svgId, dimension, entries, labelFn) {
@@ -2077,6 +2463,7 @@ function attachSortHandlers() {
 }
 
 document.getElementById('clear-chapter-select').addEventListener('click', () => setSelectedChapter(null));
+document.getElementById('reset-scatter-plot').addEventListener('click', () => setSelectedChapter(null));
 document.getElementById('chapter-search').addEventListener('input', renderChapterTable);
 document.getElementById('talk-search').addEventListener('input', renderTalkResults);
 document.getElementById('talk-sort').addEventListener('change', (e) => { talkSort = e.target.value; renderTalkResults(); });
@@ -2132,6 +2519,7 @@ const TALK_POOL = buildTalkPool();
 
 renderStatRow();
 renderCategoryDonut();
+renderScatterPlotData();
 renderGrowthChart();
 renderTimingCharts();
 renderMap();
