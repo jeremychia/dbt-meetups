@@ -17,7 +17,7 @@ pipeline/run_pipeline.sh --slugs oslo-dbt-group,berlin-dbt-meetup
 SKIP_SCRAPE=1 pipeline/run_pipeline.sh                     # re-enrich/rebuild only
 ```
 
-The script bootstraps `.venv/` with Playwright + Chromium on first run.
+The script bootstraps `.venv/` with Playwright + Chromium on first run. It's shell-agnostic (works with `bash`, `sh`, `zsh`, etc.).
 
 ## Steps
 

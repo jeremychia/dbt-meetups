@@ -26,20 +26,28 @@ if ! "$PY" -c "import playwright, numpy, shapely" >/dev/null 2>&1; then
   .venv/bin/python -m playwright install chromium
 fi
 
-SLUGS_ARGS=()
+SLUGS_ARG=""
 if [ "${1:-}" = "--slugs" ] && [ -n "${2:-}" ]; then
-  SLUGS_ARGS=(--slugs "$2")
+  SLUGS_ARG="$2"
 fi
 
 if [ "${SKIP_SCRAPE:-0}" != "1" ]; then
   echo "== 1/4 scrape =="
-  "$PY" pipeline/scrape.py "${SLUGS_ARGS[@]}"
+  if [ -n "$SLUGS_ARG" ]; then
+    "$PY" pipeline/scrape.py --slugs "$SLUGS_ARG"
+  else
+    "$PY" pipeline/scrape.py
+  fi
 else
   echo "== 1/4 scrape (skipped) =="
 fi
 
 echo "== 2/4 enrich =="
-"$PY" pipeline/enrich.py "${SLUGS_ARGS[@]}"
+if [ -n "$SLUGS_ARG" ]; then
+  "$PY" pipeline/enrich.py --slugs "$SLUGS_ARG"
+else
+  "$PY" pipeline/enrich.py
+fi
 
 echo "== 3/4 speakers =="
 "$PY" pipeline/update_speakers.py
