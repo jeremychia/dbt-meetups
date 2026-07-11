@@ -8,6 +8,7 @@ to the profile directory for reuse by scrape.py.
 Note: the scraper currently works anonymously for public groups; login is only
 needed if Meetup starts gating event pages.
 """
+
 import time
 
 from playwright.sync_api import sync_playwright
@@ -16,13 +17,17 @@ import config
 
 TIMEOUT_SECONDS = 300
 
+
 def is_logged_in(page) -> bool:
     try:
-        return page.locator("[data-testid='member-dropdown']").count() > 0 \
-            or page.locator("a[href*='/members/']").count() > 0 \
+        return (
+            page.locator("[data-testid='member-dropdown']").count() > 0
+            or page.locator("a[href*='/members/']").count() > 0
             or "meetup.com/home" in page.url
+        )
     except Exception:
         return False
+
 
 def main():
     with sync_playwright() as p:
@@ -47,6 +52,7 @@ def main():
         time.sleep(2)
         context.close()
         print(f"Session saved to {config.PROFILE_DIR}")
+
 
 if __name__ == "__main__":
     main()

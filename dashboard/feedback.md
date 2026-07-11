@@ -20,7 +20,7 @@ once the change has been made, append what the action taken was in the subsectio
 **Action taken:** Moved the chapter picker + date-range slider into a sticky bar at the very top of the page, above the score cards, so it drives every section below it. Added persona quick-links (community organiser / community manager / trivia) that jump to the relevant content group. Replaced conclusory copy ("the community has grown 15x...") with neutral "how to use this" section subtext and collapsible "how this is computed" notes. Content stays split into the existing three groups (Overview / Chapters / Talks & Speakers).
 
 **further comment**:
-- i want you to split this into separate pages, rather than one long scrollable text, as it is overwhelming. 
+- i want you to split this into separate pages, rather than one long scrollable text, as it is overwhelming.
 - the date-range slider needs event listeners. it doesn't do anything now when you move it. make sure that the scorecards move as well
 - "overview", "chapters", "talks & speakers" don't work anymore
 
@@ -30,8 +30,8 @@ once the change has been made, append what the action taken was in the subsectio
 
 
 - it's more interesting to look in terms of a 1 year trending moment. and to see the change year on year.
-  
-- consider all putting in the "all-time" numbers but that's more 
+
+- consider all putting in the "all-time" numbers but that's more
 
 - chapters: more interesting to show number of 'active' chapters (i.e. number of chapters which had an event in the last 1 year). you can also show in the subtext what are the number of chapters which are dormant. also show what is the % change of chapters which are active from last year
 
@@ -79,7 +79,7 @@ the visualisation should be a donut chart with tooltips instead of a bar chart i
 
 **further comments**:
 - can you define what is in which category please?
-- also i want it to be two columns: one column with the categories lines pointing out to show which is which, 
+- also i want it to be two columns: one column with the categories lines pointing out to show which is which,
 - and the second column is showing the talks and their descriptions, and include the link to the event as well pelase
 
 **Action taken (follow-up):** Section is now two columns: donut + legend on the left, definition + sample talks on the right. Clicking a slice/legend row shows the real list of topics that roll into that category (sourced directly from the `CATEGORY_MAP` lookup table used to build the data, not hand-written text, so it can't drift out of sync) plus sample talks with their descriptions and a link to the source event. Implemented the category breakdown as chips under a heading rather than literal leader-lines pointing from the donut — SVG leader-lines that stay legible across chart sizes and both themes are a lot more fragile than a definitions list, and the effect (know which topics are in which category) is the same.
@@ -163,7 +163,7 @@ with the addresses of the events, i'm also curious to see where the events are h
 **Action taken:** Added a "venues used more than once" card to chapter detail: a small map with markers sized by reuse count, plus a ranked list. Important caveat — this does **not** use real street-level geocoding. There's no geocoding API in the build pipeline (kept offline/reproducible on purpose), so each venue gets a deterministic small offset from the chapter's city center, just enough to plot distinct, stable markers and show which venues repeat — the marker positions are not their real locations within the city. Flagged this clearly in the section subtext and footnote. Capacity isn't in the enriched data (only `attendees` per event, not venue capacity), so it isn't shown; if you want it, the enrichment prompt would need to start extracting a capacity field where mentioned.
 
 **further comments 2**:
-- i can't see the placement on the map though. 
+- i can't see the placement on the map though.
 - can you check? for singapore, i expect that open sourced is also a venue that appears more than once. is it because you did not do the geocoding?
 - for the average, don't you think there is a more suitable visualisation for this?
 - also for the "at a glance", what is the difference between the scorecards at the top?
@@ -178,7 +178,7 @@ with the addresses of the events, i'm also curious to see where the events are h
 
 **Action taken (follow-up 3):** Added a third 100%-stacked bar for the chapter's region average (e.g. "Asia avg" for Singapore), sitting between the chapter's own bar and the community-wide average — same category colors and order as before, computed from a new region-scoped category breakdown. Replaced the native tooltip (the browser's built-in `title` attribute, slow to appear and unstyled) with a proper styled hover tooltip matching the rest of the dashboard, showing the exact talk count and share for whichever segment you're over; segments also brighten slightly on hover so it's clear they're interactive.
 
-## talks and speakers: 
+## talks and speakers:
 
 i want to be able to do more filtering and sort by, for example, by date, sort bys, etc.
 

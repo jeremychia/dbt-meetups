@@ -13,6 +13,7 @@ variants are handled conservatively:
 
 Idempotent: rerunning without new data changes nothing.
 """
+
 import json
 import re
 import time
@@ -82,11 +83,19 @@ def main():
         # Prefer the variant with diacritics/most characters as canonical.
         canonical = existing_canonical or max(variants, key=len)
         merge = next(
-            (m for m in identities["canonical_merges"] if m["canonical_name"] == canonical),
+            (
+                m
+                for m in identities["canonical_merges"]
+                if m["canonical_name"] == canonical
+            ),
             None,
         )
         if merge is None:
-            merge = {"canonical_name": canonical, "variants": [], "method": "auto-exact-normalized"}
+            merge = {
+                "canonical_name": canonical,
+                "variants": [],
+                "method": "auto-exact-normalized",
+            }
             identities["canonical_merges"].append(merge)
         for v in variants:
             if v not in merge["variants"]:
@@ -118,11 +127,13 @@ def main():
             if pair in confirmed_different or pair in pending:
                 continue
             pending.add(pair)
-            new_pending.append({
-                "names": sorted(pair),
-                "similarity": round(ratio, 3),
-                "note": "fuzzy match involving a new speaker name — review and either add to canonical_merges or confirmed_different_people",
-            })
+            new_pending.append(
+                {
+                    "names": sorted(pair),
+                    "similarity": round(ratio, 3),
+                    "note": "fuzzy match involving a new speaker name — review and either add to canonical_merges or confirmed_different_people",
+                }
+            )
     if new_pending:
         identities.setdefault("pending_review", []).extend(new_pending)
 
@@ -142,11 +153,15 @@ def main():
         for cn, chs in chapters_by_canonical.items()
         if len(chs) > 1
     ]
-    repeat.sort(key=lambda r: (-len(r["chapters"]), -r["appearance_count"], r["canonical_name"]))
+    repeat.sort(
+        key=lambda r: (-len(r["chapters"]), -r["appearance_count"], r["canonical_name"])
+    )
     identities["repeat_speakers_across_chapters"] = repeat
     identities["generated"] = time.strftime("%Y-%m-%d")
 
-    config.SPEAKER_ID_FILE.write_text(json.dumps(identities, indent=2, ensure_ascii=False))
+    config.SPEAKER_ID_FILE.write_text(
+        json.dumps(identities, indent=2, ensure_ascii=False)
+    )
     print(
         f"speakers: {len(speakers)} raw names, {new_merges} exact-normalized merge(s) added, "
         f"{len(new_pending)} new pending-review pair(s), {len(repeat)} repeat speakers across chapters"

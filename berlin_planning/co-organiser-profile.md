@@ -78,7 +78,7 @@ Listen for: Comfort with async work, ability to follow a written plan and raise 
 
 ## Known Candidate Pool Reference
 
-**12 people have expressed interest.** Their companies:  
+**12 people have expressed interest.** Their companies:
 Qonto, Urban Sports Club, Rib Software, HTTP Archive, Enpal GmbH, T-Systems, Forto Logistics, Meinestadt.de, ex-Blinkist, Formel Skin, Solution Xpert.
 
 **Cross-check during screening:**

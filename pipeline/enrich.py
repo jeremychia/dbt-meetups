@@ -13,6 +13,7 @@ Usage:
     python pipeline/enrich.py --baseline          # mark all current raw/enriched gaps as reviewed
     python pipeline/enrich.py --dry-run
 """
+
 import argparse
 import glob
 import json
@@ -29,15 +30,32 @@ import config
 DEFAULT_MODEL = "claude-opus-4-8"
 
 TOPIC_VOCABULARY = [
-    "dbt best practices", "dbt fundamentals", "dbt product features",
-    "dbt product updates", "dbt migration & adoption", "data modeling",
-    "data quality & testing", "data governance", "data mesh",
-    "data engineering", "analytics engineering", "business intelligence",
-    "semantic layer", "orchestration & ci/cd", "performance & scale",
-    "modern data stack", "tools & ecosystem", "developer workflow",
-    "project structure", "genai & llm", "team & org design",
-    "career development", "community", "industry trends",
-    "domain-specific use cases", "data warehouse & platforms",
+    "dbt best practices",
+    "dbt fundamentals",
+    "dbt product features",
+    "dbt product updates",
+    "dbt migration & adoption",
+    "data modeling",
+    "data quality & testing",
+    "data governance",
+    "data mesh",
+    "data engineering",
+    "analytics engineering",
+    "business intelligence",
+    "semantic layer",
+    "orchestration & ci/cd",
+    "performance & scale",
+    "modern data stack",
+    "tools & ecosystem",
+    "developer workflow",
+    "project structure",
+    "genai & llm",
+    "team & org design",
+    "career development",
+    "community",
+    "industry trends",
+    "domain-specific use cases",
+    "data warehouse & platforms",
 ]
 
 PROMPT_TEMPLATE = """You are extracting structured data about a dbt meetup event from the raw text of its Meetup.com page.
@@ -81,8 +99,17 @@ Raw page text:
 ---"""
 
 REQUIRED_FIELDS = [
-    "event_url", "event_id", "event_name", "date", "time", "location",
-    "attendees", "agenda", "event_description", "talks", "additional_metadata",
+    "event_url",
+    "event_id",
+    "event_name",
+    "date",
+    "time",
+    "location",
+    "attendees",
+    "agenda",
+    "event_description",
+    "talks",
+    "additional_metadata",
 ]
 
 
@@ -94,7 +121,12 @@ def find_claude_bin() -> str:
     if which:
         return which
     candidates = sorted(
-        glob.glob(str(Path.home() / ".vscode/extensions/anthropic.claude-code-*/resources/native-binary/claude"))
+        glob.glob(
+            str(
+                Path.home()
+                / ".vscode/extensions/anthropic.claude-code-*/resources/native-binary/claude"
+            )
+        )
     )
     if candidates:
         return candidates[-1]
@@ -110,14 +142,19 @@ def load_state() -> dict:
 def save_state(state: dict) -> None:
     state["last_updated"] = time.strftime("%Y-%m-%d")
     config.ENRICHMENT_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
-    config.ENRICHMENT_STATE_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False))
+    config.ENRICHMENT_STATE_FILE.write_text(
+        json.dumps(state, indent=2, ensure_ascii=False)
+    )
 
 
 def load_enriched(slug: str) -> dict:
     path = config.ENRICHED_DIR / f"{slug}.json"
     if path.exists():
         return json.loads(path.read_text())
-    return {"events": [], "metadata": {"extraction_date": time.strftime("%Y-%m-%d"), "total_events": 0}}
+    return {
+        "events": [],
+        "metadata": {"extraction_date": time.strftime("%Y-%m-%d"), "total_events": 0},
+    }
 
 
 def extract_json(text: str) -> dict:
@@ -141,7 +178,11 @@ def enrich_event(claude_bin: str, model: str, raw_event: dict) -> dict:
         raw_text=(raw_event.get("raw_text") or "")[:30000],
         topics=json.dumps(TOPIC_VOCABULARY),
     )
-    env = {k: v for k, v in os.environ.items() if k not in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT")}
+    env = {
+        k: v
+        for k, v in os.environ.items()
+        if k not in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT")
+    }
     result = subprocess.run(
         [claude_bin, "-p", "--model", model],
         input=prompt,
@@ -166,12 +207,21 @@ def validate(event: dict, raw_event: dict) -> list[str]:
     for talk in event.get("talks") or []:
         for topic in talk.get("topics") or []:
             if topic not in vocab:
-                warnings.append(f"topic outside vocabulary: {topic!r} (talk: {talk.get('title')!r})")
+                warnings.append(
+                    f"topic outside vocabulary: {topic!r} (talk: {talk.get('title')!r})"
+                )
     return warnings
 
 
-def process_chapter(slug: str, claude_bin: str, model: str, state: dict,
-                    dry_run: bool, limit: int | None, processed_count: int) -> int:
+def process_chapter(
+    slug: str,
+    claude_bin: str,
+    model: str,
+    state: dict,
+    dry_run: bool,
+    limit: int | None,
+    processed_count: int,
+) -> int:
     raw_path = config.RAW_EVENTS_DIR / f"{slug}.json"
     raw = json.loads(raw_path.read_text())
     raw_events = {str(e.get("event_id")): e for e in raw.get("events", [])}
@@ -195,11 +245,16 @@ def process_chapter(slug: str, claude_bin: str, model: str, state: dict,
             changed = True
             continue
         if dry_run:
-            print(f"  [dry-run] would enrich {eid} ({raw_event.get('page_title', '')[:60]})", flush=True)
+            print(
+                f"  [dry-run] would enrich {eid} ({raw_event.get('page_title', '')[:60]})",
+                flush=True,
+            )
             processed_count += 1
             continue
 
-        print(f"  enriching {eid} ({raw_event.get('page_title', '')[:60]})...", flush=True)
+        print(
+            f"  enriching {eid} ({raw_event.get('page_title', '')[:60]})...", flush=True
+        )
         try:
             result = enrich_event(claude_bin, model, raw_event)
         except Exception as e:
@@ -221,7 +276,10 @@ def process_chapter(slug: str, claude_bin: str, model: str, state: dict,
             print(f"    WARNING: {w}", flush=True)
         enriched["events"].append(result)
         changed = True
-        print(f"    added: {result.get('event_name')} ({result.get('date')}), {len(result.get('talks') or [])} talks", flush=True)
+        print(
+            f"    added: {result.get('event_name')} ({result.get('date')}), {len(result.get('talks') or [])} talks",
+            flush=True,
+        )
 
     if changed and not dry_run:
         enriched["events"].sort(key=lambda e: e.get("date") or "", reverse=True)
@@ -250,7 +308,9 @@ def run_baseline(state: dict) -> None:
         for e in raw.get("events", []):
             eid = str(e.get("event_id"))
             if eid not in enriched_ids and eid not in skipped:
-                skipped[eid] = f"baseline {today}: in raw_events but not enriched before the pipeline existed"
+                skipped[eid] = (
+                    f"baseline {today}: in raw_events but not enriched before the pipeline existed"
+                )
                 added += 1
     save_state(state)
     print(f"baseline: marked {added} pre-existing gaps as reviewed")
@@ -258,12 +318,18 @@ def run_baseline(state: dict) -> None:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--slugs", help="Comma-separated chapter slugs (raw_events filenames without .json)")
+    parser.add_argument(
+        "--slugs",
+        help="Comma-separated chapter slugs (raw_events filenames without .json)",
+    )
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--limit", type=int, help="Max events to enrich this run")
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--baseline", action="store_true",
-                        help="Mark all current raw/enriched gaps as reviewed and exit")
+    parser.add_argument(
+        "--baseline",
+        action="store_true",
+        help="Mark all current raw/enriched gaps as reviewed and exit",
+    )
     args = parser.parse_args()
 
     state = load_state()
@@ -276,13 +342,16 @@ def main():
         slugs = [s.strip() for s in args.slugs.split(",")]
     else:
         slugs = sorted(
-            p.stem for p in config.RAW_EVENTS_DIR.glob("*.json") if not p.name.startswith("_")
+            p.stem
+            for p in config.RAW_EVENTS_DIR.glob("*.json")
+            if not p.name.startswith("_")
         )
 
     processed = 0
     for slug in slugs:
-        processed = process_chapter(slug, claude_bin, args.model, state,
-                                    args.dry_run, args.limit, processed)
+        processed = process_chapter(
+            slug, claude_bin, args.model, state, args.dry_run, args.limit, processed
+        )
         if args.limit is not None and processed >= args.limit:
             print(f"limit {args.limit} reached", flush=True)
             break

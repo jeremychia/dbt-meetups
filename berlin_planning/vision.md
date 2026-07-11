@@ -108,7 +108,7 @@ Introduce light-touch continuity mechanisms so the meetup doesn't feel like a se
   - "How do we test AI-assisted models in dbt?"
   - "Who owns a metric when AI helped define it?"
   - "What does 'data ownership' mean at our company?"
-  
+
   Returning members will feel like there's an accumulated thread across events, not just isolated talks.
 
 - **Ecosystem collaboration:** Reach out to dltHub and Gemma Analytics for one joint or cross-promoted edition per year. You're not competitors for the same 100–200 Berlin practitioners — you're different venues for the same community. Joint editions reduce fragmentation and signal maturity.

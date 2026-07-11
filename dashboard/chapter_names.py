@@ -73,5 +73,5 @@ CHAPTER_DISPLAY_NAMES = {
     "vancouver": "Vancouver",
     "vienna": "Vienna",
     "dc": "Washington DC",
-    "wellington": "Wellington"
+    "wellington": "Wellington",
 }

@@ -4,6 +4,7 @@ All data locations resolve relative to DBT_MEETUPS_DATA_DIR when set, which
 lets tests run the whole pipeline against a copy of the data without touching
 the real raw_events/ and enriched/ directories.
 """
+
 import os
 from pathlib import Path
 

@@ -1,14 +1,16 @@
-import json, os
+import json
+import os
 from shapely.geometry import Polygon
 
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
-TOPO_FILE = os.path.join(DASHBOARD_DIR, 'world-countries-110m.json')
-OUTPUT_FILE = os.path.join(DASHBOARD_DIR, 'world_path.txt')
+TOPO_FILE = os.path.join(DASHBOARD_DIR, "world-countries-110m.json")
+OUTPUT_FILE = os.path.join(DASHBOARD_DIR, "world_path.txt")
 
 # source: https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json (Natural Earth 110m, public domain)
 topo = json.load(open(TOPO_FILE))
-scale_x, scale_y = topo['transform']['scale']
-trans_x, trans_y = topo['transform']['translate']
+scale_x, scale_y = topo["transform"]["scale"]
+trans_x, trans_y = topo["transform"]["translate"]
+
 
 def decode_arc(arc):
     coords = []
@@ -21,12 +23,14 @@ def decode_arc(arc):
         coords.append((lon, lat))
     return coords
 
+
 def get_arc_coords(arc_index):
     if arc_index >= 0:
-        return decode_arc(topo['arcs'][arc_index])
+        return decode_arc(topo["arcs"][arc_index])
     else:
         real_index = ~arc_index
-        return list(reversed(decode_arc(topo['arcs'][real_index])))
+        return list(reversed(decode_arc(topo["arcs"][real_index])))
+
 
 def ring_from_arcs(arc_list):
     coords = []
@@ -38,29 +42,32 @@ def ring_from_arcs(arc_list):
             coords.extend(pts)
     return coords
 
+
 VIEWBOX_W = 960
 VIEWBOX_H = 500
+
 
 def project(lon, lat):
     x = (lon + 180) / 360 * VIEWBOX_W
     y = (90 - lat) / 180 * VIEWBOX_H
     return x, y
 
+
 SIMPLIFY_TOLERANCE_DEG = 0.4  # degrees, in lon/lat space before projection
 
 path_parts = []
-geoms = topo['objects']['countries']['geometries']
+geoms = topo["objects"]["countries"]["geometries"]
 total_rings = 0
 kept_rings = 0
 
 for geom in geoms:
-    if geom['properties']['name'] == 'Antarctica':
+    if geom["properties"]["name"] == "Antarctica":
         continue
-    gtype = geom['type']
-    arcs = geom['arcs']
-    if gtype == 'Polygon':
+    gtype = geom["type"]
+    arcs = geom["arcs"]
+    if gtype == "Polygon":
         polys = [arcs]
-    elif gtype == 'MultiPolygon':
+    elif gtype == "MultiPolygon":
         polys = arcs
     else:
         continue
@@ -135,8 +142,16 @@ for geom in geoms:
                 seam_n_prev = (prev[0] + 180) // 360
                 seam_n_cur = (cur[0] + 180) // 360
                 if seam_n_prev != seam_n_cur:
-                    seam_lon = max(seam_n_prev, seam_n_cur) * 360 - 180 if cur[0] > prev[0] else min(seam_n_prev, seam_n_cur) * 360 + 180
-                    t = (seam_lon - prev[0]) / (cur[0] - prev[0]) if cur[0] != prev[0] else 0.5
+                    seam_lon = (
+                        max(seam_n_prev, seam_n_cur) * 360 - 180
+                        if cur[0] > prev[0]
+                        else min(seam_n_prev, seam_n_cur) * 360 + 180
+                    )
+                    t = (
+                        (seam_lon - prev[0]) / (cur[0] - prev[0])
+                        if cur[0] != prev[0]
+                        else 0.5
+                    )
                     lat_at_seam = prev[1] + t * (cur[1] - prev[1])
                     fragments[-1].append((seam_lon, lat_at_seam))
                     fragments.append([(seam_lon, lat_at_seam)])
@@ -168,15 +183,17 @@ for geom in geoms:
                     frag = frag + [frag[0]]
                 kept_rings += 1
                 pts = [project(lon, lat) for lon, lat in frag]
-                d = f"M{pts[0][0]:.0f},{pts[0][1]:.0f} " + " ".join(f"L{x:.0f},{y:.0f}" for x, y in pts[1:])
+                d = f"M{pts[0][0]:.0f},{pts[0][1]:.0f} " + " ".join(
+                    f"L{x:.0f},{y:.0f}" for x, y in pts[1:]
+                )
                 if frag[0] == frag[-1]:
                     d += " Z"
                 path_parts.append(d)
 
         geoms_to_emit = []
-        if simplified.geom_type == 'Polygon':
+        if simplified.geom_type == "Polygon":
             geoms_to_emit = [simplified]
-        elif simplified.geom_type == 'MultiPolygon':
+        elif simplified.geom_type == "MultiPolygon":
             geoms_to_emit = list(simplified.geoms)
 
         for g in geoms_to_emit:
@@ -189,5 +206,5 @@ full_path = " ".join(path_parts)
 print(f"Rings: {total_rings} -> kept {kept_rings}")
 print(f"Path length: {len(full_path)} chars")
 
-with open(OUTPUT_FILE, 'w') as f:
+with open(OUTPUT_FILE, "w") as f:
     f.write(full_path)
