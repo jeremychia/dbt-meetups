@@ -389,6 +389,7 @@
   }
   .table-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
   .table-toggle.active { color: var(--text-primary); border-color: var(--text-secondary); background: var(--surface-1); }
+  #seasonality-region-filters .table-toggle { margin-left: 0; }
   .hidden { display: none !important; }
 
   /* map controls */
@@ -565,11 +566,26 @@
           <h2>Growth over time</h2>
           <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
         </div>
-        <p class="section-sub" id="growth-sub">Events per year, split by region. Select a chapter above to overlay its own trend on top.</p>
+        <p class="section-sub" id="growth-sub">Events per year, split by region. Select a chapter above to overlay its own trend on top. Dotted line shows annualized forecast (after 3+ months).</p>
         <div class="card">
           <div class="line-chart-wrap">
             <svg id="growth-chart" viewBox="0 0 900 350" style="width:100%; height:auto; display:block;"></svg>
             <div class="line-chart-tooltip" id="growth-tooltip"></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex-between">
+          <h2>Seasonality</h2>
+          <div class="legend-row" id="seasonality-legend" style="margin-top:0;"></div>
+        </div>
+        <p class="section-sub">Events by month across years. Shows how meetup activity varies seasonally. Click regions to filter.</p>
+        <div class="card">
+          <div style="margin-bottom: 12px; display: flex; gap: 4px; flex-wrap: wrap; justify-content: center;" id="seasonality-region-filters"></div>
+          <div class="line-chart-wrap">
+            <svg id="seasonality-chart" viewBox="0 0 900 350" style="width:100%; height:auto; display:block;"></svg>
+            <div class="line-chart-tooltip" id="seasonality-tooltip"></div>
           </div>
         </div>
       </section>
@@ -905,6 +921,7 @@ function filteredEventPool(excludeDimension, ignoreChapter) {
 function setTimeFilter(dim, value) {
   timeFilters[dim] = timeFilters[dim] === value ? null : value;
   renderGrowthChart();
+  renderSeasonalityChart();
   renderTimingCharts();
   renderCategoryDonut();
 }
@@ -928,6 +945,7 @@ function setSelectedChapter(slug) {
   renderChapterTable();
   renderChapterDetail();
   renderGrowthChart();
+  renderSeasonalityChart();
   renderTimingCharts();
   renderCategoryDonut();
   renderStatRow();
@@ -1272,9 +1290,31 @@ function renderGrowthChart() {
     `;
   }
 
+  let forecastHtml = '';
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+  const currentYearIdx = years.indexOf(currentYear);
+  if (currentYearIdx >= 0 && currentMonth >= 2) {
+    const daysSinceYearStart = Math.floor((new Date() - new Date(currentYear, 0, 1)) / (1000 * 60 * 60 * 24));
+    const daysInYear = (new Date(currentYear + 1, 0, 1) - new Date(currentYear, 0, 1)) / (1000 * 60 * 60 * 24);
+
+    visibleRegions.forEach(region => {
+      const currentYearVal = seriesByRegion[region][currentYearIdx];
+      const forecastVal = Math.round(currentYearVal * (daysInYear / daysSinceYearStart));
+      const color = REGION_COLORS[region] || 'var(--series-1)';
+      const endX = xFor(currentYearIdx);
+      const endY = yFor(currentYearVal);
+      const forecastY = yFor(Math.min(forecastVal, niceMax));
+      const finalX = padL + plotW;
+      forecastHtml += `<line x1="${endX.toFixed(1)}" y1="${endY.toFixed(1)}" x2="${finalX.toFixed(1)}" y2="${forecastY.toFixed(1)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="2,2" opacity="0.6" />`;
+      forecastHtml += `<circle cx="${finalX.toFixed(1)}" cy="${forecastY.toFixed(1)}" r="2.5" fill="${color}" opacity="0.6" />`;
+    });
+  }
+
   svg.innerHTML = `
     ${gridHtml}
     ${regionsHtml}
+    ${forecastHtml}
     ${chapterHtml}
     ${xLabelsHtml}
     <line id="growth-crosshair" x1="0" y1="${padT}" x2="0" y2="${H - padB}" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3,3" style="display:none;"></line>
@@ -1334,8 +1374,137 @@ function renderGrowthChart() {
   if (clearBtn) clearBtn.addEventListener('click', () => {
     Object.keys(timeFilters).forEach(k => timeFilters[k] = null);
     renderGrowthChart();
+    renderSeasonalityChart();
     renderTimingCharts();
     renderCategoryDonut();
+  });
+}
+
+let seasonalityRegionFilter = new Set();
+
+function renderSeasonalityChart() {
+  const svg = document.getElementById('seasonality-chart');
+  const tooltip = document.getElementById('seasonality-tooltip');
+  const communityPool = filteredEventPool('year', true);
+  const years = [...new Set(EVENT_POOL.map(e => e.year))].sort();
+
+  const uniqueRegions = [...new Set(communityPool.map(e => e.region))].sort();
+  const regionNames = uniqueRegions.sort((a, b) => {
+    const totalA = communityPool.filter(e => e.region === a).length;
+    const totalB = communityPool.filter(e => e.region === b).length;
+    return totalB - totalA;
+  });
+
+  function monthSeries(year, region) {
+    const monthCounts = Array(12).fill(0);
+    communityPool
+      .filter(e => e.year === year && (seasonalityRegionFilter.size === 0 || seasonalityRegionFilter.has(e.region)))
+      .forEach(e => {
+        const month = parseInt(e.date.split('-')[1]) - 1;
+        monthCounts[month]++;
+      });
+    return monthCounts;
+  }
+
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const W = 900, H = 260;
+  const padL = 36, padR = 16, padT = 16, padB = 28;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+
+  const allSeriesByYear = {};
+  years.forEach(year => {
+    const series = monthSeries(year, null);
+    if (year === currentYear) {
+      series.splice(currentMonth + 1);
+    }
+    allSeriesByYear[year] = series;
+  });
+
+  const allValues = Object.values(allSeriesByYear).flat();
+  const maxVal = Math.max(1, ...allValues);
+  const niceMax = Math.ceil(maxVal / 5) * 5 || maxVal;
+
+  const maxMonths = Math.max(...Object.values(allSeriesByYear).map(s => s.length));
+  function xFor(monthIdx) { return padL + (monthIdx / (maxMonths - 1 || 1)) * plotW; }
+  function yFor(v) { return padT + plotH - (v / niceMax) * plotH; }
+  function pathFor(series) {
+    return series.map((v, i) => `${i === 0 ? 'M' : 'L'}${xFor(i).toFixed(1)},${yFor(v).toFixed(1)}`).join(' ');
+  }
+
+  let gridHtml = '';
+  const ySteps = 4;
+  for (let s = 0; s <= ySteps; s++) {
+    const v = Math.round((niceMax / ySteps) * s);
+    const y = yFor(v);
+    gridHtml += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" class="line-chart-gridline"></line>`;
+    gridHtml += `<text x="${padL - 8}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="line-chart-axis-label">${v}</text>`;
+  }
+
+  let xLabelsHtml = '';
+  months.slice(0, maxMonths).forEach((m, i) => {
+    xLabelsHtml += `<text x="${xFor(i).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="line-chart-axis-label">${m}</text>`;
+  });
+
+  const colorMap = {};
+  const hueShift = 360 / years.length;
+  years.forEach((year, idx) => {
+    colorMap[year] = `hsl(${(idx * hueShift) % 360}, 65%, 50%)`;
+  });
+
+  let seriesHtml = '';
+  years.forEach(year => {
+    const series = allSeriesByYear[year];
+    if (series.length === 0) return;
+    const color = colorMap[year];
+    seriesHtml += `<path d="${pathFor(series)}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round" opacity="0.75" data-year="${year}" class="seasonality-line"></path>`;
+    seriesHtml += series.map((v, i) => `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="2.5" fill="${color}" opacity="0.75" class="seasonality-point" data-year="${year}" data-month="${i}" data-value="${v}"></circle>`).join('');
+  });
+
+  svg.innerHTML = `
+    ${gridHtml}
+    ${seriesHtml}
+    ${xLabelsHtml}
+    <line id="seasonality-crosshair" x1="0" y1="${padT}" x2="0" y2="${H - padB}" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3,3" style="display:none;"></line>
+  `;
+
+  svg.querySelectorAll('.seasonality-point').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      tooltip.style.display = 'block';
+      const year = el.dataset.year;
+      const month = months[el.dataset.month];
+      const value = el.dataset.value;
+      tooltip.innerHTML = `<strong>${month} ${year}</strong><br>${value} events`;
+    });
+    el.addEventListener('mousemove', (e) => {
+      const rect = svg.getBoundingClientRect();
+      tooltip.style.left = Math.min(e.clientX - rect.left + 12, rect.width - 180) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 40) + 'px';
+    });
+    el.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+  });
+
+  document.getElementById('seasonality-legend').innerHTML = years.filter(year => allSeriesByYear[year] && allSeriesByYear[year].length > 0).map(year => `<div class="legend-item"><span class="legend-swatch" style="background:${colorMap[year]};"></span>${year}</div>`).join('');
+
+  const filterContainer = document.getElementById('seasonality-region-filters');
+  filterContainer.innerHTML = `<button class="table-toggle ${seasonalityRegionFilter.size === 0 ? 'active' : ''}" data-region="all">All regions</button>${regionNames.map(region => `<button class="table-toggle ${seasonalityRegionFilter.has(region) ? 'active' : ''}" data-region="${region}">${region}</button>`).join('')}`;
+
+  filterContainer.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const region = btn.dataset.region;
+      if (region === 'all') {
+        seasonalityRegionFilter.clear();
+      } else if (seasonalityRegionFilter.has(region)) {
+        seasonalityRegionFilter.delete(region);
+      } else {
+        seasonalityRegionFilter.add(region);
+      }
+      renderSeasonalityChart();
+    });
   });
 }
 
@@ -2538,6 +2707,7 @@ renderStatRow();
 renderCategoryDonut();
 renderScatterPlotData();
 renderGrowthChart();
+renderSeasonalityChart();
 renderTimingCharts();
 renderMap();
 populateChapterSelect();
