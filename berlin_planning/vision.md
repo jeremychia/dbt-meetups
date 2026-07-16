@@ -35,11 +35,25 @@ Berlin's data/AI meetup scene is crowded and increasingly agent-focused:
 
 ---
 
+## What Makes Berlin's Roster Different (vs. Other dbt Meetup Chapters)
+
+Comparing Berlin's 14 events / 35 talks against peer dbt Meetup chapters (Amsterdam, London, Paris, Copenhagen, Barcelona, NYC — using the same enriched speaker/topic dataset that powers this project's dashboard) surfaces a real, evidence-backed distinction:
+
+**Berlin already has the lowest rate of leadership-titled speakers of any comparable chapter.** Only 9% of Berlin talks (3 of 35) came from a Head/Director/VP/CEO/CTO/Founder — versus 26–43% everywhere else (Paris 26%, London 35%, Copenhagen 38%, Barcelona 40%, NYC 43%). Berlin's roster is dominated by individual-contributor titles: "Senior Analytics Engineer, CarOnSale," "Data Insights Lead, Ecosia," "Product Engineer, Deepnote" — people doing the work, not people managing the people doing the work. Berlin has zero VP/Chief-level speakers; Barcelona and NYC have several.
+
+**Berlin's vendor/big-logo presence is mid-pack, not high.** 29% of Berlin talks involve a platform vendor or named enterprise (dbt Labs, consultancies, etc.), compared to Amsterdam's 50% — the outlier chapter, whose roster is increasingly vendor- and GenAI-hype-driven (Xebia, MotherDuck, Snowflake, Snowplow all recur; "genai & llm" is its third-most-common topic). Berlin, London, and Paris cluster around 26–32%. The instinct to worry Berlin is "too enterprise" isn't supported by the data — Amsterdam is the cautionary tale of what vendor capture looks like; Berlin isn't there.
+
+**Berlin's topic mix is unusually balanced.** No single topic dominates Berlin's programming (performance & scale, dbt product updates, team & org design, and data quality/testing each sit around 6-8 mentions). Compare that to London and NYC, where "team & org design" talks dominate (10 and 13 mentions respectively — read: management-heavy, strategy-heavy content), or Amsterdam's GenAI lean. Berlin hasn't over-rotated toward any single narrative yet — which is an asset, not a gap to close.
+
+**The one place every chapter is thin, including Berlin: solo practitioners and freelancers.** Across all six comparator chapters, freelance/independent consultant speakers max out at 1-2 per chapter (Berlin: 1, Amsterdam: 2, London: 1, others: 0). Nobody has built a stage for the analytics engineer who isn't backed by a company logo at all — freelancers, career-changers, people between roles, people at companies too small or unglamorous to be "recruiting bait." This is genuine, uncontested white space.
+
+---
+
 ## The Gap & The White Space
 
-Berlin's analytics engineering community (the ~70% of the local AE/BI job market that uses dbt day to day) is currently underserved in one specific way:
+Berlin's analytics engineering community (the ~70% of the local AE/BI job market that uses dbt day to day) is currently underserved in two connected ways:
 
-**No one is running a deep, recurring, in-person practitioner venue that treats AI-in-the-data-stack as a *discipline problem* — trust, governance, testing, ownership — rather than as a demos-and-hype topic.**
+**1. No one is running a deep, recurring, in-person practitioner venue that treats AI-in-the-data-stack as a *discipline problem* — trust, governance, testing, ownership — rather than as a demos-and-hype topic.**
 
 - DataTalksClub and Data Berlin are online-heavy or broad-topic, good for reach but weak for sticky, same-faces, recurring relationships.
 - dltHub and AI-agent meetups are chasing the "how to build with agents" question (legitimate topic, but not dbt's specialty).
@@ -50,6 +64,8 @@ This is dbt Labs' own headline finding from their [2026 State of Analytics Engin
 - 71% worry about hallucinated or incorrect data reaching stakeholders.
 - 41% cite ambiguous data ownership as an ongoing challenge.
 - **Success in 2026 won't come from building faster with AI; it will come from scaling trust alongside output.**
+
+**2. No dbt chapter anywhere — Berlin included — has built a real stage for the ordinary, working analytics engineer:** the person maintaining a dbt project solo at a 40-person company, the freelancer between contracts, the person who has never managed anyone and doesn't intend to. Every peer chapter's programming skews toward heads-of, founders, and vendor reps when speakers are recruited by prestige. Berlin already resists this better than most (9% leadership titles vs. 26-43% elsewhere) — but "already better than London" is a low bar. The opportunity is to make the IC/practitioner focus a *deliberate, named* editorial policy rather than an accident of who happened to volunteer, and to explicitly go after the freelancers and small-company practitioners that literally no chapter — Berlin or peer — currently features.
 
 ---
 
@@ -72,6 +88,8 @@ From `analysis/job_descriptions/jd_data/` (132-record corpus, filtered to Berlin
 
 The meetup's differentiator is not "we discuss AI before anyone else" (everyone already does). It's **"we treat AI-in-data-work as a discipline problem, grounded in governance, testing, and trust — the hard questions dbt Labs' own 2026 research says matter most."**
 
+**And the stage belongs to the person who did the work, not the person managing the person who did the work.** Berlin already speaks less to founders and heads-of than every peer chapter we've measured — that's not an accident to protect, it's a policy to declare. The meetup should be known as the place where the solo analytics engineer at a 40-person company, the freelancer between contracts, and the junior three months into their first dbt project get the same mic as anyone from a household-name employer.
+
 ---
 
 ## Concrete Shifts (Next 2–3 Editions)
@@ -89,7 +107,15 @@ Every other Berlin data meetup is in demo mode on agents. Program 1-2 talks per 
 
 This differentiates by depth and practitioner honesty, not by topic avoidance. You're not saying "we don't do AI" — you're saying "we do AI discipline, which nobody else here is doing."
 
-### 2. Format: Keep What Works, Expand Room for Ecosystem Voices
+### 2. Editorial Policy: Protect and Extend the IC Focus
+
+Berlin already runs 9% leadership-titled talks vs. 26–43% at peer chapters (Amsterdam, London, Paris, Copenhagen, Barcelona, NYC) — the lowest of any comparable dbt Meetup city. Make this deliberate instead of incidental:
+
+- **Speaker-sourcing rule:** When two candidates pitch a similar talk, default to the one doing the hands-on work over the one managing the team that does it. A "Head of Analytics Engineering" talk is not banned, but it should be the exception on a lineup, not the anchor.
+- **Actively recruit the unrepresented practitioner tiers:** freelancers/independent consultants, analytics engineers at small or unglamorous companies, career-changers, and people early in their dbt journey. Across every peer chapter measured, freelance/independent speakers max out at 1-2 per chapter's entire history — nobody has built a real stage for this group. Berlin can be first.
+- **Reframe "scars over features" (already the content philosophy — see co-organiser-profile.md) as explicitly about seniority, not just topic.** The best "scars" talks often come from the person still in the trenches, not the person who solved the problem two promotions ago and is now retelling it.
+
+### 3. Format: Keep What Works, Expand Room for Ecosystem Voices
 
 **Keep:**
 - The proven 2–3 talk + networking structure (5 years of data says it works)
@@ -98,7 +124,7 @@ This differentiates by depth and practitioner honesty, not by topic avoidance. Y
 **Open question (for organizers to decide):**
 - Should you also create an *additional*, occasional slot where adjacent tools (a testing tool like Great Expectations, a BI layer, an orchestrator) can share short updates? This widens relevance to the modern data stack without touching dbt Labs' airtime. Not every edition needs it, but 1–2 per year could build goodwill across the ecosystem.
 
-### 3. Continuity: Build Institutional Memory
+### 4. Continuity: Build Institutional Memory
 
 Introduce light-touch continuity mechanisms so the meetup doesn't feel like a series of one-off talks:
 
@@ -117,11 +143,15 @@ Introduce light-touch continuity mechanisms so the meetup doesn't feel like a se
 
 ## Anchor for Recruiting Speakers & Sponsors
 
-When pitching to speakers or sponsors, lead with the hiring-demand data:
+**For sponsors and framing the meetup's market relevance,** lead with the hiring-demand data:
 
-> "dbt is in 71% of Berlin analytics engineering job postings. This meetup is the community around the tool Berlin's data teams are required to know. We're recruiting practitioners from Wolt, Vinted, Trade Republic, GetYourGuide, SumUp, Getsafe, Cosuno, and dozens of other Berlin companies — people making real decisions about how to integrate AI safely into their data platforms."
+> "dbt is in 71% of Berlin analytics engineering job postings. This meetup is the community around the tool Berlin's data teams are required to know — from Wolt, Vinted, Trade Republic, GetYourGuide, SumUp, Getsafe, and Cosuno to freelancers and two-person data teams at companies nobody's heard of yet. People making real decisions about how to integrate AI safely into their data platforms, at every level of seniority."
 
-This frames the meetup as a hub for a real, deep local market need — not a niche interest group.
+**For recruiting individual speakers, lead with the work, not the logo:**
+
+> "Got a dbt project that taught you something the hard way — a migration that went sideways, a test suite you're proud of, a governance call you had to make alone? We want the story, not your job title. Some of our best talks have come from people three months into their first analytics engineering role."
+
+This framing lets the meetup be a hub for a real, deep local market need — without implicitly telling a solo freelancer or a junior AE that they need a bigger company name to belong on stage.
 
 ---
 
@@ -129,7 +159,7 @@ This frames the meetup as a hub for a real, deep local market need — not a nic
 
 1. **Finalize the 2026–27 event calendar** anchored on the "trust vs. speed" throughline. Pick 1–2 topics per edition that explicitly address governance/trust in the context of AI-agents-in-dbt.
 
-2. **Recruit speakers** from Berlin companies (Vinted, Trade Republic, Wolt, GetYourGuide, SumUp, Getsafe, etc.) who've actually shipped dbt + AI tooling together. Prioritize retrospective, honest talks over promotional ones.
+2. **Recruit speakers on the work, not the employer.** Keep sourcing from known Berlin companies (Vinted, Trade Republic, Wolt, GetYourGuide, SumUp, Getsafe, etc.) who've shipped dbt + AI tooling — but weight equally hard toward freelancers, solo practitioners at small companies, and early-career analytics engineers, since no dbt chapter measured (Berlin included) currently gives this group real stage time. Prioritize retrospective, honest talks over promotional ones regardless of who's giving them.
 
 3. **Set up the Slack backlog doc** in `#local-berlin` to capture open questions from the community. Make it visible — reference it in the opening remarks at the next event.
 
@@ -145,3 +175,4 @@ This frames the meetup as a hub for a real, deep local market need — not a nic
 - **Fivetran + dbt Labs Merger (June 2026):** https://www.fivetran.com/press/fivetran-dbt-labs-complete-merger-to-create-the-data-infrastructure-for-trusted-ai-agents
 - **Berlin Job Postings Analysis:** 132-record corpus from `analysis/job_descriptions/jd_data/`, 71% of 35 Berlin-based AE/BI roles require dbt.
 - **Past Events:** 14 documented events in `analysis/dbt-meetups/berlin/events.json` (2021–2026).
+- **Peer-chapter comparison:** speaker-title and topic-tag analysis across `enriched/*.json` for Berlin vs. Amsterdam, London, Paris, Copenhagen, Barcelona, and NYC dbt Meetup chapters (same dataset powering this project's dashboard).
