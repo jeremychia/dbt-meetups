@@ -22,7 +22,7 @@ from playwright.sync_api import sync_playwright
 import config
 
 PAST_EVENTS_QUERY_HASH = (
-    "321388b1e4a11b17a57efe3ae7a90abfecbc703a4f4e99519772294924c21351"
+    "7ee35e6c00aafa75572fea738e4a6d7188354af9c3836ed5bd4c25d22c95d271"
 )
 
 
@@ -60,6 +60,9 @@ def get_past_events(page, slug: str) -> list[dict]:
             }""",
             payload,
         )
+        if result.get("errors") and not result.get("data"):
+            raise RuntimeError(f"getPastGroupEvents query failed: {result['errors']}")
+
         events_data = (result.get("data") or {}).get("groupByUrlname") or {}
         events_data = events_data.get("events") or {}
         edges = events_data.get("edges", [])
