@@ -1,1 +1,0 @@
-baltics dbt meetup
