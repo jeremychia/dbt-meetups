@@ -4,8 +4,8 @@
     "generated_at": "2026-09-23",
     "prepared_for": "Jeremy Chia (dbt meetups — Baltics)",
     "purpose": "Find Lithuanian companies using dbt, and people who could speak at or attend the Baltic dbt Meetup.",
-    "version": 6,
-    "schema_version": 2,
+    "version": 7,
+    "schema_version": 3,
     "region": "Lithuania (Baltic dbt Meetup, Vilnius)",
     "method": [
       "LinkedIn Jobs guest search for 'dbt' (location: Lithuania) returned 415 postings; the full description of each was fetched and only postings whose text contains the word 'dbt' were kept (43).",
@@ -16,7 +16,8 @@
       "v3 (2026-09-23): zero-shot topic classification added to speaker_evidence and past_meetups talks, matching the chapter enrichment rules in pipeline/past-meetups.md step 6.",
       "v4 (2026-09-23): conformed to the shared schema used by berlin_planning/berlin_dbt_companies.json — person ids are now kebab-case names (old pNNN ids kept in notes), added local_presence, based_in_region, linkedin_confidence, priority_tier (derived from speaker_potential), past_chapter_talks, job posting dates, and speaker_evidence fields (content_id, co_authors, mentions_dbt, url_precision, confidence).",
       "v5 (2026-09-23): added lead_type (proven_speaker / emerging_voice / featured / no_public_content) to prioritise people who publish but have not presented yet; emerging voices with recent authored content were raised to priority_tier 1 (older content: 2). Shared schema v2.",
-      "v6 (2026-09-23): targeted search for emerging voices — Lithuania-based people who publish about dbt (LinkedIn posts, Medium/Substack/company blogs, GitHub) but have no talk on record. Added 6 people (Simas Janušas, Martynas Mickevičius, Paulius Alaburda, Jurgita Zukauskaite, Kaloyan Todorov Hristov, Žymantė Guogaitė) and new content for Rytis Ulys (now proven_speaker), Tomas Peluritis, Aurimas Griciūnas and Dovilė Bakšytė."
+      "v6 (2026-09-23): targeted search for emerging voices — Lithuania-based people who publish about dbt (LinkedIn posts, Medium/Substack/company blogs, GitHub) but have no talk on record. Added 6 people (Simas Janušas, Martynas Mickevičius, Paulius Alaburda, Jurgita Zukauskaite, Kaloyan Todorov Hristov, Žymantė Guogaitė) and new content for Rytis Ulys (now proven_speaker), Tomas Peluritis, Aurimas Griciūnas and Dovilė Bakšytė.",
+      "v7 (2026-09-23): shared schema v3 adds pronouns (self-stated only) and sourced_via; schema-only change: pronouns set to null (none self-stated in public results for tier 1-2 people) and sourced_via derived from each person's evidence (job_ad_company_search where they came from the company search)."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,7 +48,9 @@
       "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
       "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
       "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
-      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found"
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
     },
     "caveats": [
       "Titles come from search snippets and may be stale — verify profiles before reaching out.",
@@ -95,6 +98,17 @@
         "no_public_content": 79,
         "featured": 2,
         "emerging_voice": 5
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 21,
+        "chapter_meetup_history": 5,
+        "job_ad_company_search": 79,
+        "company_blog_scan": 6,
+        "linkedin_search": 3,
+        "github": 2,
+        "podcast": 5,
+        "newsletter_or_blog": 3
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -239,6 +253,7 @@
         {
           "id": "mantas-satkevicius",
           "name": "Mantas Satkevičius",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -251,6 +266,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -284,6 +302,7 @@
         {
           "id": "marius-zukauskas",
           "name": "Marius Žukauskas",
+          "pronouns": null,
           "title": "Analytics Engineering Team Lead @ Surfshark (at time of talk)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -296,6 +315,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -340,6 +363,7 @@
         {
           "id": "asta-popliauskyte",
           "name": "Asta Popliauskyte",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -354,6 +378,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -373,6 +400,7 @@
         {
           "id": "linas-kapocius",
           "name": "Linas Kapočius",
+          "pronouns": null,
           "title": "Data Engineer | Security Champion",
           "city": "Vilnius",
           "based_in_region": true,
@@ -387,6 +415,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": "Lists dbt, Dagster, Airflow, BigQuery; contributed to Lithuanian open data infrastructure.",
@@ -406,6 +437,7 @@
         {
           "id": "andrius-urbonavicius",
           "name": "Andrius Urbonavicius",
+          "pronouns": null,
           "title": "Data Analytics / BI (title unconfirmed)",
           "city": null,
           "based_in_region": null,
@@ -420,6 +452,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -439,6 +474,7 @@
         {
           "id": "dovile-komolovaite",
           "name": "Dovilė Komolovaitė",
+          "pronouns": null,
           "title": "Generalist Data Scientist",
           "city": null,
           "based_in_region": null,
@@ -453,6 +489,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -472,6 +511,7 @@
         {
           "id": "mantas-zabarauskas",
           "name": "Mantas Zabarauskas",
+          "pronouns": null,
           "title": "Head of Analytics & Data Science",
           "city": null,
           "based_in_region": null,
@@ -486,6 +526,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -505,6 +548,7 @@
         {
           "id": "tomas-ivanaitis",
           "name": "Tomas Ivanaitis",
+          "pronouns": null,
           "title": "Head of AI & Data Platform Engineering",
           "city": null,
           "based_in_region": null,
@@ -519,6 +563,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -538,6 +585,7 @@
         {
           "id": "tomas-kazlauskas",
           "name": "Tomas Kazlauskas",
+          "pronouns": null,
           "title": "Chief Business Intelligence Officer",
           "city": null,
           "based_in_region": null,
@@ -552,6 +600,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -603,6 +654,7 @@
         {
           "id": "augustinas-karvelis",
           "name": "Augustinas Karvelis",
+          "pronouns": null,
           "title": "Analytics Engineer",
           "city": "Kaunas/Vilnius",
           "based_in_region": true,
@@ -615,6 +667,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -648,6 +703,7 @@
         {
           "id": "ieva-jacunskiene",
           "name": "Ieva Jacunskienė",
+          "pronouns": null,
           "title": "Unconfirmed",
           "city": "Lithuania",
           "based_in_region": true,
@@ -662,6 +718,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -697,6 +756,7 @@
         {
           "id": "akvile-veleckaite",
           "name": "Akvilė Veleckaitė",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -711,6 +771,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -730,6 +793,7 @@
         {
           "id": "kamile-platakyte",
           "name": "Kamilė Platakytė",
+          "pronouns": null,
           "title": "Analytics Engineer",
           "city": null,
           "based_in_region": null,
@@ -744,6 +808,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -763,6 +830,7 @@
         {
           "id": "laurynas-jakstas",
           "name": "Laurynas Jakštas",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -777,6 +845,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -796,6 +867,7 @@
         {
           "id": "liucija-latanauskaite",
           "name": "Liucija Latanauskaite",
+          "pronouns": null,
           "title": "Senior Data Scientist (AI Team)",
           "city": null,
           "based_in_region": null,
@@ -810,6 +882,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -829,6 +904,7 @@
         {
           "id": "migle-jonaityte",
           "name": "Miglė Jonaitytė",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -843,6 +919,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -862,6 +941,7 @@
         {
           "id": "milda-sniokaite",
           "name": "Milda Šniokaitė",
+          "pronouns": null,
           "title": "Data Analytics Lead",
           "city": null,
           "based_in_region": null,
@@ -876,6 +956,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -895,6 +978,7 @@
         {
           "id": "robertas-travkinas",
           "name": "Robertas Travkinas",
+          "pronouns": null,
           "title": "Analytics Engineer",
           "city": null,
           "based_in_region": null,
@@ -909,6 +993,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -976,6 +1063,7 @@
         {
           "id": "edas-kazlauskas",
           "name": "Edas Kazlauskas",
+          "pronouns": null,
           "title": "Data Engineer / analyst",
           "city": null,
           "based_in_region": null,
@@ -990,6 +1078,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1009,6 +1100,7 @@
         {
           "id": "jana-polianskaja",
           "name": "Jana Polianskaja",
+          "pronouns": null,
           "title": "Data engineering (title unconfirmed)",
           "city": null,
           "based_in_region": null,
@@ -1023,6 +1115,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1042,6 +1137,7 @@
         {
           "id": "justin-maciulis",
           "name": "Justin Mačiulis",
+          "pronouns": null,
           "title": "Data / analytics / engineering",
           "city": "Vilnius",
           "based_in_region": true,
@@ -1056,6 +1152,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1070,6 +1169,7 @@
         {
           "id": "levaldas-zigmantas",
           "name": "Levaldas Zigmantas",
+          "pronouns": null,
           "title": "Data management (title unconfirmed)",
           "city": null,
           "based_in_region": null,
@@ -1084,6 +1184,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1103,6 +1206,7 @@
         {
           "id": "gytaute-peseckaite",
           "name": "Gytautė Peseckaitė",
+          "pronouns": null,
           "title": "Data science analyst",
           "city": "Vilnius",
           "based_in_region": true,
@@ -1117,6 +1221,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1131,6 +1238,7 @@
         {
           "id": "justas-krikstaponis",
           "name": "Justas Krikštaponis",
+          "pronouns": null,
           "title": "IT / cloud database engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -1145,6 +1253,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1246,6 +1357,7 @@
         {
           "id": "ilya-kapshuk",
           "name": "Ilya Kapshuk",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -1260,6 +1372,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1279,6 +1394,7 @@
         {
           "id": "mantautas-danusas",
           "name": "Mantautas Danusas",
+          "pronouns": null,
           "title": "Senior Data Analyst @ NordVPN",
           "city": null,
           "based_in_region": null,
@@ -1293,6 +1409,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1312,6 +1431,7 @@
         {
           "id": "matas-tiskus",
           "name": "Matas Tiskus",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -1326,6 +1446,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1345,6 +1468,7 @@
         {
           "id": "edgaras-jankauskas",
           "name": "Edgaras Jankauskas",
+          "pronouns": null,
           "title": "Unconfirmed (possibly Analytics Engineer)",
           "city": null,
           "based_in_region": null,
@@ -1359,6 +1483,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1378,6 +1505,7 @@
         {
           "id": "kiryl-klimenka",
           "name": "Kiryl Klimenka",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -1392,6 +1520,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1474,6 +1605,7 @@
         {
           "id": "rytis-ulys",
           "name": "Rytis Ulys",
+          "pronouns": null,
           "title": "Head of Data & Analytics",
           "city": "Vilnius",
           "based_in_region": true,
@@ -1490,6 +1622,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1599,6 +1735,7 @@
         {
           "id": "karolis-petkevicius",
           "name": "Karolis Petkevičius",
+          "pronouns": null,
           "title": "Junior Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -1613,6 +1750,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1632,6 +1772,7 @@
         {
           "id": "martynas-manikas",
           "name": "Martynas Manikas",
+          "pronouns": null,
           "title": "Recruiter @ Oxylabs (corrected; earlier listed as Senior Analytics Engineer)",
           "city": null,
           "based_in_region": null,
@@ -1646,6 +1787,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1665,6 +1809,7 @@
         {
           "id": "dovile-baksyte",
           "name": "Dovilė Bakšytė",
+          "pronouns": null,
           "title": "Analytics Team Lead",
           "city": null,
           "based_in_region": null,
@@ -1679,6 +1824,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -1716,6 +1864,7 @@
         {
           "id": "zygimantas-garbauskas",
           "name": "Žygimantas Garbauskas",
+          "pronouns": null,
           "title": "Data engineering (title unconfirmed)",
           "city": null,
           "based_in_region": null,
@@ -1730,6 +1879,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1749,6 +1901,7 @@
         {
           "id": "kaloyan-todorov-hristov",
           "name": "Kaloyan Todorov Hristov",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": "Vilnius",
           "based_in_region": null,
@@ -1761,6 +1914,9 @@
             "attendee_potential": "low"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -1834,6 +1990,7 @@
         {
           "id": "edvin-saveljev",
           "name": "Edvin Saveljev",
+          "pronouns": null,
           "title": "Data Scientist",
           "city": null,
           "based_in_region": null,
@@ -1848,6 +2005,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1867,6 +2027,7 @@
         {
           "id": "emilija-kareivaite",
           "name": "Emilija Kareivaitė",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -1881,6 +2042,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1900,6 +2064,7 @@
         {
           "id": "anthony-mantzaris",
           "name": "Anthony Mantzaris",
+          "pronouns": null,
           "title": "Data Analyst / Data Scientist (unconfirmed)",
           "city": null,
           "based_in_region": null,
@@ -1914,6 +2079,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1933,6 +2101,7 @@
         {
           "id": "csaba-sas",
           "name": "Csaba Sas",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -1947,6 +2116,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -1966,6 +2138,7 @@
         {
           "id": "eligijus-bujokas",
           "name": "Eligijus Bujokas",
+          "pronouns": null,
           "title": "Data / ML Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -1980,6 +2153,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": "Has spoken at meetups and conferences (per search summary).",
@@ -2018,6 +2194,7 @@
         {
           "id": "abdussalam-a",
           "name": "Abdussalam A.",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2032,6 +2209,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": "Profile lists dbt, BigQuery, Dataform, Airflow, Terraform.",
@@ -2046,6 +2226,7 @@
         {
           "id": "mantas-cirtautas",
           "name": "Mantas Cirtautas",
+          "pronouns": null,
           "title": "Data Engineer (TV Analytics)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2060,6 +2241,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": "Team works with GCP, BigQuery, dbt, Airflow.",
@@ -2074,6 +2258,7 @@
         {
           "id": "tomas-ramanauskas",
           "name": "Tomas Ramanauskas",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2088,6 +2273,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2102,6 +2290,7 @@
         {
           "id": "dovile-vaskyte",
           "name": "Dovilė Vaškytė",
+          "pronouns": null,
           "title": "Data analytics; meetup organiser",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2116,6 +2305,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": "Has organised data analytics meetups — potential co-promoter.",
@@ -2130,6 +2322,7 @@
         {
           "id": "zymante-guogaite",
           "name": "Žymantė Guogaitė",
+          "pronouns": null,
           "title": null,
           "city": "Vilnius",
           "based_in_region": true,
@@ -2142,6 +2335,9 @@
             "attendee_potential": "low"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "linkedin_search"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2308,6 +2504,7 @@
         {
           "id": "valerija-zivotkevic",
           "name": "Valerija Životkevič",
+          "pronouns": null,
           "title": "Lead Data Engineer @ Kiloverse (Data Engineer @ Kilo Health at time of talk)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2322,6 +2519,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2362,6 +2563,7 @@
         {
           "id": "gabriele-kalinauskaite",
           "name": "Gabrielė Kalinauskaitė",
+          "pronouns": null,
           "title": "Senior Payments Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -2376,6 +2578,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2395,6 +2600,7 @@
         {
           "id": "karolina-gudaite",
           "name": "Karolina Gudaitė",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -2409,6 +2615,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2463,6 +2672,7 @@
         {
           "id": "mantas-tamasauskas",
           "name": "Mantas Tamasauskas",
+          "pronouns": null,
           "title": "Team Lead of Analysts",
           "city": null,
           "based_in_region": null,
@@ -2477,6 +2687,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2496,6 +2709,7 @@
         {
           "id": "marius-astrauskas",
           "name": "Marius Astrauskas",
+          "pronouns": null,
           "title": "Data Steward",
           "city": "Lithuania",
           "based_in_region": true,
@@ -2510,6 +2724,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2524,6 +2741,7 @@
         {
           "id": "eimantas-lotuzys",
           "name": "Eimantas Lotužys",
+          "pronouns": null,
           "title": "Data analysis (title unconfirmed)",
           "city": null,
           "based_in_region": null,
@@ -2538,6 +2756,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2581,6 +2802,7 @@
         {
           "id": "gediminas-kristopaitis",
           "name": "Gediminas Krištopaitis",
+          "pronouns": null,
           "title": "Data Team Lead @ TeraSky; founder of Fast.BI",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2595,6 +2817,11 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "github",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2699,6 +2926,7 @@
         {
           "id": "dmitrijus-kirjackis",
           "name": "Dmitrijus Kirjackis",
+          "pronouns": null,
           "title": "Unknown",
           "city": "Lithuania",
           "based_in_region": true,
@@ -2713,6 +2941,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2727,6 +2958,7 @@
         {
           "id": "greta-mieliauskaite",
           "name": "Greta Mieliauskaitė",
+          "pronouns": null,
           "title": "Unknown",
           "city": "Lithuania",
           "based_in_region": true,
@@ -2741,6 +2973,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2802,6 +3037,7 @@
         {
           "id": "evaldas-jankauskas",
           "name": "Evaldas Jankauskas",
+          "pronouns": null,
           "title": "Analytics Team Lead",
           "city": null,
           "based_in_region": null,
@@ -2816,6 +3052,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2835,6 +3074,7 @@
         {
           "id": "tautvydas-sikorskis",
           "name": "Tautvydas Sikorskis",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2849,6 +3089,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -2902,6 +3145,7 @@
         {
           "id": "laima-plesnyte",
           "name": "Laima Plėšnytė",
+          "pronouns": null,
           "title": "Data Analyst (previously Oxylabs)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -2917,6 +3161,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2966,6 +3214,7 @@
         {
           "id": "jonas-grigas",
           "name": "Jonas Grigas",
+          "pronouns": null,
           "title": "Senior Data Scientist (may have moved)",
           "city": null,
           "based_in_region": null,
@@ -2980,6 +3229,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3028,6 +3280,7 @@
         {
           "id": "ernestas-babachinas",
           "name": "Ernestas Babachinas",
+          "pronouns": null,
           "title": "Head of Data Engineering",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3042,6 +3295,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "podcast"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3074,6 +3330,7 @@
         {
           "id": "darius-sabas",
           "name": "Darius Sabas",
+          "pronouns": null,
           "title": "Data leadership (data strategy & analytics engineering)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3088,6 +3345,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3146,6 +3406,7 @@
         {
           "id": "jurate-servaite",
           "name": "Jūratė Servaitė",
+          "pronouns": null,
           "title": "Head of HR (job poster)",
           "city": null,
           "based_in_region": null,
@@ -3160,6 +3421,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3217,6 +3481,7 @@
         {
           "id": "rokas-rutkauskas",
           "name": "Rokas Rutkauskas",
+          "pronouns": null,
           "title": "Unknown (surfaced in Data Engineer search)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3231,6 +3496,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3270,6 +3538,7 @@
         {
           "id": "valdas-gylys",
           "name": "Valdas Gylys",
+          "pronouns": null,
           "title": "Data Engineer (DevOps/DataOps)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3284,6 +3553,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3322,6 +3594,7 @@
         {
           "id": "vytenis-pranculis",
           "name": "Vytenis Pranculis",
+          "pronouns": null,
           "title": "Head of FinCrime Analytics",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3336,6 +3609,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3374,6 +3650,7 @@
         {
           "id": "antanas-baltrusaitis",
           "name": "Antanas Baltrušaitis",
+          "pronouns": null,
           "title": "Founder, Scoris; ex-Head of Data at Luminor and Girteka; ex-Senior Analytics Engineer at Beyond Analysis",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3389,6 +3666,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3466,6 +3746,7 @@
         {
           "id": "simas-janusas",
           "name": "Simas Janušas",
+          "pronouns": null,
           "title": "Senior Software Engineer, DataOps & Insights",
           "city": null,
           "based_in_region": null,
@@ -3478,6 +3759,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3565,6 +3849,7 @@
         {
           "id": "andrius-gunka",
           "name": "Andrius Gunka",
+          "pronouns": null,
           "title": "Business Intelligence Team Lead",
           "city": null,
           "based_in_region": null,
@@ -3579,6 +3864,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3598,6 +3886,7 @@
         {
           "id": "dominykas-visnevskis",
           "name": "Dominykas Višnevskis",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -3612,6 +3901,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3626,6 +3918,7 @@
         {
           "id": "marijus-doviltis",
           "name": "Marijus Doviltis",
+          "pronouns": null,
           "title": "Senior BI Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -3640,6 +3933,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3659,6 +3955,7 @@
         {
           "id": "matas-avizienis",
           "name": "Matas Avižienis",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -3673,6 +3970,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3692,6 +3992,7 @@
         {
           "id": "tadas-daugvila",
           "name": "Tadas Daugvila",
+          "pronouns": null,
           "title": "Database / data role",
           "city": null,
           "based_in_region": null,
@@ -3706,6 +4007,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3756,6 +4060,7 @@
         {
           "id": "daniil-jerjomin",
           "name": "Daniil Jerjomin",
+          "pronouns": null,
           "title": "Senior Data Engineer (Payments)",
           "city": null,
           "based_in_region": null,
@@ -3770,6 +4075,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3789,6 +4097,7 @@
         {
           "id": "donatas-eigminas",
           "name": "Donatas Eigminas",
+          "pronouns": null,
           "title": "Engineering Manager (previously Senior Data Engineer)",
           "city": null,
           "based_in_region": null,
@@ -3803,6 +4112,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3822,6 +4134,7 @@
         {
           "id": "elena-gorohhova",
           "name": "Elena Gorohhova",
+          "pronouns": null,
           "title": "Chief Data Officer, Luminor Group (Tallinn)",
           "city": null,
           "based_in_region": null,
@@ -3836,6 +4149,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3855,6 +4171,7 @@
         {
           "id": "mindaugas-rukas",
           "name": "Mindaugas Rūkas",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -3869,6 +4186,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -3944,6 +4264,7 @@
         {
           "id": "simonas-stonys",
           "name": "Simonas Stonys",
+          "pronouns": null,
           "title": "Head of Data Quality & Analytics",
           "city": null,
           "based_in_region": null,
@@ -3958,6 +4279,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "podcast"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3995,6 +4319,7 @@
         {
           "id": "vytautas-jauniskis",
           "name": "Vytautas Jauniškis",
+          "pronouns": null,
           "title": "Data Engineer in Product Engineering",
           "city": null,
           "based_in_region": null,
@@ -4009,6 +4334,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -4028,6 +4356,7 @@
         {
           "id": "jurgita-zukauskaite",
           "name": "Jurgita Zukauskaite",
+          "pronouns": null,
           "title": "Data Engineer, Data Quality & Analytics",
           "city": "Kaunas or Vilnius",
           "based_in_region": true,
@@ -4042,6 +4371,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": "Profile mentions designing dbt models on Snowflake and Azure.",
@@ -4092,6 +4424,7 @@
         {
           "id": "daniel-vargas",
           "name": "Daniel Vargas",
+          "pronouns": null,
           "title": "Data Scientist",
           "city": null,
           "based_in_region": null,
@@ -4106,6 +4439,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -4125,6 +4461,7 @@
         {
           "id": "vytautas-jankauskas",
           "name": "Vytautas Jankauskas",
+          "pronouns": null,
           "title": "Director of Data Science / Data Scientist Senior Specialist",
           "city": null,
           "based_in_region": null,
@@ -4139,6 +4476,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -4209,6 +4549,7 @@
         {
           "id": "maria-dimidova",
           "name": "Maria Dimidova",
+          "pronouns": null,
           "title": "Data analytics leader at Able (Ruby Labs brand)",
           "city": null,
           "based_in_region": null,
@@ -4223,6 +4564,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -4266,6 +4610,7 @@
         {
           "id": "tomas-peluritis",
           "name": "Tomas Peluritis",
+          "pronouns": null,
           "title": "Leads data at Mediatech; host of the Uncle Data newsletter and podcast",
           "city": "Vilnius",
           "based_in_region": true,
@@ -4281,6 +4626,12 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "newsletter_or_blog",
+            "linkedin_search",
+            "podcast"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4534,6 +4885,7 @@
         {
           "id": "raimonda-bruziene",
           "name": "Raimonda Bruziene",
+          "pronouns": null,
           "title": "Senior Business Intelligence Developer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -4549,6 +4901,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": "Profile lists dbt, dlt, PostgreSQL.",
@@ -4693,6 +5048,7 @@
         {
           "id": "rokas-steponavicius",
           "name": "Rokas Steponavičius",
+          "pronouns": null,
           "title": "Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -4707,6 +5063,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -4726,6 +5085,7 @@
         {
           "id": "zivile-valutyte-silveira",
           "name": "Zivile Valutyte Silveira",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -4740,6 +5100,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -4777,6 +5140,7 @@
         {
           "id": "martynas-jocys",
           "name": "Martynas Jočys",
+          "pronouns": null,
           "title": "Data & Analytics Consultant @ Macaw Lithuania (formerly Data Engineering Tech Lead @ Oxylabs)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -4792,6 +5156,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4864,6 +5231,7 @@
         {
           "id": "vytautas-kraujalis",
           "name": "Vytautas Kraujalis",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -4878,6 +5246,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [],
           "attendee_signal": "Completed dbt Fundamentals.",
@@ -4980,6 +5351,7 @@
         {
           "id": "vytenis-janilionis",
           "name": "Vytenis Janilionis",
+          "pronouns": null,
           "title": "Director Data Science & Engineering",
           "city": null,
           "based_in_region": null,
@@ -4994,6 +5366,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5031,6 +5406,7 @@
         {
           "id": "artsem-varyvoda",
           "name": "Artsem Varyvoda",
+          "pronouns": null,
           "title": "Lead Data Engineer; Head of Data Quality, EPAM Lithuania & Latvia",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5045,6 +5421,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5095,6 +5474,7 @@
         {
           "id": "paulius-venclovas",
           "name": "Paulius Venclovas",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5109,6 +5489,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5160,6 +5543,7 @@
         {
           "id": "vilius-kaulinskas",
           "name": "Vilius Kaulinskas",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5174,6 +5558,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5206,6 +5593,7 @@
         {
           "id": "vidmante-ciziene",
           "name": "Vidmantė Čižienė",
+          "pronouns": null,
           "title": "Data & information management lead (Wholesale Electricity); formerly Data Engineer @ carVertical",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5220,6 +5608,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "company_blog_scan"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5271,6 +5663,7 @@
         {
           "id": "paulius-alaburda",
           "name": "Paulius Alaburda",
+          "pronouns": null,
           "title": "Head of Data Analytics",
           "city": null,
           "based_in_region": true,
@@ -5285,6 +5678,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "linkedin_search",
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5353,6 +5750,7 @@
         {
           "id": "ekaterina-korolkoviene",
           "name": "Ekaterina Korolkoviene",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5365,6 +5763,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5440,6 +5841,7 @@
         {
           "id": "vytautas-jaras",
           "name": "Vytautas Jaras",
+          "pronouns": null,
           "title": "Senior Data Analyst",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5454,6 +5856,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5486,6 +5891,7 @@
         {
           "id": "valentinas-mitalauskas",
           "name": "Valentinas Mitalauskas",
+          "pronouns": null,
           "title": "Senior Data Engineer @ Shopify; formerly Analytics Engineering Lead @ Hostinger",
           "city": null,
           "based_in_region": null,
@@ -5500,6 +5906,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "podcast"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5696,6 +6106,7 @@
         {
           "id": "greta-b",
           "name": "Greta B.",
+          "pronouns": null,
           "title": "Recruiter (job poster)",
           "city": null,
           "based_in_region": null,
@@ -5710,6 +6121,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5818,6 +6232,7 @@
         {
           "id": "aurimas-griciunas",
           "name": "Aurimas Griciunas",
+          "pronouns": null,
           "title": "Data/ML/AI engineering educator (SwirlAI); formerly Neptune.ai",
           "city": "Vilnius (assumed)",
           "based_in_region": null,
@@ -5830,6 +6245,10 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "newsletter_or_blog"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5900,6 +6319,7 @@
         {
           "id": "albinas-plesnys",
           "name": "Albinas Plesnys",
+          "pronouns": null,
           "title": "Data Architect (tvaras.ai / Vėjai – employer unconfirmed)",
           "city": "Lithuania",
           "based_in_region": true,
@@ -5914,6 +6334,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5967,6 +6390,7 @@
         {
           "id": "kestutis-gadeikis",
           "name": "Kęstutis Gadeikis",
+          "pronouns": null,
           "title": "Chief Actuary & Data Governance Manager, Lietuvos Draudimas (PZU)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -5979,6 +6403,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6012,6 +6439,7 @@
         {
           "id": "rytis-jonas-zolubas",
           "name": "Rytis Jonas Zolubas",
+          "pronouns": null,
           "title": "Data Engineer (Fairlo); CTO Molecule Data; founder Data Magna",
           "city": null,
           "based_in_region": null,
@@ -6026,6 +6454,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "podcast"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6059,6 +6490,7 @@
         {
           "id": "laura-dage",
           "name": "Laura Dagė",
+          "pronouns": null,
           "title": "Data Analytics Engineer / BI Analyst (Analytika)",
           "city": "Lithuania",
           "based_in_region": true,
@@ -6073,6 +6505,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -6087,6 +6522,7 @@
         {
           "id": "sylvia-okwu",
           "name": "Sylvia Okwu",
+          "pronouns": null,
           "title": "Data Analytics Engineer (Metasite Data Insights)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6101,6 +6537,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -6115,6 +6554,7 @@
         {
           "id": "gabija-latvenaite",
           "name": "Gabija Latvėnaitė",
+          "pronouns": null,
           "title": "Unknown (data) @ TGLAB",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6129,6 +6569,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -6143,6 +6586,7 @@
         {
           "id": "martynas-mickevicius",
           "name": "Martynas Mickevičius",
+          "pronouns": null,
           "title": "Software developer @ Argyle",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6157,6 +6601,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "github"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -6252,6 +6699,7 @@
         {
           "id": "saulius-valatka",
           "name": "Saulius Valatka",
+          "pronouns": null,
           "title": "Staff Engineer",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6266,6 +6714,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -6313,6 +6765,7 @@
         {
           "id": "martynas-cibulskis",
           "name": "Martynas Cibulskis",
+          "pronouns": null,
           "title": "Engineer (data platform)",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6327,6 +6780,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6360,6 +6816,7 @@
         {
           "id": "evaldas-kazlauskis",
           "name": "Evaldas Kazlauskis",
+          "pronouns": null,
           "title": "Leads data science work",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6372,6 +6829,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6405,6 +6865,7 @@
         {
           "id": "vytautas-matiukas",
           "name": "Vytautas Matiukas",
+          "pronouns": null,
           "title": "Decision Scientist",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6419,6 +6880,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -6438,6 +6902,7 @@
         {
           "id": "andrius-petronis",
           "name": "Andrius Petronis",
+          "pronouns": null,
           "title": "Decision Scientist",
           "city": "Vilnius",
           "based_in_region": true,
@@ -6452,6 +6917,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "job_ad_company_search"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,

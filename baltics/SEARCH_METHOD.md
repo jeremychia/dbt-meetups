@@ -3,7 +3,7 @@
 This file goes with `lithuania_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and gives a prompt for re-running and extending the search.
 
 - **First built:** 2026-09-23
-- **Dataset version:** 4 (shared schema version 1)
+- **Dataset version:** 7 (shared schema version 3)
 - **Goal:** find companies in Lithuania that use dbt, and people there who could **speak at** or **attend** the Baltic dbt Meetup (Vilnius).
 - **Sister dataset:** `../berlin_planning/berlin_dbt_companies.json`. Both files follow one shared schema, described in §3. The full definition and the validator are in `../berlin_planning/SEARCH_METHOD.md` §3 and Appendix A.
 
@@ -55,6 +55,20 @@ Job ads are the most reliable sign that a company uses dbt, because companies li
   - `speaker_potential: high` means they have given talks on dbt or analytics engineering, or at least two public talks.
   - `attendee_potential: high` means their profile mentions dbt, they have published dbt content, or they are a confirmed practitioner at a company with a strong dbt signal.
 
+### Step 3b: Emerging voices, meaning people who publish but haven't presented (added in v6)
+
+The meetup wants to give first-time speakers a chance, so this step looks for people who **write** about dbt but have no talk on record. Two sub-agents ran in parallel:
+
+1. **Writers and open source.** Covered Medium, Substack, dev.to and Hashnode, company engineering blogs (Kilo Health, Nord Security, Oxylabs, Surfshark, Hostinger, Omnisend, TransferGo, Eneba, PVcase), Lithuanian-language content, GitHub dbt projects by Lithuania-based developers, and the dbt Community forum.
+2. **LinkedIn posts.** Used `site:linkedin.com/posts` with dbt plus Vilnius, Kaunas or a company name; Lithuanian phrases (`"dbt" duomenų`); "dbt Certified"; and posts about attending a past Baltic dbt Meetup or Coalesce.
+
+Every person is checked quickly for talks. Content is recorded as `speaker_evidence` with `type` set to `article`, `post` or `oss`. `lead_type` and `priority_tier` then follow the shared rule in `../berlin_planning/SEARCH_METHOD.md` §1 Step 6:
+
+- An **emerging_voice** in the region (or not known to be outside it) with content dated 2024 or later becomes **tier 1**.
+- An emerging voice whose content is older or undated becomes **tier 2**.
+
+**How the organiser dashboard ranks them.** Within each tier, emerging voices come first, then proven speakers, then featured people, then people with no public content. The Speakers view has a "First-time speakers" filter.
+
 ### Step 4: Parallel sub-agents
 
 The people search was split across 3 sub-agents running in parallel, each covering 6–8 companies or one source type. Each returned a JSON array, which was merged and de-duplicated by name with accents removed (see §4).
@@ -95,16 +109,28 @@ The people search was split across 3 sub-agents running in parallel, each coveri
 - **Open leadership roles.** Many "no leader found" gaps are real vacancies: Head of Data roles are open at Hostinger, Eneba, Nord (Saily), Barbora and Oxylabs.
 - **Scrambly** uses Dataform, not dbt. **Bolt**'s analytics engineers are mostly in Tallinn.
 - **Vinted people** are flagged `internal_vinted: true` rather than removed.
+- **Emerging voices are hard to find by search in Lithuania (v6).** About 110 searches found only 6 new people:
+  - Search engines rarely connect Medium, dev.to and Substack authors, or LinkedIn posts, to Lithuania.
+  - None of the big dbt employers publishes dbt engineering-blog posts. Omnisend's Feb 2026 post was the exception.
+  - No Lithuanian-language dbt content turned up.
+  - What worked: company blog posts that name the author (Omnisend), GitHub repos whose profiles list Vilnius (`vilnius-pub`), and LinkedIn posts in which a data leader lists the team's stack (Ignitis).
+  - A call for first-time speakers through the meetup's own channels (the Meetup group and dbt Slack `#local-baltics`) will probably find more people than search.
+- **Employer-branding quotes are "featured", not authored.** Examples are the Oxylabs "Behind The Code" quotes and "A chat with…" interviews.
+- **Agent reports can be wrong about who has presented.** Check whether someone counted as an emerging voice has already spoken somewhere. Rytis Ulys turned out to have Build Stuff and OxyCon talks.
 
 ### Key findings (2026-09)
 
 - **Companies with the heaviest dbt use:** Kilo Health, Nord Security, Surfshark, Oxylabs, Hostinger, CoinGate, Eneba, IKI, Telia, TransferGo, Omnisend, PVcase, Ovoko, Artea bankas and Lietuvos bankas.
 - **Proven dbt speakers:** Tomas Peluritis, Augustinas Karvelis (spoke at Coalesce), Mantas Satkevičius, Antanas Baltrušaitis, Ernestas Babachinas, and past meetup speakers (Gediminas Krištopaitis, Laima Plėšnytė, Valerija Životkevič, Marius Žukauskas).
 - **Venue and partner contacts:** TeraSky (the dbt partner), Oxylabs (hosted #1) and Vinted (hosted #2).
+- **Emerging voices to invite as first-time speakers (v6):**
+  - **Tier 1:** Simas Janušas (Omnisend). His post covers AI-assisted dbt development; check where he's based.
+  - **Tier 2:** Martynas Mickevičius (maintains the `vilnius-pub` project: dbt + DuckDB + Evidence.dev), Paulius Alaburda (Ignitis Head of Data Analytics; posts about the team's dbt stack) and Albinas Plesnys (Medium dbt tutorials).
+  - **Worth asking:** Rytis Ulys (Oxylabs) could put forward one of his dbt-certified analytics engineers.
 
 ---
 
-## 3. Shared schema (version 1)
+## 3. Shared schema (version 3)
 
 `baltics/lithuania_dbt_companies.json` and `berlin_planning/berlin_dbt_companies.json` have exactly these keys, in this order. A value can be `null` when it's unknown, but a key is never missing.
 
@@ -117,9 +143,9 @@ companies[]         id, name, type, watchlist, excluded_from_outreach, cities[],
   job_postings[]    title, url, source, linkedin_company_name, dbt_mentioned_in_text, dbt_snippet,
                     job_poster, posted_date, last_seen, job_family, work_mode
   other_evidence[]  type, url, note
-  people[]          id, name, title, city, based_in_region, level, linkedin_urls[], has_linkedin,
-                    linkedin_confidence, meetup_fit{speaker_potential, attendee_potential},
-                    mentions_dbt, speaker_evidence[], attendee_signal, evidence[]{url, note},
+  people[]          id, name, pronouns, title, city, based_in_region, level, linkedin_urls[],
+                    has_linkedin, linkedin_confidence, meetup_fit{speaker_potential, attendee_potential},
+                    lead_type, sourced_via[], mentions_dbt, speaker_evidence[], attendee_signal, evidence[]{url, note},
                     confidence, internal_vinted, priority_tier, suggested_talk_angle,
                     past_chapter_talks[]{date, talk_title, topics}, notes
     speaker_evidence[]  type, event, title, date, url, content_id, co_authors[], mentions_dbt,
@@ -199,6 +225,20 @@ Tasks, in priority order (the session has about 200 web searches in total, so sp
      engineering, data modelling, testing, orchestration or data platforms.
    - Check new Uncle Data newsletter and podcast episodes and guests.
 
+2b. EMERGING VOICES (people who publish about dbt but have no talk yet; a priority for first-time
+    speaker invitations, see SEARCH_METHOD.md §1 Step 3b)
+   - Look for new Lithuania-based authors of dbt / analytics-engineering content since the last run:
+     LinkedIn posts (site:linkedin.com/posts + dbt + Vilnius/Kaunas/company names, Lithuanian
+     phrases), company blog posts that name their author (Omnisend, Kilo, Nord, Oxylabs, Surfshark,
+     Hostinger, TransferGo, Telia...), Medium/Substack/dev.to, GitHub dbt projects whose owners list
+     Lithuania, and posts about attending the Baltic dbt Meetup or Coalesce.
+   - For each person, check whether they have given a talk. Record content as speaker_evidence
+     (type article / post / oss) with a suggested_talk_angle.
+   - Re-check existing emerging voices for new content (and for talks: if they have now presented,
+     they become proven_speaker).
+   - Apply the lead_type and priority_tier rules (tier 1 = emerging voice in region with content
+     from 2024 onwards).
+
 3. PEOPLE: fill the gaps
    - For every company with dbt_signal "strong" and fewer than 3 people, look for working-level
      practitioners (Analytics Engineer, Data Engineer, Data Analyst, BI Developer).
@@ -211,13 +251,17 @@ Rules:
 - Only record linkedin.com/in URLs that appear word for word in search results. Never guess.
 - Collect only professional information: name, title, company, public talks and posts.
 - Give every person a confidence rating and an evidence URL.
-- Merge into the existing JSON following SEARCH_METHOD.md §4. Back up the old file first as
-  lithuania_dbt_companies.v<N>.json.
+- Merge into the existing JSON following SEARCH_METHOD.md §4. Commit the old file first; git
+  history keeps old versions, so don't save a .v<N>.json copy.
 - Re-score meetup_fit, recalculate counts and bump the version.
 - Add a change-log entry to SEARCH_METHOD.md: date, what was added, and any new lessons.
 
-When finished, tell me briefly what's new: new companies, new speakers, new likely attendees, and
-anything that has changed (job moves, companies that stopped hiring).
+- Run the shared-schema validator (../berlin_planning/SEARCH_METHOD.md Appendix A), then rebuild the
+  organiser dashboard with ../dashboard/build_dashboard.sh.
+
+When finished, tell me briefly what's new: new first-time speaker candidates (emerging voices, with a
+link to their content), new proven speakers, new companies, new likely attendees, and anything that
+has changed (job moves, companies that stopped hiring).
 ````
 
 ---
@@ -270,3 +314,6 @@ The meetup event pages can be read the same way: open any meetup.com page, then
 | 2026-09-23 | 2 | Deeper search for speakers and attendees: 49 companies, 103 people (15 with high speaker potential, 41 with high attendee potential), past meetup agendas, community channels, watchlist. |
 | 2026-09-23 | 3 | Topics from `TOPIC_VOCABULARY` added to 46 `speaker_evidence` items and 6 `past_meetups` talks. |
 | 2026-09-23 | 4 | Moved to the shared schema v1, the same as Berlin. Person ids changed from `pNNN` to kebab-case names (old ids kept in `notes`). Added `local_presence`, `based_in_region`, `linkedin_confidence`, `priority_tier`, `suggested_talk_angle`, `past_chapter_talks`, the job-ad fields `posted_date`, `last_seen`, `job_family` and `work_mode`, and the evidence fields `content_id`, `co_authors`, `mentions_dbt`, `description`, `url_precision` and `confidence`. `field_definitions` and `counts` are now the same in both files. 55 companies, 104 people. |
+| 2026-09-23 | 5 | Shared schema v2 adds `lead_type`. Emerging voices, meaning people who publish but have no talk yet, are prioritised for first-time speaker invitations; the rule is in `../berlin_planning/SEARCH_METHOD.md` §1 Step 6. Split: 23 proven speakers, 1 emerging voice (Albinas Plesnys, dbt CI/CD articles), 1 featured, 79 with no public content. Most Lithuanian leads came from job-ad searches, so the next run should look for people who post (Medium, LinkedIn posts, Uncle Data guests). |
+| 2026-09-23 | 6 | Search for emerging voices (Step 3b). Added 6 people: Simas Janušas (tier 1), Martynas Mickevičius, Paulius Alaburda, Žymantė Guogaitė (tier 2), Jurgita Zukauskaite and Kaloyan Todorov Hristov. Added new content for Rytis Ulys (now `proven_speaker`), Tomas Peluritis, Aurimas Griciūnas and Dovilė Bakšytė. Now 110 people: 24 proven speakers, 5 emerging voices, 2 featured. The organiser dashboard now ranks emerging voices first within each tier and has a lead-type filter. `metadata.counts` puts `lead_type` last, to match Berlin and KL. Backup: `lithuania_dbt_companies.v5.json`. |
+| 2026-09-23 | 7 | Shared schema v3 adds `pronouns` and `sourced_via` (schema-only change). `pronouns` records only pronouns people publish themselves; none were found for tier-1/2 people, so all are `null`. `sourced_via` is derived from each person's evidence; people found through the job-ad company search are `job_ad_company_search`. For women-in-data sourcing and the line-up balance check, see `../berlin_planning/SEARCH_METHOD.md` Step 2b and §1 Step 6. Next run: check Vilnius women-in-data groups (e.g. PyLadies Vilnius, Women Go Tech). Backup: `lithuania_dbt_companies.v6.json`. |
