@@ -48,6 +48,31 @@ pipeline/run_pipeline.sh
 
 > **Tip:** `pipeline/run_pipeline.sh` sets up `.venv/` itself if you skip the install step. See `pipeline/README.md` for the full flag list, such as `SKIP_SCRAPE=1` or `DBT_MEETUPS_DATA_DIR=...` to test against a copy of the data.
 
+## Organiser cockpit
+
+A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), linked from the dashboard, for finding people to speak at or attend a chapter's next meetup. It combines every `<region>_dbt_companies.json` in the repo: Berlin, Vilnius and Kuala Lumpur. Each chapter and view has its own link to share, such as `/organiser/#berlin/speakers`.
+
+- **Views.** Speakers, attendees and companies to invite, each ranked. A topic table shows which topics past talks never covered but current leads can.
+- **First-time speakers first.** Within each tier, the speaker list puts **emerging voices** (people who publish about dbt but have no talk on record) ahead of proven speakers, then everyone else. A filter shows just one group. A balanced line-up pairs one proven speaker with one or two first-time speakers.
+- **Outreach status** is saved in your browser only. Use **Export CSV** to take a list elsewhere.
+- **Vinted colleagues are labelled**, since the source files mark them as not for outreach. A checkbox hides them.
+
+### Rebuild after the research changes
+
+Run this after editing any `<region>_dbt_companies.json`, then commit the result. It is separate from the Meetup pipeline.
+
+```sh
+dashboard/build_organiser.sh
+```
+
+- **Commit the data file before you update it.** Git history holds old versions, so don't keep `.v<N>.json` copies. They are git-ignored.
+
+### Add a chapter
+
+1. Save the research as `<folder>/<region>_dbt_companies.json`, in the shared schema from [`berlin_planning/SEARCH_METHOD.md`](berlin_planning/SEARCH_METHOD.md) §3.
+2. Add a line to `CHAPTERS` in `dashboard/build_organiser_data.py`, giving its label and goal (`speakers`, `attendees` or `both`). Without one, the chapter still loads, with goal `both`.
+3. Run `dashboard/build_organiser.sh`.
+
 ## Running the tests
 
 ```sh
