@@ -1,0 +1,5440 @@
+{
+  "metadata": {
+    "title": "Kuala Lumpur dbt companies and people for a new Kuala Lumpur dbt Meetup",
+    "generated_at": "2026-09-23",
+    "prepared_for": "Jeremy Chia (organising a Kuala Lumpur dbt Meetup)",
+    "purpose": "Find Malaysia-based people who could speak at (or help organise) a first Kuala Lumpur dbt Meetup, and the Malaysian companies that use dbt.",
+    "version": 1,
+    "schema_version": 1,
+    "region": "Kuala Lumpur",
+    "method": [
+      "v1 (2026-09-23): four parallel sub-agents — company blogs batch A (large Malaysian/regional companies), batch B (startups, vendors, consultancies), a people/community sweep (conferences, meetups, newsletters), and a LinkedIn Jobs scan (keywords=dbt&location=Malaysia, 627 listings, 488 data-titled ads opened, 27 containing the whole word dbt) plus Indeed Malaysia and freehire.me (countries=my&skills=dbt).",
+      "Second wave: a gap-fill agent (Data Council KL on Luma, Snowflake User Group KL, Snowflake World Tour KL 2025/2026, GDG KL; practitioners at strong-dbt employers) and a LinkedIn verification pass.",
+      "The session's 200-web-search cap was reached during the second wave; 16 people were not LinkedIn-searched (linkedin_confidence 'not_searched').",
+      "Topics assigned from TOPIC_VOCABULARY in pipeline/enrich.py (1–3 per item, most relevant first).",
+      "No Kuala Lumpur dbt chapter exists yet, so past_meetups and past_chapter_talks are empty."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead; 2 = good lead / needs verification / relevant talk at another meetup; 3 = older, peripheral or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'"
+    },
+    "caveats": [
+      "Titles and employers come from public pages/snippets and may be stale — verify before outreach.",
+      "Only public professional information is recorded; no personal contact details.",
+      "Very few Malaysia-based people have public dbt content. Most speaker leads are data leads at companies whose job ads require dbt (Ryt Bank, GXBank, foodpanda, Funding Societies); ask them for a dbt talk rather than assuming one exists.",
+      "LinkedIn URLs were matched from search snippets only; people with linkedin_confidence 'not_searched' still need a check.",
+      "freehire.me dbt tags come from automatic extraction; open the ad before treating dbt as core.",
+      "Speaker names for Snowflake World Tour sessions come from LinkedIn post snippets, not the agenda page."
+    ],
+    "counts": {
+      "companies": 89,
+      "people": 44,
+      "job_postings": 50,
+      "companies_with_job_postings": 36,
+      "speaker_evidence_items": 54,
+      "unique_content_items": 43,
+      "people_with_linkedin": 26,
+      "people_who_spoke_at_this_chapter": 0,
+      "internal_vinted": 1,
+      "level": {
+        "leadership": 16,
+        "working": 28
+      },
+      "speaker_potential": {
+        "high": 10,
+        "low": 7,
+        "medium": 27
+      },
+      "attendee_potential": {
+        "high": 11,
+        "medium": 32,
+        "low": 1
+      },
+      "priority_tier": {
+        "1": 3,
+        "3": 14,
+        "2": 14,
+        "connector": 12,
+        "organiser": 1
+      },
+      "watchlist_companies": 51,
+      "past_meetups": 0
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "data warehouse & platforms": 11,
+      "genai & llm": 9,
+      "data governance": 8,
+      "domain-specific use cases": 7,
+      "community": 6,
+      "career development": 5,
+      "team & org design": 5,
+      "performance & scale": 5,
+      "orchestration & ci/cd": 5,
+      "industry trends": 4,
+      "data quality & testing": 4,
+      "data engineering": 4,
+      "modern data stack": 4,
+      "tools & ecosystem": 4,
+      "analytics engineering": 3,
+      "dbt fundamentals": 3,
+      "project structure": 2,
+      "dbt best practices": 2,
+      "data modeling": 2,
+      "data mesh": 2,
+      "business intelligence": 1,
+      "dbt migration & adoption": 1,
+      "developer workflow": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "ryt-bank",
+      "name": "Ryt Bank (YTL Digital Bank)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Redshift",
+        "Airflow",
+        "PySpark",
+        "FastAPI"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer, Analytics",
+          "url": "https://www.linkedin.com/jobs/view/4460952768",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Ryt Bank",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proven experience with dbt and modern data warehouse platforms (Snowflake, Redshift)",
+          "job_poster": "Adiba Azhar – Recruiting Right Talents for Ryt Bank",
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer, Platform",
+          "url": "https://www.linkedin.com/jobs/view/4460955726",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Ryt Bank",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong proficiency in SQL and Python, and experience with libraries like PySpark, Pandas, DBT and FastAPI",
+          "job_poster": "Adiba Azhar – Recruiting Right Talents for Ryt Bank",
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Business Intelligence Analyst",
+          "url": "https://www.linkedin.com/jobs/view/4460967584",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Ryt Bank",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience with dbt (modeling), Airflow (orchestration), and cloud data warehouses",
+          "job_poster": "Adiba Azhar – Recruiting Right Talents for Ryt Bank",
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Business Intelligence Intern",
+          "url": "https://prosple.com/graduate-employers/ryt-bank/jobs-internships/business-intelligence-intern-0",
+          "source": "Prosple",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "build the enterprise reporting mart using dbt and Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "post",
+          "url": "https://www.linkedin.com/posts/auyongminhao_we-went-live-with-snowflake-signed-it-80-activity-7440548801280585728-_FFL",
+          "note": "Head of Data's post: Snowflake AI Data Platform live at Ryt Bank (2026)"
+        }
+      ],
+      "people": [
+        {
+          "id": "au-yong-min-hao",
+          "name": "Au Yong Min Hao",
+          "title": "Head of Data",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/auyongminhao"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Data Council Talks #12 (Data Council KL)",
+              "title": "Fireside Chat – The Great Tech Job Makeover: What AI Means for Your Career",
+              "date": "2025-06-19",
+              "url": "https://luma.com/m3nydr6r",
+              "content_id": "dckl-12-ai-career-panel",
+              "co_authors": [
+                "Fahim Surani",
+                "Michael Leow",
+                "Shahril Kamaruzzaman"
+              ],
+              "mentions_dbt": false,
+              "description": "Panellist at DCKL #12 (hosted at Xendit Malaysia); bio lists Head of Data at Ryt Bank, ex-Director of Data Engineering at MoneyLion.",
+              "topics": [
+                "career development",
+                "genai & llm",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "panel",
+              "event": "Snowflake Data for Breakfast Kuala Lumpur 2026",
+              "title": "Data for Breakfast KL: featuring Ryt Bank and S P Setia",
+              "date": "2026-04-21",
+              "url": "https://www.linkedin.com/posts/michael-utama-404a4a105_snowflake-dataforbreakfast-digitaltransformation-activity-7448286193986846720-cDX4",
+              "content_id": "snowflake-dfb-kl-2026",
+              "co_authors": [
+                "Alex Chi Chong Lim"
+              ],
+              "mentions_dbt": false,
+              "description": "Featured Ryt Bank customer speaker at Snowflake's KL breakfast event.",
+              "topics": [
+                "data warehouse & platforms",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "post",
+              "event": "LinkedIn post series",
+              "title": "What I look for in an Analytics Engineer",
+              "date": "2026",
+              "url": "https://www.linkedin.com/posts/auyongminhao_what-i-look-for-in-an-analytics-engineer-activity-7423050492580270080-sY4s",
+              "content_id": "ryt-bank-what-i-look-for-in-an-analytics-engineer",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "First post of a series on staffing a modern data team (then Data Platform Engineer, Data Scientist).",
+              "topics": [
+                "analytics engineering",
+                "team & org design",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/auyongminhao",
+              "note": "Result title: Au Yong Min Hao – Head of Data, Ryt Bank"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Standing up dbt + Snowflake at a greenfield digital bank, and how he hires analytics engineers.",
+          "past_chapter_talks": [],
+          "notes": "Ryt Bank ads require dbt + Snowflake, so his team runs dbt. Ex-MoneyLion (Director of Data Engineering) and KFit. Also a route into the ex-MoneyLion data network."
+        },
+        {
+          "id": "shawn-loh",
+          "name": "Shawn Loh",
+          "title": "Data Engineer II",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/shawn-loh-5001951ba"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": "Practitioner at a strong-dbt company",
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/shawn-loh-5001951ba",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Could co-present a Ryt Bank dbt talk with Au Yong Min Hao.",
+          "past_chapter_talks": [],
+          "notes": "Ex-MoneyLion; profile mentions data modelling and warehousing. No public talks."
+        }
+      ],
+      "notes": "Strongest dbt employer in KL: several open roles require dbt; Head of Data speaks publicly. Workday req name 'Analytics-Engineer_JR00000329' shows an explicit AE role."
+    },
+    {
+      "id": "gxbank",
+      "name": "GXBank",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya",
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Snowpipe",
+        "medallion architecture",
+        "BI Bytes (in-house self-serve BI)"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4464863204",
+          "source": "LinkedIn",
+          "linkedin_company_name": "GXBank",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "maintain robust and scalable ELT data pipelines using dbt (data build tool) for data transformation within Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer: Snowflake ELT & Airflow Lead",
+          "url": "https://freehire.me/jobs/senior-data-engineer-snowflake-elt-airflow-lead-gxbank-35hlwi4f",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "design, build, and operate robust ELT pipelines using dbt for Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "BI & Analytics Senior Specialist",
+          "url": "https://www.linkedin.com/jobs/view/4379627748/",
+          "source": "LinkedIn",
+          "linkedin_company_name": "GXBank",
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "tagged dbt on freehire; full text not verified",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.snowflake.com/en/world-tour/kuala-lumpur/agenda/",
+          "note": "Snowflake World Tour KL 2026 customer story 'The Cheat Code to Calm the Stormy Data Sea' (Bee Teng Lim)"
+        },
+        {
+          "type": "talk",
+          "url": "https://www.linkedin.com/posts/laxman-damodar-60349122_gxbank-snowflakecommunity-datasecurity-activity-7377240009361281024-ioKT",
+          "note": "Snowflake World Tour KL 2025: Data & AI governance session (Laxman Damodar)"
+        },
+        {
+          "type": "article",
+          "url": "https://www.theasianbanker.com/updates-and-articles/gx-bank-integrates-ai-to-scale-fraud-detection-risk-management-and-business-intelligence",
+          "note": "The Asian Banker on GXBank's BI Bytes and AI for fraud/risk/BI"
+        },
+        {
+          "type": "case_study",
+          "url": "https://www.snowflake.com/en/customers/",
+          "note": "Search snippet of a Snowflake customer story: medallion architecture with dbt for transformation logic and QA. Exact story URL not found."
+        }
+      ],
+      "people": [
+        {
+          "id": "bee-teng-lim",
+          "name": "Bee Teng Lim",
+          "title": "Head of Data Science & Analytics",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/bee-teng-lim-5b0234168"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "case_study",
+              "event": "Snowflake World Tour Kuala Lumpur 2026",
+              "title": "The Cheat Code to Calm the Stormy Data Sea",
+              "date": "2026-08-18",
+              "url": "https://www.linkedin.com/posts/changboon_snowflakeworldtour-dataengineering-ai-activity-7502542545151864832-zGWJ",
+              "content_id": "gxbank-swt-kl-2026-cheat-code",
+              "co_authors": [
+                "Chang Boon Heng"
+              ],
+              "mentions_dbt": false,
+              "description": "GXBank customer session on BI Bytes, its self-serve BI tool; speaker attribution from a Snowflake SE's recap post.",
+              "topics": [
+                "business intelligence",
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "panel",
+              "event": "The Asian Banker Summit 2026",
+              "title": "Digital banks turning data into action at scale",
+              "date": "2026",
+              "url": "https://www.instagram.com/p/DXD-ofpgb8i/",
+              "content_id": "asian-banker-summit-2026-gxbank",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Panel on digital banks using data and AI at scale.",
+              "topics": [
+                "industry trends",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/bee-teng-lim-5b0234168",
+              "note": "Result title: Bee Teng Lim – GXBank"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "BI Bytes: governed self-serve analytics on a dbt-modelled Snowflake warehouse.",
+          "past_chapter_talks": [],
+          "notes": "GXBank ads require dbt on Snowflake. Described in one source as Executive Director, Data Science."
+        },
+        {
+          "id": "laxman-damodar",
+          "name": "Laxman Damodar",
+          "title": "Head of Data Management",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/laxman-damodar-60349122"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake World Tour Kuala Lumpur 2025",
+              "title": "Data & AI Governance (real-world scenarios)",
+              "date": "2025-10-09",
+              "url": "https://www.linkedin.com/posts/laxman-damodar-60349122_gxbank-snowflakecommunity-datasecurity-activity-7377240009361281024-ioKT",
+              "content_id": "gxbank-swt-kl-2025-governance",
+              "co_authors": [
+                "Severin Gassauer-Fleissner"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented PII and data security governance at GXBank.",
+              "topics": [
+                "data governance",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/laxman-damodar-60349122",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "PII tagging, masking and governance policies in a bank's dbt layer.",
+          "past_chapter_talks": [],
+          "notes": "A second profile (my.linkedin.com/in/laxman-damodar-73919b348) shows the same title; the 60349122 URL matches his posts. Ex-CIMB data architecture."
+        },
+        {
+          "id": "caroline-chong",
+          "name": "Caroline Chong",
+          "title": "Head of Data",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/caroline-chong-a68a835"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/caroline-chong-a68a835",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Senior sponsor for a GXBank talk or venue. No public talks found."
+        },
+        {
+          "id": "haziq-noor",
+          "name": "Haziq Noor",
+          "title": "Data Analyst / Analytics Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/haziq-noor"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": "Practitioner at a strong-dbt company",
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/haziq-noor",
+              "note": "LinkedIn match (medium)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Lightning talk: switching from manufacturing into analytics engineering.",
+          "past_chapter_talks": [],
+          "notes": "Found via a GXBank + analytics engineer + dbt search. No talks found."
+        },
+        {
+          "id": "safwan-norasidin",
+          "name": "Safwan Norasidin",
+          "title": "Data Analytics Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/safwannorasidin"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": "Practitioner at a strong-dbt company",
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/safwannorasidin",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Ex-GXBank data engineering intern. No talks found."
+        }
+      ],
+      "notes": "dbt + Snowflake confirmed in ads and a customer-story snippet. GXBank has presented at Snowflake World Tour KL in 2024, 2025 and 2026."
+    },
+    {
+      "id": "moneylion",
+      "name": "MoneyLion (Gen Digital), KL tech hub",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt or SQLMesh",
+        "Apache Iceberg",
+        "AWS",
+        "Airflow",
+        "Kubernetes",
+        "Terraform",
+        "Kimball"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - MoneyLion",
+          "url": "https://www.linkedin.com/jobs/view/4416809159",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Gen",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Advanced experience with AWS cloud infrastructure and either DBT or SQLMesh for data transformations",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer - MoneyLion",
+          "url": "https://jobs.ashbyhq.com/gen-digital/cf481e28-f073-4b13-93e3-c8222642ed29",
+          "source": "Ashby (Gen Digital)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "either DBT or SQLMesh for data transformations",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+          "note": "Hosted the Snowflake User Group KL launch meetup (17 Jul 2024) at its TRX office"
+        },
+        {
+          "type": "meetup",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-24th-april-2025/",
+          "note": "Hosted the Snowflake User Group KL meetup (24 Apr 2025, 58 attendees)"
+        },
+        {
+          "type": "meetup",
+          "url": "https://allevents.in/kuala%20lumpur/moneylion-tech-talk-12/10000755112831807",
+          "note": "Runs its own public 'MoneyLion Tech Talk' series in KL (#12 Nov 2023, #14 Jul 2024)"
+        },
+        {
+          "type": "other",
+          "url": "https://theorg.com/org/moneylion/teams/data-engineering-and-analytics",
+          "note": "Org chart of the Data Engineering & Analytics team"
+        }
+      ],
+      "people": [
+        {
+          "id": "arnold-cheong",
+          "name": "Arnold Cheong",
+          "title": "Lead, Data Engineering",
+          "city": "Petaling Jaya",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/arnold-cheong-wk/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "Host of the Snowflake User Group KL launch meetup",
+              "date": "2024-07-17",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+              "content_id": "moneylion-snowflake-ug-kl-host-2024",
+              "co_authors": [
+                "Sasi Subramaniam"
+              ],
+              "mentions_dbt": false,
+              "description": "MoneyLion host and core-team contact for the KL Snowflake chapter.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "panel",
+              "event": "Snowflake World Tour Kuala Lumpur 2025",
+              "title": "Panel with KAF Digital Bank and Snowflake",
+              "date": "2025-10-09",
+              "url": "https://www.linkedin.com/posts/dr-muhsin-hassan_im-excited-to-be-speaking-and-sharing-insights-activity-7381831801624961025-ZULd",
+              "content_id": "swt-kl-2025-kaf-moneylion-panel",
+              "co_authors": [
+                "Muhsin Hassan",
+                "Kaushik GD"
+              ],
+              "mentions_dbt": false,
+              "description": "Panel at Snowflake World Tour KL; full session title cut off in the snippet.",
+              "topics": [
+                "data warehouse & platforms",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/arnold-cheong-wk/",
+              "note": "Result title: Arnold Cheong – MoneyLion; snippet: leads the Data Engineering team, formerly Setel, Petaling Jaya"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Why MoneyLion chose dbt or SQLMesh on Snowflake + Iceberg.",
+          "past_chapter_talks": [],
+          "notes": "Leads MoneyLion's data engineering team (~15 engineers); ex-Setel. Title differs by source (Lead Data Engineer vs Director of Engineering). Best venue/host contact."
+        },
+        {
+          "id": "wilbert-chong",
+          "name": "Wilbert Chong",
+          "title": "Data Engineer",
+          "city": "Selangor",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/wilbertchong27/",
+            "https://my.linkedin.com/in/wilbertchong27"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "Snowflake Blueprint: Building a Secure and Scalable Data Platform",
+              "date": "2025-04-24",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-24th-april-2025/",
+              "content_id": "moneylion-snowflake-blueprint",
+              "co_authors": [
+                "Dafuallah Esameldien"
+              ],
+              "mentions_dbt": false,
+              "description": "How MoneyLion built a secure, scalable data platform on Snowflake.",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake World Tour Kuala Lumpur (2024)",
+              "title": "Redefining Data Architecture with Apache Iceberg and Snowflake",
+              "date": "2024",
+              "url": "https://www.linkedin.com/posts/michael-utama-404a4a105_snowflake-world-tour-kuala-lumpur-activity-7243483645686996992-OgPW",
+              "content_id": "moneylion-swt-kl-iceberg",
+              "co_authors": [
+                "Dafuallah Esameldien",
+                "Chang Boon Heng"
+              ],
+              "mentions_dbt": false,
+              "description": "MoneyLion's move to an Iceberg-based architecture on Snowflake (from a LinkedIn post snippet). A 'Maximizing FinOps Efficiency in Snowflake' session was also given.",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/wilbertchong27/",
+              "note": "Result title: Wilbert Chong – Data Engineer @ MoneyLion"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "The transformation layer on Snowflake + Iceberg: dbt vs SQLMesh.",
+          "past_chapter_talks": [],
+          "notes": "Monash Malaysia; ex-Beyondsoft (Tencent IEG)."
+        },
+        {
+          "id": "dafuallah-esameldien",
+          "name": "Dafuallah Esameldien",
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/dafuallah"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "Snowflake Blueprint: Building a Secure and Scalable Data Platform",
+              "date": "2025-04-24",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-24th-april-2025/",
+              "content_id": "moneylion-snowflake-blueprint",
+              "co_authors": [
+                "Wilbert Chong"
+              ],
+              "mentions_dbt": false,
+              "description": "How MoneyLion built a secure, scalable data platform on Snowflake.",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake World Tour Kuala Lumpur (2024)",
+              "title": "Redefining Data Architecture with Apache Iceberg and Snowflake",
+              "date": "2024",
+              "url": "https://www.linkedin.com/posts/michael-utama-404a4a105_snowflake-world-tour-kuala-lumpur-activity-7243483645686996992-OgPW",
+              "content_id": "moneylion-swt-kl-iceberg",
+              "co_authors": [
+                "Wilbert Chong",
+                "Chang Boon Heng"
+              ],
+              "mentions_dbt": false,
+              "description": "MoneyLion's Iceberg-on-Snowflake architecture (from a LinkedIn post snippet).",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/dafuallah",
+              "note": "Result title: Dafuallah Esameldien – Data Engineer – MoneyLion (my.linkedin.com)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Governance and cost controls around a Snowflake + dbt/SQLMesh stack.",
+          "past_chapter_talks": [],
+          "notes": "One snippet mentioned New York; the Malaysian LinkedIn subdomain and KL talks point to Malaysia."
+        },
+        {
+          "id": "goh-pei-xuan",
+          "name": "Goh Pei Xuan",
+          "title": "Data Engineer II",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/pei-xuan-goh-b3a32920a"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Council Talks #11 (Data Council KL, at AWS KL)",
+              "title": "Taming Airflow: From Development Struggles to Robust Architecture",
+              "date": "2024-12-05",
+              "url": "https://lu.ma/aufuyvtq",
+              "content_id": "dckl-11-taming-airflow",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Building a robust Airflow setup on Kubernetes and Helm at MoneyLion.",
+              "topics": [
+                "orchestration & ci/cd",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "MoneyLion Tech Talk #14",
+              "title": "Airflow setup talk",
+              "date": "2024-07-10",
+              "url": "https://stayhappening.com/e/moneylion-tech-talk-14-E3LV5HDRXDAW",
+              "content_id": "moneylion-tech-talk-14-airflow",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Earlier version of the Airflow talk at MoneyLion's in-house series.",
+              "topics": [
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/pei-xuan-goh-b3a32920a",
+              "note": "Result title: Pei Xuan Goh – Data Engineer II at MoneyLion"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Orchestrating dbt/SQLMesh with Airflow on Kubernetes.",
+          "past_chapter_talks": [],
+          "notes": "Not the same person as the Apave/Singapore profiles with this name."
+        },
+        {
+          "id": "wei-peng-tan",
+          "name": "Wei Peng Tan",
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/tan-wei-peng"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "Infrastructure as Code with Snowflake: Terraform for User Access Control",
+              "date": "2024-07-17",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+              "content_id": "moneylion-snowflake-terraform-iac",
+              "co_authors": [
+                "Ng Ser Jie"
+              ],
+              "mentions_dbt": false,
+              "description": "Managing Snowflake user access control with Terraform.",
+              "topics": [
+                "orchestration & ci/cd",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/tan-wei-peng",
+              "note": "Result title: Tan Wei Peng – Data Engineer at MoneyLion"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Access-as-code and CI/CD guardrails for a dbt project on Snowflake.",
+          "past_chapter_talks": [],
+          "notes": ""
+        },
+        {
+          "id": "ng-ser-jie",
+          "name": "Ng Ser Jie",
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "Infrastructure as Code with Snowflake: Terraform for User Access Control",
+              "date": "2024-07-17",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+              "content_id": "moneylion-snowflake-terraform-iac",
+              "co_authors": [
+                "Wei Peng Tan"
+              ],
+              "mentions_dbt": false,
+              "description": "Managing Snowflake user access control with Terraform.",
+              "topics": [
+                "orchestration & ci/cd",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Two LinkedIn searches found no profile."
+        },
+        {
+          "id": "michael-leow",
+          "name": "Michael Leow",
+          "title": "Principal SRE",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Data Council Talks #12 (Data Council KL)",
+              "title": "Fireside Chat – The Great Tech Job Makeover: What AI Means for Your Career",
+              "date": "2025-06-19",
+              "url": "https://luma.com/m3nydr6r",
+              "content_id": "dckl-12-ai-career-panel",
+              "co_authors": [
+                "Au Yong Min Hao",
+                "Fahim Surani",
+                "Shahril Kamaruzzaman"
+              ],
+              "mentions_dbt": false,
+              "description": "Panellist; tech co-founder of Carlist.my, Sinar Project civic tech.",
+              "topics": [
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "SRE, not a data practitioner. Hosted an SRE meetup at MoneyLion (https://luma.com/oc0x8m75). Name too common to match LinkedIn."
+        }
+      ],
+      "notes": "Most speaker-ready data team in KL and a proven host (Snowflake UG, own Tech Talk series). Ads say 'dbt or SQLMesh': ask which runs in production."
+    },
+    {
+      "id": "foodpanda-malaysia",
+      "name": "foodpanda Malaysia (Delivery Hero), KL analytics hub",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow",
+        "Looker",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Analyst (Finance)",
+          "url": "https://www.linkedin.com/jobs/view/4443739305",
+          "source": "LinkedIn",
+          "linkedin_company_name": "foodpanda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transform massive datasets into actionable insights using tools like BigQuery and dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Marketing and Experimentation Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/4462574178",
+          "source": "LinkedIn",
+          "linkedin_company_name": "foodpanda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "implement and transform massive datasets into actionable insights using tools like BigQuery and dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Analyst, Quick Commerce & Partnerships",
+          "url": "https://www.linkedin.com/jobs/view/4464967383",
+          "source": "LinkedIn",
+          "linkedin_company_name": "foodpanda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "using tools like BigQuery and dbt ... Familiarity with dbt/Airflow is a plus",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "KL hub serves 16–17 markets and its analysts build dbt models. foodpanda's Singapore team has spoken at the Singapore dbt Meetup (test bloat, model versioning), so ask them for a KL colleague."
+    },
+    {
+      "id": "funding-societies-my",
+      "name": "Funding Societies | Modalku (Malaysia)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "AWS (S3, Glue, Lambda, MWAA)",
+        "Airflow",
+        "Metabase"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (regional data team, Malaysia)",
+          "url": "https://remotive.com/remote/jobs/software-development/data-engineer-4305838",
+          "source": "Remotive",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build and maintain modular, tested, and well-documented data transformation models using dbt on top of Snowflake.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://www.foundit.my/job/data-engineer-funding-societies-modalku-group-malaysia-50735391",
+          "source": "foundit",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build modular, tested, documented dbt models on top of Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/feed/fsmk-engineering",
+          "note": "Latest ~10 posts (Dec 2024–Jul 2026): AI, auth, i18n, IAM; no dbt"
+        }
+      ],
+      "people": [],
+      "notes": "dbt on Snowflake with a Malaysia-based role, but no named data authors found."
+    },
+    {
+      "id": "deriv",
+      "name": "Deriv",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cyberjaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "GCP",
+        "BigQuery",
+        "Airflow",
+        "dbt or Dataform",
+        "Kafka",
+        "Pub/Sub",
+        "Kimball / Data Vault"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4430522144",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Deriv",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "You've shipped with dbt or Dataform and understand why transformation layers matter",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineering Lead",
+          "url": "https://www.linkedin.com/jobs/view/4430503420",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Deriv",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "worked with dbt or Dataform ... Kimball or Data Vault",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineering Tech Lead",
+          "url": "https://freehire.me/jobs/data-engineering-tech-lead-deriv-com-majyllcw",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "GCP, BigQuery, Airflow, dbt, and Kafka",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://deriv.com/derivtech/feed/data-engineering-at-deriv-building-robust-infrastructure",
+          "note": "Old Deriv Tech data post now redirects to derivai.substack.com (AI-focused); no dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Hiring heavily for data engineers in Cyberjaya. Seen on LinkedIn but no public content: Fauzan Ragitya (data engineer)."
+    },
+    {
+      "id": "intrepid-asia",
+      "name": "Intrepid Asia",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Snowflake",
+        "StarRocks",
+        "Airflow",
+        "Cube.dev",
+        "Looker Studio",
+        "Superset"
+      ],
+      "job_postings": [
+        {
+          "title": "Head of Data & Analytics (AI Native)",
+          "url": "https://www.linkedin.com/jobs/view/4413414613",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Intrepid Asia",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Our current stack includes Google BigQuery, StarRocks, Airflow, DBT, Cube.dev (semantic layer), Looker Studio, and Apache Superset",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://my.linkedin.com/jobs/view/my-senior-analytics-engineer-at-intrepid-asia-4275620629",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Intrepid Asia",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt, BigQuery, Snowflake; semantic layers and data marts",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "SEA e-commerce enabler with its regional data & AI team in KL. The Head of Data role is open, so no named lead yet."
+    },
+    {
+      "id": "star-media-group",
+      "name": "Star Media Group Berhad",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "GCP Dataflow",
+        "Looker Studio",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4467511148",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Star Media Group Berhad",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proven experience using Apache Airflow and dbt to manage complex data workflows",
+          "job_poster": "Serafina Liew – Executive, Group People at Star Media Group Berhad",
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "No named practitioners found."
+    },
+    {
+      "id": "time-dotcom",
+      "name": "TIME dotCom Berhad",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Shah Alam"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "medallion (silver/gold)",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Analyst (Consumer Business)",
+          "url": "https://www.linkedin.com/jobs/view/4436899868",
+          "source": "LinkedIn",
+          "linkedin_company_name": "TIME dotCom Berhad",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "silver-layer cleaning ... through gold-layer models ready for reporting, including dbt implementation, testing, and documentation",
+          "job_poster": "Brenda Ann – Talent Acquisition | HR Business Partner @ TIME dotCom Berhad",
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "A recruiter ad for an unnamed Shah Alam telco using dbt + Looker (see askheadhunter) may be TIME too."
+    },
+    {
+      "id": "askheadhunter",
+      "name": "Askheadhunter / Timesconsult (recruiter, unnamed telco client)",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Shah Alam"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst @ Telco Company - Shah Alam",
+          "url": "https://malaysia.indeed.com/viewjob?jk=c0aae1d50efd90fc",
+          "source": "Indeed",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience with dbt for data transformation and modelling. Experience using Looker.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Client possibly TIME dotCom."
+    },
+    {
+      "id": "nitka",
+      "name": "Nitka Technologies",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Batu Pahat, Johor"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt macros",
+        "incremental models",
+        "snapshots"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4424851445",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Nitka",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT frameworks with reusable dbt macros, incremental models, and snapshot patterns",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Johor, outside the Klang Valley."
+    },
+    {
+      "id": "onsemi",
+      "name": "onsemi (Malaysia)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Selangor"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Sales Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4469308125",
+          "source": "LinkedIn",
+          "linkedin_company_name": "onsemi",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build and maintain robust data models using DBT following best practices and standards",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "wilhelmsen",
+      "name": "Wilhelmsen (KL GBS Data & Analytics)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "AI Platform Engineer",
+          "url": "https://malaysia.indeed.com/viewjob?jk=a935048f25c5ff32",
+          "source": "Indeed",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Ensure integration with Snowflake and dbt data foundation.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Platform Engineer",
+          "url": "https://my.linkedin.com/jobs/view/data-platform-engineer-at-wilhelmsen-ship-management-4419193956",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Wilhelmsen Ship Management",
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "dbt not confirmed in snippet",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Snowflake + dbt data foundation in the KL shared-services centre. No named people found."
+    },
+    {
+      "id": "rockwool-malaysia",
+      "name": "ROCKWOOL (Malaysia)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Subang Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "Snowflake",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Snowflake, DBT Cloud & AI Platforms",
+          "url": "https://freehire.me/jobs/senior-data-engineer-snowflake-dbt-cloud-ai-platforms-rockwool-international-a-s-qooqnku2",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "builds and optimizes Snowflake and DBT Cloud pipelines",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "One of few dbt Cloud mentions in Malaysia."
+    },
+    {
+      "id": "synogize",
+      "name": "Synogize (KL office)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Melbourne"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt",
+        "Coalesce",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer – Snowflake Technology - Kuala Lumpur",
+          "url": "https://www.linkedin.com/jobs/view/4460927477",
+          "source": "LinkedIn",
+          "linkedin_company_name": "synogize",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong technical expertise in Snowflake, SQL and cloud platforms ... including tools like dbt, Coalesce and Fivetran",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.snowflake.com/en/world-tour/kuala-lumpur/",
+          "note": "Exhibited at Snowflake World Tour KL 2025/2026"
+        },
+        {
+          "type": "profile",
+          "url": "https://my.linkedin.com/in/raqilhidayat",
+          "note": "Synogize KL staff (Rafi Aqila Hidayat) at the World Tour booth"
+        }
+      ],
+      "people": [
+        {
+          "id": "ong-jee-jen",
+          "name": "Ong Jee Jen",
+          "title": "General Manager, Malaysia",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/ong-jee-jen-64788639"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Supply-chain data sharing session",
+              "title": "Panel on supply-chain data sharing",
+              "date": "2026",
+              "url": "https://www.linkedin.com/posts/ong-jee-jen-64788639_thanks-jeff-tan-for-organizing-a-well-curated-activity-7454702555038859264-el7w",
+              "content_id": "synogize-supply-chain-panel",
+              "co_authors": [
+                "Bryan Yeo",
+                "Eu Jin Kuan",
+                "David Teh"
+              ],
+              "mentions_dbt": false,
+              "description": "Panellist at a supply-chain data sharing session.",
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/ong-jee-jen-64788639",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Route to sponsorship and to a consultant speaker (other KL staff: Prashant Murali, Vincent Low)."
+        }
+      ],
+      "notes": "Australian Snowflake/dbt consultancy with a KL delivery office: possible sponsor."
+    },
+    {
+      "id": "agoda-kl",
+      "name": "Agoda (KL office)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Spark",
+        "Vertica",
+        "StarRocks",
+        "Airflow",
+        "dbt",
+        "semantic layer"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior / Staff Data Engineer (BI) – CEG Team",
+          "url": "https://www.linkedin.com/jobs/view/4455255312",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Agoda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT tools or orchestration frameworks (e.g., Airflow, dbt, internal frameworks)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer: Semantic Layer & API Services (KL)",
+          "url": "https://freehire.me/jobs/senior-data-engineer-semantic-layer-api-services-agoda-ehij7g2k",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": null,
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/feed/agoda-engineering",
+          "note": "Mar–Aug 2026 feed: no dbt posts"
+        }
+      ],
+      "people": [],
+      "notes": "Small semantic-layer platform team in KL; most data engineering is in Bangkok."
+    },
+    {
+      "id": "oxydata",
+      "name": "Oxydata Software Sdn Bhd",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "BigQuery",
+        "Snowflake",
+        "Redshift",
+        "Airflow",
+        "dbt",
+        "Dagster"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4439855784",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Oxydata Software Sdn Bhd",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with workflow orchestration tools (e.g. Airflow, dbt, Dagster)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "cloudmile",
+      "name": "CloudMile",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "GCP",
+        "Spark",
+        "Beam",
+        "Kafka",
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4454233513",
+          "source": "LinkedIn",
+          "linkedin_company_name": "CloudMile",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "open-source big data technologies such as Spark, Hadoop, Apache Beam, Kafka, dbt, and Airflow",
+          "job_poster": "Gee Nee Cheah – Senior Human Resources Specialist",
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Google Cloud partner."
+    },
+    {
+      "id": "prudential-services-asia",
+      "name": "Prudential Services Asia",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "PySpark",
+        "Azure Data Factory",
+        "Cloud Composer",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Associate Director, Data & AI Architect",
+          "url": "https://www.linkedin.com/jobs/view/4450200795",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Prudential Services Asia",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern ETL/ELT tools such as DBT, PySpark, Azure Data Factory (ADF), Cloud Composer, and Apache Airflow",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "coforge",
+      "name": "Coforge",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "AWS Glue",
+        "Airflow",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://malaysia.indeed.com/viewjob?jk=fa6ed99b4131d2bd",
+          "source": "Indeed",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT pipelines using AWS Glue, Airflow, dbt, SQL, and Python",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "rapsodo",
+      "name": "Rapsodo (KL)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Dataform or dbt",
+        "Kubernetes",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data & AI Engineer",
+          "url": "https://malaysia.indeed.com/viewjob?jk=1bacb67470b622b1",
+          "source": "Indeed",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "experience with a SQL transformation framework (Dataform, dbt, or equivalent)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "sime-darby-industrial",
+      "name": "Sime Darby Industrial",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Selangor"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt or Informatica",
+        "Snowflake",
+        "Azure Synapse"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Executive, Data Engineer",
+          "url": "https://simedarby.wd3.myworkdayjobs.com/en-US/SimeCareerSite/job/Malaysia--Selangor--SDI-Head-Office-B004/Senior-Executive--Data-Engineer_JR120616",
+          "source": "Workday",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "modern transformation tools such as dbt, Informatica, or similar (search summary only)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "ams-osram",
+      "name": "ams OSRAM (Kulim)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kulim, Kedah"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Apache NiFi",
+        "Azure Data Factory"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Cloud Data Engineer",
+          "url": "https://freehire.me/jobs/staff-cloud-data-engineer-ams-osram-tpbg3rik",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL, Python, dbt, Airflow, Apache NiFi and Azure Data Factory",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Northern Malaysia."
+    },
+    {
+      "id": "endava",
+      "name": "Endava (KL)",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Python",
+        "AWS",
+        "Snowflake",
+        "Airflow",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-endava-p3jinw7u",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Python, AWS, Snowflake, Airflow, and dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "bonuslink",
+      "name": "BonusLink",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Dagster",
+        "Athena",
+        "BigQuery",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-bonuslink-2r6khtzc",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "tagged dbt by freehire",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "dfi-retail-group",
+      "name": "DFI Retail Group (PJ)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://freehire.me/jobs/lead-data-engineer-dfi-retail-group-m3doxlqv",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "tagged dbt by freehire",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "g-asiapacific",
+      "name": "G-AsiaPacific",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake/Databricks/BigQuery",
+        "Airflow",
+        "dbt",
+        "AWS"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-g-asiapacific-336coftb",
+          "source": "freehire",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake/Databricks/BigQuery and orchestration tools like Airflow/dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Malaysian cloud services provider (since 2008)."
+    },
+    {
+      "id": "k3-advisory-group",
+      "name": "K3 Advisory Group (incl. Quantuma)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Azure",
+        "Microsoft Fabric",
+        "Databricks",
+        "dbt (desirable)"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4452605736",
+          "source": "LinkedIn",
+          "linkedin_company_name": "K3 Advisory Group",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Desirable: Experience with DBT, data contracts or semantic layer tooling",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Also posted as Quantuma: https://www.linkedin.com/jobs/view/4452426928"
+    },
+    {
+      "id": "standard-chartered-kl",
+      "name": "Standard Chartered (KL)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Databricks",
+        "Azure",
+        "PySpark",
+        "dbt",
+        "Dataiku"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Manager, T&O Performance Management (India, Malaysia)",
+          "url": "https://www.linkedin.com/jobs/view/4460214623",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Standard Chartered",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Databricks, Azure, Python / PySpark, dbt, Dataiku or comparable tools is advantageous",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "reap",
+      "name": "Reap (KL)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior AI Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/4465095492",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Reap",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Nice to Have ... Experience with dbt or similar transformation and testing frameworks",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "wpp-media",
+      "name": "WPP Media (KL)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt or Dataform",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "Manager, Data & Analytics (Advertising Technology)",
+          "url": "https://www.linkedin.com/jobs/view/4451205059",
+          "source": "LinkedIn",
+          "linkedin_company_name": "WPP Media",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Exposure to data pipelines like dbt or Dataform",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "concentrix",
+      "name": "Concentrix (KL)",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Snowflake",
+        "BigQuery",
+        "Databricks",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Professional, BI Analyst (TCF)",
+          "url": "https://www.linkedin.com/jobs/view/4449527648",
+          "source": "LinkedIn",
+          "linkedin_company_name": "Concentrix",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation tooling such as dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "rotate",
+      "name": "Rotate (KL)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Databricks",
+        "Airflow",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst",
+          "url": "https://malaysia.indeed.com/viewjob?jk=eaf3b914a2403432",
+          "source": "Indeed",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Familiarity with data tools such as Databricks, Airflow, dbt, or similar — not required, but a bonus",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "fasset",
+      "name": "Fasset (KL)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "analytics engineering"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer, Kuala Lumpur",
+          "url": "https://builtin.com/job/analytics-engineer-kuala-lumpur/8951729",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "dbt not seen in snippet",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Analytics engineering role in KL; stack unverified."
+    },
+    {
+      "id": "ikano-retail",
+      "name": "Ikano Retail (IKEA franchisee)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Azure Data Factory",
+        "Databricks",
+        "PySpark",
+        "Azure Synapse"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer, Ikano Retail",
+          "url": "https://www.linkedin.com/jobs/view/4227390196",
+          "source": "LinkedIn",
+          "linkedin_company_name": "IKEA",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Azure Data Factory, Databricks and PySpark, Azure Synapse, and dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michael-rorig",
+          "name": "Michael Rorig",
+          "title": "Head of Data",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Databricks Data + AI World Tour Kuala Lumpur 2023",
+              "title": "Generative AI: Data-Driven Roadmap to Success",
+              "date": "2023-08",
+              "url": "https://events.databricks.com/DataAI_World_Tour_Kuala_Lumpur/registration-closed",
+              "content_id": "databricks-daiwt-kl-2023-genai-panel",
+              "co_authors": [
+                "Chari T.V. Thirumala",
+                "Lim Eu Shawn",
+                "Chua Yong Howe"
+              ],
+              "mentions_dbt": false,
+              "description": "Panel on data-driven GenAI roadmaps.",
+              "topics": [
+                "genai & llm",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "KL base not verified; older evidence."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "shopback",
+      "name": "ShopBack",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Singapore"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Holistics"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "article",
+          "url": "https://medium.com/shopback-tech-blog/tagged/dbt",
+          "note": "3-part 'Designing ELT pipelines with dbt' series (2021)"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/feed/shopback-tech-blog/tagged/dbt",
+          "note": "Only 3 dbt posts, all 2021"
+        }
+      ],
+      "people": [
+        {
+          "id": "wei-jian",
+          "name": "Wei Jian",
+          "title": "Data Analyst (former ShopBack; current role unverified)",
+          "city": "Malaysia (per a third-party profile)",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "ShopBack Tech Blog",
+              "title": "Designing ELT pipelines with dbt (Parts 1–3)",
+              "date": "2021-08",
+              "url": "https://medium.com/shopback-tech-blog/designing-elt-pipelines-with-dbt-part-1-7dabe1c33572",
+              "content_id": "shopback-designing-elt-pipelines-with-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Migrating BI-tool transformations to dbt with layered models, naming conventions, tests, docs and partial parsing.",
+              "topics": [
+                "dbt migration & adoption",
+                "project structure",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": "Migrating a multi-country marketplace to dbt: what we'd do differently.",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "article",
+              "event": "Medium (personal)",
+              "title": "Lessons learned after 1 year with dbt.",
+              "date": "2022-08-24",
+              "url": "https://medium.com/@imweijian/lessons-learned-after-1-year-with-dbt-a7f0ccf85b12",
+              "content_id": "weijian-lessons-1-year-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Running a dbt project while the analytics team tripled from 6 to 18.",
+              "topics": [
+                "dbt best practices",
+                "team & org design",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "article",
+              "event": "Medium (personal)",
+              "title": "Lessons learned when scaling dbt models quickly.",
+              "date": "2022-09-26",
+              "url": "https://medium.com/@imweijian/lessons-learned-when-scaling-dbt-models-quickly-c3fcd1551663",
+              "content_id": "weijian-scaling-dbt-models-quickly",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Problems met when growing the number of dbt models fast.",
+              "topics": [
+                "project structure",
+                "performance & scale",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Scaling a dbt project when analyst headcount triples.",
+          "past_chapter_talks": [],
+          "notes": "Only Malaysia link is a third-party profile. Earlier Carousell and Piktochart. Very common name: match LinkedIn only with ShopBack/Carousell/Piktochart in history. No posts since 2022."
+        }
+      ],
+      "notes": "Best written dbt content by a Malaysia-linked author, but old (2021–22)."
+    },
+    {
+      "id": "xendit",
+      "name": "Xendit (Malaysia office, KL Sentral)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Jakarta",
+        "Manila"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Delta Lake",
+        "Spark"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "article",
+          "url": "https://medium.com/xendit-engineering/optimizing-costs-of-a-data-lakehouse-3cb6777b2f94",
+          "note": "Jun 2023: lakehouse transform tables built with dbt"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/feed/xendit-engineering",
+          "note": "1 dbt post; latest post Feb 2024"
+        },
+        {
+          "type": "meetup",
+          "url": "https://lu.ma/dckl8",
+          "note": "Hosted Data Council KL #8 (May 2024) and #12 (Jun 2025) at its KL office"
+        }
+      ],
+      "people": [
+        {
+          "id": "david-lexa",
+          "name": "David Lexa",
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Xendit Engineering (Medium)",
+              "title": "Optimizing costs of a Data Lakehouse",
+              "date": "2023-06-12",
+              "url": "https://medium.com/xendit-engineering/optimizing-costs-of-a-data-lakehouse-3cb6777b2f94",
+              "content_id": "xendit-optimizing-lakehouse-costs",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Processing raw data into clean and transform Delta tables with dbt, and cutting costs.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Cost-optimising dbt on a lakehouse.",
+          "past_chapter_talks": [],
+          "notes": "Probably in Indonesia/Philippines: remote speaker only."
+        }
+      ],
+      "notes": "Data team probably outside Malaysia, but its KL office is a proven meetup venue (DCKL)."
+    },
+    {
+      "id": "syakeer-rahman-independent",
+      "name": "Syakeer Rahman (independent / OSS)",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Malaysia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Core",
+        "DuckDB",
+        "Athena",
+        "Trino",
+        "Airflow",
+        "DataHub",
+        "Elementary",
+        "Ollama"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "oss",
+          "url": "https://github.com/SyakeerRahman/Data_Engineering_Open_Source_Data_Platform_Airflow_dbt_Trino_Ollama_AI",
+          "note": "Open-source AWS data platform with ~500 dbt models, slim CI and text-to-SQL on the dbt manifest"
+        }
+      ],
+      "people": [
+        {
+          "id": "syakeer-rahman",
+          "name": "Syakeer Rahman",
+          "title": "Data engineer (employer unknown)",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "Data_Engineering_Open_Source_Data_Platform_Airflow_dbt_Trino_Ollama_AI",
+              "date": "2026",
+              "url": "https://github.com/SyakeerRahman/Data_Engineering_Open_Source_Data_Platform_Airflow_dbt_Trino_Ollama_AI",
+              "content_id": "syakeer-oss-dbt-trino-ollama",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Low-cost AWS platform: dbt Core on DuckDB/Athena, slim CI (state:modified+), DataHub lineage and a text-to-SQL layer indexing the dbt manifest.",
+              "topics": [
+                "genai & llm",
+                "orchestration & ci/cd",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": "A 500-model dbt platform for under $500/month, plus text-to-SQL from the manifest.",
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "A 500-model dbt platform for under $500/month, plus text-to-SQL from the dbt manifest.",
+          "past_chapter_talks": [],
+          "notes": "README says it was built for a small data engineering team in Malaysia. Repo is new (1 star); date inferred."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "lance-data",
+      "name": "Lance Data",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lee-boon-keong",
+          "name": "Lee Boon Keong (BK)",
+          "title": "Data Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/leeboonkeong/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Council Talks #6 (Virtual), Data Council KL",
+              "title": "Introductory presentation on dbt (data build tool)",
+              "date": "2020-05-21",
+              "url": "http://1bk.dev/blog/2020/05/22/data-council-dbt-presentation",
+              "content_id": "dckl-6-dbt-intro-2020",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Guest introduction to dbt at DCKL; slides and repo at github.com/1bk/dc-dbt. The only KL dbt talk found.",
+              "topics": [
+                "dbt fundamentals",
+                "analytics engineering",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "simple-airports-analysis-v2 (dlt + DuckDB + Prefect + dbt + marimo)",
+              "date": null,
+              "url": "https://github.com/1bk/simple-airports-analysis-v2",
+              "content_id": "1bk-simple-airports-analysis-v2",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Rebuild of his Malaysian airports analysis on a fully open-source stack including dbt.",
+              "topics": [
+                "modern data stack",
+                "tools & ecosystem",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Data Council KL",
+              "title": "Volunteer committee member, Data Council KL",
+              "date": "2024-12-05",
+              "url": "https://lu.ma/aufuyvtq",
+              "content_id": "dckl-committee",
+              "co_authors": [
+                "Irfan Noordin"
+              ],
+              "mentions_dbt": false,
+              "description": "Named as a DCKL volunteer committee member on the #11 event page.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/leeboonkeong/",
+              "note": "Result title: Boon Keong Lee – Lance Data (job move from MoneyLion confirmed)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Six years after introducing dbt to KL: a laptop-scale open-source stack (dlt, DuckDB, dbt) on Malaysian open data.",
+          "past_chapter_talks": [],
+          "notes": "Investment analyst turned data engineer (1bk.dev/about). Ex-MoneyLion. Top pick for first speaker AND co-organiser: he sits on the DCKL committee."
+        }
+      ],
+      "notes": "Employer of Lee Boon Keong; company stack not researched."
+    },
+    {
+      "id": "seek-kl",
+      "name": "SEEK / Jobstreet (KL tech hub)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks",
+        "EMR",
+        "Spark",
+        "Delta Lake",
+        "AWS"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (Data Delivery)",
+          "url": "https://startup.jobs/data-engineer-seek-9999091",
+          "source": "startup.jobs",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": null,
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": null,
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://lu.ma/ykeg7loq",
+          "note": "Hosted Data Council KL #10 (Jul 2024) at Menara AIA Cap Square"
+        }
+      ],
+      "people": [
+        {
+          "id": "md-obaidul-karim",
+          "name": "Md Obaidul Karim",
+          "title": "Staff/Principal Data Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/md-obaidul-karim-24059015"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Council Talks #10 (Data Council KL, at SEEK)",
+              "title": "From Cluster Chaos to Calm: The S3 & Delta Table Rescue Mission",
+              "date": "2024-07-18",
+              "url": "https://lu.ma/ykeg7loq",
+              "content_id": "dckl-10-s3-delta-rescue",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Moving a Parquet data lake to Delta tables on S3 for reliability, freshness and cost.",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/md-obaidul-karim-24059015",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Lakehouse table formats and what they mean for a dbt layer.",
+          "past_chapter_talks": [],
+          "notes": "SEEK is a likely venue sponsor."
+        },
+        {
+          "id": "azwan-zuharimi",
+          "name": "Azwan Zuharimi",
+          "title": "Senior Data Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/azwan-zuharimi"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "post",
+              "event": "LinkedIn post",
+              "title": "Post on DuckDB / SQL / data warehousing",
+              "date": "2023-10",
+              "url": "https://www.linkedin.com/posts/azwan-zuharimi_duckdb-python-sql-activity-7114625829048918016-wFv2",
+              "content_id": "azwan-duckdb-warehouse-post",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Search summary says he advises learning warehouse concepts before dbt; has taught a data engineering class.",
+              "topics": [
+                "data modeling",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/azwan-zuharimi",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Warehouse fundamentals before dbt: a beginner-track talk.",
+          "past_chapter_talks": [],
+          "notes": "Ex-FWD Singapore. dbt advice from a search summary only."
+        }
+      ],
+      "notes": "Databricks stack, but hosts data meetups and has speaking engineers."
+    },
+    {
+      "id": "celcomdigi",
+      "name": "CelcomDigi",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Snowflake CoWork"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+          "note": "'The Snowflake Journey – A CelcomDigi Point of View' (Jul 2024)"
+        },
+        {
+          "type": "talk",
+          "url": "https://www.snowflake.com/en/world-tour/kuala-lumpur/agenda/",
+          "note": "'Making AI Real for Customer Experience: CelcomDigi's Journey with Snowflake CoWork' (Aug 2026)"
+        }
+      ],
+      "people": [
+        {
+          "id": "fairuz-rizal-a-rashid",
+          "name": "Ts. Fairuz Rizal A Rashid",
+          "title": "Senior IT Architect (Data & AI)",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "The Snowflake Journey – A CelcomDigi Point of View",
+              "date": "2024-07-17",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+              "content_id": "celcomdigi-snowflake-journey",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "CelcomDigi's data platform modernisation and Snowflake architecture.",
+              "topics": [
+                "data warehouse & platforms",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake World Tour Kuala Lumpur 2026",
+              "title": "Making AI Real for Customer Experience: CelcomDigi's Journey with Snowflake CoWork",
+              "date": "2026-08-18",
+              "url": "https://www.snowflake.com/en/world-tour/kuala-lumpur/agenda/",
+              "content_id": "celcomdigi-swt-kl-2026-cowork",
+              "co_authors": [
+                "Sasi Subramaniam"
+              ],
+              "mentions_dbt": false,
+              "description": "AI-driven customer experience on Snowflake for ~20M subscribers.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Modelling telco data for 20M subscribers: where transformation and governance sit.",
+          "past_chapter_talks": [],
+          "notes": "2026 speaker name from a search snippet; agenda lists no names. CDMP."
+        }
+      ],
+      "notes": "Large Snowflake customer; transformation tool unknown."
+    },
+    {
+      "id": "bank-islam",
+      "name": "Bank Islam Malaysia",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "DataHub",
+        "dbt (per newsletter snippet)"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hasbullah-abu-bakar",
+          "name": "Hasbullah Abu Bakar",
+          "title": "Data Engineering Lead, CDX",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Council Talks #8 (Data Council KL, at Xendit)",
+              "title": "Where is my data? Introducing DataHub",
+              "date": "2024-05-16",
+              "url": "https://lu.ma/dckl8",
+              "content_id": "dckl-8-datahub",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Running the DataHub metadata platform in production at a bank.",
+              "topics": [
+                "data governance",
+                "tools & ecosystem",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "article",
+              "event": "Substack 'Data, Proses dan Cerita' (Malay)",
+              "title": "Susur Galur Data / Data Lineage",
+              "date": null,
+              "url": "https://hasbullahabubakar.substack.com/p/susur-galur-data-data-lineage",
+              "content_id": "hasbullah-susur-galur-data",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Malay-language post on data lineage; search summary says it covers dbt for SQL management and lineage.",
+              "topics": [
+                "data governance",
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt + a data catalogue for lineage in a regulated Islamic bank, or a dbt intro in Bahasa Malaysia.",
+          "past_chapter_talks": [],
+          "notes": "Writes in Malay (~1k subscribers). dbt mention from a search summary, not a full read."
+        },
+        {
+          "id": "shahril-kamaruzzaman",
+          "name": "Ts. Shahril Kamaruzzaman",
+          "title": "Head of Technology-Engineering-Data / Principal Architect",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/ts-shahril-kamaruzzaman-92354813a"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Data Council Talks #12 (Data Council KL)",
+              "title": "Fireside Chat – The Great Tech Job Makeover: What AI Means for Your Career",
+              "date": "2025-06-19",
+              "url": "https://luma.com/m3nydr6r",
+              "content_id": "dckl-12-ai-career-panel",
+              "co_authors": [
+                "Au Yong Min Hao",
+                "Fahim Surani",
+                "Michael Leow"
+              ],
+              "mentions_dbt": false,
+              "description": "Bio highlights cost-effective data architectures and cloud migrations (AirAsia, Carsome).",
+              "topics": [
+                "career development",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "panel",
+              "event": "World AI Show Malaysia 2026",
+              "title": "Enterprise AI panel",
+              "date": "2026",
+              "url": "https://www.linkedin.com/posts/world-ai-show_worldaishowmalaysia2026-worldaishow-waismalaysia-activity-7503324588085452800-GMWj",
+              "content_id": "world-ai-show-my-2026-bank-islam",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Panellist at World AI Show Malaysia 2026.",
+              "topics": [
+                "genai & llm",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/ts-shahril-kamaruzzaman-92354813a",
+              "note": "LinkedIn match (medium)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Cost-optimised cloud data architecture migrations.",
+          "past_chapter_talks": [],
+          "notes": "URL appeared with a '/ms' locale suffix (stripped)."
+        }
+      ],
+      "notes": "Two public speakers; dbt only via a Malay newsletter snippet."
+    },
+    {
+      "id": "kaf-digital-bank",
+      "name": "KAF Digital Bank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake (likely)"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "muhsin-hassan",
+          "name": "Muhsin Hassan, PhD",
+          "title": "Head of Data",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/dr-muhsin-hassan"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Snowflake World Tour Kuala Lumpur 2025",
+              "title": "Panel with MoneyLion and Snowflake",
+              "date": "2025-10-09",
+              "url": "https://www.linkedin.com/posts/dr-muhsin-hassan_im-excited-to-be-speaking-and-sharing-insights-activity-7381831801624961025-ZULd",
+              "content_id": "swt-kl-2025-kaf-moneylion-panel",
+              "co_authors": [
+                "Arnold Cheong",
+                "Kaushik GD"
+              ],
+              "mentions_dbt": false,
+              "description": "Panel at Snowflake World Tour KL; full title cut off in the snippet.",
+              "topics": [
+                "data warehouse & platforms",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/dr-muhsin-hassan",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Building a digital bank's data platform from scratch.",
+          "past_chapter_talks": [],
+          "notes": "Ex-Deloitte, Accendo, TM. No dbt evidence yet."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "grab",
+      "name": "Grab (PJ/KL tech centre)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya",
+        "Singapore"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Spark",
+        "Airflow",
+        "Hive",
+        "Iceberg",
+        "DataHub (Hubble)",
+        "Genchi",
+        "Data Contract Registry"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://engineering.grab.com/feed.xml",
+          "note": "No dbt content; in-house stack"
+        },
+        {
+          "type": "article",
+          "url": "https://engineering.grab.com/data-mesh-part-2-the-foundational-tools-behind-certification",
+          "note": "Data Mesh Part II (Apr 2026)"
+        },
+        {
+          "type": "article",
+          "url": "https://engineering.grab.com/data-mesh-at-grab-part-three",
+          "note": "Data Mesh Part III (Aug 2026)"
+        }
+      ],
+      "people": [
+        {
+          "id": "harvey-li",
+          "name": "Harvey Li",
+          "title": "Grab Data Tech",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/li-haihui/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Grab Tech Blog",
+              "title": "Data Mesh at Grab (Part II): The foundational tools behind certification",
+              "date": "2026-04-30",
+              "url": "https://engineering.grab.com/data-mesh-part-2-the-foundational-tools-behind-certification",
+              "content_id": "grab-data-mesh-part-2",
+              "co_authors": [
+                "Aezo Teo",
+                "Houren Chen",
+                "Feng Cheng"
+              ],
+              "mentions_dbt": false,
+              "description": "Hubble catalogue certification, Genchi data quality and the Data Contract Registry.",
+              "topics": [
+                "data mesh",
+                "data governance",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "article",
+              "event": "Grab Tech Blog",
+              "title": "Data Mesh at Grab (Part III): Operationalizing data reliability with automated DPIs",
+              "date": "2026-08-28",
+              "url": "https://engineering.grab.com/data-mesh-at-grab-part-three",
+              "content_id": "grab-data-mesh-part-3",
+              "co_authors": [
+                "Shuguang Xiang",
+                "Zi Qin Yeow",
+                "Feng Cheng"
+              ],
+              "mentions_dbt": false,
+              "description": "Contract breaches become automated Data Production Issues with RCA and auto-healing.",
+              "topics": [
+                "data quality & testing",
+                "data mesh",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/li-haihui/",
+              "note": "LinkedIn match (medium)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Data contracts and certification: patterns a dbt team can borrow.",
+          "past_chapter_talks": [],
+          "notes": "Probably Singapore-based."
+        },
+        {
+          "id": "zi-qin-yeow",
+          "name": "Zi Qin Yeow",
+          "title": "Senior Software Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Grab Tech Blog",
+              "title": "Data Mesh at Grab (Part III): Operationalizing data reliability with automated DPIs",
+              "date": "2026-08-28",
+              "url": "https://engineering.grab.com/data-mesh-at-grab-part-three",
+              "content_id": "grab-data-mesh-part-3",
+              "co_authors": [
+                "Harvey Li",
+                "Shuguang Xiang",
+                "Feng Cheng"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-author on automated data incident handling.",
+              "topics": [
+                "data quality & testing",
+                "data mesh"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Universiti Malaya graduate (2024), so possibly Malaysia-based. GitHub ziqinyeow."
+        },
+        {
+          "id": "feng-cheng",
+          "name": "Feng Cheng",
+          "title": "Grab data platform",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/chengfengatgrab/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Grab Tech Blog",
+              "title": "Data Mesh at Grab (Part II): The foundational tools behind certification",
+              "date": "2026-04-30",
+              "url": "https://engineering.grab.com/data-mesh-part-2-the-foundational-tools-behind-certification",
+              "content_id": "grab-data-mesh-part-2",
+              "co_authors": [
+                "Aezo Teo",
+                "Harvey Li",
+                "Houren Chen"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-author on Grab's data certification tooling.",
+              "topics": [
+                "data mesh",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/chengfengatgrab/",
+              "note": "LinkedIn match (medium)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Result titled 'Cheng Feng – Grab' (name order reversed)."
+        }
+      ],
+      "notes": "Strong data-mesh and data-quality writing, but no dbt and authors mostly in Singapore."
+    },
+    {
+      "id": "carsome",
+      "name": "Carsome",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Airflow",
+        "Tableau",
+        "Decube",
+        "Google Cloud"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "article",
+          "url": "https://www.decube.io/post/build-modern-data-stack-discussion",
+          "note": "CDO interview on the modern data stack; no dbt"
+        },
+        {
+          "type": "news",
+          "url": "https://www.googlecloudpresscorner.com/2025-04-02-CARSOME-Group-Consolidates-Cloud-Infrastructure-Shifts-Data-and-AI-Driven-Innovation-Into-High-Gear-with-Google-Cloud-and-Searce",
+          "note": "Apr 2025: consolidated on Google Cloud"
+        }
+      ],
+      "people": [
+        {
+          "id": "piyush-palkar",
+          "name": "Piyush Palkar",
+          "title": "Chief Data Officer (as of 2023 interview)",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/p-dataguy"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "interview",
+              "event": "Decube blog",
+              "title": "Building a Modern Data Stack: Insights from Carsome's CDO, Piyush Palkar",
+              "date": "2023-07",
+              "url": "https://www.decube.io/post/build-modern-data-stack-discussion",
+              "content_id": "carsome-modern-data-stack-interview",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Carsome's warehouse choice, ETL tools, Airflow, Tableau and data observability.",
+              "topics": [
+                "modern data stack",
+                "data warehouse & platforms",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/p-dataguy",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Building a data org at a Malaysian unicorn.",
+          "past_chapter_talks": [],
+          "notes": "Role may be stale; check he is still at Carsome."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "decube",
+      "name": "Decube",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Singapore"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "data observability",
+        "data catalogue",
+        "dbt-core connector"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "izzudin-hafiz",
+          "name": "Izzudin Hafiz",
+          "title": "Co-founder & CTO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/izzudinhafiz/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Council Talks #9 (Data Council KL, at Setel)",
+              "title": "Data Contracts: Building Data Trust",
+              "date": "2024",
+              "url": "https://luma.com/t5fcsqb6",
+              "content_id": "dckl-9-data-contracts",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data contracts as interfaces, guarantees and ownership.",
+              "topics": [
+                "data quality & testing",
+                "data governance",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/izzudinhafiz/",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt model contracts and tests vs upstream data contracts.",
+          "past_chapter_talks": [],
+          "notes": "Vendor-adjacent (Decube has a dbt connector). Talk was in KL; home city unverified."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "one-credit",
+      "name": "One Credit",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yudhiesh-ravindranath",
+          "name": "Yudhiesh Ravindranath",
+          "title": "Staff Data Scientist",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/yudhiesh-ravindranath"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Council Talks #9 (Data Council KL)",
+              "title": "Grokking Vector Databases",
+              "date": "2024",
+              "url": "https://luma.com/t5fcsqb6",
+              "content_id": "dckl-9-vector-databases",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Choosing a vector database for GenAI search, based on work at MoneyLion.",
+              "topics": [
+                "genai & llm",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/yudhiesh-ravindranath",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Serving warehouse-modelled data to LLM and search apps.",
+          "past_chapter_talks": [],
+          "notes": "Moved MoneyLion → One Credit (LinkedIn result title). ML profile; weak dbt fit."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "roche-kl",
+      "name": "Roche (KL)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "poo-kuan-hoong",
+          "name": "Dr. Poo Kuan Hoong",
+          "title": "Section Lead: Data Analytics – Data Engineering",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "AWS Community Day Malaysia 2025",
+              "title": "Agentic AI Vibe Coding with Kiro",
+              "date": "2025",
+              "url": "https://awsug.my/acd-2025.html",
+              "content_id": "acd-my-2025-kiro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Agentic AI coding at the Malaysian AWS community conference.",
+              "topics": [
+                "genai & llm",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "podcast",
+              "event": "Big Data Talks #18",
+              "title": "New Technologies, Algorithms and Building User Communities",
+              "date": null,
+              "url": "https://www.youtube.com/watch?v=TxqnITAK1pw",
+              "content_id": "big-data-talks-18-poo-kuan-hoong",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Interview on data technologies and building communities.",
+              "topics": [
+                "community",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "AI coding agents for dbt development.",
+          "past_chapter_talks": [],
+          "notes": "Google Developer Expert (AI); regular GDG/AWS speaker. Strong connector to KL dev communities. awsug.my links linkedin.com/in/kuanhoong (not confirmed in search)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ant-international",
+      "name": "Ant International (KL)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hong-vin-koay",
+          "name": "Hong Vin Koay",
+          "title": "Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/koayhv/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "PyLadies x PyData Kuala Lumpur Meetup",
+              "title": "Host of the PyData KL meetup",
+              "date": "2025-10-30",
+              "url": "https://www.meetup.com/pydatakl/events/311302096/",
+              "content_id": "pydata-kl-pyladies-2025-10",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted PyData KL (with PyLadies KL) during PyCon MY 2025 week.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/koayhv/",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "PyData KL organiser and PyCon MY organiser. Cross-promotion partner, not a dbt speaker."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "sd-guthrie",
+      "name": "SD Guthrie",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "irfan-noordin",
+          "name": "Irfan Noordin",
+          "title": "Manager, Cloud and Data",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/irfan-noordin"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Council KL",
+              "title": "Volunteer committee member, Data Council KL",
+              "date": "2024-12-05",
+              "url": "https://lu.ma/aufuyvtq",
+              "content_id": "dckl-committee",
+              "co_authors": [
+                "Lee Boon Keong"
+              ],
+              "mentions_dbt": false,
+              "description": "Named as a DCKL volunteer committee member; writes DCKL recap posts.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/irfan-noordin",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Potential co-organiser via Data Council KL."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "ocbc-malaysia",
+      "name": "OCBC Malaysia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bagus-mahendra-wicaksono",
+          "name": "Bagus Mahendra Wicaksono",
+          "title": "Application Architect",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "GDG Cloud KL Build with AI Session 2",
+              "title": "BigQuery Multimodal: Analyze Text, Images, Audio & More with SQL",
+              "date": "2025-05-10",
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-kl-presents-gdg-cloud-kl-build-with-ai-session-2/",
+              "content_id": "gdg-cloud-kl-bwai-2025-bigquery-multimodal",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Workshop on BigQuery multimodal SQL.",
+              "topics": [
+                "data warehouse & platforms",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Only data talk found at GDG KL 2025. No dbt signal."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "sp-setia",
+      "name": "S P Setia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alex-chi-chong-lim",
+          "name": "Alex Chi Chong Lim",
+          "title": "Chief Information & Digital Officer",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Snowflake Data for Breakfast Kuala Lumpur 2026",
+              "title": "Data for Breakfast KL: featuring Ryt Bank and S P Setia",
+              "date": "2026-04-21",
+              "url": "https://www.linkedin.com/posts/michael-utama-404a4a105_snowflake-dataforbreakfast-digitaltransformation-activity-7448286193986846720-cDX4",
+              "content_id": "snowflake-dfb-kl-2026",
+              "co_authors": [
+                "Au Yong Min Hao"
+              ],
+              "mentions_dbt": false,
+              "description": "Snowflake customer speaker for S P Setia.",
+              "topics": [
+                "industry trends",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Executive; route to an S P Setia data engineer."
+        }
+      ],
+      "notes": "Snowflake customer."
+    },
+    {
+      "id": "datalemur-independent",
+      "name": "Katie Huang Xiemin (independent / DataLemur)",
+      "type": "independent",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Malaysia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "katie-huang-xiemin",
+          "name": "Katie Huang Xiemin",
+          "title": "SQL Consultant / Data Analyst",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/katiehuangx/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "post",
+              "event": "LinkedIn post",
+              "title": "#dataengineering: learning dbt, Snowflake and Dagster",
+              "date": "2023-05",
+              "url": "https://www.linkedin.com/posts/katiehuangx_dataengineering-activity-7064127275838947328-Bs3Q",
+              "content_id": "katiehuangx-learning-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Moving from analyst to data engineering; dbt is her favourite tool for query lineage.",
+              "topics": [
+                "career development",
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "8-Week-SQL-Challenge case study solutions",
+              "date": null,
+              "url": "https://github.com/katiehuangx/8-Week-SQL-Challenge",
+              "content_id": "katiehuangx-8-week-sql-challenge",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Widely forked SQL case-study repo (~320 stars).",
+              "topics": [
+                "community",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/katiehuangx/",
+              "note": "LinkedIn match (high)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "From accountant to SQL/dbt practitioner.",
+          "past_chapter_talks": [],
+          "notes": "Malaysia per GitHub; city unknown. Large following: good for promoting the meetup."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "snowflake-my",
+      "name": "Snowflake Malaysia / Snowflake User Group KL",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt Projects on Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://usergroups.snowflake.com/kuala-lumpur/",
+          "note": "KL user group: 161 members, last event Apr 2025"
+        },
+        {
+          "type": "talk",
+          "url": "https://www.snowflake.com/en/world-tour/kuala-lumpur/agenda/",
+          "note": "World Tour KL 2026 had a Snowflake-led breakout 'Data Engineering for AI: dbt Projects, Semantic Views and Snowflake CoCo'"
+        }
+      ],
+      "people": [
+        {
+          "id": "chang-boon-heng",
+          "name": "Chang Boon Heng",
+          "title": "Senior Solutions Engineer",
+          "city": "Kuala Lumpur",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Community Meetup Kuala Lumpur",
+              "title": "Snowflake Tech Updates",
+              "date": "2025-04-24",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-24th-april-2025/",
+              "content_id": "snowflake-ug-kl-2025-04-tech-updates",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vendor update on new Snowflake features.",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "dbt Projects on Snowflake demo.",
+          "past_chapter_talks": [],
+          "notes": "Vendor. Useful for customer introductions (GXBank, MoneyLion)."
+        },
+        {
+          "id": "yun-fei-choo",
+          "name": "Yun Fei Choo",
+          "title": "Field Marketing Lead, SEA",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Organiser of the Snowflake User Group KL; co-hosting contact."
+        }
+      ],
+      "notes": "Existing KL Snowflake community (dormant since Apr 2025) can seed the dbt meetup audience."
+    },
+    {
+      "id": "aws-malaysia",
+      "name": "AWS Malaysia",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://lu.ma/aufuyvtq",
+          "note": "AWS KL (Mid Valley) hosted Data Council KL #11"
+        }
+      ],
+      "people": [
+        {
+          "id": "fahim-surani",
+          "name": "Fahim Surani",
+          "title": "Senior Solutions Architect (FSI, GenAI)",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Data Council Talks #12 (Data Council KL)",
+              "title": "Fireside Chat – The Great Tech Job Makeover: What AI Means for Your Career",
+              "date": "2025-06-19",
+              "url": "https://luma.com/m3nydr6r",
+              "content_id": "dckl-12-ai-career-panel",
+              "co_authors": [
+                "Au Yong Min Hao",
+                "Michael Leow",
+                "Shahril Kamaruzzaman"
+              ],
+              "mentions_dbt": false,
+              "description": "AWS panellist.",
+              "topics": [
+                "genai & llm",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Venue route (AWS KL office)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "aws-user-groups-malaysia",
+      "name": "AWS User Groups Malaysia",
+      "type": "community",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://www.awsug.my/acd-2025.html",
+          "note": "AWS Community Day Malaysia 2025 (27 Sep 2025, Sunway)"
+        }
+      ],
+      "people": [
+        {
+          "id": "kaushik-mohanraj",
+          "name": "Kaushik Mohanraj",
+          "title": "User Group Leader",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Fellow leaders: Sanket Saxena, Hafiz Syed Ashir Hassan, Meenal Saxena."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "microsoft-fabric-community-my",
+      "name": "Microsoft Fabric Community Malaysia",
+      "type": "community",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://www.meetup.com/kuala-lumpur-microsoft-project-meetup-group/",
+          "note": "175 members; meetups at Microsoft Malaysia"
+        }
+      ],
+      "people": [
+        {
+          "id": "chen-zhen-yew",
+          "name": "Chen Zhen Yew",
+          "title": "Organiser, Microsoft Fabric Community Malaysia",
+          "city": "Kuala Lumpur",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Route to the Microsoft venue and Fabric/Power BI users."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "data-council-kl",
+      "name": "Data Council Kuala Lumpur (DCKL)",
+      "type": "community",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://luma.com/dckl",
+          "note": "12 meetups since 2019; 150–200 RSVPs; hosts Xendit, Setel, SEEK, AWS. No events since Jun 2025."
+        },
+        {
+          "type": "talk",
+          "url": "http://1bk.dev/blog/2020/05/22/data-council-dbt-presentation",
+          "note": "DCKL #6 (2020): the only dbt talk found in KL"
+        }
+      ],
+      "people": [],
+      "notes": "Main KL data-engineering meetup and the natural co-host. Committee: Lee Boon Keong, Irfan Noordin (listed under their employers)."
+    },
+    {
+      "id": "fivetran-dbt-labs",
+      "name": "Fivetran / dbt Labs (merged 2026)",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": true,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Fivetran"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "news",
+          "url": "https://www.fivetran.com/press/fivetran-dbt-labs-complete-merger-to-create-the-data-infrastructure-for-trusted-ai-agents",
+          "note": "Merger completed May 2026"
+        },
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/pro/dbt/",
+          "note": "dbt Meetup Pro network: no Kuala Lumpur group exists"
+        }
+      ],
+      "people": [],
+      "notes": "No Malaysian staff found. Contact for chapter set-up and swag, not an outreach target. Partner directory loads by JavaScript."
+    },
+    {
+      "id": "databricks-my",
+      "name": "Databricks Malaysia",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://events.databricks.com/FY27-AI-Days-KualaLumpur/session/3792313/customer-spotlight-petronas",
+          "note": "AI Day KL (May 2026): PETRONAS, Malaysia Airlines, DNB"
+        }
+      ],
+      "people": [],
+      "notes": "Customers could be targets for a dbt-on-Databricks talk."
+    },
+    {
+      "id": "vinted",
+      "name": "Vinted",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Berlin",
+        "Vilnius"
+      ],
+      "local_presence": "none",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jeremy-chia",
+          "name": "Jeremy Chia",
+          "title": "Senior Analytics Engineer, Shipping Finance",
+          "city": "Berlin",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Singapore dbt Meetup",
+              "title": "Building and Analysing a Structured Dataset of Singapore's Parliamentary Speeches - Parleh-Mate",
+              "date": "2025-08-19",
+              "url": "https://www.meetup.com/singapore-dbt-meetup/events/310382971/",
+              "content_id": "sg-dbt-meetup-2025-08-19-jeremy-chia",
+              "co_authors": [
+                "Royce Hoe"
+              ],
+              "mentions_dbt": true,
+              "description": "How the Parleh-Mate personal project made Singapore's parliamentary speeches easier to explore and analyse using a stack with dbt, Python, LLM, and Render, from data extraction to modelling.",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": true,
+          "priority_tier": "organiser",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Organiser of this search; co-organises the Berlin dbt Meetup. Past Singapore dbt Meetup speaker."
+        }
+      ],
+      "notes": "Organiser's employer; no Malaysian presence."
+    },
+    {
+      "id": "setel",
+      "name": "Setel (Petronas)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup",
+          "url": "https://luma.com/t5fcsqb6",
+          "note": "Hosted Data Council KL #9 (2024)"
+        },
+        {
+          "type": "other",
+          "url": "https://theorg.com/org/setel/teams/data-analysis",
+          "note": "Small data team"
+        }
+      ],
+      "people": [],
+      "notes": "No stack evidence; proven venue."
+    },
+    {
+      "id": "airasia-capital-a",
+      "name": "AirAsia / Capital A / airasia MOVE / Teleport / BigPay",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sepang",
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Google Cloud",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://cloud.google.com/customers/airasia",
+          "note": "Google Cloud customer story (older)"
+        }
+      ],
+      "people": [],
+      "notes": "A 'dbt within Snowflake' snippet credited to AirAsia was actually GXBank's ad."
+    },
+    {
+      "id": "propertyguru",
+      "name": "PropertyGuru / iProperty",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Singapore"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "AWS",
+        "Terraform"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/feed/propertyguru-engineering",
+          "note": "Nov 2023–Dec 2024: software/infra only"
+        }
+      ],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "mr-diy",
+      "name": "MR DIY International",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks",
+        "Spark",
+        "Kafka"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://freehire.me/jobs/data-engineer-lead-mr-diy-international-zo5x4san",
+          "note": "Data Engineer Lead: Databricks stack"
+        }
+      ],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "genting-malaysia",
+      "name": "Genting Malaysia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Azure Synapse",
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://freehire.me/jobs/data-engineer-genting-malaysia-ruija5ni",
+          "note": "Data Engineer: Azure/Databricks"
+        }
+      ],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "tng-digital",
+      "name": "Touch 'n Go / TNG Digital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Two searches, no stack evidence."
+    },
+    {
+      "id": "digital-banks-other",
+      "name": "Boost / Boost Bank, AEON Bank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "No stack evidence found."
+    },
+    {
+      "id": "malaysian-incumbent-banks",
+      "name": "Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Grouped; not searched in depth. Likely traditional enterprise stacks."
+    },
+    {
+      "id": "telcos-other",
+      "name": "Axiata / ADA, Maxis, U Mobile, Telekom Malaysia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "No dbt evidence."
+    },
+    {
+      "id": "petronas",
+      "name": "Petronas / Petronas Digital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks (customer)"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Databricks customer spotlight 2026."
+    },
+    {
+      "id": "ecommerce-logistics-other",
+      "name": "Shopee MY, Lazada MY, Ninja Van MY, J&T",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Data engineering mostly in Singapore/China."
+    },
+    {
+      "id": "conglomerates-media-other",
+      "name": "Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Grouped; one search each at most."
+    },
+    {
+      "id": "small-my-startups",
+      "name": "Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "No public data blogs or dbt evidence."
+    },
+    {
+      "id": "gbs-mncs-kl",
+      "name": "MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Cyberjaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "No dbt ads found."
+    },
+    {
+      "id": "experian-my",
+      "name": "Experian Malaysia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cyberjaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Hadoop",
+        "Spark",
+        "Azure"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "mindvalley",
+      "name": "Mindvalley",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "GCP"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "fuku",
+      "name": "Fuku",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://startup.jobs/analytics-data-engineer-fuku-7847169",
+          "note": "Analytics & Data Engineer; no dbt"
+        }
+      ],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "storehub",
+      "name": "StoreHub (incl. Beep)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "No engineering blog."
+    },
+    {
+      "id": "fave",
+      "name": "Fave",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "iprice",
+      "name": "iPrice Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "airwallex",
+      "name": "Airwallex",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Singapore",
+        "Melbourne"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://careers.airwallex.com/job/161c20a1-e79b-4755-aa7b-2367bb1e4885/staff-data-platform-engineer/",
+          "note": "Staff Data Platform Engineer mentions Airflow and DBT (snippet)"
+        }
+      ],
+      "people": [],
+      "notes": "No KL data team confirmed."
+    },
+    {
+      "id": "employment-hero",
+      "name": "Employment Hero",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Sydney"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://employmenthero.com/jobs/position/employment-hero-senior-analytics-engineer-remote-mm5at/",
+          "note": "Senior Analytics Engineer (remote)"
+        }
+      ],
+      "people": [],
+      "notes": "KL data team unconfirmed."
+    },
+    {
+      "id": "lalamove",
+      "name": "Lalamove",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hong Kong",
+        "Kuala Lumpur"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "atome",
+      "name": "Atome (Advance Intelligence Group)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur",
+        "Singapore"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "wise-kl",
+      "name": "Wise (KL office)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kuala Lumpur"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://builtin.com/job/data-engineer/9418569",
+          "note": "dbt ad is London-based"
+        }
+      ],
+      "people": [],
+      "notes": "Unclear whether KL staff do data work."
+    },
+    {
+      "id": "rbc-shared-services-malaysia",
+      "name": "RBC Shared Services Malaysia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Penang"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "AWS",
+        "Snowflake",
+        "dbt (snippet)"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Search summary mentioned dbt in a Penang data engineer ad; no URL found."
+    },
+    {
+      "id": "starhub-pj",
+      "name": "StarHub (PJ)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Petaling Jaya"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Airbyte",
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_posting",
+          "url": "https://careers.starhub.com/job/Petaling-Jaya-Principal-Data-Engineer/1362906166/",
+          "note": "Principal Data Engineer; dbt not seen"
+        }
+      ],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "consultancies-unverified",
+      "name": "Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity)",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.aimpointdigital.com/partners/dbt-labs",
+          "note": "Aimpoint is a dbt partner; no KL presence"
+        }
+      ],
+      "people": [],
+      "notes": "Infinite Lambda runs the Singapore dbt Meetup (Michael Han) — worth asking about a Malaysian consultant."
+    }
+  ],
+  "sources": {
+    "company_blogs_scanned": [
+      "https://deriv.com/derivtech/feed/data-engineering-at-deriv-building-robust-infrastructure",
+      "https://engineering.grab.com/feed.xml",
+      "https://medium.com/feed/agoda-engineering",
+      "https://medium.com/feed/fsmk-engineering",
+      "https://medium.com/feed/propertyguru-engineering",
+      "https://medium.com/feed/shopback-tech-blog/tagged/dbt",
+      "https://medium.com/feed/xendit-engineering",
+      "https://www.aimpointdigital.com/partners/dbt-labs"
+    ],
+    "job_boards": [
+      "https://www.linkedin.com/jobs/search?keywords=dbt&location=Malaysia",
+      "https://freehire.me/jobs?countries=my&skills=dbt",
+      "https://malaysia.indeed.com/q-dbt-jobs.html",
+      "https://my.jobstreet.com/dbt-jobs (JS-only, not readable)"
+    ],
+    "conference_agendas": [
+      "https://www.snowflake.com/en/world-tour/kuala-lumpur/agenda/",
+      "https://www.snowflake.com/events/data-for-breakfast/kuala-lumpur/",
+      "https://events.databricks.com/FY27-AI-Days-KualaLumpur/",
+      "https://www.awsug.my/acd-2025.html",
+      "https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-devfest-2025-kl-gdg-kl-x-gdg-cloud-kl/",
+      "https://cfp.pycon.my/pyconmy-2025/schedule/ (not readable)"
+    ],
+    "community_event_pages": [
+      "https://lu.ma/dckl8",
+      "https://luma.com/t5fcsqb6",
+      "https://lu.ma/ykeg7loq",
+      "https://lu.ma/aufuyvtq",
+      "https://luma.com/m3nydr6r",
+      "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-17-july-2024/",
+      "https://usergroups.snowflake.com/events/details/snowflake-kuala-lumpur-presents-snowflake-community-meetup-kuala-lumpur-24th-april-2025/",
+      "https://luma.com/65cp4q8c",
+      "http://1bk.dev/blog/2020/05/22/data-council-dbt-presentation"
+    ],
+    "past_meetups_derived_from": null
+  },
+  "past_meetups": [],
+  "community_channels": [
+    {
+      "name": "Data Council Kuala Lumpur (DCKL)",
+      "url": "https://luma.com/dckl",
+      "note": "Main KL data-engineering meetup since 2019; 150–200 RSVPs; Meetup group (private, ~730 members): meetup.com/datacouncil-ai-kuala-lumpur-data-engineering-science. Committee includes Lee Boon Keong and Irfan Noordin. No events since Jun 2025 — best co-host."
+    },
+    {
+      "name": "Snowflake User Group – Kuala Lumpur",
+      "url": "https://usergroups.snowflake.com/kuala-lumpur/",
+      "note": "161 members; organisers Yun Fei Choo (Snowflake) and Eric Z.; host contact Arnold Cheong (MoneyLion). Last event Apr 2025."
+    },
+    {
+      "name": "PyData Kuala Lumpur",
+      "url": "https://www.meetup.com/pydatakl/",
+      "note": "329 members; organiser Hong Vin Koay; Discord discord.gg/6RK9FDP. Low activity."
+    },
+    {
+      "name": "PyCon Malaysia",
+      "url": "https://www.pycon.my/",
+      "note": "Annual conference (Sunway University). pretalx schedule at cfp.pycon.my/pyconmy-2025/ loads by JavaScript and could not be read."
+    },
+    {
+      "name": "PyLadies Kuala Lumpur",
+      "url": "https://my.linkedin.com/in/pyladieskl",
+      "note": "Co-ran the Oct 2025 PyData KL meetup."
+    },
+    {
+      "name": "AWS User Groups Malaysia / AWS Community Day MY",
+      "url": "https://www.awsug.my/acd-2025.html",
+      "note": "Leaders Kaushik Mohanraj et al.; partners include SRE KL, Cloud Native KL, AI Tinkerers KL."
+    },
+    {
+      "name": "Microsoft Fabric Community Malaysia",
+      "url": "https://www.meetup.com/kuala-lumpur-microsoft-project-meetup-group/",
+      "note": "175 members; organiser Chen Zhen Yew; meets at Microsoft Malaysia."
+    },
+    {
+      "name": "GDG Kuala Lumpur / GDG Cloud KL",
+      "url": "https://gdg.community.dev/gdg-kuala-lumpur/",
+      "note": "DevFest KL 1,200+ attendees, AI/mobile-heavy; Build with AI KL: bwai.gdgkl.my."
+    },
+    {
+      "name": "KL Data Science (Meetup)",
+      "url": "https://www.meetup.com/kl-data-science/",
+      "note": "Private, 307 members, mostly inactive."
+    },
+    {
+      "name": "MoneyLion Tech Talk series",
+      "url": "https://allevents.in/kuala%20lumpur/moneylion-tech-talk-12/10000755112831807",
+      "note": "In-house public talk series at MoneyLion's KL office."
+    },
+    {
+      "name": "Developer Kaki (Facebook group)",
+      "url": "https://www.facebook.com/groups/developerkaki/",
+      "note": "DCKL promotes meetups here."
+    },
+    {
+      "name": "AI Tinkerers Kuala Lumpur",
+      "url": "https://kuala-lumpur.aitinkerers.org/",
+      "note": "For an AI + analytics crossover session."
+    },
+    {
+      "name": "Singapore dbt Meetup",
+      "url": "https://www.meetup.com/singapore-dbt-meetup/",
+      "note": "Nearest dbt chapter (~1,200 members), run with Infinite Lambda (Michael Han, Jing Yu Lim). None of its speakers checked are KL-based."
+    },
+    {
+      "name": "dbt Meetup Pro network",
+      "url": "https://www.meetup.com/pro/dbt/",
+      "note": "No Kuala Lumpur group exists yet."
+    }
+  ]
+}
