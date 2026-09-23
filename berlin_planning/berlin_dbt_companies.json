@@ -4,8 +4,8 @@
     "generated_at": "2026-09-23",
     "prepared_for": "Jeremy Chia (Berlin dbt Meetup)",
     "purpose": "Find Berlin companies using dbt, and people who could speak at or attend the Berlin dbt Meetup.",
-    "version": 3,
-    "schema_version": 1,
+    "version": 4,
+    "schema_version": 2,
     "region": "Berlin",
     "method": [
       "Web search + page fetch of company engineering blogs, Medium publications, dbt Labs / vendor case studies, conference agendas (dbt Summit, Data + AI Summit, Berlin Buzzwords, PyCon DE, applydata, Data Berlin).",
@@ -13,7 +13,8 @@
       "meetup.com and dbt Slack #local-berlin were not accessible.",
       "Topics assigned by zero-shot classification using TOPIC_VOCABULARY from pipeline/enrich.py (1-3 per item, most relevant first), same rules as pipeline/past-meetups.md step 6.",
       "v2 (2026-09-23): restructured to match baltics/lithuania_dbt_companies.json (companies → people → speaker_evidence) with Berlin-specific extensions.",
-      "v3 (2026-09-23): added Data Berlin meetup line-ups (26 own events + 3 partner events, May 2023 – Sep 2026, from lu.ma and meetup.com event pages) and every role on databerlin.net/skills/dbt (89 roles, 70 companies); renamed Berlin-only fields to the shared schema (local_presence, based_in_region, past_chapter_talks) and file renamed to berlin_dbt_companies.json."
+      "v3 (2026-09-23): added Data Berlin meetup line-ups (26 own events + 3 partner events, May 2023 – Sep 2026, from lu.ma and meetup.com event pages) and every role on databerlin.net/skills/dbt (89 roles, 70 companies); renamed Berlin-only fields to the shared schema (local_presence, based_in_region, past_chapter_talks) and file renamed to berlin_dbt_companies.json.",
+      "v4 (2026-09-23): added lead_type (proven_speaker / emerging_voice / featured / no_public_content) to prioritise people who publish but have not presented yet; emerging voices with recent authored content were raised to priority_tier 1 (older content: 2). Shared schema v2."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -37,13 +38,14 @@
       "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
       "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
       "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
-      "companies.people.priority_tier": "1 = strong recent lead; 2 = good lead / needs verification / relevant talk at another meetup; 3 = older, peripheral or remote; organiser / backup / connector = special roles",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
       "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
       "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
       "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
       "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
       "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
-      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'"
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found"
     },
     "caveats": [
       "Titles and employers come from public pages/snippets and may be stale — verify before outreach.",
@@ -68,8 +70,8 @@
         "leadership": 52
       },
       "speaker_potential": {
-        "high": 32,
-        "medium": 89,
+        "high": 36,
+        "medium": 85,
         "low": 3
       },
       "attendee_potential": {
@@ -78,15 +80,21 @@
         "low": 5
       },
       "priority_tier": {
-        "1": 7,
-        "3": 68,
-        "2": 45,
+        "1": 11,
+        "2": 47,
+        "3": 62,
         "organiser": 1,
         "backup": 2,
         "connector": 1
       },
       "watchlist_companies": 48,
-      "past_meetups": 15
+      "past_meetups": 15,
+      "lead_type": {
+        "proven_speaker": 99,
+        "emerging_voice": 16,
+        "featured": 6,
+        "no_public_content": 3
+      }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
     "topic_vocabulary": [
@@ -192,6 +200,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -311,6 +320,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "high"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -343,7 +353,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": ""
@@ -364,6 +374,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "high"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -396,7 +407,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": ""
@@ -417,6 +428,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -471,6 +483,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -523,6 +536,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -562,6 +576,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -610,6 +625,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -660,6 +676,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -710,6 +727,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -826,6 +844,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -878,6 +897,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "featured",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -930,6 +950,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "featured",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -984,6 +1005,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1016,7 +1038,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": ""
@@ -1035,6 +1057,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1067,7 +1090,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": ""
@@ -1130,6 +1153,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "featured",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1182,6 +1206,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -1272,6 +1297,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1447,6 +1473,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1522,6 +1549,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1576,6 +1604,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1628,6 +1657,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -1728,6 +1758,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1820,6 +1851,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1891,6 +1923,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1977,6 +2010,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2029,6 +2063,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "low"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2080,6 +2115,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2134,6 +2170,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2188,6 +2225,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2243,6 +2281,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2293,6 +2332,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2445,6 +2485,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2539,9 +2580,10 @@
           "has_linkedin": true,
           "linkedin_confidence": "medium",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2574,7 +2616,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 2,
+          "priority_tier": 1,
           "suggested_talk_angle": "Data contracts vs dbt contracts.",
           "past_chapter_talks": [],
           "notes": ""
@@ -2592,9 +2634,10 @@
           "has_linkedin": true,
           "linkedin_confidence": "high",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2646,7 +2689,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 2,
+          "priority_tier": 1,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Now at 7NXT Health Group per LinkedIn snippet (ex-idealo)."
@@ -2665,6 +2708,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2720,6 +2764,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2795,6 +2840,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2898,6 +2944,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2989,9 +3036,10 @@
           "has_linkedin": false,
           "linkedin_confidence": "low",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3023,7 +3071,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 1,
           "suggested_talk_angle": "dbt for engineering metrics.",
           "past_chapter_talks": [],
           "notes": ""
@@ -3116,10 +3164,11 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "featured",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
-              "type": "article",
+              "type": "interview",
               "event": "Wolt careers blog",
               "title": "Curious, cool, and a little nerdy – Analytics Engineering at Wolt",
               "date": "2026-06-04",
@@ -3195,6 +3244,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "featured",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3351,6 +3401,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3442,6 +3493,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3495,6 +3547,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3545,6 +3598,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3602,6 +3656,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3657,6 +3712,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3707,6 +3763,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4038,6 +4095,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4171,6 +4229,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4258,6 +4317,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "featured",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4330,6 +4390,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4435,6 +4496,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4517,6 +4579,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4604,6 +4667,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4696,6 +4760,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "low"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4745,9 +4810,10 @@
           "has_linkedin": true,
           "linkedin_confidence": "high",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4778,7 +4844,7 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 1,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": ""
@@ -4797,6 +4863,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4862,6 +4929,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4992,6 +5060,7 @@
             "speaker_potential": "low",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5042,6 +5111,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -5122,6 +5192,7 @@
             "speaker_potential": "low",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5174,6 +5245,7 @@
             "speaker_potential": "low",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5230,6 +5302,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5339,6 +5412,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -5391,6 +5465,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -5476,6 +5551,7 @@
             "speaker_potential": "high",
             "attendee_potential": "low"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5584,6 +5660,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5680,6 +5757,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5739,6 +5817,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5788,6 +5867,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5836,6 +5916,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5884,6 +5965,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5932,6 +6014,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6244,6 +6327,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -7323,6 +7407,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -7750,6 +7835,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -7804,6 +7890,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8132,6 +8219,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8545,6 +8633,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8626,6 +8715,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8693,6 +8783,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8764,6 +8855,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8829,6 +8921,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8893,6 +8986,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8958,6 +9052,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9024,6 +9119,7 @@
             "speaker_potential": "high",
             "attendee_potential": "low"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9102,6 +9198,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9169,6 +9266,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9237,6 +9335,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9292,6 +9391,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9348,6 +9448,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9424,6 +9525,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9499,6 +9601,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9570,6 +9673,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9634,6 +9738,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9685,6 +9790,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9736,6 +9842,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9818,6 +9925,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9883,6 +9991,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9952,6 +10061,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10043,6 +10153,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10131,6 +10242,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10219,6 +10331,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10283,6 +10396,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10348,6 +10462,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10415,6 +10530,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "low"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10486,6 +10602,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10537,6 +10654,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10608,6 +10726,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10681,6 +10800,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10751,6 +10871,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10822,6 +10943,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10888,6 +11010,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10959,6 +11082,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11023,6 +11147,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11089,6 +11214,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11155,6 +11281,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11223,6 +11350,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11291,6 +11419,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11355,6 +11484,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11422,6 +11552,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11486,6 +11617,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
