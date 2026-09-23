@@ -3,8 +3,9 @@
 This file goes with `lithuania_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and gives a prompt for re-running and extending the search.
 
 - **First built:** 2026-09-23
-- **Dataset version:** 2
+- **Dataset version:** 4 (shared schema version 1)
 - **Goal:** find companies in Lithuania that use dbt, and people there who could **speak at** or **attend** the Baltic dbt Meetup (Vilnius).
+- **Sister dataset:** `../berlin_planning/berlin_dbt_companies.json`. Both files follow one shared schema, described in §3. The full definition and the validator are in `../berlin_planning/SEARCH_METHOD.md` §3 and Appendix A.
 
 ---
 
@@ -103,21 +104,39 @@ The people search was split across 3 sub-agents running in parallel, each coveri
 
 ---
 
-## 3. Dataset schema (short version)
+## 3. Shared schema (version 1)
+
+`baltics/lithuania_dbt_companies.json` and `berlin_planning/berlin_dbt_companies.json` have exactly these keys, in this order. A value can be `null` when it's unknown, but a key is never missing.
 
 ```
-metadata            method, field_definitions, caveats, counts, version
-companies[]         id, name, type, excluded_from_outreach, cities, dbt_signal,
-                    stack_signals[], job_postings[] {title, url, source, dbt_snippet, job_poster},
-                    other_evidence[] {type, url, note}, people_ids[], notes
-people[]            id, name, company_id, company, title, city, level (working|leadership),
-                    linkedin_urls[], has_linkedin, meetup_fit {speaker_potential, attendee_potential},
-                    mentions_dbt, speaker_evidence[] {type, event, title, date, url},
-                    attendee_signal, evidence[] {url, note}, confidence, internal_vinted, notes
-past_meetups[]      name, date, venue, url, organisers, talks[]
-community_channels[]
-watchlist_companies[]   companies to re-check (weak or unconfirmed dbt signal)
+metadata            title, generated_at, prepared_for, purpose, version, schema_version, region,
+                    method[], field_definitions{}, caveats[], counts{}, topic_vocabulary_source,
+                    topic_vocabulary[], topic_counts{}
+companies[]         id, name, type, watchlist, excluded_from_outreach, cities[], local_presence,
+                    dbt_signal, stack_signals[], job_postings[], other_evidence[], people[], notes
+  job_postings[]    title, url, source, linkedin_company_name, dbt_mentioned_in_text, dbt_snippet,
+                    job_poster, posted_date, last_seen, job_family, work_mode
+  other_evidence[]  type, url, note
+  people[]          id, name, title, city, based_in_region, level, linkedin_urls[], has_linkedin,
+                    linkedin_confidence, meetup_fit{speaker_potential, attendee_potential},
+                    mentions_dbt, speaker_evidence[], attendee_signal, evidence[]{url, note},
+                    confidence, internal_vinted, priority_tier, suggested_talk_angle,
+                    past_chapter_talks[]{date, talk_title, topics}, notes
+    speaker_evidence[]  type, event, title, date, url, content_id, co_authors[], mentions_dbt,
+                        description, topics[], suggested_talk_angle, url_precision, confidence
+sources             free-form object of source URLs (differs by region)
+past_meetups[]      name, date, venue, url, organisers[], attendees, talks[]{speaker, company, title, topics}
+community_channels[] name, url, note
 ```
+
+- **Ids:** person `id`s are kebab-case ASCII names (e.g. `tomas-peluritis`). Until v3 they were `pNNN`; each person's old id is kept in `notes` as "(v3 id: pNNN)".
+- **Values filled in when moving to the shared schema (v4):**
+  - `priority_tier` is taken from `speaker_potential`: high → 1, medium → 2, low → 3, and Vinted people → `backup`.
+  - `local_presence` is `confirmed` when a company has a Lithuanian city in `cities`.
+  - `based_in_region` is true when a person's `city` is in Lithuania. It is null for unknown or "assumed" cities.
+- **Topics:** every `speaker_evidence` item and every `past_meetups` talk has 1–3 topics from `TOPIC_VOCABULARY` in `../pipeline/enrich.py`.
+- **Definitions** are in `metadata.field_definitions`, which is identical in both regional files. `metadata.counts` uses the same keys in both.
+- **Checking the schema:** run the validator in `../berlin_planning/SEARCH_METHOD.md` Appendix A. It checks both files.
 
 ---
 
@@ -131,12 +150,14 @@ watchlist_companies[]   companies to re-check (weak or unconfirmed dbt signal)
    - Add any new LinkedIn URLs and evidence.
    - Update the title or company only if the new evidence is newer and has High confidence.
    - Record job moves in `notes`, for example "moved from X to Y (source, date)".
-3. **New people** get the next free `id` (`pNNN`). New companies get a short kebab-case `id`.
+3. **New people** get a kebab-case ASCII `id` made from their name (e.g. `laima-plesnyte`). New companies also get a short kebab-case `id`.
+   - Tag each new `speaker_evidence` item with 1–3 topics from `TOPIC_VOCABULARY`.
+   - Fill in every field in the shared schema (§3), using `null` when unknown.
 4. **Job ads expire.** On each run:
    - Add new ads.
    - Keep old ones, but add `"last_seen": "YYYY-MM-DD"`.
    - A company stays in the dataset even when it has no current ads.
-5. **Re-score `meetup_fit`** after merging, using the rules in `metadata.field_definitions`.
+5. **Re-score after merging.** Recalculate `meetup_fit`, `priority_tier` and `past_chapter_talks` (matched against `past_meetups`), using the rules in `metadata.field_definitions`. Then run the shared-schema validator (§3).
 6. **Update the metadata:**
    - Bump `metadata.version`.
    - Set `generated_at`.
@@ -247,3 +268,5 @@ The meetup event pages can be read the same way: open any meetup.com page, then
 |---|---|---|
 | 2026-09-23 | 1 | First search: 30 companies, 43 verified dbt job ads, 40 working-level and 17 leadership contacts. |
 | 2026-09-23 | 2 | Deeper search for speakers and attendees: 49 companies, 103 people (15 with high speaker potential, 41 with high attendee potential), past meetup agendas, community channels, watchlist. |
+| 2026-09-23 | 3 | Topics from `TOPIC_VOCABULARY` added to 46 `speaker_evidence` items and 6 `past_meetups` talks. |
+| 2026-09-23 | 4 | Moved to the shared schema v1, the same as Berlin. Person ids changed from `pNNN` to kebab-case names (old ids kept in `notes`). Added `local_presence`, `based_in_region`, `linkedin_confidence`, `priority_tier`, `suggested_talk_angle`, `past_chapter_talks`, the job-ad fields `posted_date`, `last_seen`, `job_family` and `work_mode`, and the evidence fields `content_id`, `co_authors`, `mentions_dbt`, `description`, `url_precision` and `confidence`. `field_definitions` and `counts` are now the same in both files. 55 companies, 104 people. |
