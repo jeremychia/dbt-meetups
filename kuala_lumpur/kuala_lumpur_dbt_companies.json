@@ -4,14 +4,15 @@
     "generated_at": "2026-09-23",
     "prepared_for": "Jeremy Chia (organising a Kuala Lumpur dbt Meetup)",
     "purpose": "Find Malaysia-based people who could speak at (or help organise) a first Kuala Lumpur dbt Meetup, and the Malaysian companies that use dbt.",
-    "version": 1,
-    "schema_version": 1,
+    "version": 2,
+    "schema_version": 2,
     "region": "Kuala Lumpur",
     "method": [
       "v1 (2026-09-23): four parallel sub-agents — company blogs batch A (large Malaysian/regional companies), batch B (startups, vendors, consultancies), a people/community sweep (conferences, meetups, newsletters), and a LinkedIn Jobs scan (keywords=dbt&location=Malaysia, 627 listings, 488 data-titled ads opened, 27 containing the whole word dbt) plus Indeed Malaysia and freehire.me (countries=my&skills=dbt).",
       "Second wave: a gap-fill agent (Data Council KL on Luma, Snowflake User Group KL, Snowflake World Tour KL 2025/2026, GDG KL; practitioners at strong-dbt employers) and a LinkedIn verification pass.",
       "The session's 200-web-search cap was reached during the second wave; 16 people were not LinkedIn-searched (linkedin_confidence 'not_searched').",
       "Topics assigned from TOPIC_VOCABULARY in pipeline/enrich.py (1–3 per item, most relevant first).",
+      "v2 (2026-09-23): moved to shared schema v2 (lead_type; emerging voices with 2024+ content raised to tier 1). LinkedIn pass for the 16 not_searched people plus 3 medium-confidence ones (18 searched; 14 URLs found).",
       "No Kuala Lumpur dbt chapter exists yet, so past_meetups and past_chapter_talks are empty."
     ],
     "field_definitions": {
@@ -36,13 +37,14 @@
       "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
       "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
       "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
-      "companies.people.priority_tier": "1 = strong recent lead; 2 = good lead / needs verification / relevant talk at another meetup; 3 = older, peripheral or remote; organiser / backup / connector = special roles",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
       "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
       "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
       "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
       "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
       "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
-      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'"
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found"
     },
     "caveats": [
       "Titles and employers come from public pages/snippets and may be stale — verify before outreach.",
@@ -59,32 +61,38 @@
       "companies_with_job_postings": 36,
       "speaker_evidence_items": 54,
       "unique_content_items": 43,
-      "people_with_linkedin": 26,
+      "people_with_linkedin": 38,
       "people_who_spoke_at_this_chapter": 0,
       "internal_vinted": 1,
       "level": {
-        "leadership": 16,
-        "working": 28
+        "leadership": 17,
+        "working": 27
       },
       "speaker_potential": {
-        "high": 10,
+        "high": 13,
         "low": 7,
-        "medium": 27
+        "medium": 24
       },
       "attendee_potential": {
-        "high": 11,
-        "medium": 32,
-        "low": 1
+        "high": 12,
+        "medium": 29,
+        "low": 3
       },
       "priority_tier": {
-        "1": 3,
-        "3": 14,
-        "2": 14,
+        "1": 6,
+        "3": 9,
+        "2": 16,
         "connector": 12,
         "organiser": 1
       },
       "watchlist_companies": 51,
-      "past_meetups": 0
+      "past_meetups": 0,
+      "lead_type": {
+        "proven_speaker": 26,
+        "no_public_content": 9,
+        "emerging_voice": 8,
+        "featured": 1
+      }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
     "topic_vocabulary": [
@@ -239,6 +247,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -334,6 +343,7 @@
             "speaker_potential": "low",
             "attendee_potential": "high"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": "Practitioner at a strong-dbt company",
@@ -453,6 +463,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -507,7 +518,7 @@
           "priority_tier": 1,
           "suggested_talk_angle": "BI Bytes: governed self-serve analytics on a dbt-modelled Snowflake warehouse.",
           "past_chapter_talks": [],
-          "notes": "GXBank ads require dbt on Snowflake. Described in one source as Executive Director, Data Science."
+          "notes": "HIGHLIGHT – woman in data (as described in public sources; confirm before introducing her this way). Speaker lead: Snowflake World Tour KL 2026 customer story and Asian Banker Summit 2026 panel. GXBank ads require dbt on Snowflake. Described in one source as Executive Director, Data Science."
         },
         {
           "id": "laxman-damodar",
@@ -525,6 +536,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -578,6 +590,7 @@
             "speaker_potential": "low",
             "attendee_potential": "high"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -592,7 +605,7 @@
           "priority_tier": "connector",
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Senior sponsor for a GXBank talk or venue. No public talks found."
+          "notes": "HIGHLIGHT – woman in data (as described in public sources; confirm before introducing her this way). Senior sponsor for a GXBank speaker or venue rather than a speaker. Senior sponsor for a GXBank talk or venue. No public talks found."
         },
         {
           "id": "haziq-noor",
@@ -605,18 +618,19 @@
             "https://my.linkedin.com/in/haziq-noor"
           ],
           "has_linkedin": true,
-          "linkedin_confidence": "medium",
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": "Practitioner at a strong-dbt company",
           "evidence": [
             {
               "url": "https://my.linkedin.com/in/haziq-noor",
-              "note": "LinkedIn match (medium)"
+              "note": "Result title: Haziq Noor – Data Analyst / Analytics Engineer @ GXBank; Kuala Lumpur"
             }
           ],
           "confidence": "Low",
@@ -642,6 +656,7 @@
             "speaker_potential": "low",
             "attendee_potential": "high"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": "Practitioner at a strong-dbt company",
@@ -750,6 +765,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -824,6 +840,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -899,6 +916,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -974,6 +992,7 @@
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -1024,7 +1043,7 @@
           "priority_tier": 2,
           "suggested_talk_angle": "Orchestrating dbt/SQLMesh with Airflow on Kubernetes.",
           "past_chapter_talks": [],
-          "notes": "Not the same person as the Apave/Singapore profiles with this name."
+          "notes": "HIGHLIGHT – woman in data (as described in public sources; confirm before introducing her this way). Speaker lead: gave her Airflow talk twice (MoneyLion Tech Talk #14, DCKL #11). Not the same person as the Apave/Singapore profiles with this name."
         },
         {
           "id": "wei-peng-tan",
@@ -1042,6 +1061,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -1093,6 +1113,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -1139,6 +1160,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -1737,6 +1759,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2520,11 +2543,12 @@
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2557,7 +2581,7 @@
           "priority_tier": 3,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "KL base not verified; older evidence."
+          "notes": "KL base not verified; older evidence. v2: only a German namesake found on LinkedIn. BusinessToday (Aug 2023) confirms Head of Data, Ikano Retail at Data + AI World Tour KL."
         }
       ],
       "notes": ""
@@ -2597,16 +2621,17 @@
           "id": "wei-jian",
           "name": "Wei Jian",
           "title": "Data Analyst (former ShopBack; current role unverified)",
-          "city": "Malaysia (per a third-party profile)",
-          "based_in_region": null,
+          "city": "Penang",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "medium",
-            "attendee_potential": "medium"
+            "attendee_potential": "high"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2674,7 +2699,7 @@
           "priority_tier": 2,
           "suggested_talk_angle": "Scaling a dbt project when analyst headcount triples.",
           "past_chapter_talks": [],
-          "notes": "Only Malaysia link is a third-party profile. Earlier Carousell and Piktochart. Very common name: match LinkedIn only with ShopBack/Carousell/Piktochart in history. No posts since 2022."
+          "notes": "Only Malaysia link is a third-party profile. Earlier Carousell and Piktochart. Very common name: match LinkedIn only with ShopBack/Carousell/Piktochart in history. No posts since 2022. v2: no LinkedIn profile found. Apollo/Datanyze list Data Analyst at ShopBack (2020–present), Carousell (2018–20), Piktochart (2016–18), based in Pulau Pinang."
         }
       ],
       "notes": "Best written dbt content by a Malaysia-linked author, but old (2021–22)."
@@ -2719,17 +2744,20 @@
         {
           "id": "david-lexa",
           "name": "David Lexa",
-          "title": "Data Engineer",
+          "title": "Senior Manager, Data Engineering",
           "city": null,
           "based_in_region": null,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/david-lexa"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2753,13 +2781,18 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/david-lexa",
+              "note": "Result title: David Lexa – Senior Manager, Data Engineering (Xendit not in title)"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": "Cost-optimising dbt on a lakehouse.",
           "past_chapter_talks": [],
-          "notes": "Probably in Indonesia/Philippines: remote speaker only."
+          "notes": "Probably in Indonesia/Philippines: remote speaker only. v2: Xendit article covers the Philippines region."
         }
       ],
       "notes": "Data team probably outside Malaysia, but its KL office is a proven meetup venue (DCKL)."
@@ -2798,16 +2831,17 @@
           "id": "syakeer-rahman",
           "name": "Syakeer Rahman",
           "title": "Data engineer (employer unknown)",
-          "city": null,
+          "city": "Putrajaya",
           "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2834,10 +2868,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 2,
+          "priority_tier": 1,
           "suggested_talk_angle": "A 500-model dbt platform for under $500/month, plus text-to-SQL from the dbt manifest.",
           "past_chapter_talks": [],
-          "notes": "README says it was built for a small data engineering team in Malaysia. Repo is new (1 star); date inferred."
+          "notes": "README says it was built for a small data engineering team in Malaysia. Repo is new (1 star); date inferred. v2: no LinkedIn /in/ URL found (posts appear under 'syakeerrahman'). GitHub profile: Muhammad Syakeer bin Abdul Rahman, Putrajaya. Other repo: cloudops-sentinel-copilot (LangGraph RAG)."
         }
       ],
       "notes": ""
@@ -2873,6 +2907,7 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3007,6 +3042,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3059,6 +3095,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3089,7 +3126,7 @@
           ],
           "confidence": "Low",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": "Warehouse fundamentals before dbt: a beginner-track talk.",
           "past_chapter_talks": [],
           "notes": "Ex-FWD Singapore. dbt advice from a search summary only."
@@ -3134,13 +3171,16 @@
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/ts-fairuz-rizal-a-rashid-cdmp-04594a6"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3184,13 +3224,18 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/ts-fairuz-rizal-a-rashid-cdmp-04594a6",
+              "note": "Result title: Ts. Fairuz Rizal A Rashid, CDMP – Data & AI – CelcomDigi"
+            }
+          ],
           "confidence": "High",
           "internal_vinted": false,
           "priority_tier": 2,
           "suggested_talk_angle": "Modelling telco data for 20M subscribers: where transformation and governance sit.",
           "past_chapter_talks": [],
-          "notes": "2026 speaker name from a search snippet; agenda lists no names. CDMP."
+          "notes": "2026 speaker name from a search snippet; agenda lists no names. CDMP. v2: search result confirms the Aug 2026 World Tour session."
         }
       ],
       "notes": "Large Snowflake customer; transformation tool unknown."
@@ -3220,13 +3265,16 @@
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hasbullahabubakar/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3268,7 +3316,12 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/hasbullahabubakar/",
+              "note": "Result title: Mohamad Hasbullah Abu Bakar – Centre of Digital Experience, Bank Islam; Kuala Lumpur"
+            }
+          ],
           "confidence": "High",
           "internal_vinted": false,
           "priority_tier": 2,
@@ -3284,14 +3337,16 @@
           "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
-            "https://my.linkedin.com/in/ts-shahril-kamaruzzaman-92354813a"
+            "https://www.linkedin.com/in/shahril-kamaruzzaman-92354813a/",
+            "https://my.linkedin.com/in/shahril-kamaruzzaman-92354813a"
           ],
           "has_linkedin": true,
-          "linkedin_confidence": "medium",
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3338,8 +3393,8 @@
           "attendee_signal": null,
           "evidence": [
             {
-              "url": "https://my.linkedin.com/in/ts-shahril-kamaruzzaman-92354813a",
-              "note": "LinkedIn match (medium)"
+              "url": "https://www.linkedin.com/in/shahril-kamaruzzaman-92354813a/",
+              "note": "Result title: shahril kamaruzzaman – Bank Islam Malaysia Berhad; Kuala Lumpur"
             }
           ],
           "confidence": "Medium",
@@ -3385,6 +3440,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3470,18 +3526,19 @@
           "id": "harvey-li",
           "name": "Harvey Li",
           "title": "Grab Data Tech",
-          "city": null,
-          "based_in_region": null,
+          "city": "Singapore",
+          "based_in_region": false,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/li-haihui/"
           ],
           "has_linkedin": true,
-          "linkedin_confidence": "medium",
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3535,7 +3592,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/li-haihui/",
-              "note": "LinkedIn match (medium)"
+              "note": "Result title: Harvey LI – Grab; located in Singapore"
             }
           ],
           "confidence": "Medium",
@@ -3549,16 +3606,19 @@
           "id": "zi-qin-yeow",
           "name": "Zi Qin Yeow",
           "title": "Senior Software Engineer",
-          "city": null,
-          "based_in_region": null,
+          "city": "Malaysia",
+          "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/ziqinyeow"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3585,13 +3645,18 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/ziqinyeow",
+              "note": "Result title: Yeow Z. – Malaysia (handle matches GitHub ziqinyeow; company not in title)"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 1,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Universiti Malaya graduate (2024), so possibly Malaysia-based. GitHub ziqinyeow."
+          "notes": "Universiti Malaya graduate (2024), so possibly Malaysia-based. GitHub ziqinyeow. v2: Malaysian profile; promoted to Senior SWE at Grab Apr 2025 (personal site)."
         },
         {
           "id": "feng-cheng",
@@ -3606,9 +3671,10 @@
           "has_linkedin": true,
           "linkedin_confidence": "medium",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3643,7 +3709,7 @@
           ],
           "confidence": "Low",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 1,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Result titled 'Cheng Feng – Grab' (name order reversed)."
@@ -3699,6 +3765,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "featured",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3774,6 +3841,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3844,6 +3912,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3900,17 +3969,20 @@
         {
           "id": "poo-kuan-hoong",
           "name": "Dr. Poo Kuan Hoong",
-          "title": "Section Lead: Data Analytics – Data Engineering",
+          "title": "Data Engineering Lead",
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kuanhoong/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3951,7 +4023,12 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/kuanhoong/",
+              "note": "Result title: Poo Kuan Hoong, Ph.D – Roche; Data Engineering Lead, AWS Community Builder"
+            }
+          ],
           "confidence": "Medium",
           "internal_vinted": false,
           "priority_tier": "connector",
@@ -3993,6 +4070,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -4061,6 +4139,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -4122,13 +4201,16 @@
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/bagusmahendrawicaksono"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -4151,7 +4233,12 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/bagusmahendrawicaksono",
+              "note": "Result title: Bagus Mahendra Wicaksono – OCBC"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
           "priority_tier": 3,
@@ -4184,13 +4271,16 @@
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alex-chi/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -4215,7 +4305,12 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/alex-chi/",
+              "note": "Result title: Alex Chi – Federal Territory of Kuala Lumpur (S P Setia role from ZoomInfo/Apollo)"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
           "priority_tier": "connector",
@@ -4257,6 +4352,7 @@
             "speaker_potential": "medium",
             "attendee_potential": "high"
           },
+          "lead_type": "emerging_voice",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4305,10 +4401,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 3,
+          "priority_tier": 2,
           "suggested_talk_angle": "From accountant to SQL/dbt practitioner.",
           "past_chapter_talks": [],
-          "notes": "Malaysia per GitHub; city unknown. Large following: good for promoting the meetup."
+          "notes": "HIGHLIGHT – woman in data (as described in public sources; confirm before introducing her this way). First-time speaker lead with a large following; could also help promote the meetup. Malaysia per GitHub; city unknown. Large following: good for promoting the meetup."
         }
       ],
       "notes": ""
@@ -4346,16 +4442,19 @@
           "id": "chang-boon-heng",
           "name": "Chang Boon Heng",
           "title": "Senior Solutions Engineer",
-          "city": "Kuala Lumpur",
+          "city": "Singapore / KL",
           "based_in_region": null,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://sg.linkedin.com/in/changboon"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -4378,32 +4477,45 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://sg.linkedin.com/in/changboon",
+              "note": "Result title: ChangBoon Heng – Snowflake (Singapore subdomain)"
+            }
+          ],
           "confidence": "Medium",
           "internal_vinted": false,
           "priority_tier": "connector",
           "suggested_talk_angle": "dbt Projects on Snowflake demo.",
           "past_chapter_talks": [],
-          "notes": "Vendor. Useful for customer introductions (GXBank, MoneyLion)."
+          "notes": "Vendor. Useful for customer introductions (GXBank, MoneyLion). v2: profile is on the Singapore subdomain; covers KL, SG and Jakarta."
         },
         {
           "id": "yun-fei-choo",
           "name": "Yun Fei Choo",
           "title": "Field Marketing Lead, SEA",
-          "city": null,
-          "based_in_region": null,
+          "city": "Singapore",
+          "based_in_region": false,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://sg.linkedin.com/in/yunfeichoo"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://sg.linkedin.com/in/yunfeichoo",
+              "note": "Result title: Yun Fei Choo – Snowflake; based in Singapore"
+            }
+          ],
           "confidence": "Medium",
           "internal_vinted": false,
           "priority_tier": "connector",
@@ -4442,13 +4554,16 @@
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://my.linkedin.com/in/fahim-surani"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -4475,7 +4590,12 @@
             }
           ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://my.linkedin.com/in/fahim-surani",
+              "note": "Result title: Fahim S. – Amazon Web Services (AWS)"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
           "priority_tier": "connector",
@@ -4510,27 +4630,35 @@
         {
           "id": "kaushik-mohanraj",
           "name": "Kaushik Mohanraj",
-          "title": "User Group Leader",
+          "title": "User Group Leader (AWS UG Malaysia); Blazeclan Technologies",
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kaushikmohanraj/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/kaushikmohanraj/",
+              "note": "Result title: Kaushik Mohanraj – Blazeclan Technologies; Kuala Lumpur"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
           "priority_tier": "connector",
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Fellow leaders: Sanket Saxena, Hafiz Syed Ashir Hassan, Meenal Saxena."
+          "notes": "Fellow leaders: Sanket Saxena, Hafiz Syed Ashir Hassan, Meenal Saxena. v2: AWS Golden Jacket (all 12 certifications)."
         }
       ],
       "notes": ""
@@ -4559,21 +4687,29 @@
         {
           "id": "chen-zhen-yew",
           "name": "Chen Zhen Yew",
-          "title": "Organiser, Microsoft Fabric Community Malaysia",
+          "title": "Organiser, Microsoft Fabric Community Malaysia; SRKK Group",
           "city": "Kuala Lumpur",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/chenzhenyew/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
           },
+          "lead_type": "no_public_content",
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/chenzhenyew/",
+              "note": "Result title: ChenZhen Yew – SRKK Group"
+            }
+          ],
           "confidence": "Low",
           "internal_vinted": false,
           "priority_tier": "connector",
@@ -4698,6 +4834,7 @@
             "speaker_potential": "high",
             "attendee_potential": "low"
           },
+          "lead_type": "proven_speaker",
           "mentions_dbt": true,
           "speaker_evidence": [
             {
