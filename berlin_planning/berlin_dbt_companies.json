@@ -4,8 +4,8 @@
     "generated_at": "2026-09-23",
     "prepared_for": "Jeremy Chia (Berlin dbt Meetup)",
     "purpose": "Find Berlin companies using dbt, and people who could speak at or attend the Berlin dbt Meetup.",
-    "version": 4,
-    "schema_version": 2,
+    "version": 5,
+    "schema_version": 3,
     "region": "Berlin",
     "method": [
       "Web search + page fetch of company engineering blogs, Medium publications, dbt Labs / vendor case studies, conference agendas (dbt Summit, Data + AI Summit, Berlin Buzzwords, PyCon DE, applydata, Data Berlin).",
@@ -14,7 +14,8 @@
       "Topics assigned by zero-shot classification using TOPIC_VOCABULARY from pipeline/enrich.py (1-3 per item, most relevant first), same rules as pipeline/past-meetups.md step 6.",
       "v2 (2026-09-23): restructured to match baltics/lithuania_dbt_companies.json (companies → people → speaker_evidence) with Berlin-specific extensions.",
       "v3 (2026-09-23): added Data Berlin meetup line-ups (26 own events + 3 partner events, May 2023 – Sep 2026, from lu.ma and meetup.com event pages) and every role on databerlin.net/skills/dbt (89 roles, 70 companies); renamed Berlin-only fields to the shared schema (local_presence, based_in_region, past_chapter_talks) and file renamed to berlin_dbt_companies.json.",
-      "v4 (2026-09-23): added lead_type (proven_speaker / emerging_voice / featured / no_public_content) to prioritise people who publish but have not presented yet; emerging voices with recent authored content were raised to priority_tier 1 (older content: 2). Shared schema v2."
+      "v4 (2026-09-23): added lead_type (proven_speaker / emerging_voice / featured / no_public_content) to prioritise people who publish but have not presented yet; emerging voices with recent authored content were raised to priority_tier 1 (older content: 2). Shared schema v2.",
+      "v5 (2026-09-23): shared schema v3 adds pronouns (self-stated only) and sourced_via; added women-in-data community sourcing (PyLadies Berlin, Women in Big Data Berlin, Women Techmakers Berlin, Women+ in Data/AI Festival, AWS Women's User Group, WomenTech Network, WiMLDS): 28 new people."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -45,7 +46,9 @@
       "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
       "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
       "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
-      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found"
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
     },
     "caveats": [
       "Titles and employers come from public pages/snippets and may be stale — verify before outreach.",
@@ -56,44 +59,57 @@
       "Data Berlin meetup speakers were LinkedIn-searched only when priority_tier 2; others have linkedin_confidence 'not_searched'."
     ],
     "counts": {
-      "companies": 144,
-      "people": 124,
+      "companies": 156,
+      "people": 152,
       "job_postings": 98,
       "companies_with_job_postings": 78,
-      "speaker_evidence_items": 153,
-      "unique_content_items": 125,
-      "people_with_linkedin": 63,
+      "speaker_evidence_items": 182,
+      "unique_content_items": 152,
+      "people_with_linkedin": 69,
       "people_who_spoke_at_this_chapter": 10,
       "internal_vinted": 5,
       "level": {
-        "working": 72,
-        "leadership": 52
+        "working": 93,
+        "leadership": 59
       },
       "speaker_potential": {
-        "high": 36,
-        "medium": 85,
-        "low": 3
+        "high": 38,
+        "medium": 112,
+        "low": 2
       },
       "attendee_potential": {
         "high": 16,
-        "medium": 103,
+        "medium": 131,
         "low": 5
       },
       "priority_tier": {
         "1": 11,
-        "2": 47,
-        "3": 62,
+        "2": 61,
+        "3": 74,
         "organiser": 1,
         "backup": 2,
-        "connector": 1
+        "connector": 3
       },
-      "watchlist_companies": 48,
+      "watchlist_companies": 60,
       "past_meetups": 15,
       "lead_type": {
-        "proven_speaker": 99,
+        "proven_speaker": 125,
         "emerging_voice": 16,
-        "featured": 6,
-        "no_public_content": 3
+        "featured": 9,
+        "no_public_content": 2
+      },
+      "people_with_self_stated_pronouns": 3,
+      "sourced_via": {
+        "company_blog_scan": 23,
+        "conference_or_meetup_agenda": 16,
+        "chapter_meetup_history": 10,
+        "data_berlin_meetup": 81,
+        "case_study": 5,
+        "women_in_data_community": 29,
+        "github": 1,
+        "linkedin_search": 1,
+        "newsletter_or_blog": 4,
+        "podcast": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -126,28 +142,28 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "genai & llm": 46,
-      "domain-specific use cases": 28,
-      "data warehouse & platforms": 25,
-      "data engineering": 23,
-      "business intelligence": 18,
+      "genai & llm": 52,
+      "data engineering": 33,
+      "domain-specific use cases": 31,
+      "data warehouse & platforms": 28,
+      "business intelligence": 24,
+      "data governance": 23,
+      "performance & scale": 19,
       "analytics engineering": 18,
-      "performance & scale": 17,
-      "data governance": 17,
-      "tools & ecosystem": 14,
+      "team & org design": 17,
+      "tools & ecosystem": 15,
+      "career development": 14,
+      "data quality & testing": 13,
       "orchestration & ci/cd": 12,
-      "team & org design": 12,
+      "industry trends": 12,
       "dbt migration & adoption": 11,
-      "data quality & testing": 11,
-      "industry trends": 11,
+      "community": 10,
       "semantic layer": 9,
-      "data mesh": 6,
+      "data mesh": 8,
+      "modern data stack": 6,
       "dbt best practices": 5,
-      "career development": 5,
-      "community": 5,
       "data modeling": 5,
       "developer workflow": 5,
-      "modern data stack": 4,
       "project structure": 2,
       "dbt product features": 1
     }
@@ -187,6 +203,7 @@
         {
           "id": "giovanni-corsetti-silva",
           "name": "Giovanni Corsetti Silva",
+          "pronouns": null,
           "title": "Senior Data Engineer, Core Data Platform",
           "city": "Berlin",
           "based_in_region": true,
@@ -201,6 +218,11 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -307,6 +329,7 @@
         {
           "id": "fabian-buecheler",
           "name": "Fabian Bücheler",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -321,6 +344,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -361,6 +387,7 @@
         {
           "id": "shaurya-sood",
           "name": "Shaurya Sood",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -375,6 +402,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -415,6 +445,7 @@
         {
           "id": "danny-burleigh",
           "name": "Danny Burleigh",
+          "pronouns": null,
           "title": "Data Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -429,6 +460,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -470,6 +504,7 @@
         {
           "id": "lennart-scharmann",
           "name": "Lennart Scharmann",
+          "pronouns": null,
           "title": "Data Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -484,6 +519,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -525,6 +563,7 @@
         {
           "id": "zaher-wanli",
           "name": "Zaher Wanli",
+          "pronouns": null,
           "title": "Analytics / Marketing attribution",
           "city": "Berlin",
           "based_in_region": true,
@@ -537,6 +576,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -565,6 +607,7 @@
         {
           "id": "ahmed-ben-el-cadi",
           "name": "Ahmed Ben El Cadi",
+          "pronouns": null,
           "title": "Marketing Analytics Manager",
           "city": null,
           "based_in_region": null,
@@ -577,6 +620,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -614,6 +660,7 @@
         {
           "id": "kanykei-dordoeva",
           "name": "Kanykei Dordoeva",
+          "pronouns": null,
           "title": "Senior Data Analyst, Marketing Analytics",
           "city": null,
           "based_in_region": null,
@@ -626,6 +673,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -665,6 +715,7 @@
         {
           "id": "nacho-rios",
           "name": "Nacho Rios",
+          "pronouns": null,
           "title": "Senior Data Analyst, Marketing Analytics",
           "city": null,
           "based_in_region": null,
@@ -677,6 +728,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -716,6 +770,7 @@
         {
           "id": "meghana-satish",
           "name": "Meghana Satish",
+          "pronouns": null,
           "title": "MLOps Engineer",
           "city": null,
           "based_in_region": null,
@@ -728,6 +783,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -831,6 +889,7 @@
         {
           "id": "waqas-shahid",
           "name": "M. Waqas Shahid",
+          "pronouns": null,
           "title": "Principal Data Platform Engineer",
           "city": null,
           "based_in_region": null,
@@ -845,6 +904,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -884,6 +946,7 @@
         {
           "id": "uttpesh-vyas",
           "name": "Uttpesh Vyas",
+          "pronouns": null,
           "title": "Manager Finance Data Engineering",
           "city": null,
           "based_in_region": null,
@@ -898,6 +961,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "case_study"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -939,6 +1005,7 @@
         {
           "id": "mario-sejdia",
           "name": "Mario Sejdia",
+          "pronouns": null,
           "title": "Director Digital Transformation",
           "city": null,
           "based_in_region": null,
@@ -951,6 +1018,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "case_study"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -992,6 +1062,7 @@
         {
           "id": "breno-costa",
           "name": "Breno Costa",
+          "pronouns": null,
           "title": "ML/Data",
           "city": null,
           "based_in_region": null,
@@ -1006,6 +1077,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1046,6 +1120,7 @@
         {
           "id": "steven-xu",
           "name": "Steven Xu",
+          "pronouns": null,
           "title": "ML/Data",
           "city": null,
           "based_in_region": null,
@@ -1058,6 +1133,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1094,6 +1172,61 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": ""
+        },
+        {
+          "id": "anita-fechner",
+          "name": "Anita Fechner",
+          "pronouns": null,
+          "title": "Product Analyst",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Women in Big Data Berlin",
+              "title": "WiBD Berlin core team; panel moderator",
+              "date": "2025-04-24",
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "content_id": "wid-2025-04-24-wibd-berlin-core-team-panel-moderator",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosts and moderates WiBD Berlin events.",
+              "topics": [
+                "community",
+                "business intelligence",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "note": "panel at Women in Big Data Berlin (2025-04-24)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -1140,6 +1273,7 @@
         {
           "id": "alexander-novikov",
           "name": "Alexander Novikov",
+          "pronouns": null,
           "title": "Director of Data & BI",
           "city": "Berlin",
           "based_in_region": true,
@@ -1154,6 +1288,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "case_study"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1193,6 +1330,7 @@
         {
           "id": "michael-gabriel",
           "name": "Michael Gabriel",
+          "pronouns": null,
           "title": "Engineering Manager Data",
           "city": "Berlin",
           "based_in_region": true,
@@ -1207,6 +1345,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -1284,6 +1425,7 @@
         {
           "id": "jeremy-chia",
           "name": "Jeremy Chia",
+          "pronouns": null,
           "title": "Senior Analytics Engineer, Shipping Finance",
           "city": "Berlin",
           "based_in_region": true,
@@ -1298,6 +1440,13 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda",
+            "github",
+            "linkedin_search",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1462,6 +1611,7 @@
         {
           "id": "justina-sakalyte",
           "name": "Justina Šakalytė",
+          "pronouns": null,
           "title": "Co-author, risk-based testing",
           "city": null,
           "based_in_region": null,
@@ -1474,6 +1624,10 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1536,6 +1690,7 @@
         {
           "id": "oscar-ligthart",
           "name": "Oscar Ligthart",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -1550,6 +1705,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1591,6 +1749,7 @@
         {
           "id": "rodrigo-loredo",
           "name": "Rodrigo Loredo",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -1605,6 +1764,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1646,6 +1808,7 @@
         {
           "id": "abdallah-dorra",
           "name": "Abdallah Dorra",
+          "pronouns": null,
           "title": "Senior Software Engineer",
           "city": null,
           "based_in_region": null,
@@ -1658,6 +1821,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -1745,6 +1911,7 @@
         {
           "id": "andre-wagner",
           "name": "Andre Wagner",
+          "pronouns": null,
           "title": "Director of Data Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -1759,6 +1926,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1838,6 +2009,7 @@
         {
           "id": "jerry-nwabuilo",
           "name": "Jerry Nwabuilo",
+          "pronouns": null,
           "title": "Senior Analytics Engineer (at time of post; later PowerUs)",
           "city": "Berlin",
           "based_in_region": true,
@@ -1852,6 +2024,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1910,6 +2086,7 @@
         {
           "id": "dolf-ter-hofste",
           "name": "Dolf ter Hofsté",
+          "pronouns": null,
           "title": "Data (at time of post)",
           "city": "Netherlands",
           "based_in_region": null,
@@ -1924,6 +2101,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -1997,6 +2177,7 @@
         {
           "id": "akash-ganguly",
           "name": "Akash Ganguly",
+          "pronouns": null,
           "title": "Data Engineer (at time of post)",
           "city": null,
           "based_in_region": null,
@@ -2011,6 +2192,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2050,6 +2234,7 @@
         {
           "id": "faysal-rehmat",
           "name": "Faysal Rehmat",
+          "pronouns": null,
           "title": "Data (at time of post)",
           "city": "New York",
           "based_in_region": false,
@@ -2064,6 +2249,9 @@
             "attendee_potential": "low"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2102,6 +2290,7 @@
         {
           "id": "nuno-capeta",
           "name": "Nuno Capeta",
+          "pronouns": null,
           "title": "Data platform",
           "city": null,
           "based_in_region": null,
@@ -2116,6 +2305,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2157,6 +2349,7 @@
         {
           "id": "annie-meininghaus",
           "name": "Annie Meininghaus",
+          "pronouns": null,
           "title": "Data platform",
           "city": null,
           "based_in_region": null,
@@ -2171,6 +2364,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2212,6 +2408,7 @@
         {
           "id": "david-castro-gavino",
           "name": "David Castro-Gavino",
+          "pronouns": null,
           "title": "VP of Data, Global",
           "city": null,
           "based_in_region": null,
@@ -2226,6 +2423,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2270,6 +2470,7 @@
         {
           "id": "sai-dinesh-dacharaju",
           "name": "Sai Dinesh Dacharaju",
+          "pronouns": null,
           "title": "Senior Product Manager - Marketing Science",
           "city": null,
           "based_in_region": null,
@@ -2282,6 +2483,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2321,6 +2525,7 @@
         {
           "id": "navid-ghayazi",
           "name": "Navid Ghayazi",
+          "pronouns": null,
           "title": "Senior Data Scientist",
           "city": null,
           "based_in_region": null,
@@ -2333,6 +2538,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2368,6 +2576,113 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Found via Data Berlin meetup line-ups (2026-09-23)."
+        },
+        {
+          "id": "christin-schink",
+          "name": "Christin Schink",
+          "pronouns": null,
+          "title": "Senior Director, Data Product",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Women Techmakers Berlin",
+              "title": "Breaking Barriers: Women Leading in Tech",
+              "date": "2023-12-06",
+              "url": "https://www.meetup.com/wtm-berlin/events/297416222/",
+              "content_id": "wid-2023-12-06-breaking-barriers-women-leading-in-tech",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Oversees product strategy for HelloFresh's global data function.",
+              "topics": [
+                "team & org design",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/wtm-berlin/events/297416222/",
+              "note": "panel at Women Techmakers Berlin (2023-12-06)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "axis-cutli",
+          "name": "Axis Cutli",
+          "pronouns": null,
+          "title": "Data Management (Data Alliance)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Women Techmakers Berlin",
+              "title": "Breaking Barriers: Women Leading in Tech (moderator)",
+              "date": "2023-12-06",
+              "url": "https://www.meetup.com/wtm-berlin/events/297416222/",
+              "content_id": "wid-2023-12-06-breaking-barriers-women-leading-in-tech-",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data management specialist; moderated the panel.",
+              "topics": [
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/wtm-berlin/events/297416222/",
+              "note": "panel at Women Techmakers Berlin (2023-12-06)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -2472,6 +2787,7 @@
         {
           "id": "aydan-rende",
           "name": "Aydan Rende",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -2486,6 +2802,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -2570,6 +2890,7 @@
         {
           "id": "david-foerster",
           "name": "David Förster",
+          "pronouns": null,
           "title": "Data",
           "city": "Berlin",
           "based_in_region": true,
@@ -2584,6 +2905,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2624,6 +2948,7 @@
         {
           "id": "max-rieger",
           "name": "Max Rieger",
+          "pronouns": null,
           "title": "Data Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -2638,6 +2963,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2697,6 +3025,7 @@
         {
           "id": "fabian-marino",
           "name": "Fabian Marino",
+          "pronouns": null,
           "title": "Software Engineer",
           "city": null,
           "based_in_region": null,
@@ -2709,6 +3038,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2753,6 +3085,7 @@
         {
           "id": "felix-pitterling",
           "name": "Felix Pitterling",
+          "pronouns": null,
           "title": "Junior Cloud Engineer",
           "city": null,
           "based_in_region": null,
@@ -2765,6 +3098,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -2827,6 +3163,7 @@
         {
           "id": "pawel-wiszniewski",
           "name": "Paweł Wiszniewski",
+          "pronouns": null,
           "title": "Data Platform",
           "city": "Berlin",
           "based_in_region": true,
@@ -2841,6 +3178,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -2931,6 +3271,7 @@
         {
           "id": "artur-yatsenko",
           "name": "Artur Yatsenko",
+          "pronouns": null,
           "title": "Director of Data Engineering",
           "city": "Berlin",
           "based_in_region": true,
@@ -2945,6 +3286,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "podcast"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3028,6 +3372,7 @@
         {
           "id": "nelson-rangel",
           "name": "Nélson Rangel",
+          "pronouns": null,
           "title": "Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -3040,6 +3385,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3151,6 +3499,7 @@
         {
           "id": "alexis-oddos-attia",
           "name": "Alexis Oddos Attia",
+          "pronouns": null,
           "title": "Analytics Engineer",
           "city": null,
           "based_in_region": null,
@@ -3165,6 +3514,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3231,6 +3583,7 @@
         {
           "id": "douglas-zickuhr",
           "name": "Douglas Zickuhr",
+          "pronouns": null,
           "title": "Data",
           "city": null,
           "based_in_region": null,
@@ -3245,6 +3598,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "case_study"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -3388,6 +3744,7 @@
         {
           "id": "marina-ariamnova",
           "name": "Marina Ariamnova",
+          "pronouns": null,
           "title": "Data/Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -3402,6 +3759,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -3480,6 +3840,7 @@
         {
           "id": "johana-yuan-feng",
           "name": "Johana Yuan Feng",
+          "pronouns": null,
           "title": "Risk & Compliance Data Analyst",
           "city": "Berlin",
           "based_in_region": true,
@@ -3494,6 +3855,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3536,6 +3900,7 @@
         {
           "id": "dafne-romero",
           "name": "Dafne Romero",
+          "pronouns": null,
           "title": "Senior Data Scientist",
           "city": null,
           "based_in_region": null,
@@ -3548,6 +3913,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3585,6 +3953,7 @@
         {
           "id": "tadej-stajner",
           "name": "Tadej Štajner",
+          "pronouns": null,
           "title": "Data Engineering Manager",
           "city": "Berlin",
           "based_in_region": true,
@@ -3599,6 +3968,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3643,6 +4015,7 @@
         {
           "id": "jake-robert-mongaya",
           "name": "Jake Robert Mongaya",
+          "pronouns": null,
           "title": "Data Engineering Manager",
           "city": "Berlin",
           "based_in_region": true,
@@ -3657,6 +4030,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3701,6 +4077,7 @@
         {
           "id": "elisabeth-kant",
           "name": "Elisabeth Kant",
+          "pronouns": null,
           "title": "Head of Data Science",
           "city": null,
           "based_in_region": null,
@@ -3713,6 +4090,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -3750,6 +4130,7 @@
         {
           "id": "christian-hiroz",
           "name": "Christian Hiroz",
+          "pronouns": null,
           "title": "Senior Data Engineer",
           "city": null,
           "based_in_region": null,
@@ -3764,6 +4145,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4084,6 +4468,7 @@
         {
           "id": "marielle-dado",
           "name": "Marielle Dado",
+          "pronouns": null,
           "title": "Senior Analytics Engineer / freelance",
           "city": "Berlin",
           "based_in_region": true,
@@ -4096,6 +4481,11 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup",
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4216,6 +4606,7 @@
         {
           "id": "zsofia-bognar",
           "name": "Zsofia Bognar",
+          "pronouns": null,
           "title": "Data Insights Lead",
           "city": "Berlin",
           "based_in_region": true,
@@ -4230,6 +4621,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4273,6 +4668,59 @@
             }
           ],
           "notes": "Past speaker 2023."
+        },
+        {
+          "id": "jessica-greene",
+          "name": "Jessica Greene",
+          "pronouns": null,
+          "title": "Senior ML Engineer; PyLadies Berlin co-lead",
+          "city": "Berlin",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Berlin",
+              "title": "PyLadies Berlin co-lead",
+              "date": "2025",
+              "url": "https://2025.pycon.de/pyladies-at-pyconde-2025/",
+              "content_id": "wid-2025-pyladies-berlin-co-lead",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-leads PyLadies Berlin; a gateway to its speakers.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://2025.pycon.de/pyladies-at-pyconde-2025/",
+              "note": "organiser at PyLadies Berlin (2025)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -4306,6 +4754,7 @@
         {
           "id": "kumar-aman",
           "name": "Kumar Aman",
+          "pronouns": null,
           "title": "Team Lead Data Engineer (at time of case study)",
           "city": null,
           "based_in_region": null,
@@ -4318,6 +4767,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "featured",
+          "sourced_via": [
+            "case_study"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4377,6 +4829,7 @@
         {
           "id": "eva-schreyer",
           "name": "Eva Schreyer",
+          "pronouns": null,
           "title": "Head of Data & Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -4391,6 +4844,11 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "data_berlin_meetup",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4483,6 +4941,7 @@
         {
           "id": "ceren-saritoprak-gundogdu",
           "name": "Ceren Sarıtoprak Gündoğdu",
+          "pronouns": null,
           "title": "Consultant",
           "city": "Berlin",
           "based_in_region": true,
@@ -4497,6 +4956,9 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4566,6 +5028,7 @@
         {
           "id": "bijan-soltani",
           "name": "Bijan Soltani",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -4580,6 +5043,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4654,6 +5120,7 @@
         {
           "id": "adrian-brudaru",
           "name": "Adrian Brudaru",
+          "pronouns": null,
           "title": "Co-founder & CDO",
           "city": "Berlin",
           "based_in_region": true,
@@ -4668,6 +5135,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4747,6 +5218,7 @@
         {
           "id": "aman-gupta",
           "name": "Aman Gupta",
+          "pronouns": null,
           "title": "dltHub",
           "city": "Mumbai",
           "based_in_region": false,
@@ -4761,6 +5233,9 @@
             "attendee_potential": "low"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4800,6 +5275,7 @@
         {
           "id": "hiba-jamal",
           "name": "Hiba Jamal",
+          "pronouns": null,
           "title": "dltHub",
           "city": null,
           "based_in_region": null,
@@ -4814,6 +5290,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -4852,6 +5331,7 @@
         {
           "id": "rahul-joshi",
           "name": "Rahul Joshi",
+          "pronouns": null,
           "title": "Solution Engineer",
           "city": null,
           "based_in_region": null,
@@ -4864,6 +5344,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4918,6 +5401,7 @@
         {
           "id": "aashish-nair",
           "name": "Aashish Nair",
+          "pronouns": null,
           "title": "GTM Engineer",
           "city": null,
           "based_in_region": null,
@@ -4930,6 +5414,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -4964,6 +5451,61 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Found via Data Berlin meetup line-ups (2026-09-23)."
+        },
+        {
+          "id": "alena-astrakhantseva",
+          "name": "Alena Astrakhantseva",
+          "pronouns": null,
+          "title": "Python Developer / Data Scientist / DevRel",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "Building a composable data future: how dlt empowers data pipelines",
+              "date": "2024-11-12",
+              "url": "https://www.meetup.com/pyladies-berlin/events/303905109/",
+              "content_id": "wid-2024-11-12-building-a-composable-data-future-how-dl",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "How dlt fits with other tools, including dbt, for end-to-end ELT pipelines.",
+              "topics": [
+                "data engineering",
+                "tools & ecosystem",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/303905109/",
+              "note": "talk at PyLadies Berlin (2024-11-12)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -5047,6 +5589,7 @@
         {
           "id": "anna-geller",
           "name": "Anna Geller",
+          "pronouns": null,
           "title": "Product Lead / DevRel",
           "city": "Berlin",
           "based_in_region": true,
@@ -5061,6 +5604,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5098,6 +5644,7 @@
         {
           "id": "mehdi-ouazza",
           "name": "Mehdi Ouazza",
+          "pronouns": null,
           "title": "Developer Relations",
           "city": null,
           "based_in_region": null,
@@ -5112,6 +5659,10 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -5179,6 +5730,7 @@
         {
           "id": "katharine-jarmul",
           "name": "Katharine Jarmul",
+          "pronouns": null,
           "title": "Principal Data Scientist",
           "city": "Berlin",
           "based_in_region": true,
@@ -5189,12 +5741,34 @@
           "has_linkedin": true,
           "linkedin_confidence": "high",
           "meetup_fit": {
-            "speaker_potential": "low",
+            "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
-          "lead_type": "no_public_content",
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
           "mentions_dbt": null,
-          "speaker_evidence": [],
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women+ in Data/AI Festival (Berlin)",
+              "title": "Women+-Empowered ML (Women+ in Data/AI Festival)",
+              "date": "2024-09-27",
+              "url": "https://women-in-data-ai.tech/2024/sessions",
+              "content_id": "wid-2024-09-27-women-empowered-ml-women-in-data-ai-fest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data engineering track talk at the Women+ in Data/AI Festival.",
+              "topics": [
+                "data governance",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
           "attendee_signal": null,
           "evidence": [
             {
@@ -5208,6 +5782,117 @@
           "suggested_talk_angle": "Pair with Marielle Dado for a privacy evening.",
           "past_chapter_talks": [],
           "notes": ""
+        },
+        {
+          "id": "amy-raygada",
+          "name": "Amy Raygada",
+          "pronouns": null,
+          "title": "Principal Data and AI Strategist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data Berlin",
+              "title": "From Data Strategy to Seat at the Table (workshop)",
+              "date": "2025-05-15",
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "content_id": "wid-2025-05-15-from-data-strategy-to-seat-at-the-table-",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Linking data strategy to business initiatives and influencing stakeholders.",
+              "topics": [
+                "team & org design",
+                "data governance",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "note": "talk at Women in Big Data Berlin (2025-05-15)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "inna-zykova",
+          "name": "Inna Zykova",
+          "pronouns": null,
+          "title": "Data Engineer Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/innazykova/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women+ in Data/AI Festival (Berlin)",
+              "title": "Tuning your ML Platform to get ahead in the GenAI race",
+              "date": "2024-09-27",
+              "url": "https://women-in-data-ai.tech/2024/sessions",
+              "content_id": "wid-2024-09-27-tuning-your-ml-platform-to-get-ahead-in-",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Adapting ML platforms for GenAI workloads (data engineering track).",
+              "topics": [
+                "data engineering",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-in-data-ai.tech/2024/sessions",
+              "note": "talk at Women+ in Data/AI Festival (Berlin) (2024-09-27)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -5232,6 +5917,7 @@
         {
           "id": "alexey-grigorev",
           "name": "Alexey Grigorev",
+          "pronouns": null,
           "title": "Founder",
           "city": "Berlin",
           "based_in_region": true,
@@ -5246,6 +5932,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "no_public_content",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [],
           "attendee_signal": null,
@@ -5289,6 +5978,7 @@
         {
           "id": "francesco-mucio",
           "name": "Francesco 'mucio' Mucio",
+          "pronouns": null,
           "title": "Organiser, Data Berlin",
           "city": "Berlin",
           "based_in_region": true,
@@ -5303,6 +5993,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5399,6 +6092,7 @@
         {
           "id": "fabian-halkivaha",
           "name": "Fabian Halkivaha",
+          "pronouns": null,
           "title": "Principal Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -5413,6 +6107,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -5454,6 +6151,7 @@
         {
           "id": "mukrram-ur-rahman",
           "name": "Mukrram Ur Rahman",
+          "pronouns": null,
           "title": "Principal Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -5466,6 +6164,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": false,
           "speaker_evidence": [
             {
@@ -5538,6 +6239,7 @@
         {
           "id": "silja-mardla",
           "name": "Silja Märdla",
+          "pronouns": null,
           "title": "Head of Analytics Engineering",
           "city": "Tallinn",
           "based_in_region": false,
@@ -5552,6 +6254,9 @@
             "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5649,6 +6354,7 @@
         {
           "id": "petr-janda",
           "name": "Petr Janda",
+          "pronouns": null,
           "title": "Founder & CEO",
           "city": null,
           "based_in_region": null,
@@ -5661,6 +6367,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5744,6 +6453,7 @@
         {
           "id": "jimmy-pang",
           "name": "Jimmy Pang",
+          "pronouns": null,
           "title": "Writer, Data Biz newsletter",
           "city": "Berlin",
           "based_in_region": true,
@@ -5758,6 +6468,10 @@
             "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": true,
           "speaker_evidence": [
             {
@@ -5806,6 +6520,7 @@
         {
           "id": "riccardo-amadio",
           "name": "Riccardo Amadio",
+          "pronouns": null,
           "title": "Big Data Engineer and Dagster Evangelist",
           "city": null,
           "based_in_region": null,
@@ -5818,6 +6533,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5856,6 +6574,7 @@
         {
           "id": "luca-de-angelis",
           "name": "Luca De Angelis",
+          "pronouns": null,
           "title": "Senior Data Analyst & Scientist (freelance)",
           "city": null,
           "based_in_region": null,
@@ -5868,6 +6587,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5905,6 +6627,7 @@
         {
           "id": "christian-schafer",
           "name": "Christian Schäfer",
+          "pronouns": null,
           "title": null,
           "city": null,
           "based_in_region": null,
@@ -5917,6 +6640,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -5954,6 +6680,7 @@
         {
           "id": "simon-bumm",
           "name": "Simon Bumm",
+          "pronouns": null,
           "title": null,
           "city": null,
           "based_in_region": null,
@@ -5966,6 +6693,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6003,6 +6733,7 @@
         {
           "id": "lukas-rieder",
           "name": "Lukas Rieder",
+          "pronouns": null,
           "title": "Data engineer (freelance)",
           "city": null,
           "based_in_region": null,
@@ -6015,6 +6746,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -6048,6 +6782,387 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Found via Data Berlin meetup line-ups (2026-09-23)."
+        },
+        {
+          "id": "timna-aversa",
+          "name": "Timna Aversa",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/timna-aversa/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "The Struggles Of Buying Data",
+              "date": "2024-11-12",
+              "url": "https://www.meetup.com/pyladies-berlin/events/303905109/",
+              "content_id": "wid-2024-11-12-the-struggles-of-buying-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Lessons from buying third-party data for a company project.",
+              "topics": [
+                "data engineering",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/303905109/",
+              "note": "talk at PyLadies Berlin (2024-11-12)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "lisa-johannsen",
+          "name": "Lisa Johannsen",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Berlin",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "Crypto Bot",
+              "date": "2026-03-10",
+              "url": "https://www.meetup.com/pyladies-berlin/events/313053329/",
+              "content_id": "wid-2026-03-10-crypto-bot",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Real-time streaming data, ML and scalable system design.",
+              "topics": [
+                "data engineering",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/313053329/",
+              "note": "talk at PyLadies Berlin (2026-03-10)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "claudia-dresselhaus",
+          "name": "Claudia Dresselhaus",
+          "pronouns": "she/her",
+          "title": "Senior LLM Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "How to build a genAI application End-To-End in Python",
+              "date": "2025-04-08",
+              "url": "https://www.meetup.com/pyladies-berlin/events/306556415/",
+              "content_id": "wid-2025-04-08-how-to-build-a-genai-application-end-to-",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Building a GenAI app with Azure and the OpenAI API.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/306556415/",
+              "note": "talk at PyLadies Berlin (2025-04-08); self-stated pronouns shown on the event page: she/her"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "jasmin-herrmann",
+          "name": "Jasmin Herrmann",
+          "pronouns": null,
+          "title": "Strategic leader (regulatory, financial services / retail / tech)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "PyLadies Berlin & Hamburg",
+              "title": "Book Club: Humanizing Data Strategy (foreword author, co-speaker)",
+              "date": "2024-08-29",
+              "url": "https://www.meetup.com/pyladies-berlin/events/302591702/",
+              "content_id": "wid-2024-08-29-book-club-humanizing-data-strategy-forew",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Spoke with Tiankai Feng about his data strategy and governance book.",
+              "topics": [
+                "data governance",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/302591702/",
+              "note": "panel at PyLadies Berlin & Hamburg (2024-08-29)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "anastasia-karavdina",
+          "name": "Anastasia Karavdina",
+          "pronouns": null,
+          "title": "Solution Architect ML/AI and BI",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "PyLadies @ PyCon DE 2025",
+              "title": "PyLadies Panel: AI Skills & Careers",
+              "date": "2025-04-24",
+              "url": "https://2025.pycon.de/talks/9TRFCK/",
+              "content_id": "wid-2025-04-24-pyladies-panel-ai-skills-careers",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Panel on AI-era careers; works across ML/AI and BI architecture.",
+              "topics": [
+                "career development",
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://2025.pycon.de/talks/9TRFCK/",
+              "note": "panel at PyLadies @ PyCon DE 2025 (2025-04-24)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "tereza-iofciu",
+          "name": "Tereza Iofciu",
+          "pronouns": null,
+          "title": "Data leadership coach / data practitioner; PyData Berlin organiser",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "PyLadies @ PyCon DE 2025",
+              "title": "PyLadies Panel: AI Skills & Careers",
+              "date": "2025-04-24",
+              "url": "https://2025.pycon.de/talks/9TRFCK/",
+              "content_id": "wid-2025-04-24-pyladies-panel-ai-skills-careers",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "15+ years across data science, data engineering and team management.",
+              "topics": [
+                "team & org design",
+                "career development",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://2025.pycon.de/talks/9TRFCK/",
+              "note": "panel at PyLadies @ PyCon DE 2025 (2025-04-24)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "yulia-tokareva",
+          "name": "Yulia Tokareva",
+          "pronouns": null,
+          "title": "Project Manager (BI & analytics projects)",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Women in Big Data Berlin",
+              "title": "Event host, 'AI for Everyone'",
+              "date": "2025-09-25",
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "content_id": "wid-2025-09-25-event-host-ai-for-everyone",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "WiBD core team; 10 years of BI and analytics project management.",
+              "topics": [
+                "business intelligence",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "note": "host at Women in Big Data Berlin (2025-09-25)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": "People not tied to a company in this dataset."
@@ -6316,6 +7431,7 @@
         {
           "id": "andrew-madson",
           "name": "Andrew Madson",
+          "pronouns": null,
           "title": "Head of Developer Relations",
           "city": null,
           "based_in_region": null,
@@ -6328,6 +7444,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -7396,6 +8515,7 @@
         {
           "id": "goutham-veeramachaneni",
           "name": "Goutham Veeramachaneni",
+          "pronouns": null,
           "title": "Staff Software Engineer",
           "city": null,
           "based_in_region": null,
@@ -7408,6 +8528,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -7822,6 +8945,7 @@
         {
           "id": "adedeji-rodemade",
           "name": "Adedeji Rodemade",
+          "pronouns": null,
           "title": "Team Lead Data Analytics Engineering",
           "city": null,
           "based_in_region": null,
@@ -7836,6 +8960,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -7879,6 +9006,7 @@
         {
           "id": "majid-mostafavi",
           "name": "Majid Mostafavi",
+          "pronouns": null,
           "title": "Team Lead Data Science",
           "city": null,
           "based_in_region": null,
@@ -7891,6 +9019,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8206,6 +9337,7 @@
         {
           "id": "hamzah-chaudhary",
           "name": "Hamzah Chaudhary",
+          "pronouns": null,
           "title": "CEO and Co-Founder",
           "city": null,
           "based_in_region": null,
@@ -8220,6 +9352,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8622,6 +9757,7 @@
         {
           "id": "julien-look",
           "name": "Julien Look",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -8634,6 +9770,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8704,6 +9843,7 @@
         {
           "id": "theo-mahmut-bulut",
           "name": "Theo Mahmut Bulut",
+          "pronouns": null,
           "title": "Co-Founder",
           "city": null,
           "based_in_region": null,
@@ -8716,6 +9856,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8770,6 +9913,7 @@
         {
           "id": "andrey-pushvintsev",
           "name": "Andrey Pushvintsev",
+          "pronouns": null,
           "title": "Staff Analyst",
           "city": "Berlin",
           "based_in_region": true,
@@ -8784,6 +9928,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8844,6 +9991,7 @@
         {
           "id": "christophe-blefari",
           "name": "Christophe Blefari",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -8856,6 +10004,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8910,6 +10061,7 @@
         {
           "id": "mihaela-tsankova",
           "name": "Mihaela Tsankova",
+          "pronouns": null,
           "title": "Group Manager, Marketing Science",
           "city": null,
           "based_in_region": null,
@@ -8922,6 +10074,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -8975,6 +10130,7 @@
         {
           "id": "vivien-saulais",
           "name": "Vivien Saulais",
+          "pronouns": null,
           "title": "Senior Sales Engineer",
           "city": null,
           "based_in_region": null,
@@ -8987,6 +10143,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9041,6 +10200,7 @@
         {
           "id": "anastasiia-stefanska",
           "name": "Anastasiia Stefanska",
+          "pronouns": null,
           "title": "Senior Data Analyst",
           "city": null,
           "based_in_region": null,
@@ -9053,6 +10213,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9106,6 +10269,7 @@
         {
           "id": "torsten-glunde",
           "name": "Torsten Glunde",
+          "pronouns": null,
           "title": "CEO",
           "city": "Hannover-Braunschweig region",
           "based_in_region": false,
@@ -9120,6 +10284,10 @@
             "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup",
+            "chapter_meetup_history"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9187,6 +10355,7 @@
         {
           "id": "franz-schwab",
           "name": "Franz Schwab",
+          "pronouns": null,
           "title": "Head of Solution Engineering Europe",
           "city": null,
           "based_in_region": null,
@@ -9199,6 +10368,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9255,6 +10427,7 @@
         {
           "id": "serhii-sokolenko",
           "name": "Serhii Sokolenko",
+          "pronouns": null,
           "title": "Co-Founder & CEO",
           "city": null,
           "based_in_region": null,
@@ -9267,6 +10440,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9322,6 +10498,7 @@
         {
           "id": "ali-izhar-ahmed",
           "name": "Ali Izhar Ahmed",
+          "pronouns": null,
           "title": "VP Data and AI",
           "city": null,
           "based_in_region": null,
@@ -9336,6 +10513,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9378,6 +10558,7 @@
         {
           "id": "angelita-frozza-sanches",
           "name": "Angelita Frozza Sanches",
+          "pronouns": null,
           "title": "Head of Core Data Platform (spoke as Engineering Manager)",
           "city": "Berlin",
           "based_in_region": true,
@@ -9392,6 +10573,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9437,6 +10621,7 @@
         {
           "id": "kiran-paduvalli-gourish",
           "name": "Kiran Paduvalli Gourish",
+          "pronouns": null,
           "title": "Lead BI Engineer",
           "city": null,
           "based_in_region": null,
@@ -9449,6 +10634,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9512,6 +10700,7 @@
         {
           "id": "aleksandr-zolotukhin",
           "name": "Aleksandr Zolotukhin",
+          "pronouns": null,
           "title": "VP of Data & Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -9526,6 +10715,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9588,6 +10780,7 @@
         {
           "id": "paula-urrialde",
           "name": "Paula Urrialde",
+          "pronouns": null,
           "title": "Principal BI Developer",
           "city": "Berlin",
           "based_in_region": true,
@@ -9602,6 +10795,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9662,6 +10858,7 @@
         {
           "id": "christian-barra",
           "name": "Christian Barra",
+          "pronouns": null,
           "title": "Co-Founder",
           "city": null,
           "based_in_region": null,
@@ -9674,6 +10871,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9727,6 +10927,7 @@
         {
           "id": "josh-lee",
           "name": "Josh Lee",
+          "pronouns": null,
           "title": "Open Source Advocate",
           "city": null,
           "based_in_region": null,
@@ -9739,6 +10940,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9779,6 +10983,7 @@
         {
           "id": "maciej-bak",
           "name": "Maciej Bak",
+          "pronouns": null,
           "title": "Support Engineer",
           "city": null,
           "based_in_region": null,
@@ -9791,6 +10996,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9831,6 +11039,7 @@
         {
           "id": "robert-hodges",
           "name": "Robert Hodges",
+          "pronouns": null,
           "title": "CEO",
           "city": null,
           "based_in_region": null,
@@ -9843,6 +11052,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9914,6 +11126,7 @@
         {
           "id": "viktor-kessler",
           "name": "Viktor Kessler",
+          "pronouns": null,
           "title": "Co-Founder",
           "city": null,
           "based_in_region": null,
@@ -9926,6 +11139,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -9980,6 +11196,7 @@
         {
           "id": "anvar-atash",
           "name": "Anvar Atash",
+          "pronouns": null,
           "title": "Co-Founder and CEO",
           "city": null,
           "based_in_region": null,
@@ -9992,6 +11209,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10048,6 +11268,7 @@
         {
           "id": "manil-manohar",
           "name": "Manil Manohar",
+          "pronouns": null,
           "title": "Head of Data and Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -10062,6 +11283,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10142,6 +11366,7 @@
         {
           "id": "pavel-chocholous",
           "name": "Pavel Chocholous",
+          "pronouns": null,
           "title": "Senior Product Marketing Engineer",
           "city": null,
           "based_in_region": null,
@@ -10154,6 +11379,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10231,6 +11459,7 @@
         {
           "id": "burak-karakan",
           "name": "Burak Karakan",
+          "pronouns": null,
           "title": "CEO and Founder",
           "city": null,
           "based_in_region": null,
@@ -10243,6 +11472,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10320,6 +11552,7 @@
         {
           "id": "sabri-karagonen",
           "name": "Sabri Karagönen",
+          "pronouns": null,
           "title": "Data & Product",
           "city": null,
           "based_in_region": null,
@@ -10332,6 +11565,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10385,6 +11621,7 @@
         {
           "id": "yingjun-wu",
           "name": "Yingjun Wu",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -10397,6 +11634,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10451,6 +11691,7 @@
         {
           "id": "astrid-paramita-mochtarram",
           "name": "Astrid Paramita Mochtarram",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -10463,6 +11704,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10517,6 +11761,7 @@
         {
           "id": "emanuele-celoria",
           "name": "Emanuele Celoria",
+          "pronouns": null,
           "title": "Senior Analytics Engineer",
           "city": "Turin",
           "based_in_region": false,
@@ -10531,6 +11776,9 @@
             "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10591,6 +11839,7 @@
         {
           "id": "pablo-garcia",
           "name": "Pablo Garcia",
+          "pronouns": null,
           "title": "Senior Solution Engineer",
           "city": null,
           "based_in_region": null,
@@ -10603,6 +11852,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10643,6 +11895,7 @@
         {
           "id": "ashish-bagri",
           "name": "Ashish Bagri",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -10655,6 +11908,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10713,6 +11969,7 @@
         {
           "id": "divya-bokaria",
           "name": "Divya Bokaria",
+          "pronouns": null,
           "title": "Director of Data and Analytics",
           "city": "Berlin",
           "based_in_region": true,
@@ -10727,6 +11984,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10787,6 +12047,7 @@
         {
           "id": "michal-gancarski",
           "name": "Michal Gancarski",
+          "pronouns": null,
           "title": "Staff Data Engineer",
           "city": "Berlin",
           "based_in_region": true,
@@ -10801,6 +12062,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10858,6 +12122,7 @@
         {
           "id": "boyan-angelov",
           "name": "Boyan Angelov",
+          "pronouns": null,
           "title": "Principal Data and AI Strategy",
           "city": "Berlin",
           "based_in_region": true,
@@ -10872,6 +12137,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10912,6 +12180,60 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Found via Data Berlin meetup line-ups (2026-09-23)."
+        },
+        {
+          "id": "berit-frech",
+          "name": "Berit Frech",
+          "pronouns": null,
+          "title": "Data and Cloud Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Berlin WiMLDS",
+              "title": "Unlocking the Power of Serverless: Transforming to a Scalable ML Platform",
+              "date": "2023-11-22",
+              "url": "https://www.meetup.com/berlin-women-in-machine-learning-and-data-science/events/296966193/",
+              "content_id": "wid-2023-11-22-unlocking-the-power-of-serverless-transf",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Engineering side of a serverless ML platform migration.",
+              "topics": [
+                "data engineering",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/berlin-women-in-machine-learning-and-data-science/events/296966193/",
+              "note": "talk at Berlin WiMLDS (2023-11-22)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -10932,6 +12254,7 @@
         {
           "id": "moritz-schone",
           "name": "Moritz Schöne",
+          "pronouns": null,
           "title": "Head of Data Science",
           "city": null,
           "based_in_region": null,
@@ -10944,6 +12267,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -10997,6 +12323,7 @@
         {
           "id": "constanze-bayer",
           "name": "Constanze Bayer",
+          "pronouns": null,
           "title": "Senior Data Journalist",
           "city": "Berlin",
           "based_in_region": true,
@@ -11011,6 +12338,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11071,6 +12401,7 @@
         {
           "id": "gunnar-morling",
           "name": "Gunnar Morling",
+          "pronouns": null,
           "title": "Senior Staff Software Engineer",
           "city": null,
           "based_in_region": null,
@@ -11083,6 +12414,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11136,6 +12470,7 @@
         {
           "id": "irina-ioana-brudaru",
           "name": "Irina Ioana Brudaru",
+          "pronouns": null,
           "title": "Principal Engineering and Science Lead, Data",
           "city": null,
           "based_in_region": null,
@@ -11148,6 +12483,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11203,6 +12541,7 @@
         {
           "id": "leo-torres",
           "name": "Leo Torres",
+          "pronouns": null,
           "title": "Lead Data Scientist",
           "city": null,
           "based_in_region": null,
@@ -11215,6 +12554,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11270,6 +12612,7 @@
         {
           "id": "vasilije-markovic",
           "name": "Vasilije Markovic",
+          "pronouns": null,
           "title": "Founder",
           "city": null,
           "based_in_region": null,
@@ -11282,6 +12625,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11337,6 +12683,7 @@
         {
           "id": "fahd-lemhaider",
           "name": "Fahd Lemhaider",
+          "pronouns": null,
           "title": "Head of Data",
           "city": null,
           "based_in_region": null,
@@ -11351,6 +12698,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11408,6 +12758,7 @@
         {
           "id": "ivo-albrecht",
           "name": "Ivo Albrecht",
+          "pronouns": null,
           "title": null,
           "city": null,
           "based_in_region": null,
@@ -11420,6 +12771,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11473,6 +12827,7 @@
         {
           "id": "sameer-al-sakran",
           "name": "Sameer Al-Sakran",
+          "pronouns": null,
           "title": "Founder & CEO",
           "city": null,
           "based_in_region": null,
@@ -11485,6 +12840,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11541,6 +12899,7 @@
         {
           "id": "andreas-scherbaum",
           "name": "Andreas Scherbaum",
+          "pronouns": null,
           "title": "WarehousePG Architect",
           "city": null,
           "based_in_region": null,
@@ -11553,6 +12912,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11606,6 +12968,7 @@
         {
           "id": "will-martin",
           "name": "Will Martin",
+          "pronouns": null,
           "title": "Evangelist",
           "city": null,
           "based_in_region": null,
@@ -11618,6 +12981,9 @@
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
+          "sourced_via": [
+            "data_berlin_meetup"
+          ],
           "mentions_dbt": null,
           "speaker_evidence": [
             {
@@ -11651,6 +13017,917 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Found via Data Berlin meetup line-ups (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "helloprint",
+      "name": "HelloPrint",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sara-garcia-cabezali",
+          "name": "Sara García Cabezalí",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "Using the modern stack to build a product catalog for scalability",
+              "date": "2024-11-12",
+              "url": "https://www.meetup.com/pyladies-berlin/events/303905109/",
+              "content_id": "wid-2024-11-12-using-the-modern-stack-to-build-a-produc",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Automating a 10M-SKU product catalogue with dbt, Airflow and OpenAI.",
+              "topics": [
+                "modern data stack",
+                "data engineering",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/303905109/",
+              "note": "talk at PyLadies Berlin (2024-11-12)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "kertos",
+      "name": "Kertos",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kira-kravets",
+          "name": "Kira Kravets",
+          "pronouns": "she/her",
+          "title": "Machine Learning Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "Making the most of production data with LLM Agent",
+              "date": "2025-04-08",
+              "url": "https://www.meetup.com/pyladies-berlin/events/306556415/",
+              "content_id": "wid-2025-04-08-making-the-most-of-production-data-with-",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "LLM agents that query production databases so users don't need SQL.",
+              "topics": [
+                "genai & llm",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/306556415/",
+              "note": "talk at PyLadies Berlin (2025-04-08); self-stated pronouns shown on the event page: she/her"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "stepstone",
+      "name": "StepStone",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "klea-sanka",
+          "name": "Klea Sanka",
+          "pronouns": "she/her",
+          "title": "Data Scientist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin; Berlin WiMLDS",
+              "title": "The World of Salary: Introducing Salary Prediction Models at StepStone",
+              "date": "2023-06-27",
+              "url": "https://www.meetup.com/pyladies-berlin/events/292854508/",
+              "content_id": "wid-2023-06-27-the-world-of-salary-introducing-salary-p",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Salary-data pipelines from experiment to production, and gender bias in predictions.",
+              "topics": [
+                "domain-specific use cases",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/292854508/",
+              "note": "talk at PyLadies Berlin; Berlin WiMLDS (2023-06-27); self-stated pronouns shown on the event page: she/her"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "dhl",
+      "name": "DHL",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "fateme-kamali",
+          "name": "Fateme Kamali",
+          "pronouns": null,
+          "title": "Data Scientist (Data & Analytics)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Berlin",
+              "title": "Retrieval-Augmented Generation",
+              "date": "2024-08-13",
+              "url": "https://www.meetup.com/pyladies-berlin/events/302267360/",
+              "content_id": "wid-2024-08-13-retrieval-augmented-generation",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "RAG talk from DHL's Data & Analytics team.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-berlin/events/302267360/",
+              "note": "talk at PyLadies Berlin (2024-08-13)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "astrazeneca",
+      "name": "AstraZeneca",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "katarzyna-stoltmann",
+          "name": "Katarzyna Stoltmann",
+          "pronouns": null,
+          "title": "Head of Data Science & AI; founder, Women in Big Data Berlin",
+          "city": "Berlin",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data Berlin",
+              "title": "Women in Big Data Berlin founder; talks incl. 'AI for Good' keynote",
+              "date": "2026-09-17",
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "content_id": "wid-2026-09-17-women-in-big-data-berlin-founder-talks-i",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Founded and runs WiBD Berlin; speaks on end-to-end AI solutions.",
+              "topics": [
+                "community",
+                "genai & llm",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "note": "organiser at Women in Big Data Berlin (2026-09-17)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "thermondo",
+      "name": "thermondo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Berlin"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "maria-beiner",
+          "name": "Maria Beiner",
+          "pronouns": null,
+          "title": "Product Manager Pricing",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data Berlin",
+              "title": "Developing a Data-Driven Leadership Mindset (workshop)",
+              "date": "2025-05-15",
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "content_id": "wid-2025-05-15-developing-a-data-driven-leadership-mind",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Turning pricing and product data into leadership decisions.",
+              "topics": [
+                "business intelligence",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "note": "talk at Women in Big Data Berlin (2025-05-15)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kendy-rannenberg",
+          "name": "Kendy Rannenberg",
+          "pronouns": null,
+          "title": "Manager Business Development CE",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Women in Big Data Berlin",
+              "title": "How to develop a successful career in tech? / The Future of Tech",
+              "date": "2025-10-24",
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "content_id": "wid-2025-10-24-how-to-develop-a-successful-career-in-te",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Databricks panellist and hackathon juror.",
+              "topics": [
+                "industry trends",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+              "note": "panel at Women in Big Data Berlin (2025-10-24)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "deloitte",
+      "name": "Deloitte",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "amelisa-brari",
+          "name": "Amelisa Brari",
+          "pronouns": null,
+          "title": "Senior Cloud & Data Engineer Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "AWS Women's User Group Berlin",
+              "title": "Empowering Data Mesh Governance with Amazon DataZone",
+              "date": "2025-02-11",
+              "url": "https://www.meetup.com/berlin-amazon-web-services-meetup-group/events/305598827/",
+              "content_id": "wid-2025-02-11-empowering-data-mesh-governance-with-ama",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Federated governance, access control and metadata management for data mesh.",
+              "topics": [
+                "data mesh",
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/berlin-amazon-web-services-meetup-group/events/305598827/",
+              "note": "talk at AWS Women's User Group Berlin (2025-02-11)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "metro-digital",
+      "name": "METRO.digital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Berlin"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "angela-jones",
+          "name": "Angela Jones",
+          "pronouns": null,
+          "title": "Senior Data Analyst",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "http://www.linkedin.com/in/angela-jones-dr"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women+ in Data/AI Festival (Berlin)",
+              "title": "Beyond the Textbook: Unexpected Hurdles in A/B Testing B2B Recommender Systems",
+              "date": "2024-09-27",
+              "url": "https://women-in-data-ai.tech/2024/speakers",
+              "content_id": "wid-2024-09-27-beyond-the-textbook-unexpected-hurdles-i",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Practical problems in A/B testing B2B recommender systems.",
+              "topics": [
+                "business intelligence",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-in-data-ai.tech/2024/speakers",
+              "note": "talk at Women+ in Data/AI Festival (Berlin) (2024-09-27)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "picnic-technologies",
+      "name": "Picnic Technologies",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anna-hannemann",
+          "name": "Anna Hannemann",
+          "pronouns": null,
+          "title": "Project Director Automated Fulfilment",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/anna-hannemann/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women+ in Data/AI Festival (Berlin)",
+              "title": "Leveraging data-driven automation for optimized e-grocery fulfillment",
+              "date": "2024-09-27",
+              "url": "https://women-in-data-ai.tech/2024/sessions",
+              "content_id": "wid-2024-09-27-leveraging-data-driven-automation-for-op",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data-driven supply-chain automation and data products in production.",
+              "topics": [
+                "domain-specific use cases",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-in-data-ai.tech/2024/sessions",
+              "note": "talk at Women+ in Data/AI Festival (Berlin) (2024-09-27)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "bayer",
+      "name": "Bayer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "laura-fernandez-gallardo",
+          "name": "Laura Fernandez Gallardo",
+          "pronouns": null,
+          "title": "Senior Machine Learning Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women+ in Data/AI Festival (Berlin)",
+              "title": "A Data Mesh Implementation to Facilitate Data Sharing Across Digital Products",
+              "date": "2023-06-30",
+              "url": "https://women-in-data-ai.tech/sessions/a-data-mesh-implementation-to-facilitate-data-sharing-across-digital-products-for-insights-extraction",
+              "content_id": "wid-2023-06-30-a-data-mesh-implementation-to-facilitate",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data-as-a-product and a self-serve platform on AWS Lake Formation.",
+              "topics": [
+                "data mesh",
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-in-data-ai.tech/sessions/a-data-mesh-implementation-to-facilitate-data-sharing-across-digital-products-for-insights-extraction",
+              "note": "talk at Women+ in Data/AI Festival (Berlin) (2023-06-30)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "docmorris",
+      "name": "DocMorris",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Berlin"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alena-matsiushova",
+          "name": "Alena Matsiushova",
+          "pronouns": null,
+          "title": "Junior Data Engineer",
+          "city": "Berlin",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alena-matsiushova/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "WomenTech Network Berlin",
+              "title": "Women in Tech Connect Berlin 2025 panel",
+              "date": "2025-01-22",
+              "url": "https://www.womentech.net/events/women-in-tech-connect-berlin-2025",
+              "content_id": "wid-2025-01-22-women-in-tech-connect-berlin-2025-panel",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Career-changer into data engineering (SQL/Python).",
+              "topics": [
+                "career development",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.womentech.net/events/women-in-tech-connect-berlin-2025",
+              "note": "panel at WomenTech Network Berlin (2025-01-22)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
+        },
+        {
+          "id": "gulnara-pepeliaeva",
+          "name": "Gulnara Pepeliaeva",
+          "pronouns": null,
+          "title": "Junior Data Engineer",
+          "city": "Berlin",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/gulnara-pepeliaeva/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "WomenTech Network Berlin",
+              "title": "Women in Tech Connect Berlin 2025 panel",
+              "date": "2025-01-22",
+              "url": "https://www.womentech.net/events/women-in-tech-connect-berlin-2025",
+              "content_id": "wid-2025-01-22-women-in-tech-connect-berlin-2025-panel",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Former IP lawyer turned data engineer, focused on the business value of data.",
+              "topics": [
+                "career development",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.womentech.net/events/women-in-tech-connect-berlin-2025",
+              "note": "panel at WomenTech Network Berlin (2025-01-22)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Found via women-in-data community sourcing (2026-09-23)."
         }
       ],
       "notes": ""
@@ -11697,7 +13974,16 @@
       "meetup_calendar_luma": "https://lu.ma/data-berlin",
       "meetup_com": "https://www.meetup.com/data-berlin/",
       "newsletter_archive": "https://databerlin.substack.com/archive"
-    }
+    },
+    "women_in_data_communities": [
+      "https://www.meetup.com/pyladies-berlin/",
+      "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+      "https://www.meetup.com/wtm-berlin/",
+      "https://women-in-data-ai.tech/",
+      "https://www.meetup.com/berlin-amazon-web-services-meetup-group/",
+      "https://www.womentech.net/",
+      "https://www.meetup.com/berlin-women-in-machine-learning-and-data-science/"
+    ]
   },
   "past_meetups": [
     {
@@ -12255,6 +14541,41 @@
       "name": "Data Berlin YouTube",
       "url": "https://www.youtube.com/@DataBerlin",
       "note": "Some meetups live-streamed"
+    },
+    {
+      "name": "PyLadies Berlin",
+      "url": "https://www.meetup.com/pyladies-berlin/",
+      "note": "Monthly talk nights; themed data nights (e.g. Nov 2024) are the best source of data speakers; listings show self-stated pronouns"
+    },
+    {
+      "name": "Women in Big Data Berlin",
+      "url": "https://www.meetup.com/women-in-big-data-berlin-meetup-group/",
+      "note": "Founded by Katarzyna Stoltmann; mostly AI and career topics"
+    },
+    {
+      "name": "Women Techmakers Berlin",
+      "url": "https://www.meetup.com/wtm-berlin/",
+      "note": "Occasional data panels"
+    },
+    {
+      "name": "Women+ in Data/AI Festival (INNOQ, Berlin)",
+      "url": "https://women-in-data-ai.tech/",
+      "note": "2023 and 2024 editions with a data engineering track; paused in 2025"
+    },
+    {
+      "name": "AWS Women's User Group Berlin",
+      "url": "https://www.meetup.com/berlin-amazon-web-services-meetup-group/",
+      "note": "Occasional data platform talks"
+    },
+    {
+      "name": "WomenTech Network Berlin",
+      "url": "https://www.womentech.net/",
+      "note": "Women in Tech Connect Berlin panels"
+    },
+    {
+      "name": "Berlin WiMLDS",
+      "url": "https://www.meetup.com/berlin-women-in-machine-learning-and-data-science/",
+      "note": "Few events since 2023, ML-heavy"
     }
   ]
 }
