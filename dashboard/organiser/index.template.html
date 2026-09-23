@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organiser Cockpit</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23FF694B'/><path d='M8 10h3v12H8V10zm5-2h3v14h-3V8zm5 4h3v10h-3v-10z' fill='%23fff'/></svg>">
+<style>
+  :root {
+    --surface-1: #0f0f0f; --surface-2: #1a1a1a; --surface-3: #242424; --border: #3a3a3a;
+    --text-primary: #ffffff; --text-secondary: #d0d0d0; --text-muted: #a0a0a0;
+    --accent: #5ab3ff; --positive: #22e6a5; --warn: #ffc947; --negative: #ff7f7f;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --surface-1: #fafaf8; --surface-2: #f0ede7; --surface-3: #e6e1d8; --border: #ddd7cc;
+      --text-primary: #1a1a1a; --text-secondary: #4a4a4a; --text-muted: #707070;
+      --accent: #0052cc; --positive: #008b5c; --warn: #9a6400; --negative: #cc2222;
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --surface-1: #fafaf8; --surface-2: #f0ede7; --surface-3: #e6e1d8; --border: #ddd7cc;
+    --text-primary: #1a1a1a; --text-secondary: #4a4a4a; --text-muted: #707070;
+    --accent: #0052cc; --positive: #008b5c; --warn: #9a6400; --negative: #cc2222;
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--surface-1); color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px; line-height: 1.45;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 16px 80px; }
+  .hidden { display: none !important; }
+
+  header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  header h1 { font-size: 24px; margin: 4px 0; }
+  header p { margin: 0; color: var(--text-secondary); max-width: 700px; font-size: 13.5px; }
+  .back { font-size: 12.5px; color: var(--text-muted); text-decoration: none; }
+  .back:hover { color: var(--text-primary); }
+  .theme-toggle button {
+    background: none; border: 1px solid transparent; color: var(--text-secondary); cursor: pointer;
+    font-size: 14px; padding: 4px 8px; border-radius: 6px;
+  }
+  .theme-toggle button.active { background: var(--surface-2); border-color: var(--border); }
+
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tab {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary);
+    border-radius: 12px; padding: 10px 16px; cursor: pointer; text-align: left; font: inherit;
+  }
+  .tab strong { display: block; color: var(--text-primary); font-size: 15px; }
+  .tab span { font-size: 12px; }
+  .tab.active { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+  .stat b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 12px; color: var(--text-secondary); }
+
+  .views { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 14px; overflow-x: auto; }
+  .views button {
+    background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary);
+    padding: 8px 12px; cursor: pointer; font: inherit; font-weight: 600; white-space: nowrap;
+  }
+  .views button.active { color: var(--text-primary); border-bottom-color: var(--accent); }
+  .views button .goal-dot { color: var(--accent); }
+
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .toolbar input[type=search], .toolbar select {
+    background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 10px; font: inherit; font-size: 13px;
+  }
+  .toolbar input[type=search] { flex: 1 1 220px; min-width: 0; }
+  .toolbar label { font-size: 12.5px; color: var(--text-secondary); display: flex; gap: 5px; align-items: center; }
+  .btn {
+    background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 12px; cursor: pointer; font: inherit; font-size: 13px;
+  }
+  .btn:hover { border-color: var(--text-secondary); }
+  .view-note { font-size: 12.5px; color: var(--text-muted); margin: 0 0 12px; }
+
+  .list { display: flex; flex-direction: column; gap: 8px; }
+  .row { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+  .row-head { display: flex; gap: 12px; align-items: flex-start; }
+  .rank { font-variant-numeric: tabular-nums; color: var(--text-muted); font-size: 12px; min-width: 26px; padding-top: 2px; }
+  .row-main { flex: 1; min-width: 0; }
+  .row-title { font-weight: 650; font-size: 14.5px; }
+  .row-sub { color: var(--text-secondary); font-size: 13px; overflow-wrap: anywhere; }
+  .row-side { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; flex-shrink: 0; }
+  .status {
+    background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border);
+    border-radius: 999px; padding: 3px 8px; font: inherit; font-size: 12px;
+  }
+  .status[data-v="contacted"] { border-color: var(--accent); color: var(--accent); }
+  .status[data-v="confirmed"] { border-color: var(--positive); color: var(--positive); }
+  .status[data-v="declined"], .status[data-v="skip"] { color: var(--text-muted); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+  .chip { font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--surface-3); color: var(--text-secondary); }
+  .chip.good { color: var(--positive); }
+  .chip.warn { color: var(--warn); }
+  .chip.bad { color: var(--negative); }
+  .chip.topic { background: none; border: 1px solid var(--border); cursor: pointer; }
+  .chip.topic:hover { border-color: var(--accent); color: var(--text-primary); }
+  .angle { margin-top: 8px; font-size: 13px; color: var(--text-primary); }
+  .angle::before { content: "talk idea · "; color: var(--text-muted); }
+
+  details { margin-top: 8px; }
+  summary { cursor: pointer; font-size: 12.5px; color: var(--text-muted); }
+  .detail-list { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--text-secondary); }
+  .detail-list li { margin-bottom: 4px; }
+  .note { font-size: 12.5px; color: var(--text-muted); margin-top: 6px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 12px; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: var(--surface-2); }
+  .table-scroll { overflow-x: auto; }
+  .bar { display: inline-block; height: 8px; border-radius: 4px; background: var(--accent); vertical-align: middle; }
+  .bar.past { background: var(--text-muted); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .card h3 { margin: 0 0 8px; font-size: 14px; }
+  .empty { color: var(--text-muted); padding: 24px 0; text-align: center; }
+  .caveats { margin-top: 28px; font-size: 12px; color: var(--text-muted); }
+  .caveats ul { padding-left: 18px; }
+
+  @media (max-width: 640px) {
+    .row-head { flex-wrap: wrap; }
+    .row-side { flex-direction: row; align-items: center; width: 100%; justify-content: flex-start; }
+    .two-col { grid-template-columns: 1fr; }
+    .tab { flex: 1 1 140px; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <a class="back" href="../">← dbt Meetup Community Dashboard</a>
+      <h1>Organiser cockpit</h1>
+      <p>Who could speak at, or come to, each chapter's next meetup. Leads come from public talks, blog posts and job ads. Check a profile before reaching out, because titles go stale.</p>
+    </div>
+    <div class="theme-toggle">
+      <button id="theme-dark" title="Dark mode">🌙</button>
+      <button id="theme-light" title="Light mode">☀️</button>
+    </div>
+  </header>
+
+  <div class="tabs" id="chapter-tabs"></div>
+  <div class="stat-row" id="stat-row"></div>
+
+  <nav class="views" id="view-nav">
+    <button data-view="speakers">Speakers</button>
+    <button data-view="attendees">Attendees</button>
+    <button data-view="companies">Companies</button>
+    <button data-view="topics">Topics</button>
+    <button data-view="history">Past meetups &amp; channels</button>
+  </nav>
+
+  <div class="toolbar" id="toolbar">
+    <input type="search" id="search" placeholder="Search names, companies, titles, topics…">
+    <select id="topic-filter"><option value="">All topics</option></select>
+    <select id="lead-filter" aria-label="lead type">
+      <option value="">All leads</option>
+      <option value="emerging_voice">First-time speakers (publish, no talk yet)</option>
+      <option value="proven_speaker">Proven speakers</option>
+    </select>
+    <select id="status-filter">
+      <option value="">Any status</option>
+      <option value="open">Not contacted yet</option>
+      <option value="contacted">Contacted</option>
+      <option value="confirmed">Confirmed</option>
+    </select>
+    <label><input type="checkbox" id="in-region"> In region only</label>
+    <label id="hide-vinted-label"><input type="checkbox" id="hide-vinted"> Hide Vinted colleagues</label>
+    <button class="btn" id="export">Export CSV</button>
+  </div>
+  <p class="view-note" id="view-note"></p>
+
+  <div id="view"></div>
+
+  <div class="caveats" id="caveats"></div>
+</div>
+
+<script>
+const DATA = __ORGANISER_DATA__;
+
+const STATUSES = ['', 'contacted', 'confirmed', 'declined', 'skip'];
+const STATUS_LABELS = { '': 'not contacted', contacted: 'contacted', confirmed: 'confirmed', declined: 'declined', skip: 'skip' };
+const VIEW_NOTES = {
+  speakers: 'Ranked by lead tier. Within a tier, first-time speakers (people who publish but have no talk yet) come first, then proven speakers, then everyone else; then speaker potential, past talks here and public dbt content. Newest activity breaks ties. A good line-up pairs one proven speaker with one or two first-time speakers.',
+  attendees: 'Ranked by whether they are in the region, then attendee potential, then how strongly their company uses dbt.',
+  companies: 'Teams to invite. Ranked by local presence, then dbt signal, then open job ads that mention dbt. A team that is hiring for dbt is usually a team that uses it.',
+  topics: 'Past talks at this chapter against the topics the current leads can cover. A topic with leads but no past talks is a gap worth filling. Click a row to see those speakers.',
+  history: '',
+};
+
+const store = {
+  get(key, fallback) { try { const v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+  set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} },
+};
+let statuses = store.get('organiser-status', {});
+
+const state = {
+  chapter: null, view: null, search: '', topic: '', lead: '', status: '', inRegion: false, hideVinted: false,
+};
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const chapter = () => DATA.chapters.find(c => c.key === state.chapter);
+const statusKey = (kind, id) => `${state.chapter}:${kind}:${id}`;
+const statusOf = (kind, id) => statuses[statusKey(kind, id)] || '';
+
+function defaultView(ch) { return ch.goal === 'attendees' ? 'attendees' : 'speakers'; }
+function goalText(goal) {
+  return { speakers: 'Goal: find speakers', attendees: 'Goal: grow attendance', both: 'Goal: speakers and attendees' }[goal];
+}
+
+// ---- url hash keeps chapter + view shareable: #berlin/speakers
+function readHash() {
+  const [key, view] = location.hash.slice(1).split('/');
+  const ch = DATA.chapters.find(c => c.key === key) || DATA.chapters[0];
+  state.chapter = ch ? ch.key : null;
+  state.view = VIEW_NOTES.hasOwnProperty(view) ? view : (ch ? defaultView(ch) : 'speakers');
+}
+function writeHash() { history.replaceState(null, '', `#${state.chapter}/${state.view}`); }
+
+// ---- filtering
+function matchesPerson(p) {
+  if (state.inRegion && p.based_in_region !== true) return false;
+  if (state.hideVinted && p.internal_vinted) return false;
+  if (state.topic && !p.topics.includes(state.topic)) return false;
+  if (state.lead && p.lead_type !== state.lead) return false;
+  const st = statusOf('person', p.id);
+  if (state.status === 'open' && st) return false;
+  if (state.status && state.status !== 'open' && st !== state.status) return false;
+  if (state.search) {
+    const hay = [p.name, p.title, p.company_name, p.city, p.talk_angle, ...p.topics, ...p.evidence.map(e => e.title)].join(' ').toLowerCase();
+    if (!hay.includes(state.search)) return false;
+  }
+  return true;
+}
+function matchesCompany(c) {
+  if (state.inRegion && c.local_presence !== 'confirmed') return false;
+  const st = statusOf('company', c.id);
+  if (state.status === 'open' && st) return false;
+  if (state.status && state.status !== 'open' && st !== state.status) return false;
+  if (state.search) {
+    const hay = [c.name, c.type, ...c.cities, ...c.stack, ...c.jobs.map(j => j.title)].join(' ').toLowerCase();
+    if (!hay.includes(state.search)) return false;
+  }
+  return true;
+}
+function visiblePeople() {
+  const ch = chapter();
+  const rankKey = state.view === 'attendees' ? 'attendee_rank' : 'speaker_rank';
+  return ch.people.filter(matchesPerson).sort((a, b) => a[rankKey] - b[rankKey]);
+}
+
+// ---- rendering helpers
+function statusSelect(kind, id) {
+  const v = statusOf(kind, id);
+  return `<select class="status" data-kind="${kind}" data-id="${esc(id)}" data-v="${v}" aria-label="outreach status">` +
+    STATUSES.map(s => `<option value="${s}"${s === v ? ' selected' : ''}>${STATUS_LABELS[s]}</option>`).join('') + '</select>';
+}
+function levelChip(value, label) {
+  const cls = value === 'high' ? 'good' : value === 'low' ? 'bad' : '';
+  return `<span class="chip ${cls}">${label} ${esc(value)}</span>`;
+}
+function regionChip(p) {
+  if (p.based_in_region === true) return `<span class="chip good">in ${esc(chapter().label)}</span>`;
+  if (p.based_in_region === false) return `<span class="chip bad">elsewhere${p.city ? ' · ' + esc(p.city) : ''}</span>`;
+  return `<span class="chip warn">location unverified</span>`;
+}
+
+function personRow(p) {
+  const speakerView = state.view !== 'attendees';
+  const rank = speakerView ? p.speaker_rank : p.attendee_rank;
+  const reasons = speakerView ? p.speaker_reasons : p.attendee_reasons;
+  const links = [
+    p.linkedin ? `<a href="${esc(p.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>${p.linkedin_confidence !== 'high' ? ` <span class="chip warn">match ${esc(p.linkedin_confidence)}</span>` : ''}` : '',
+  ].filter(Boolean).join(' ');
+  const items = [
+    ...p.past_talks.map(t => `<li><b>Spoke here</b> ${esc(t.date)} · ${esc(t.talk_title)}</li>`),
+    ...p.evidence.map(e => `<li>${esc(e.date || 'undated')} · ${esc(e.type)}${e.event ? ' at ' + esc(e.event) : ''} · ${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a>` : esc(e.title)}${e.mentions_dbt ? '' : ' <span class="chip">no dbt</span>'}</li>`),
+  ];
+  return `<div class="row">
+    <div class="row-head">
+      <div class="rank">#${rank}</div>
+      <div class="row-main">
+        <div class="row-title">${esc(p.name)}${p.internal_vinted ? ' <span class="chip">Vinted colleague</span>' : ''}</div>
+        <div class="row-sub">${esc(p.title || '')}${p.title ? ' · ' : ''}${esc(p.company_name)}${p.company_excluded ? ' <span class="chip bad">not for outreach</span>' : ''}</div>
+        <div class="chips">
+          ${reasons.map(r => `<span class="chip${r.startsWith('first-time') ? ' good' : ''}">${esc(r)}</span>`).join('')}
+          ${speakerView ? levelChip(p.speaker_potential, 'speaker') : levelChip(p.attendee_potential, 'attendee')}
+          ${speakerView ? regionChip(p) : ''}
+          ${p.also_in.length ? `<span class="chip good">also in ${esc(p.also_in.join(', '))}</span>` : ''}
+          ${p.last_active ? `<span class="chip">last active ${esc(p.last_active.slice(0, 7))}</span>` : ''}
+        </div>
+        ${speakerView && p.talk_angle ? `<div class="angle">${esc(p.talk_angle)}</div>` : ''}
+        ${p.topics.length ? `<div class="chips">${p.topics.map(t => `<button class="chip topic" data-topic="${esc(t)}">${esc(t)}</button>`).join('')}</div>` : ''}
+        ${items.length || p.notes ? `<details><summary>${[items.length ? `${items.length} public item${items.length === 1 ? '' : 's'}` : '', p.notes ? 'note' : ''].filter(Boolean).join(' · ')}</summary>
+          ${items.length ? `<ul class="detail-list">${items.join('')}</ul>` : ''}
+          ${p.notes ? `<div class="note">${esc(p.notes)}</div>` : ''}
+        </details>` : ''}
+      </div>
+      <div class="row-side">${statusSelect('person', p.id)}${links}</div>
+    </div>
+  </div>`;
+}
+
+function companyRow(c, i) {
+  const ch = chapter();
+  const people = ch.people.filter(p => p.company_id === c.id);
+  const signalCls = c.dbt_signal === 'strong' ? 'good' : c.dbt_signal === 'medium' ? '' : 'warn';
+  return `<div class="row">
+    <div class="row-head">
+      <div class="rank">#${i + 1}</div>
+      <div class="row-main">
+        <div class="row-title">${esc(c.name)}</div>
+        <div class="row-sub">${esc(c.type)}${c.cities.length ? ' · ' + esc(c.cities.join(', ')) : ''}</div>
+        <div class="chips">
+          <span class="chip ${signalCls}">dbt signal ${esc(c.dbt_signal)}</span>
+          <span class="chip ${c.local_presence === 'confirmed' ? 'good' : 'warn'}">local presence ${esc(c.local_presence.replace('_', ' '))}</span>
+          ${c.dbt_job_count ? `<span class="chip good">${c.dbt_job_count} dbt job ad${c.dbt_job_count > 1 ? 's' : ''}</span>` : ''}
+          <span class="chip">${c.people_count} ${c.people_count === 1 ? 'person' : 'people'}</span>
+          ${c.watchlist ? '<span class="chip warn">watchlist</span>' : ''}
+          ${c.excluded_from_outreach ? '<span class="chip bad">not for outreach</span>' : ''}
+          ${c.also_in.length ? `<span class="chip good">also in ${esc(c.also_in.join(', '))}</span>` : ''}
+        </div>
+        ${c.stack.length ? `<div class="row-sub" style="margin-top:6px">stack: ${esc(c.stack.join(', '))}</div>` : ''}
+        ${people.length || c.jobs.length || c.notes ? `<details><summary>${people.length} ${people.length === 1 ? 'person' : 'people'} · ${c.jobs.length} job ad${c.jobs.length === 1 ? '' : 's'}</summary>
+          ${people.length ? `<ul class="detail-list">${people.map(p => `<li>${esc(p.name)} · ${esc(p.title || '')}${p.linkedin ? ` · <a href="${esc(p.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ''}</li>`).join('')}</ul>` : ''}
+          ${c.jobs.length ? `<ul class="detail-list">${c.jobs.map(j => `<li><a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.title)}</a>${j.last_seen ? ` · seen ${esc(j.last_seen)}` : ''}</li>`).join('')}</ul>` : ''}
+          ${c.notes ? `<div class="note">${esc(c.notes)}</div>` : ''}
+        </details>` : ''}
+      </div>
+      <div class="row-side">${statusSelect('company', c.id)}</div>
+    </div>
+  </div>`;
+}
+
+function renderTopics() {
+  const ch = chapter();
+  const rows = [...ch.topics].sort((a, b) => (b.leads - b.past_talks * 2) - (a.leads - a.past_talks * 2) || b.leads - a.leads);
+  const maxLeads = Math.max(1, ...rows.map(r => r.leads));
+  const maxPast = Math.max(1, ...rows.map(r => r.past_talks));
+  return `<div class="table-scroll"><table>
+    <thead><tr><th>Topic</th><th class="num">Past talks here</th><th>Last covered</th><th class="num">Leads who cover it</th></tr></thead>
+    <tbody>${rows.map(r => `<tr class="clickable" data-topic="${esc(r.topic)}">
+      <td>${esc(r.topic)}${r.leads && !r.past_talks ? ' <span class="chip good">gap</span>' : ''}</td>
+      <td class="num">${r.past_talks} <span class="bar past" style="width:${Math.round(40 * r.past_talks / maxPast)}px"></span></td>
+      <td>${esc(r.last_covered || '—')}</td>
+      <td class="num">${r.leads} <span class="bar" style="width:${Math.round(60 * r.leads / maxLeads)}px"></span></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+function renderHistory() {
+  const ch = chapter();
+  const meetups = ch.past_meetups.length ? ch.past_meetups.map(m => `<li><a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.date)} · ${esc(m.name)}</a>${m.attendees ? ` · ${m.attendees} attended` : ''}
+      <ul class="detail-list">${m.talks.map(t => `<li>${esc(t.speaker)}${t.company ? ' (' + esc(t.company) + ')' : ''} · ${esc(t.title)}</li>`).join('')}</ul></li>`).join('')
+    : '<li>none recorded</li>';
+  const channels = ch.channels.map(c => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.name)}</a>${c.note ? ' · ' + esc(c.note) : ''}</li>`).join('');
+  return `<div class="two-col">
+    <div class="card"><h3>Past meetups</h3><ul class="detail-list">${meetups}</ul></div>
+    <div class="card"><h3>Where to promote</h3><ul class="detail-list">${channels}</ul></div>
+  </div>`;
+}
+
+function renderStats() {
+  const ch = chapter();
+  const people = ch.people;
+  const speakerLeads = people.filter(p => ['1', '2'].includes(p.priority_tier)).length;
+  const firstTime = people.filter(p => p.lead_type === 'emerging_voice' && ['1', '2'].includes(p.priority_tier) && !p.internal_vinted).length;
+  const inRegion = people.filter(p => p.based_in_region === true).length;
+  const localDbt = ch.companies.filter(c => c.local_presence === 'confirmed' && c.dbt_signal === 'strong').length;
+  const dbtJobs = ch.companies.reduce((n, c) => n + c.dbt_job_count, 0);
+  const contacted = Object.entries(statuses).filter(([k, v]) => k.startsWith(ch.key + ':') && ['contacted', 'confirmed'].includes(v)).length;
+  const last = ch.past_meetups[0];
+  const stats = [
+    [speakerLeads, 'tier 1–2 speaker leads'],
+    [firstTime, 'of them first-time speakers'],
+    [inRegion, `people confirmed in ${ch.label}`],
+    [localDbt, 'local companies with strong dbt use'],
+    [dbtJobs, 'open job ads mentioning dbt'],
+    [last ? last.date.slice(0, 7) : '—', `last meetup (${ch.past_meetups.length} total)`],
+    [contacted, 'contacted or confirmed (this browser)'],
+  ];
+  document.getElementById('stat-row').innerHTML = stats.map(([v, l]) => `<div class="stat"><b>${esc(v)}</b><span>${esc(l)}</span></div>`).join('');
+}
+
+function render() {
+  const ch = chapter();
+  if (!ch) { document.getElementById('view').innerHTML = '<div class="empty">No chapter files found.</div>'; return; }
+  writeHash();
+
+  document.getElementById('chapter-tabs').innerHTML = DATA.chapters.map(c =>
+    `<button class="tab${c.key === state.chapter ? ' active' : ''}" data-chapter="${c.key}"><strong>${esc(c.label)}</strong><span>${goalText(c.goal)} · ${c.people.length} people · ${c.companies.length} companies</span></button>`
+  ).join('');
+  document.querySelectorAll('#view-nav button').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === state.view);
+    const isGoal = b.dataset.view === defaultView(ch) && ch.goal !== 'both';
+    b.dataset.label = b.dataset.label || b.textContent;
+    b.innerHTML = esc(b.dataset.label) + (isGoal ? ' <span class="goal-dot" title="this chapter\'s goal">●</span>' : '');
+  });
+  renderStats();
+
+  const peopleView = state.view === 'speakers' || state.view === 'attendees';
+  document.getElementById('toolbar').classList.toggle('hidden', !(peopleView || state.view === 'companies'));
+  document.getElementById('topic-filter').classList.toggle('hidden', !peopleView);
+  document.getElementById('lead-filter').classList.toggle('hidden', state.view !== 'speakers');
+  document.getElementById('hide-vinted-label').classList.toggle('hidden', !peopleView);
+  document.getElementById('view-note').textContent = VIEW_NOTES[state.view];
+
+  const view = document.getElementById('view');
+  if (peopleView) {
+    const people = visiblePeople();
+    view.innerHTML = people.length ? `<div class="list">${people.map(personRow).join('')}</div>` : '<div class="empty">No one matches these filters.</div>';
+  } else if (state.view === 'companies') {
+    const companies = ch.companies.filter(matchesCompany);
+    view.innerHTML = companies.length ? `<div class="list">${companies.map(companyRow).join('')}</div>` : '<div class="empty">No companies match these filters.</div>';
+  } else if (state.view === 'topics') {
+    view.innerHTML = renderTopics();
+  } else {
+    view.innerHTML = renderHistory();
+  }
+
+  document.getElementById('caveats').innerHTML = `<strong>About this data</strong> · ${esc(ch.region)}, snapshot ${esc(ch.generated_at)} (version ${esc(ch.version)}). Outreach status is saved in this browser only.<ul>${ch.caveats.map(c => `<li>${esc(c)}</li>`).join('')}</ul>`;
+}
+
+// ---- csv export of the current list
+function exportCsv() {
+  const ch = chapter();
+  let header, rows;
+  if (state.view === 'companies') {
+    header = ['rank', 'company', 'type', 'cities', 'dbt_signal', 'local_presence', 'dbt_job_ads', 'people', 'status'];
+    rows = ch.companies.filter(matchesCompany).map((c, i) => [i + 1, c.name, c.type, c.cities.join('; '), c.dbt_signal, c.local_presence, c.dbt_job_count, c.people_count, statusOf('company', c.id)]);
+  } else {
+    const rankKey = state.view === 'attendees' ? 'attendee_rank' : 'speaker_rank';
+    header = ['rank', 'name', 'title', 'company', 'city', 'in_region', 'tier', 'lead_type', 'speaker_potential', 'attendee_potential', 'talk_idea', 'linkedin', 'vinted_colleague', 'status'];
+    rows = visiblePeople().map(p => [p[rankKey], p.name, p.title, p.company_name, p.city, p.based_in_region, p.priority_tier, p.lead_type, p.speaker_potential, p.attendee_potential, p.talk_angle, p.linkedin, p.internal_vinted, statusOf('person', p.id)]);
+  }
+  const csv = [header, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = `${ch.key}-${state.view}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ---- events
+document.getElementById('chapter-tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-chapter]');
+  if (!b) return;
+  state.chapter = b.dataset.chapter;
+  state.view = defaultView(chapter());
+  state.topic = '';
+  document.getElementById('topic-filter').value = '';
+  render();
+});
+document.getElementById('view-nav').addEventListener('click', e => {
+  const b = e.target.closest('[data-view]');
+  if (!b) return;
+  state.view = b.dataset.view;
+  render();
+});
+document.getElementById('view').addEventListener('click', e => {
+  const t = e.target.closest('[data-topic]');
+  if (!t) return;
+  state.topic = t.dataset.topic;
+  state.view = 'speakers';
+  document.getElementById('topic-filter').value = state.topic;
+  render();
+  window.scrollTo({ top: document.getElementById('view-nav').offsetTop - 8, behavior: 'smooth' });
+});
+document.getElementById('view').addEventListener('change', e => {
+  const s = e.target.closest('select.status');
+  if (!s) return;
+  const key = statusKey(s.dataset.kind, s.dataset.id);
+  if (s.value) statuses[key] = s.value; else delete statuses[key];
+  store.set('organiser-status', statuses);
+  s.dataset.v = s.value;
+  renderStats();
+});
+document.getElementById('search').addEventListener('input', e => { state.search = e.target.value.trim().toLowerCase(); render(); });
+document.getElementById('topic-filter').addEventListener('change', e => { state.topic = e.target.value; render(); });
+document.getElementById('lead-filter').addEventListener('change', e => { state.lead = e.target.value; render(); });
+document.getElementById('status-filter').addEventListener('change', e => { state.status = e.target.value; render(); });
+document.getElementById('in-region').addEventListener('change', e => { state.inRegion = e.target.checked; render(); });
+document.getElementById('hide-vinted').addEventListener('change', e => { state.hideVinted = e.target.checked; render(); });
+document.getElementById('export').addEventListener('click', exportCsv);
+window.addEventListener('hashchange', () => { readHash(); render(); });
+
+// ---- theme: shares the 'theme' key with the main dashboard
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem('theme', theme); } catch (e) {}
+  document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
+  document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+}
+document.getElementById('theme-dark').addEventListener('click', () => setTheme('dark'));
+document.getElementById('theme-light').addEventListener('click', () => setTheme('light'));
+let savedTheme = null;
+try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
+setTheme(savedTheme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+
+// ---- boot
+const allTopics = [...new Set(DATA.chapters.flatMap(c => c.topics.map(t => t.topic)))];
+document.getElementById('topic-filter').innerHTML += allTopics.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
+readHash();
+render();
+</script>
+</html>
