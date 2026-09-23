@@ -1,55 +1,52 @@
 # dbt-meetups
 
-Cross-chapter analysis of the ~75 [dbt](https://www.getdbt.com/) Meetup groups
-worldwide: events, talks, speakers, and topics, scraped from Meetup.com,
-structured by an LLM, and published as a static dashboard.
+A cross-chapter analysis of the ~75 [dbt](https://www.getdbt.com/) Meetup groups worldwide. It scrapes events, talks, speakers and topics from Meetup.com. An LLM structures them, and the results are published as a static dashboard.
 
-**Live dashboard:** deployed via GitHub Pages on every push to `main` (see
-`.github/workflows/deploy-dashboard.yml`).
+**Live dashboard:** deployed to GitHub Pages on every push to `main` (see `.github/workflows/deploy-dashboard.yml`).
 
 ## How it fits together
 
 ```
-1. scrape.py            Meetup.com        --> raw_events/*.json
-2. enrich.py             raw_events/*.json --> enriched/*.json
-3. update_speakers.py    enriched/*.json   --> speaker-identities.json
-4. build_dashboard_data.py   enriched/*.json + speaker-identities.json
-                                            --> dashboard/dashboard_data.json
-                                            --> dashboard/index.html
+1. scrape.py                 Meetup.com                 --> raw_events/*.json
+2. enrich.py                 raw_events/*.json          --> enriched/*.json
+3. update_speakers.py        enriched/*.json            --> speaker-identities.json
+4. build_dashboard_data.py   enriched/*.json
+                             + speaker-identities.json  --> dashboard/dashboard_data.json
+                                                        --> dashboard/index.html
 ```
 
-- **`raw_events/*.json`** — one file per chapter, the scraped page text and
-  structured metadata (dates, RSVPs, location) straight from Meetup.
-- **`enriched/*.json`** — the same events, with an LLM structuring each
-  event's talks (title, speaker, topics) against a fixed schema and 26-topic
-  vocabulary. This is the closest thing this project has to a "modeled"
-  layer.
-- **`pipeline/speaker-identities.json`** — cross-chapter speaker
-  de-duplication (the same person's name spelled two different ways across
-  two chapters' events).
-- **`dashboard/dashboard_data.json`** — the aggregated output the dashboard
-  actually reads: per-chapter stats, topic/category rollups, growth-over-time
-  series, computed fresh from `enriched/*.json` on every build.
+### Data files
 
-Full step-by-step docs (what each script does, flags, state files, how to add
-a new chapter) live in [`pipeline/README.md`](pipeline/README.md). The
-enrichment schema and topic vocabulary are documented in
-[`pipeline/past-meetups.md`](pipeline/past-meetups.md) — that file is the
-source of truth `enrich.py`'s prompt is built from.
+- **`raw_events/*.json`** — the scraped page text and basic metadata (dates, RSVPs, location), straight from Meetup. One file per chapter.
+- **`enriched/*.json`** — the same events after an LLM has pulled out each talk's title, speaker and topics. Every record follows a fixed schema and a 26-topic vocabulary. This is the closest thing the project has to a modeled layer.
+- **`pipeline/speaker-identities.json`** — matches speakers across chapters. For example, one person whose name is spelled two ways in two chapters.
+- **`dashboard/dashboard_data.json`** — what the dashboard reads. It holds per-chapter stats, topic and category rollups, and growth over time. It is rebuilt from `enriched/*.json` on every build.
+
+### Further docs
+
+- **Pipeline:** [`pipeline/README.md`](pipeline/README.md) covers each script, its flags, its state files, and how to add a chapter.
+- **Schema and topics:** [`pipeline/past-meetups.md`](pipeline/past-meetups.md) defines the enrichment schema and topic vocabulary. The `enrich.py` prompt is built from it.
 
 ## Quick start
+
+### Install
 
 ```sh
 pip install -r requirements.txt
 python -m playwright install chromium
-
-pipeline/run_pipeline.sh --slugs oslo-dbt-group   # scrape + enrich + rebuild, one chapter
-pipeline/run_pipeline.sh                          # all ~75 chapters (slow, calls an LLM per new event)
 ```
 
-`pipeline/run_pipeline.sh` bootstraps `.venv/` automatically if you skip the
-manual install above. See `pipeline/README.md` for the full flag list
-(`SKIP_SCRAPE=1`, `DBT_MEETUPS_DATA_DIR=...` for testing against a data copy).
+### Run the pipeline
+
+```sh
+# scrape, enrich and rebuild one chapter
+pipeline/run_pipeline.sh --slugs oslo-dbt-group
+
+# all ~75 chapters (slow: calls an LLM for each new event)
+pipeline/run_pipeline.sh
+```
+
+> **Tip:** `pipeline/run_pipeline.sh` sets up `.venv/` itself if you skip the install step. See `pipeline/README.md` for the full flag list, such as `SKIP_SCRAPE=1` or `DBT_MEETUPS_DATA_DIR=...` to test against a copy of the data.
 
 ## Running the tests
 
@@ -57,78 +54,35 @@ manual install above. See `pipeline/README.md` for the full flag list
 python3 -m unittest discover -s tests -v
 ```
 
-Tests run against small fixture data in `tests/fixtures/`, not the real
-`enriched/` directory, so they're fast and don't drift as new meetups get
-scraped. One test (`CategoryMapVocabularyTests`) parses
-`pipeline/past-meetups.md` directly and asserts the category-rollup table
-documented there matches the `CATEGORY_MAP` dict hardcoded in
-`dashboard/build_dashboard_data.py` — those two are independent files by
-design (see below) and this is what keeps them from silently drifting apart.
-
-CI (`.github/workflows/deploy-dashboard.yml`) runs this suite before every
-dashboard rebuild/deploy, and `.github/workflows/test.yml` runs it on every
-push and pull request.
+- **Fixture data.** Tests run against small files in `tests/fixtures/`, not the real `enriched/` directory. So they stay fast and don't change as new meetups are scraped.
+- **Docs and code stay in sync.** `CategoryMapVocabularyTests` reads the category-rollup table in `pipeline/past-meetups.md`. It checks that table matches `CATEGORY_MAP` in `dashboard/build_dashboard_data.py`. Without it, the two files could drift apart silently.
+- **CI.** The suite runs before every dashboard deploy (`.github/workflows/deploy-dashboard.yml`). It also runs on every push and pull request (`.github/workflows/test.yml`).
 
 ## Design decisions
 
-**No dbt, no database, no dimensional modeling.** This project analyzes dbt
-Meetups but doesn't itself use dbt, which is worth explaining since it's the
-obvious question.
+This project analyzes dbt Meetups, but **it does not use dbt, SQL or a database.** Here is why.
 
-- **The whole "warehouse" fits in memory.** ~75 chapters, ~500 events, ~1,000
-  talks. That's a few megabytes of JSON. A star schema, a warehouse, and a
-  dbt project modeling `fct_talks`/`dim_speakers` would add real
-  infrastructure (a database to run, credentials to manage, a second
-  toolchain to learn) to solve a problem this data doesn't have. dbt earns
-  its keep when you're transforming data in a warehouse, at scale, with a
-  team; there's no warehouse here, no scale problem, and no team of
-  analysts writing competing SQL against the same tables.
-- **The transform is LLM extraction, not SQL.** The one genuinely hard data
-  problem in this project — turning "a scraped Meetup page's raw text" into
-  "a list of structured talks with speakers and topics" — isn't expressible
-  as a SQL transformation over structured source tables, because the source
-  isn't structured. `enrich.py`'s prompt (built from
-  `pipeline/past-meetups.md`) *is* the transformation logic; a dbt model
-  would have nothing to do once that step is done, because the remaining
-  aggregation (group by chapter, roll up categories, compute trailing
-  windows) is a couple hundred lines of Python over data that already fits
-  in a `dict`.
-- **Static output, not a queryable warehouse.** The end product is a
-  dashboard, not a place for analysts to write ad-hoc SQL. Precomputing
-  `dashboard_data.json` once per pipeline run and shipping it as a static
-  JSON blob the frontend reads client-side is simpler to deploy (GitHub
-  Pages, no backend, no query engine) and simpler to reason about (the
-  entire "data model" is one Python dict, defined in one place,
-  `build_dashboard_data.build_output()`) than standing up a database to
-  serve the same handful of aggregate queries.
-- **What *is* modeled, just not with dbt:** `enriched/*.json` is the
-  structured/typed layer (the "staging models," if you like the analogy) —
-  every event has a fixed schema, every talk has a controlled topic
-  vocabulary rather than free text. `build_dashboard_data.py` is the "mart" —
-  it reads the staging layer and produces the aggregates the dashboard
-  needs. The transformation logic just lives in Python functions and an LLM
-  prompt instead of `.sql` files, because the inputs and the scale don't
-  call for anything heavier.
+### 1. The data fits in memory
 
-If this ever needed to scale past a few thousand events, or needed multiple
-people writing independent transformations against the same underlying data,
-that's exactly the point where introducing a real warehouse + dbt would earn
-its complexity. This project hasn't reached that point yet.
+~75 chapters, ~500 events, ~1,000 talks. That is a few megabytes of JSON. A warehouse and a dbt project would mean a database to run, credentials to manage and a second toolchain. None of that solves a problem this data has.
+
+### 2. The hard step is LLM extraction, not SQL
+
+The real work is turning a Meetup page's raw text into a list of talks, speakers and topics. The source isn't structured, so SQL can't do it. The `enrich.py` prompt (built from `pipeline/past-meetups.md`) is the transformation. What's left afterwards is a few hundred lines of Python aggregation.
+
+### 3. Static output, not a query engine
+
+The end product is a dashboard, not a place for ad-hoc SQL. `dashboard_data.json` is computed once per pipeline run and served as a static file. That keeps hosting to GitHub Pages, with no backend. The whole data model lives in one function, `build_dashboard_data.build_output()`.
+
+### 4. It is still modeled, just not with dbt
+
+- **`enriched/*.json` is the staging layer.** Every event has a fixed schema. Every talk uses a controlled topic vocabulary, not free text.
+- **`build_dashboard_data.py` is the mart.** It reads the staging layer and produces the aggregates the dashboard needs.
+
+A warehouse and dbt would earn their complexity past a few thousand events. The same goes for several people writing separate transformations on the same data. The project hasn't reached that point.
 
 ## Known limitations
 
-- **Advisory-only validation.** `enrich.py` checks each enriched record
-  against the schema/topic vocabulary but only prints a warning on failure —
-  it does not reject bad records. If a chapter's enriched data looks wrong,
-  check `pipeline/enrich.py`'s output for `WARNING:` lines from the last run.
-- **No dependency pinning below the direct level.** `requirements.txt` pins
-  `playwright`/`numpy`/`shapely` (this project's direct dependencies); their
-  own transitive dependencies aren't locked. Fine for a project this size;
-  revisit with a lockfile (`pip-compile`, `uv`) if that ever becomes a
-  problem.
-- **`raw_events/*.json` contains scraped page text verbatim**, which can
-  include incidental personal contact info that was public on the source
-  Meetup page (e.g. an organizer's email in an event description). This is a
-  known, accepted tradeoff of scraping public event pages as-is rather than
-  scrubbing them — worth being aware of before treating `raw_events/` as
-  safe to share more widely than the repo already is.
+- **Validation only warns.** `enrich.py` checks each record against the schema and topic vocabulary. On failure it prints a warning but keeps the record. If a chapter's data looks wrong, look for `WARNING:` lines in the last run's output.
+- **Only direct dependencies are pinned.** `requirements.txt` pins `playwright`, `numpy` and `shapely`. Their own dependencies aren't locked. If that causes trouble, move to a lockfile (`uv` or `pip-compile`).
+- **Raw files can hold personal details.** `raw_events/*.json` keeps the scraped page text as-is. That can include contact details that were public on Meetup, such as an organizer's email in an event description. Check before sharing `raw_events/` beyond this repo.
