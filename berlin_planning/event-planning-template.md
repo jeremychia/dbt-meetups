@@ -53,6 +53,14 @@
 **Options for Talks:** *(required)*
 - [Candidate talk/topic ideas]
 - Avoid topics already extensively covered in past sessions (check Past Sessions log)
+- Candidates: `berlin_dbt_companies.json`. Start with tier-1 `emerging_voice` leads (first-time speakers), then tier-1 `proven_speaker` leads.
+
+**Line-up balance check:** *(required — review together with the co-organisers before confirming speakers)*
+- [ ] Gender balance: if the draft line-up is all men, go back to the leads with `sourced_via: women_in_data_community` and ask the community connectors (PyLadies Berlin, Women in Big Data Berlin) for introductions
+- [ ] At least one first-time speaker (`emerging_voice`) alongside an experienced one
+- [ ] A mix of scale-ups and enterprises, and of local and international speakers
+- [ ] Topics don't repeat the last 2–3 events (compare the `topics` tags)
+- *This is the organisers' judgement, not a number worked out from the dataset. The dataset doesn't record or infer anyone's gender.*
 
 **Notes:** *(required)*
 - Slides shared with participants? [Y/N]
