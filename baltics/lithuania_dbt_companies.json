@@ -3,24 +3,48 @@
     "title": "Lithuanian dbt companies and people for the Baltic dbt Meetup",
     "generated_at": "2026-09-23",
     "prepared_for": "Jeremy Chia (dbt meetups — Baltics)",
+    "purpose": "Find Lithuanian companies using dbt, and people who could speak at or attend the Baltic dbt Meetup.",
+    "version": 4,
+    "schema_version": 1,
+    "region": "Lithuania (Baltic dbt Meetup, Vilnius)",
     "method": [
       "LinkedIn Jobs guest search for 'dbt' (location: Lithuania) returned 415 postings; the full description of each was fetched and only postings whose text contains the word 'dbt' were kept (43).",
       "CVbankas.lt keyword search 'dbt'; web searches in English and Lithuanian (duomenų analitikas, duomenų inžinierius, duomenų mokslininkas, analytics engineer, data engineer, data scientist).",
       "Company careers pages / Teamtailor / conference talks as supplementary evidence.",
       "Contacts found via public web search (LinkedIn profiles indexed by search engines, theorg.com, company blogs). LinkedIn people search was not used (requires login).",
       "v2: past Baltic dbt Meetup agendas (meetup.com), PyCon Lithuania 2024–2026 and Big Data Conference Europe speaker lists, PyData Vilnius, Coalesce 2024, Uncle Data newsletter/podcast, Medium, and LinkedIn profile/post searches for dbt in Lithuania.",
-      "v3 (2026-09-23): zero-shot topic classification added to speaker_evidence and past_meetups talks, matching the chapter enrichment rules in pipeline/past-meetups.md step 6."
+      "v3 (2026-09-23): zero-shot topic classification added to speaker_evidence and past_meetups talks, matching the chapter enrichment rules in pipeline/past-meetups.md step 6.",
+      "v4 (2026-09-23): conformed to the shared schema used by berlin_planning/berlin_dbt_companies.json — person ids are now kebab-case names (old pNNN ids kept in notes), added local_presence, based_in_region, linkedin_confidence, priority_tier (derived from speaker_potential), past_chapter_talks, job posting dates, and speaker_evidence fields (content_id, co_authors, mentions_dbt, url_precision, confidence)."
     ],
     "field_definitions": {
-      "companies.dbt_signal": "strong = dbt required or core stack; medium = dbt listed among alternatives or inferred from keyword match; nice-to-have = listed as a plus; weak = unverified",
-      "companies.people.confidence": "High = name + title + company visible in the search result; Medium = indirect evidence; Low = weak evidence",
-      "companies.people.mentions_dbt": "true if the person's public snippet mentions dbt; null if unknown",
-      "companies.people.meetup_fit.speaker_potential": "high = has given talks on dbt/analytics-engineering topics, or 2+ public talks; medium = some public content or a data leader with dbt ties; low = no public speaking evidence",
-      "companies.people.meetup_fit.attendee_potential": "high = profile mentions dbt, has public dbt content, or is a confirmed practitioner at a strong-dbt company; medium = data practitioner, dbt usage unconfirmed; low = weak identification",
-      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness)",
-      "companies.watchlist": "true for companies checked but not yet showing Lithuania-based dbt work; kept so they are not re-researched",
-      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries tagged 'community'",
-      "past_meetups.talks.topics": "same vocabulary as speaker_evidence.topics"
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead; 2 = good lead / needs verification / relevant talk at another meetup; 3 = older, peripheral or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'"
     },
     "caveats": [
       "Titles come from search snippets and may be stale — verify profiles before reaching out.",
@@ -31,19 +55,37 @@
       "Several strong speakers (Augustinas Karvelis, Mantas Satkevičius, Marius Žukauskas) have no confirmed LinkedIn URL; find them via their company pages."
     ],
     "counts": {
-      "companies": 49,
-      "job_postings_with_dbt": 43,
+      "companies": 55,
       "people": 104,
-      "people_working_level": 74,
-      "people_leadership": 30,
-      "speaker_potential_high": 15,
-      "speaker_potential_medium": 10,
-      "attendee_potential_high": 41,
+      "job_postings": 43,
+      "companies_with_job_postings": 23,
+      "speaker_evidence_items": 46,
+      "unique_content_items": 45,
+      "people_with_linkedin": 97,
+      "people_who_spoke_at_this_chapter": 5,
       "internal_vinted": 5,
-      "watchlist_companies": 6
+      "level": {
+        "working": 74,
+        "leadership": 30
+      },
+      "speaker_potential": {
+        "high": 15,
+        "low": 79,
+        "medium": 10
+      },
+      "attendee_potential": {
+        "high": 41,
+        "medium": 63
+      },
+      "priority_tier": {
+        "1": 14,
+        "3": 77,
+        "2": 8,
+        "backup": 5
+      },
+      "watchlist_companies": 6,
+      "past_meetups": 2
     },
-    "version": 3,
-    "purpose": "Find Lithuanian companies using dbt, and people who could speak at or attend the Baltic dbt Meetup.",
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
     "topic_vocabulary": [
       "dbt best practices",
@@ -72,7 +114,32 @@
       "industry trends",
       "domain-specific use cases",
       "data warehouse & platforms"
-    ]
+    ],
+    "topic_counts": {
+      "data engineering": 10,
+      "tools & ecosystem": 7,
+      "team & org design": 6,
+      "data modeling": 6,
+      "orchestration & ci/cd": 6,
+      "performance & scale": 5,
+      "data quality & testing": 5,
+      "dbt product features": 4,
+      "analytics engineering": 4,
+      "genai & llm": 4,
+      "data governance": 4,
+      "community": 4,
+      "industry trends": 4,
+      "dbt fundamentals": 3,
+      "developer workflow": 3,
+      "modern data stack": 3,
+      "domain-specific use cases": 3,
+      "business intelligence": 3,
+      "dbt migration & adoption": 2,
+      "career development": 2,
+      "data warehouse & platforms": 2,
+      "project structure": 1,
+      "dbt best practices": 1
+    }
   },
   "companies": [
     {
@@ -85,6 +152,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -103,7 +171,11 @@
           "linkedin_company_name": "Surfshark",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with modern analytics stacks (e.g., dbt, Looker, Tableau, and Git-based workflows)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Product Data Team Lead (Vilnius)",
@@ -112,7 +184,11 @@
           "linkedin_company_name": "Surfshark",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with modern analytics stacks (e.g., dbt, Looker, Tableau, and Git-based workflows)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Mid/Senior Marketing Data Analyst (Vilnius)",
@@ -121,7 +197,11 @@
           "linkedin_company_name": "Surfshark",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with modern analytics stacks and workflows (e.g., dbt, Looker/Tableau, Git)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Mid/Senior Marketing Data Analyst (Kaunas)",
@@ -130,7 +210,11 @@
           "linkedin_company_name": "Surfshark",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with modern analytics stacks and workflows (e.g., dbt, Looker/Tableau, Git)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -142,13 +226,15 @@
       ],
       "people": [
         {
-          "id": "p008",
+          "id": "mantas-satkevicius",
           "name": "Mantas Satkevičius",
           "title": "Senior Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -161,26 +247,38 @@
               "title": "When SQL is not enough: Enhancing SQL-First data pipelines with dbt Python Models",
               "date": "2024-02-26",
               "url": "https://www.meetup.com/pydata-vilnius/",
+              "content_id": "pydata-vilnius-meetup-3-when-sql-is-not-enough-enhancing-sql-fir",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "dbt product features",
                 "data engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Proven local dbt speaker. No LinkedIn URL found."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Proven local dbt speaker. No LinkedIn URL found. (v3 id: p008)"
         },
         {
-          "id": "p009",
+          "id": "marius-zukauskas",
           "name": "Marius Žukauskas",
           "title": "Analytics Engineering Team Lead @ Surfshark (at time of talk)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -193,6 +291,30 @@
               "title": "Surfshark's Journey to Analytics Engineering",
               "date": "2024-10-29",
               "url": "https://www.meetup.com/vilnius-dbt-meetup/events/303809378/",
+              "content_id": "baltic-dbt-meetup-1-surfshark-s-journey-to-analytics-enginee",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "analytics engineering",
+                "dbt migration & adoption",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-29",
+              "talk_title": "Surfshark's Journey to Analytics Engineering",
               "topics": [
                 "analytics engineering",
                 "dbt migration & adoption",
@@ -200,22 +322,20 @@
               ]
             }
           ],
-          "attendee_signal": null,
-          "evidence": [],
-          "confidence": "Medium",
-          "internal_vinted": false,
-          "notes": "A profile at https://www.linkedin.com/in/marius-zukauskas/ showed Eternia Solar — may be a job change or a different person; check manually."
+          "notes": "A profile at https://www.linkedin.com/in/marius-zukauskas/ showed Eternia Solar — may be a job change or a different person; check manually. (v3 id: p009)"
         },
         {
-          "id": "p029",
+          "id": "asta-popliauskyte",
           "name": "Asta Popliauskyte",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://fr.linkedin.com/in/asta-popliauskyte"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -231,18 +351,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p029)"
         },
         {
-          "id": "p037",
+          "id": "linas-kapocius",
           "name": "Linas Kapočius",
           "title": "Data Engineer | Security Champion",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/linas-kapocius/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -258,18 +383,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p037)"
         },
         {
-          "id": "p048",
+          "id": "andrius-urbonavicius",
           "name": "Andrius Urbonavicius",
           "title": "Data Analytics / BI (title unconfirmed)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/andrius-urbonavicius13/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -285,18 +415,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p048)"
         },
         {
-          "id": "p056",
+          "id": "dovile-komolovaite",
           "name": "Dovilė Komolovaitė",
           "title": "Generalist Data Scientist",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/dovile-komolovaite/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -312,18 +447,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p056)"
         },
         {
-          "id": "p073",
+          "id": "mantas-zabarauskas",
           "name": "Mantas Zabarauskas",
           "title": "Head of Analytics & Data Science",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/mantas-zabarauskas-977a14b3/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -339,18 +479,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p073)"
         },
         {
-          "id": "p085",
+          "id": "tomas-ivanaitis",
           "name": "Tomas Ivanaitis",
           "title": "Head of AI & Data Platform Engineering",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/tomas-ivanaitis"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -366,18 +511,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p085)"
         },
         {
-          "id": "p086",
+          "id": "tomas-kazlauskas",
           "name": "Tomas Kazlauskas",
           "title": "Chief Business Intelligence Officer",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/tomas-kazlauskas-2548b347/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -393,7 +543,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p086)"
         }
       ],
       "notes": ""
@@ -408,6 +561,7 @@
         "Kaunas",
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt"
@@ -427,13 +581,15 @@
       ],
       "people": [
         {
-          "id": "p003",
+          "id": "augustinas-karvelis",
           "name": "Augustinas Karvelis",
           "title": "Analytics Engineer",
           "city": "Kaunas/Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -446,28 +602,40 @@
               "title": "Implementing real-time slowly changing dimensions (SCD) type 2 with dbt",
               "date": "2024-10",
               "url": "https://www.getdbt.com/resources/coalesce-on-demand/coalesce-2024-implementing-real-time-slowly-changing-dimensions-scd-type-2-with-dbt",
+              "content_id": "coalesce-2024-implementing-real-time-slowly-changing-d",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "data modeling",
                 "performance & scale"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Top speaker pick: could repeat his Coalesce talk locally (Debezium CDC, incremental predicates, BigQuery). No LinkedIn URL found."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Top speaker pick: could repeat his Coalesce talk locally (Debezium CDC, incremental predicates, BigQuery). No LinkedIn URL found. (v3 id: p003)"
         },
         {
-          "id": "p006",
+          "id": "ieva-jacunskiene",
           "name": "Ieva Jacunskienė",
           "title": "Unconfirmed",
           "city": "Lithuania",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/ievapajarskaite/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -480,28 +648,42 @@
               "title": "Implementing real-time SCD type 2 with dbt (co-speaker)",
               "date": "2024-10",
               "url": "https://www.youtube.com/watch?v=MEbCjIrPU6E",
+              "content_id": "coalesce-2024-implementing-real-time-scd-type-2-with-d",
+              "co_authors": [
+                "Valentinas Mitalauskas"
+              ],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "data modeling",
                 "performance & scale"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "A RocketReach listing calls her Chief Revenue Officer, which looks wrong. Check her title."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "A RocketReach listing calls her Chief Revenue Officer, which looks wrong. Check her title. (v3 id: p006)"
         },
         {
-          "id": "p028",
+          "id": "akvile-veleckaite",
           "name": "Akvilė Veleckaitė",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/akvile-veleckaite"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -517,18 +699,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p028)"
         },
         {
-          "id": "p034",
+          "id": "kamile-platakyte",
           "name": "Kamilė Platakytė",
           "title": "Analytics Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/kamile-platakyte/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -544,18 +731,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p034)"
         },
         {
-          "id": "p036",
+          "id": "laurynas-jakstas",
           "name": "Laurynas Jakštas",
           "title": "Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/laurynas-jak%C5%A1tas-81b05bb9"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -571,18 +763,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p036)"
         },
         {
-          "id": "p038",
+          "id": "liucija-latanauskaite",
           "name": "Liucija Latanauskaite",
           "title": "Senior Data Scientist (AI Team)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/liucija-latanauskaite/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -598,18 +795,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p038)"
         },
         {
-          "id": "p043",
+          "id": "migle-jonaityte",
           "name": "Miglė Jonaitytė",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/migle-jonaityte"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -625,18 +827,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p043)"
         },
         {
-          "id": "p078",
+          "id": "milda-sniokaite",
           "name": "Milda Šniokaitė",
           "title": "Data Analytics Lead",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/milda-sniokaite"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -652,18 +859,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p078)"
         },
         {
-          "id": "p080",
+          "id": "robertas-travkinas",
           "name": "Robertas Travkinas",
           "title": "Analytics Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/robertas-travkinas-101a71116"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -679,7 +891,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p080)"
         }
       ],
       "notes": "Not in the LinkedIn dbt keyword hits, but strong public dbt evidence (Coalesce speaker)."
@@ -693,6 +908,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -708,7 +924,11 @@
           "linkedin_company_name": "Lietuvos bankas | Bank of Lithuania",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Patirties programuojant (pvz., Python) ir dirbant su duomenų apdorojimo įrankiais (pvz., dbt, Airflow ar analogais)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -725,15 +945,17 @@
       ],
       "people": [
         {
-          "id": "p058",
+          "id": "edas-kazlauskas",
           "name": "Edas Kazlauskas",
           "title": "Data Engineer / analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/edas-kazlauskas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -749,18 +971,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p058)"
         },
         {
-          "id": "p064",
+          "id": "jana-polianskaja",
           "name": "Jana Polianskaja",
           "title": "Data engineering (title unconfirmed)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/jana-polianskaja"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -776,18 +1003,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p064)"
         },
         {
-          "id": "p066",
+          "id": "justin-maciulis",
           "name": "Justin Mačiulis",
           "title": "Data / analytics / engineering",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/justinasmac/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -798,18 +1030,23 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "An earlier snippet suggested he may have joined Beyond Analysis."
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "An earlier snippet suggested he may have joined Beyond Analysis. (v3 id: p066)"
         },
         {
-          "id": "p071",
+          "id": "levaldas-zigmantas",
           "name": "Levaldas Zigmantas",
           "title": "Data management (title unconfirmed)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/levaldas-zigmantas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -825,21 +1062,26 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p071)"
         },
         {
-          "id": "p101",
+          "id": "gytaute-peseckaite",
           "name": "Gytautė Peseckaitė",
           "title": "Data science analyst",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/gytaute-peseckaite"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -847,21 +1089,26 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p101)"
         },
         {
-          "id": "p102",
+          "id": "justas-krikstaponis",
           "name": "Justas Krikštaponis",
           "title": "IT / cloud database engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/justas-krik%C5%A1taponis-45352533/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -869,7 +1116,10 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p102)"
         }
       ],
       "notes": "Postings in Lithuanian explicitly name dbt."
@@ -884,6 +1134,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt"
@@ -896,7 +1147,11 @@
           "linkedin_company_name": "Nord Security",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Design and implement data transformation workflows using dbt to create reusable, analysis/chatbot-ready data assets",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Analyst | Group Finance & Operations | Mid-Senior (Vilnius)",
@@ -905,7 +1160,11 @@
           "linkedin_company_name": "Nord Security",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Develop and maintain dbt models that transform raw financial and operational data into documented, reliable datasets",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Analyst | Group Finance & Operations | Mid-Senior (Kaunas)",
@@ -914,7 +1173,11 @@
           "linkedin_company_name": "Nord Security",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Develop and maintain dbt models that transform raw financial and operational data into documented, reliable datasets",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Analyst (Finance) | Senior (Kaunas)",
@@ -923,7 +1186,11 @@
           "linkedin_company_name": "Nord Security",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Build and maintain DBT models; Own data quality and controls",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Analyst (Finance) | Senior (Vilnius)",
@@ -932,21 +1199,27 @@
           "linkedin_company_name": "Nord Security",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Build and maintain DBT models; Own data quality and controls",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p033",
+          "id": "ilya-kapshuk",
           "name": "Ilya Kapshuk",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/ilya-kapshuk/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -962,18 +1235,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p033)"
         },
         {
-          "id": "p040",
+          "id": "mantautas-danusas",
           "name": "Mantautas Danusas",
           "title": "Senior Data Analyst @ NordVPN",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/mantautas-danusas-07944483/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -989,18 +1267,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p040)"
         },
         {
-          "id": "p042",
+          "id": "matas-tiskus",
           "name": "Matas Tiskus",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/matastiskus"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1016,18 +1299,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p042)"
         },
         {
-          "id": "p059",
+          "id": "edgaras-jankauskas",
           "name": "Edgaras Jankauskas",
           "title": "Unconfirmed (possibly Analytics Engineer)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/edgaras-jankauskas-bab434168/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1043,18 +1331,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p059)"
         },
         {
-          "id": "p069",
+          "id": "kiryl-klimenka",
           "name": "Kiryl Klimenka",
           "title": "Senior Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://de.linkedin.com/in/kirill-klimenko"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1070,7 +1363,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p069)"
         }
       ],
       "notes": "Finance/Group Finance data team explicitly builds dbt models. Also hiring Staff Analytics Engineer and Head of Data (Saily) — leadership seats may be open."
@@ -1084,6 +1380,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -1101,7 +1398,11 @@
           "linkedin_company_name": "Oxylabs.io",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience working with data modelling (ideally with dbt, but using SQL works as well)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Scientist",
@@ -1110,7 +1411,11 @@
           "linkedin_company_name": "Oxylabs.io",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Nice to Have: Experience with Dagster, dbt, Superset, or Trino",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -1127,10 +1432,11 @@
       ],
       "people": [
         {
-          "id": "p020",
+          "id": "rytis-ulys",
           "name": "Rytis Ulys",
           "title": "Head of Data & Analytics",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/rytisulys",
@@ -1138,6 +1444,7 @@
             "https://lt.linkedin.com/in/rytis-ulys"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -1150,10 +1457,17 @@
               "title": "Working in Data at Oxylabs: A Chat With Rytis",
               "date": null,
               "url": "https://career.oxylabs.io/blog/data-teams-at-oxylabs/",
+              "content_id": "oxylabs-careers-blog-working-in-data-at-oxylabs-a-chat-with-r",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "team & org design",
                 "career development"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "article",
@@ -1161,10 +1475,17 @@
               "title": "Interview with Rytis Ulys, Analytics Team Lead at Oxylabs",
               "date": null,
               "url": "https://europeanbusinessmagazine.com/entrepreneur-profiles/interview-with-rytis-ulys-analytics-team-lead-at-oxylabs/",
+              "content_id": "european-business-magazin-interview-with-rytis-ulys-analytics-team",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "team & org design",
                 "analytics engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": "Hosted and organised the first Baltic dbt Meetup at Oxylabs.",
@@ -1176,18 +1497,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Potential host venue / co-organiser."
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Potential host venue / co-organiser. (v3 id: p020)"
         },
         {
-          "id": "p035",
+          "id": "karolis-petkevicius",
           "name": "Karolis Petkevičius",
           "title": "Junior Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/karolis-petkevi%C4%8Dius-0192031b7/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1203,21 +1529,26 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p035)"
         },
         {
-          "id": "p041",
+          "id": "martynas-manikas",
           "name": "Martynas Manikas",
           "title": "Recruiter @ Oxylabs (corrected; earlier listed as Senior Analytics Engineer)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/martynas-manikas-12164a10b/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": false,
           "speaker_evidence": [],
@@ -1230,18 +1561,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Recruiter, not a practitioner, but useful for reaching the Oxylabs data team."
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Recruiter, not a practitioner, but useful for reaching the Oxylabs data team. (v3 id: p041)"
         },
         {
-          "id": "p055",
+          "id": "dovile-baksyte",
           "name": "Dovilė Bakšytė",
           "title": "Analytics Team Lead",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/dovile-baksyte"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1257,18 +1593,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p055)"
         },
         {
-          "id": "p095",
+          "id": "zygimantas-garbauskas",
           "name": "Žygimantas Garbauskas",
           "title": "Data engineering (title unconfirmed)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/zgarbauskas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1284,7 +1625,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p095)"
         }
       ],
       "notes": ""
@@ -1299,6 +1643,7 @@
         "Kaunas",
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt"
@@ -1311,7 +1656,11 @@
           "linkedin_company_name": "Eneba",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Working knowledge of SQL and data modeling, hands-on experience with DBT, and familiarity with at least one BI or dashboarding tool",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -1323,15 +1672,17 @@
       ],
       "people": [
         {
-          "id": "p030",
+          "id": "edvin-saveljev",
           "name": "Edvin Saveljev",
           "title": "Data Scientist",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/edvin-saveljev-bb770296"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1347,18 +1698,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p030)"
         },
         {
-          "id": "p031",
+          "id": "emilija-kareivaite",
           "name": "Emilija Kareivaitė",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/emilija-kareivait%C4%97"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1374,18 +1730,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p031)"
         },
         {
-          "id": "p049",
+          "id": "anthony-mantzaris",
           "name": "Anthony Mantzaris",
           "title": "Data Analyst / Data Scientist (unconfirmed)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/tonio6/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1401,18 +1762,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p049)"
         },
         {
-          "id": "p050",
+          "id": "csaba-sas",
           "name": "Csaba Sas",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://hu.linkedin.com/in/csaba-sas-56238aa9"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1428,18 +1794,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p050)"
         },
         {
-          "id": "p061",
+          "id": "eligijus-bujokas",
           "name": "Eligijus Bujokas",
           "title": "Data / ML Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/eligijus-bujokas-a27676120/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1450,7 +1821,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Speaker history not itemised; verify."
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Speaker history not itemised; verify. (v3 id: p061)"
         }
       ],
       "notes": "Hiring an Analytics Engineering Lead (hands-on dbt) and a Head of Data — leadership seats may be open."
@@ -1464,6 +1838,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -1476,15 +1851,17 @@
       ],
       "people": [
         {
-          "id": "p027",
+          "id": "abdussalam-a",
           "name": "Abdussalam A.",
           "title": "Senior Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/abdulsalamfadhel/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1495,18 +1872,23 @@
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p027)"
         },
         {
-          "id": "p039",
+          "id": "mantas-cirtautas",
           "name": "Mantas Cirtautas",
           "title": "Data Engineer (TV Analytics)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/mantas-cirtautas-340643a3/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1517,18 +1899,23 @@
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p039)"
         },
         {
-          "id": "p045",
+          "id": "tomas-ramanauskas",
           "name": "Tomas Ramanauskas",
           "title": "Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/tomas-ramanauskas-4564a9193/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1539,18 +1926,23 @@
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p045)"
         },
         {
-          "id": "p057",
+          "id": "dovile-vaskyte",
           "name": "Dovilė Vaškytė",
           "title": "Data analytics; meetup organiser",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/dovil%C4%97-va%C5%A1kyt%C4%97-73477a120/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1561,7 +1953,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p057)"
         }
       ],
       "notes": ""
@@ -1575,6 +1970,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -1591,7 +1987,11 @@
           "linkedin_company_name": "Kilo™",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "creating clean, scalable data models, well-defined metrics, and reliable tracking foundations using dbt and BigQuery. Build and maintain a scalable analytics engineering layer in dbt",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Analytics Engineer",
@@ -1600,7 +2000,11 @@
           "linkedin_company_name": "Kilo™",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Employ GCP tools (dbt, Airflow and Looker) to enhance data quality, efficiency, and delivery of accurate and timely data",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Analyst",
@@ -1609,7 +2013,11 @@
           "linkedin_company_name": "Kilo™",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Employ GCP tools (dbt, Airflow and Looker) to enhance data quality, efficiency, and delivery of accurate and timely data",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Senior Data Analyst",
@@ -1618,7 +2026,11 @@
           "linkedin_company_name": "Kilo™",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Leverage the power of dbt for overcoming complex modelling problems with a focus on performance, robustness and scalability",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Analytics Engineer",
@@ -1627,7 +2039,11 @@
           "linkedin_company_name": "Kiloverse",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Employ GCP tools (dbt, Airflow and Looker) to enhance data quality, efficiency, and delivery of accurate and timely data",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Payments Data Analyst",
@@ -1636,7 +2052,11 @@
           "linkedin_company_name": "Kilo™",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with DBT would be considered a significant advantage. Gross salary range is 3500-5200 EUR/month",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Payments Data Analyst",
@@ -1645,21 +2065,27 @@
           "linkedin_company_name": "Kiloverse",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with DBT would be considered a significant advantage",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p014",
+          "id": "valerija-zivotkevic",
           "name": "Valerija Životkevič",
           "title": "Lead Data Engineer @ Kiloverse (Data Engineer @ Kilo Health at time of talk)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/valerija-zivotkevic"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -1672,27 +2098,47 @@
               "title": "Orchestrating dbt with Airflow Datasets",
               "date": "2025-03-13",
               "url": "https://www.meetup.com/vilnius-dbt-meetup/events/306239130/",
+              "content_id": "vilnius-dbt-meetup-2-orchestrating-dbt-with-airflow-datasets",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "orchestration & ci/cd"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Good for a follow-up talk; also a route into Kilo Health's data team."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-03-13",
+              "talk_title": "Orchestrating dbt with Airflow Datasets",
+              "topics": [
+                "orchestration & ci/cd"
+              ]
+            }
+          ],
+          "notes": "Good for a follow-up talk; also a route into Kilo Health's data team. (v3 id: p014)"
         },
         {
-          "id": "p032",
+          "id": "gabriele-kalinauskaite",
           "name": "Gabrielė Kalinauskaitė",
           "title": "Senior Payments Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/gabriel%C4%97-kalinauskait%C4%97-46a232113/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -1708,18 +2154,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p032)"
         },
         {
-          "id": "p068",
+          "id": "karolina-gudaite",
           "name": "Karolina Gudaitė",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/karolina-gudait%C4%97-57a5561a9/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1735,7 +2186,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p068)"
         }
       ],
       "notes": "Most dbt-heavy hiring in the scan (8 postings across Kilo + Kiloverse brands). No data leader confirmed via public search."
@@ -1750,6 +2204,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -1772,15 +2227,17 @@
       ],
       "people": [
         {
-          "id": "p072",
+          "id": "mantas-tamasauskas",
           "name": "Mantas Tamasauskas",
           "title": "Team Lead of Analysts",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/mantas-tamasauskas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1796,18 +2253,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p072)"
         },
         {
-          "id": "p076",
+          "id": "marius-astrauskas",
           "name": "Marius Astrauskas",
           "title": "Data Steward",
           "city": "Lithuania",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/marius-astrauskas-10157419"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -1818,21 +2280,26 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p076)"
         },
         {
-          "id": "p098",
+          "id": "eimantas-lotuzys",
           "name": "Eimantas Lotužys",
           "title": "Data analysis (title unconfirmed)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/eimantas-lotu%C5%BEys-415b73254/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -1845,7 +2312,10 @@
           ],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p098)"
         }
       ],
       "notes": "Building a new data team; dbt confirmed in the Lead Data Engineer ad."
@@ -1859,6 +2329,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -1871,15 +2342,17 @@
       ],
       "people": [
         {
-          "id": "p005",
+          "id": "gediminas-kristopaitis",
           "name": "Gediminas Krištopaitis",
           "title": "Data Team Lead @ TeraSky; founder of Fast.BI",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/gediminas-kri%C5%A1topaitis-b1013554/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -1892,10 +2365,17 @@
               "title": "Introduction to dbt Cloud",
               "date": "2024-10-29",
               "url": "https://www.meetup.com/vilnius-dbt-meetup/events/303809378/",
+              "content_id": "baltic-dbt-meetup-1-introduction-to-dbt-cloud",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "dbt fundamentals",
                 "dbt product features"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -1903,10 +2383,17 @@
               "title": "From Development to Production: Mastering dbt CI/CD with Argo Workflows",
               "date": "2025-03-13",
               "url": "https://www.meetup.com/vilnius-dbt-meetup/events/306239130/",
+              "content_id": "vilnius-dbt-meetup-2-from-development-to-production-mastering",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "orchestration & ci/cd",
                 "developer workflow"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -1914,10 +2401,17 @@
               "title": "Modern Data Stack principles & in-house tools",
               "date": "2025-09",
               "url": "https://tallinndataweek.ee/schedule",
+              "content_id": "tallinn-data-week-2025-db-modern-data-stack-principles-in-house-to",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "modern data stack",
                 "tools & ecosystem"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             },
             {
               "type": "oss",
@@ -1925,31 +2419,60 @@
               "title": "fast.bi (dbt-based data platform)",
               "date": null,
               "url": "https://github.com/fast-bi",
+              "content_id": "github-fast-bi-dbt-based-data-platform",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "tools & ecosystem",
                 "modern data stack"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             }
           ],
           "attendee_signal": "Meetup co-organiser via TeraSky (dbt partner).",
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Has spoken twice already, so better as host, MC or sponsor contact."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-29",
+              "talk_title": "Introduction to dbt Cloud",
+              "topics": [
+                "dbt fundamentals",
+                "dbt product features"
+              ]
+            },
+            {
+              "date": "2025-03-13",
+              "talk_title": "From Development to Production: Mastering dbt CI/CD with Argo Workflows",
+              "topics": [
+                "orchestration & ci/cd",
+                "developer workflow"
+              ]
+            }
+          ],
+          "notes": "Has spoken twice already, so better as host, MC or sponsor contact. (v3 id: p005)"
         },
         {
-          "id": "p097",
+          "id": "dmitrijus-kirjackis",
           "name": "Dmitrijus Kirjackis",
           "title": "Unknown",
           "city": "Lithuania",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/dimalink/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -1957,21 +2480,26 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p097)"
         },
         {
-          "id": "p100",
+          "id": "greta-mieliauskaite",
           "name": "Greta Mieliauskaitė",
           "title": "Unknown",
           "city": "Lithuania",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/greta-mieliauskait%C4%97-"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -1979,7 +2507,10 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p100)"
         }
       ],
       "notes": "Key partner/sponsor for the meetup."
@@ -1993,6 +2524,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -2007,7 +2539,11 @@
           "linkedin_company_name": "IKI",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "We expect you to have: Strong experience with dbt; Good Python knowledge; Hands-on experience with Airflow",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -2024,15 +2560,17 @@
       ],
       "people": [
         {
-          "id": "p062",
+          "id": "evaldas-jankauskas",
           "name": "Evaldas Jankauskas",
           "title": "Analytics Team Lead",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/evaldas-jankauskas-5b73407b"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2048,18 +2586,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p062)"
         },
         {
-          "id": "p084",
+          "id": "tautvydas-sikorskis",
           "name": "Tautvydas Sikorskis",
           "title": "Data Analyst",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/tautvydas-sikorskis-810991193/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2070,7 +2613,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p084)"
         }
       ],
       "notes": "No working-level data people found publicly."
@@ -2084,6 +2630,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -2101,22 +2648,28 @@
           "linkedin_company_name": "Eldorado.gg",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "OUR DATA STACK: Stitch for data synchronization; Google BigQuery for storage and warehousing; dbt for data modeling",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p007",
+          "id": "laima-plesnyte",
           "name": "Laima Plėšnytė",
           "title": "Data Analyst (previously Oxylabs)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/laima-plesnyte",
             "https://lt.linkedin.com/in/laima-pl%C4%97%C5%A1nyt%C4%97-102296197"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -2129,11 +2682,18 @@
               "title": "Building a scalable analytics architecture with dbt Core and Airflow",
               "date": "2024-10-29",
               "url": "https://www.meetup.com/vilnius-dbt-meetup/events/303809378/",
+              "content_id": "baltic-dbt-meetup-1-building-a-scalable-analytics-architectu",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "orchestration & ci/cd",
                 "project structure",
                 "dbt product features"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": "Promoted the first Baltic dbt Meetup on LinkedIn.",
@@ -2145,18 +2705,33 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Could return with a talk on Eldorado.gg's dbt + BigQuery stack."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-29",
+              "talk_title": "Building a scalable analytics architecture with dbt Core and Airflow",
+              "topics": [
+                "orchestration & ci/cd",
+                "project structure",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": "Could return with a talk on Eldorado.gg's dbt + BigQuery stack. (v3 id: p007)"
         },
         {
-          "id": "p065",
+          "id": "jonas-grigas",
           "name": "Jonas Grigas",
           "title": "Senior Data Scientist (may have moved)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/jonas-grigas-5b9959194"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2172,7 +2747,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p065)"
         }
       ],
       "notes": ""
@@ -2186,6 +2764,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -2203,15 +2782,17 @@
       ],
       "people": [
         {
-          "id": "p017",
+          "id": "ernestas-babachinas",
           "name": "Ernestas Babachinas",
           "title": "Head of Data Engineering",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/ernestasbabachinas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -2224,30 +2805,42 @@
               "title": "Bytes & Insights: Testing in Data Engineering",
               "date": null,
               "url": "https://uncledata.substack.com/p/bytes-and-insights-testing-in-data-892",
+              "content_id": "uncle-data-podcast-bytes-insights-testing-in-data-engineeri",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data quality & testing"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": "Team relies fully on dbt; talked about dbt migration and testing.",
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Talk idea: a dbt testing strategy. Previously Big Data Engineering Lead at Exacaster."
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Talk idea: a dbt testing strategy. Previously Big Data Engineering Lead at Exacaster. (v3 id: p017)"
         },
         {
-          "id": "p096",
+          "id": "darius-sabas",
           "name": "Darius Sabas",
           "title": "Data leadership (data strategy & analytics engineering)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/darius-sabas-486b813/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -2255,7 +2848,10 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p096)"
         }
       ],
       "notes": ""
@@ -2269,6 +2865,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -2285,7 +2882,11 @@
           "job_poster": {
             "name_title": "Jūratė Servaitė — Head of HR @ CoinGate",
             "linkedin_url": "https://lt.linkedin.com/in/j%C5%ABrat%C4%97-servait%C4%97-93281346"
-          }
+          },
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -2297,15 +2898,17 @@
       ],
       "people": [
         {
-          "id": "p067",
+          "id": "jurate-servaite",
           "name": "Jūratė Servaitė",
           "title": "Head of HR (job poster)",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/j%C5%ABrat%C4%97-servait%C4%97-93281346"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2321,7 +2924,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p067)"
         }
       ],
       "notes": "dbt project on BigQuery in production as system of record. No working-level data people found publicly."
@@ -2335,6 +2941,7 @@
       "cities": [
         "Lithuania"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
@@ -2351,24 +2958,30 @@
           "linkedin_company_name": "Welltech",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with dbt for data modeling and transformation",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p103",
+          "id": "rokas-rutkauskas",
           "name": "Rokas Rutkauskas",
           "title": "Unknown (surfaced in Data Engineer search)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/rokas-rutkauskas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -2376,7 +2989,10 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p103)"
         }
       ],
       "notes": "No Lithuania-based data people found publicly."
@@ -2391,6 +3007,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -2403,15 +3020,17 @@
       ],
       "people": [
         {
-          "id": "p087",
+          "id": "valdas-gylys",
           "name": "Valdas Gylys",
           "title": "Data Engineer (DevOps/DataOps)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/valdas-gylys-2111594/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2422,7 +3041,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p087)"
         }
       ],
       "notes": ""
@@ -2436,6 +3058,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -2448,15 +3071,17 @@
       ],
       "people": [
         {
-          "id": "p093",
+          "id": "vytenis-pranculis",
           "name": "Vytenis Pranculis",
           "title": "Head of FinCrime Analytics",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vytenis-pranculis-data-geek/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2467,7 +3092,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p093)"
         }
       ],
       "notes": ""
@@ -2481,6 +3109,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -2493,16 +3122,18 @@
       ],
       "people": [
         {
-          "id": "p001",
+          "id": "antanas-baltrusaitis",
           "name": "Antanas Baltrušaitis",
           "title": "Founder, Scoris; ex-Head of Data at Luminor and Girteka; ex-Senior Analytics Engineer at Beyond Analysis",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/abaltrusaitis/",
             "https://lt.linkedin.com/in/antanas-baltrusaitis-bb532442"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -2515,11 +3146,18 @@
               "title": "Cloud Data Solutions Are Overrated: Building a Pan-European Business Database for Lunch Money (dlt, dbt, Prefect)",
               "date": "2026-04-09",
               "url": "https://pretalx.com/pycon-lithuania-2026/talk/FKPJYP/",
+              "content_id": "pycon-lithuania-2026-cloud-data-solutions-are-overrated-build",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "modern data stack",
                 "data engineering",
                 "performance & scale"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -2527,18 +3165,28 @@
               "title": "Leveraging LLMs for Automated Generation and Validation of Financial Descriptions for Lithuanian Companies",
               "date": "2025-04-25",
               "url": "https://pretalx.com/pycon-lithuania-2025/speaker/HXZCUQ/",
+              "content_id": "pycon-lithuania-2025-leveraging-llms-for-automated-generation",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "genai & llm",
                 "data quality & testing",
                 "domain-specific use cases"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": "dbt in speaker bio; posts often on LinkedIn.",
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Strong speaker on a low-cost open-source dbt stack."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Strong speaker on a low-cost open-source dbt stack. (v3 id: p001)"
         }
       ],
       "notes": "Founder-led."
@@ -2552,6 +3200,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [],
       "job_postings": [],
@@ -2575,6 +3224,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt",
@@ -2592,7 +3242,11 @@
           "linkedin_company_name": "Twoday",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Azure Synapse Analytics, Azure Data Factory, Microsoft Fabric), Databricks (PySpark, SparkSQL), dbt, Power BI",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Engineer (Kaunas)",
@@ -2601,21 +3255,27 @@
           "linkedin_company_name": "Twoday",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Azure Synapse Analytics, Azure Data Factory, Microsoft Fabric), Databricks (PySpark, SparkSQL), dbt, Power BI",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p047",
+          "id": "andrius-gunka",
           "name": "Andrius Gunka",
           "title": "Business Intelligence Team Lead",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/andrius%E2%80%A8-gunka-9796892a/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2631,18 +3291,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p047)"
         },
         {
-          "id": "p053",
+          "id": "dominykas-visnevskis",
           "name": "Dominykas Višnevskis",
           "title": "Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/dominykas-visnevskis/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2653,18 +3318,23 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p053)"
         },
         {
-          "id": "p075",
+          "id": "marijus-doviltis",
           "name": "Marijus Doviltis",
           "title": "Senior BI Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/marijus-doviltis/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2680,18 +3350,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p075)"
         },
         {
-          "id": "p077",
+          "id": "matas-avizienis",
           "name": "Matas Avižienis",
           "title": "Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/matasa"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2707,18 +3382,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p077)"
         },
         {
-          "id": "p083",
+          "id": "tadas-daugvila",
           "name": "Tadas Daugvila",
           "title": "Database / data role",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/tadas-daugvila-300307a3/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2734,7 +3414,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p083)"
         }
       ],
       "notes": "Consultancy — dbt used on client projects."
@@ -2748,6 +3431,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "Airflow or dbt"
@@ -2767,15 +3451,17 @@
       ],
       "people": [
         {
-          "id": "p052",
+          "id": "daniil-jerjomin",
           "name": "Daniil Jerjomin",
           "title": "Senior Data Engineer (Payments)",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/daniiljerjomin/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2791,18 +3477,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p052)"
         },
         {
-          "id": "p054",
+          "id": "donatas-eigminas",
           "name": "Donatas Eigminas",
           "title": "Engineering Manager (previously Senior Data Engineer)",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/donatas-eigminas-335a2732/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2818,18 +3509,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p054)"
         },
         {
-          "id": "p060",
+          "id": "elena-gorohhova",
           "name": "Elena Gorohhova",
           "title": "Chief Data Officer, Luminor Group (Tallinn)",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/elena-gorohhova/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2845,18 +3541,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p060)"
         },
         {
-          "id": "p079",
+          "id": "mindaugas-rukas",
           "name": "Mindaugas Rūkas",
           "title": "Senior Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/mindaugas-r%C5%ABkas-282484198"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2872,7 +3573,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p079)"
         }
       ],
       "notes": ""
@@ -2887,6 +3591,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt or Airflow",
@@ -2901,7 +3606,11 @@
           "linkedin_company_name": "OAG",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Familiarity with NoSQL databases (particularly Azure Cosmos DB) or tools such as dbt or Apache Airflow",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Engineer (Kaunas)",
@@ -2910,7 +3619,11 @@
           "linkedin_company_name": "OAG",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Familiarity with NoSQL databases (particularly Azure Cosmos DB) or tools such as dbt or Apache Airflow",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -2922,15 +3635,17 @@
       ],
       "people": [
         {
-          "id": "p021",
+          "id": "simonas-stonys",
           "name": "Simonas Stonys",
           "title": "Head of Data Quality & Analytics",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/simonas-stonys-a4a2aa89/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -2943,9 +3658,16 @@
               "title": "Bytes and Insights: Testing in Data",
               "date": null,
               "url": "https://uncledata.substack.com/p/bytes-and-insights-testing-in-data",
+              "content_id": "uncle-data-podcast-bytes-and-insights-testing-in-data",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data quality & testing"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
@@ -2957,18 +3679,23 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p021)"
         },
         {
-          "id": "p091",
+          "id": "vytautas-jauniskis",
           "name": "Vytautas Jauniškis",
           "title": "Data Engineer in Product Engineering",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vytautas-jauni%C5%A1kis-344618158/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -2984,7 +3711,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p091)"
         }
       ],
       "notes": ""
@@ -2998,6 +3728,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt",
@@ -3012,21 +3743,27 @@
           "linkedin_company_name": "Nasdaq",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Hands-on experience with modern data and analytics tools such as dbt, QuickSight, Power BI, or similar platforms",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p051",
+          "id": "daniel-vargas",
           "name": "Daniel Vargas",
           "title": "Data Scientist",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/daniel-vargas-50bb2a64/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3042,18 +3779,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p051)"
         },
         {
-          "id": "p089",
+          "id": "vytautas-jankauskas",
           "name": "Vytautas Jankauskas",
           "title": "Director of Data Science / Data Scientist Senior Specialist",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/vytautas-j"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3069,7 +3811,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p089)"
         }
       ],
       "notes": ""
@@ -3083,6 +3828,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt",
@@ -3099,7 +3845,11 @@
           "linkedin_company_name": "Ruby Labs",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Nice to have: Python and/or modern analytics tooling (dbt, Airflow, or similar)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Data Engineer (Marketing Systems)",
@@ -3108,21 +3858,27 @@
           "linkedin_company_name": "Ruby Labs",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Basic understanding of BigQuery, ClickHouse, dbt, and documentation practices",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p074",
+          "id": "maria-dimidova",
           "name": "Maria Dimidova",
           "title": "Data analytics leader at Able (Ruby Labs brand)",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/maria-dimidova-86641b262/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3138,7 +3894,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p074)"
         }
       ],
       "notes": "No Lithuania-based working-level people found publicly."
@@ -3152,6 +3911,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [],
       "job_postings": [],
@@ -3164,16 +3924,18 @@
       ],
       "people": [
         {
-          "id": "p012",
+          "id": "tomas-peluritis",
           "name": "Tomas Peluritis",
           "title": "Leads data at Mediatech; host of the Uncle Data newsletter and podcast",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/tomaspeluritis/",
             "https://www.linkedin.com/in/tomas-peluritis-99216854/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -3186,10 +3948,17 @@
               "title": "Beyond dbt: Modern SQL Transformation and Lineage with SQLGlot and SQLMesh",
               "date": "2025-11",
               "url": "https://bigdataconference.eu/big-data-conference-2025/",
+              "content_id": "big-data-conference-europ-beyond-dbt-modern-sql-transformation-and",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "tools & ecosystem",
                 "data governance"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -3197,10 +3966,17 @@
               "title": "Beyond dbt: Modern SQL Transformation and Lineage with sqlglot and sqlmesh",
               "date": "2025-04-24",
               "url": "https://pretalx.com/pycon-lithuania-2025/speaker/K7MRTJ/",
+              "content_id": "pycon-lithuania-2025-beyond-dbt-modern-sql-transformation-and",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "tools & ecosystem",
                 "data governance"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -3208,10 +3984,17 @@
               "title": "Write-Audit-Publish Pattern in Modern Data Pipelines",
               "date": "2024-04-05",
               "url": "https://pretalx.com/pycon-lithuania-2024/schedule/?format=list",
+              "content_id": "pycon-lithuania-2024-write-audit-publish-pattern-in-modern-da",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data quality & testing",
                 "data engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -3219,10 +4002,17 @@
               "title": "Airflow Lessons They Don't Put in the Docs",
               "date": "2026-04-09",
               "url": "https://pretalx.com/pycon-lithuania-2026/speaker/K7MRTJ/",
+              "content_id": "pycon-lithuania-2026-airflow-lessons-they-don-t-put-in-the-do",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "orchestration & ci/cd",
                 "data engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "organiser",
@@ -3230,9 +4020,16 @@
               "title": "Organiser / host",
               "date": "2024-01-24",
               "url": "https://www.linkedin.com/posts/tomaspeluritis_pydata-vilnius-2-wed-jan-24-2024-600-activity-7150400510364205057-3jd7",
+              "content_id": "pydata-vilnius-2-organiser-host",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "community"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "article",
@@ -3240,9 +4037,16 @@
               "title": "Oh, my dbt (data build tool)",
               "date": null,
               "url": "https://uncledata.substack.com/p/oh-my-dbt-data-build-tool",
+              "content_id": "uncle-data-substack-oh-my-dbt-data-build-tool",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "dbt fundamentals"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "article",
@@ -3250,11 +4054,18 @@
               "title": "Airflow, dbt, and Postgres",
               "date": "2022-11",
               "url": "https://uncledata.substack.com/p/airflow-dbt-and-postgres",
+              "content_id": "uncle-data-substack-airflow-dbt-and-postgres",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "dbt fundamentals",
                 "orchestration & ci/cd",
                 "data engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "article",
@@ -3262,10 +4073,17 @@
               "title": "Mastering Analytics Engineering: The Art of Data Modeling and Beyond",
               "date": null,
               "url": "https://uncledata.substack.com/p/mastering-analytics-engineering-the",
+              "content_id": "uncle-data-substack-mastering-analytics-engineering-the-art",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data modeling",
                 "analytics engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "post",
@@ -3273,10 +4091,17 @@
               "title": "DBT vs SDF vs SQLMesh",
               "date": "2023-08",
               "url": "https://www.linkedin.com/posts/tomaspeluritis_dbt-vs-sdf-vs-sqlmesh-activity-7099809008152100864-S1AP",
+              "content_id": "linkedin-dbt-vs-sdf-vs-sqlmesh",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "tools & ecosystem",
                 "industry trends"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             },
             {
               "type": "podcast",
@@ -3284,17 +4109,27 @@
               "title": "Host (LT/EN)",
               "date": null,
               "url": "https://podcasts.apple.com/lt/podcast/uncle-data/id1621095992",
+              "content_id": "uncle-data-podcast-host-lt-en",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "community",
                 "industry trends"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": "Best-known data engineering voice in Lithuania; also a community multiplier (newsletter, podcast, PyData Vilnius).",
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Top speaker pick; could also help promote the meetup. A 'dbt vs SQLMesh' angle would draw a crowd."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Top speaker pick; could also help promote the meetup. A 'dbt vs SQLMesh' angle would draw a crowd. (v3 id: p012)"
         }
       ],
       "notes": "Tomas Peluritis leads data here."
@@ -3308,6 +4143,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [],
       "job_postings": [],
@@ -3320,16 +4156,18 @@
       ],
       "people": [
         {
-          "id": "p044",
+          "id": "raimonda-bruziene",
           "name": "Raimonda Bruziene",
           "title": "Senior Business Intelligence Developer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/bruzieneraimonda/",
             "https://lt.linkedin.com/in/bruzieneraimonda"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -3340,7 +4178,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Previously Girteka, SameSystem, IKI."
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Previously Girteka, SameSystem, IKI. (v3 id: p044)"
         }
       ],
       "notes": ""
@@ -3354,6 +4195,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt",
@@ -3368,7 +4210,11 @@
           "linkedin_company_name": "foxity.io",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Our main stack is GCP, dbt, Looker — experience with these is a plus",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
@@ -3384,6 +4230,7 @@
       "cities": [
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt",
@@ -3411,6 +4258,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [],
       "job_postings": [],
@@ -3433,6 +4281,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "nice-to-have",
       "stack_signals": [
         "dbt",
@@ -3449,7 +4298,11 @@
           "linkedin_company_name": "BARBORA Lietuva",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with tools such as dbt, Docker, Terraform, and Prefect is a plus",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -3461,15 +4314,17 @@
       ],
       "people": [
         {
-          "id": "p081",
+          "id": "rokas-steponavicius",
           "name": "Rokas Steponavičius",
           "title": "Data Analyst",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/rokas-steponavi%C4%8Dius-bba423148"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3485,18 +4340,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p081)"
         },
         {
-          "id": "p094",
+          "id": "zivile-valutyte-silveira",
           "name": "Zivile Valutyte Silveira",
           "title": "Data Engineer",
           "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/zivile-valutyte-silveira/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3512,7 +4372,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p094)"
         }
       ],
       "notes": ""
@@ -3526,22 +4389,25 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "nice-to-have",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p010",
+          "id": "martynas-jocys",
           "name": "Martynas Jočys",
           "title": "Data & Analytics Consultant @ Macaw Lithuania (formerly Data Engineering Tech Lead @ Oxylabs)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/martynas-jocys",
             "https://www.linkedin.com/in/martynasjocys/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -3554,9 +4420,16 @@
               "title": "Conference host",
               "date": "2025-11",
               "url": "https://bigdataconference.eu/big-data-conference-2025/",
+              "content_id": "big-data-conference-europ-conference-host",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "community"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             },
             {
               "type": "talk",
@@ -3564,10 +4437,17 @@
               "title": "Design Essentials for BI Developers",
               "date": "2026-11",
               "url": "https://bigdataconference.eu/",
+              "content_id": "big-data-conference-europ-design-essentials-for-bi-developers",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "business intelligence",
                 "data modeling"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             },
             {
               "type": "profile",
@@ -3575,9 +4455,16 @@
               "title": "Speaker profile (Most Active Speaker 2024)",
               "date": "2024",
               "url": "https://sessionize.com/martynas-jocys/",
+              "content_id": "sessionize-speaker-profile-most-active-speaker-2024",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "community"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -3589,18 +4476,23 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": "Two profile URLs appeared (Oxylabs and Macaw), probably the same person after a move. Very experienced speaker, focused on BI and Power BI; could cover the semantic layer / BI side, or MC."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Two profile URLs appeared (Oxylabs and Macaw), probably the same person after a move. Very experienced speaker, focused on BI and Power BI; could cover the semantic layer / BI side, or MC. (v3 id: p010)"
         },
         {
-          "id": "p046",
+          "id": "vytautas-kraujalis",
           "name": "Vytautas Kraujalis",
           "title": "Senior Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vytautaskraujalis/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -3611,7 +4503,10 @@
           "evidence": [],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p046)"
         }
       ],
       "notes": "Data consultancy."
@@ -3625,6 +4520,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "nice-to-have",
       "stack_signals": [
         "dbt",
@@ -3639,7 +4535,11 @@
           "linkedin_company_name": "Cast AI",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Nice To Have: Experience with dbt, Snowflake, BigQuery, or similar modern data-stack components",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
@@ -3655,6 +4555,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "nice-to-have",
       "stack_signals": [
         "SQL",
@@ -3683,6 +4584,7 @@
       "cities": [
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -3695,15 +4597,17 @@
       ],
       "people": [
         {
-          "id": "p092",
+          "id": "vytenis-janilionis",
           "name": "Vytenis Janilionis",
           "title": "Director Data Science & Engineering",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vytenis-janilionis-2587a34a/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3719,7 +4623,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p092)"
         }
       ],
       "notes": "Not verified — include only as a lead."
@@ -3733,21 +4640,24 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p002",
+          "id": "artsem-varyvoda",
           "name": "Artsem Varyvoda",
           "title": "Lead Data Engineer; Head of Data Quality, EPAM Lithuania & Latvia",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/artsem-varyvoda"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -3760,16 +4670,26 @@
               "title": "Python for Data Quality in 2025: Why tests alone are no longer enough",
               "date": "2026-04-09",
               "url": "https://pretalx.com/pycon-lithuania-2026/speaker/",
+              "content_id": "pycon-lithuania-2026-python-for-data-quality-in-2025-why-test",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data quality & testing"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Matched from bio; good for a data quality / testing talk."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Matched from bio; good for a data quality / testing talk. (v3 id: p002)"
         }
       ],
       "notes": "Data quality department."
@@ -3783,21 +4703,24 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p019",
+          "id": "paulius-venclovas",
           "name": "Paulius Venclovas",
           "title": "Senior Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/paulius-venclovas-b57566140"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -3810,17 +4733,27 @@
               "title": "Python, rust and arrow for data processing",
               "date": "2026-04-09",
               "url": "https://pretalx.com/pycon-lithuania-2026/schedule/?format=list",
+              "content_id": "pycon-lithuania-2026-python-rust-and-arrow-for-data-processin",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data engineering",
                 "performance & scale"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Databricks-focused."
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Databricks-focused. (v3 id: p019)"
         }
       ],
       "notes": ""
@@ -3834,21 +4767,24 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p088",
+          "id": "vilius-kaulinskas",
           "name": "Vilius Kaulinskas",
           "title": "Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vilius-kaulinskas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -3859,7 +4795,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p088)"
         }
       ],
       "notes": ""
@@ -3873,21 +4812,24 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p023",
+          "id": "vidmante-ciziene",
           "name": "Vidmantė Čižienė",
           "title": "Data & information management lead (Wholesale Electricity); formerly Data Engineer @ carVertical",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vidmant%C4%97-%C4%8Di%C5%BEien%C4%97-882b8739/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -3900,10 +4842,17 @@
               "title": "The Power of Python for Data Management",
               "date": "2025-04-24",
               "url": "https://pretalx.com/pycon-lithuania-2025/speaker/",
+              "content_id": "pycon-lithuania-2025-the-power-of-python-for-data-management",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data engineering",
                 "data governance"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             },
             {
               "type": "article",
@@ -3911,17 +4860,27 @@
               "title": "carVertical: active metadata pioneer",
               "date": "2023",
               "url": "https://humansofdata.atlan.com/2023/09/carvertical-active-metadata-pioneer/",
+              "content_id": "atlan-humans-of-data-carvertical-active-metadata-pioneer",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data governance",
                 "tools & ecosystem"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Data catalogue / governance angle. Women Go Tech mentor."
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Data catalogue / governance angle. Women Go Tech mentor. (v3 id: p023)"
         }
       ],
       "notes": ""
@@ -3935,19 +4894,22 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p004",
+          "id": "ekaterina-korolkoviene",
           "name": "Ekaterina Korolkoviene",
           "title": "Data Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -3960,10 +4922,17 @@
               "title": "Streamlit: Pythonic Swiss knife for data apps",
               "date": null,
               "url": "https://www.meetup.com/pydata-vilnius/",
+              "content_id": "pydata-vilnius-streamlit-pythonic-swiss-knife-for-data",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "tools & ecosystem",
                 "business intelligence"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
             },
             {
               "type": "talk",
@@ -3971,17 +4940,27 @@
               "title": "It's Just Code: Library Dismantling 101",
               "date": "2026-04-08",
               "url": "https://pretalx.com/pycon-lithuania-2026/schedule/?format=list",
+              "content_id": "pycon-lithuania-2026-it-s-just-code-library-dismantling-101",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "developer workflow",
                 "data engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "No LinkedIn URL found."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "No LinkedIn URL found. (v3 id: p004)"
         }
       ],
       "notes": ""
@@ -3995,6 +4974,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4007,15 +4987,17 @@
       ],
       "people": [
         {
-          "id": "p090",
+          "id": "vytautas-jaras",
           "name": "Vytautas Jaras",
           "title": "Senior Data Analyst",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/vytautas-jaras-977356157/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -4026,7 +5008,10 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p090)"
         }
       ],
       "notes": ""
@@ -4040,21 +5025,24 @@
       "cities": [
         "Remote"
       ],
+      "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p013",
+          "id": "valentinas-mitalauskas",
           "name": "Valentinas Mitalauskas",
           "title": "Senior Data Engineer @ Shopify; formerly Analytics Engineering Lead @ Hostinger",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/valentinas-mitalauskas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -4067,10 +5055,19 @@
               "title": "Implementing real-time SCD type 2 with dbt",
               "date": "2024-10",
               "url": "https://www.getdbt.com/resources/coalesce-on-demand/coalesce-2024-implementing-real-time-slowly-changing-dimensions-scd-type-2-with-dbt",
+              "content_id": "coalesce-2024-implementing-real-time-scd-type-2-with-d",
+              "co_authors": [
+                "Ieva Jacunskienė"
+              ],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "data modeling",
                 "performance & scale"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             },
             {
               "type": "podcast",
@@ -4078,17 +5075,27 @@
               "title": "[EN] Data Team in Hostinger with Valentinas Mitalauskas",
               "date": null,
               "url": "https://podtail.com/en/podcast/duomen-d-lei/-en-data-team-in-hostinger-with-valentinas-mitalau/",
+              "content_id": "uncle-data-podcast-en-data-team-in-hostinger-with-valentina",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "team & org design",
                 "analytics engineering"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Not confirmed that he's still in Lithuania (Shopify is remote-first)."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Not confirmed that he's still in Lithuania (Shopify is remote-first). (v3 id: p013)"
         }
       ],
       "notes": ""
@@ -4102,6 +5109,7 @@
       "cities": [
         "Lithuania (remote/unspecified)"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [
         "Dataform or dbt",
@@ -4115,7 +5123,11 @@
           "linkedin_company_name": "Scrambly",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "a cloud warehouse, a transformation framework (Dataform or dbt), and serverless functions and scheduling",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Senior Data Scientist",
@@ -4124,7 +5136,11 @@
           "linkedin_company_name": "Scrambly",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "BQML, Dataform, or dbt, or other experience building models close to the warehouse",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
@@ -4140,6 +5156,7 @@
       "cities": [
         "Remote"
       ],
+      "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4162,6 +5179,7 @@
       "cities": [
         "Lithuania"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "Snowflake",
@@ -4177,7 +5195,11 @@
           "linkedin_company_name": "Intetics",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "at least 5-6 years of experience with Snowflake, Python, SSIS, SQL Server, DBT, AWS",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
@@ -4193,6 +5215,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt"
@@ -4208,21 +5231,27 @@
           "job_poster": {
             "name_title": "Greta B. — Connecting Top Talent with Growth Opportunities",
             "linkedin_url": "https://lt.linkedin.com/in/greta-b-03a6a8108"
-          }
+          },
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p063",
+          "id": "greta-b",
           "name": "Greta B.",
           "title": "Recruiter (job poster)",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/greta-b-03a6a8108"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -4238,7 +5267,10 @@
           ],
           "confidence": "High",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p063)"
         }
       ],
       "notes": "Recruiter; end client unknown."
@@ -4252,6 +5284,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "Spark",
@@ -4266,7 +5299,11 @@
           "linkedin_company_name": "MWDN",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with batch processing frameworks (Spark, dbt, Airflow)",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
@@ -4282,6 +5319,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
         "Airflow",
@@ -4297,7 +5335,11 @@
           "linkedin_company_name": "Bonapolia",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "The engineer will work with modern frameworks such as Airflow, dbt, and SAP Data Services, contribute to Data Mesh and Medallion architecture implementations",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
@@ -4313,22 +5355,25 @@
       "cities": [
         "Lithuania"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
       "other_evidence": [],
       "people": [
         {
-          "id": "p015",
+          "id": "aurimas-griciunas",
           "name": "Aurimas Griciunas",
           "title": "Data/ML/AI engineering educator (SwirlAI); formerly Neptune.ai",
           "city": "Vilnius (assumed)",
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -4338,10 +5383,17 @@
               "title": "Closing keynote: Challenges and Opportunities of Agentic Systems",
               "date": "2025-04-25",
               "url": "https://pretalx.com/pycon-lithuania-2025/speaker/",
+              "content_id": "pycon-lithuania-2025-closing-keynote-challenges-and-opportuni",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "genai & llm",
                 "industry trends"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
             },
             {
               "type": "talk",
@@ -4349,29 +5401,41 @@
               "title": "Panel: Leading Through the Shift",
               "date": "2026-04-09",
               "url": "https://pretalx.com/pycon-lithuania-2026/schedule/?format=list",
+              "content_id": "pycon-lithuania-2026-panel-leading-through-the-shift",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "team & org design",
                 "genai & llm",
                 "industry trends"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": "Big draw; would suit an 'AI + analytics engineering' keynote."
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Big draw; would suit an 'AI + analytics engineering' keynote. (v3 id: p015)"
         },
         {
-          "id": "p016",
+          "id": "albinas-plesnys",
           "name": "Albinas Plesnys",
           "title": "Data Architect (tvaras.ai / Vėjai – employer unconfirmed)",
           "city": "Lithuania",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/albinas-plesnys"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -4384,11 +5448,18 @@
               "title": "Dealing with dynamic structured JSON fields in SQL: a case using dbt & Jinja (in BigQuery)",
               "date": null,
               "url": "https://medium.com/@albinas.plesnys/dealing-with-dynamic-json-fields-in-tables-a-case-using-dbt-jinja-in-bigquery-1ecd432b249f",
+              "content_id": "medium-dealing-with-dynamic-structured-json-fie",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "data modeling",
                 "dbt best practices",
                 "data warehouse & platforms"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             },
             {
               "type": "article",
@@ -4396,30 +5467,42 @@
               "title": "BI Infrastructure Without Robbing a Bank (dbt CI/CD, dbt docs)",
               "date": null,
               "url": "https://medium.com/@albinas.plesnys/bi-infrastructure-without-robbing-a-bank-a-complete-tutorial-in-5-parts-3-e64ad347a293",
+              "content_id": "medium-bi-infrastructure-without-robbing-a-bank",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "orchestration & ci/cd",
                 "developer workflow",
                 "dbt product features"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": "Writes dbt tutorials and posts about dbt and BigQuery.",
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": "Could give a practical dbt + Jinja talk."
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Could give a practical dbt + Jinja talk. (v3 id: p016)"
         },
         {
-          "id": "p025",
+          "id": "kestutis-gadeikis",
           "name": "Kęstutis Gadeikis",
           "title": "Chief Actuary & Data Governance Manager, Lietuvos Draudimas (PZU)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "medium",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -4429,31 +5512,43 @@
               "title": "Beyond the Static 2D Plot - Spatial Data Storytelling in 4D",
               "date": "2026-04-09",
               "url": "https://pretalx.com/pycon-lithuania-2026/schedule/?format=list",
+              "content_id": "pycon-lithuania-2026-beyond-the-static-2d-plot-spatial-data-s",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "business intelligence",
                 "domain-specific use cases"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p025)"
         },
         {
-          "id": "p026",
+          "id": "rytis-jonas-zolubas",
           "name": "Rytis Jonas Zolubas",
           "title": "Data Engineer (Fairlo); CTO Molecule Data; founder Data Magna",
           "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://www.linkedin.com/in/rzolubas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "medium",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -4463,28 +5558,40 @@
               "title": "Navigating Data Consultancy",
               "date": "2023-09",
               "url": "https://www.youtube.com/watch?v=8sEpcem1PQI",
+              "content_id": "uncle-data-podcast-navigating-data-consultancy",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "career development",
                 "team & org design"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": "Not confirmed that he's in Lithuania."
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Not confirmed that he's in Lithuania. (v3 id: p026)"
         },
         {
-          "id": "p070",
+          "id": "laura-dage",
           "name": "Laura Dagė",
           "title": "Data Analytics Engineer / BI Analyst (Analytika)",
           "city": "Lithuania",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/lauradage/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -4495,18 +5602,23 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p070)"
         },
         {
-          "id": "p082",
+          "id": "sylvia-okwu",
           "name": "Sylvia Okwu",
           "title": "Data Analytics Engineer (Metasite Data Insights)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/sylvia-okwu/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -4517,21 +5629,26 @@
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p082)"
         },
         {
-          "id": "p099",
+          "id": "gabija-latvenaite",
           "name": "Gabija Latvėnaitė",
           "title": "Unknown (data) @ TGLAB",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/gabija-latv%C4%97nait%C4%97/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "low",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [],
@@ -4539,7 +5656,10 @@
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": false,
-          "notes": ""
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "(v3 id: p099)"
         }
       ],
       "notes": "People whose employer is small, unclear or not otherwise tracked."
@@ -4554,6 +5674,7 @@
         "Vilnius",
         "Kaunas"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt"
@@ -4566,7 +5687,11 @@
           "linkedin_company_name": "Vinted",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Analytics Engineering Guild (40+ colleagues) - you will benefit from shared best practices, reusable dbt/Python packages",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Analytics Engineer, Vinted Go (Vilnius)",
@@ -4575,7 +5700,11 @@
           "linkedin_company_name": "Vinted",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Analytics Engineering Guild (40+ colleagues) - you will benefit from shared best practices, reusable dbt/Python packages",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         },
         {
           "title": "Senior Decision Scientist, Frontend Technologies",
@@ -4584,21 +5713,27 @@
           "linkedin_company_name": "Vinted",
           "dbt_mentioned_in_text": true,
           "dbt_snippet": "Experience with version control (Git) and dbt is a plus",
-          "job_poster": null
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-23",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [],
       "people": [
         {
-          "id": "p011",
+          "id": "saulius-valatka",
           "name": "Saulius Valatka",
           "title": "Staff Engineer",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/sauliusvl/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -4611,10 +5746,17 @@
               "title": "Getting to dbt: data ingestion at Vinted",
               "date": "2025-03-13",
               "url": "https://www.meetup.com/vilnius-dbt-meetup/events/306239130/",
+              "content_id": "vilnius-dbt-meetup-2-getting-to-dbt-data-ingestion-at-vinted",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
               "topics": [
                 "data engineering",
                 "dbt migration & adoption"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -4626,18 +5768,32 @@
           ],
           "confidence": "High",
           "internal_vinted": true,
-          "notes": "Vinted colleague. Don't confuse with another Saulius Valatka at Atrandi Biosciences."
+          "priority_tier": "backup",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-03-13",
+              "talk_title": "Getting to dbt: data ingestion at Vinted",
+              "topics": [
+                "data engineering",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": "Vinted colleague. Don't confuse with another Saulius Valatka at Atrandi Biosciences. (v3 id: p011)"
         },
         {
-          "id": "p018",
+          "id": "martynas-cibulskis",
           "name": "Martynas Cibulskis",
           "title": "Engineer (data platform)",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://lt.linkedin.com/in/martynas-cibulskis"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "medium",
             "attendee_potential": "high"
@@ -4650,29 +5806,41 @@
               "title": "Extending the Apache Iceberg FileIO abstraction at Vinted (paraphrased)",
               "date": "2025-11",
               "url": "https://medium.com/@hugh.evans.dev/big-data-europe-2025-highlights-02145529297d",
+              "content_id": "big-data-conference-europ-extending-the-apache-iceberg-fileio-abst",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "data engineering",
                 "data warehouse & platforms"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Medium",
           "internal_vinted": true,
-          "notes": "Vinted colleague."
+          "priority_tier": "backup",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vinted colleague. (v3 id: p018)"
         },
         {
-          "id": "p024",
+          "id": "evaldas-kazlauskis",
           "name": "Evaldas Kazlauskis",
           "title": "Leads data science work",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "medium",
-            "attendee_potential": "low"
+            "attendee_potential": "medium"
           },
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -4682,28 +5850,40 @@
               "title": "When safety is non-negotiable - 3 stages of building safety using data & AI",
               "date": "2025-04-25",
               "url": "https://pretalx.com/pycon-lithuania-2025/speaker/",
+              "content_id": "pycon-lithuania-2025-when-safety-is-non-negotiable-3-stages-o",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
               "topics": [
                 "domain-specific use cases",
                 "genai & llm"
-              ]
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
             }
           ],
           "attendee_signal": null,
           "evidence": [],
           "confidence": "Low",
           "internal_vinted": true,
-          "notes": "Vinted colleague; data science focus."
+          "priority_tier": "backup",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vinted colleague; data science focus. (v3 id: p024)"
         },
         {
-          "id": "p104",
+          "id": "vytautas-matiukas",
           "name": "Vytautas Matiukas",
           "title": "Decision Scientist",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/matiukas/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "high"
@@ -4719,18 +5899,23 @@
           ],
           "confidence": "High",
           "internal_vinted": true,
-          "notes": "Vinted colleague."
+          "priority_tier": "backup",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vinted colleague. (v3 id: p104)"
         },
         {
-          "id": "p105",
+          "id": "andrius-petronis",
           "name": "Andrius Petronis",
           "title": "Decision Scientist",
           "city": "Vilnius",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/andriuspetronis/"
           ],
           "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "low",
             "attendee_potential": "medium"
@@ -4746,7 +5931,10 @@
           ],
           "confidence": "Medium",
           "internal_vinted": true,
-          "notes": "Vinted colleague."
+          "priority_tier": "backup",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vinted colleague. (v3 id: p105)"
         }
       ],
       "notes": "Excluded from outreach — user's own employer. Kept for completeness. Only people shown in Vilnius or Kaunas are listed; Victor Dutto and Rodrigo Loredo (data platform leads) are Amsterdam-based."
@@ -4758,6 +5946,7 @@
       "watchlist": true,
       "excluded_from_outreach": false,
       "cities": [],
+      "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4778,6 +5967,7 @@
       "watchlist": true,
       "excluded_from_outreach": false,
       "cities": [],
+      "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4800,6 +5990,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4820,6 +6011,7 @@
       "watchlist": true,
       "excluded_from_outreach": false,
       "cities": [],
+      "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4842,6 +6034,7 @@
       "cities": [
         "Vilnius"
       ],
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4862,6 +6055,7 @@
       "watchlist": true,
       "excluded_from_outreach": false,
       "cities": [],
+      "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -4887,6 +6081,7 @@
         "Oxylabs",
         "TeraSky"
       ],
+      "attendees": null,
       "talks": [
         {
           "speaker": "Gediminas Krištopaitis",
@@ -4928,6 +6123,7 @@
         "dbt Labs",
         "TeraSky"
       ],
+      "attendees": null,
       "talks": [
         {
           "speaker": "Gediminas Krištopaitis",
