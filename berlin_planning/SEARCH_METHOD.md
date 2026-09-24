@@ -5,7 +5,7 @@ This file goes with `berlin_dbt_companies.json`. It explains how the dataset was
 - **First built:** 2026-09-23
 - **Dataset version:** 5 (shared schema version 3)
 - **Goal:** find people in Berlin who post or speak about dbt and data topics, and who could **speak at** (or attend) the Berlin dbt Meetup. Also find the Berlin companies that use dbt.
-- **Sister datasets:** `../baltics/lithuania_dbt_companies.json` and `../kuala_lumpur/kuala_lumpur_dbt_companies.json`. All three follow one shared schema (§3). They are named `<region>_dbt_companies.json`, and a validator checks that their keys are identical (Appendix A).
+- **Sister datasets:** `../baltics/lithuania_dbt_companies.json`, `../kuala_lumpur/kuala_lumpur_dbt_companies.json` and `../paris/paris_dbt_companies.json`. All four follow one shared schema (§3). They are named `<region>_dbt_companies.json`, and a validator checks that their keys are identical (Appendix A).
 
 The Lithuania search started from **job ads**: first find which companies use dbt, then look for people there. The Berlin search starts from **public content** (blog posts, talks, case studies, podcasts and other meetups' line-ups) and adds job ads as a second signal. In both files the key record for a speaker is their `speaker_evidence`, and each item is tagged with meetup topics.
 
@@ -237,7 +237,7 @@ The job-board page was read directly with one fetch, because it is plain server-
 
 ## 3. Shared schema (version 3)
 
-`berlin_planning/berlin_dbt_companies.json`, `baltics/lithuania_dbt_companies.json` and `kuala_lumpur/kuala_lumpur_dbt_companies.json` have exactly these keys, in this order. A value can be `null` when it's unknown, but a key is never missing.
+`berlin_planning/berlin_dbt_companies.json`, `baltics/lithuania_dbt_companies.json`, `kuala_lumpur/kuala_lumpur_dbt_companies.json` and `paris/paris_dbt_companies.json` have exactly these keys, in this order. A value can be `null` when it's unknown, but a key is never missing.
 
 ```
 metadata            title, generated_at, prepared_for, purpose, version, schema_version, region,
@@ -402,7 +402,7 @@ def check(path):
     return d
 
 files = ["berlin_planning/berlin_dbt_companies.json", "baltics/lithuania_dbt_companies.json",
-         "kuala_lumpur/kuala_lumpur_dbt_companies.json"]
+         "kuala_lumpur/kuala_lumpur_dbt_companies.json", "paris/paris_dbt_companies.json"]
 ds = [check(f) for f in files]
 for d in ds[1:]:
     assert d["metadata"]["field_definitions"] == ds[0]["metadata"]["field_definitions"], "field_definitions differ"

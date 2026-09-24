@@ -24,6 +24,7 @@ CHAPTERS = {
     "berlin": {"label": "Berlin", "goal": "speakers"},
     "lithuania": {"label": "Vilnius", "goal": "attendees"},
     "kuala_lumpur": {"label": "Kuala Lumpur", "goal": "speakers"},
+    "paris": {"label": "Paris", "goal": "speakers"},
 }
 
 TIER_ORDER = {"1": 0, "2": 1, "backup": 2, "3": 3, "connector": 4, "organiser": 5}

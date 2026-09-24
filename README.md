@@ -50,7 +50,7 @@ pipeline/run_pipeline.sh
 
 ## Organiser cockpit
 
-A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), linked from the dashboard, for finding people to speak at or attend a chapter's next meetup. It combines every `<region>_dbt_companies.json` in the repo: Berlin, Vilnius and Kuala Lumpur. Each chapter and view has its own link to share, such as `/organiser/#berlin/speakers`.
+A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), linked from the dashboard, for finding people to speak at or attend a chapter's next meetup. It combines every `<region>_dbt_companies.json` in the repo: Berlin, Vilnius, Kuala Lumpur and Paris. Each chapter and view has its own link to share, such as `/organiser/#berlin/speakers`.
 
 - **Views.** Speakers, attendees and companies to invite, each ranked. A topic table shows which topics past talks never covered but current leads can.
 - **First-time speakers first.** Within each tier, the speaker list puts **emerging voices** (people who publish about dbt but have no talk on record) ahead of proven speakers, then everyone else. A filter shows just one group. A balanced line-up pairs one proven speaker with one or two first-time speakers.
