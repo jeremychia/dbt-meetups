@@ -9,19 +9,19 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **Approach:** public content (blogs, podcasts, conferences and other meetups' line-ups), a job-ad scan, and every past Paris dbt Meetup speaker.
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 238 |
-| People | 186 |
+| Companies | 244 |
+| People | 207 |
 | Tier 1 leads | 34 |
 | First-time speakers (publish, no talk yet) | 26 |
-| Proven speakers | 136 |
+| Proven speakers | 144 |
 | Spoke at this chapter before | 17 |
-| Based in the region | 162 |
-| Based elsewhere | 9 |
-| Location unknown | 15 |
+| Based in the region | 170 |
+| Based elsewhere | 12 |
+| Location unknown | 25 |
 | With a LinkedIn profile | 46 |
 | Job ads mentioning dbt | 150 |
 | Past chapter meetups | 10 |
@@ -46,7 +46,11 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 
 ### Women-in-data communities
 
-- **Paris Data Ladies:** [meetup.com/paris-data-ladies](https://www.meetup.com/paris-data-ladies/) was the only strong source: 22 events since 2023, each with 3–4 data speakers. Its meetup.com group data also lists organisers and event hosts, who are recorded as `connector`.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **Paris Data Ladies:** [meetup.com/paris-dataladies](https://www.meetup.com/paris-dataladies/) was the only strong source: 22 events since 2023, each with 3–4 data speakers. Its meetup.com group data also lists organisers and event hosts, who are recorded as `connector`. Its [November 2025 event at Thales](https://www.meetup.com/paris-dataladies/events/311778883/) added Louise Rodriguez (Thales) and Linh Tran and Anaïs Faussadier (DGFiP), on AI and data sovereignty. Two more co-hosts, Justine Deshais and Rima Hajou, are recorded as connectors.
+- **[Women in Big Data Paris](https://www.meetup.com/women-in-big-data-paris-meetup-group/):** its [June 2025 afterwork with iAdvize](https://www.meetup.com/women-in-big-data-paris-meetup-group/events/308007050/) was held in Nantes. It gave Francesca Iannuzzi (Chief Data Officer, iAdvize), Camille Salin (iAdvize), Emeline Daviau (Head of Data Analytics, Maisons du Monde) and Line Ton That (Groupe La Poste). The network's France director, Andrea Lavergne, is recorded as a connector.
+- **Organisers of Python, R and ML groups:** the Meetup event hosts of [PyLadies Paris](https://www.meetup.com/pyladiesparis/) (Simona Bottani, Chiara Biscaro, Mojdeh Rastgoo, Anuradha Kar), [RLadies+ Paris](https://www.meetup.com/rladies-paris/) (Mouna Belaid) and [Paris WiMLDS](https://www.meetup.com/paris-women-in-machine-learning-data-science/) (Caroline Chavier, Juliette Bassnagel) are recorded as connectors. PyLadies Paris also gave one data-science tooling talk, by Marie Sacksick of probabl.
+- **[Women in AI France](https://www.womeninai.co/france):** the team page gives 3 connectors with data and AI roles: Léa El Samarji (Avanade), Alix Barel (Microsoft) and Ania Kaci (IBM). It lists no dated events.
 
 ### Job ads
 
@@ -66,9 +70,10 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **Paris Data Engineers:** the group no longer exists.
 - **Welcome to the Jungle search URLs:** they go to a login page.
 - **Paris WiMLDS:** almost all ML.
-- **PyLadies Paris (`pyladiesparis`) and R-Ladies Paris:** mostly Python, ML and R content. Only their organisers were kept.
-- **Women in Big Data Paris:** no named data speakers.
-- **WiDS Paris:** no events since 2023.
+- **PyLadies Paris (`pyladiesparis`) and R-Ladies Paris:** mostly Python, ML and R content. Only their organisers and one tooling talk were kept.
+- **Women in Big Data Paris:** its masterclasses and the November 2025 10-year event named no speakers. Only the June 2025 afterwork did.
+- **WiDS Paris:** the [Meetup group](https://www.meetup.com/Women-in-Data-Science-WiDS-Paris/) has held no event since 2017.
+- **[Social Builder](https://socialbuilder.org/evenements/) and [Girls in Tech France](https://girlsintech.org/france/):** the events page returned almost no content, and the Girls in Tech request timed out.
 - **Duchess France, Women Techmakers and Ladies of Code Paris:** nothing data-related.
 - **Speakers picked from conference bios:** some Forward Data Conference speakers were picked using wording in their conference bios. Those people are tagged `sourced_via: conference_or_meetup_agenda`, not `women_in_data_community`, and the dataset records no gender for anyone. Take women-in-data speakers only from the community's own events.
 
@@ -80,7 +85,7 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **Labelled staff:** dbt Labs' Paris-related staff and Fivetran staff are labelled in the cockpit. `excluded_from_outreach` is true only for internal records (Vinted).
 
 <!-- companies:start -->
-237 companies and communities were looked at. A company is local when it has people or roles in the region.
+243 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (105)</summary>
 
@@ -97,6 +102,12 @@ Agoda, Axway, blef.fr (Data News), Blent.ai (local presence not confirmed), Brev
 <details><summary><b>Not verified</b> (95)</summary>
 
 AB Tasty, Agicap / Libeo, Air France-KLM, Airbyte (local presence not confirmed), Ankorstore, Aquila Data Enabler, Aramis Group, BearingPoint, Believe, BNP Paribas / AXA / Société Générale, Brigad (local presence not confirmed), Brigad / Side, Carbonfact, Carrefour, Clean Data Architecture, Clever Cloud, Count (local presence not confirmed), Criteo, Dailymotion, Data Value Consulting (local presence not confirmed), DataGalaxy, Dataiku, Deezer, Dust, Département du Gard (local presence not confirmed), Ekimetrics, ENGIE, Eurazeo, Evaneos, ex-Galeries Lafayette (local presence not confirmed), Fifty-five, Freelance (Back Market mission) (local presence not confirmed), Galeries Lafayette, Getaround, GitGuardian, GRDF (at time of talk) (local presence not confirmed), Groupe La Poste, Hightouch (local presence not confirmed), Hivebrite, Hubvisor (local presence not confirmed), Hugging Face, Hymaïa, Jolimoi, L'Oréal, Lalilo (local presence not confirmed), leboncoin (Adevinta), Lightdash (local presence not confirmed), Luko / Leocare / Lalilo, LVMH / Sephora, Lydia / Sumeria, Maketools, ManoMano, Metabase (local presence not confirmed), Mooncard, MotherDuck (local presence not confirmed), Neo4j (ex-Sifflet) (local presence not confirmed), Nibble (local presence not confirmed), Nissan United AMIEO (local presence not confirmed), Numberly (1000mercis Group), OCTO Technology (Accenture), Omni (local presence not confirmed), Open Value, Optic 2000, Owkin (at time of 2024 talk) (local presence not confirmed), Paris Data Ladies, Paris Women in Machine Learning & Data Science, PayFit, Pennylane, Photoroom, Pigment / Yousign / Payplug, Positive Thinking Company (local presence not confirmed), PyLadies Paris, R-Ladies Paris, Scaleway, Selfr (local presence not confirmed), Sicara, SNCF Connect & Tech, Snowflake (local presence not confirmed), Social Good Accelerator, Sopht, Sorare, Stellantis, Supabase (local presence not confirmed), Taktile (local presence not confirmed), TotalEnergies, TotalEnergies Renewables, Toucan, Ubisoft / Dailymotion / Le Monde / Radio France, Van Cleef & Arpels, Veesion, Welcome to the Jungle, Weld (local presence not confirmed), Women in Big Data Paris, Ynsect, Zenika
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (6)</summary>
+
+DGFiP (Ministère de l'Économie et des Finances), iAdvize (local presence not confirmed), Maisons du Monde (local presence not confirmed), probabl, Thales, Women in AI France
 
 </details>
 
@@ -171,7 +182,7 @@ AB Tasty, Agicap / Libeo, Air France-KLM, Airbyte (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Other sources checked</b> (61)</summary>
+<details><summary><b>Other sources checked</b> (69)</summary>
 
 - [Medium RSS feeds (publication/tagged/<tag>)](https://medium.com/feed/<publication>/tagged/dbt)
 - [DataGen newsletter (Substack)](https://datageneration.substack.com/)
@@ -234,6 +245,14 @@ AB Tasty, Agicap / Libeo, Air France-KLM, Airbyte (local presence not confirmed)
 - [Data For Good](https://www.meetup.com/fr-fr/data-for-good-fr/) (nothing useful)
 - [Forward Data Conference speakers 2024-2026](https://forward-data-conference.com/program/speakers/)
 - [Coalesce speakers from Paris](https://sessionize.com/coalesce-2024/) (nothing useful)
+- [Meetup gql2 groupSearch near Paris (women-in-data queries)](https://www.meetup.com/gql2#groupSearch-paris-wid)
+- [Paris Data Ladies 2025-2026 events (Meetup gql2)](https://www.meetup.com/paris-dataladies/events/?type=past)
+- [PyLadies Paris (Meetup gql2 past events)](https://www.meetup.com/pyladiesparis/events/?type=past)
+- [Paris WiMLDS 2024-2026 events (Meetup gql2)](https://www.meetup.com/paris-women-in-machine-learning-data-science/events/?type=past)
+- [WiDS Paris (Meetup gql2, urlname Women-in-Data-Science-WiDS-Paris)](https://www.meetup.com/Women-in-Data-Science-WiDS-Paris/) (nothing useful)
+- [Women in AI France team page](https://www.womeninai.co/france)
+- [Social Builder events page](https://socialbuilder.org/evenements/) (nothing useful)
+- [Girls in Tech France](https://girlsintech.org/france/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -279,7 +298,8 @@ Tier 1 is stricter here than the central rule. The first build proposed 52 tier-
   - **LinkedIn pass:** 127 people are still `not_searched`. In the first build only 14 of the 105 tier-1/2 people without a profile were searched before the web-search limit. Finish this first, in its own session.
   - **New content since `metadata.generated_at`:** new DataGen episodes and posts, the latest Forward Data Conference programme, new Paris dbt Meetup, Paris Data Ladies, Paris Airflow and DuckDB Paris events, and new posts on the blogs in `sources.checked`.
   - **Job ads:** re-run the LinkedIn Jobs guest scan and the Lever, Greenhouse and Ashby searches, including the 50 ads left over by the cap.
-  - **Women-in-data groups not yet scanned:** Social Builder, Femmes@numérique, Girls in Tech, Women in AI France, Data For Good and Les Pionnières.
+  - **Women-in-data groups not yet scanned:** Femmes@numérique, Data For Good and Les Pionnières. Social Builder and Girls in Tech France were not reachable, so retry them in a browser. Women in AI France lists no events, so look for #WAITalks speakers on its news page.
+  - **Women-in-data events:** new Paris Data Ladies and Women in Big Data Paris events with named speakers.
 - **People to locate:** 15 people have no known location, including Willis Nana, whose LinkedIn result had nothing tying it to the recorded talk. The 4 tier-1 leads among them are Grégoire Naud, Paul Colinmaire, Thales Loiola Ravelli and Martin-Pierre Roset.
 - **Data conventions:** `metadata.region` is "Paris (Paris dbt Meetup)". `sources.checked` lists every source checked, with a `yielded` flag. `past_meetups` is copied from `../enriched/paris-dbt-meetup.json`. Person `content_id`s have the form `<event-slug>-<title-slug>`.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `paris/paris_dbt_companies.json`, the Paris dbt Meetup, `../enriched/paris-dbt-meetup.json` and the region Paris / Île-de-France. Add: "Content is often in French, so search in French too and record French titles as they are, with an English description. Tier 1 = Paris or unknown location plus a dbt item from 2024 onwards, or a first-time speaker under the shared rule. Back up the old file as `paris_dbt_companies.v<N>.json`."
@@ -291,3 +311,4 @@ Tier 1 is stricter here than the central rule. The first build proposed 52 tier-
 | 2026-09-24 | 1 | First search, with 5 parallel sub-agents covering large companies, partners/vendors/media, meetups and conferences, job ads, and women-in-data communities, plus chapter history. 238 companies (94 on the watchlist), 186 people, 147 dbt job ads at 109 companies, 207 unique content items. Split: 137 proven speakers, 26 emerging voices, 8 featured, 16 with no public content. Tiers: 37 tier 1, 86 tier 2, 54 tier 3, 9 connectors. 17 people had already spoken at the Paris dbt Meetup. The LinkedIn pass is incomplete because the web-search limit was reached; 38 people have LinkedIn URLs. |
 | 2026-09-24 | 2 | Rebuilt with the same merge rules; adds 3 job ads the v1 build had dropped (150 in total), otherwise unchanged. Backup: `paris_dbt_companies.v1.json`. |
 | 2026-10-01 | 3 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed 4 people: co-written Ippon posts and in-person talks at the chapter. LinkedIn search results placed 5 more. Of the 9 placed, 3 are in Paris and 6 elsewhere (Bordeaux, Nantes, Lille, Niort and Lyon). 18 people are still unknown. |
+| 2026-10-01 | 4 | Women-in-data pass from Meetup data and the Women in AI France team page. 21 people added: 8 speakers and panellists from Paris Data Ladies, Women in Big Data Paris and PyLadies Paris, plus 13 organisers as connectors. WiDS Paris is inactive. Social Builder and Girls in Tech France were not reachable. |

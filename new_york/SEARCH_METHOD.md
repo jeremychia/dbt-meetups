@@ -7,19 +7,19 @@ This file holds what is specific to New York. The method, scoring rules, schema 
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 89 |
-| People | 150 |
+| Companies | 96 |
+| People | 166 |
 | Tier 1 leads | 45 |
 | First-time speakers (publish, no talk yet) | 24 |
-| Proven speakers | 113 |
+| Proven speakers | 121 |
 | Spoke at this chapter before | 65 |
-| Based in the region | 66 |
+| Based in the region | 72 |
 | Based elsewhere | 17 |
-| Location unknown | 67 |
+| Location unknown | 77 |
 | With a LinkedIn profile | 24 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 30 |
@@ -54,10 +54,12 @@ One research run covered New York. It used about 22 web searches before the sess
 
 ### Women-in-data communities
 
-Speakers come from women-focused groups' own events. Nobody's gender is recorded or guessed. These groups run Tableau, AI and LLM events rather than analytics engineering talks, so the organisers are the useful contacts.
-
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
 - **[Data + Women NYC](https://usergroups.tableau.com/data-women-nyc):** gave its organisers. Its events focus on Tableau.
-- **[NYC WiMLDS](https://www.meetup.com/nyc-wimlds/):** one panel with named data leaders, on generative AI.
+- **[NYC WiMLDS](https://www.meetup.com/nyc-wimlds/):** one panel with named data leaders, on generative AI. Its events since then are AI demo nights and LLM bootcamps.
+- **[GDG NYC and Women Techmakers NYC](https://www.meetup.com/gdgnyc/):** the Women Techmakers Ambassadors run International Women's Day and women-in-AI events, mostly at Google's New York office. The Meetup copies carry full speaker bios. [Build with AI 2024](https://www.meetup.com/gdgnyc/events/300509530/) gave Paige Epstein and Dean Manko of Kantar on LLMs in digital analytics. [Power Women in AI/ML 2023](https://www.meetup.com/gdgnyc/events/294478731/) gave Jayeeta Putatunda (Fitch Ratings). [Women in AI/ML 2023](https://www.meetup.com/gdgnyc/events/292262065/) gave Supreet Kaur (Morgan Stanley) and Phanom Noelani Parker (Amazon). The organisers are connectors: Anna Nerezova, Shivika Arora (JPMorgan Chase) and Carolina Castro (Google). Events since 2025 are mostly AI hackathons.
+- **[R-Ladies New York](https://www.meetup.com/rladiesnyc/):** the Meetup slug is `rladiesnyc`. It runs talks, tutorials and lightning talks. Talks since 2024 gave Jennifer Hill on causal inference, Rika Gorn on Quarto and Mitzi Morris on Stan. The gql2 `eventHosts` field gave 5 regular hosts as connectors: Dorota Rizik, Jacki Buros, Clara Wang, Mei Guan and Nicole Burke.
+- **Also ask:** the GDG NYC and R-Ladies hosts to suggest analytics engineers from their members.
 
 ### Job ads
 
@@ -78,7 +80,11 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **[PyData NYC](https://www.meetup.com/pydatanyc/):** no dbt talks from 2024 to 2026.
 - **[Data Council NYC group](https://www.meetup.com/data-council-nyc-data-engineering-science/):** only promotes other conferences.
 - **[NYC PyLadies](https://www.meetup.com/nyc-pyladies/):** one event since 2024, on vector search.
-- **[R-Ladies NYC](https://www.meetup.com/rladies-newyork/):** posts partner promotions only.
+- **[NYC PyLadies](https://www.meetup.com/nyc-pyladies/):** no event since October 2024.
+- **Women-focused Meetup groups with no data talks:** [Girl Develop It NYC](https://www.meetup.com/girldevelopit/) runs paid classes and doesn't name instructors. [Women in Software Engineering NYC](https://www.meetup.com/women-in-software-engineering-nyc/) runs bootcamp sessions and AI hackathons. [NYC Women in STEM](https://www.meetup.com/nyc-stem/) is a book club. [NYC Fintech Women](https://www.meetup.com/nyc-fintech-women/) posts vendor events. [Real Women in Tech](https://www.meetup.com/real-women-in-tech/) has no events. [New York AI 2030](https://www.meetup.com/new-york-ai-2030-women-in-ai-leadership-award-group/) runs responsible AI summits.
+- **[Lesbians Who Tech Summit](https://lesbianswhotech.org/):** held in New York each October. Its speakers are executives, with no data talk titles.
+- **No New York chapter or event:** [Women in Big Data](https://www.womeninbigdata.org/), [WiDS](https://www.widsworldwide.org/events/), [She Loves Data](https://www.shelovesdata.com/) and [Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/). Women Who Code closed in 2024.
+- **[GDG NYC Bevy API](https://gdg.community.dev/api/event_slim/for_chapter/937/?status=Completed&page_size=100):** the list is unsorted and has no speakers. The Meetup copies are easier.
 - **Web search:** the session limit stopped the run after about 22 searches.
 - **dbt Summit bios:** none of the 18 bios checked names a city.
 - **Brooklyn Data posts:** the author line has no profile link, so most of its consultants stay unplaced.
@@ -90,7 +96,7 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **Bilt** has the strongest company story, with two dbt Summit 2026 talks and a dbt case study.
 
 <!-- companies:start -->
-88 companies and communities were looked at. A company is local when it has people or roles in the region.
+95 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (68)</summary>
 
@@ -110,9 +116,9 @@ Artemis (local presence not confirmed), Circle (local presence not confirmed), E
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (1)</summary>
+<details><summary><b>Uses a different stack</b> (8)</summary>
 
-NYC Women in Machine Learning & Data Science
+Amazon (local presence not confirmed), Fitch Ratings (local presence not confirmed), GDG NYC, Google, Kantar (local presence not confirmed), Morgan Stanley (local presence not confirmed), NYC Women in Machine Learning & Data Science, R-Ladies New York
 
 </details>
 
@@ -122,7 +128,7 @@ NYC Women in Machine Learning & Data Science
 
 </details>
 
-<details><summary><b>Other sources checked</b> (22)</summary>
+<details><summary><b>Other sources checked</b> (42)</summary>
 
 - [dbt Summit 2026 speaker pages (via getdbt.com sitemap)](https://www.getdbt.com/sitemap-0.xml)
 - [Coalesce on the Road NYC 2026](https://www.getdbt.com/events/roadshow/coalesce-in-nyc)
@@ -146,6 +152,26 @@ NYC Women in Machine Learning & Data Science
 - [NYT Open blog](https://open.nytimes.com/feed) (nothing useful)
 - [Squarespace engineering blog](https://engineering.squarespace.com/blog) (nothing useful)
 - [Built In NYC job ads](https://www.builtinnyc.com/jobs/data-analytics/search/analytics-engineer)
+- [Meetup gql2 groupSearch near Manhattan (women-in-data queries)](https://www.meetup.com/gql2#nyc-wid)
+- [GDG NYC (Women Techmakers events)](https://www.meetup.com/gdgnyc/)
+- [GDG NYC Bevy events API](https://gdg.community.dev/api/event_slim/for_chapter/937/?status=Completed&page_size=100) (nothing useful)
+- [R-Ladies New York (Meetup rladiesnyc)](https://www.meetup.com/rladiesnyc/)
+- [NYC WiMLDS (re-check)](https://www.meetup.com/nyc-wimlds/events/) (nothing useful)
+- [NYC PyLadies (re-check)](https://www.meetup.com/nyc-pyladies/events/) (nothing useful)
+- [Girl Develop It NYC](https://www.meetup.com/girldevelopit/) (nothing useful)
+- [Women in Software Engineering NYC](https://www.meetup.com/women-in-software-engineering-nyc/) (nothing useful)
+- [NYC Women in STEM](https://www.meetup.com/nyc-stem/) (nothing useful)
+- [NYC Fintech Women](https://www.meetup.com/nyc-fintech-women/) (nothing useful)
+- [Real Women in Tech](https://www.meetup.com/real-women-in-tech/) (nothing useful)
+- [Empowering Women of Color in Technology](https://www.meetup.com/source-coder-hub/) (nothing useful)
+- [New York AI 2030 (women in AI leadership group)](https://www.meetup.com/new-york-ai-2030-women-in-ai-leadership-award-group/) (nothing useful)
+- [Lesbians Who Tech Summit New York](https://lesbianswhotech.org/) (nothing useful)
+- [Women in Big Data (New York)](https://www.womeninbigdata.org/?s=new+york) (nothing useful)
+- [WiDS Worldwide events](https://www.widsworldwide.org/events/) (nothing useful)
+- [Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [Girls in Tech New York](https://girlsintech.org/new-york/) (nothing useful)
+- [Women Who Code](https://womenwhocode.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -189,6 +215,8 @@ NYC Women in Machine Learning & Data Science
   - **dbt Summit:** new speaker pages from the getdbt.com sitemap, filtered to New York employers.
   - **Meetup `gql2`:** new events of New York data groups through `groupSearch` and events, with `curl`.
   - **Data + Women NYC:** ask the organisers for analytics engineering speakers.
+  - **Women-in-data communities not reachable:** the [Girls in Tech New York](https://girlsintech.org/new-york/) site timed out. The [R-Ladies NYC board page](https://www.rladiesnyc.org/#board) did not render. Retry both.
+  - **Lesbians Who Tech Summit:** check the 2026 agenda after the 5-7 October summit for data talks.
   - **Job ads:** `site:` searches on Lever, Greenhouse and Ashby with "dbt New York".
 - **People to locate:** 108 people are still `not_searched` on LinkedIn. Start with the dbt Summit speakers whose location is unknown. Re-check old profiles at Ramp and JetBlue.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `new_york/new_york_dbt_companies.json`, the chapter `nyc-dbt-meetup`, `../enriched/nyc-dbt-meetup.json` and the region "the NYC metro area". Cap Brooklyn Data at one speaker per event. Budget about 25 web searches.
@@ -200,3 +228,4 @@ NYC Women in Machine Learning & Data Science
 | 2026-10-01 | 1 | First build from one research run: 89 companies, 151 people, 7 job ads at 6 companies, 30 past meetups. 66 people had spoken at the chapter. Tiers: 52 tier 1, 65 tier 2, 26 tier 3, 8 connectors. Lead types: 113 proven speakers, 24 emerging voices, 8 featured, 6 with no public content. |
 | 2026-10-01 | 1 | Location pass from public pages: 26 people placed, 20 in the region and 6 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 12 people searched, 6 placed, 2 in the region and 4 elsewhere. 86 people are still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass with fetches only: 16 people added from GDG NYC and Women Techmakers NYC and R-Ladies New York, 8 speakers and 8 connectors. 7 companies added. 20 women-focused communities checked. |

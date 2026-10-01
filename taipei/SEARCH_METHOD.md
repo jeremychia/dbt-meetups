@@ -7,18 +7,18 @@ This file holds what is specific to Taipei. The method, scoring rules, schema an
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 44 |
-| People | 69 |
-| Tier 1 leads | 30 |
+| Companies | 50 |
+| People | 87 |
+| Tier 1 leads | 31 |
 | First-time speakers (publish, no talk yet) | 23 |
-| Proven speakers | 46 |
+| Proven speakers | 55 |
 | Spoke at this chapter before | 30 |
-| Based in the region | 23 |
-| Based elsewhere | 2 |
+| Based in the region | 40 |
+| Based elsewhere | 3 |
 | Location unknown | 44 |
 | With a LinkedIn profile | 1 |
 | Job ads mentioning dbt | 2 |
@@ -44,7 +44,7 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **[DevOps Taiwan on KKTIX](https://devops.kktix.cc/):** KKTIX is Taiwan's event-ticket site, and each organiser feed (`<org>.kktix.cc/events.json`) lists names and employers. It gave the [#70 data panel](https://devops.kktix.cc/events/meetup-70-data), co-hosted with the chapter on 2025-05-23, and a [#67 talk](https://devops.kktix.cc/events/meetup-67).
 - **[COSCUP](https://coscup.org/2025/json/session.json):** Taiwan's open-source conference. The 2024 and 2025 session data gave few dbt talks, but did give an Airflow committer and some warehouse talks.
 - **Meetup GraphQL:** a group search around Taipei's coordinates listed the local data groups, with past events, hosts and RSVPs with profile cities.
-- **[R-Ladies Taipei](https://www.meetup.com/rladies-taipei/):** the one active women-in-data group, with 83 past events and speaker bios that name employers. The organisers Kristen Chan, Ning Chen and Ben Chen are recorded as connectors. The talks are mostly about R and generative AI, not dbt.
+- **[R-Ladies Taipei](https://www.meetup.com/rladies-taipei/):** the one active women-in-data group on Meetup, with 83 past events and speaker bios that name employers. The organisers Kristen Chan, Ning Chen and Ben Chen are recorded as connectors. The talks are mostly about R and generative AI, not dbt.
 - **[Taipei Women in Tech](https://www.meetup.com/taipeiwomenintech/):** 226 past events, with one data warehouse speaker since 2023.
 - **Women-in-data yield:** 7 people from both groups, all tier 2 or 3 or connectors.
 - **Chapter history:** every named speaker from `../enriched/taipei-dbt-meetup.json` was added. That added 27 people, and 30 people in the file have spoken at the chapter.
@@ -62,6 +62,14 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **LinkedIn search results:** 15 people were searched. It placed 1, Katy Yuan, in the San Francisco Bay Area.
 - **Result:** 23 people are in the region, 2 are outside it and 44 are unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[WiDS Taipei](https://www.widstaipei.org/):** the best source. Taiwanese in Data Science runs a one-day conference of women data scientists each May, in person and on Zoom. The [2024](https://www.widstaipei.org/conference-2024-chinese) and [2026](https://www.widstaipei.org/conference-2026-chinese) pages name 8 speakers each with employers, but no talk titles. The [Medium feed](https://medium.com/feed/women-in-data-science-taipei) has a write-up of each 2025 and 2026 talk with the speaker's bio. It reads with a plain fetch.
+- **WiDS Taipei data talks:** Tricia Tsai (RHINOSHIELD) on building a data team from zero (2025). 姜乃文 (CommonWealth Magazine Group) on generative BI (2026). 林蒧均 (Chung-Hua Institution for Economic Research) on data cleaning for decisions (2026). AnLei Huang (Databricks, Singapore) on trustworthy analytics agents (2026). Alyssa Chen, Karen Hsieh and Lany Liu, already in the file, also spoke. 9 ambassadors from 2024 to 2026 are recorded as connectors.
+- **[WTM Taipei](https://gdg.community.dev/gdg-taipei/):** Women Techmakers Taipei runs through GDG Taipei. The GDG events API (chapter 748) holds every event's details. The [Design x Data Meetup](https://gdg.community.dev/e/my8yxb/) (September 2025, at Dcard) had talks by Jamin Fan and Ricky Yu, both past chapter speakers. The other WTM events since 2024 are career workshops.
+- **Also ask:** the WiDS Taipei organisers and Alyssa Chen's 數聚村莊 community for speakers.
+
 ## 2. What didn't work here
 
 - **Web search:** ran out after 3 calls, so there was no LinkedIn search during research and no job-ad search. The rest of the run used direct page fetches, open APIs and each site's own search.
@@ -71,6 +79,7 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **Company feeds on Medium:** [Dcard](https://medium.com/dcardlab), Pinkoi, Hahow and others had no dbt posts in the recent feeds.
 - **Other local groups:** [PyData Taipei](https://www.meetup.com/pydata-taipei/), GDG Taipei, Taipei.py and AI Engineers in Taiwan had no data-stack talks since 2023.
 - **[PyCon TW](https://tw.pycon.org/):** the talk list needs a login, so it was not read.
+- **Women-in-data sources with nothing new:** Meetup's group search near Taipei found only R-Ladies Taipei and Taipei Women in Tech, both already covered. [PyLadies Taiwan on KKTIX](https://pyladies.kktix.cc/events.json) has had no event since 2014. [Girls in Tech Taiwan](https://girlsintech.org/taiwan/) did not respond. The WiDS Taipei 2025 page shows speakers only in images.
 
 ## 3. Companies looked at
 
@@ -79,7 +88,7 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **Recce:** the employer of Karen Hsieh, who organises the chapter, and of two first-time speakers, Kent Chen and Even Wei.
 
 <!-- companies:start -->
-43 companies and communities were looked at. A company is local when it has people or roles in the region.
+49 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (19)</summary>
 
@@ -99,9 +108,9 @@ Appier, AppWorks School, E.Sun Bank (玉山銀行), Microsoft Taiwan (台灣微�
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (9)</summary>
+<details><summary><b>Uses a different stack</b> (15)</summary>
 
-COSCUP, DevOps Taiwan, Employer not identified (local presence not confirmed), Financial-sector employer (not named) (local presence not confirmed), Greenpeace East Asia (綠色和平), iThome (iT 邦幫忙), R-Ladies Taipei, Taipei Women in Tech, 新立資訊 OSYS
+AILogora (local presence not confirmed), Chung-Hua Institution for Economic Research (中華經濟研究院), CommonWealth Magazine Group (天下雜誌), COSCUP, DevOps Taiwan, Employer not identified (local presence not confirmed), Financial-sector employer (not named) (local presence not confirmed), Greenpeace East Asia (綠色和平), iThome (iT 邦幫忙), R-Ladies Taipei, RHINOSHIELD (犀牛盾), Taipei Women in Tech, Taiwanese in Data Science (TWiDS) / WiDS Taipei, The Reporter (報導者) (local presence not confirmed), 新立資訊 OSYS
 
 </details>
 
@@ -113,7 +122,7 @@ COSCUP, DevOps Taiwan, Employer not identified (local presence not confirmed), F
 
 </details>
 
-<details><summary><b>Other sources checked</b> (15)</summary>
+<details><summary><b>Other sources checked</b> (25)</summary>
 
 - [iThome 鐵人賽 dbt search and tag](https://ithelp.ithome.com.tw/tags/articles/dbt)
 - [iThome 鐵人賽 data-engineering searches](https://ithelp.ithome.com.tw/search?tab=ironman&search=BigQuery)
@@ -130,6 +139,16 @@ COSCUP, DevOps Taiwan, Employer not identified (local presence not confirmed), F
 - [104, Cake job boards](https://www.cake.me/jobs/dbt) (nothing useful)
 - [Taiwanese company Medium feeds (Dcard, Pinkoi, Hahow and others)](https://medium.com/dcardlab) (nothing useful)
 - [PyCon TW talk API](https://tw.pycon.org/) (nothing useful)
+- [Meetup gql2 groupSearch near Taipei](https://www.meetup.com/gql2)
+- [WiDS Taipei 2024 conference](https://www.widstaipei.org/conference-2024-chinese)
+- [WiDS Taipei 2025 conference](https://www.widstaipei.org/conference-2025-chinese)
+- [WiDS Taipei 2026 conference](https://www.widstaipei.org/conference-2026-chinese)
+- [WiDS Taipei Medium feed](https://medium.com/feed/women-in-data-science-taipei)
+- [WiDS Worldwide site search (Taipei)](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Taipei)
+- [GDG Taipei events API (WTM Taipei)](https://gdg.community.dev/api/event_slim/for_chapter/748/?status=Completed&page_size=200) (nothing useful)
+- [WTM Taipei Design x Data Meetup](https://gdg.community.dev/e/my8yxb/)
+- [PyLadies Taiwan on KKTIX](https://pyladies.kktix.cc/events.json) (nothing useful)
+- [Girls in Tech Taiwan](https://girlsintech.org/taiwan/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -181,8 +200,14 @@ COSCUP, DevOps Taiwan, Employer not identified (local presence not confirmed), F
   - **Even Wei and Shih Mei-Cheng:** the search summaries named New Taipei and Taipei, but no result showed the profile.
   - **Kevin Chien (DeepHow) and Tom Sung (Bitfinex):** the results gave only "Taiwan".
   - **Michael Han (Infinite Lambda):** the result showed no location.
-  - **Past speakers with no employer:** Jamin Fan, Ricky Yu and Benny Xu spoke in region but have no employer on record. Find one, and the medium rule can then place all three.
+  - **Past speakers with no employer:** Jamin Fan, Ricky Yu and Benny Xu spoke in region but have no employer on record. Find one, and the medium rule can then place all three. Ricky Yu also gave a WTM Taipei talk in person at Dcard in September 2025.
   - **簡妙蓉:** check whether the [R-Ladies Taipei talk](https://www.meetup.com/rladies-taipei/events/305306204/) was given in person.
+- **Women-in-data communities not yet reachable:**
+  - **WiDS Taipei 2024 talk titles:** the conference page gives none. Ask the organisers, or read the 2024 posts on Medium through r.jina.ai.
+  - **WiDS Taipei 2025 speakers:** shown only in images. 4 of them were found through the Medium feed.
+  - **PyLadies Taiwan and Girls in Tech Taiwan:** no current event page was found.
+  - **Women Who Code Taipei:** Women Who Code closed in 2024. Taipei Women in Tech carries on its alumni.
+- **People from the women-in-data pass:** the 18 people added have no LinkedIn search.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `taipei/taipei_dbt_companies.json`, the Taipei dbt Meetup, `../enriched/taipei-dbt-meetup.json` and the Taipei metro area (Taipei, New Taipei and Keelung, plus Taoyuan; not Hsinchu). Add: "Search in Traditional Chinese and English. Show each name as published, and give each an ASCII id: the handle plus `-ithome`, or Hanyu Pinyin."
 
 ## Change log
@@ -192,3 +217,4 @@ COSCUP, DevOps Taiwan, Employer not identified (local presence not confirmed), F
 | 2026-10-01 | 1 | First build. iThome 鐵人賽, the chapter's Medium publication, the Recce blog, DevOps Taiwan on KKTIX, COSCUP, R-Ladies Taipei and Taipei Women in Tech, GitHub and Yourator, plus chapter history. 69 people at 44 companies, 30 of them past chapter speakers. 23 emerging voices and 30 tier-1 leads. 2 job ads, neither read. |
 | 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, KKTIX and COSCUP speaker pages, GitHub profiles and recent in-person talks. 23 people placed, 22 of them in the region. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 15 people searched and 1 placed, outside the region. With the location pass, 23 people are in the region, 2 outside it and 44 unknown. |
+| 2026-10-01 | 2 | Women-in-data pass. Checked WiDS Taipei (2024 to 2026 and its Medium feed), WTM Taipei through GDG Taipei, PyLadies Taiwan and Girls in Tech Taiwan. Added 18 people with `sourced_via: women_in_data_community`: 9 speakers and 9 WiDS Taipei ambassadors as connectors. Added talks for Alyssa Chen, Karen Hsieh, Lany Liu, Jamin Fan and Ricky Yu. Added 2 community channels. |

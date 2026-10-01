@@ -7,19 +7,19 @@ This file holds what is specific to San Francisco. The method, scoring rules, sc
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 61 |
-| People | 76 |
+| Companies | 70 |
+| People | 97 |
 | Tier 1 leads | 24 |
 | First-time speakers (publish, no talk yet) | 10 |
-| Proven speakers | 51 |
+| Proven speakers | 67 |
 | Spoke at this chapter before | 36 |
-| Based in the region | 49 |
+| Based in the region | 56 |
 | Based elsewhere | 13 |
-| Location unknown | 14 |
+| Location unknown | 28 |
 | With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 13 |
@@ -43,11 +43,15 @@ The first build had about 20 web searches before the shared session limit ran ou
 
 ### Women-in-data communities
 
-People were taken only from each community's own events.
+People were taken only from each community's own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
 
 - **[Snowflake Women in Data Bay Area](https://www.snowflake.com/event/women-in-data-bay-area-20260128) (January 2026):** 5 speakers, from DoorDash, Ross Stores, CrowdStrike, Engage3 and Snowflake.
 - **[Hightouch Women in Data SF](https://hightouch.com/events/women-in-data-meetup) (February 2023):** 1 keynote speaker.
 - **[WiDS Berkeley](https://wids.berkeley.edu/speakers):** WiDS means Women in Data Science. The page shows the 2023 line-up, including an analytics engineering leader at Meta.
+- **[PyLadies San Francisco](https://www.meetup.com/pyladiessf/):** monthly talk nights at sponsor offices, with full line-ups on Meetup. The [September 2026 meetup at Snowflake](https://www.meetup.com/pyladiessf/events/315897145/) gave Rose Tan (Snowflake), Kasia Rachuta (Intuit) and Lilinoe Harbottle on data integrity in regulated pipelines. The [October 2025 meetup](https://www.meetup.com/pyladiessf/events/311140845/) gave Dori Wilson, now listed as Head of Data at Recce, and Jennifer Slotnick. Divya Dhar spoke on data cleaning with AI. The organisers are connectors: Alla Barbalat, Semona Igama (Okta), Kasia Rachuta and Shruti Taware.
+- **[Bay Area WiMLDS](https://www.meetup.com/bay-area-women-in-machine-learning-and-data-science/):** Women in Machine Learning & Data Science. Monthly talks, often at Snowflake. It gave Amanda Kelly (Snowflake, Streamlit) and Lisa Dusseault (Data Transfer Initiative) in May 2024, Barkha Herman (StarTree) on Apache Pinot and anomaly detection, and Shubhi Asthana (IBM Research) on PII guardrails. A [2023 lightning talk night with Lyft](https://www.meetup.com/bay-area-women-in-machine-learning-and-data-science/events/292687386/) gave Gina Longo (SiriusXM), Grishma Jena (IBM) and 3 Lyft data scientists. Joanne Rodrigues spoke at the joint event with PyLadies in July 2025. The hosts Carolina Arriaga and Erin Pangilinan are connectors.
+- **[R-Ladies San Francisco](https://www.meetup.com/rladies-san-francisco/):** no data talks since 2023. Its host Gabriela de Queiroz is a connector.
+- **Also ask:** the PyLadies SF and WiMLDS organisers to suggest analytics engineers from their members.
 
 ### Meetups, GitHub and job ads
 
@@ -66,7 +70,9 @@ People were taken only from each community's own events.
 - **[dbt Summit 2026 keynotes](https://www.getdbt.com/blog/dbt-summit-2026-keynotes-product-sessions):** dbt Labs staff only.
 - **Session and customer pages:** the individual dbt Summit and Coalesce session pages returned 404. So did the getdbt.com case studies and the Datafold and Lightdash customer pages.
 - **[Monte Carlo case studies](https://montecarlo.ai/case-studies/):** PagerDuty and Credit Karma. Neither mentions dbt.
-- **[Women in Big Data Bay Area](https://www.meetup.com/women-in-big-data-bay-area/):** the group no longer exists.
+- **[Women in Big Data Bay Area](https://www.meetup.com/women-in-big-data-bay-area/):** the Meetup group no longer exists. The [May 2026 summit recap](https://www.womeninbigdata.org/building-the-future-together-reflections-from-the-wibd-bay-area-10-year-innovation-summit/) names only AI and leadership speakers, without employers.
+- **Women-focused groups with no data talks:** [GDG San Francisco](https://www.meetup.com/gdgsanfrancisco/) Women Techmakers events (career and AI talks; IWD 2024 cancelled), [Mature Women in Tech](https://www.meetup.com/sfmaturewomenintech/) (career meetings), [Girl Develop It SF](https://www.meetup.com/girl-develop-it-san-francisco/) (paid classes, no named instructors) and [OutGeek Women in Tech](https://www.meetup.com/outgeek-women-in-tech/) (no events).
+- **Pages that no longer exist:** the [Data + Women San Francisco](https://usergroups.tableau.com/data-women-san-francisco/) Tableau group page and the [WiDS conference page](https://www.widsworldwide.org/conference/) return 404. Women Who Code closed in 2024.
 - **[MotherDuck SF meetups](https://motherduck.com/events/motherduck-duckdb-july-meetup-2026.md):** DuckDB and agent talks, with no dbt speakers.
 - **[AI Council Bay Area](https://www.aicouncil.com/bay-2025):** Data Council was renamed, and the page lists no speakers.
 - **Company Medium feeds:** [Gusto](https://medium.com/feed/gusto-engineering) and Faire had no dbt posts. [Airbnb](https://medium.com/feed/airbnb-engineering), Lyft and Instacart returned HTTP 429 (too many requests), so Bay Area company tech blogs are still unscanned.
@@ -79,7 +85,7 @@ People were taken only from each community's own events.
 - **Many leads are featured** in someone else's content, with no talk or post of their own. Ask these people for a first talk rather than a repeat.
 
 <!-- companies:start -->
-60 companies and communities were looked at. A company is local when it has people or roles in the region.
+69 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (37)</summary>
 
@@ -99,9 +105,9 @@ Big Time Data (local presence not confirmed), Credit Karma, CrowdStrike (local p
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (1)</summary>
+<details><summary><b>Uses a different stack</b> (10)</summary>
 
-WiDS Berkeley
+Bay Area WiMLDS, Data Transfer Initiative (local presence not confirmed), IBM (local presence not confirmed), Intuit (local presence not confirmed), Lyft, PyLadies San Francisco, R-Ladies San Francisco, SiriusXM (local presence not confirmed), StarTree (local presence not confirmed), WiDS Berkeley
 
 </details>
 
@@ -114,7 +120,7 @@ WiDS Berkeley
 
 </details>
 
-<details><summary><b>Other sources checked</b> (17)</summary>
+<details><summary><b>Other sources checked</b> (30)</summary>
 
 - [dbt Summit 2026 sessions by role](https://www.getdbt.com/blog/dbt-summit-2026-sessions-by-role)
 - [dbt Summit 2026 keynotes and product sessions](https://www.getdbt.com/blog/dbt-summit-2026-keynotes-product-sessions) (nothing useful)
@@ -133,6 +139,19 @@ WiDS Berkeley
 - [Data Council / AI Council Bay Area 2025](https://www.aicouncil.com/bay-2025) (nothing useful)
 - [Women in Big Data Bay Area meetup](https://www.meetup.com/women-in-big-data-bay-area/) (nothing useful)
 - [GitHub user search (dbt in bio, SF)](https://github.com/search?q=dbt+location%3A%22San+Francisco%22&type=users)
+- [Meetup gql2 groupSearch near San Francisco (women-in-data queries)](https://www.meetup.com/gql2#sf-wid)
+- [PyLadies San Francisco](https://www.meetup.com/pyladiessf/)
+- [Bay Area WiMLDS](https://www.meetup.com/bay-area-women-in-machine-learning-and-data-science/)
+- [R-Ladies San Francisco](https://www.meetup.com/rladies-san-francisco/) (nothing useful)
+- [GDG San Francisco (Women Techmakers events)](https://www.meetup.com/gdgsanfrancisco/) (nothing useful)
+- [Mature Women in Tech (SF)](https://www.meetup.com/sfmaturewomenintech/) (nothing useful)
+- [Girl Develop It San Francisco](https://www.meetup.com/girl-develop-it-san-francisco/) (nothing useful)
+- [Women in Tech Events by OutGeek Collective](https://www.meetup.com/outgeek-women-in-tech/) (nothing useful)
+- [Women in Big Data Bay Area 10-Year Innovation Summit](https://www.womeninbigdata.org/building-the-future-together-reflections-from-the-wibd-bay-area-10-year-innovation-summit/) (nothing useful)
+- [Data + Women San Francisco](https://usergroups.tableau.com/data-women-san-francisco/) (nothing useful)
+- [WiDS Worldwide conference page](https://www.widsworldwide.org/conference/) (nothing useful)
+- [Girls in Tech](https://girlsintech.org/) (nothing useful)
+- [Women Who Code](https://womenwhocode.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -174,6 +193,8 @@ WiDS Berkeley
   - **Customer stories:** Hex, Omni and Sigma stories published since `metadata.generated_at`.
   - **Medium feeds:** retry Airbnb, Lyft and Instacart (`medium.com/feed/<publication>`). Find the author of Instacart's "Adopting dbt" post.
   - **Named speakers:** search for the speakers at DocuSign, Figma and Instacart, which have a dbt talk but no named speaker.
+  - **Women-in-data communities not reachable:** the [Girls in Tech](https://girlsintech.org/) site timed out. Data + Women San Francisco has no working page; find its new address on the Tableau user group directory.
+  - **Dori Wilson:** confirm the move from Chime to Recce before outreach.
 - **People to locate:** the 26 unknown locations. Find GitHub logins for the unknown-location people at Hex, Omni, LangChain, DoorDash, Zipline, Sigma and Okta.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `san_francisco/san_francisco_dbt_companies.json`, the chapter `san-francisco-dbt-meetup`, `../enriched/san-francisco-dbt-meetup.json` and the region "the nine SF Bay Area counties, with commuter towns such as Santa Cruz". Budget about 25 web searches.
 
@@ -184,3 +205,4 @@ WiDS Berkeley
 | 2026-10-01 | 1 | First build: dbt Summit 2026 and Coalesce 2025 agendas, vendor customer stories (Hex, Omni, Monte Carlo), the dbt Developer Blog, the Snowflake Bay Area User Group, 3 women-in-data events, GitHub user search and job ads from web search. Past chapter speakers added from `../enriched/san-francisco-dbt-meetup.json`. 61 companies (36 on the watchlist), 76 people, 3 job ads, 13 past meetups. Split: 51 proven speakers, 10 emerging voices, 13 featured, 2 with no public content. Tiers: 24 tier 1, 41 tier 2, 9 tier 3, 2 connectors. 36 people had already spoken at the chapter. |
 | 2026-10-01 | 1 | Location pass: 18 people placed from Meetup host and RSVP profiles and GitHub, 12 in the region and 6 outside. |
 | 2026-10-01 | 1 | LinkedIn pass: 7 people placed from LinkedIn search results, 4 in the region and 3 outside. 27 people are still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass with fetches only: 21 people added from PyLadies SF, Bay Area WiMLDS and R-Ladies SF, 15 speakers and 6 connectors, and a new talk added for Dori Wilson. 9 companies added. 13 women-focused communities checked. |

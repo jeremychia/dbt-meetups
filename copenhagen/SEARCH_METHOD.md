@@ -7,19 +7,19 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 73 |
-| People | 90 |
+| Companies | 76 |
+| People | 98 |
 | Tier 1 leads | 21 |
 | First-time speakers (publish, no talk yet) | 6 |
-| Proven speakers | 71 |
+| Proven speakers | 72 |
 | Spoke at this chapter before | 32 |
-| Based in the region | 71 |
+| Based in the region | 72 |
 | Based elsewhere | 7 |
-| Location unknown | 12 |
+| Location unknown | 19 |
 | With a LinkedIn profile | 8 |
 | Job ads mentioning dbt | 11 |
 | Past chapter meetups | 11 |
@@ -46,7 +46,10 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 
 ### Women-in-data communities
 
-- **[TechWomen Cph](https://www.meetup.com/techwomen-cph/):** panels with data leaders, and a 2026-09 masterclass with Women in Data & Analytics. The topics are mostly AI and careers. 8 people came from this group.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[TechWomen Cph](https://www.meetup.com/techwomen-cph/):** the only active women-in-data group in Copenhagen, with 1,154 members. It runs panels with data leaders, and a 2026-09 masterclass with Women in Data & Analytics. The topics are mostly AI and careers. The first build took 8 people from it. This pass added Corie Tilly, a digital analytics engineer on the [October 2025 panel](https://www.meetup.com/techwomen-cph/events/311082320/), and 5 organisers and hosts as connectors, led by Meriem Manouchi.
+- **[Women Techmakers Copenhagen](https://www.meetup.com/wtm-copenhagen/):** 887 members, but no events since November 2023 and no data talks. Its organisers, Aurora Melchor and Sherry List, are connectors.
+- **Also ask:** Meriem Manouchi for data and analytics engineering speakers from TechWomen Cph.
 
 ### Job ads
 
@@ -72,6 +75,7 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **[Fabric & Power BI User Group Denmark](https://www.meetup.com/denmark-powerbi-user-group/):** mostly online speakers from other countries.
 - **[Analytics Pioneers Copenhagen](https://www.meetup.com/analytics-pioneers-copenhagen/):** online trainings by a German agency.
 - **[R-Ladies Copenhagen](https://www.meetup.com/rladies-copenhagen/) and [Copenhagen Women in Machine Learning & Data Science](https://www.meetup.com/copenhagen-women-in-machine-learning-and-data-science/):** no events since 2019.
+- **Other women-in-data networks:** [Ascend - Women in Data & Analytics](https://www.meetup.com/women-in-data-analytics/) shows up in a Copenhagen search, but it meets at Wise in London. The [GDG Copenhagen](https://gdg.community.dev/gdg-copenhagen/) events API (`event_slim/for_chapter/1018`) has no women-in-tech or data events since 2023. pyladies.com lists no Danish chapter. She Loves Data lists no Copenhagen events. Women Who Code closed in 2024. Meetup's group search found no WiDS, Women in Big Data or Girls in Tech group.
 - **[thehub.io](https://thehub.io/jobs?search=dbt):** it loads results in the browser, so a fetch saw only 3 ads from outside Denmark.
 - **Jobindex ads:** they link off-site, so the dbt wording was visible for one ad only.
 - **[dbt Summit speakers page](https://www.getdbt.com/dbt-summit/speakers):** it now shows only the 2027 waitlist.
@@ -85,7 +89,7 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **dbt Labs staff are labelled.** Seven past chapter speakers work at dbt Labs.
 
 <!-- companies:start -->
-72 companies and communities were looked at. A company is local when it has people or roles in the region.
+75 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (27)</summary>
 
@@ -105,13 +109,13 @@ Ageras (local presence not confirmed), Better Collective, Dagrofa, dbt Labs (loc
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (2)</summary>
+<details><summary><b>Uses a different stack</b> (5)</summary>
 
-Copenhagen Data Engineering, TechWomen Cph
+Copenhagen Data Engineering, Employer not identified (local presence not confirmed), Monta (local presence not confirmed), TechWomen Cph, Women Techmakers Copenhagen
 
 </details>
 
-<details><summary><b>Other sources checked</b> (21)</summary>
+<details><summary><b>Other sources checked</b> (28)</summary>
 
 - Local chapter history (enriched/copenhagen-dbt-meetup.json): `enriched/copenhagen-dbt-meetup.json`
 - [Copenhagen dbt Meetup vol. 11 (upcoming)](https://www.meetup.com/copenhagen-dbt-meetup/events/316677743/)
@@ -134,6 +138,13 @@ Copenhagen Data Engineering, TechWomen Cph
 - [thehub.io dbt search](https://thehub.io/jobs?search=dbt) (nothing useful)
 - [Intellishore insights](https://intellishore.dk/insights/) (nothing useful)
 - [LEAP website](https://leap-consulting.dk/) (nothing useful)
+- [Meetup gql2 groupSearch near Copenhagen](https://www.meetup.com/gql2)
+- [Women Techmakers Copenhagen (Meetup gql2)](https://www.meetup.com/wtm-copenhagen/)
+- [Ascend - Women in Data & Analytics (Meetup gql2)](https://www.meetup.com/women-in-data-analytics/) (nothing useful)
+- [GDG Copenhagen events API (Women Techmakers)](https://gdg.community.dev/api/event_slim/for_chapter/1018/) (nothing useful)
+- [PyLadies chapter list](https://pyladies.com/locations/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [Women Who Code](https://womenwhocode.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -179,7 +190,7 @@ Copenhagen Data Engineering, TechWomen Cph
   - **GitHub:** re-run the user search for dbt repos.
   - **Company blogs:** retry the Pleo, Lunar, Trustpilot and Too Good To Go feeds before the Medium rate limit starts.
   - **Job ads:** open the Jobindex ads one by one to read the dbt wording. Try thehub.io in a browser.
-  - **Women-in-data:** ask TechWomen Cph for introductions to data and analytics engineering speakers.
+  - **Women-in-data:** ask Meriem Manouchi at TechWomen Cph for introductions to data and analytics engineering speakers. Find the Women in Data & Analytics group that co-ran the 2026-09 masterclass; it has no Meetup page. Try WiDS through its community site in the browser.
   - **Chapter history:** after 2026-10-21, refresh the chapter history so vol. 11 is included.
   - **dbt Slack:** check the [#local-denmark](https://slack.getdbt.com/) channel by hand.
 - **People to locate:** 12 people have no known location, mostly chapter speakers and dbt Labs staff. The Snowflake User Group Denmark pages link many LinkedIn profiles, so find those people through search results.
@@ -192,3 +203,4 @@ Copenhagen Data Engineering, TechWomen Cph
 | 2026-10-01 | 1 | First build. Meetup data for 14 Danish data groups, Snowflake User Group Denmark, SYNQ customer stories, a Jobindex dbt search, TheirStack and a GitHub user search, plus chapter history. 90 people at 73 companies, 32 of them past chapter speakers. 11 job ads. Web search ran out after about 15 calls. |
 | 2026-10-01 | 1 | Location pass from public pages: in-person chapter talks, Sessionize and tied Meetup member profiles. 12 people placed, 9 in Copenhagen and 3 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 10 people searched, 1 placed in Copenhagen and 1 in Dublin. With the location pass, 14 people placed and 15 still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass over TechWomen Cph, Women Techmakers Copenhagen and other networks. 9 people added: 1 digital analytics engineer and 8 organisers and hosts as connectors. |

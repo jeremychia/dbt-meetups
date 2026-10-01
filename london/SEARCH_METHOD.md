@@ -7,19 +7,19 @@ This file holds what is specific to London. The method, scoring rules, schema an
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 75 |
-| People | 120 |
+| Companies | 79 |
+| People | 129 |
 | Tier 1 leads | 38 |
 | First-time speakers (publish, no talk yet) | 11 |
-| Proven speakers | 104 |
+| Proven speakers | 109 |
 | Spoke at this chapter before | 33 |
-| Based in the region | 97 |
+| Based in the region | 99 |
 | Based elsewhere | 6 |
-| Location unknown | 17 |
+| Location unknown | 24 |
 | With a LinkedIn profile | 8 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 22 |
@@ -42,9 +42,13 @@ This file holds what is specific to London. The method, scoring rules, schema an
 
 ### Women-in-data communities
 
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
 - **[Data + Women London](https://usergroups.tableau.com/data-women-london/):** the best source. It is a Tableau user group. Its 2024 and 2025 event pages list speakers with employers, including a dbt talk and a hands-on dbt lab in June 2025.
 - **Panels at other meetups:** the Allies of Women in Data panels at the London Analytics Engineering Meetup, and the Data Engineers London International Women's Day panel.
-- **Result:** 34 people are tagged `women_in_data_community`.
+- **[Women in Data UK podcast](https://womenindata.co.uk/):** the posts API (`womenindata.co.uk/wp-json/wp/v2/posts`) lists each episode with the guest's name and role. It gave Lauren Dixon (Chief Data Officer, FCA), Gemma Trailor (Analytics Manager, B&Q), Kinnari Ladha and Michelle Adebayo. The hosts, Karen Jean-Francois and Cecilia Oliveira, are recorded as connectors.
+- **[PyLadies London](https://www.meetup.com/pyladieslondon/):** the [July 2025 meetup at OakNorth](https://www.meetup.com/pyladieslondon/events/308836457/) had a data mesh talk by Anitha, a senior data engineer. The page gives only the first name.
+- **[WiDS London](https://www.widsworldwide.org/events/event/wids-london-university-of-greenwich/):** two 2024 upskill workshops. The pages name only the ambassadors, Abhigya Chetna and Samiya Khan, who are recorded as connectors.
+- **Result:** 43 people are tagged `women_in_data_community`.
 
 ### Job ads
 
@@ -65,7 +69,10 @@ This file holds what is specific to London. The method, scoring rules, schema an
 - **[dbt developer blog authors page](https://docs.getdbt.com/blog/authors):** no confirmed London community authors.
 - **[dbt Summit 2026 speaker list](https://www.getdbt.com/dbt-summit/speakers):** rendered by JavaScript, so a fetch returns nothing.
 - **[Coalesce on the Road London 2025](https://www.getdbt.com/events/roadshow/coalesce-on-the-road-london):** the page returned 404.
-- **[PyLadies London](https://www.meetup.com/pyladieslondon/), Data Science Festival and GDG Cloud London:** no dbt talks from 2024 onwards with full speaker names.
+- **[PyLadies London](https://www.meetup.com/pyladieslondon/), Data Science Festival and GDG Cloud London:** no dbt talks from 2024 onwards with full speaker names. PyLadies London has held no event since July 2025.
+- **Inactive women-in-data groups:** [London WiMLDS](https://www.meetup.com/London-Women-in-Machine-Learning-and-Data-Science/) last met in October 2023 and [R-Ladies London](https://www.meetup.com/rladies-london/) in October 2022.
+- **Women-in-tech groups with no data talks:** [Women Coding Community](https://www.meetup.com/women-coding-community/) (AI agents, Java, book clubs), [Ladies of Code](https://www.meetup.com/ladies-of-code-uk/), [Rise London Tech Ladies](https://www.meetup.com/we-rise/), [SuperWomen in Tech](https://www.meetup.com/sgi-superwomen-in-tech/) and Girlies in Tech London.
+- **Women Techmakers and IWD at GDG London:** the [events API](https://gdg.community.dev/api/event_slim/for_chapter/995/?status=Completed&page_size=200) lists IWD 2024, IWD 2025 and a May 2026 evening. None had data talks. The IWD 2025 site did not respond.
 - **[PyData London 2025 call for papers](https://cfp.pydata.org/london2025/speaker/):** no dbt or analytics engineering talks. The PyData London schedule is rendered by JavaScript.
 - **[Women in Data UK meet-ups archive](https://womenindata.co.uk/category/meet-ups/):** it stops in 2020.
 
@@ -76,7 +83,7 @@ This file holds what is specific to London. The method, scoring rules, schema an
 - **Cognify:** the recruiter runs the London Analytics Engineering Meetup, the richest source of London talks.
 
 <!-- companies:start -->
-73 companies and communities were looked at. A company is local when it has people or roles in the region.
+77 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (38)</summary>
 
@@ -96,9 +103,9 @@ Astrato Analytics, Baringa, Beauty Pie (local presence not confirmed), Co-op, Da
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (1)</summary>
+<details><summary><b>Uses a different stack</b> (5)</summary>
 
-QuantumBlack (McKinsey) (local presence not confirmed)
+B&Q (local presence not confirmed), Financial Conduct Authority, OakNorth, QuantumBlack (McKinsey) (local presence not confirmed), Women in Data UK
 
 </details>
 
@@ -112,7 +119,7 @@ QuantumBlack (McKinsey) (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Other sources checked</b> (19)</summary>
+<details><summary><b>Other sources checked</b> (28)</summary>
 
 - [London Analytics Engineering Meetup (gql2)](https://www.meetup.com/london-analytics-engineering-meetup/events/?type=past)
 - [Data Engineers London (gql2)](https://www.meetup.com/data-engineers-london/events/?type=past)
@@ -133,6 +140,15 @@ QuantumBlack (McKinsey) (local presence not confirmed)
 - [dbt developer blog authors](https://docs.getdbt.com/blog/authors) (nothing useful)
 - [Infinite Lambda blog API](https://infinitelambda.com/wp-json/wp/v2/posts?search=dbt) (nothing useful)
 - [Burns Sheehan data meetup](https://www.burnssheehan.co.uk/events/data-meetup-analytics-engineering-the-life-cycle/s107469/)
+- [Meetup gql2 groupSearch near London (women-in-data queries)](https://www.meetup.com/gql2#groupSearch-london-wid)
+- [PyLadies London (Meetup gql2 past events)](https://www.meetup.com/pyladieslondon/events/?type=past)
+- [London WiMLDS (Meetup gql2)](https://www.meetup.com/London-Women-in-Machine-Learning-and-Data-Science/) (nothing useful)
+- [R-Ladies London (Meetup gql2)](https://www.meetup.com/rladies-london/) (nothing useful)
+- [Women Coding Community (Meetup gql2)](https://www.meetup.com/women-coding-community/) (nothing useful)
+- [Ladies of Code UK, Rise (London Tech Ladies), SuperWomen in Tech, Girlies in Tech (Meetup gql2)](https://www.meetup.com/ladies-of-code-uk/) (nothing useful)
+- [Women in Data UK posts API](https://womenindata.co.uk/wp-json/wp/v2/posts?per_page=30)
+- [WiDS London event pages](https://www.widsworldwide.org/events/event/wids-london-university-of-greenwich/)
+- [GDG London events API (Women Techmakers and IWD)](https://gdg.community.dev/api/event_slim/for_chapter/995/?status=Completed&page_size=200) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -174,6 +190,7 @@ QuantumBlack (McKinsey) (local presence not confirmed)
   - **Blogs:** new posts on The Information Lab and Monzo blogs, Infinite Lambda authors, Datatonic, and dbt Labs case studies of London companies.
   - **dbt Summit 2026 speaker pages:** through the getdbt.com sitemap, for more London employers.
   - **Job ads:** only 3 were found. Try `site:` searches on Lever, Greenhouse and Ashby with "dbt London".
+  - **Women-in-data sources:** new Women in Data UK podcast episodes through the posts API, and new Data + Women London events. Find Anitha's full name through OakNorth. The IWD 2025 GDG London site did not respond, so retry it.
   - **Beyond the host:** look past The Information Lab for first-time speakers, so the line-up does not depend on the host.
 - **People to locate:** 17 people have no known location, and 96 are still `not_searched` on LinkedIn. Start with the unknown locations.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `london/london_dbt_companies.json`, the London dbt Meetup, `../enriched/london-dbt-meetup.json` and the region Greater London, with Oxford and Brighton counted as local.
@@ -185,3 +202,4 @@ QuantumBlack (McKinsey) (local presence not confirmed)
 | 2026-10-01 | 1 | First build from one research run: 75 companies, 120 people, 3 job ads at 2 companies, 22 past meetups. 33 people had spoken at the chapter. Tiers: 38 tier 1, 55 tier 2, 19 tier 3, 7 connectors, 1 organiser. Lead types: 104 proven speakers, 11 emerging voices, 1 featured, 4 with no public content. |
 | 2026-10-01 | 1 | Location pass from public pages: 13 people placed, 9 in the region and 4 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 12 people searched, 3 placed in London. 21 people are still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass: the Women in Data UK podcast, PyLadies London and WiDS London. 9 people added: 5 speakers and podcast guests, plus 4 connectors. London WiMLDS and R-Ladies London are inactive. Women Coding Community, Ladies of Code, Rise and GDG London had no data talks. |

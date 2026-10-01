@@ -7,19 +7,19 @@ This file holds what is specific to Montreal. The method, scoring rules, schema 
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 56 |
-| People | 67 |
+| Companies | 58 |
+| People | 73 |
 | Tier 1 leads | 12 |
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 53 |
 | Spoke at this chapter before | 15 |
-| Based in the region | 49 |
+| Based in the region | 54 |
 | Based elsewhere | 1 |
-| Location unknown | 17 |
+| Location unknown | 18 |
 | With a LinkedIn profile | 6 |
 | Job ads mentioning dbt | 40 |
 | Past chapter meetups | 6 |
@@ -50,11 +50,13 @@ Much of the local content is in French. French posts and talks are recorded as t
 
 ### Women-in-data communities
 
-Speakers come from women-focused groups' own events. Nobody's gender is recorded or guessed. 10 people are tagged `women_in_data_community`.
+Speakers come from women-focused groups' own events. Nobody's gender is recorded or guessed. 16 people are tagged `women_in_data_community`.
 
 - **Women on Snowflake (June 2024):** a [Snowflake Montreal User Group edition](https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting) with an all-women speaker line-up. It gave four speakers.
 - **[PyLadies Montréal](https://www.meetup.com/pyladiesmtl/):** two named speakers in March 2026. The talk topics are not listed.
-- **Women Techmakers Montreal:** runs through [GDG Montreal](https://www.meetup.com/gdg-montreal/). It gave organisers and ambassadors.
+- **Women Techmakers Montreal:** runs through [GDG Montreal](https://www.meetup.com/gdg-montreal/). It gave organisers and ambassadors. The GDG events API (`event_slim/for_chapter/954`) lists IWD events for 2023 to 2025. The [IWD 2025 page](https://gdg.community.dev/e/mctsvr/) names 12 organisers but no speakers. Raphaëlle Giraud (Vooban, data engineering lead) and Mimoh Solanki are recorded as connectors.
+- **[R-Ladies Montreal](https://www.meetup.com/rladies-montreal/):** relaunched in June 2025. Its 3 organisers are recorded as connectors. The 2024 sessions were introductions to R and Python at McGill, with no named speakers.
+- **[Women In The Loop](https://www.meetup.com/meetup-women-in-the-loop/):** a new study group (2026) that runs system design sessions. One session covered retrieval pipelines for AI. The organiser is recorded as a connector.
 - **[WiDS Montreal](https://www.widsworldwide.org/events/event/wids-montreal/):** the 2024 edition names an ambassador only.
 
 ### Job ads and locations
@@ -77,7 +79,10 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **[Data Developer Meetup MTL](https://luma.com/7yr2a677):** the page lists no panellists.
 - **[Montreal AI & Data Engineering meetup](https://www.meetup.com/montreal-data-engineering/):** off topic.
 - **[Montreal Women in ML & DS meetup](https://www.meetup.com/montreal-women-in-machine-learning-and-data-science/):** no events since June 2024.
-- **[R-Ladies Montreal](https://www.meetup.com/rladies-montreal/):** rebooting with intro sessions.
+- **[R-Ladies Montreal](https://www.meetup.com/rladies-montreal/):** rebooting with intro sessions. No talk has a named speaker.
+- **More women-in-tech groups with no data talks:** [Montréal Women in Agile](https://www.meetup.com/WiA-Montreal/) runs agile and leadership talks. [QueerTech Montreal](https://www.meetup.com/queertech-montreal/) runs career events. PyLadies Montréal has held no new talks since March 2026.
+- **French searches:** Meetup's group search for "femmes", "femmes en tech" and "elles" returns social groups only.
+- **Data + Women:** no Montreal Tableau user group or Data + Women page was found. Both guessed pages return 404.
 - **Web search:** the session limit stopped the extension after about 17 searches, and most results were job ads.
 
 ## 3. Companies looked at
@@ -88,7 +93,7 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Toronto file.
 
 <!-- companies:start -->
-55 companies and communities were looked at. A company is local when it has people or roles in the region.
+57 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (6)</summary>
 
@@ -114,9 +119,9 @@ agileDSS, Air Canada, Air Transat, Altitude Sports, Browns Shoes, CDPQ, Datafold
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (2)</summary>
+<details><summary><b>Uses a different stack</b> (4)</summary>
 
-GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal
+GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal, Vooban (local presence not confirmed), Women In The Loop
 
 </details>
 
@@ -136,7 +141,7 @@ GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal
 
 </details>
 
-<details><summary><b>Other sources checked</b> (31)</summary>
+<details><summary><b>Other sources checked</b> (41)</summary>
 
 - [Montréal dbt Meetup past events (meetup gql2)](https://www.meetup.com/montreal-dbt-meetup/)
 - [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
@@ -169,6 +174,16 @@ GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal
 - [dev.to dbt tag authors](https://dev.to/t/dbt) (nothing useful)
 - [Infostrux blog](https://www.infostrux.com/blog) (nothing useful)
 - [Datatonic insights](https://www.datatonic.com/insights/) (nothing useful)
+- [Meetup gql2 groupSearch near Montreal (women-in-data queries)](https://www.meetup.com/gql2)
+- [GDG Montreal events API (Women Techmakers Montreal)](https://gdg.community.dev/api/event_slim/for_chapter/954/?status=Completed&page_size=300)
+- [Women Techmakers Montreal IWD 2025](https://gdg.community.dev/e/mctsvr/)
+- [Women Techmakers Montreal IWD 2024](https://gdg.community.dev/e/mj8dh2/) (nothing useful)
+- [R-Ladies Montreal reboot (Meetup gql2)](https://www.meetup.com/rladies-montreal/events/308391618/)
+- [Women In The Loop (Meetup gql2)](https://www.meetup.com/meetup-women-in-the-loop/)
+- [Montréal Women in Agile (Meetup gql2)](https://www.meetup.com/WiA-Montreal/) (nothing useful)
+- [QueerTech Montreal (Meetup gql2)](https://www.meetup.com/queertech-montreal/) (nothing useful)
+- [PyLadies Montréal events since March 2026](https://www.meetup.com/PyLadiesMTL/) (nothing useful)
+- [Data + Women and the Montreal Tableau user group](https://usergroups.tableau.com/montreal-tableau-user-group/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -213,6 +228,7 @@ GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal
   - **Job ads:** refresh with `site:` searches on Lever, Greenhouse and Ashby, in English and French. The 40 ads date from 2026-09-24.
   - **Pages not read yet:** ConFoo sessions, Coalesce 2025 speakers and the Data Developer Meetup MTL panellists.
   - **PyLadies Montréal:** ask the organisers about the topics of the March 2026 talks.
+  - **Women Techmakers Montreal IWD speakers:** the 2024 and 2025 pages name no speakers. Ask Stefania Pecore or Mimoh Solanki for the line-ups.
   - **First-time speakers outside Maxa and agileDSS:** for example at Lightspeed, Workleap, AlayaCare and Poka.
 - **People to locate:** 53 people are still `not_searched` on LinkedIn. Start with the 17 unknown locations.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `montreal/montreal_dbt_companies.json`, the chapter `montreal-dbt-meetup`, `../enriched/montreal-dbt-meetup.json` and the region "Greater Montreal". Search in English and French, and record French content with an English description. Plan one Maxa speaker per event. Budget about 25 web searches.
@@ -225,3 +241,4 @@ GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal
 | 2026-10-01 | 2 | Extension run, mostly from older Snowflake Montreal User Group pages and the Maxa and agileDSS blogs: 67 people and 58 companies. Emerging voices rose from 2 to 11, and tier 1 from 2 to 12. |
 | 2026-10-01 | 2 | Location pass from public pages: no one qualified. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 12 people searched, 3 placed, 2 in the region and 1 elsewhere. 17 people are still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass: Women Techmakers Montreal IWD pages, R-Ladies Montreal and Women In The Loop. 6 new people, all organisers recorded as connectors. |

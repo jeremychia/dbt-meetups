@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find New York companies using dbt, and people who could speak at or attend the New York dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 3,
     "region": "New York (New York dbt Meetup)",
     "method": [
@@ -13,7 +13,11 @@
       "Lesson: meetup.com/gql2 answers groupSearch(filter:{query,lat,lon,radius}) and groupByUrlname events without a browser session, so a city's data meetups can be listed and read in two calls per group.",
       "Lesson: medium.com/feed returned 429 for every publication this run, so nyc company medium blogs were not scanned.",
       "Lesson: nyc women-in-data groups (data + women nyc, wimlds nyc, pyladies nyc) run tableau, ai-demo and llm events rather than analytics engineering talks; their organisers are the useful contacts.",
-      "v1 (2026-10-01): location pass. 50 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (24 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 67 people are still unknown."
+      "v1 (2026-10-01): location pass. 50 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (24 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 67 people are still unknown.",
+      "v2 (2026-10-01): women-in-data pass with fetches only (no web search, about 25 fetches): Meetup gql2 groupSearch near Manhattan with 24 queries, then the past events and hosts of GDG NYC, R-Ladies New York, NYC WiMLDS, NYC PyLadies, Girl Develop It NYC, Women in Software Engineering NYC, NYC Women in STEM, NYC Fintech Women and others; the GDG NYC Bevy events API; Lesbians Who Tech, Women in Big Data, WiDS, Women on Snowflake, She Loves Data and Girls in Tech checked. 16 people added (8 speakers, 8 organisers and hosts as connectors). Nobody's gender is recorded or inferred; no pronouns were self-published.",
+      "Lesson: the R-Ladies New York Meetup slug is rladiesnyc. The older alias rladies-newyork resolves to it, and the group has run talks and tutorials since 2024.",
+      "Lesson: GDG NYC posts its Women Techmakers events on Meetup with full speaker bios, so the gql2 events query is enough without the Bevy pages.",
+      "Lesson: the gql2 eventHosts field names each group's regular hosts and their profile city, which gives connectors when a group's site has no board page."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -53,44 +57,45 @@
       "Most dbt Summit 2026 speakers here are tied to nyc through their employer's headquarters, not a stated city. based_in_region is left null unless a page states nyc.",
       "Brooklyn Data organises the chapter. Its 20 authors fill most emerging-voice slots, and its consultants work remotely. Cap Brooklyn Data at one speaker per event and look for emerging voices at other employers.",
       "Women-in-data sources gave organisers and an ai panel, not analytics engineering speakers. Ask the Data + Women NYC organisers for introductions.",
-      "LinkedIn: 7 of 151 people have a profile url, taken word for word from search results. 144 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
+      "LinkedIn: 7 of 151 people have a profile url, taken word for word from search results. 144 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
+      "Women-in-data community speakers are recorded from event pages; employers are as stated on the event date and may be out of date."
     ],
     "counts": {
-      "companies": 89,
-      "people": 150,
+      "companies": 96,
+      "people": 166,
       "job_postings": 7,
       "companies_with_job_postings": 6,
-      "speaker_evidence_items": 99,
-      "unique_content_items": 78,
+      "speaker_evidence_items": 117,
+      "unique_content_items": 91,
       "people_with_linkedin": 24,
       "people_who_spoke_at_this_chapter": 65,
       "internal_vinted": 0,
       "level": {
-        "leadership": 60,
-        "working": 90
+        "leadership": 64,
+        "working": 102
       },
       "speaker_potential": {
         "high": 109,
-        "medium": 41
+        "medium": 57
       },
       "attendee_potential": {
         "high": 49,
-        "medium": 84,
+        "medium": 100,
         "low": 17
       },
       "priority_tier": {
         "1": 45,
-        "2": 71,
-        "3": 26,
-        "connector": 8
+        "2": 72,
+        "3": 33,
+        "connector": 16
       },
-      "watchlist_companies": 66,
+      "watchlist_companies": 71,
       "past_meetups": 30,
       "lead_type": {
-        "proven_speaker": 113,
-        "featured": 7,
+        "proven_speaker": 121,
+        "featured": 8,
         "emerging_voice": 24,
-        "no_public_content": 6
+        "no_public_content": 13
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
@@ -98,7 +103,7 @@
         "company_blog_scan": 30,
         "chapter_meetup_history": 65,
         "newsletter_or_blog": 2,
-        "women_in_data_community": 6
+        "women_in_data_community": 22
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -131,27 +136,27 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "genai & llm": 19,
+      "genai & llm": 25,
+      "community": 20,
       "data warehouse & platforms": 13,
       "performance & scale": 12,
+      "orchestration & ci/cd": 11,
       "data engineering": 10,
-      "orchestration & ci/cd": 10,
-      "community": 10,
+      "tools & ecosystem": 10,
       "semantic layer": 9,
       "dbt migration & adoption": 9,
+      "domain-specific use cases": 9,
+      "analytics engineering": 8,
       "data governance": 8,
-      "tools & ecosystem": 7,
-      "domain-specific use cases": 7,
-      "analytics engineering": 6,
+      "developer workflow": 7,
       "business intelligence": 6,
       "dbt best practices": 6,
-      "developer workflow": 6,
       "team & org design": 5,
+      "data quality & testing": 5,
       "dbt product features": 5,
-      "data quality & testing": 4,
+      "data modeling": 4,
       "industry trends": 4,
       "dbt product updates": 4,
-      "data modeling": 3,
       "modern data stack": 2,
       "project structure": 2
     }
@@ -6653,6 +6658,59 @@
           "suggested_talk_angle": "running a 100-person data and analytics team in consumer banking",
           "past_chapter_talks": [],
           "notes": null
+        },
+        {
+          "id": "shivika-arora",
+          "name": "Shivika Arora",
+          "pronouns": null,
+          "title": "Modernisation and engineer experience lead, JPMorgan Chase; Women Techmakers Ambassador NYC",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "GDG NYC (Women Techmakers)",
+              "title": "Women Techmakers Ambassador NYC and GDG NYC organiser",
+              "date": "2023-03-08",
+              "url": "https://www.meetup.com/gdgnyc/events/291935405/",
+              "content_id": "gdg-nyc-women-techmakerswomen-techmakers-ambassador-nyc-and",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Named as a GDG NYC organiser for International Women's Day NYC 2023. The bio says the role covers JPMorgan's Manhattan, Brooklyn, Silicon Valley and Seattle tech locations.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/291935405/",
+              "note": "organiser: Women Techmakers Ambassador NYC and GDG NYC organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Also a coach in the JPMorgan Women On The Move network."
         }
       ],
       "notes": null
@@ -9813,6 +9871,985 @@
         }
       ],
       "notes": "employer of a past New York dbt Meetup speaker"
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "New York"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "carolina-castro",
+          "name": "Carolina Castro",
+          "pronouns": null,
+          "title": "Developer Relations Program Manager, Google",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Women in AI/ML at Google NYC",
+              "title": "Women in AI townhall (moderator)",
+              "date": "2023-03-21",
+              "url": "https://www.meetup.com/gdgnyc/events/292262065/",
+              "content_id": "women-in-aiml-at-google-nycwomen-in-ai-townhall-moderator",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Moderated the Women in AI townhall with all speakers at the Women Techmakers event at Google NYC.",
+              "topics": [
+                "genai & llm",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "International Women's Day NYC 2023 at JP Morgan",
+              "title": "Women Techmakers at Google",
+              "date": "2023-03-23",
+              "url": "https://www.meetup.com/gdgnyc/events/291939113/",
+              "content_id": "international-womens-day-nyc-2023-at-jp-morganwomen-techmake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Opening talk on the Women Techmakers programme.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "host",
+              "event": "Power Women in AI/ML at Google NYC",
+              "title": "Welcome and intro to GDG",
+              "date": "2023-07-12",
+              "url": "https://www.meetup.com/gdgnyc/events/294478731/",
+              "content_id": "power-women-in-aiml-at-google-nycwelcome-and-intro-to-gdg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted the evening of LLM and generative AI talks.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/292262065/",
+              "note": "host: Women in AI townhall (moderator)"
+            },
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/291939113/",
+              "note": "talk: Women Techmakers at Google"
+            },
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/294478731/",
+              "note": "host: Welcome and intro to GDG"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Runs Women Techmakers events at Google's New York office; a route to Google speakers."
+        }
+      ],
+      "notes": "Hosts the GDG NYC and Women Techmakers events at its Chelsea office."
+    },
+    {
+      "id": "gdg-nyc",
+      "name": "GDG NYC",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "New York"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anna-nerezova",
+          "name": "Anna Nerezova",
+          "pronouns": null,
+          "title": "GDG NYC lead and Women Techmakers Ambassador; digital marketing and cloud transformation consultant",
+          "city": "New York",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "GDG NYC (Women Techmakers)",
+              "title": "Organiser, GDG NYC and Women Techmakers NYC",
+              "date": "2024-03-08",
+              "url": "https://www.meetup.com/gdgnyc/events/299195034/",
+              "content_id": "gdg-nyc-women-techmakersorganiser-gdg-nyc-and-women-techmake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-hosts GDG NYC events, including International Women's Day 2023 and 2024 and Power Women in AI/ML. The bio cites 15 years in data, analytics and optimisation and the Google Analytics 100 Women in Analytics list.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/299195034/",
+              "note": "organiser: Organiser, GDG NYC and Women Techmakers NYC"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated. Location (medium): Meetup host profile city. Hosted 15 GDG NYC events since 2024."
+        }
+      ],
+      "notes": "Google Developer Group NYC. Its Women Techmakers Ambassadors run International Women's Day and women-in-AI events every spring."
+    },
+    {
+      "id": "kantar",
+      "name": "Kantar",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "New York"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "paige-epstein",
+          "name": "Paige Epstein",
+          "pronouns": null,
+          "title": "Senior Analytics Consultant, Dx Analytics, Kantar",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Build with AI and IWD 'Impact the Future' (GDG NYC)",
+              "title": "Kantar x Google: Leverage LLM/AI to Make Processes More Efficient",
+              "date": "2024-04-29",
+              "url": "https://www.meetup.com/gdgnyc/events/300509530/",
+              "content_id": "build-with-ai-and-iwd-impact-the-future-gdg-nyckantar-x-goog",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-presented with Dean Manko on using LLMs to streamline digital analytics data collection.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/300509530/",
+              "note": "talk: Kantar x Google: Leverage LLM/AI to Make Processes More Efficient"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "How an analytics consultancy team uses LLMs to speed up data collection and reporting.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "dean-manko",
+          "name": "Dean Manko",
+          "pronouns": null,
+          "title": "Associate Analytics Consultant, Dx Analytics, Kantar",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Build with AI and IWD 'Impact the Future' (GDG NYC)",
+              "title": "Kantar x Google: Leverage LLM/AI to Make Processes More Efficient",
+              "date": "2024-04-29",
+              "url": "https://www.meetup.com/gdgnyc/events/300509530/",
+              "content_id": "build-with-ai-and-iwd-impact-the-future-gdg-nyckantar-x-goog",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-presented with Paige Epstein.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/300509530/",
+              "note": "talk: Kantar x Google: Leverage LLM/AI to Make Processes More Efficient"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Market research firm; its Dx Analytics team presented at the GDG NYC Women Techmakers event in 2024."
+    },
+    {
+      "id": "fitch-ratings",
+      "name": "Fitch Ratings",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "New York"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jayeeta-putatunda",
+          "name": "Jayeeta Putatunda",
+          "pronouns": null,
+          "title": "Senior Data Scientist, Fitch Ratings",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Power Women in AI/ML at Google NYC",
+              "title": "Instruction-Tuning an LLM: Build a Closed-domain Information Retrieval System using Flan-T5",
+              "date": "2023-07-12",
+              "url": "https://www.meetup.com/gdgnyc/events/294478731/",
+              "content_id": "power-women-in-aiml-at-google-nycinstructiontuning-an-llm-bu",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on tuning an open-source LLM for retrieval over domain documents.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/294478731/",
+              "note": "talk: Instruction-Tuning an LLM: Build a Closed-domain Information Retrieval System using Flan-T5"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "morgan-stanley",
+      "name": "Morgan Stanley",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "New York"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "supreet-kaur",
+          "name": "Supreet Kaur",
+          "pronouns": null,
+          "title": "Assistant Vice President, data strategist and data scientist, Morgan Stanley",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Women in AI/ML at Google NYC",
+              "title": "Speaker, Women in AI townhall",
+              "date": "2023-03-21",
+              "url": "https://www.meetup.com/gdgnyc/events/292262065/",
+              "content_id": "women-in-aiml-at-google-nycspeaker-women-in-ai-townhall",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker. The bio says the role owns several AI products and builds data science solutions.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/292262065/",
+              "note": "panel: Speaker, Women in AI townhall"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "phanom-noelani-parker",
+          "name": "Phanom Noelani Parker",
+          "pronouns": null,
+          "title": "Global Product Leader, Alexa (Data and AI), Amazon",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in AI/ML at Google NYC",
+              "title": "AI/ML - Solving Business Problems from Development to Production",
+              "date": "2023-03-21",
+              "url": "https://www.meetup.com/gdgnyc/events/292262065/",
+              "content_id": "women-in-aiml-at-google-nycaiml-solving-business-problems-fr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on taking AI and ML work from development to production.",
+              "topics": [
+                "genai & llm",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdgnyc/events/292262065/",
+              "note": "talk: AI/ML - Solving Business Problems from Development to Production"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "City not stated on the event page."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rladies-new-york",
+      "name": "R-Ladies New York",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "New York"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "R",
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://www.meetup.com/rladiesnyc/",
+          "note": "3,115 members; 37 events since 2023, about a third of them talks or tutorials."
+        }
+      ],
+      "people": [
+        {
+          "id": "jennifer-hill",
+          "name": "Jennifer Hill",
+          "pronouns": null,
+          "title": "Speaker, R-Ladies New York",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "R-Ladies New York",
+              "title": "Democratizing Methods for Causal Inference",
+              "date": "2024-06-25",
+              "url": "https://www.meetup.com/rladiesnyc/events/301611616/",
+              "content_id": "rladies-new-yorkdemocratizing-methods-for-causal-inference",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on a causal inference software tool built to help researchers use the method correctly, with a randomised test of the tool.",
+              "topics": [
+                "tools & ecosystem",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/events/301611616/",
+              "note": "talk: Democratizing Methods for Causal Inference"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the event page."
+        },
+        {
+          "id": "rika-gorn",
+          "name": "Rika Gorn",
+          "pronouns": null,
+          "title": "Speaker, R-Ladies New York",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "R-Ladies New York",
+              "title": "Getting Started with Quarto for R",
+              "date": "2024-05-01",
+              "url": "https://www.meetup.com/rladiesnyc/events/300613412/",
+              "content_id": "rladies-new-yorkgetting-started-with-quarto-for-r",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Introductory tutorial on building documents and reports with Quarto and R.",
+              "topics": [
+                "tools & ecosystem",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/events/300613412/",
+              "note": "talk: Getting Started with Quarto for R"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the event page."
+        },
+        {
+          "id": "mitzi-morris",
+          "name": "Mitzi Morris",
+          "pronouns": null,
+          "title": "Speaker, R-Ladies New York",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "R-Ladies New York",
+              "title": "BRMS2Stan: Intro to Stan for BRMS Users",
+              "date": "2025-05-07",
+              "url": "https://www.meetup.com/rladiesnyc/events/306939721/",
+              "content_id": "rladies-new-yorkbrms2stan-intro-to-stan-for-brms-users",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "In-person talk and tutorial on writing custom statistical models directly in Stan.",
+              "topics": [
+                "tools & ecosystem",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/events/306939721/",
+              "note": "talk: BRMS2Stan: Intro to Stan for BRMS Users"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the event page."
+        },
+        {
+          "id": "dorota-rizik",
+          "name": "Dorota Rizik",
+          "pronouns": null,
+          "title": "Event host, R-Ladies New York",
+          "city": "New York",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "R-Ladies New York",
+              "title": "Hosts R-Ladies New York events",
+              "date": "2024",
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "content_id": "rladies-new-yorkhosts-rladies-new-york-events",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host on 10 R-Ladies New York events since 2024, according to the Meetup event data.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "note": "host: Hosts R-Ladies New York events"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the Meetup group. Location (medium): Meetup host profile city."
+        },
+        {
+          "id": "jacki-buros",
+          "name": "Jacki Buros",
+          "pronouns": null,
+          "title": "Event host, R-Ladies New York",
+          "city": "Brooklyn",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "R-Ladies New York",
+              "title": "Hosts R-Ladies New York events",
+              "date": "2024",
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "content_id": "rladies-new-yorkhosts-rladies-new-york-events",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host on 5 R-Ladies New York events since 2024, according to the Meetup event data.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "note": "host: Hosts R-Ladies New York events"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the Meetup group. Location (medium): Meetup host profile city."
+        },
+        {
+          "id": "clara-wang",
+          "name": "Clara Wang",
+          "pronouns": null,
+          "title": "Event host, R-Ladies New York",
+          "city": "Brooklyn",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "R-Ladies New York",
+              "title": "Hosts R-Ladies New York events",
+              "date": "2024",
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "content_id": "rladies-new-yorkhosts-rladies-new-york-events",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host on 2 R-Ladies New York events since 2024, according to the Meetup event data.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "note": "host: Hosts R-Ladies New York events"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the Meetup group. Location (medium): Meetup host profile city."
+        },
+        {
+          "id": "mei-guan",
+          "name": "Mei Guan",
+          "pronouns": null,
+          "title": "Event host, R-Ladies New York",
+          "city": "New York",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "R-Ladies New York",
+              "title": "Hosts R-Ladies New York events",
+              "date": "2024",
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "content_id": "rladies-new-yorkhosts-rladies-new-york-events",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host on 2 R-Ladies New York events since 2024, according to the Meetup event data.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "note": "host: Hosts R-Ladies New York events"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the Meetup group. Location (medium): Meetup host profile city."
+        },
+        {
+          "id": "nicole-burke",
+          "name": "Nicole Burke",
+          "pronouns": null,
+          "title": "Event host, R-Ladies New York",
+          "city": "Brooklyn",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "R-Ladies New York",
+              "title": "Hosts R-Ladies New York events",
+              "date": "2024",
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "content_id": "rladies-new-yorkhosts-rladies-new-york-events",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host on 2 R-Ladies New York events since 2024, according to the Meetup event data.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladiesnyc/",
+              "note": "host: Hosts R-Ladies New York events"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the Meetup group. Location (medium): Meetup host profile city."
+        }
+      ],
+      "notes": "R-Ladies chapter (Meetup slug rladiesnyc). Runs talks, tutorials, lightning talks and book clubs. Its hosts are connectors."
     }
   ],
   "sources": {
@@ -9925,7 +10962,7 @@
         "name": "R-Ladies NYC",
         "url": "https://www.meetup.com/rladies-newyork/",
         "yielded": false,
-        "note": "partner promotions only"
+        "note": "partner promotions only; the group lives at meetup.com/rladiesnyc, which has talks since 2024 (see that entry)"
       },
       {
         "name": "Medium RSS feeds of nyc company blogs",
@@ -9950,6 +10987,126 @@
         "url": "https://www.builtinnyc.com/jobs/data-analytics/search/analytics-engineer",
         "yielded": true,
         "note": "clay, datavations, brainforge, zocdoc ads quote dbt"
+      },
+      {
+        "name": "Meetup gql2 groupSearch near Manhattan (women-in-data queries)",
+        "url": "https://www.meetup.com/gql2#nyc-wid",
+        "yielded": true,
+        "note": "Queries: women, pyladies, r-ladies, women techmakers, wids, women in data, women in tech, girls in tech, wimlds, data + women, she, women in ai, women in big data, lesbians who tech, women in analytics, aws women, women data science, women engineers, women in machine learning, women in cloud, she loves data, women who code, women in fintech. New groups: Girl Develop It NYC, Women in Software Engineering NYC, NYC Women in STEM, NYC Fintech Women, Real Women in Tech, Empowering Women of Color in Technology."
+      },
+      {
+        "name": "GDG NYC (Women Techmakers events)",
+        "url": "https://www.meetup.com/gdgnyc/",
+        "yielded": true,
+        "note": "IWD 2023 (Wix, JP Morgan), Women in AI/ML 2023, Power Women in AI/ML 2023, IWD 2024 and Build with AI 2024 named speakers with employers. 2025-26 events are AI hackathons and a cybersecurity talk night."
+      },
+      {
+        "name": "GDG NYC Bevy events API",
+        "url": "https://gdg.community.dev/api/event_slim/for_chapter/937/?status=Completed&page_size=100",
+        "yielded": false,
+        "note": "229 past events, but the list is unsorted and gives no speakers. The Meetup copies are easier."
+      },
+      {
+        "name": "R-Ladies New York (Meetup rladiesnyc)",
+        "url": "https://www.meetup.com/rladiesnyc/",
+        "yielded": true,
+        "note": "Talks by Jennifer Hill, Rika Gorn and Mitzi Morris since 2024; 5 regular hosts. The rladiesnyc.org board section did not render."
+      },
+      {
+        "name": "NYC WiMLDS (re-check)",
+        "url": "https://www.meetup.com/nyc-wimlds/events/",
+        "yielded": false,
+        "note": "Since the earlier pass: AI demo nights and LLM bootcamps only. The October 2025 panel is already recorded."
+      },
+      {
+        "name": "NYC PyLadies (re-check)",
+        "url": "https://www.meetup.com/nyc-pyladies/events/",
+        "yielded": false,
+        "note": "No event since October 2024."
+      },
+      {
+        "name": "Girl Develop It NYC",
+        "url": "https://www.meetup.com/girldevelopit/",
+        "yielded": false,
+        "note": "Paid classes (SQL, Python, AI). Instructors are not named."
+      },
+      {
+        "name": "Women in Software Engineering NYC",
+        "url": "https://www.meetup.com/women-in-software-engineering-nyc/",
+        "yielded": false,
+        "note": "Codesmith bootcamp sessions and AI hackathons. No data talks."
+      },
+      {
+        "name": "NYC Women in STEM",
+        "url": "https://www.meetup.com/nyc-stem/",
+        "yielded": false,
+        "note": "Book club and outings only."
+      },
+      {
+        "name": "NYC Fintech Women",
+        "url": "https://www.meetup.com/nyc-fintech-women/",
+        "yielded": false,
+        "note": "Four events since 2023, all vendor or crypto events."
+      },
+      {
+        "name": "Real Women in Tech",
+        "url": "https://www.meetup.com/real-women-in-tech/",
+        "yielded": false,
+        "note": "No events."
+      },
+      {
+        "name": "Empowering Women of Color in Technology",
+        "url": "https://www.meetup.com/source-coder-hub/",
+        "yielded": false,
+        "note": "One kickoff social in 2026."
+      },
+      {
+        "name": "New York AI 2030 (women in AI leadership group)",
+        "url": "https://www.meetup.com/new-york-ai-2030-women-in-ai-leadership-award-group/",
+        "yielded": false,
+        "note": "Responsible AI summits and receptions; no data talks."
+      },
+      {
+        "name": "Lesbians Who Tech Summit New York",
+        "url": "https://lesbianswhotech.org/",
+        "yielded": false,
+        "note": "2025 past speakers are executives with no talk titles. The 2026 summit runs 5-7 October in New York."
+      },
+      {
+        "name": "Women in Big Data (New York)",
+        "url": "https://www.womeninbigdata.org/?s=new+york",
+        "yielded": false,
+        "note": "No New York chapter. The chapter page returns 404."
+      },
+      {
+        "name": "WiDS Worldwide events",
+        "url": "https://www.widsworldwide.org/events/",
+        "yielded": false,
+        "note": "No New York regional event listed."
+      },
+      {
+        "name": "Women on Snowflake",
+        "url": "https://usergroups.snowflake.com/women-on-snowflake/",
+        "yielded": false,
+        "note": "Global Snowflake user group. Its listed events are in Europe; none in New York."
+      },
+      {
+        "name": "She Loves Data",
+        "url": "https://www.shelovesdata.com/",
+        "yielded": false,
+        "note": "No New York chapter or event."
+      },
+      {
+        "name": "Girls in Tech New York",
+        "url": "https://girlsintech.org/new-york/",
+        "yielded": false,
+        "note": "The site timed out."
+      },
+      {
+        "name": "Women Who Code",
+        "url": "https://womenwhocode.com/",
+        "yielded": false,
+        "note": "Closed in 2024; no New York events since."
       }
     ]
   },
@@ -10886,6 +12043,31 @@
       "name": "Apache Spark NYC",
       "url": "https://www.meetup.com/spark-nyc/",
       "note": "luma registration; datadog and rokt venues"
+    },
+    {
+      "name": "GDG NYC and Women Techmakers NYC",
+      "url": "https://www.meetup.com/gdgnyc/",
+      "note": "Google Developer Group NYC. Women Techmakers Ambassadors run International Women's Day and women-in-AI events, mostly at Google's office. Data and analytics talks in 2023 and 2024 (Kantar, Fitch Ratings, Morgan Stanley); since 2025 mostly AI hackathons."
+    },
+    {
+      "name": "R-Ladies New York",
+      "url": "https://www.meetup.com/rladiesnyc/",
+      "note": "R-Ladies chapter with talks, tutorials and lightning talks. Data talks since 2024: causal inference, Quarto, Stan. No dbt talks."
+    },
+    {
+      "name": "Girl Develop It NYC",
+      "url": "https://www.meetup.com/girldevelopit/",
+      "note": "Paid coding classes, including an Intro to SQL series in 2025. Instructors are not named."
+    },
+    {
+      "name": "Women in Software Engineering NYC",
+      "url": "https://www.meetup.com/women-in-software-engineering-nyc/",
+      "note": "Coding bootcamp promotion until 2024, then AI hackathons and founder events. No data or analytics talks."
+    },
+    {
+      "name": "Lesbians Who Tech Summit (New York)",
+      "url": "https://lesbianswhotech.org/",
+      "note": "Annual summit in New York in October. Executive and leadership speakers; no data talk titles listed."
     }
   ]
 }

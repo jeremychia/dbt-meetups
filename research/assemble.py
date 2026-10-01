@@ -164,10 +164,15 @@ def add_chapter_speakers(companies, past, chapter_name, city):
     """Every past chapter speaker becomes a person, so the cockpit can show who has spoken before."""
     index = {norm(p["name"]): p for c in companies for p in c["people"]}
     by_name = {norm(c["name"]): c for c in companies}
+    # a talk already credited to someone (for example a record merged under another spelling) adds nobody new
+    credited = {(t["date"], t["talk_title"]) for c in companies for p in c["people"] for t in p["past_chapter_talks"]}
     for m in past:
         for t in m["talks"]:
+            if (m["date"], t["title"]) in credited:
+                continue
             for name in re.split(r"\s*(?:&|,| and )\s*", t["speaker"] or ""):
-                if len(norm(name).split()) < 2 or norm(name) in index:
+                # a team listed as the speaker ("RVU team") is not a person
+                if len(norm(name).split()) < 2 or norm(name) in index or re.search(r"\bteams?\b", name, re.I):
                     continue
                 parts = [x.strip() for x in re.split(r",|@|\bat\b", t["company"] or "")]
                 parts = [x for x in parts if x and not re.fullmatch(r"(inc|ltd|llc|gmbh|se|ag|plc|corp)\.?", x, re.I)]

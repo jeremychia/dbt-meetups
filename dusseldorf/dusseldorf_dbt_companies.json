@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Düsseldorf companies using dbt, and people who could speak at or attend the Düsseldorf dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 3,
     "region": "Düsseldorf (Rhein-Ruhr dbt Meetup)",
     "method": [
@@ -17,7 +17,11 @@
       "Lesson: Data Saturday pages embed Sessionize; the /api/v2/<id>/view/Sessions and /view/Speakers embeds parse into speaker names and taglines.",
       "Lesson: consultancy blog RSS feeds (adesso, ORAYLIS) plus each post's author box are the best source of first-time speakers in NRW; they name the author and role, but rarely the office.",
       "Lesson: Medium (feeds and rss2json), dev.to and GitHub search were rate-limited from this session; web search returned mostly job ads for NRW dbt queries.",
-      "v2 (2026-10-01): location pass. 19 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (3 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 32 people are still unknown."
+      "v2 (2026-10-01): location pass. 19 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (3 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 32 people are still unknown.",
+      "v3 (2026-10-01): women-in-data pass with fetches only (no web search, about 15 fetches): Meetup gql2 groupSearch around Düsseldorf (70 km) with 17 queries, then past events and event hosts of Women in Big Data NRW, R-Ladies Cologne, Female Dev Club, Women in Tech Köln and a new Cologne networking group; GDG chapter search for NRW cities; PyLadies locations; the Women on Snowflake event list. 19 people added or updated (11 speakers, 8 hosts and organisers as connectors). Nobody's gender is recorded or inferred; no pronouns were self-published.",
+      "Lesson: Women in Big Data NRW's 2023 and 2024 Meetup event descriptions name speakers with employer and talk title. Since mid-2025 the group runs 'Data Dates' discussion evenings with no speakers.",
+      "Lesson: Meetup gql2 eventHosts{name member{name city}} returns each event's hosts with their profile city, which names a group's organisers when the page doesn't.",
+      "Lesson: gdg.community.dev has no GDG chapter for Düsseldorf, Cologne, Essen, Dortmund or Bonn, so there is no Women Techmakers route in NRW."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -56,50 +60,52 @@
       "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
       "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
       "Titles, employers and cities come from public pages and listings; most consultancy authors do not state their office, so based_in_region is often unknown. Verify before outreach.",
-      "LinkedIn: 9 of 69 people have a profile url, taken word for word from search results. 60 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
+      "LinkedIn: 9 of 69 people have a profile url, taken word for word from search results. 60 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
+      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred."
     ],
     "counts": {
-      "companies": 64,
-      "people": 69,
+      "companies": 74,
+      "people": 87,
       "job_postings": 49,
       "companies_with_job_postings": 24,
-      "speaker_evidence_items": 95,
-      "unique_content_items": 89,
+      "speaker_evidence_items": 114,
+      "unique_content_items": 102,
       "people_with_linkedin": 9,
       "people_who_spoke_at_this_chapter": 5,
       "internal_vinted": 0,
       "level": {
-        "working": 61,
-        "leadership": 8
+        "working": 75,
+        "leadership": 12
       },
       "speaker_potential": {
-        "high": 36,
-        "medium": 33
+        "high": 37,
+        "medium": 50
       },
       "attendee_potential": {
-        "high": 5,
-        "medium": 59,
-        "low": 5
+        "high": 6,
+        "medium": 73,
+        "low": 8
       },
       "priority_tier": {
         "1": 22,
-        "connector": 11,
-        "2": 23,
-        "3": 13
+        "connector": 19,
+        "2": 27,
+        "3": 19
       },
-      "watchlist_companies": 28,
+      "watchlist_companies": 36,
       "past_meetups": 2,
       "lead_type": {
-        "proven_speaker": 43,
+        "proven_speaker": 53,
         "featured": 6,
-        "emerging_voice": 20
+        "emerging_voice": 20,
+        "no_public_content": 8
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "conference_or_meetup_agenda": 44,
         "chapter_meetup_history": 5,
         "company_blog_scan": 18,
-        "women_in_data_community": 5,
+        "women_in_data_community": 23,
         "other": 3
       }
     },
@@ -133,31 +139,31 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "data warehouse & platforms": 29,
-      "genai & llm": 17,
-      "team & org design": 16,
-      "business intelligence": 13,
-      "community": 11,
-      "data engineering": 10,
+      "data warehouse & platforms": 32,
+      "community": 19,
+      "genai & llm": 19,
+      "team & org design": 18,
+      "business intelligence": 15,
+      "data engineering": 12,
+      "domain-specific use cases": 10,
       "data modeling": 9,
+      "data governance": 9,
       "data quality & testing": 8,
-      "data governance": 7,
-      "domain-specific use cases": 6,
+      "data mesh": 5,
       "dbt best practices": 4,
       "developer workflow": 4,
-      "data mesh": 4,
       "performance & scale": 4,
       "tools & ecosystem": 4,
+      "analytics engineering": 3,
       "project structure": 3,
       "semantic layer": 3,
       "dbt fundamentals": 3,
       "dbt migration & adoption": 2,
+      "career development": 2,
       "modern data stack": 2,
       "orchestration & ci/cd": 2,
       "industry trends": 2,
-      "dbt product updates": 1,
-      "analytics engineering": 1,
-      "career development": 1
+      "dbt product updates": 1
     }
   },
   "companies": [
@@ -389,6 +395,60 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "connector. taod runs a regular Cologne event programme: Data Lounge & Learn, BI & BBQ (8 Sep 2026) and Data & AI After Hours (11 Jun 2026, at Microsoft Köln)."
+        },
+        {
+          "id": "anna-maria-steffens",
+          "name": "Anna Maria Steffens",
+          "pronouns": null,
+          "title": "Data Consultant",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Decoding the Daily Life of a Data Consultant",
+              "date": "2023-06-29",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/293491997/",
+              "content_id": "women-in-big-data-nrwdecoding-the-daily-life-of-a-data-consu",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk at the women in big data nrw evening with picnic in düsseldorf, on how data consultants add value for clients.",
+              "topics": [
+                "career development",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/293491997/",
+              "note": "talk: Decoding the Daily Life of a Data Consultant"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "a day in the life of a taod data consultant: the dbt and platform work clients ask for",
+          "past_chapter_talks": [],
+          "notes": "Placed in the region from an in-person Women in Big Data NRW talk and a local employer; check before outreach."
         }
       ],
       "notes": "Cologne HQ (Oskar-Jäger-Str. 173). Describes itself as a long-standing German dbt Labs partner. Hosted the May 2025 chapter event and runs its own Cologne event series, including at Microsoft Köln. Most obvious repeat co-host. | Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24) | merged duplicate record 'taod Consulting GmbH'"
@@ -2891,7 +2951,7 @@
           "has_linkedin": true,
           "linkedin_confidence": "high",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
@@ -2916,6 +2976,24 @@
               "suggested_talk_angle": null,
               "url_precision": "direct",
               "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Tuning your ML Platform to Get Ahead in the GenAI Race: Challenges and Takeaways",
+              "date": "2024-06-27",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301414751/",
+              "content_id": "women-in-big-data-nrwtuning-your-ml-platform-to-get-ahead-in",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk as a thoughtworks data engineer at the women in big data nrw evening at thoughtworks cologne.",
+              "topics": [
+                "data warehouse & platforms",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -2931,6 +3009,10 @@
             {
               "url": "https://www.linkedin.com/in/innazykova/",
               "note": "location (high): same person as in the berlin_planning file: linkedin search result: Inna Zykova - Data Engineer - Thoughtworks, Düsseldorf https://www.linkedin.com/in/innazykova/ https://www.linkedin.com/in/innazykova/"
+            },
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301414751/",
+              "note": "talk: Tuning your ML Platform to Get Ahead in the GenAI Race: Challenges and Takeaways"
             }
           ],
           "confidence": "Medium",
@@ -2938,7 +3020,7 @@
           "priority_tier": 3,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Talk was about AI agents, not analytics engineering. Employer not stated. | location (high): same person as in the berlin_planning file: linkedin search result: Inna Zykova - Data Engineer - Thoughtworks, Düsseldorf https://www.linkedin.com/in/innazykova/ https://www.linkedin.com/in/innazykova/"
+          "notes": "Talk was about AI agents, not analytics engineering. Employer not stated. | location (high): same person as in the berlin_planning file: linkedin search result: Inna Zykova - Data Engineer - Thoughtworks, Düsseldorf https://www.linkedin.com/in/innazykova/ https://www.linkedin.com/in/innazykova/ | The 2024 event page lists Inna Zykova as a data engineer at Thoughtworks."
         },
         {
           "id": "liisel-jessop",
@@ -4972,7 +5054,220 @@
           "note": "Engineering/data blog scanned 2026-09-24"
         }
       ],
-      "people": [],
+      "people": [
+        {
+          "id": "corinna-meier",
+          "name": "Corinna Meier",
+          "pronouns": null,
+          "title": "Event host, Women in Big Data NRW",
+          "city": "Krefeld",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data NRW",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "content_id": "women-in-big-data-nrwevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "hosts women in big data nrw events on meetup.com since 2023.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to women in big data nrw speakers and venues",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile; employer not stated."
+        },
+        {
+          "id": "olga-schneider",
+          "name": "Olga Schneider",
+          "pronouns": null,
+          "title": "Event host, Women in Big Data NRW",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data NRW",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "content_id": "women-in-big-data-nrwevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "hosts women in big data nrw events on meetup.com since 2023.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to women in big data nrw speakers and venues",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile; employer not stated."
+        },
+        {
+          "id": "anastasia-dobasis",
+          "name": "Anastasia Dobasis",
+          "pronouns": null,
+          "title": "Event host, Women in Big Data NRW",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data NRW",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "content_id": "women-in-big-data-nrwevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "hosts women in big data nrw events on meetup.com.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to women in big data nrw speakers and venues",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile; employer not stated."
+        },
+        {
+          "id": "julia-kannenberg",
+          "name": "Julia Kannenberg",
+          "pronouns": null,
+          "title": "Event host, Women in Big Data NRW",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data NRW",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "content_id": "women-in-big-data-nrwevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "hosts women in big data nrw events on meetup.com.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to women in big data nrw speakers and venues",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile; employer not stated."
+        }
+      ],
       "notes": "1,150 members, Düsseldorf-based. Its 2025-26 events are small café 'Data Dates' (6-17 attendees) plus occasional company-hosted talks. Good partner for a co-branded evening."
     },
     {
@@ -6660,6 +6955,869 @@
       ],
       "people": [],
       "notes": null
+    },
+    {
+      "id": "vodafone",
+      "name": "Vodafone",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "juliette-aucamp",
+          "name": "Juliette Aucamp",
+          "pronouns": null,
+          "title": "Head of Business Engagement & Delivery, Data & Analytics (Consumer and Commercial Operations)",
+          "city": null,
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Driving Business Value",
+              "date": "2023-06-29",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/293491997/",
+              "content_id": "women-in-big-data-nrwdriving-business-value",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk on turning analytics and reporting output into insights the business adopts.",
+              "topics": [
+                "business intelligence",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/293491997/",
+              "note": "talk: Driving Business Value"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "getting the business to adopt what analytics teams build",
+          "past_chapter_talks": [],
+          "notes": "Placed in the region from an in-person Women in Big Data NRW talk and a local employer; check before outreach."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "picnic",
+      "name": "Picnic",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "friederike-kulik",
+          "name": "Friederike Kulik",
+          "pronouns": null,
+          "title": "Workforce Planning & Analytics Lead",
+          "city": null,
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Centralization of Workforce Planning",
+              "date": "2023-06-29",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/293491997/",
+              "content_id": "women-in-big-data-nrwcentralization-of-workforce-planning",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk on centralising workforce planning with a new scheduling system and employee app, and the data storage and usage behind it.",
+              "topics": [
+                "domain-specific use cases",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/293491997/",
+              "note": "talk: Centralization of Workforce Planning"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "analytics for workforce planning at picnic",
+          "past_chapter_talks": [],
+          "notes": "Placed in the region from an in-person Women in Big Data NRW talk and a local employer; check before outreach."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "vaillant-group",
+      "name": "Vaillant Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "adrian-krug",
+          "name": "Adrian Krug",
+          "pronouns": null,
+          "title": "(title not stated)",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Maximizing Company Value: From the Past to the Future with Data Architecture and Data Mesh Principles",
+              "date": "2024-09-05",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301614472/",
+              "content_id": "women-in-big-data-nrwmaximizing-company-value-from-the-past",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk at the women in big data nrw meetup at point 8 in dortmund.",
+              "topics": [
+                "data mesh",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301614472/",
+              "note": "talk: Maximizing Company Value: From the Past to the Future with Data Architecture and Data Mesh Principles"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "moving a manufacturer's data architecture towards data mesh principles",
+          "past_chapter_talks": [],
+          "notes": "Placed in the region from an in-person Women in Big Data NRW talk and a local employer; check before outreach."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "point-8",
+      "name": "Point 8",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Dortmund"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lena-linhoff",
+          "name": "Lena Linhoff",
+          "pronouns": null,
+          "title": "(title not stated)",
+          "city": "Dortmund",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Lessons learned from working on data-driven projects in mechanical engineering",
+              "date": "2024-09-05",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301614472/",
+              "content_id": "women-in-big-data-nrwlessons-learned-from-working-on-datadri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "joint talk with vanessa müller at the women in big data nrw meetup hosted by point 8 in dortmund.",
+              "topics": [
+                "domain-specific use cases",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301614472/",
+              "note": "talk: Lessons learned from working on data-driven projects in mechanical engineering"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "data projects in mechanical engineering",
+          "past_chapter_talks": [],
+          "notes": "Placed in the region from an in-person Women in Big Data NRW talk and a local employer; check before outreach."
+        },
+        {
+          "id": "vanessa-muller",
+          "name": "Vanessa Müller",
+          "pronouns": null,
+          "title": "(title not stated)",
+          "city": "Dortmund",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Lessons learned from working on data-driven projects in mechanical engineering",
+              "date": "2024-09-05",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301614472/",
+              "content_id": "women-in-big-data-nrwlessons-learned-from-working-on-datadri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "joint talk with lena linhoff at the women in big data nrw meetup hosted by point 8 in dortmund.",
+              "topics": [
+                "domain-specific use cases",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301614472/",
+              "note": "talk: Lessons learned from working on data-driven projects in mechanical engineering"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "data projects in mechanical engineering",
+          "past_chapter_talks": [],
+          "notes": "Placed in the region from an in-person Women in Big Data NRW talk and a local employer; check before outreach."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "volvo-car-deutschland",
+      "name": "Volvo Car Deutschland",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "eva-bledau",
+          "name": "Eva Bledau",
+          "pronouns": null,
+          "title": "Head of Digitalization",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "How Volvo Cars is Leveraging Vehicle Data",
+              "date": "2024-06-27",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301414751/",
+              "content_id": "women-in-big-data-nrwhow-volvo-cars-is-leveraging-vehicle-da",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk on use cases for car data at the women in big data nrw evening at thoughtworks cologne.",
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/301414751/",
+              "note": "talk: How Volvo Cars is Leveraging Vehicle Data"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "what a car maker does with vehicle data",
+          "past_chapter_talks": [],
+          "notes": "Location not stated."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "abn-amro-bank-frankfurt-branch",
+      "name": "ABN AMRO Bank (Frankfurt Branch)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "philipp-szutta",
+          "name": "Philipp Szutta",
+          "pronouns": null,
+          "title": "Head of Frankfurt Data Office & Product Owner",
+          "city": "Frankfurt am Main",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "(Big) Data Challenges in Finance",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/304321711/",
+              "content_id": "women-in-big-data-nrwbig-data-challenges-in-finance",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk on big data warehouse architecture under regulatory pressure, at the joint women in big data nrw evening in frankfurt.",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/304321711/",
+              "note": "talk: (Big) Data Challenges in Finance"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "data warehouse architecture in a regulated bank",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the Frankfurt event; the role is at the Frankfurt branch."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "slalom",
+      "name": "Slalom",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "laura-traverso",
+          "name": "Laura Traverso",
+          "pronouns": null,
+          "title": "Principal Data Scientist & AI Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "From Bold to Boring: Why AI Still Can't Do Ethics?",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/304321711/",
+              "content_id": "women-in-big-data-nrwfrom-bold-to-boring-why-ai-still-cant-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "joint talk with nicole staub-demaria at the women in big data nrw evening in frankfurt.",
+              "topics": [
+                "data governance",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/304321711/",
+              "note": "talk: From Bold to Boring: Why AI Still Can't Do Ethics?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "keeping ai systems on the right side of ethics and governance",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the Frankfurt event; location not stated."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "unstated-employer-rheinruhr",
+      "name": "Unstated employer (Rhein-Ruhr)",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "angela-musicsiedler",
+          "name": "Angela Music-Siedler",
+          "pronouns": null,
+          "title": "(title not stated)",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW",
+              "title": "Modern BI as a Greenfield Approach: Transforming Data for Success",
+              "date": "2023-11-16",
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/296624784/",
+              "content_id": "women-in-big-data-nrwmodern-bi-as-a-greenfield-approach-tran",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk on setting up a bi department from scratch, with data management, strategy and use cases, at women in big data nrw in düsseldorf.",
+              "topics": [
+                "business intelligence",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-nrw/events/296624784/",
+              "note": "talk: Modern BI as a Greenfield Approach: Transforming Data for Success"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "building a bi team from scratch",
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the event page. Placed in the region from an in-person Düsseldorf talk; check before outreach."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "female-dev-club",
+      "name": "Female Dev Club",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anna-maier",
+          "name": "Anna Maier",
+          "pronouns": null,
+          "title": "Organiser, Female Dev Club",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Female Dev Club",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/female-dev-club/",
+              "content_id": "female-dev-clubevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "organises the monthly female dev club talks in düsseldorf, including a 2023 talk on sql and a 2026 talk on data privacy.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/female-dev-club/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to female dev club speakers and the codecentric and ux&i venue",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile; employer not stated."
+        },
+        {
+          "id": "jennifer-lucifero",
+          "name": "Jennifer Lucifero",
+          "pronouns": null,
+          "title": "Organiser, Female Dev Club",
+          "city": "Mönchengladbach",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Female Dev Club",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/female-dev-club/",
+              "content_id": "female-dev-clubevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "organises the monthly female dev club talks in düsseldorf.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/female-dev-club/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to female dev club speakers",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile; employer not stated."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rladies-cologne",
+      "name": "R-Ladies Cologne",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "cosima-meyer",
+          "name": "Cosima Meyer",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Cologne",
+          "city": "Mannheim",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies Cologne",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/rladies-cologne/",
+              "content_id": "rladies-cologneevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "hosts r-ladies cologne's online events: a reproducible analytical pipelines book club in 2023-2024 and r package and llm talks in 2025.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-cologne/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to r-ladies speakers on reproducible pipelines",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile."
+        },
+        {
+          "id": "gabe-winter",
+          "name": "Gabe Winter",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Cologne",
+          "city": "Jena",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies Cologne",
+              "title": "Event host",
+              "date": "2026",
+              "url": "https://www.meetup.com/rladies-cologne/",
+              "content_id": "rladies-cologneevent-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "hosts r-ladies cologne's online events.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-cologne/",
+              "note": "organiser: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to r-ladies speakers",
+          "past_chapter_talks": [],
+          "notes": "City from the Meetup host profile."
+        }
+      ],
+      "notes": null
     }
   ],
   "sources": {
@@ -6893,6 +8051,54 @@
         "url": "https://usergroups.snowflake.com/germany/",
         "yielded": false,
         "note": "No NRW chapter (Berlin, Hamburg, Munich, Rhein-Main only)."
+      },
+      {
+        "name": "Women in Big Data NRW past events and hosts (Meetup gql2)",
+        "url": "https://www.meetup.com/women-in-big-data-nrw/",
+        "yielded": true,
+        "note": "45 past events. Named speakers at the June 2023 Picnic evening, November 2023 BI evening, June 2024 Thoughtworks evening, September 2024 Point 8 evening in Dortmund and December 2024 Frankfurt evening. 2025 and 2026 events are discussions without speakers."
+      },
+      {
+        "name": "R-Ladies Cologne (Meetup gql2)",
+        "url": "https://www.meetup.com/rladies-cologne/",
+        "yielded": true,
+        "note": "25 online events: a reproducible pipelines book club (2023-2024), R package workshops (2025) and an LLM tool-calling talk (December 2025). Speakers are from outside the region; 2 organisers recorded as connectors."
+      },
+      {
+        "name": "Female Dev Club (Meetup gql2)",
+        "url": "https://www.meetup.com/female-dev-club/",
+        "yielded": true,
+        "note": "36 monthly talks in Düsseldorf since 2023, mostly software and careers. A SQL talk in May 2023 and a data privacy talk in September 2026 don't name the speaker. 2 organisers recorded as connectors."
+      },
+      {
+        "name": "Women in Tech Köln (Meetup gql2)",
+        "url": "https://www.meetup.com/women-in-tech-koln/",
+        "yielded": false,
+        "note": "Career workshops and get-togethers; no data talks."
+      },
+      {
+        "name": "Networking in IT und Tech von Frauen für Frauen (Meetup gql2)",
+        "url": "https://www.meetup.com/networking-im-umfeld-von-it-und-digitalisierung/",
+        "yielded": false,
+        "note": "Founded August 2026 in Cologne, 14 members, no past events."
+      },
+      {
+        "name": "GDG chapter search for NRW cities",
+        "url": "https://gdg.community.dev/chapters/",
+        "yielded": false,
+        "note": "No GDG chapter for Düsseldorf, Cologne, Essen, Dortmund or Bonn, so no Women Techmakers events were found."
+      },
+      {
+        "name": "PyLadies locations",
+        "url": "https://pyladies.com/locations/",
+        "yielded": false,
+        "note": "No PyLadies chapter in NRW."
+      },
+      {
+        "name": "Women on Snowflake events",
+        "url": "https://usergroups.snowflake.com/women-on-snowflake/",
+        "yielded": false,
+        "note": "22 past events; none in NRW."
       }
     ]
   },
@@ -7035,6 +8241,21 @@
       "name": "Engineering Kiosk Rhine-Ruhr (meetup.com)",
       "url": "https://www.meetup.com/engineering-kiosk-rhine-ruhr/",
       "note": "General engineering meetup, Düsseldorf."
+    },
+    {
+      "name": "Women in Big Data NRW (current Meetup URL)",
+      "url": "https://www.meetup.com/women-in-big-data-nrw/",
+      "note": "Talk evenings with named speakers until December 2024, including BI, data mesh and analytics talks. Since mid-2025 it runs 'Data Dates' discussion evenings in Düsseldorf on data quality, data bias and data skills, with no speakers."
+    },
+    {
+      "name": "R-Ladies Cologne",
+      "url": "https://www.meetup.com/rladies-cologne/",
+      "note": "Online events: a reproducible analytical pipelines book club (2023-2024), R package workshops and an LLM tool-calling talk (2025). No dbt or BI talks."
+    },
+    {
+      "name": "Female Dev Club",
+      "url": "https://www.meetup.com/female-dev-club/",
+      "note": "Monthly talks in Düsseldorf at UX&I, supported by codecentric. Mostly software and careers; a data privacy talk in September 2026. No dbt or BI talks since 2024."
     }
   ]
 }

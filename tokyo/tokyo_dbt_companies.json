@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Tokyo companies using dbt, and people who could speak at or attend the Tokyo dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 3,
     "region": "Tokyo (Tokyo dbt Meetup)",
     "method": [
@@ -14,7 +14,12 @@
       "Lesson: Hatena-based company blogs answer /search?q=dbt with server-rendered HTML, so Timee, LayerX and ZOZO posts were found without search calls.",
       "Lesson: connpass blocks plain fetches (HTTP 403) and TECH PLAY returned 403, so Data Engineering Study and other connpass line-ups were not read.",
       "Lesson: Tokyo women-in-tech events found (Women Tech Terrace by CyberAgent, PyLadies Tokyo, WiDS Tokyo @ IBM) had no data-platform or dbt talks on record; no women-in-data community line-up yielded a candidate.",
-      "v1 (2026-10-01): location pass. 22 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (4 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 24 people are still unknown."
+      "v1 (2026-10-01): location pass. 22 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (4 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 24 people are still unknown.",
+      "v2 (2026-10-01): women-in-data pass with fetches only (no web search, about 28 fetches): Meetup gql2 groupSearch near Tokyo with 17 queries, then the past events of Women in AI Japan and Tokyo WiMLDS; connpass searches and group pages (PyLadies Tokyo, WTM Tokyo, ML女子部, GTUG Girls, Snowflake女子会 collaborations), the Snowflake女子会 note feed, the PyLadies Tokyo site and the WiDS site search. 20 people added (5 speakers and 15 connectors, 6 of whom also gave talks), plus organiser evidence for one existing person. Nobody's gender is recorded or inferred; no pronouns were self-published.",
+      "Lesson: connpass event and search pages now answer a plain curl with a browser user agent; earlier runs got HTTP 403.",
+      "Lesson: Snowflake女子会 is the most useful women-in-data community in Tokyo. Its connpass collaboration pages list all 11 organisers with employers, and its note.com feed (note.com/snowvillage_wmn/rss) has event reports with speakers. Its own events are on TECH PLAY, which returns HTTP 403.",
+      "Lesson: Meetup groupSearch near Tokyo returns mostly social groups for 'women'; only Women in AI Japan and Tokyo WiMLDS (one event, 2019) are women-in-data groups there. Japanese communities run on connpass instead.",
+      "Lesson: wids-tokyo.jp is now an unrelated site; WiDS Tokyo events are only on widsworldwide.org and connpass."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -56,42 +61,46 @@
       "No women-in-data community source yielded candidates, and gender was never inferred. The organiser should ask the chapter hosts and Snowflake Data Heroes for introductions to balance the line-up.",
       "No job postings were collected: the web-search budget ran out before the job-ad searches.",
       "Only public professional information is recorded; no contact details. Pronouns only when self-stated (none found).",
-      "LinkedIn: 4 of 126 people have a profile url, taken word for word from search results. 122 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
+      "LinkedIn: 4 of 126 people have a profile url, taken word for word from search results. 122 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
+      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred.",
+      "Most Snowflake女子会 organisers publish under a handle; names are recorded as written, with the handle."
     ],
     "counts": {
-      "companies": 73,
-      "people": 126,
+      "companies": 87,
+      "people": 146,
       "job_postings": 0,
       "companies_with_job_postings": 0,
-      "speaker_evidence_items": 111,
-      "unique_content_items": 100,
+      "speaker_evidence_items": 138,
+      "unique_content_items": 115,
       "people_with_linkedin": 4,
       "people_who_spoke_at_this_chapter": 40,
       "internal_vinted": 0,
       "level": {
-        "leadership": 11,
-        "working": 115
+        "leadership": 14,
+        "working": 132
       },
       "speaker_potential": {
-        "high": 122,
-        "medium": 4
+        "high": 123,
+        "medium": 23
       },
       "attendee_potential": {
-        "high": 91,
-        "medium": 30,
+        "high": 94,
+        "medium": 47,
         "low": 5
       },
       "priority_tier": {
         "1": 103,
-        "2": 20,
+        "2": 23,
+        "connector": 16,
         "organiser": 2,
-        "connector": 1
+        "3": 2
       },
-      "watchlist_companies": 19,
+      "watchlist_companies": 30,
       "past_meetups": 19,
       "lead_type": {
-        "proven_speaker": 44,
+        "proven_speaker": 55,
         "emerging_voice": 80,
+        "no_public_content": 9,
         "featured": 2
       },
       "people_with_self_stated_pronouns": 0,
@@ -99,6 +108,7 @@
         "company_blog_scan": 82,
         "conference_or_meetup_agenda": 3,
         "chapter_meetup_history": 43,
+        "women_in_data_community": 21,
         "newsletter_or_blog": 2
       }
     },
@@ -132,9 +142,10 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "data warehouse & platforms": 23,
+      "community": 28,
+      "data warehouse & platforms": 25,
+      "genai & llm": 20,
       "developer workflow": 16,
-      "genai & llm": 15,
       "dbt best practices": 14,
       "orchestration & ci/cd": 14,
       "dbt product features": 13,
@@ -143,16 +154,15 @@
       "data quality & testing": 11,
       "data governance": 10,
       "data modeling": 10,
-      "community": 10,
-      "data engineering": 8,
+      "data engineering": 10,
       "dbt fundamentals": 8,
+      "career development": 8,
+      "analytics engineering": 7,
       "dbt migration & adoption": 7,
       "project structure": 6,
       "semantic layer": 6,
-      "analytics engineering": 5,
-      "business intelligence": 4,
+      "business intelligence": 6,
       "modern data stack": 4,
-      "career development": 3,
       "dbt product updates": 2,
       "domain-specific use cases": 2,
       "team & org design": 2,
@@ -2317,7 +2327,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "women_in_data_community"
           ],
           "mentions_dbt": false,
           "speaker_evidence": [
@@ -2338,6 +2349,23 @@
               "suggested_talk_angle": null,
               "url_precision": "direct",
               "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo. Published the joint hands-on event and its materials.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -2345,6 +2373,10 @@
             {
               "url": "https://zenn.dev/datum_studio/articles/1058d49960f006",
               "note": "blog: SPCS をフル活用して Snowflake で完結するデータ基盤を作ってみた ～SWT Tokyo DATUM STUDIO ブース解説"
+            },
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
             }
           ],
           "confidence": "Medium",
@@ -2693,6 +2725,59 @@
             }
           ],
           "notes": "location (high): linkedin search result: Yuta Hishinuma - Snowflake Data Superhero / Chura DATA Inc. CTO, Naha, Okinawa, Japan https://www.linkedin.com/in/yuta-hishinuma/"
+        },
+        {
+          "id": "tshizuku03",
+          "name": "kayo (tshizuku03)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; Chura Data",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
         }
       ],
       "notes": "Okinawa-based consultancy with remote staff; CTO Yuta Hishinuma is a past chapter speaker. | employer of a past Tokyo dbt Meetup speaker | merged duplicate record 'Chura Data Inc.'"
@@ -4680,6 +4765,81 @@
           "suggested_talk_angle": "when exposures, metrics and the Semantic Layer pay off",
           "past_chapter_talks": [],
           "notes": null
+        },
+        {
+          "id": "mizuhoruisui",
+          "name": "Mizuho (mizuhoruisui)",
+          "pronouns": null,
+          "title": "Engineer, truestar; organiser, Snowflake女子会",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake女子会 #8",
+              "title": "キャリア迷子のわたしがコミュニティに参加する意義とは",
+              "date": "2026-08-27",
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "content_id": "snowflake-8",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Career talk on what joining a data community gives an engineer.",
+              "topics": [
+                "career development",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            },
+            {
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "note": "talk: キャリア迷子のわたしがコミュニティに参加する意義とは"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
         }
       ],
       "notes": null
@@ -4785,6 +4945,80 @@
           "suggested_talk_angle": "auto-generated ER diagrams and docs from dbt",
           "past_chapter_talks": [],
           "notes": "Qiita org shows CyberAgent; nine dbt posts 2024-2026."
+        },
+        {
+          "id": "miyu-nitamago",
+          "name": "みゆう (miyu_nitamago)",
+          "pronouns": null,
+          "title": "Data role, CyberAgent; organiser, Snowflake女子会",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo. Listed at Sumitomo Rubber Industries in April 2026.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake女子会 #8",
+              "title": "『このままでいいのかな？』から一歩踏み出した、私のデータキャリア選択",
+              "date": "2026-08-27",
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "content_id": "snowflake-8",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Career talk on moving to Tokyo and changing jobs for a data career.",
+              "topics": [
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            },
+            {
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "note": "talk: 『このままでいいのかな？』から一歩踏み出した、私のデータキャリア選択"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer changed between the two Snowflake女子会 pages: Sumitomo Rubber Industries (April 2026), CyberAgent (August 2026)."
         }
       ],
       "notes": null
@@ -5473,6 +5707,60 @@
           "suggested_talk_angle": "teaching data modelling inside a research company",
           "past_chapter_talks": [],
           "notes": null
+        },
+        {
+          "id": "miyahara-intage",
+          "name": "宮原栞梨 (Miyahara)",
+          "pronouns": null,
+          "title": "Data engineer, Data Technology department, INTAGE",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "pUG x Snowflake女子会 hands-on",
+              "title": "インテージのパネルデータをSnowflakeへ。POS-isの土台を支えるTROCCO活用術",
+              "date": "2026-04-28",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "pug-x-snowflake-handsonsnowflakeposistrocco",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "How INTAGE loads its consumer panel data and masters into Snowflake with TROCCO for the POS-is sales analytics product.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "talk: インテージのパネルデータをSnowflakeへ。POS-isの土台を支えるTROCCO活用術"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Loading a large panel dataset into Snowflake and modelling it for a sales analytics product.",
+          "past_chapter_talks": [],
+          "notes": "Spoke in person at primeNumber in Tokyo. Moved from data science to data engineering in 2025."
         }
       ],
       "notes": null
@@ -8187,6 +8475,114 @@
             }
           ],
           "notes": null
+        },
+        {
+          "id": "satoru-mag",
+          "name": "Satoru Nakamura (satoru_mag)",
+          "pronouns": null,
+          "title": "Analytics engineer and data consultant (BigQuery)",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "生成AI×データ分析 活用 Meetup 2025 (ML女子部)",
+              "title": "データ分析エージェントでBQを活用",
+              "date": "2025-11-14",
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "content_id": "ai-meetup-2025-mlbq",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Using a data analysis agent with BigQuery.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "note": "talk: データ分析エージェントでBQを活用"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Analytics engineering on BigQuery with an AI analysis agent on top.",
+          "past_chapter_talks": [],
+          "notes": "Spoke in person at Google Shibuya. Describes the work as analytics engineering and data consulting; employer not stated."
+        },
+        {
+          "id": "masked-analyze",
+          "name": "マスクドアナライズ (Masked Analyze)",
+          "pronouns": null,
+          "title": "Independent AI and data science consultant and author",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "生成AI×データ分析 活用 Meetup 2025 (ML女子部)",
+              "title": "社内のおじさんと一緒に考える生成AI導入推進",
+              "date": "2025-11-14",
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "content_id": "ai-meetup-2025-mlai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Rolling out generative AI inside a company.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "note": "talk: 社内のおじさんと一緒に考える生成AI導入推進"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Author of books on AI and data analysis projects. Publishes under a pseudonym."
         }
       ],
       "notes": "employer of a past Tokyo dbt Meetup speaker"
@@ -9004,6 +9400,1122 @@
         }
       ],
       "notes": "employer of a past Tokyo dbt Meetup speaker"
+    },
+    {
+      "id": "snowflake-snowflake-womens-community",
+      "name": "Snowflake女子会 (Snowflake women's community)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake",
+        "TROCCO"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://pug.connpass.com/event/389174/",
+          "note": "pUG x Snowflake女子会 hands-on, 2026-04-28, at primeNumber; lists all 11 organisers with employers."
+        },
+        {
+          "type": "community",
+          "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+          "note": "Report on Snowflake女子会 #8 (2026-08-27): a session on context engineering and 3 career talks."
+        }
+      ],
+      "people": [],
+      "notes": "Women-led Snowflake user community (planning, running and speaking are all by women; anyone may attend). Part of the SnowVillage community. Ran meetup #8 in August 2026 at DATUM STUDIO and a joint hands-on with primeNumber User Group in April 2026. Its 11 organisers are connectors."
+    },
+    {
+      "id": "infotech",
+      "name": "Infotech (インフォテック株式会社)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yamashita-infotech",
+          "name": "山下由紀子 (Yamashita)",
+          "pronouns": null,
+          "title": "Business Solutions Group, Infotech",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "pUG x Snowflake女子会 hands-on",
+              "title": "営業データを現場へ見える化！ TROCCO × Snowflakeで作るかんたんデータパイプラインと、Snowflake Cortex AI関数に分析を任せてみた話",
+              "date": "2026-04-28",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "pug-x-snowflake-handson-trocco-snowflakesnowflake-cortex-ai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Joined up sales data across departments with TROCCO and Snowflake, built dashboards, and used Snowflake Cortex AI functions for analysis.",
+              "topics": [
+                "data engineering",
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "talk: 営業データを現場へ見える化！ TROCCO × Snowflakeで作るかんたんデータパイプラインと、Snowflake Cortex AI関数に分析を任せてみた話"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "A first internal data pipeline and dashboards for a sales team, from an application developer's point of view.",
+          "past_chapter_talks": [],
+          "notes": "Spoke in person at primeNumber in Tokyo for Snowflake女子会."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cccmk-holdings-v-point-marketing",
+      "name": "CCCMK Holdings / V Point Marketing",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yuppi-works",
+          "name": "ゆき (yuppi_works)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; V Point Marketing",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake女子会 #8",
+              "title": "結婚と同時に地方移住⁉︎ 同じ会社で働き続けられた方法とは",
+              "date": "2026-08-27",
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "content_id": "snowflake-8",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Career talk on staying in a Tokyo data job after moving away from the capital.",
+              "topics": [
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            },
+            {
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "note": "talk: 結婚と同時に地方移住⁉︎ 同じ会社で働き続けられた方法とは"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Listed at CCCMK Holdings in April 2026 and at V Point Marketing in August 2026. Works remotely from outside Greater Tokyo."
+        },
+        {
+          "id": "nekosuki",
+          "name": "Naho (__nekosuki_)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; CCCMK Holdings",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "snowflake-japan",
+      "name": "Snowflake (Japan)",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tomowk1",
+          "name": "tomo Wakamatsu (tomowk1)",
+          "pronouns": null,
+          "title": "Snowflake Japan; organiser, Snowflake女子会",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Snowflake女子会 note",
+              "title": "Snowflake女子会 #8 〜語って、広げる。女性エンジニアのキャリア〜 イベントレポート",
+              "date": "2026-08-27",
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "content_id": "snowflake-notesnowflake-8",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Wrote the report on meetup #8.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            },
+            {
+              "url": "https://note.com/snowvillage_wmn/n/n2c596a3d08c9",
+              "note": "blog: Snowflake女子会 #8 〜語って、広げる。女性エンジニアのキャリア〜 イベントレポート"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "daihatsu-motor",
+      "name": "Daihatsu Motor",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "dkiymkybi",
+          "name": "Iyama (dkiymkybi)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; Daihatsu Motor",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "motex",
+      "name": "MOTEX",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sao-08",
+          "name": "しぃさぁ (sao_08)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; MOTEX",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ihi",
+      "name": "IHI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "haru-hamutech",
+          "name": "Haru (Haru_Hamutech)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; IHI",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "methodologic",
+      "name": "Methodologic (株式会社メソドロジック)",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "usakoyama",
+          "name": "kaori (usakoyama)",
+          "pronouns": null,
+          "title": "Organiser, Snowflake女子会; Methodologic",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake女子会",
+              "title": "Snowflake女子会 organising committee",
+              "date": "2026-04",
+              "url": "https://pug.connpass.com/event/389174/",
+              "content_id": "snowflakesnowflake-organising-committee",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an organiser (幹事) of Snowflake女子会, the women-led Snowflake user community in Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://pug.connpass.com/event/389174/",
+              "note": "organiser: Snowflake女子会 organising committee"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "women-in-ai-japan",
+      "name": "Women in AI Japan",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "eriko-toda",
+          "name": "Eriko Toda (戸田江里子)",
+          "pronouns": null,
+          "title": "Ambassador, Women in AI Japan",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in AI Japan",
+              "title": "Women in AI Japan ambassador and host",
+              "date": "2025-04-03",
+              "url": "https://www.meetup.com/women-in-ai-japan/events/307004841/",
+              "content_id": "women-in-ai-japanwomen-in-ai-japan-ambassador-and-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosts most Women in AI Japan events and moderated the April 2025 lightning talks at CIC Tokyo.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-ai-japan/events/307004841/",
+              "note": "organiser: Women in AI Japan ambassador and host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "kana-minami",
+          "name": "Kana Minami",
+          "pronouns": null,
+          "title": "Host, Women in AI Japan",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in AI Japan",
+              "title": "Women in AI Japan event host",
+              "date": "2025-12-22",
+              "url": "https://www.meetup.com/women-in-ai-japan/",
+              "content_id": "women-in-ai-japanwomen-in-ai-japan-event-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted Women in AI Japan seminars from 2023 to December 2025.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-ai-japan/",
+              "note": "organiser: Women in AI Japan event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Japanese chapter of Women in AI, run with Happy Digital Academy (HappyCom). 144 Meetup members. Mostly AI and career seminars; a few data science and web analytics talks since 2023."
+    },
+    {
+      "id": "happy-analytics",
+      "name": "HAPPY ANALYTICS",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "taku-ogawa",
+          "name": "Taku Ogawa (小川卓)",
+          "pronouns": null,
+          "title": "CEO, HAPPY ANALYTICS",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Happy Digital x Women in AI Japan seminar",
+              "title": "現場のプロが知っておきたい Web分析と改善とは",
+              "date": "2025-02-13",
+              "url": "https://www.meetup.com/women-in-ai-japan/events/306097652/",
+              "content_id": "happy-digital-x-women-in-ai-japan-seminar-web",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Online interview on web analytics with GA4: where to dig into data, how to set priorities and how to win support inside the company.",
+              "topics": [
+                "business intelligence",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-ai-japan/events/306097652/",
+              "note": "talk: 現場のプロが知っておきたい Web分析と改善とは"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "KPI design and web analytics data that analytics engineers model for marketing teams.",
+          "past_chapter_talks": [],
+          "notes": "Online talk. A veteran web analyst with more than 700 talks, formerly at Recruit, CyberAgent and Amazon Japan."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "yokohama-city-university",
+      "name": "Yokohama City University",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Yokohama"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yoko-ono-ycu",
+          "name": "Yoko Ono (小野陽子)",
+          "pronouns": null,
+          "title": "Associate Professor, School of Data Science, Yokohama City University; WiDS Tokyo @ YCU ambassador",
+          "city": "Yokohama",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in AI Japan seminar",
+              "title": "ロールモデルに会いに行こう ―データサイエンス力を磨く！―",
+              "date": "2023-11-29",
+              "url": "https://www.meetup.com/women-in-ai-japan/events/297367669/",
+              "content_id": "women-in-ai-japan-seminar",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Online interview on the data science skills companies need and the university's data science programme.",
+              "topics": [
+                "career development",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "WiDS Tokyo @ Yokohama City University",
+              "title": "WiDS Tokyo @ YCU ambassador",
+              "date": "2023",
+              "url": "https://www.widsworldwide.org/events/event/wids-tokyo-yokohama-city-university-2/",
+              "content_id": "wids-tokyo-yokohama-city-universitywids-tokyo-ycu-ambassador",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Ambassador of the WiDS Tokyo regional event at Yokohama City University since 2018.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-ai-japan/events/297367669/",
+              "note": "talk: ロールモデルに会いに行こう ―データサイエンス力を磨く！―"
+            },
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-tokyo-yokohama-city-university-2/",
+              "note": "organiser: WiDS Tokyo @ YCU ambassador"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Route to WiDS Tokyo speakers and data science students in Yokohama."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ml-women-in-ml-japan",
+      "name": "ML女子部 (Women in ML Japan)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "BigQuery",
+        "Google Cloud"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://women-ml.connpass.com/event/366580/",
+          "note": "生成AI×データ分析 活用 Meetup 2025, 2025-11-14, Google Shibuya: 3 talks and a panel."
+        }
+      ],
+      "people": [],
+      "notes": "Women-run machine learning and data analysis study group (anyone may attend), usually at Google Shibuya. Held a generative AI and data analysis meetup in November 2025."
+    },
+    {
+      "id": "unerry",
+      "name": "unerry",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sayaka-ito-unerry",
+          "name": "Sayaka Ito (伊藤清香)",
+          "pronouns": null,
+          "title": "CTO, unerry; organiser, ML女子部; Jagu'e'r committee",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "生成AI×データ分析 活用 Meetup 2025",
+              "title": "パネルディスカッション「生成AIとデータ分析」 (moderator)",
+              "date": "2025-11-14",
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "content_id": "ai-meetup-2025ai-moderator",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Moderated a panel on generative AI and data analysis at Google Shibuya.",
+              "topics": [
+                "genai & llm",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "WTM Tokyo International Women's Day 2025",
+              "title": "エンジニアとしての自己肯定感：インポスターの壁を破る",
+              "date": "2025-03-22",
+              "url": "https://wtm-tokyo.connpass.com/event/342888/",
+              "content_id": "wtm-tokyo-international-womens-day-2025",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Career talk at the Women Techmakers Tokyo IWD event at LayerX.",
+              "topics": [
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "note": "panel: パネルディスカッション「生成AIとデータ分析」 (moderator)"
+            },
+            {
+              "url": "https://wtm-tokyo.connpass.com/event/342888/",
+              "note": "talk: エンジニアとしての自己肯定感：インポスターの壁を破る"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Organiser of ML女子部 and a committee member of Jagu'e'r, the Japan Google Cloud user group. A route to women in the Google Cloud data community."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "canva-japan",
+      "name": "Canva Japan",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kt-data-saber",
+          "name": "KT (DATA_Saber)",
+          "pronouns": null,
+          "title": "Community Lead, Canva Japan; founder of the DATA Saber programme",
+          "city": "Tokyo",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "生成AI×データ分析 活用 Meetup 2025 (ML女子部)",
+              "title": "CANVAにおける生成AI活用事例",
+              "date": "2025-11-14",
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "content_id": "ai-meetup-2025-mlcanvaai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Generative AI use at Canva.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://women-ml.connpass.com/event/366580/",
+              "note": "talk: CANVAにおける生成AI活用事例"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Founded the DATA Saber data visualisation certification (over 3,100 graduates) and led Tableau and Snowflake communities in Japan. A connector to the Japanese BI community."
+        }
+      ],
+      "notes": null
     }
   ],
   "sources": {
@@ -9093,6 +10605,96 @@
         "url": "https://techplay.jp/event/924859",
         "yielded": false,
         "note": "women-in-data check: TECH PLAY returned 403"
+      },
+      {
+        "name": "Meetup gql2 groupSearch near Tokyo",
+        "url": "https://www.meetup.com/gql2",
+        "yielded": true,
+        "note": "Queries: women, pyladies, r-ladies, women techmakers, wids, women in data, women in tech, girls in tech, wimlds, data + women, she, women who code, women in big data, 女性, lesbians who tech, aws women. Only Women in AI Japan and Tokyo WiMLDS are women-in-data groups."
+      },
+      {
+        "name": "Women in AI Japan past events (Meetup gql2)",
+        "url": "https://www.meetup.com/women-in-ai-japan/",
+        "yielded": true,
+        "note": "16 events since 2023; a web analytics interview (2025) and a data science interview (2023)."
+      },
+      {
+        "name": "Tokyo WiMLDS (Meetup gql2)",
+        "url": "https://www.meetup.com/tokyo-women-in-machine-learning-and-data-science/",
+        "yielded": false,
+        "note": "138 members; one event, in 2019."
+      },
+      {
+        "name": "Snowflake女子会 x pUG hands-on (connpass)",
+        "url": "https://pug.connpass.com/event/389174/",
+        "yielded": true,
+        "note": "2026-04-28 at primeNumber; 2 data talks and 11 named organisers."
+      },
+      {
+        "name": "Snowflake女子会 note feed",
+        "url": "https://note.com/snowvillage_wmn/rss",
+        "yielded": true,
+        "note": "4 posts; the #8 report (2026-08-27) names 3 career speakers."
+      },
+      {
+        "name": "Snowflake女子会 on TECH PLAY",
+        "url": "https://techplay.jp/community/snowvillage_wmn",
+        "yielded": false,
+        "note": "HTTP 403 to plain fetches; the community's own event pages were not read."
+      },
+      {
+        "name": "ML女子部 (connpass)",
+        "url": "https://women-ml.connpass.com/event/",
+        "yielded": true,
+        "note": "Generative AI and data analysis meetup, 2025-11-14, with 3 talks and a panel."
+      },
+      {
+        "name": "PyLadies Tokyo (connpass)",
+        "url": "https://pyladies-tokyo.connpass.com/",
+        "yielded": false,
+        "note": "Meetups #102 to #111 since 2025 are Python, AI agent and satellite data workshops; no data platform talks, and speakers are not named."
+      },
+      {
+        "name": "PyLadies Tokyo site",
+        "url": "https://tokyo.pyladies.com/",
+        "yielded": false,
+        "note": "Redirects to pyladiestokyo.github.io; no organiser names."
+      },
+      {
+        "name": "WTM Tokyo (connpass)",
+        "url": "https://wtm-tokyo.connpass.com/event/",
+        "yielded": true,
+        "note": "IWD 2025 at LayerX had career talks only; gave the unerry CTO as a connector."
+      },
+      {
+        "name": "GTUG Girls x PyLadies data analysis workshop",
+        "url": "https://gtuggirls.connpass.com/event/304447/",
+        "yielded": false,
+        "note": "January 2024 beginner pandas workshop (Humble Data); no named speakers."
+      },
+      {
+        "name": "WiDS Worldwide site search (Tokyo, Japan)",
+        "url": "https://www.widsworldwide.org/wp-json/wp/v2/search?search=Tokyo",
+        "yielded": true,
+        "note": "WiDS Tokyo @ Shotoku, @ IBM and @ Yokohama City University event pages; the YCU ambassador is Yoko Ono."
+      },
+      {
+        "name": "wids-tokyo.jp",
+        "url": "https://wids-tokyo.jp/",
+        "yielded": false,
+        "note": "The domain now hosts an unrelated money blog."
+      },
+      {
+        "name": "connpass searches: Women in Data, Data+Women, Women Techmakers Tokyo, 女子会 データ",
+        "url": "https://connpass.com/search/?q=Women+in+Data",
+        "yielded": false,
+        "note": "No Women in Data Japan or Data + Women group on connpass; results are pre-2022 WiDS and WTM events."
+      },
+      {
+        "name": "Women Developers Summit",
+        "url": "https://womendevsummit.jp/",
+        "yielded": false,
+        "note": "Domain did not resolve."
       }
     ]
   },
@@ -9875,6 +11477,36 @@
       "name": "Zenn dbt topic",
       "url": "https://zenn.dev/topics/dbt",
       "note": "where Japanese dbt practitioners publish"
+    },
+    {
+      "name": "Snowflake女子会 (SnowVillage women)",
+      "url": "https://note.com/snowvillage_wmn",
+      "note": "Women-led Snowflake user community in Tokyo, events on TECH PLAY. Data talks in 2026: TROCCO and Snowflake pipelines at INTAGE and Infotech. Meetup #8 (August 2026) was on careers. 11 named organisers."
+    },
+    {
+      "name": "Women in AI Japan",
+      "url": "https://www.meetup.com/women-in-ai-japan/",
+      "note": "Women in AI chapter run with Happy Digital Academy. Mostly AI and career seminars; a web analytics talk in February 2025."
+    },
+    {
+      "name": "ML女子部",
+      "url": "https://women-ml.connpass.com/",
+      "note": "Women-run ML and data analysis study group at Google Shibuya. Held a generative AI and data analysis meetup with BigQuery talks in November 2025."
+    },
+    {
+      "name": "PyLadies Tokyo",
+      "url": "https://pyladies-tokyo.connpass.com/",
+      "note": "Monthly Python meetups and regional caravans. Since 2024 the talks are Python and AI workshops, with no data platform talks."
+    },
+    {
+      "name": "Women Techmakers Tokyo",
+      "url": "https://wtm-tokyo.connpass.com/",
+      "note": "Google's women-in-tech programme. Runs an International Women's Day event each spring; 2025 had career talks only."
+    },
+    {
+      "name": "WiDS Tokyo @ Yokohama City University",
+      "url": "https://www.widsworldwide.org/events/event/wids-tokyo-yokohama-city-university-2/",
+      "note": "WiDS regional event run by the YCU School of Data Science; no speakers listed on the WiDS site."
     }
   ]
 }

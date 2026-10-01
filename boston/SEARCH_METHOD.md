@@ -7,19 +7,19 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 77 |
-| People | 43 |
+| Companies | 85 |
+| People | 61 |
 | Tier 1 leads | 6 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 37 |
+| Proven speakers | 42 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 32 |
+| Based in the region | 43 |
 | Based elsewhere | 4 |
-| Location unknown | 7 |
+| Location unknown | 14 |
 | With a LinkedIn profile | 6 |
 | Job ads mentioning dbt | 62 |
 | Past chapter meetups | 12 |
@@ -46,9 +46,12 @@ The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan
 
 ### Women-in-data communities
 
-People were taken only from each community's own events.
-
-- **[PyLadies Boston](https://www.meetup.com/pyladies-boston/):** the only useful source. It gave a Women in Data Boston representative, a regular presenter and a careers panel. Its venues include CarGurus and Kensho.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published.
+- **[PyLadies Boston](https://www.meetup.com/pyladies-boston/):** the most active source. It gave a Women in Data Boston representative, a regular presenter and a careers panel. Its venues include CarGurus and Kensho. The 2026-10-01 pass added 3 more hosts as connectors.
+- **[WEST](https://www.meetup.com/westorg/):** WEST is Women in the Enterprise of Science & Technology, a Cambridge women-in-STEM association. Its [September 2026 career panel](https://www.meetup.com/westorg/events/316625224/) on AI, data and computational science named 2 biotech data leaders. Marie-Aude Guié (X-Chem) and Yurong Xin (Arbor Biotechnologies) are recorded. Most other WEST events are on careers and leadership.
+- **[WiDS Boston](https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/):** this is separate from WiDS Cambridge. The WiDS site search API (`wp-json/wp/v2/search?search=Boston`) found 3 event pages and a round-up. Kavana Venkatesh ran a 2024 generative AI workshop at Northeastern. The [late-2025 round-up](https://www.widsworldwide.org/get-inspired/blog/october-december-2025-ambassador-event-highlights/) describes a Boston University panel of analytics leaders, but the panellists are not named. The ambassadors and Louvere Walker-Hannon (MathWorks, WiDS Advisory Committee) are recorded as connectors.
+- **Women Techmakers through GDG Boston and GDG Cloud Boston:** both chapters run International Women's Day events each year. The GDG events API covers them (chapters 269 and 458). The [IWD Boston 2025 page](https://gdg.community.dev/e/mgwcv2/) gave Reen Lepatan (MIT, business analytics) and a talk on data and storytelling. The [IWD 2024 page](https://gdg.community.dev/e/mm79mj/) at the Broad Institute had AI and career talks only. 3 organisers are recorded as connectors.
+- **New groups, organisers only:** [Metro Boston Data Ladies](https://www.meetup.com/metro-boston-data-ladies/) started in Waltham in 2026 and holds informal data project meetups. [AWS User Group Women in AI Cambridge](https://www.meetup.com/aws-user-group-women-in-ai-cambridge/) launched online in July 2026. Its launch speakers joined from Seoul and Warsaw, so they are not recorded.
 
 ### Company blogs and job ads
 
@@ -70,6 +73,9 @@ People were taken only from each community's own events.
 - **Guessed Meetup group names:** nothing found for Boston Airflow, Databricks, Tableau or WiMLDS.
 - **[R-Ladies Boston](https://www.meetup.com/rladies-boston/):** runs socials only.
 - **[WiDS Cambridge 2026](https://www.widscambridge.org/featured-speakers-2026):** academic and policy speakers. WiDS means Women in Data Science.
+- **Dormant women-in-data groups:** [Boston WiMLDS](https://www.meetup.com/Boston-Women-in-Machine-Learning-and-Data-Science/) last met in November 2022. [Women in Big Data Boston](https://www.meetup.com/women-in-big-data-boston/) last met in June 2020.
+- **No named speakers:** [Girl Develop It Boston](https://www.meetup.com/Girl-Develop-It-Boston/) runs national online classes. The [Boston Tableau User Group](https://usergroups.tableau.com/boston-tableau-user-group/) has no Data + Women events.
+- **Not found:** She Loves Data, Girls in Tech and Lesbians Who Tech have no Boston Meetup group. [Women in Data](https://www.womenindata.org/) lists no Boston chapter.
 - **[Wayfair tech blog](https://www.aboutwayfair.com/careers/tech-blog):** BigQuery and ML content, with no dbt. No local company blog had new dbt authors.
 - **Old chapter talks:** give no location evidence. Most talks from 2020–23 could not be placed.
 
@@ -80,7 +86,7 @@ People were taken only from each community's own events.
 - **No first-time speakers yet.** Boston has none, so the list leans on people who already speak.
 
 <!-- companies:start -->
-76 companies and communities were looked at. A company is local when it has people or roles in the region.
+84 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (6)</summary>
 
@@ -100,6 +106,12 @@ Battery Ventures (local presence not confirmed), dbt Labs (local presence not co
 
 </details>
 
+<details><summary><b>Uses a different stack</b> (8)</summary>
+
+Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI Cambridge, Metro Boston Data Ladies, MIT, WiDS Boston, Women in the Enterprise of Science & Technology (WEST), Women Techmakers Boston (GDG Boston and GDG Cloud Boston), X-Chem (local presence not confirmed)
+
+</details>
+
 <details><summary><b>Blogs and sites scanned</b> (6)</summary>
 
 - https://klaviyo.tech/
@@ -111,7 +123,7 @@ Battery Ventures (local presence not confirmed), dbt Labs (local presence not co
 
 </details>
 
-<details><summary><b>Other sources checked</b> (18)</summary>
+<details><summary><b>Other sources checked</b> (37)</summary>
 
 - [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
 - [Coalesce 2025 on-demand](https://www.getdbt.com/resources/coalesce-on-demand)
@@ -131,6 +143,25 @@ Battery Ventures (local presence not confirmed), dbt Labs (local presence not co
 - [Wayfair tech blog](https://www.aboutwayfair.com/careers/tech-blog) (nothing useful)
 - [Meetup urlname guesses (Boston Snowflake/Airflow/Databricks/Tableau/WiMLDS/Women in Data)](https://www.meetup.com/) (nothing useful)
 - [LinkedIn Jobs guest API (keywords=dbt, Boston-area)](https://www.linkedin.com/jobs/search?keywords=dbt)
+- [Meetup gql2 groupSearch near Boston](https://www.meetup.com/gql2)
+- [WEST past events (Meetup gql2)](https://www.meetup.com/westorg/)
+- [Metro Boston Data Ladies (Meetup gql2)](https://www.meetup.com/metro-boston-data-ladies/)
+- [AWS User Group Women in AI Cambridge (Meetup gql2)](https://www.meetup.com/aws-user-group-women-in-ai-cambridge/)
+- [GDG Boston events API](https://gdg.community.dev/api/event_slim/for_chapter/269/?status=Completed&page_size=300)
+- [GDG Cloud Boston events API](https://gdg.community.dev/api/event_slim/for_chapter/458/?status=Completed&page_size=300)
+- [International Women's Day Boston 2025 (GDG Boston)](https://gdg.community.dev/e/mgwcv2/)
+- [International Women's Day Boston 2024 (GDG Cloud Boston)](https://gdg.community.dev/e/mm79mj/)
+- [International Women's Day Boston 2025 (GDG Cloud Boston)](https://gdg.community.dev/e/mmuzvz/) (nothing useful)
+- [WiDS Boston @ Northeastern University 2024](https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/)
+- [WiDS Boston 2023 event pages](https://www.widsworldwide.org/events/event/wids-boston/)
+- [WiDS October–December 2025 ambassador round-up](https://www.widsworldwide.org/get-inspired/blog/october-december-2025-ambassador-event-highlights/)
+- [WiDS profile: Louvere Walker-Hannon](https://www.widsworldwide.org/get-inspired/blog/celebrating-louvere-walker-hannon-from-wids-ambassador-to-advisory-committee-member/)
+- [Boston WiMLDS (Meetup gql2)](https://www.meetup.com/Boston-Women-in-Machine-Learning-and-Data-Science/) (nothing useful)
+- [Women in Big Data Boston (Meetup gql2)](https://www.meetup.com/women-in-big-data-boston/) (nothing useful)
+- [Girl Develop It Boston (Meetup gql2)](https://www.meetup.com/Girl-Develop-It-Boston/) (nothing useful)
+- [Women in Data (womenindata.org)](https://www.womenindata.org/) (nothing useful)
+- [Boston Tableau User Group (Data + Women check)](https://usergroups.tableau.com/boston-tableau-user-group/) (nothing useful)
+- [She Loves Data, Girls in Tech and WiMLDS Boston Meetup names](https://www.meetup.com/she-loves-data-boston/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -170,7 +201,8 @@ Battery Ventures (local presence not confirmed), dbt Labs (local presence not co
   - **GitHub user search** (`dbt location:Boston`) for first-time speakers with public dbt work. It was the best source of first-time speakers in Atlanta.
   - **Meetup `gql2` `groupSearch`** with Boston's latitude and longitude, instead of guessing group names. Then read the past events (`sort: DESC`) of the data groups it finds.
   - **Boston Data and AI Saturday:** read the accepted schedule after 3 October 2026. Check new Snowflake User Group events too.
-  - **Women in Data Boston:** scan its own events, and the PyLadies Boston events since the last run.
+  - **Women in Data Boston:** its own event page was not found. Ask Kaveesha Shah for it, and scan the PyLadies Boston events since the last run.
+  - **WiDS x BU panel:** the November 2025 panellists are not named on the WiDS site. Ask the ambassador, Ming Hua Tsai.
   - **LinkedIn Jobs:** re-run the guest scan (keywords=dbt, Boston), keeping ads with the whole word dbt.
 - **People to locate:** the 7 unknown locations in section 5, starting with William Kuan and Athena Casarotto.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `boston/boston_dbt_companies.json`, the chapter `boston-dbt-meetup`, `../enriched/boston-dbt-meetup.json` and the region "Greater Boston (Boston, Cambridge, Burlington and nearby), with commuter towns such as Providence". Budget about 25 web searches.
@@ -182,3 +214,4 @@ Battery Ventures (local presence not confirmed), dbt Labs (local presence not co
 | 2026-09-24 | 1 | First build: dbt Summit 2026 and Coalesce 2025 agendas filtered to local employers, local meetups and user groups, PyLadies Boston and other women-in-data communities, company blogs, and a LinkedIn Jobs scan. Past chapter speakers added from `../enriched/boston-dbt-meetup.json`. 78 companies (18 on the watchlist), 43 people, 62 job ads at 48 companies, 12 past meetups. Split: 37 proven speakers, 6 featured. Tiers: 6 tier 1, 25 tier 2, 4 tier 3, 8 connectors. 21 people had already spoken at the chapter. |
 | 2026-10-01 | 2 | Location pass: 8 people placed from Meetup host and RSVP profiles, GitHub and recent in-person talks, 7 in the region and 1 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 5 people placed from LinkedIn search results, 4 in the region and 1 outside. 9 people are still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass: WEST, WiDS Boston, Women Techmakers through GDG Boston and GDG Cloud Boston, Metro Boston Data Ladies, AWS User Group Women in AI Cambridge and new PyLadies Boston hosts. 18 new people: 4 speakers and panellists, and 14 organisers as connectors. |

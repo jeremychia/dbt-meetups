@@ -7,19 +7,19 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 103 |
-| People | 69 |
+| Companies | 105 |
+| People | 76 |
 | Tier 1 leads | 4 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 51 |
+| Proven speakers | 52 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 62 |
+| Based in the region | 68 |
 | Based elsewhere | 2 |
-| Location unknown | 5 |
+| Location unknown | 6 |
 | With a LinkedIn profile | 3 |
 | Job ads mentioning dbt | 70 |
 | Past chapter meetups | 4 |
@@ -55,10 +55,11 @@ Two research runs built the file. The first build (2026-09-24) used about 18 web
 
 ### Women-in-data communities
 
-Speakers come from women-focused groups' own events. Nobody's gender is recorded or guessed. 5 people are tagged `women_in_data_community`.
+Speakers come from women-focused groups' own events. Nobody's gender is recorded or guessed. 12 people are tagged `women_in_data_community`.
 
-- **[PyLadies Toronto](https://www.meetup.com/PyLadies-Toronto/):** the organiser is recorded as a connector. The group is back in person from April 2026, with a call for lightning talks.
-- **[AWS User Group Women in Tech Ontario](https://www.meetup.com/aws-women-in-tech-user-group-ontario/):** the organiser is recorded as a connector.
+- **[PyLadies Toronto](https://www.meetup.com/PyLadies-Toronto/):** the organiser and 2 hosts are recorded as connectors. The group is back in person from April 2026. Its [April lightning-talk night](https://www.meetup.com/pyladies-toronto/events/314245447/) had a City of Toronto collisions data pipeline on Airflow, and a talk on moving into data analytics and BI. The speakers are not named.
+- **[AWS User Group Women in Tech Ontario](https://www.meetup.com/aws-women-in-tech-user-group-ontario/):** the organiser is recorded as a connector. The group runs online talks. Its [May 2026 talk](https://www.meetup.com/aws-women-in-tech-user-group-ontario/events/314598442/) was by Soumil Shah (Zeta Global), on writing data into more than 10,000 Amazon S3 tables.
+- **Women Techmakers Toronto:** the ambassadors post on a small Meetup group, [Beyond Networking - Women in Tech](https://www.meetup.com/north-york-wisdom-business-network-meetup-group/), and register on Luma. The [May 2026 Luma page](https://luma.com/hcub806p) names 4 hosts, recorded as connectors. Their events are for networking, with no talks.
 - **[R-Ladies Toronto](https://www.meetup.com/R-Ladies-Toronto/):** one lightning-talk speaker.
 - **[WiDS Toronto @ Dataiku](https://www.widsworldwide.org/events/event/wids-toronto-dataiku/):** names event ambassadors only, not panellists.
 
@@ -82,6 +83,13 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **Medium:** blocks `curl` and direct fetches. rss2json rate-limits after about 10 new feeds.
 - **[dev.to](https://dev.to/t/dbt) and GitHub location search:** job-seeker portfolios, not speakers, and not worth the calls.
 - **Women-in-data groups:** [PyData Toronto](https://www.meetup.com/pydata-toronto/), Toronto Women's Data Group and Women in Big Data Toronto had no local speaker events since mid-2024.
+- **More women-in-data groups with no people:**
+  - **[Toronto WiMLDS](https://www.meetup.com/Toronto-Women-in-Machine-Learning-and-Data-Science/):** last met in March 2022.
+  - **[Women in Big Data Toronto](https://www.meetup.com/women-in-big-data-toronto/):** last met on Meetup in June 2023.
+  - **GDG Toronto and GDG Cloud Toronto:** their IWD pages for 2024 to 2026 name only the organisers. This includes the 2025 event run with Women Techmakers Toronto.
+  - **[WiDS Toronto](https://www.widsworldwide.org/events/event/wids-toronto/):** an online event in June 2023 with no speakers listed.
+  - **[QueerTech Toronto](https://www.meetup.com/queertech-toronto/):** runs career and networking events, with no data talks.
+  - **Not on Meetup:** She Loves Data, Lesbians Who Tech, Women in AI and Data + Women have no Toronto group.
 - **Web search:** the session limit stopped the extension after about 20 searches.
 
 ## 3. Companies looked at
@@ -92,7 +100,7 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
 
 <!-- companies:start -->
-102 companies and communities were looked at. A company is local when it has people or roles in the region.
+104 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (6)</summary>
 
@@ -106,9 +114,9 @@ Agoda, Akkodis, AnswerLayer, Artemis (local presence not confirmed), Autodesk, A
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (2)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (3)</summary>
 
-Archetype Consulting Inc., Snowflake Toronto User Group
+Archetype Consulting Inc., Snowflake Toronto User Group, Zeta Global (local presence not confirmed)
 
 </details>
 
@@ -118,9 +126,9 @@ Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CB
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (2)</summary>
+<details><summary><b>Uses a different stack</b> (3)</summary>
 
-AWS User Group Women in Tech Ontario, PyLadies Toronto
+AWS User Group Women in Tech Ontario, PyLadies Toronto, Women Techmakers Toronto
 
 </details>
 
@@ -136,7 +144,7 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto
 
 </details>
 
-<details><summary><b>Other sources checked</b> (29)</summary>
+<details><summary><b>Other sources checked</b> (41)</summary>
 
 - [Toronto dbt Meetup past events (Meetup gql2)](https://www.meetup.com/toronto-dbt-meetup/)
 - [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
@@ -167,6 +175,18 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto
 - [Waterloo Data Science and Data Engineering, Toronto Data Engineering and Cloud, ODSC, Analytics.Club, Toronto AI groups (Meetup gql2)](https://www.meetup.com/waterloo-data-science/) (nothing useful)
 - [Snowflake World Tour Toronto 2026 speakers](https://www.snowflake.com/en/world-tour/toronto/speakers/) (nothing useful)
 - [dev.to tag dbt / GitHub user search by location](https://dev.to/t/dbt) (nothing useful)
+- [Meetup gql2 groupSearch near Toronto (women-in-data queries)](https://www.meetup.com/gql2)
+- [AWS User Group Women in Tech Ontario past events (Meetup gql2)](https://www.meetup.com/aws-women-in-tech-user-group-ontario/events/314598442/)
+- [PyLadies Toronto April 2026 lightning talks](https://www.meetup.com/pyladies-toronto/events/314245447/)
+- [Women Techmakers Toronto: Beyond Networking (Luma)](https://luma.com/hcub806p)
+- [Toronto WiMLDS (Meetup gql2)](https://www.meetup.com/Toronto-Women-in-Machine-Learning-and-Data-Science/) (nothing useful)
+- [Women in Big Data Toronto (Meetup gql2)](https://www.meetup.com/women-in-big-data-toronto/) (nothing useful)
+- [GDG Toronto events API and IWD pages](https://gdg.community.dev/api/event_slim/for_chapter/959/?status=Completed&page_size=300) (nothing useful)
+- [GDG Cloud Toronto events API and IWD 2024](https://gdg.community.dev/api/event_slim/for_chapter/259/?status=Completed&page_size=300) (nothing useful)
+- [WiDS Toronto (online, 2023)](https://www.widsworldwide.org/events/event/wids-toronto/) (nothing useful)
+- [QueerTech Toronto (Meetup gql2)](https://www.meetup.com/queertech-toronto/) (nothing useful)
+- [Women in STEM/Finance career Meetup Group](https://www.meetup.com/women-in-stem-finance-career-meetup-group/) (nothing useful)
+- [She Loves Data, Lesbians Who Tech, Women in AI and Data + Women Toronto on Meetup](https://www.meetup.com/she-loves-data-toronto/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -209,7 +229,8 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto
   - **User groups:** new events of the Snowflake Toronto and Databricks Toronto user groups, and Toronto data groups through Meetup `gql2` `groupSearch`, with `curl`.
   - **Job ads:** refresh with `site:` searches on Lever, Greenhouse and Ashby for dbt Toronto. The 70 ads date from 2026-09-24.
   - **Pages not read yet:** Coalesce 2025 speakers (needs a browser), Snowflake World Tour Toronto 2026, Day of Data Toronto 2026, Big Data & Analytics Summit Canada and dbt Summit speaker pages.
-  - **PyLadies Toronto:** ask the organiser about the April 2026 lightning-talk speakers.
+  - **PyLadies Toronto:** ask the organisers for the April 2026 lightning-talk speakers. The talks on the City of Toronto collisions pipeline and on moving into BI are good fits.
+  - **Women-in-data panels with no published names:** the Women in Big Data Toronto "Lead with Data" panel (March 2025) and the GDG Toronto IWD 2025 panel. Ask the organisers for the panellists.
   - **Waterloo:** no Waterloo group had dbt talks, so try Waterloo company blogs.
 - **People to locate:** 66 people are still `not_searched` on LinkedIn. Start with tier 1 and tier 2, and the 5 unknown locations.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `toronto/toronto_dbt_companies.json`, the chapter `toronto-dbt-meetup`, `../enriched/toronto-dbt-meetup.json` and the region "the Greater Toronto Area, including the Waterloo region". Budget about 25 web searches.
@@ -222,3 +243,4 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto
 | 2026-10-01 | 2 | Extension run: 38 people and 19 companies added, giving 69 people and 103 companies. 7 new emerging voices, all Loblaw Digital authors. Tiers: 4 tier 1, 22 tier 2, 33 tier 3, 10 connectors. |
 | 2026-10-01 | 2 | Location pass from public pages: 6 people placed, 4 in the region and 2 elsewhere. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 1 person searched; the profile link was recorded but the location stays unknown. 5 people are still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass: AWS User Group Women in Tech Ontario, PyLadies Toronto and Women Techmakers Toronto. 7 new people: 1 speaker, and 6 organisers as connectors. |

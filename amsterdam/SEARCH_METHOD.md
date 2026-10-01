@@ -7,19 +7,19 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 61 |
-| People | 99 |
+| Companies | 65 |
+| People | 116 |
 | Tier 1 leads | 43 |
-| First-time speakers (publish, no talk yet) | 12 |
-| Proven speakers | 87 |
+| First-time speakers (publish, no talk yet) | 11 |
+| Proven speakers | 97 |
 | Spoke at this chapter before | 34 |
-| Based in the region | 74 |
+| Based in the region | 79 |
 | Based elsewhere | 6 |
-| Location unknown | 19 |
+| Location unknown | 31 |
 | With a LinkedIn profile | 18 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 16 |
@@ -42,10 +42,13 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 
 ### Women-in-data communities
 
-- **[PyLadies Amsterdam](https://www.meetup.com/pyladiesams/):** hands-on workshops on dbt, DuckDB and dlt. It was the best source of speakers on dbt and data engineering.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[PyLadies Amsterdam](https://www.meetup.com/pyladiesams/):** hands-on workshops on dbt, DuckDB and dlt. It was the best source of speakers on dbt and data engineering. Its 2025 and 2026 events added Merel Theisen (QuantumBlack, [Kedro pipelines](https://www.meetup.com/pyladiesams/events/310249357/)) and Felicity Fan ([coding agents with a Streamlit dashboard](https://www.meetup.com/pyladiesams/events/315542536/)). The event hosts, Una Galyeva and Nancy Irisarri Méndez, are recorded as connectors.
+- **[Xebia Women in Data](https://www.meetup.com/xebia-women-in-data/):** its own Meetup group at Xebia's Amsterdam office, with 3 editions since September 2025. [Edition 2](https://www.meetup.com/xebia-women-in-data/events/310612027/) had Marlous Been on Odido's data backbone and Doortje de Wiljes, likely Rituals' head of data. [Edition 3](https://www.meetup.com/xebia-women-in-data/events/311855231/) had Anya Prosvetova on Snowflake Intelligence and Larisse Pinto on community. [Edition 4](https://www.meetup.com/xebia-women-in-data/events/315676995/) confirmed the talks by Taís Laurindo Pereira and Sohi Sudhir. The group asks for speakers.
+- **[Dutch Women in Tech](https://www.meetup.com/dutch-women-in-tech/):** monthly meetups in Dutch, mostly on careers. Its [December 2025 Power BI evening](https://www.meetup.com/dutch-women-in-tech/events/311120452/) gave Marjolein Opsteegh and Karianne de Dood (Ilionx). Its 5 regular hosts are recorded as connectors.
+- **[Rotterdam Women in Tech](https://www.meetup.com/rotterdam-women-in-tech/):** co-working days and workshops. It gave Maryna Makavetskaya ([Intro to SQL](https://www.meetup.com/rotterdam-women-in-tech/events/312386496/)), Mingjue Liu ([Power BI with Claude](https://www.meetup.com/rotterdam-women-in-tech/events/315352580/)) and the organiser Akemi Micallef.
 - **[Data + Women Amsterdam](https://usergroups.tableau.com/data-women-amsterdam/):** mostly career and AI themes, plus a Data Expo track.
-- **Xebia Women in Data meetup:** known only from a search summary, so its talks link to the [Xebia events page](https://events.xebia.com/).
-- **Result:** 13 people came from these groups.
+- **Result:** 30 people came from these groups.
 
 ### Job ads
 
@@ -72,6 +75,9 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 - **[PyData Amsterdam 2024 programme](https://amsterdam2024.pydata.org/cfp/schedule/):** HTTP 522 (server down).
 - **[Coalesce on-demand listing](https://www.getdbt.com/resources/coalesce-on-demand):** no Dutch employers.
 - **Xebia author pages:** they return 404, and the post author boxes give no city.
+- **Women-in-data groups with no data talks:** [SheSharp](https://www.meetup.com/shesharp/) (co-working and careers), [Girl Code](https://www.meetup.com/girlcode/) (software engineering), [WeCode](https://www.meetup.com/wecode/) (security and code), and Women in Tech Network and AI Woman Space (no events).
+- **Women Techmakers:** the [GDG Amsterdam events API](https://gdg.community.dev/api/event_slim/for_chapter/1358/?status=Completed&page_size=100) lists only Coffee Coding and AppDevCon since 2024.
+- **[WiDS](https://www.widsworldwide.org/) and [She Loves Data](https://www.shelovesdata.com/events):** no Netherlands event since 2020, and no European She Loves Data events.
 - **Chapter Sessionize:** the [call for speakers](https://sessionize.com/amsterdam-dbt-meetup) is closed and lists no one.
 
 ## 3. Companies looked at
@@ -81,7 +87,7 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 - **Two placeholder employers.** "Independent / employer not stated" and "Independent / no company" hold people whose employer was not given. Titles are left empty where the source page did not state one.
 
 <!-- companies:start -->
-58 companies and communities were looked at. A company is local when it has people or roles in the region.
+62 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (35)</summary>
 
@@ -101,9 +107,9 @@ Albert Heijn, AllOptions (local presence not confirmed), Aurai, DaAnalytics, HEM
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (6)</summary>
+<details><summary><b>Uses a different stack</b> (10)</summary>
 
-Cargill (local presence not confirmed), Data + Women Amsterdam, Sandvik (local presence not confirmed), Teva (local presence not confirmed), UWV, Watson+Holmes (local presence not confirmed)
+Cargill (local presence not confirmed), Data + Women Amsterdam, Ilionx, Odido (local presence not confirmed), QuantumBlack (local presence not confirmed), Rituals (local presence not confirmed), Sandvik (local presence not confirmed), Teva (local presence not confirmed), UWV, Watson+Holmes (local presence not confirmed)
 
 </details>
 
@@ -114,7 +120,7 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Sandvik (local p
 
 </details>
 
-<details><summary><b>Other sources checked</b> (21)</summary>
+<details><summary><b>Other sources checked</b> (33)</summary>
 
 - [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
 - [dbt World Tour](https://www.getdbt.com/events/roadshow/dbt-world-tour) (nothing useful)
@@ -137,6 +143,18 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Sandvik (local p
 - [Data + Women Amsterdam](https://usergroups.tableau.com/data-women-amsterdam/)
 - [Company job boards (Greenhouse, Lever, Ashby, Recruitee)](https://jobs.ashbyhq.com/mollie)
 - [chapter Sessionize](https://sessionize.com/amsterdam-dbt-meetup) (nothing useful)
+- [Meetup gql2 groupSearch near Amsterdam (women-in-data queries)](https://www.meetup.com/gql2#groupSearch-amsterdam-wid)
+- [Xebia Women in Data (Meetup gql2 past events)](https://www.meetup.com/xebia-women-in-data/)
+- [PyLadies Amsterdam 2025-2026 events (Meetup gql2)](https://www.meetup.com/pyladiesams/events/?type=past)
+- [Dutch Women in Tech (Meetup gql2)](https://www.meetup.com/dutch-women-in-tech/)
+- [Rotterdam Women in Tech (Meetup gql2)](https://www.meetup.com/rotterdam-women-in-tech/)
+- [SheSharp (Meetup gql2)](https://www.meetup.com/shesharp/) (nothing useful)
+- [Girl Code (Meetup gql2)](https://www.meetup.com/girlcode/) (nothing useful)
+- [WeCode, Women in IT network at KVK (Meetup gql2)](https://www.meetup.com/wecode/) (nothing useful)
+- [Women in Tech Network Amsterdam and AI Woman Space (Meetup gql2)](https://www.meetup.com/women-in-tech-network/) (nothing useful)
+- [GDG Amsterdam events API (Women Techmakers)](https://gdg.community.dev/api/event_slim/for_chapter/1358/?status=Completed&page_size=100) (nothing useful)
+- [WiDS Worldwide site search (Amsterdam, Netherlands)](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Amsterdam) (nothing useful)
+- [She Loves Data events](https://www.shelovesdata.com/events) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -170,7 +188,7 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Sandvik (local p
   - Dumky de Wilde wrote the TDD post at Xebia and now works at MotherDuck.
   - Lucas Ortiz and Cor Zuurmond have not been re-checked since their 2023 and 2022 posts.
 - [ ] **dbt Labs staff are labelled.** Bart van Delft is tier 1 under a company named "dbt", which the cockpit does not label as dbt Labs. Bart van Delft can speak, but check the line-up has practitioners first.
-- [ ] **Check two weak leads.** The Holland Casino speakers may be consultants on the project. The Xebia Women in Data talks by Taís Laurindo Pereira and Sohi Sudhir are known only from a search summary.
+- [ ] **Check weak leads.** The Holland Casino speakers may be consultants on the project. Taís Laurindo Pereira now works as a product analyst, and the employer is not stated. Doortje de Wiljes is probably Rituals' head of data, but the event page does not say so directly.
 - [ ] **Check people listed elsewhere.** Sam Debruyn is in Belgium, Hamzah Chaudhary in San Francisco and Amir Peres (Yuki) in Israel.
 
 ## 6. Next run
@@ -180,6 +198,7 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Sandvik (local p
   - **Xebia posts:** `xebia.com/feed/?s=dbt&paged=N`.
   - **Conferences:** the Coalesce 2024 and 2025 agendas and Big Data Expo.
   - **Company blogs:** retry the Booking, Adyen, bol and Mollie engineering blogs.
+  - **Women-in-data groups:** new editions of Xebia Women in Data, and the Power BI or SQL sessions at Dutch Women in Tech and Rotterdam Women in Tech. Nothing was reachable for Women Techmakers, WiDS or She Loves Data in the Netherlands, so check again only if a chapter appears.
   - **PyData Amsterdam 2024:** retry the programme. The group is also moving to [Luma](https://luma.com/pydataamsterdam).
 - **People to locate:** 19 people have no known location. They include tier-1 leads Oliver Ramsay, Liam McCarty and Jon Su, and most chapter speakers from 2023 and 2024. The PyData, Data & Drinks and PyLadies event pages link most speakers' LinkedIn profiles, so find those people through search results.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `amsterdam/amsterdam_dbt_companies.json`, the Netherlands dbt Meetup, `../enriched/amsterdam-dbt-meetup.json` and the region the Netherlands.
@@ -191,3 +210,4 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Sandvik (local p
 | 2026-10-01 | 1 | First build. Meetup data for Dutch data groups, the dbt Summit 2026 speakers, the Xebia blog feed, Picnic's Medium feed, women-in-data groups and about 90 company job boards, plus chapter history. 99 people at 61 companies, 34 of them past chapter speakers. 7 job ads. Web search ran out after about 20 calls. |
 | 2026-10-01 | 1 | Location pass from public pages: in-person chapter talks, event pages and Sessionize. 15 people placed, 14 in the Netherlands and 1 in Belgium. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 15 people searched, 6 placed in the Netherlands and 2 elsewhere. With the location pass, 23 people placed and 29 still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass from Meetup data: Xebia Women in Data, PyLadies Amsterdam, Dutch Women in Tech and Rotterdam Women in Tech. 17 people added (9 speakers, 8 organisers as connectors) and 3 updated with new talks. SheSharp, Girl Code, WeCode, GDG Amsterdam, WiDS and She Loves Data had no data talks. |

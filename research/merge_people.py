@@ -28,7 +28,8 @@ for drop in (people[i] for i in drop_ids):
         keep["based_in_region"], keep["city"], keep["meetup_fit"]["attendee_potential"] = drop["based_in_region"], drop["city"], drop["meetup_fit"]["attendee_potential"]
     if drop["lead_type"] == "proven_speaker":
         keep["lead_type"] = "proven_speaker"
-    keep["notes"] = " | ".join(x for x in [keep["notes"], drop["notes"], f"merged duplicate record '{drop['name']}' ({drop['id']})"] if x)
+    parts = [x for n in (keep["notes"], drop["notes"]) for x in (n or "").split(" | ") if x]
+    keep["notes"] = " | ".join(dict.fromkeys(parts + [f"merged duplicate record '{drop['name']}' ({drop['id']})"]))
 
 for c in d["companies"]:
     c["people"] = [p for p in c["people"] if p["id"] not in drop_ids]

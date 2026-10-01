@@ -8,19 +8,19 @@ This file holds what is specific to Vilnius. The method, scoring rules, schema a
 - **Language:** search in English and Lithuanian.
 
 <!-- at-a-glance:start -->
-**At a glance** (version 8, 2026-10-01)
+**At a glance** (version 9, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 55 |
-| People | 110 |
+| Companies | 57 |
+| People | 120 |
 | Tier 1 leads | 15 |
 | First-time speakers (publish, no talk yet) | 5 |
-| Proven speakers | 24 |
+| Proven speakers | 27 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 59 |
+| Based in the region | 62 |
 | Based elsewhere | 2 |
-| Location unknown | 49 |
+| Location unknown | 56 |
 | With a LinkedIn profile | 100 |
 | Job ads mentioning dbt | 43 |
 | Past chapter meetups | 2 |
@@ -98,6 +98,13 @@ The meetup event pages can be read the same way: open any meetup.com page, then 
 - **LinkedIn posts in which a data leader lists the team's stack:** for example Ignitis.
 - **Other places searched for first-time speakers:** Medium, Substack, dev.to and Hashnode; the engineering blogs of Kilo Health, Nord Security, Oxylabs, Surfshark, Hostinger, Omnisend, TransferGo, Eneba and PVcase; Lithuanian-language content; the dbt Community forum; `site:linkedin.com/posts` with dbt plus Vilnius, Kaunas or a company name, Lithuanian phrases (`"dbt" duomenų`) and "dbt Certified"; and posts about attending a past Baltic dbt Meetup or Coalesce.
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[PyLadies Lithuania](https://www.meetup.com/pyladies-lithuania/):** the only women-in-data group on Meetup in Lithuania, with 128 members since 2024. It runs meetups at Oxylabs and Flo, and workshops at PyCon Lithuania. Its [2026 web scraping workshop](https://www.meetup.com/pyladies-lithuania/events/313810308/) gave two Oxylabs speakers, Karolina Šarauskaitė and Ieva Šataitė. Its organisers Inga Pliavgo and Enrika Vyšniauskaitė are connectors.
+- **[Women Go Tech](https://www.womengotech.com/):** a Lithuanian mentoring organisation with Data & Analytics and Data Science mentor tracks. Its [about page](https://www.womengotech.com/about-us/) gave 5 team members as connectors. Ieva Šūmakarytė spoke for it at [PyLadies Lithuania](https://www.meetup.com/pyladies-lithuania/events/303387292/) in 2024. Its public events since 2025 are two online AI webinars, read through `/wp-json/tribe/events/v1/events`.
+- **Also ask:** PyLadies Lithuania and Women Go Tech for women in data roles at the dbt employers. Women Go Tech's mentor pages list data engineers and analysts without employers.
+
 ## 2. What didn't work here
 
 - **CV-Online and CVMarket keyword search:** only matches job titles, so a dbt search returns nothing.
@@ -106,6 +113,8 @@ The meetup event pages can be read the same way: open any meetup.com page, then 
 - **`site:linkedin.com/posts dbt ...`:** noisy. It returns worldwide results and therapy "DBT" (dialectical behaviour therapy).
 - **Big Data Conference Europe speaker pages:** loaded by script, so plain fetches get nothing. Use the browser.
 - **The fetch tool on job boards:** timed out. The built-in browser plus in-page `fetch()` worked instead.
+- **Other groups found by the search:** [Tech Kinship](https://www.meetup.com/tech-kinship/) has 3,028 members but runs Lithuanian-language talks on leadership and work culture. PyLadies Lithuania's 2025 Python data workshop does not name its instructors.
+- **Women-in-data networks with no Lithuanian chapter:** Meetup's group search found no R-Ladies, Women Techmakers, WiDS, WiMLDS, She Loves Data, Women in Big Data or Girls in Tech group near Vilnius or Kaunas. The GDG chapter pages tried for Vilnius and Kaunas do not exist, so no Women Techmakers events were found. pyladies.com lists no Lithuanian chapter. The Women in AI Lithuania page returns 404. [Rails Girls Vilnius](https://railsgirls.com/vilnius.html) last ran in 2014. Women Who Code closed in 2024.
 - **Searching for first-time speakers:** about 110 searches found only 6 new people. Search engines rarely connect Medium, dev.to and Substack authors, or LinkedIn posts, to Lithuania. None of the big dbt employers except Omnisend publishes dbt engineering-blog posts. No Lithuanian-language dbt content turned up.
 
 ## 3. Companies looked at
@@ -116,7 +125,7 @@ The meetup event pages can be read the same way: open any meetup.com page, then 
 - **Open leadership roles:** many "no leader found" gaps are real vacancies. Head of Data roles are open at Hostinger, Eneba, Nord (Saily), Barbora and Oxylabs.
 
 <!-- companies:start -->
-55 companies and communities were looked at. A company is local when it has people or roles in the region.
+57 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (21)</summary>
 
@@ -139,6 +148,26 @@ BARBORA Lietuva, Cast AI, ECOSERVICE grupė, Macaw Lithuania
 <details><summary><b>Not verified</b> (17)</summary>
 
 Adform (local presence not confirmed), Beyond Analysis, BITĖ Lietuva, Bolt (local presence not confirmed), BURGA (local presence not confirmed), EPAM Systems (Lithuania), Flo Health, Genius Sports (Vilnius), HomeToGo (Kaunas), Ignitis Group, Other / independent, Paysera (local presence not confirmed), Revolut (Vilnius), Scrambly, Shopify (remote) (local presence not confirmed), UAB Ltintus (local presence not confirmed), Wix (Vilnius)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+PyLadies Lithuania, Women Go Tech
+
+</details>
+
+<details><summary><b>Other sources checked</b> (9)</summary>
+
+- [Meetup gql2 groupSearch near Vilnius and Kaunas](https://www.meetup.com/gql2)
+- [PyLadies Lithuania (Meetup gql2)](https://www.meetup.com/pyladies-lithuania/)
+- [Women Go Tech site and events API](https://www.womengotech.com/wp-json/tribe/events/v1/events)
+- [Tech Kinship (Meetup gql2)](https://www.meetup.com/tech-kinship/) (nothing useful)
+- [GDG chapters in Lithuania (Women Techmakers)](https://gdg.community.dev/) (nothing useful)
+- [PyLadies chapter sites](https://pyladies.com/locations/) (nothing useful)
+- [Women in AI Lithuania](https://www.womeninai.co/lithuania) (nothing useful)
+- [Rails Girls Vilnius](https://railsgirls.com/vilnius.html) (nothing useful)
+- [Women Who Code](https://womenwhocode.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -175,7 +204,7 @@ Adform (local presence not confirmed), Beyond Analysis, BITĖ Lietuva, Bolt (loc
   - **Job ads:** the LinkedIn Jobs scan, CVbankas and the English and Lithuanian web searches. Set `last_seen` on ads seen again.
   - **Speakers:** new events at meetup.com/vilnius-dbt-meetup, and the latest PyCon Lithuania, Big Data Conference Europe, PyData Vilnius, Coalesce and Tallinn Data Week speaker lists. New Uncle Data episodes and guests.
   - **First-time speakers:** new Lithuania-based authors since the last run, and new content or talks by the existing ones.
-  - **Women-in-data groups:** check Vilnius groups such as PyLadies Vilnius and Women Go Tech.
+  - **Women-in-data groups:** new PyLadies Lithuania events, and the PyCon Lithuania workshop pages that name the 2025 PyLadies instructors. Women Go Tech mentors in data tracks need employers before they can be leads.
   - **People gaps:** for every company with `dbt_signal` "strong" and fewer than 3 people, look for analytics engineers, data engineers, data analysts and BI developers. Re-check people with confidence "Low" or notes like "may have left".
 - **People to locate:** 49 people have no known location, mostly people found through the job-ad company search with only a LinkedIn profile as evidence. The tier-1/2 leads among them are Simas Janušas, Aurimas Griciunas, Dovilė Bakšytė and Rytis Jonas Zolubas.
 - **Data conventions:** person ids were `pNNN` until v3. Each person's old id is kept in `notes` as "(v3 id: pNNN)".
@@ -193,3 +222,4 @@ Adform (local presence not confirmed), Beyond Analysis, BITĖ Lietuva, Bolt (loc
 | 2026-09-23 | 6 | Search for emerging voices (Step 3b). Added 6 people: Simas Janušas (tier 1), Martynas Mickevičius, Paulius Alaburda, Žymantė Guogaitė (tier 2), Jurgita Zukauskaite and Kaloyan Todorov Hristov. Added new content for Rytis Ulys (now `proven_speaker`), Tomas Peluritis, Aurimas Griciūnas and Dovilė Bakšytė. Now 110 people: 24 proven speakers, 5 emerging voices, 2 featured. The organiser dashboard now ranks emerging voices first within each tier and has a lead-type filter. `metadata.counts` puts `lead_type` last, to match Berlin and KL. Backup: `lithuania_dbt_companies.v5.json`. |
 | 2026-09-23 | 7 | Shared schema v3 adds `pronouns` and `sourced_via` (schema-only change). `pronouns` records only pronouns people publish themselves; none were found for tier-1/2 people, so all are `null`. `sourced_via` is derived from each person's evidence; people found through the job-ad company search are `job_ad_company_search`. For women-in-data sourcing and the line-up balance check, see `../berlin_planning/SEARCH_METHOD.md` Step 2b and §1 Step 6. Next run: check Vilnius women-in-data groups (e.g. PyLadies Vilnius, Women Go Tech). Backup: `lithuania_dbt_companies.v6.json`. |
 | 2026-10-01 | 8 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed no one, because most unknown people have no evidence link other than a LinkedIn profile. LinkedIn search results placed 9 people: 7 in Lithuania and 2 elsewhere (Paris and Chicago). 49 people are still unknown. |
+| 2026-10-01 | 9 | Women-in-data pass from PyLadies Lithuania and Women Go Tech. 10 people added: 2 Oxylabs workshop speakers, and 8 organisers and staff as connectors. |

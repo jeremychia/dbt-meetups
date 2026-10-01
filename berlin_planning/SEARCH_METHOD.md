@@ -9,19 +9,19 @@ This file holds what is specific to Berlin. The method, scoring rules, schema an
 - **Reference file:** this file's `metadata.field_definitions` is the reference copy for every city ([§4](../research/README.md#4-shared-schema-version-3)).
 
 <!-- at-a-glance:start -->
-**At a glance** (version 6, 2026-10-01)
+**At a glance** (version 7, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 156 |
-| People | 152 |
+| Companies | 157 |
+| People | 165 |
 | Tier 1 leads | 11 |
 | First-time speakers (publish, no talk yet) | 16 |
-| Proven speakers | 125 |
+| Proven speakers | 132 |
 | Spoke at this chapter before | 10 |
-| Based in the region | 90 |
+| Based in the region | 101 |
 | Based elsewhere | 11 |
-| Location unknown | 51 |
+| Location unknown | 53 |
 | With a LinkedIn profile | 71 |
 | Job ads mentioning dbt | 98 |
 | Past chapter meetups | 15 |
@@ -50,12 +50,15 @@ Data Berlin is Berlin's largest general data meetup and job board, run by France
 
 ### Women-in-data communities
 
-- **[PyLadies Berlin](https://www.meetup.com/pyladies-berlin):** the best source. Its themed data talk nights, such as 12 Nov 2024, had dbt and dlt talks. Its listings show speakers' own pronouns.
-- **[Women in Big Data Berlin](https://www.meetup.com/women-in-big-data-berlin-meetup-group):** speakers and the founder.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published.
+- **[PyLadies Berlin](https://www.meetup.com/pyladies-berlin):** the best source. Its themed data talk nights, such as 12 Nov 2024, had dbt and dlt talks. Its listings show speakers' own pronouns. Newer events added Anne Sehnal and Cassandra Milbradt of d-fine ([AI agents workshop](https://www.meetup.com/pyladies-berlin/events/314645733/), May 2026), and Claudia Stangarone and Helen FitzGerald of Bettermile ([delivery-risk talk](https://www.meetup.com/pyladies-berlin/events/304510252/), January 2025). The organiser Vanessa Fonseca is a connector.
+- **[Women in Big Data Berlin](https://www.meetup.com/women-in-big-data-berlin-meetup-group):** speakers and the founder. Its [January 2025 data and governance evening](https://www.meetup.com/women-in-big-data-berlin-meetup-group/events/305143951/) added Silke Kaiser (Hertie School) and Martin Manhembué (data quality with AI agents).
+- **[AWS Women's User Group Berlin](https://www.meetup.com/berlin-amazon-web-services-meetup-group/):** its [April 2025 online session with Women on Snowflake](https://www.meetup.com/berlin-amazon-web-services-meetup-group/events/307161270/) gave Anastasiia Stefanska (TUI) and Isabella Renzetti, both Snowflake Data Superheroes. Its 4 organisers (Ruth Otero, Sana Shah, Shabnam Motamedirad and Linda Mohamed) are connectors.
+- **[Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/):** an online Snowflake user group led by the same two people. It runs hands-on labs and Women in Data breakfasts at Snowflake World Tour stops.
 - **[Women Techmakers Berlin](https://www.meetup.com/wtm-berlin):** speakers with data talks.
-- **[Women+ in Data/AI Festival](https://women-in-data-ai.tech):** the 2023–2024 editions, with a data engineering track.
-- **Also checked:** AWS Women's User Group Berlin, WomenTech Network Berlin, Berlin WiMLDS and PyLadies at PyCon DE.
-- **Connectors:** the PyLadies Berlin co-lead and the WiBD Berlin founder are tier `connector`.
+- **[Women+ in Data/AI Festival](https://women-in-data-ai.tech):** the 2023–2024 editions, with a data engineering track. Martina Freers (INNOQ), who leads it, is a connector.
+- **Also checked:** WomenTech Network Berlin, Berlin WiMLDS and PyLadies at PyCon DE.
+- **Connectors:** the PyLadies Berlin organisers, the WiBD Berlin founder and the AWS Women's User Group organisers are tier `connector`.
 
 ### Conferences, newsletters and podcasts
 
@@ -82,7 +85,9 @@ Data Berlin is Berlin's largest general data meetup and job board, run by France
 - **Data Berlin YouTube:** the channel page and RSS feed returned no videos, so recordings aren't linked yet.
 - **dbt Slack #local-berlin:** can't be searched from outside Slack.
 - **Quiet scale-up blogs:** N26, SumUp, Babbel, Omio, Solaris, Auto1, SoundCloud and Urban Sports Club engineering have been quiet since 2023.
-- **Women-in-data groups with no active Berlin chapter or speaker lists for 2023–26:** R-Ladies Berlin (dormant since about 2019), Women in Data, WiDS, She Loves Data, Women in AI, Girls in Tech and Ladies of Code.
+- **Women-in-data groups with no active Berlin chapter or speaker lists for 2023–26:** [R-Ladies Berlin](https://www.meetup.com/rladies-berlin/) (last event November 2020), Women in Data, WiDS, She Loves Data, Women in AI, Girls in Tech and Ladies of Code.
+- **Inactive or paused since the last run:** [Berlin WiMLDS](https://www.meetup.com/Berlin-Women-in-Machine-Learning-and-Data-Science/) last met in November 2023. The [Women+ in Data/AI Festival](https://women-in-data-ai.tech/) is paused in 2025.
+- **Women-in-tech groups with no data talks:** [Women Techmakers Berlin](https://www.meetup.com/wtm-berlin/) in 2025–26 (roundtables, IWD, AI and careers), [Empowered in Tech](https://www.meetup.com/empowered-in-tech/), [IT_Frauen Berlin](https://www.meetup.com/it_frauen-berlin/) and AI for Women Berlin (no events).
 - **Data Berlin talks as dbt evidence:** none of the 78 talk descriptions mentioned dbt. The programme has been heavy on AI and agents since 2025.
 
 ## 3. Companies looked at
@@ -93,7 +98,7 @@ Data Berlin is Berlin's largest general data meetup and job board, run by France
 - **Roles based elsewhere:** some roles on the Berlin board are remote or outside Berlin, such as Fivetran's Costa Rica role and Grafana's Sweden and Spain roles.
 
 <!-- companies:start -->
-155 companies and communities were looked at. A company is local when it has people or roles in the region.
+156 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (23)</summary>
 
@@ -113,9 +118,9 @@ Alligator Company (local presence not confirmed), Altinity (local presence not c
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (4)</summary>
+<details><summary><b>Uses a different stack</b> (5)</summary>
 
-Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
+d-fine, Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
 
 </details>
 
@@ -145,6 +150,22 @@ Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
 - https://www.getyourguide.careers/posts
 - https://www.tasman.ai/news
 - https://www.y42.com/blog
+
+</details>
+
+<details><summary><b>Other sources checked</b> (11)</summary>
+
+- [Meetup gql2 groupSearch near Berlin (women-in-data queries)](https://www.meetup.com/gql2#groupSearch-berlin-wid)
+- [PyLadies Berlin 2025-2026 events (Meetup gql2)](https://www.meetup.com/pyladies-berlin/events/?type=past)
+- [Women in Big Data Berlin 2025-2026 events (Meetup gql2)](https://www.meetup.com/women-in-big-data-berlin-meetup-group/events/?type=past)
+- [AWS Women's User Group Berlin 2025-2026 events (Meetup gql2)](https://www.meetup.com/berlin-amazon-web-services-meetup-group/events/?type=past)
+- [Women Techmakers Berlin 2025-2026 events (Meetup gql2)](https://www.meetup.com/wtm-berlin/events/?type=past) (nothing useful)
+- [Women on Snowflake user group page](https://usergroups.snowflake.com/women-on-snowflake/)
+- [Women+ in Data/AI Festival site](https://women-in-data-ai.tech/) (nothing useful)
+- [Empowered in Tech (Meetup gql2)](https://www.meetup.com/empowered-in-tech/) (nothing useful)
+- [R-Ladies Berlin (Meetup gql2)](https://www.meetup.com/rladies-berlin/) (nothing useful)
+- [Berlin WiMLDS (Meetup gql2)](https://www.meetup.com/Berlin-Women-in-Machine-Learning-and-Data-Science/) (nothing useful)
+- [IT_Frauen Berlin and AI for Women Berlin (Meetup gql2)](https://www.meetup.com/it_frauen-berlin/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -196,6 +217,7 @@ Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
   - **Data Berlin events:** new line-ups on [Luma](https://lu.ma/data-berlin) and [meetup.com](https://www.meetup.com/data-berlin/events/?type=past). Give their talks a `content_id` of `databerlin-<date>-<slug>`.
   - **Blogs:** re-scan `sources.company_blogs_scanned` and the dbt Labs case studies for Berlin companies.
   - **Conferences:** dbt Summit and Coalesce, Databricks Data + AI Summit, Berlin Buzzwords, PyCon DE & PyData and the applydata meetup.
+  - **Women-in-data events:** new PyLadies Berlin, Women in Big Data Berlin and AWS Women's User Group Berlin events, and the Women on Snowflake past events, which need a browser to load more than four. Check whether the Women+ in Data/AI Festival returns in 2026.
   - **Links:** replace `overview_page` links with direct links.
 - **People to locate:**
   - **Unknown locations:** 51 people. Work in tier order, with past chapter speakers first within a tier.
@@ -213,3 +235,4 @@ Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
 | 2026-09-23 | 4 | Shared schema v2 adds `lead_type` (proven_speaker / emerging_voice / featured / no_public_content). 8 emerging voices raised in priority: 4 to tier 1 (David Förster, Max Rieger, Nélson Rangel, Hiba Jamal) and 4 to tier 2 (Danny Burleigh and Lennart Scharmann were already tier 1). Split: 99 proven speakers, 16 emerging voices, 6 featured, 3 with no public content. |
 | 2026-09-23 | 5 | Shared schema v3 adds `pronouns` (self-stated only, never inferred) and `sourced_via`. **Women-in-data sourcing (Step 2b):** 28 new people from PyLadies Berlin, Women in Big Data Berlin, Women Techmakers Berlin, the Women+ in Data/AI Festival, AWS Women's User Group, WomenTech Network and WiMLDS, plus new evidence for Katharine Jarmul. 3 people have self-stated pronouns. Added a line-up balance check to the outreach order and to `event-planning-template.md`. Totals: 156 companies, 152 people. Lithuania and Kuala Lumpur moved to schema v3 too (schema-only change). Backup: `berlin_dbt_companies.v4.json`. |
 | 2026-10-01 | 6 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed 38 people: Meetup host and RSVP lists tied to the person, and recent in-person talks at Data Berlin and other Berlin events by people whose employer has a Berlin office. LinkedIn search results placed 9 more. Of the 47 placed, 42 are in Berlin and 5 elsewhere. 53 people are still unknown. |
+| 2026-10-01 | 7 | Women-in-data pass from Meetup data and the Women on Snowflake user group page. 13 people added: 7 speakers from PyLadies Berlin, Women in Big Data Berlin and AWS Women's User Group Berlin, plus 6 organisers as connectors. Anastasiia Stefanska gained a talk. R-Ladies Berlin and Berlin WiMLDS are inactive, and the Women+ in Data/AI Festival is paused in 2025. |

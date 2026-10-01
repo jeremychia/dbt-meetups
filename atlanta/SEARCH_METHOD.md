@@ -7,19 +7,19 @@ This file holds what is specific to Atlanta. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 81 |
-| People | 81 |
+| Companies | 91 |
+| People | 96 |
 | Tier 1 leads | 11 |
-| First-time speakers (publish, no talk yet) | 14 |
-| Proven speakers | 51 |
+| First-time speakers (publish, no talk yet) | 13 |
+| Proven speakers | 60 |
 | Spoke at this chapter before | 17 |
-| Based in the region | 64 |
+| Based in the region | 75 |
 | Based elsewhere | 4 |
-| Location unknown | 13 |
+| Location unknown | 17 |
 | With a LinkedIn profile | 11 |
 | Job ads mentioning dbt | 35 |
 | Past chapter meetups | 8 |
@@ -63,6 +63,15 @@ Atlanta's live data community is on the Bevy event platform (Snowflake and Table
 - **Location pass (2026-10-01):** page fetches placed 6 people, 5 in the region and 1 outside. The evidence was speaker bios and recent in-person talks at an employer with an Atlanta office.
 - **LinkedIn pass (2026-10-01):** LinkedIn search results placed 4 people, all in the region. No LinkedIn page was opened.
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published. One organiser published them.
+- **[Women Techmakers Atlanta](https://gdg.community.dev/gdg-atlanta/):** runs its events through GDG Atlanta. The GDG events API (`event_slim/for_chapter/547`) lists 6 Women Techmakers events, the last in April 2024. The [IWD ATL 2023 page](https://gdg.community.dev/events/details/google-gdg-atlanta-presents-international-womens-day-atl-2023/) named 2 data panellists, Jessica Reyes (Equifax) and Sherry Ni (Kennesaw State). Jessica M. Rudd moderated. The page also lists 5 organisers. The organisers also ran a [BigQuery and Gemini lab](https://www.meetup.com/google-developer-groups-gdg-atlanta/events/302737372/) in August 2024. Kate Hargrove (66degrees) led it, and Soumya Sinha (LexisNexis Risk Solutions) gave the opening talk.
+- **[R-Ladies Atlanta](https://www.meetup.com/rladies-atlanta/):** restarted in March 2024 with a talk on R Markdown and Quarto. The speaker was co-founder Melinda Higgins (Emory School of Nursing). There has been no event since. The other co-organiser is recorded as a connector.
+- **[WiDS Atlanta @ Dataiku](https://www.widsworldwide.org/get-inspired/blog/wrapping-up-2024-wids-ambassador-events/):** the 2024 WiDS round-up names a leadership panel. The panellists were Becky Patterson (BCBS), Beverly Wright and Haley Bobo. The WiDS site search API (`wp-json/wp/v2/search?search=Atlanta`) found it. No 2025 or 2026 Atlanta event was found.
+- **[REFACTR.TECH](https://www.meetup.com/refactr-tech/):** an inclusive Atlanta tech community with monthly meetups. Its [Women + AI Futures Week event](https://www.meetup.com/refactr-tech/events/306525446/) in March 2025, held at FanDuel, had one data-related talk. Iulia Ilea (FanDuel) spoke on automating data collection for anti-money-laundering investigations. The 3 organisers are recorded as connectors.
+- **[Women Building AI](https://www.meetup.com/women-building-ai/):** a new Decatur group. It held its first gathering in August 2026. The organiser is recorded as a connector.
+
 ## 2. What didn't work here
 
 - **Meetup:** not where Atlanta's data community meets. Most data groups are dormant or run vendor webinars. [Data Science ATL](https://www.meetup.com/data-science-atl/) is mostly vendor webinars.
@@ -75,8 +84,13 @@ Atlanta's live data community is on the Bevy event platform (Snowflake and Table
 - **Other Medium feeds:** every guessed publication returned HTTP 429 (too many requests). The guesses for Mailchimp, Cox, Home Depot, Calendly, Salesloft and Greenlight were not confirmed.
 - **[dbt Developer Hub blog authors](https://docs.getdbt.com/blog/authors):** none with an Atlanta employer.
 - **Open web search:** Medium, dev.to and Substack authors with an Atlanta employer gave nothing usable.
-- **Women-in-data communities:** no Atlanta source yielded people. [Atlanta WiMLDS](https://www.meetup.com/atlanta-wimlds/) has no events. [Women in Big Data Atlanta](https://www.meetup.com/women-in-big-data-atlanta-chapter/) was not found. Women Who Code closed in 2024.
-- **Unreachable sites:** the Georgia State University events site did not resolve. The [WiDS](https://www.widsworldwide.org/) (Women in Data Science) regional page returned 404.
+- **Women-in-data communities that gave no people:**
+  - **[Atlanta WiMLDS](https://www.meetup.com/atlanta-wimlds/):** 145 members and no events.
+  - **[Girl Develop It Atlanta](https://www.meetup.com/girl-develop-it-atlanta/):** online coding and SQL classes with no named instructors.
+  - **Not on Meetup:** PyLadies Atlanta, Women in Big Data, Lesbians Who Tech, Girls in Tech and Data + Women have no Atlanta group. Meetup's group search for "women" mostly returns social groups.
+  - **[Women in Technology](https://www.womenintechnology.org/):** this site is the Washington DC group, not Atlanta's.
+  - **Closed:** Women Who Code closed in 2024.
+- **Unreachable sites:** Atlanta's Women in Technology site (witlinc.org) and girlsintech.org did not resolve. The Georgia Tech and Georgia State calendar searches render with JavaScript, so a fetch returns no events. WiDS regional event pages for Atlanta return 404.
 
 ## 3. Companies looked at
 
@@ -86,7 +100,7 @@ Atlanta's live data community is on the Bevy event platform (Snowflake and Table
 - **GitHub leads are mostly portfolio or course projects.** The tier 1 on these comes from the scoring rule, not from judgement.
 
 <!-- companies:start -->
-80 companies and communities were looked at. A company is local when it has people or roles in the region.
+90 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (3)</summary>
 
@@ -100,9 +114,21 @@ Agoda, AT&T, CapTech, Chick-fil-A, CNN, Cox Automotive, Credigy, DiversiTech Cor
 
 </details>
 
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+66degrees (local presence not confirmed)
+
+</details>
+
 <details><summary><b>Not verified</b> (45)</summary>
 
 Allegro Analytics (local presence not confirmed), Americold, Amplitude (local presence not confirmed), Analytic Vizion (local presence not confirmed), Apex Systems (local presence not confirmed), Asian American Power Network, Atlanta Databricks User Group, Atlanta Tableau User Group, BlackRock, Cargill (local presence not confirmed), Cut-Thru Consulting (local presence not confirmed), Dagster (local presence not confirmed), Data Science ATL (DataSciConnect), Dataiku (local presence not confirmed), dbt Labs (local presence not confirmed), Delta Air Lines (local presence not confirmed), Elevance Health (local presence not confirmed), Equifax, Fox Corporation (local presence not confirmed), Georgia Tech Athletic Association, Georgia-Pacific, GoTo Foods, HD Supply (local presence not confirmed), Improving (Alpharetta), Institute for Insight, Georgia State University (local presence not confirmed), Johnson Controls (local presence not confirmed), McKesson (local presence not confirmed), Piedmont (local presence not confirmed), PrizePicks (local presence not confirmed), PyData Atlanta, Salesforce (Tableau), Salesloft (local presence not confirmed), Shopify, Snowflake (local presence not confirmed), Snowflake User Groups Atlanta, Southern Company (local presence not confirmed), TAG Data Governance Society, TAG Data Science & AI Society, The Coca-Cola Company, Truist, TSYS, Vanrish Technology, WBD (local presence not confirmed), Yum! Brands (local presence not confirmed), Zaxby's (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (9)</summary>
+
+Blue Cross Blue Shield (local presence not confirmed), Emory University, Kennesaw State University, LexisNexis Risk Solutions (local presence not confirmed), R-Ladies Atlanta, REFACTR.TECH, WiDS Atlanta, Women Building AI, Women Techmakers Atlanta (GDG Atlanta)
 
 </details>
 
@@ -114,7 +140,7 @@ Allegro Analytics (local presence not confirmed), Americold, Amplitude (local pr
 
 </details>
 
-<details><summary><b>Other sources checked</b> (32)</summary>
+<details><summary><b>Other sources checked</b> (50)</summary>
 
 - Local enriched chapter file: `enriched/atlanta-dbt-meetup-group.json`
 - [Meetup past events (Atlanta dbt)](https://www.meetup.com/atlanta-dbt-meetup-group/events/?type=past) (nothing useful)
@@ -148,6 +174,24 @@ Allegro Analytics (local presence not confirmed), Americold, Amplitude (local pr
 - [Georgia State Institute for Insight events / WiDS regional events](https://www.widsworldwide.org/) (nothing useful)
 - [SQL Saturday Atlanta](https://sqlsaturday.com/) (nothing useful)
 - [Medium feeds for Atlanta companies (curl)](https://medium.com/feed/) (nothing useful)
+- [Meetup gql2 groupSearch near Atlanta](https://www.meetup.com/gql2)
+- [GDG Atlanta events API (Women Techmakers Atlanta)](https://gdg.community.dev/api/event_slim/for_chapter/547/?status=Completed&page_size=200)
+- [International Women's Day ATL 2023 (Women Techmakers Atlanta)](https://gdg.community.dev/events/details/google-gdg-atlanta-presents-international-womens-day-atl-2023/)
+- [GDG Atlanta Build with AI lab, August 2024](https://www.meetup.com/google-developer-groups-gdg-atlanta/events/302737372/)
+- [Pioneers in Skirts IWD 2024 (GDG Atlanta)](https://www.meetup.com/google-developer-groups-gdg-atlanta/events/299597794/) (nothing useful)
+- [R-Ladies Atlanta (Meetup gql2)](https://www.meetup.com/rladies-atlanta/)
+- [WiDS Atlanta @ Dataiku 2024 (WiDS ambassador round-up)](https://www.widsworldwide.org/get-inspired/blog/wrapping-up-2024-wids-ambassador-events/)
+- [WiDS site search for Atlanta](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Atlanta)
+- [REFACTR.TECH (Meetup gql2)](https://www.meetup.com/refactr-tech/)
+- [Women Building AI (Meetup gql2)](https://www.meetup.com/women-building-ai/)
+- [Girl Develop It Atlanta (Meetup gql2)](https://www.meetup.com/girl-develop-it-atlanta/) (nothing useful)
+- [PyLadies Atlanta, Women in Big Data, Lesbians Who Tech, Girls in Tech and Data + Women on Meetup](https://www.meetup.com/pyladies-atlanta/) (nothing useful)
+- [PyAtl and PyData Atlanta past events (Meetup gql2)](https://www.meetup.com/python-atlanta/) (nothing useful)
+- [Women in Technology (womenintechnology.org)](https://www.womenintechnology.org/) (nothing useful)
+- [Women in Technology Georgia (witlinc.org)](https://witlinc.org/) (nothing useful)
+- [Girls in Tech Atlanta](https://girlsintech.org/atlanta/) (nothing useful)
+- [Georgia Tech campus calendar search](https://calendar.gatech.edu/search?search_api_fulltext=women%20data) (nothing useful)
+- [Georgia State events search](https://events.gsu.edu/search/events?search=women+data) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -188,7 +232,7 @@ Allegro Analytics (local presence not confirmed), Americold, Amplitude (local pr
 - **Sources to try first:**
   - **LinkedIn pass:** 36 tier-1 and tier-2 people are still `not_searched`.
   - **Meetup `gql2` past-events query:** run it for the chapter, with `sort: DESC`, to capture recent organisers and RSVPs.
-  - **Women-in-data calendars:** the Georgia Tech, Georgia State and TAG DEI society calendars.
+  - **Women-in-data sources not reachable by fetch:** the Georgia Tech and Georgia State calendars (open them in a browser), Women in Technology Georgia (witlinc.org) and Girls in Tech Atlanta. Also check the TAG DEI society calendar and the next Women Techmakers IWD event on GDG Atlanta.
   - **TAG and COLLIDE:** the TAG DataPalooza speaker list in October, and COLLIDE session titles once published.
   - **Medium publications:** confirm the names for Mailchimp, Cox, Home Depot, Calendly, Salesloft and Greenlight, and read their feeds.
   - **GitHub and Bevy:** GitHub user search (`dbt location:Atlanta`) for new first-time speakers, and the Bevy pages for Snowflake and Tableau Atlanta.
@@ -203,3 +247,4 @@ Allegro Analytics (local presence not confirmed), Americold, Amplitude (local pr
 | 2026-10-01 | 2 | Extension: TAG society calendars and board pages, COLLIDE 2026, Tableau, Snowflake and Databricks user groups, an Amplitude Community panel and GitHub user search. 45 new people, for 81 companies (38 on the watchlist) and 81 people. Split: 51 proven speakers, 14 emerging voices, 14 featured, 2 with no public content. Tiers: 11 tier 1, 36 tier 2, 18 tier 3, 16 connectors. |
 | 2026-10-01 | 2 | Location pass: 6 people placed from speaker bios and recent in-person talks, 5 in the region and 1 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 4 people placed from LinkedIn search results, all in the region. 15 people are still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass: Women Techmakers Atlanta (through GDG Atlanta), R-Ladies Atlanta, WiDS Atlanta, REFACTR.TECH and Women Building AI. 15 new people and 2 updated: 10 speakers and panellists, and 7 organisers as connectors. |

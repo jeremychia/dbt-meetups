@@ -7,17 +7,17 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 56 |
-| People | 82 |
+| Companies | 60 |
+| People | 89 |
 | Tier 1 leads | 20 |
 | First-time speakers (publish, no talk yet) | 14 |
-| Proven speakers | 65 |
+| Proven speakers | 66 |
 | Spoke at this chapter before | 28 |
-| Based in the region | 63 |
+| Based in the region | 70 |
 | Based elsewhere | 5 |
 | Location unknown | 14 |
 | With a LinkedIn profile | 9 |
@@ -57,6 +57,15 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **LinkedIn search results:** 15 people were searched. It placed 5 in Singapore and 1 in Sydney. 3 LinkedIn URLs were carried over from the Kuala Lumpur file.
 - **Yield:** 17 people placed across both passes, and 14 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[Women Devs SG](https://www.meetup.com/women-devs-sg/):** the most active women-in-tech group, with 45 events since June 2024. Two were data events: [Web3 data analytics](https://www.meetup.com/women-devs-sg/events/301544159/) (July 2024) and a [Dataiku data science walkthrough](https://www.meetup.com/women-devs-sg/events/303595492/) (October 2024). The event pages rarely name speakers. The hosts Victoria Lo, Saloni, Toshal Patel and Diya Naresh are recorded as connectors. Aishwarya E, already in the file, is the main host.
+- **[R-Ladies Singapore](https://www.meetup.com/rladies-singapore-sg/):** founded in 2024, with 4 events to January 2025. The organiser, Liang Tian, is a connector.
+- **[WiDS Singapore @ Dataiku](https://www.widsworldwide.org/events/event/wids-singapore-dataiku/):** an in-person regional conference in May 2023. The Dataiku ambassador, Nasim Bano Sheena Nasim, is a connector.
+- **WiDS Taipei:** AnLei Huang, a Databricks solution engineer in Singapore, [spoke at WiDS Taipei 2026](https://medium.com/women-in-data-science-taipei/wids-taipei-2026-building-trustworthy-systems-through-imperfection-by-anlei-huang-2685a5372a8f) on trustworthy analytics agents and semantics. This is the strongest data speaker from this pass.
+- **Also ask:** the Women Devs SG hosts to share the call for speakers, and Dataiku for the WiDS Singapore network.
+
 ## 2. What didn't work here
 
 - **Web search:** ran out after about 12 calls. The rest of the run used direct fetches of pages, plus the GitHub and DEV APIs.
@@ -68,6 +77,7 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **GitHub API:** rate-limited, and code search hit its limit.
 - **Grab and Holistics author pages:** list posts only, with no location.
 - **Women-in-data groups:** no Singapore women-in-data group was found with dbt talks.
+- **Other women-in-data sources:** [Singapore WiMLDS](https://www.meetup.com/singapore-women-in-machine-learning-and-data-science/) has held no event since 2023. The Women Techmakers International Women's Day events with [GDG Singapore](https://gdg.community.dev/gdg-singapore/) (2024 and 2025) had AI workshops and named no speakers. [She Loves Data](https://www.shelovesdata.com/) now runs global online AI courses, and its events page returns 404. Girls in Tech Singapore did not resolve. Women Who Code closed in 2024.
 
 ## 3. Companies looked at
 
@@ -77,7 +87,7 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **Overlap with Kuala Lumpur:** Feng Cheng and Chang Boon Heng appear in both datasets.
 
 <!-- companies:start -->
-55 companies and communities were looked at. A company is local when it has people or roles in the region.
+59 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (20)</summary>
 
@@ -97,9 +107,9 @@ Airwallex, Amazon Web Services (AWS), Carousell, ClickHouse (local presence not 
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (2)</summary>
+<details><summary><b>Uses a different stack</b> (6)</summary>
 
-DataScience SG, PyLadies Singapore
+Databricks, Dataiku, DataScience SG, PyLadies Singapore, R Ladies Singapore, Women Devs SG
 
 </details>
 
@@ -117,7 +127,7 @@ DataScience SG, PyLadies Singapore
 
 </details>
 
-<details><summary><b>Other sources checked</b> (18)</summary>
+<details><summary><b>Other sources checked</b> (27)</summary>
 
 - [GovTech STACK [Data] meetups](https://www.developer.tech.gov.sg/communities/events/stack-meetups/)
 - [Snowflake User Group Singapore](https://usergroups.snowflake.com/singapore/)
@@ -137,6 +147,15 @@ DataScience SG, PyLadies Singapore
 - [GitHub users in Singapore mentioning dbt](https://github.com/search?q=dbt+location%3ASingapore&type=users) (nothing useful)
 - [Databricks User Group Singapore](https://community.databricks.com/t5/singapore/databricks-user-group-singapore-meetup/m-p/124414) (nothing useful)
 - [Luma DataScience SG calendar](https://luma.com/datascienceSG) (nothing useful)
+- [Meetup gql2 groupSearch near Singapore](https://www.meetup.com/gql2)
+- [Women Devs SG past events (Meetup gql2)](https://www.meetup.com/women-devs-sg/)
+- [R Ladies Singapore (Meetup gql2)](https://www.meetup.com/rladies-singapore-sg/)
+- [Singapore WiMLDS (Meetup gql2)](https://www.meetup.com/singapore-women-in-machine-learning-and-data-science/) (nothing useful)
+- [GDG Singapore events API (Women Techmakers)](https://gdg.community.dev/api/event_slim/for_chapter/495/?status=Completed&page_size=300) (nothing useful)
+- [WiDS Singapore @ Dataiku](https://www.widsworldwide.org/events/event/wids-singapore-dataiku/)
+- [WiDS Singapore (online)](https://www.widsworldwide.org/events/event/wids-singapore/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [Girls in Tech Singapore](https://girlsintech.org/singapore/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -180,7 +199,13 @@ DataScience SG, PyLadies Singapore
   - **The chapter and STACK:** new GovTech STACK [Data] meetups, and new Singapore dbt Meetup and Snowflake User Group Singapore events through Meetup `gql2`.
   - **Conference agendas:** the Coalesce and dbt Summit speaker lists, and the Snowflake and Databricks World Tour Singapore agendas, were not covered.
   - **Job ads:** read the remaining 6 freehire.me pages, keeping ads that contain the whole word "dbt". Add the Lever, Greenhouse and Ashby `site:` searches.
-  - **Women-in-data:** ask PyLadies Singapore and Women Devs SG for speakers on data topics.
+  - **Women-in-data:** ask PyLadies Singapore and Women Devs SG for speakers on data topics. Read new Women Devs SG and R-Ladies Singapore events.
+- **Women-in-data communities not yet reachable:**
+  - **Women Devs SG speakers:** the 2024 Web3 analytics and Dataiku events name no speakers. Ask the hosts.
+  - **Women Techmakers Singapore:** the GDG event pages name no speakers or ambassadors. Ask GDG Singapore.
+  - **Girls in Tech Singapore and She Loves Data:** no Singapore event page was found.
+  - **WiDS Singapore since 2024:** no event is listed on the WiDS site.
+- **People from the women-in-data pass:** the 7 people added have no LinkedIn search. Saloni is known only by a Meetup first name.
 - **People to locate:**
   - **Past speakers:** 14 people are still unknown, mostly past chapter speakers from 2023 and 2024. LinkedIn found no profile with a matching title for Aezo Teo, Houren Chen, Shuguang Xiang, Adam Bagaskarta and Jia Ler Chew. Try the Grab or ShopBack author pages.
   - **Auxten Wang:** gave 2 in-person Singapore talks in 2026. Confirm whether ClickHouse has a Singapore office.
@@ -193,3 +218,4 @@ DataScience SG, PyLadies Singapore
 | 2026-10-01 | 1 | First build. GovTech STACK, Snowflake User Group, DataScience SG, PyCon and PyLadies Singapore events, freehire.me and TheirStack job ads, Grab, Medium, Holistics and Infinite Lambda blogs, and DEV authors, plus chapter history. 82 people at 57 companies, 28 of them past chapter speakers. 21 dbt job ads. |
 | 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, and recent in-person chapter talks. 11 people placed, 8 in Singapore and 3 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 6 people placed, 5 in Singapore and 1 in Sydney. With the location pass, 17 people placed and 14 still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass. Checked Women Devs SG, R-Ladies Singapore, Singapore WiMLDS, Women Techmakers through GDG Singapore, WiDS Singapore, She Loves Data and Girls in Tech Singapore. Added 7 people with `sourced_via: women_in_data_community`: 1 speaker (AnLei Huang, Databricks, from WiDS Taipei 2026) and 6 connectors. Added 4 community channels. |

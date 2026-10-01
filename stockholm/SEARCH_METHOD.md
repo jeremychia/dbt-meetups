@@ -7,19 +7,19 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 90 |
-| People | 51 |
+| Companies | 100 |
+| People | 72 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 40 |
+| Proven speakers | 55 |
 | Spoke at this chapter before | 19 |
-| Based in the region | 40 |
-| Based elsewhere | 4 |
-| Location unknown | 7 |
+| Based in the region | 55 |
+| Based elsewhere | 6 |
+| Location unknown | 11 |
 | With a LinkedIn profile | 20 |
 | Job ads mentioning dbt | 62 |
 | Past chapter meetups | 7 |
@@ -30,12 +30,25 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **[Data & AI Stockholm](https://dataaistockholm.com/):** the best source, and the city's most active data community. Its [Substack recaps](https://dataaistockholm1.substack.com/p/data-ai-in-practice-from-foundations) name speakers with their employers. Its [summit page](https://dataaistockholm.com/summit) lists 18 speakers with LinkedIn links. The summit is on 14 October 2026. The recaps and summit page are far more efficient than company blogs.
 - **Chapter events:** 7 events, from January 2023 to June 2025. The early events were at Regeringsgatan 25. Since May 2024 they have been at Solita. They gave 19 past speakers, added from `../enriched/stockholm-dbt-meetup.json`. The chapter has had no events since the [June 2025 meetup](https://www.meetup.com/stockholm-dbt-meetup/events/307908713/).
 - **[Snowflake User Group Stockholm](https://usergroups.snowflake.com/stockholm/):** its event pages render on the server. They list speakers, organisers and LinkedIn links without a browser. One 2026 session covered dbt.
-- **[Women on Snowflake](https://usergroups.snowflake.com/events/details/snowflake-women-on-snowflake-presents-deep-dive-dbt-projects-on-snowflake/cohost-stockholm):** co-hosted a dbt-on-Snowflake deep dive with the Stockholm user group in January 2026. It gave the only tier-1 lead.
-- **[WiDS Sweden 2025](https://wids.confetti.events/wids2025):** mostly machine learning and AI. Its organisers include people who run data platforms at Handelsbanken, H&M and Spotify.
 - **LinkedIn Jobs:** a search for dbt around Stockholm. 62 ads at 55 companies mention dbt. The ads are spread thinly. Storytel, Solita, NOBA Bank, Lovable, Etraveli, Avalanche Studios and Adavo posted 2 each.
 - **A Luma event page:** the page for a [Nextory talk](https://luma.com/4f8lqzsp) confirmed a speaker's role.
 - **meetup.com RSVP lists:** the best location source. They placed most of the past chapter speakers.
 - **LinkedIn search results:** 7 past chapter speakers without a location were searched. Filip Vitez was placed in Stockholm. Niklas Kullberg was placed in the Uppsala area, which counts as local. Salma Bakouk was placed in New York.
+
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[Women in Tech Sweden](https://womenintech.se/speakers/):** the best women-in-data source here. Its speakers page lists every conference speaker with title and employer. Each speaker page links the session title and year, and each session page names co-speakers. It gave 12 data and analytics speakers from the 2024, 2025 and 2026 conferences:
+  - **ICA:** Annie von Heijne and Maaret Malinen on [building a data-driven business with data governance](https://womenintech.se/play/the-journey-towards-datadriven-business/) (2024), and Heaven Bereket (2026).
+  - **EasyPark:** Jing Zhao, Doreh Bovelet and Sindhusha Marakani on [scaling analytics as data demands grow](https://womenintech.se/play/scaling-success-addressing-organizational-growth-data-demands-and-overcoming-challenges/) (2024).
+  - **Electrolux:** Anna Bärlund, Vida Ahmadi and Hajar El Hanafi on [experimenting with AI](https://womenintech.se/play/embracing-ai-dare-to-experiment-and-learn/) (2025).
+  - **Others:** Frida Värnlund (Visma) on [democratising product analytics with AI agents](https://womenintech.se/play/how-visma-democratises-data-at-scale-with-internal-ai-agents/) (2026), Lisa Olsson (Snowflake, 2025) and Gabrielle Dolinder (CEMIT Digital, 2025).
+- **[Women on Snowflake](https://usergroups.snowflake.com/events/details/snowflake-women-on-snowflake-presents-deep-dive-dbt-projects-on-snowflake/cohost-stockholm):** co-hosted a dbt-on-Snowflake deep dive with the Stockholm user group in January 2026. It gave the only tier-1 lead. In September 2026 it ran a [Semantic Views lab at Snowflake World Tour Stockholm](https://usergroups.snowflake.com/e/mn74k4/) and a [session at ODSC Stockholm](https://usergroups.snowflake.com/e/mjuh2v/). Neither page names speakers.
+- **[WiDS Sweden 2025](https://wids.confetti.events/wids2025):** mostly machine learning and AI. Its organisers include people who run data platforms at Handelsbanken, H&M and Spotify.
+- **[PyLadies Stockholm](https://www.meetup.com/pyladiesstockholm/):** mostly Python talks. An [April 2025 evening at Svenska Kraftnät](https://www.meetup.com/pyladiesstockholm/events/307271864/) covered data analytics and forecasting, but names no speaker. Meetup's event-host data names 3 organisers: Anwesha Das, Beatriz Uezu and Alenka Gucek. They are connectors.
+- **[AWS Women's User Group Sweden](https://www.meetup.com/aws-womens-user-group-sweden/):** started in April 2025. One data talk: Darya Petrashka (SLB) on [talking to the business](https://www.meetup.com/aws-womens-user-group-sweden/events/315186079/), online in June 2026. Its organisers Jagoda Čubrilo, Suzana Melo and Caroline Cah (Knightec, Gothenburg) are connectors.
+- **[Women Techmakers through GDG Stockholm](https://gdg.community.dev/e/mpcqyv/):** one online International Women's Day event in March 2025, with AI and career talks. Its co-organisers Zahra Mirzaei (Devoteam) and Marina Dushkina (ICA) are connectors.
+- **Also ask:** data leads at dbt companies to suggest people on their teams.
 
 ## 2. What didn't work here
 
@@ -47,6 +60,9 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
   - **Snowflake World Tour Stockholm:** the [speakers](https://www.snowflake.com/en/world-tour/stockholm/speakers/) render in the browser only.
 - **Stockholm Open Source Data Infrastructure meetup:** the [past events](https://www.meetup.com/stockholm-open-source-data-infrastructure-meetup/events/?type=past) render in the browser only.
 - **dev.events:** the [Stockholm data listing](https://dev.events/meetups/EU/SE/Stockholm/data) shows only online events and two summits.
+- **Dormant or new women-in-data groups:** [R-Ladies Stockholm](https://www.meetup.com/rladies-stockholm/) has had no events since 2019. Two groups founded in 2026, Let's Talk (for women and non-binary people in tech) and SoHer Society, have held discussion and café evenings with no talks.
+- **WiDS Sweden 2026:** no page was found. The wids2026 page and the confetti.events site root return 404.
+- **Women in Tech Sweden partner meetups:** the [meetups archive](https://womenintech.se/wp-json/wp/v2/meetups) ends in 2023. Its January 2023 SEB data meetup falls before the window for talks.
 
 ## 3. Companies looked at
 
@@ -55,7 +71,7 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **No company dominates the job ads.** 62 ads are spread across 55 companies.
 
 <!-- companies:start -->
-89 companies and communities were looked at. A company is local when it has people or roles in the region.
+99 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (3)</summary>
 
@@ -69,9 +85,9 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, B
 
 </details>
 
-<details><summary><b>Not verified</b> (29)</summary>
+<details><summary><b>Not verified</b> (39)</summary>
 
-0TO9 (local presence not confirmed), Acast, Adapteo Group (local presence not confirmed), AKLYON Consulting / PwC Sweden (local presence not confirmed), Data & AI Stockholm (DAIS), dbt Labs (local presence not confirmed), Einride (local presence not confirmed), EQT (local presence not confirmed), Funnel (local presence not confirmed), Google Cloud (local presence not confirmed), Grafana Labs (local presence not confirmed), H&M Group (local presence not confirmed), Handelsbanken (local presence not confirmed), Iver Sverige (local presence not confirmed), King, Nextory, Nordea (local presence not confirmed), NordicFeel (local presence not confirmed), Northridge Analytics (local presence not confirmed), Northvolt (local presence not confirmed), Once Upon (local presence not confirmed), Sifflet (local presence not confirmed), Supercargo (local presence not confirmed), Svedea, SYNQ (local presence not confirmed), Tele2, TUI (local presence not confirmed), Voi (local presence not confirmed), WiDS (AI & ML) Sweden
+0TO9 (local presence not confirmed), Acast, Adapteo Group (local presence not confirmed), AKLYON Consulting / PwC Sweden (local presence not confirmed), AWS Women's User Group Sweden (local presence not confirmed), CEMIT Digital (local presence not confirmed), Data & AI Stockholm (DAIS), dbt Labs (local presence not confirmed), EasyPark Group (local presence not confirmed), Einride (local presence not confirmed), Electrolux Group (local presence not confirmed), EQT (local presence not confirmed), Funnel (local presence not confirmed), Google Cloud (local presence not confirmed), Grafana Labs (local presence not confirmed), H&M Group (local presence not confirmed), Handelsbanken (local presence not confirmed), ICA Gruppen (local presence not confirmed), Iver Sverige (local presence not confirmed), King, Knightec Group (local presence not confirmed), Nextory, Nordea (local presence not confirmed), NordicFeel (local presence not confirmed), Northridge Analytics (local presence not confirmed), Northvolt (local presence not confirmed), Once Upon (local presence not confirmed), PyLadies Stockholm (local presence not confirmed), Sifflet (local presence not confirmed), SLB (local presence not confirmed), Snowflake (local presence not confirmed), Supercargo (local presence not confirmed), Svedea, SYNQ (local presence not confirmed), Tele2, TUI (local presence not confirmed), Visma Group (local presence not confirmed), Voi (local presence not confirmed), WiDS (AI & ML) Sweden
 
 </details>
 
@@ -88,7 +104,7 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, B
 
 </details>
 
-<details><summary><b>Other sources checked</b> (15)</summary>
+<details><summary><b>Other sources checked</b> (24)</summary>
 
 - Local chapter history (enriched/stockholm-dbt-meetup.json): `enriched/stockholm-dbt-meetup.json`
 - [Data & AI Stockholm site + Substack feed](https://dataaistockholm.com/)
@@ -105,6 +121,15 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, B
 - [Robert Sahlin Medium feed](https://medium.com/feed/@robertsahlin) (nothing useful)
 - [dev.events Stockholm data meetups](https://dev.events/meetups/EU/SE/Stockholm/data) (nothing useful)
 - [LinkedIn Jobs guest API (keywords=dbt, Stockholm-area)](https://www.linkedin.com/jobs/search?keywords=dbt)
+- [Meetup gql2 groupSearch around Stockholm](https://www.meetup.com/gql2)
+- [PyLadies Stockholm past events and hosts (Meetup gql2)](https://www.meetup.com/pyladiesstockholm/)
+- [AWS Women's User Group Sweden (Meetup gql2)](https://www.meetup.com/aws-womens-user-group-sweden/)
+- [R-Ladies Stockholm (Meetup gql2)](https://www.meetup.com/rladies-stockholm/) (nothing useful)
+- [Let's Talk and SoHer Society (Meetup gql2)](https://www.meetup.com/lets-talk-kvinnor-och-ickebinara-inom-tech-swedish/) (nothing useful)
+- [Women on Snowflake events](https://usergroups.snowflake.com/women-on-snowflake/)
+- [GDG Stockholm events API (Women Techmakers)](https://gdg.community.dev/gdg-cloud-stockholm/)
+- [Women in Tech Sweden speakers and sessions](https://womenintech.se/speakers/)
+- [Women in Tech Sweden meetups (WordPress API)](https://womenintech.se/wp-json/wp/v2/meetups) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -144,6 +169,13 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, B
   - **Substack, Medium and company blogs:** look for Stockholm authors who write about dbt, and record each author's employer. The city has no emerging voices yet.
   - **Community events:** new Data & AI Stockholm recaps, Snowflake User Group Stockholm events, and WiDS Sweden and Women on Snowflake events.
   - **Data Innovation Summit:** the full speaker list.
+- **Women-in-data communities not yet reachable:**
+  - **WiDS Sweden 2026:** look for a new event page, or ask the organisers already recorded.
+  - **Women in Tech Sweden:** about 300 speaker pages were not read. Read the rest of the data, analytics and BI speakers, and the 2026 programme.
+  - **Women on Snowflake Stockholm events:** ask Anastasiia Stefanska who led the September 2026 lab and the ODSC session.
+  - **PyLadies Stockholm:** ask the organisers for the Svenska Kraftnät speakers.
+  - **She Loves Data, Girls in Tech and Women in Big Data:** no Stockholm chapter or event was found.
+- **People from the women-in-data pass:** the 21 people added have no LinkedIn search. Jing Zhao and Sindhusha Marakani have no location on record.
 - **People to locate:** 7 people have no known location.
   - **Searched twice on LinkedIn, no profile link:** Mauro Luzzatto, Guillaume Fetter, Linus Wågberg and Erik Lehto.
   - **Never searched on LinkedIn:** Mike Burke and Isabella Renzetti.
@@ -157,3 +189,4 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, B
 | 2026-09-24 | 1 | First build, from one research pass and a LinkedIn Jobs scan. 90 companies, 51 people and 62 dbt job ads at 55 companies. 40 proven speakers, 11 featured and no emerging voices. 19 people had spoken at the chapter. 17 people had LinkedIn profiles. |
 | 2026-10-01 | 2 | Location pass from public pages. 11 people placed: 8 in the region and 3 elsewhere. Unknown locations fell from 21 to 10. |
 | 2026-10-01 | 2 | LinkedIn pass on 7 past chapter speakers. 3 placed: 2 in the region and 1 elsewhere. 7 locations are still unknown, and 20 people now have LinkedIn profiles. |
+| 2026-10-01 | 3 | Women-in-data pass. Checked Women in Tech Sweden (speakers and sessions), PyLadies Stockholm and AWS Women's User Group Sweden (past events and hosts), Women on Snowflake, Women Techmakers through GDG Stockholm, WiDS Sweden, R-Ladies Stockholm and two new Meetup groups. Added 21 people with `sourced_via: women_in_data_community`: 13 speakers and 8 organisers as connectors. Added new events for Anastasiia Stefanska and Isabella Renzetti. Added 6 community channels. |

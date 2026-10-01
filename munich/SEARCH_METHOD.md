@@ -7,19 +7,19 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 65 |
-| People | 73 |
+| Companies | 73 |
+| People | 89 |
 | Tier 1 leads | 20 |
 | First-time speakers (publish, no talk yet) | 23 |
-| Proven speakers | 44 |
+| Proven speakers | 51 |
 | Spoke at this chapter before | 16 |
-| Based in the region | 44 |
+| Based in the region | 58 |
 | Based elsewhere | 12 |
-| Location unknown | 17 |
+| Location unknown | 19 |
 | With a LinkedIn profile | 16 |
 | Job ads mentioning dbt | 24 |
 | Past chapter meetups | 7 |
@@ -47,9 +47,14 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 
 ### Women-in-data communities
 
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
 - **[WiDS Munich](https://widsmunich.de/):** its team and 2025 speakers are mostly academic or machine learning. They are useful as organiser contacts at Sixt, LMU and BR.
-- **[AWS Women's User Group Munich](https://www.meetup.com/aws-womens-user-group-munich/):** its founder at BMW gave a query-performance talk.
-- **[PyLadies Munich](https://www.meetup.com/pyladiesmunich/events/?type=past):** quarterly talk nights, mostly Python and machine learning.
+  - **[2024 agenda](https://sites.google.com/view/widsmunich/past-events/wids-2024/agenda):** it names speakers with employer and talk title. The event was held at Bayerischer Rundfunk. It gave 5 people: Katharina Brunner (BR Data) on data in investigative journalism, Marie-Louise Timcke (head of the Süddeutsche Zeitung data department), Uli Köppen (BR), Ann-Kristin Vester (CorrelAid) and the moderator Leah von der Heyde (LMU).
+  - **[2026 team](https://widsmunich.de/team/):** 12 people, mostly at LMU and TUM. Johanna Sommer (Pruna AI), Isabella Almstätter and Shan Huang (Munich Data Science Institute) and Helena Džakula (SOS Children's Villages) are recorded as connectors. The 2026 conference is on 11 December 2026 at LMU, and its speakers are not yet announced.
+- **[AWS Women's User Group Munich](https://www.meetup.com/aws-womens-user-group-munich/):** its founder at BMW gave a query-performance talk. Its only other data talk was ["One Data Agent"](https://www.meetup.com/aws-womens-user-group-munich/events/311291873/) by Annalena Wiesheu and Miriam Deml (October 2025, at the BMW Future Lab). The page names no employer for them. The other talks since 2024 are about cloud, security, GenAI and careers.
+- **[PyLadies Munich](https://www.meetup.com/pyladiesmunich/events/?type=past):** quarterly talk nights, mostly Python and machine learning. Two data talks: Patricia Goldberg (Wemolo) on [Python in data engineering](https://www.meetup.com/pyladiesmunich/events/304177482/) (November 2024), and Denise Hartmann (inovex) on [agents at inovexGPT](https://www.meetup.com/pyladiesmunich/events/311379318/) (November 2025). Meetup's event-host data names the organisers Laysa Uchoa (Nordcloud), Yulia Barabash and Daryna Dementieva. They are connectors.
+- **[Women Techmakers Munich](https://gdg.community.dev/e/m95dgx/):** its only recent event was a brunch at DevFest Munich 2023. Its host, Aiman Saeed, is a connector.
+- **Also ask:** data leads at dbt companies to suggest people on their teams.
 
 ### Job ads
 
@@ -68,7 +73,8 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 - **Medium feeds:** the feeds of Personio, Celonis, FlixBus, Sixt, BMW, Allianz and others were empty or inactive.
 - **dev.to:** the [dbt tag](https://dev.to/t/dbt) had 231 dbt authors, none in Munich.
 - **Low-yield meetups and conferences:** [Data Modeling Meetup Munich](https://www.meetup.com/data-modeling-dm3/) (speakers are international and online), [PyData Munich](https://www.meetup.com/pydata-munchen/events/?type=past) (GenAI only), the [TDWI conference programme](https://www.tdwi-konferenz.de/de/programm/konferenzprogramm), [PyCon DE](https://pretalx.com/pyconde-pydata-2026/schedule/) and the [Munich Database Meetup](https://munichdatabases.xyz/).
-- **Dormant women-in-data group:** [Munich WiMLDS](https://www.meetup.com/munich-women-in-machine-learning-and-data-science/) has had no events since 2021.
+- **Dormant women-in-data groups:** [Munich WiMLDS](https://www.meetup.com/munich-women-in-machine-learning-and-data-science/) has had no events since 2021. [Google Women Techmakers Munich](https://www.meetup.com/Google-Women-in-Technology-Munchen/) on Meetup has had none since 2023.
+- **Other women-in-data networks:** Meetup's group search found no R-Ladies, Women in Big Data or She Loves Data group near Munich. Two new groups, the [Data & Digital Skills Study Club](https://www.meetup.com/data-digital-skills-study-club/) and Women thinktank, had no talks. [Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/) has held no Munich event.
 
 ## 3. Companies looked at
 
@@ -76,7 +82,7 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 - **Consultancy blogs give most first-time speakers.** b.telligent and synvert name an author on every post, but neither states an office.
 
 <!-- companies:start -->
-64 companies and communities were looked at. A company is local when it has people or roles in the region.
+72 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
@@ -90,9 +96,9 @@ b.telligent, CELUS, Databricks (local presence not confirmed), inovex (local pre
 
 </details>
 
-<details><summary><b>Not verified</b> (32)</summary>
+<details><summary><b>Not verified</b> (40)</summary>
 
-Bayerischer Rundfunk (BR Data / BR Recherche) (local presence not confirmed), Bergzeit (local presence not confirmed), BMW Group, Data Modeling Meetup Munich (DM3), dbt Labs (local presence not confirmed), Finanz Informatik (local presence not confirmed), FINN (local presence not confirmed), Firebolt (local presence not confirmed), Frontify (local presence not confirmed), Hochschule München (Munich University of Applied Sciences) (local presence not confirmed), HSE (local presence not confirmed), IDEX.Q (local presence not confirmed), In516ht (local presence not confirmed), Infineon Technologies (local presence not confirmed), Lakekeeper (Vakamo) (local presence not confirmed), LMU Munich (Social Data Science and AI Lab) (local presence not confirmed), Microsoft Fabric (local presence not confirmed), Munich Database Meetup, Munich Datageeks e.V., OMMAX (local presence not confirmed), Project A Ventures (local presence not confirmed), SAP (local presence not confirmed), Scalable Capital, Siemens AG, SIXT SE (local presence not confirmed), Snowflake (local presence not confirmed), Sundeck (local presence not confirmed), SVA System Vertrieb Alexander (local presence not confirmed), synvert (synvert Data Insights), Technische Hochschule Ingolstadt (local presence not confirmed), virtual7 GmbH (local presence not confirmed), Women in Data Science (WiDS) Munich
+Bayerischer Rundfunk (BR Data / BR Recherche) (local presence not confirmed), Bergzeit (local presence not confirmed), BMW Group, CorrelAid (local presence not confirmed), Data Modeling Meetup Munich (DM3), dbt Labs (local presence not confirmed), Finanz Informatik (local presence not confirmed), FINN (local presence not confirmed), Firebolt (local presence not confirmed), Frontify (local presence not confirmed), Hochschule München (Munich University of Applied Sciences) (local presence not confirmed), HSE (local presence not confirmed), IDEX.Q (local presence not confirmed), In516ht (local presence not confirmed), Infineon Technologies (local presence not confirmed), Lakekeeper (Vakamo) (local presence not confirmed), LMU Munich (Social Data Science and AI Lab) (local presence not confirmed), Microsoft Fabric (local presence not confirmed), Munich Data Science Institute (TUM) (local presence not confirmed), Munich Database Meetup, Munich Datageeks e.V., Nordcloud (local presence not confirmed), OMMAX (local presence not confirmed), Project A Ventures (local presence not confirmed), Pruna AI (local presence not confirmed), PyLadies Munich (local presence not confirmed), SAP (local presence not confirmed), Scalable Capital, Siemens AG, SIXT SE (local presence not confirmed), Snowflake (local presence not confirmed), SOS Children's Villages (local presence not confirmed), Sundeck (local presence not confirmed), SVA System Vertrieb Alexander (local presence not confirmed), synvert (synvert Data Insights), Süddeutsche Zeitung (local presence not confirmed), Technische Hochschule Ingolstadt (local presence not confirmed), Unstated employer (Munich) (local presence not confirmed), virtual7 GmbH (local presence not confirmed), Women in Data Science (WiDS) Munich
 
 </details>
 
@@ -119,7 +125,7 @@ Aiven (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Other sources checked</b> (37)</summary>
+<details><summary><b>Other sources checked</b> (44)</summary>
 
 - [Munich Datageeks talks (pages 1-3)](https://www.munich-datageeks.de/tag/talks/)
 - [Snowflake UG Munich - Snowflake & dbt meeting Feb 2025](https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/)
@@ -158,6 +164,13 @@ Aiven (local presence not confirmed)
 - [Munich Open Source Data Infrastructure Meetup](https://www.meetup.com/munich-open-source-data-infrastructure-meetup/) (nothing useful)
 - [PyCon DE & PyData 2025/2026 schedules (pretalx export)](https://pretalx.com/pyconde-pydata-2026/schedule/) (nothing useful)
 - [dbt developer blog authors.yml](https://github.com/dbt-labs/docs.getdbt.com/blob/current/website/blog/authors.yml) (nothing useful)
+- [PyLadies Munich past events and hosts (Meetup gql2)](https://www.meetup.com/pyladiesmunich/)
+- [WiDS Munich 2024 speakers and agenda](https://sites.google.com/view/widsmunich/past-events/wids-2024/agenda)
+- [WiDS Munich 2026 event and team](https://widsmunich.de/team/)
+- [Google Women Techmakers Munich (Meetup gql2)](https://www.meetup.com/Google-Women-in-Technology-Munchen/) (nothing useful)
+- [GDG Cloud Munich events API (Women Techmakers)](https://gdg.community.dev/gdg-cloud-munich/)
+- [Data & Digital Skills Study Club and Women thinktank (Meetup gql2)](https://www.meetup.com/data-digital-skills-study-club/) (nothing useful)
+- [Women on Snowflake events](https://usergroups.snowflake.com/women-on-snowflake/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -201,7 +214,13 @@ Aiven (local presence not confirmed)
   - **November 2025 chapter event:** read it through meetup.com, since it has no talks on record.
   - **Community events:** new events of the Munich dbt Meetup, Munich Snowflake User Group (through its event API), Munich Datageeks, Kaggle Munich, Analytics Pioneers, WiDS Munich, AWS Women's User Group and PyLadies Munich.
   - **Blogs:** new posts on the b.telligent and synvert blogs (sitemaps plus author lines), inovex and Woodmark. Then GitHub dbt repositories with Munich or Bavaria owners.
-  - **Speakers left out:** their event pages name no employer. They are Martin Worzalla, Jan Behnke and Aychin Gasimov (Snowflake user group, May 2025), Daniel Schmidt and Beatrix Stade (Analytics Pioneers), and Annalena Wiesheu and Miriam Deml (AWS Women's User Group).
+  - **Speakers left out:** their event pages name no employer. They are Martin Worzalla, Jan Behnke and Aychin Gasimov (Snowflake user group, May 2025), and Daniel Schmidt and Beatrix Stade (Analytics Pioneers). Annalena Wiesheu and Miriam Deml (AWS Women's User Group) are now recorded under an unstated employer.
+- **Women-in-data communities not yet reachable:**
+  - **WiDS Munich 2026:** read the speakers and workshop hosts when they are announced, before the 11 December 2026 conference.
+  - **WiDS Munich 2023:** its [speaker page](https://sites.google.com/view/widsmunich/past-events/WiDS-2023/speakers-2023) was not read.
+  - **Women Techmakers Munich:** ask Aiman Saeed whether the group still runs events.
+  - **R-Ladies, Women in Big Data, Girls in Tech and She Loves Data:** no Munich chapter or event was found.
+- **People from the women-in-data pass:** the 16 people added have no LinkedIn search. Annalena Wiesheu and Miriam Deml have no employer on record.
 - **People to locate:** 17 people have no known location.
   - **Searched once on LinkedIn, no match:** Benita Zeug, John Held, Lennart Werner, Viola Oduola, Giuliano Gaub, Hiroshi Hamano, Almuth Hattwich, Niels Warnecke, Tobias Walter and Kimia Karamzadeh.
   - **Never searched on LinkedIn:** Christopher Gutknecht, Michal Lapinski, Pradeep Srikakolapu, Tim Hiebenthal, Allan Mitchell, Geethu Uday and Polina Galkin. Start with Christopher Gutknecht.
@@ -215,3 +234,4 @@ Aiven (local presence not confirmed)
 | 2026-10-01 | 2 | Extension run through meetup.com, the Snowflake user group API, consultancy blogs and GitHub. 41 people and 13 companies added, for 73 people and 65 companies. Emerging voices rose from 1 to 23. Tier 1 rose from 1 to 20. |
 | 2026-10-01 | 2 | Location pass from public pages. 18 people placed: 10 in the region and 8 elsewhere. Unknown locations fell from 40 to 22. |
 | 2026-10-01 | 2 | LinkedIn pass on 15 people. 5 placed: 1 in the region and 4 elsewhere. 17 locations are still unknown, and 16 people now have LinkedIn profiles. |
+| 2026-10-01 | 3 | Women-in-data pass. Checked WiDS Munich (2024 agenda and 2026 team), AWS Women's User Group Munich, PyLadies Munich (past events and hosts), Women Techmakers Munich (through Meetup and GDG Cloud Munich), two new Meetup groups and Women on Snowflake. Added 16 people with `sourced_via: women_in_data_community`: 7 speakers and 9 organisers as connectors. Added a talk to Patricia Goldberg. Added community channels for the WiDS Munich 2024 agenda, Google Women Techmakers Munich and GDG Cloud Munich. |

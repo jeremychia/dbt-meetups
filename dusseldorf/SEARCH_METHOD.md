@@ -7,19 +7,19 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 64 |
-| People | 69 |
+| Companies | 74 |
+| People | 87 |
 | Tier 1 leads | 22 |
 | First-time speakers (publish, no talk yet) | 20 |
-| Proven speakers | 43 |
+| Proven speakers | 53 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 32 |
-| Based elsewhere | 5 |
-| Location unknown | 32 |
+| Based in the region | 45 |
+| Based elsewhere | 8 |
+| Location unknown | 34 |
 | With a LinkedIn profile | 9 |
 | Job ads mentioning dbt | 49 |
 | Past chapter meetups | 2 |
@@ -48,8 +48,20 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 
 ### Women-in-data communities
 
-- **[Women in Big Data NRW](https://www.meetup.com/women-in-big-data-dusseldorf/):** recent events are discussions without named speakers. The [recap of its Thoughtworks evening](https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/) named two speakers and two hosts.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[Women in Big Data NRW](https://www.meetup.com/women-in-big-data-nrw/):** the best source. Its 2023 and 2024 event descriptions name speakers with employer and talk title. They gave 11 speakers:
+  - **[June 2023 at Picnic, Düsseldorf](https://www.meetup.com/women-in-big-data-nrw/events/293491997/):** Anna Maria Steffens (taod) on a data consultant's working day, Juliette Aucamp (Vodafone) on getting the business to adopt analytics, and Friederike Kulik (Picnic) on workforce planning.
+  - **[November 2023, Düsseldorf](https://www.meetup.com/women-in-big-data-nrw/events/296624784/):** Angela Music-Siedler on building a BI department from scratch.
+  - **[June 2024 at Thoughtworks, Cologne](https://www.meetup.com/women-in-big-data-nrw/events/301414751/):** Inna Zykova on ML platforms, and Eva Bledau (Volvo Car Deutschland) on vehicle data.
+  - **[September 2024 at Point 8, Dortmund](https://www.meetup.com/women-in-big-data-nrw/events/301614472/):** Adrian Krug (Vaillant Group) on data architecture and data mesh, and Lena Linhoff and Vanessa Müller (Point 8) on data projects in mechanical engineering.
+  - **[December 2024, Frankfurt](https://www.meetup.com/women-in-big-data-nrw/events/304321711/):** Philipp Szutta (ABN AMRO) on data warehouses in finance, and Laura Traverso (Slalom) on AI ethics. Both are outside the region.
+  - **Since mid-2025:** the group runs "Data Dates" discussion evenings in Düsseldorf, on data quality, data bias and data skills, with no speakers.
+  - **Hosts:** Meetup's event-host data names 4 more hosts besides Liisel Jessop: Corinna Meier, Olga Schneider, Anastasia Dobasis and Julia Kannenberg. They are connectors.
+- **[Recap of the 2025 Thoughtworks evening](https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/):** it named two speakers and two hosts.
 - **[Women in AI Cologne #3](https://www.ki.nrw/women-in-ai-cologne-meetup-3/):** one speaker, on AI transformation.
+- **[Female Dev Club](https://www.meetup.com/female-dev-club/):** monthly talks in Düsseldorf, mostly on software and careers. A May 2023 SQL talk and a September 2026 data privacy talk don't name the speaker. Its organisers, Anna Maier and Jennifer Lucifero, are connectors.
+- **[R-Ladies Cologne](https://www.meetup.com/rladies-cologne/):** online events, including a reproducible analytical pipelines book club (2023 to 2024) and R package workshops (2025). The speakers and both organisers, Cosima Meyer and Gabe Winter, are based outside the region.
+- **Also ask:** data leads at dbt companies to suggest people on their teams.
 
 ### Job ads
 
@@ -67,7 +79,8 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 - **Snowflake user groups:** there is no NRW chapter. The Köln Snowflake and PyData Cologne-Bonn groups no longer exist.
 - **Company blogs with no dbt content:** [trivago tech blog](https://tech.trivago.com/), [codecentric](https://www.codecentric.de/feed), [inovex](https://www.inovex.de/de/blog/?s=dbt), [areto](https://areto.de/blog/) and [datadice](https://www.datadice.io/en/blog/).
 - **Large corporates:** REWE, METRO, Henkel and Vodafone publish nothing on dbt.
-- **Women-in-data groups with no data speakers:** PyCologne, PyData Dortmund, inovex Cologne, Female Dev Club and Women in Tech Köln.
+- **Women-in-data groups with no data speakers:** PyCologne, PyData Dortmund, inovex Cologne and [Women in Tech Köln](https://www.meetup.com/women-in-tech-koln/), which runs career workshops.
+- **Women-in-data networks with no NRW chapter:** gdg.community.dev has no GDG chapter for Düsseldorf, Cologne, Essen, Dortmund or Bonn, so there is no Women Techmakers route. [PyLadies](https://pyladies.com/locations/) has no NRW chapter, and [Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/) has held no NRW event. A new Cologne group, [Networking in IT und Tech von Frauen für Frauen](https://www.meetup.com/networking-im-umfeld-von-it-und-digitalisierung/), had no past events.
 
 ## 3. Companies looked at
 
@@ -77,7 +90,7 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 - **Large NRW employers use a different stack.** REWE, METRO, Henkel and Vodafone show no public dbt use.
 
 <!-- companies:start -->
-63 companies and communities were looked at. A company is local when it has people or roles in the region.
+73 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
@@ -91,9 +104,9 @@ adesso SE, Agoda, Analytics Pioneers (local presence not confirmed), AVS Verkehr
 
 </details>
 
-<details><summary><b>Not verified</b> (27)</summary>
+<details><summary><b>Not verified</b> (37)</summary>
 
-Accenture / intions (Essen Innovation Hub), ALDI SÜD, BarmeniaGothaer, Borussia Mönchengladbach, Data Natives Düsseldorf & Köln (local presence not confirmed), Databricks (local presence not confirmed), Databricks User Group Rhein-Ruhr, Deichmann SE, DISH Digital Solutions (METRO), Düsseldorf Data Science Meetup, FIEGE Logistik (local presence not confirmed), GDS Business Intelligence GmbH (local presence not confirmed), Handelsblatt Media Group, Infomotion, noventum consulting (local presence not confirmed), oh22data AG (local presence not confirmed), oh22information services GmbH, ORAYLIS, PyMC Labs (local presence not confirmed), REWE digital, StepStone, SumUp (local presence not confirmed), teccle group (local presence not confirmed), Thoughtworks (Cologne), trivago, Women in AI Cologne, Women in Big Data NRW
+ABN AMRO Bank (Frankfurt Branch) (local presence not confirmed), Accenture / intions (Essen Innovation Hub), ALDI SÜD, BarmeniaGothaer, Borussia Mönchengladbach, Data Natives Düsseldorf & Köln (local presence not confirmed), Databricks (local presence not confirmed), Databricks User Group Rhein-Ruhr, Deichmann SE, DISH Digital Solutions (METRO), Düsseldorf Data Science Meetup, Female Dev Club (local presence not confirmed), FIEGE Logistik (local presence not confirmed), GDS Business Intelligence GmbH (local presence not confirmed), Handelsblatt Media Group, Infomotion, noventum consulting (local presence not confirmed), oh22data AG (local presence not confirmed), oh22information services GmbH, ORAYLIS, Picnic (local presence not confirmed), Point 8 (local presence not confirmed), PyMC Labs (local presence not confirmed), R-Ladies Cologne (local presence not confirmed), REWE digital, Slalom (local presence not confirmed), StepStone, SumUp (local presence not confirmed), teccle group (local presence not confirmed), Thoughtworks (Cologne), trivago, Unstated employer (Rhein-Ruhr) (local presence not confirmed), Vaillant Group (local presence not confirmed), Vodafone (local presence not confirmed), Volvo Car Deutschland (local presence not confirmed), Women in AI Cologne, Women in Big Data NRW
 
 </details>
 
@@ -120,7 +133,7 @@ Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgeb
 
 </details>
 
-<details><summary><b>Other sources checked</b> (38)</summary>
+<details><summary><b>Other sources checked</b> (46)</summary>
 
 - [Rhein-Ruhr dbt Meetup group page](https://www.meetup.com/rhein-ruhr-dbt-meetup/)
 - [Rhein-Ruhr dbt Meetup event 307198615](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/)
@@ -160,6 +173,14 @@ Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgeb
 - [Medium feeds (datadice, StepStone) via WebFetch and rss2json](https://medium.com/feed/the-stepstone-group-tech-blog) (nothing useful)
 - [dev.to API tag=dbt](https://dev.to/api/articles?tag=dbt) (nothing useful)
 - [Snowflake user groups Germany](https://usergroups.snowflake.com/germany/) (nothing useful)
+- [Women in Big Data NRW past events and hosts (Meetup gql2)](https://www.meetup.com/women-in-big-data-nrw/)
+- [R-Ladies Cologne (Meetup gql2)](https://www.meetup.com/rladies-cologne/)
+- [Female Dev Club (Meetup gql2)](https://www.meetup.com/female-dev-club/)
+- [Women in Tech Köln (Meetup gql2)](https://www.meetup.com/women-in-tech-koln/) (nothing useful)
+- [Networking in IT und Tech von Frauen für Frauen (Meetup gql2)](https://www.meetup.com/networking-im-umfeld-von-it-und-digitalisierung/) (nothing useful)
+- [GDG chapter search for NRW cities](https://gdg.community.dev/chapters/) (nothing useful)
+- [PyLadies locations](https://pyladies.com/locations/) (nothing useful)
+- [Women on Snowflake events](https://usergroups.snowflake.com/women-on-snowflake/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -203,6 +224,11 @@ Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgeb
   - **Medium and dev.to authors:** never scanned, because both were rate-limited. Try them from a fresh session.
   - **Community events:** new events of the Rhein-Ruhr dbt Meetup, Databricks User Group Rhein-Ruhr, trivago Tech, Data & Product, Datamonsters Ruhrgebiet, Data Saturday Rheinland, Women in Big Data NRW and Women in AI Cologne.
   - **Blog feeds:** new posts on the adesso, ORAYLIS and b.telligent feeds, with each author box.
+- **Women-in-data communities not yet reachable:**
+  - **Women in Big Data NRW:** the Data Dates evenings name no speakers. Ask the hosts for a talk evening on analytics engineering, and for the SQL speaker at Female Dev Club.
+  - **WiDS, Women Techmakers, She Loves Data and Girls in Tech:** no NRW chapter or event was found.
+  - **Networking in IT und Tech von Frauen für Frauen:** a new Cologne group. Check its first events.
+- **People from the women-in-data pass:** the 18 people added have no LinkedIn search. Angela Music-Siedler and the Point 8 and Vaillant speakers have no title on record.
 - **People to locate:** 32 people have no known location. 13 tier-1 blog authors were searched on LinkedIn without a match. These 19 were never searched on LinkedIn:
   - **Tier 1:** Siver Rajab (adesso).
   - **Tier 2:** Alex Rupp, Anastasia Senitz, Hanna Schwab, Benedikt Buchert, Daniel Schmidt, Diana Ackermann, Jake Mongaya, Marco Nielinger, Mario Müller and Simon Schröder.
@@ -219,3 +245,4 @@ Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgeb
 | 2026-10-01 | 2 | Extension run through meetup.com, Sessionize, consultancy blog feeds and GitHub. 46 people and 15 companies added, for 69 people and 64 companies. Emerging voices rose from 1 to 20. Tier 1 rose from 1 to 21. |
 | 2026-10-01 | 2 | Location pass from public pages. 16 people placed: 12 in the region and 4 elsewhere. Unknown locations fell from 51 to 35. |
 | 2026-10-01 | 2 | LinkedIn pass on the 15 tier-1 blog authors without a location. 2 people placed: 1 in the region and 1 elsewhere. 33 locations are still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass. Checked Women in Big Data NRW (past events and hosts), Female Dev Club, R-Ladies Cologne, Women in Tech Köln, GDG chapters in NRW, PyLadies and Women on Snowflake. Added 18 people with `sourced_via: women_in_data_community`: 10 Women in Big Data NRW speakers and 8 hosts and organisers as connectors. Added a talk to Inna Zykova. Added community channels for the current Women in Big Data NRW page, R-Ladies Cologne and Female Dev Club. |

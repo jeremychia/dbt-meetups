@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Boston companies using dbt, and people who could speak at or attend the Boston dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 3,
     "region": "Boston (Boston dbt Meetup)",
     "method": [
@@ -12,7 +12,11 @@
       "Lesson: For US chapters, the dbt Summit speaker index plus per-speaker pages (getdbt.com/dbt-summit/speakers/<slug>) is the highest-yield source. Filtering by HQ employer gives 5-8 leads for about one fetch each.",
       "Lesson: Meetup gql2 events(status: PAST) returns oldest-first. Add sort: DESC to get recent events for long-running groups.",
       "Lesson: Snowflake User Groups (Bevy, usergroups.snowflake.com/<city>) list speakers, bios and organisers in static HTML. They are a good source of dbt-on-Snowflake local practitioners and of co-hosts.",
-      "v2 (2026-10-01): location pass. 15 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (5 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 7 people are still unknown."
+      "v2 (2026-10-01): location pass. 15 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (5 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 7 people are still unknown.",
+      "v3 (2026-10-01): women-in-data pass with fetches only (no web search, about 22 fetches): Meetup gql2 groupSearch near Boston with 15 queries, then the past events of Boston WiMLDS, Women in Big Data Boston, Metro Boston Data Ladies, AWS User Group Women in AI Cambridge, WEST, Girl Develop It Boston and PyLadies Boston; the GDG Boston and GDG Cloud Boston events APIs and 3 International Women's Day pages; the WiDS site search, 3 WiDS Boston event pages and 2 WiDS blog posts; Women in Data and the Boston Tableau User Group. 18 people added (4 speakers and panellists, 14 organisers as connectors). Nobody's gender is recorded or inferred.",
+      "Lesson: Meetup gql2 groupSearch near Boston found Boston WiMLDS (urlname Boston-Women-in-Machine-Learning-and-Data-Science), which guessed names had missed. It has been dormant since November 2022.",
+      "Lesson: Boston's Women Techmakers IWD events run through two GDG chapters, GDG Boston (chapter 269) and GDG Cloud Boston (chapter 458). The event pages name speakers, panellists and organisers with employers.",
+      "Lesson: WiDS Boston events are separate from WiDS Cambridge. The WiDS site search API finds their event pages, which name the ambassador, and the quarterly ambassador round-ups."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -50,49 +54,51 @@
     "caveats": [
       "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
       "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
-      "LinkedIn: 6 of 43 people have a profile url, taken word for word from search results. 37 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
+      "LinkedIn: 6 of 43 people have a profile url, taken word for word from search results. 37 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
+      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred."
     ],
     "counts": {
-      "companies": 77,
-      "people": 43,
+      "companies": 85,
+      "people": 61,
       "job_postings": 62,
       "companies_with_job_postings": 48,
-      "speaker_evidence_items": 50,
-      "unique_content_items": 43,
+      "speaker_evidence_items": 69,
+      "unique_content_items": 57,
       "people_with_linkedin": 6,
       "people_who_spoke_at_this_chapter": 21,
       "internal_vinted": 0,
       "level": {
-        "leadership": 14,
-        "working": 29
+        "leadership": 16,
+        "working": 45
       },
       "speaker_potential": {
         "high": 32,
-        "medium": 11
+        "medium": 29
       },
       "attendee_potential": {
         "high": 23,
         "low": 4,
-        "medium": 16
+        "medium": 34
       },
       "priority_tier": {
         "2": 25,
         "1": 6,
-        "connector": 8,
-        "3": 4
+        "connector": 22,
+        "3": 8
       },
-      "watchlist_companies": 17,
+      "watchlist_companies": 20,
       "past_meetups": 12,
       "lead_type": {
-        "proven_speaker": 37,
-        "featured": 6
+        "proven_speaker": 42,
+        "featured": 6,
+        "no_public_content": 13
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "conference_or_meetup_agenda": 39,
         "chapter_meetup_history": 21,
         "case_study": 1,
-        "women_in_data_community": 3
+        "women_in_data_community": 21
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -125,13 +131,15 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
+      "community": 24,
       "tools & ecosystem": 9,
       "data modeling": 8,
-      "community": 8,
-      "genai & llm": 7,
-      "business intelligence": 6,
+      "genai & llm": 8,
+      "business intelligence": 7,
       "performance & scale": 6,
       "data quality & testing": 6,
+      "team & org design": 5,
+      "career development": 5,
       "dbt migration & adoption": 5,
       "data governance": 5,
       "dbt best practices": 5,
@@ -139,8 +147,6 @@
       "semantic layer": 4,
       "data warehouse & platforms": 4,
       "dbt product features": 4,
-      "career development": 3,
-      "team & org design": 2,
       "analytics engineering": 2,
       "orchestration & ci/cd": 2,
       "dbt fundamentals": 2,
@@ -2597,7 +2603,8 @@
       "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
-        "Boston"
+        "Boston",
+        "Natick"
       ],
       "local_presence": "confirmed",
       "dbt_signal": "medium",
@@ -2620,7 +2627,61 @@
         }
       ],
       "other_evidence": [],
-      "people": [],
+      "people": [
+        {
+          "id": "louvere-walkerhannon",
+          "name": "Louvere Walker-Hannon",
+          "pronouns": null,
+          "title": "Engineer, MathWorks (title not stated)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Worldwide",
+              "title": "WiDS Worldwide organiser",
+              "date": "2025-10-14",
+              "url": "https://www.widsworldwide.org/get-inspired/blog/celebrating-louvere-walker-hannon-from-wids-ambassador-to-advisory-committee-member/",
+              "content_id": "wids-worldwidewids-worldwide-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Long-time WiDS Ambassador who organises events. Joined the WiDS Advisory Committee in October 2025.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/get-inspired/blog/celebrating-louvere-walker-hannon-from-wids-ambassador-to-advisory-committee-member/",
+              "note": "organiser: WiDS Worldwide organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Responsible and accessible use of AI, and mentoring new data scientists",
+          "past_chapter_talks": [],
+          "notes": "More than two decades at MathWorks per the WiDS profile. Keynote at the Black in AI workshop at NeurIPS 2021. Her own city is not stated."
+        }
+      ],
       "notes": "Boston-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
     },
     {
@@ -5280,7 +5341,167 @@
           "note": "Engineering/data blog scanned 2026-09-24"
         }
       ],
-      "people": [],
+      "people": [
+        {
+          "id": "alison-link",
+          "name": "Alison Link",
+          "pronouns": null,
+          "title": "PyLadies Boston host",
+          "city": "Cambridge",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Boston",
+              "title": "PyLadies Boston organiser",
+              "date": "2026-05-28",
+              "url": "https://www.meetup.com/pyladies-boston/events/314839665/",
+              "content_id": "pyladies-bostonpyladies-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-hosts the CambridgeSide PyLadies Hack Nights.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-boston/events/314839665/",
+              "note": "organiser: PyLadies Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
+        },
+        {
+          "id": "grecia-mayya",
+          "name": "Grecia Mayya",
+          "pronouns": null,
+          "title": "PyLadies Boston host",
+          "city": "Cambridge",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Boston",
+              "title": "PyLadies Boston organiser",
+              "date": "2026-05-28",
+              "url": "https://www.meetup.com/pyladies-boston/events/314839665/",
+              "content_id": "pyladies-bostonpyladies-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-hosts the CambridgeSide PyLadies Hack Nights.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-boston/events/314839665/",
+              "note": "organiser: PyLadies Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
+        },
+        {
+          "id": "angela-pineros",
+          "name": "Angela Pineros",
+          "pronouns": null,
+          "title": "PyLadies Boston host",
+          "city": "Cambridge",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Boston",
+              "title": "PyLadies Boston organiser",
+              "date": "2026-04-28",
+              "url": "https://www.meetup.com/pyladies-boston/events/314286262/",
+              "content_id": "pyladies-bostonpyladies-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-hosted the 2026 PyCon preview talks at Microsoft NERD.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-boston/events/314286262/",
+              "note": "organiser: PyLadies Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
+        }
+      ],
       "notes": "Very active (monthly virtual lunches, rooftop socials, hack nights). Venues used: CarGurus, Microsoft NERD, Kensho, CambridgeSide. Partners with Women in Data Boston."
     },
     {
@@ -5330,6 +5551,948 @@
       ],
       "people": [],
       "notes": "MIT IDSS + Microsoft NERD, held Mar 6, 2026. Speakers are academic or policy-focused, so no AE leads. Could help promote events."
+    },
+    {
+      "id": "xchem",
+      "name": "X-Chem",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Boston"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marieaude-guie",
+          "name": "Marie-Aude Guié",
+          "pronouns": null,
+          "title": "Vice President, Scientific Computing & Data Science, X-Chem",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "WEST Career Possibilities Panel: AI, Data & Computational Science",
+              "title": "Career Possibilities Panel: AI, Data Science & Computational Science",
+              "date": "2026-09-30",
+              "url": "https://www.meetup.com/westorg/events/316625224/",
+              "content_id": "west-career-possibilities-panel-ai-data-computational-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Panellist on careers in data science and scientific computing, run online by WEST (Women in the Enterprise of Science & Technology).",
+              "topics": [
+                "career development",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/westorg/events/316625224/",
+              "note": "panel: Career Possibilities Panel: AI, Data Science & Computational Science"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Running a scientific data platform: what a biotech data team can use from analytics engineering",
+          "past_chapter_talks": [],
+          "notes": "Title is from the WEST event listing. Office not stated."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "arbor-biotechnologies",
+      "name": "Arbor Biotechnologies",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cambridge"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yurong-xin",
+          "name": "Yurong Xin",
+          "pronouns": null,
+          "title": "Vice President, Computational and Data Sciences, Arbor Biotechnologies",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "WEST Career Possibilities Panel: AI, Data & Computational Science",
+              "title": "Career Possibilities Panel: AI, Data Science & Computational Science",
+              "date": "2026-09-30",
+              "url": "https://www.meetup.com/westorg/events/316625224/",
+              "content_id": "west-career-possibilities-panel-ai-data-computational-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Panellist on careers in data science and scientific computing, run online by WEST (Women in the Enterprise of Science & Technology).",
+              "topics": [
+                "career development",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/westorg/events/316625224/",
+              "note": "panel: Career Possibilities Panel: AI, Data Science & Computational Science"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Building a computational and data sciences team in a biotech company",
+          "past_chapter_talks": [],
+          "notes": "Title is from the WEST event listing. Office not stated."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "women-in-the-enterprise-of-science-technology-west",
+      "name": "Women in the Enterprise of Science & Technology (WEST)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cambridge"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://www.meetup.com/westorg/",
+          "note": "1,860 members. Mostly career and leadership events for women in STEM; data science career panels in September 2024 and September 2026."
+        }
+      ],
+      "people": [
+        {
+          "id": "jaime-luna",
+          "name": "Jaime Luna",
+          "pronouns": null,
+          "title": "Event host, WEST",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WEST",
+              "title": "WEST organiser",
+              "date": "2026-09-30",
+              "url": "https://www.meetup.com/westorg/events/316625224/",
+              "content_id": "westwest-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted WEST's September 2026 career panel on AI, data science and computational science.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/westorg/events/316625224/",
+              "note": "organiser: WEST organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on Meetup."
+        }
+      ],
+      "notes": "Boston-area women-in-STEM association, strongest in life sciences."
+    },
+    {
+      "id": "mit",
+      "name": "MIT",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cambridge"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "reen-lepatan",
+          "name": "Reen Lepatan",
+          "pronouns": null,
+          "title": "Business Analytics Specialist, MIT",
+          "city": "Boston",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "International Women's Day Boston 2025 (GDG Boston, Women Techmakers)",
+              "title": "The Power of Connection: Building Trust and Influence Behind the Scenes",
+              "date": "2025-04-24",
+              "url": "https://gdg.community.dev/e/mgwcv2/",
+              "content_id": "international-womens-day-boston-2025-gdg-boston-women-techma",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "How data, storytelling and collaboration shape influence, from sales pipelines to outreach campaigns.",
+              "topics": [
+                "business intelligence",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Women Techmakers",
+              "title": "Women Techmakers organiser",
+              "date": "2025",
+              "url": "https://gdg.community.dev/e/mgwcv2/",
+              "content_id": "women-techmakerswomen-techmakers-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Google Women Techmakers Ambassador who helped lead an International Women's Day campaign.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/e/mgwcv2/",
+              "note": "talk: The Power of Connection: Building Trust and Influence Behind the Scenes"
+            },
+            {
+              "url": "https://gdg.community.dev/e/mgwcv2/",
+              "note": "organiser: Women Techmakers organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "How analytics and storytelling build trust in a community campaign",
+          "past_chapter_talks": [],
+          "notes": "Spoke in person at Accenture, Boylston Street. Title is from the event page."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "wids-boston",
+      "name": "WiDS Boston",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Boston"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/",
+          "note": "WiDS regional events at Northeastern (2023, 2024) and Boston University (November 2025)."
+        }
+      ],
+      "people": [
+        {
+          "id": "kavana-venkatesh",
+          "name": "Kavana Venkatesh",
+          "pronouns": null,
+          "title": "AI practitioner, WiDS Ambassador (employer not stated)",
+          "city": "Boston",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "WiDS Boston @ Northeastern University",
+              "title": "Empowering Women in AI: A Two-Part Workshop on Generative AI Solutions, Deployment, and Responsible AI",
+              "date": "2024-04-15",
+              "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/",
+              "content_id": "wids-boston-northeastern-universityempowering-women-in-ai-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Two-part in-person workshop for women students on building, deploying and evaluating generative AI.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/",
+              "note": "workshop: Empowering Women in AI: A Two-Part Workshop on Generative AI Solutions, Deployment, and Responsible AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Evaluating and deploying generative AI on top of well-modelled data",
+          "past_chapter_talks": [],
+          "notes": "Ran the workshop in person at Northeastern with the Husky Sisters Code student group. Background in data science; employer not stated."
+        },
+        {
+          "id": "ming-hua-tsai",
+          "name": "Ming Hua Tsai",
+          "pronouns": null,
+          "title": "WiDS Ambassador, Boston University",
+          "city": "Boston",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS @ Boston University",
+              "title": "WiDS x BU: Women Leading in Data (host)",
+              "date": "2025-11-14",
+              "url": "https://www.widsworldwide.org/get-inspired/blog/october-december-2025-ambassador-event-highlights/",
+              "content_id": "wids-boston-universitywids-x-bu-women-leading-in-data-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted a networking event with a panel of senior analytics leaders. The panellists are not named.",
+              "topics": [
+                "community",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/get-inspired/blog/october-december-2025-ambassador-event-highlights/",
+              "note": "organiser: WiDS x BU: Women Leading in Data (host)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "yashashri-shiral",
+          "name": "Yashashri Shiral",
+          "pronouns": null,
+          "title": "WiDS Ambassador, WiDS Boston",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Boston",
+              "title": "WiDS Boston organiser",
+              "date": "2023-03-24",
+              "url": "https://www.widsworldwide.org/events/event/wids-boston/",
+              "content_id": "wids-bostonwids-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Ambassador for the online WiDS Boston 2023 event.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-boston/",
+              "note": "organiser: WiDS Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "rutuja-sanjay-dhanawade",
+          "name": "Rutuja Sanjay Dhanawade",
+          "pronouns": null,
+          "title": "WiDS Ambassador; student, Northeastern University",
+          "city": "Boston",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Boston @ Northeastern",
+              "title": "WiDS Boston @ Northeastern organiser",
+              "date": "2023-04-14",
+              "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-univ/",
+              "content_id": "wids-boston-northeasternwids-boston-northeastern-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Ambassador for the in-person WiDS Boston event at Northeastern.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-univ/",
+              "note": "organiser: WiDS Boston @ Northeastern organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Listed as a student in 2023."
+        }
+      ],
+      "notes": "WiDS regional events in Boston, run by student and early-career ambassadors. Separate from WiDS Cambridge."
+    },
+    {
+      "id": "metro-boston-data-ladies",
+      "name": "Metro Boston Data Ladies",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Waltham"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://www.meetup.com/metro-boston-data-ladies/",
+          "note": "Founded March 2026; 26 members; 3 informal meetups."
+        }
+      ],
+      "people": [
+        {
+          "id": "sue-clever-dawson",
+          "name": "Sue Clever Dawson",
+          "pronouns": null,
+          "title": "Organiser, Metro Boston Data Ladies",
+          "city": "Boston",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Metro Boston Data Ladies",
+              "title": "Metro Boston Data Ladies organiser",
+              "date": "2026-08-23",
+              "url": "https://www.meetup.com/metro-boston-data-ladies/events/316102332/",
+              "content_id": "metro-boston-data-ladiesmetro-boston-data-ladies-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Runs the group's coffee meetups on data projects and data and AI books.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/metro-boston-data-ladies/events/316102332/",
+              "note": "organiser: Metro Boston Data Ladies organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
+        }
+      ],
+      "notes": "Small new group for women working in data."
+    },
+    {
+      "id": "aws-user-group-women-in-ai-cambridge",
+      "name": "AWS User Group Women in AI Cambridge",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cambridge"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/events/315743796/",
+          "note": "Official AWS user group founded June 2026. The launch speakers joined from Seoul and Warsaw."
+        }
+      ],
+      "people": [
+        {
+          "id": "chandra-dunn",
+          "name": "Chandra Dunn",
+          "pronouns": null,
+          "title": "Organiser, AWS User Group Women in AI Cambridge",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "AWS User Group Women in AI Cambridge",
+              "title": "AWS User Group Women in AI Cambridge organiser",
+              "date": "2026-07-25",
+              "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/events/315743796/",
+              "content_id": "aws-user-group-women-in-ai-cambridgeaws-user-group-women-in",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-hosted the group's online launch event.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/events/315743796/",
+              "note": "organiser: AWS User Group Women in AI Cambridge organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
+        },
+        {
+          "id": "valerie-louissaint",
+          "name": "Valerie Louissaint",
+          "pronouns": null,
+          "title": "Organiser, AWS User Group Women in AI Cambridge",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "AWS User Group Women in AI Cambridge",
+              "title": "AWS User Group Women in AI Cambridge organiser",
+              "date": "2026-07-25",
+              "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/events/315743796/",
+              "content_id": "aws-user-group-women-in-ai-cambridgeaws-user-group-women-in",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-hosted the group's online launch event.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/events/315743796/",
+              "note": "organiser: AWS User Group Women in AI Cambridge organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
+        }
+      ],
+      "notes": "AWS women's user group, online so far."
+    },
+    {
+      "id": "women-techmakers-boston-gdg-boston-and-gdg-cloud-boston",
+      "name": "Women Techmakers Boston (GDG Boston and GDG Cloud Boston)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Boston",
+        "Cambridge"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://gdg.community.dev/e/mm79mj/",
+          "note": "GDG Cloud Boston's IWD events at the Broad Institute in 2024 and 2025; GDG Boston's IWD 2025 at Accenture."
+        }
+      ],
+      "people": [
+        {
+          "id": "elizabeth-mezias",
+          "name": "Elizabeth Mezias",
+          "pronouns": null,
+          "title": "GDG Boston organiser (Outside, Inc.)",
+          "city": "Boston",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "GDG Boston",
+              "title": "GDG Boston organiser",
+              "date": "2025-04-24",
+              "url": "https://gdg.community.dev/e/mgwcv2/",
+              "content_id": "gdg-bostongdg-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Organiser of International Women's Day Boston 2025.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/e/mgwcv2/",
+              "note": "organiser: GDG Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "lukas-karlsson",
+          "name": "Lukas Karlsson",
+          "pronouns": null,
+          "title": "GDG Cloud Boston organiser (Altissimo)",
+          "city": "Cambridge",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "GDG Cloud Boston",
+              "title": "GDG Cloud Boston organiser",
+              "date": "2024-03-08",
+              "url": "https://gdg.community.dev/e/mm79mj/",
+              "content_id": "gdg-cloud-bostongdg-cloud-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Organiser of International Women's Day Boston 2024 and 2025 at the Broad Institute.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/e/mm79mj/",
+              "note": "organiser: GDG Cloud Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "norbert-kremer",
+          "name": "Norbert Kremer",
+          "pronouns": null,
+          "title": "Cloud Solution Architect, Analytics By Design",
+          "city": "Cambridge",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "GDG Cloud Boston",
+              "title": "GDG Cloud Boston organiser",
+              "date": "2025-03-07",
+              "url": "https://gdg.community.dev/e/mmuzvz/",
+              "content_id": "gdg-cloud-bostongdg-cloud-boston-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-organiser of International Women's Day Boston 2024 and 2025.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/e/mmuzvz/",
+              "note": "organiser: GDG Cloud Boston organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Women Techmakers International Women's Day events run by GDG Boston and GDG Cloud Boston. Mostly AI and career talks."
     }
   ],
   "sources": {
@@ -5443,6 +6606,120 @@
         "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
         "yielded": true,
         "note": "62 ads mention dbt"
+      },
+      {
+        "name": "Meetup gql2 groupSearch near Boston",
+        "url": "https://www.meetup.com/gql2",
+        "yielded": true,
+        "note": "Queries: women, pyladies, r-ladies, women techmakers, wids, women in data, women in tech, girls in tech, wimlds, data + women, she, women in big data, women in ai, lesbians who tech, women in analytics. Found Boston WiMLDS, Metro Boston Data Ladies, AWS User Group Women in AI Cambridge, WEST and Girl Develop It Boston."
+      },
+      {
+        "name": "WEST past events (Meetup gql2)",
+        "url": "https://www.meetup.com/westorg/",
+        "yielded": true,
+        "note": "80 events since 2024, mostly career and leadership. The September 2026 data science career panel named 3 panellists and a moderator."
+      },
+      {
+        "name": "Metro Boston Data Ladies (Meetup gql2)",
+        "url": "https://www.meetup.com/metro-boston-data-ladies/",
+        "yielded": true,
+        "note": "3 informal meetups since March 2026; organiser only."
+      },
+      {
+        "name": "AWS User Group Women in AI Cambridge (Meetup gql2)",
+        "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/",
+        "yielded": true,
+        "note": "Online launch in July 2026; 2 organisers. The speakers joined from Seoul and Warsaw, so they are not recorded."
+      },
+      {
+        "name": "GDG Boston events API",
+        "url": "https://gdg.community.dev/api/event_slim/for_chapter/269/?status=Completed&page_size=300",
+        "yielded": true,
+        "note": "261 past events; IWD events in 2023, 2024 and 2025."
+      },
+      {
+        "name": "GDG Cloud Boston events API",
+        "url": "https://gdg.community.dev/api/event_slim/for_chapter/458/?status=Completed&page_size=300",
+        "yielded": true,
+        "note": "92 past events; IWD events in 2023, 2024 and 2025, and a 2024 Women Techmakers workshop."
+      },
+      {
+        "name": "International Women's Day Boston 2025 (GDG Boston)",
+        "url": "https://gdg.community.dev/e/mgwcv2/",
+        "yielded": true,
+        "note": "3 talks; one by an MIT business analytics specialist."
+      },
+      {
+        "name": "International Women's Day Boston 2024 (GDG Cloud Boston)",
+        "url": "https://gdg.community.dev/e/mm79mj/",
+        "yielded": true,
+        "note": "AI, healthcare and career talks; organisers recorded as connectors."
+      },
+      {
+        "name": "International Women's Day Boston 2025 (GDG Cloud Boston)",
+        "url": "https://gdg.community.dev/e/mmuzvz/",
+        "yielded": false,
+        "note": "The page lists organisers and partners but no agenda."
+      },
+      {
+        "name": "WiDS Boston @ Northeastern University 2024",
+        "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/",
+        "yielded": true,
+        "note": "A two-part generative AI workshop run by the ambassador."
+      },
+      {
+        "name": "WiDS Boston 2023 event pages",
+        "url": "https://www.widsworldwide.org/events/event/wids-boston/",
+        "yielded": true,
+        "note": "Two 2023 events, each naming its ambassador."
+      },
+      {
+        "name": "WiDS October–December 2025 ambassador round-up",
+        "url": "https://www.widsworldwide.org/get-inspired/blog/october-december-2025-ambassador-event-highlights/",
+        "yielded": true,
+        "note": "WiDS x BU: Women Leading in Data, November 2025. The panellists are not named."
+      },
+      {
+        "name": "WiDS profile: Louvere Walker-Hannon",
+        "url": "https://www.widsworldwide.org/get-inspired/blog/celebrating-louvere-walker-hannon-from-wids-ambassador-to-advisory-committee-member/",
+        "yielded": true,
+        "note": "Long-time WiDS Ambassador at MathWorks."
+      },
+      {
+        "name": "Boston WiMLDS (Meetup gql2)",
+        "url": "https://www.meetup.com/Boston-Women-in-Machine-Learning-and-Data-Science/",
+        "yielded": false,
+        "note": "1,274 members. 23 events, the last in November 2022."
+      },
+      {
+        "name": "Women in Big Data Boston (Meetup gql2)",
+        "url": "https://www.meetup.com/women-in-big-data-boston/",
+        "yielded": false,
+        "note": "281 members. 8 events, the last in June 2020."
+      },
+      {
+        "name": "Girl Develop It Boston (Meetup gql2)",
+        "url": "https://www.meetup.com/Girl-Develop-It-Boston/",
+        "yielded": false,
+        "note": "National online classes and career events with no named speakers."
+      },
+      {
+        "name": "Women in Data (womenindata.org)",
+        "url": "https://www.womenindata.org/",
+        "yielded": false,
+        "note": "No Boston chapter listed. Women in Data Boston is still known only through PyLadies Boston."
+      },
+      {
+        "name": "Boston Tableau User Group (Data + Women check)",
+        "url": "https://usergroups.tableau.com/boston-tableau-user-group/",
+        "yielded": false,
+        "note": "No Data + Women Boston group; the Tableau user group runs no women-focused events."
+      },
+      {
+        "name": "She Loves Data, Girls in Tech and WiMLDS Boston Meetup names",
+        "url": "https://www.meetup.com/she-loves-data-boston/",
+        "yielded": false,
+        "note": "No Boston group under these names."
       }
     ]
   },
@@ -5452,7 +6729,10 @@
       "date": "2020-05-08",
       "venue": "Online event",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/270162545/",
-      "organisers": [],
+      "organisers": [
+        "janessa lantz",
+        "Claire Carroll"
+      ],
       "attendees": 88,
       "talks": [
         {
@@ -5480,7 +6760,9 @@
       "date": "2021-05-26",
       "venue": "Online event",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/277260412/",
-      "organisers": [],
+      "organisers": [
+        "Fatima Conteh"
+      ],
       "attendees": 40,
       "talks": [
         {
@@ -5508,7 +6790,9 @@
       "date": "2021-09-30",
       "venue": "Online event",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/279716470/",
-      "organisers": [],
+      "organisers": [
+        "Rosie Cardoso"
+      ],
       "attendees": 43,
       "talks": [
         {
@@ -5536,7 +6820,11 @@
       "date": "2022-05-05",
       "venue": "Convene, 201 Washington St, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/285252302/",
-      "organisers": [],
+      "organisers": [
+        "Emily Hawkins",
+        "Jillian Corkin",
+        "dbt Labs (Super Organizer)"
+      ],
       "attendees": 52,
       "talks": []
     },
@@ -5545,7 +6833,9 @@
       "date": "2023-06-14",
       "venue": "1 Lincoln St, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/292442235/",
-      "organisers": [],
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
       "attendees": 108,
       "talks": [
         {
@@ -5573,7 +6863,9 @@
       "date": "2023-09-27",
       "venue": "Rapid7, 120 Causeway St, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/295745037/",
-      "organisers": [],
+      "organisers": [
+        "Boston dbt Meetup"
+      ],
       "attendees": 65,
       "talks": [
         {
@@ -5592,7 +6884,9 @@
       "date": "2023-12-07",
       "venue": "2 Canal Park, Cambridge, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/297398542/",
-      "organisers": [],
+      "organisers": [
+        "Boston dbt Meetup"
+      ],
       "attendees": 68,
       "talks": [
         {
@@ -5620,7 +6914,9 @@
       "date": "2024-03-27",
       "venue": "125 Summer Street, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/299365266/",
-      "organisers": [],
+      "organisers": [
+        "Chitra Sundaram"
+      ],
       "attendees": 84,
       "talks": [
         {
@@ -5639,7 +6935,11 @@
       "date": "2024-07-17",
       "venue": "Klaviyo, 125 Summer Street, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/301705215/",
-      "organisers": [],
+      "organisers": [
+        "Chitra Sundaram",
+        "Riddhima Shukla",
+        "Stefan Mitrano"
+      ],
       "attendees": 81,
       "talks": [
         {
@@ -5667,7 +6967,10 @@
       "date": "2024-11-20",
       "venue": "One Kenmore Square, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/304168286/",
-      "organisers": [],
+      "organisers": [
+        "Chitra Sundaram",
+        "Riddhima Shukla"
+      ],
       "attendees": 88,
       "talks": [
         {
@@ -5696,7 +6999,10 @@
       "date": "2025-03-19",
       "venue": "Klaviyo, 125 Summer Street, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/306137056/",
-      "organisers": [],
+      "organisers": [
+        "Chitra Sundaram",
+        "Riddhima Shukla"
+      ],
       "attendees": 85,
       "talks": [
         {
@@ -5724,7 +7030,11 @@
       "date": "2025-06-18",
       "venue": "Klaviyo, 125 Summer Street, Boston, MA",
       "url": "https://www.meetup.com/boston-dbt-meetup/events/307683026/",
-      "organisers": [],
+      "organisers": [
+        "Chitra Sundaram",
+        "Riddhima Shukla",
+        "Stefan Mitrano"
+      ],
       "attendees": 76,
       "talks": [
         {
@@ -5767,6 +7077,41 @@
       "name": "PyLadies Boston (meetup gql2)",
       "url": "https://www.meetup.com/pyladies-boston/",
       "note": "Kaveesha Shah (Women in Data), Fay Shaw, and a careers panel. Venues: CarGurus, Kensho."
+    },
+    {
+      "name": "WEST (Women in the Enterprise of Science & Technology)",
+      "url": "https://www.meetup.com/westorg/",
+      "note": "Women-in-STEM association with frequent online and Cambridge events. A data science career panel in September 2026; no analytics engineering or dbt talks."
+    },
+    {
+      "name": "WiDS Boston",
+      "url": "https://www.widsworldwide.org/events/event/wids-boston-northeastern-university/",
+      "note": "WiDS regional events at Northeastern (2023, 2024) and Boston University (November 2025, a panel of analytics leaders)."
+    },
+    {
+      "name": "Women Techmakers Boston (GDG Boston and GDG Cloud Boston)",
+      "url": "https://gdg.community.dev/e/mm79mj/",
+      "note": "Yearly International Women's Day events at the Broad Institute and Accenture. One analytics talk in 2025; mostly AI and career talks."
+    },
+    {
+      "name": "Metro Boston Data Ladies",
+      "url": "https://www.meetup.com/metro-boston-data-ladies/",
+      "note": "New Waltham-based group (2026) with informal data project meetups. No talks yet."
+    },
+    {
+      "name": "AWS User Group Women in AI Cambridge",
+      "url": "https://www.meetup.com/aws-user-group-women-in-ai-cambridge/",
+      "note": "New AWS women's user group (2026), online so far. AI talks, no analytics."
+    },
+    {
+      "name": "Boston WiMLDS",
+      "url": "https://www.meetup.com/Boston-Women-in-Machine-Learning-and-Data-Science/",
+      "note": "Dormant since November 2022."
+    },
+    {
+      "name": "Women in Big Data Boston",
+      "url": "https://www.meetup.com/women-in-big-data-boston/",
+      "note": "Dormant since June 2020."
     }
   ]
 }

@@ -7,19 +7,19 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 56 |
-| People | 106 |
+| Companies | 65 |
+| People | 120 |
 | Tier 1 leads | 34 |
 | First-time speakers (publish, no talk yet) | 13 |
-| Proven speakers | 87 |
+| Proven speakers | 92 |
 | Spoke at this chapter before | 34 |
-| Based in the region | 77 |
+| Based in the region | 84 |
 | Based elsewhere | 6 |
-| Location unknown | 23 |
+| Location unknown | 30 |
 | With a LinkedIn profile | 23 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 14 |
@@ -45,7 +45,11 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 
 ### Women-in-data communities
 
-- **[WiDS Belgium](https://www.widsworldwide.org/?p=17492):** it lists 4 event ambassadors but no speakers. The ambassadors are recorded as connectors. They are the whole women-in-data pool so far.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[WiDS Belgium site](https://www.womenindatascience.be/):** the best source. It names every speaker with employer and title, and each year's organising committee. The [2025 programme](https://www.womenindatascience.be/program-2025/) gave 5 data speakers. Sophie De Waele (dataroots) spoke on BI dashboards that business users adopt. Charlotte Waelkens (Lighthouse) spoke on GenAI summaries. Merel Theisen (QuantumBlack) spoke on Kedro pipelines. Lieve Lanoye (TP Vision) gave a keynote, and Anastasia Karavdina (Vattenfall) ran a mentorship session. The [2025 committee](https://www.womenindatascience.be/organizing-committee-2025/) and the [2024 committee](https://www.womenindatascience.be/conference/) gave 5 new connectors, including Léa Boulos (dataroots). A [panel event](https://www.womenindatascience.be/panel-discussion-2026/) is on 10 November 2026 in Ghent. The site reads with a plain fetch.
+- **[WiDS Belgium on widsworldwide.org](https://www.widsworldwide.org/?p=17492):** it lists the 4 event ambassadors, who were already recorded as connectors.
+- **[Women Techmakers Brussels](https://gdg.community.dev/gdg-brussels/):** it runs International Women's Day events with GDG Brussels and GDG Cloud Belgium. The [2025 event page](https://gdg.community.dev/events/details/google-gdg-brussels-presents-redefining-ai-a-vision-for-the-future-wtmredefinepossible/) names 3 ambassadors: Leyla Damoisaux-Delnoy (SPF Finances), Federica Nocerino (The Linux Foundation) and Lisa Becker (Pure APP). Chaimaa Nairi, a data engineer at Capgemini Blue Harvest, organises the GDG Brussels events. All 4 are connectors. The talks since 2024 are about AI and careers, not data.
+- **Also ask:** data leads at dbt companies to suggest people on their teams.
 
 ### Job ads
 
@@ -68,7 +72,9 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 - **Plain web searches for Lytix and element61:** they returned pages about dialectical behaviour therapy. Search the company site instead.
 - **dbt Labs pages:** the [dbt Summit 2026 sessions](https://www.getdbt.com/blog/dbt-summit-2026-sessions-by-role) and the [dbt developer blog authors](https://docs.getdbt.com/blog/authors) had no Belgian employers.
 - **[PyLadies Brussels](https://www.meetup.com/pyladies-brussels/):** beginner Python workshops with no named speakers.
-- **[R-Ladies Brussels](https://www.meetup.com/R-Ladies-Brussels/):** no events since 2023.
+- **[R-Ladies Brussels](https://www.meetup.com/R-Ladies-Brussels/):** no events since 2019.
+- **[Brussels WiMLDS](https://www.meetup.com/brussels-women-in-machine-learning-and-data-science/):** dormant. Its last event was a networking session in June 2023.
+- **Other women-in-data networks:** [Women in AI Belgium](https://www.womeninai.co/belgium) and the [Women in Big Data chapter list](https://www.womeninbigdata.org/chapters/) returned 404 errors. [Girls in Tech Belgium](https://girlsintech.org/belgium/) timed out. No Belgian Data + Women group, She Loves Data event or Women on Snowflake event was found. Meetup's group search found no other women-in-data group, and the 8 Belgian data groups had no women-in-data events since 2023.
 - **Belgian job boards:** a [Stepstone search](https://www.stepstone.be/emplois/dbt/a-gand) returned 0 results, and the aijobs pages redirected. Job-ad coverage is thin.
 
 ## 3. Companies looked at
@@ -78,7 +84,7 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 - **One placeholder employer.** 8 speakers whose employer the event page did not name sit under "Unstated employer (Belgium)".
 
 <!-- companies:start -->
-56 companies and communities were looked at. A company is local when it has people or roles in the region.
+65 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (27)</summary>
 
@@ -92,9 +98,9 @@ AE, Agoya (local presence not confirmed), Cegeka, Deliverect, Inspari (local pre
 
 </details>
 
-<details><summary><b>Not verified</b> (16)</summary>
+<details><summary><b>Not verified</b> (25)</summary>
 
-Aivix (local presence not confirmed), Beyond Data Group (local presence not confirmed), Brussels Airlines, Collibra, Datasense, delaware, DPD Belgium, Ghent University, imec, Nordsky (local presence not confirmed), Plainsight, Proximus, Raito (local presence not confirmed), Tinder, Torfs, Unstated employer (Belgium) (local presence not confirmed)
+Aivix (local presence not confirmed), Beyond Data Group (local presence not confirmed), Brussels Airlines, Capgemini (local presence not confirmed), Collibra, Datasense, delaware, DPD Belgium, Ghent University, Hict (local presence not confirmed), imec, Nordsky (local presence not confirmed), Plainsight, Proximus, Pure APP (local presence not confirmed), QuantumBlack (McKinsey) (local presence not confirmed), Raito (local presence not confirmed), SPF Finances (Belgian Federal Public Service Finance) (local presence not confirmed), The Linux Foundation (local presence not confirmed), The School of Industrial Biology (local presence not confirmed), Tinder, Torfs, TP Vision (local presence not confirmed), Unstated employer (Belgium) (local presence not confirmed), Vattenfall (local presence not confirmed)
 
 </details>
 
@@ -113,7 +119,7 @@ WiDS Belgium
 
 </details>
 
-<details><summary><b>Other sources checked</b> (17)</summary>
+<details><summary><b>Other sources checked</b> (30)</summary>
 
 - [dataroots blog](https://dataroots.io/blog)
 - [Data Minded on Medium](https://medium.com/feed/datamindedbe)
@@ -132,6 +138,19 @@ WiDS Belgium
 - [Stepstone dbt Ghent](https://www.stepstone.be/emplois/dbt/a-gand) (nothing useful)
 - [Datashift, element61, Lytix, Plainsight, Aivix blogs](https://www.datashift.eu/insights) (nothing useful)
 - [dbt developer blog authors](https://docs.getdbt.com/blog/authors) (nothing useful)
+- [Meetup gql2 groupSearch around Brussels](https://www.meetup.com/gql2)
+- [Brussels WiMLDS (Meetup gql2)](https://www.meetup.com/brussels-women-in-machine-learning-and-data-science/) (nothing useful)
+- [She Leads Digital (Meetup gql2)](https://www.meetup.com/she-leads-digital/) (nothing useful)
+- [Keyword scan of 8 Belgian data groups (Meetup gql2)](https://www.meetup.com/dataminds-ai/) (nothing useful)
+- [WiDS Belgium site](https://www.womenindatascience.be/)
+- [GDG Brussels events API (Women Techmakers)](https://gdg.community.dev/gdg-brussels/)
+- [Women on Snowflake events](https://usergroups.snowflake.com/women-on-snowflake/) (nothing useful)
+- [Women in AI Belgium](https://www.womeninai.co/belgium) (nothing useful)
+- [Girls in Tech Belgium](https://girlsintech.org/belgium/) (nothing useful)
+- [Women in Big Data chapters](https://www.womeninbigdata.org/chapters/) (nothing useful)
+- [Data + Women (Tableau user groups)](https://usergroups.tableau.com/data-women/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [PyLadies locations](https://pyladies.com/locations/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -178,7 +197,13 @@ WiDS Belgium
   - **Blogs:** new dataroots and Data Minded posts. Retry Datashift, element61, Lytix, Plainsight and Aivix through a site search.
   - **Medium:** fetch other Belgian company publications before the rate limit starts.
   - **Job ads:** run the ATS searches (`site:jobs.lever.co`, `site:job-boards.greenhouse.io`, `site:jobs.ashbyhq.com` with dbt Belgium).
-  - **Women-in-data:** ask the WiDS Belgium ambassadors for introductions, and look for named speakers at WiDS Belgium itself.
+  - **Women-in-data:** read the WiDS Belgium panel line-up after 10 November 2026, and the 2027 programme when it is published. Ask the WiDS Belgium committee for data engineering and analytics speakers.
+- **Women-in-data communities not yet reachable:**
+  - **Girls in Tech Belgium:** the site timed out. Try it in a browser.
+  - **Women in AI Belgium and Women in Big Data Belgium:** no chapter page was found.
+  - **Data + Women Belgium:** no group was found. Ask Biztory, which runs Tableau community events.
+  - **Women Techmakers Brussels:** the ambassadors are known, but no data talk has been held. Ask them about a joint data evening.
+- **People from the women-in-data pass:** the 14 people added have no LinkedIn search. The WiDS Belgium pages link LinkedIn profiles, which a LinkedIn pass can confirm.
   - **Data Professionals - Belgium:** its [quarterly data drinks](https://www.meetup.com/data-professionals-belgium/) in Brussels were not scanned for speakers.
 - **People to locate:** 23 people have no known location. They include tier-1 leads Arthur Chionh and Johannes Lootens, and most chapter speakers from 2023 and 2024.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `belgium/belgium_dbt_companies.json`, the Belgium dbt Meetup, `../enriched/analytics-engineering-belgium.json` and the region Belgium.
@@ -190,3 +215,4 @@ WiDS Belgium
 | 2026-10-01 | 1 | First build. Meetup data for 15 Belgian data groups, the dataroots, Data Minded and Biztory blogs, the Snowflake user group, WiDS Belgium and job boards, plus chapter history. 106 people at 56 companies, 34 of them past chapter speakers. 3 job ads. Web search ran out after about 25 calls. |
 | 2026-10-01 | 1 | Location pass from public pages: Sessionize speaker pages and in-person chapter talks. 25 people placed, 21 in Belgium and 4 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 14 people searched, 10 placed in Belgium and 1 in Paris. With the location pass, 36 people placed and 24 still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass. Checked the WiDS Belgium site, Women Techmakers Brussels (through GDG Brussels), Brussels WiMLDS, R-Ladies Brussels, PyLadies Brussels, Women on Snowflake, Women in AI, Girls in Tech, Women in Big Data, Data + Women and She Loves Data. Added 14 people with `sourced_via: women_in_data_community`: 5 WiDS Belgium speakers and 9 organisers as connectors. Added community channels for WiDS Belgium, Women Techmakers Brussels, Brussels WiMLDS and R-Ladies Brussels. |

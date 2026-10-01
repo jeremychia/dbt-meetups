@@ -7,19 +7,19 @@ This file holds what is specific to Melbourne. The method, scoring rules, schema
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 70 |
-| People | 56 |
+| Companies | 76 |
+| People | 70 |
 | Tier 1 leads | 13 |
 | First-time speakers (publish, no talk yet) | 2 |
-| Proven speakers | 51 |
+| Proven speakers | 59 |
 | Spoke at this chapter before | 7 |
-| Based in the region | 52 |
+| Based in the region | 56 |
 | Based elsewhere | 2 |
-| Location unknown | 2 |
+| Location unknown | 12 |
 | With a LinkedIn profile | 12 |
 | Job ads mentioning dbt | 35 |
 | Past chapter meetups | 4 |
@@ -58,13 +58,22 @@ One research run used about 18 web searches, plus a logged-out LinkedIn Jobs sca
 - **LinkedIn search results:** 5 people were searched. It placed 3 in Melbourne and 1 in Adelaide.
 - **Yield:** 8 people placed across both passes, and 2 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published.
+- **[Women in Cloud Meetup Group](https://www.meetup.com/women-in-cloud-meetup-group/):** the best source. It has 992 members and monthly talks at Mantel Group and REA. Each event page names the speaker, role and employer. It gave four data talks. Carine Oliveira (Easygo) spoke on [the Easygo data platform](https://www.meetup.com/women-in-cloud-meetup-group/events/310349000/) in August 2025. Anlita Chaisrisukumporn (Easygo) spoke on [the end-to-end data journey](https://www.meetup.com/women-in-cloud-meetup-group/events/313993155/) in April 2026. Gina Bocanegra (REA Group) spoke on [BigQuery telemetry](https://www.meetup.com/women-in-cloud-meetup-group/events/315664762/) in August 2026. Prerna Tiwari (Confluent) spoke on [real-time streaming](https://www.meetup.com/women-in-cloud-meetup-group/events/306749866/) in April 2025. The organisers are listed by first name only.
+- **[R-Ladies+ Melbourne](https://www.meetup.com/rladies-melbourne/):** Meetup pages often leave out the speaker. Each event has a repo on [github.com/R-LadiesMelbourne](https://github.com/R-LadiesMelbourne) whose README names the speaker. It gave Elisa Koch and Lauren Boothby (AFL) on [data in sport](https://www.meetup.com/rladies-melbourne/events/304124032/), Kate Saunders (Monash University) on [data-driven decisions](https://www.meetup.com/rladies-melbourne/events/313639240/) and Kirsty McCann (Deakin University) with a ggplotly workshop. The Meetup event hosts gave 5 more organisers as connectors.
+- **Women Techmakers Melbourne:** runs International Women's Day events with [GDG Melbourne](https://gdg.community.dev/gdg-melbourne/). The GDG events API (`event_slim/for_chapter/705`) lists every event. Only one data talk since 2023: "Women in Data Science: Challenges & Opportunities" at [IWD 2023](https://gdg.community.dev/e/mja3uz/), by a speaker named only as Thien Anh. Katie Barnett (Bilue) is the ambassador and a connector.
+- **Also ask:** R-Ladies+ Melbourne and Women in Cloud take speaker suggestions. Both are routes to more data speakers.
+
 ## 2. What didn't work here
 
 - **Sydney roadshows:** [Coalesce on the Road Sydney 2025](https://www.getdbt.com/events/roadshow/coalesce-in-sydney) had one Envato speaker with an unknown city. [dbt World Tour Sydney 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-sydney) had no Melbourne speakers.
 - **[Microsoft Fabric & Power BI Melbourne](https://www.meetup.com/power-bi-melbourne/):** BI only.
 - **DataEngBytes 2025 archive:** does not load.
 - **Company blogs:** most Melbourne tech companies have no searchable dbt posts. The [EdgeRed](https://edgered.com.au/technology_partner/dbt-solutions-partner/) partner page names no Melbourne authors. Searches for REA, Seek, Culture Amp, Linktree and carsales blogs returned nothing, and realestate.com.au is blocked by the search tool.
-- **Women-in-data groups:** none names speakers, so the line-up needs introductions instead. [R-Ladies+ Melbourne](https://www.meetup.com/rladies-melbourne/) has 2,583 members, but event pages do not name speakers. PyLadies, She Loves Data, WiDS and Women in Data have no Melbourne Meetup groups under the names tried. No candidate came from this step.
+- **Women-in-data groups with no data talks:** [Melbourne Women in Machine Learning & Data Science](https://www.meetup.com/Melbourne-Women-in-Machine-Learning-and-Data-Science/) has 1,415 members, but its last event was in February 2022. [Tech Leading Ladies](https://www.meetup.com/Tech-Leading-Ladies/), [Women Coders](https://www.meetup.com/women-coders/) and [Product Women](https://www.meetup.com/women-in-product-melbourne/) run career, coding and AI events only.
+- **Women-in-data networks with no Melbourne chapter:** the [PyLadies Melbourne](http://melbourne.pyladies.com/) site returns 404, and no Meetup group was found. [She Loves Data](https://www.shelovesdata.com/) now lists only online AI workshops. [WiDS](https://www.widsworldwide.org/events/) lists no Australian regional event. Women Who Code closed in 2024. Meetup's group search found no Women in Big Data, Data + Women or Girls in Tech group.
 - **Head-office locations on LinkedIn:** Mantel's LinkedIn location is its Sydney head office, so it does not place a Melbourne employee.
 
 ## 3. Companies looked at
@@ -74,7 +83,7 @@ One research run used about 18 web searches, plus a logged-out LinkedIn Jobs sca
 - **Customer speakers at dbt Labs events:** RMIT, REA, John Holland and Pepperstone all have dbt talks on record.
 
 <!-- companies:start -->
-69 companies and communities were looked at. A company is local when it has people or roles in the region.
+75 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (7)</summary>
 
@@ -94,9 +103,15 @@ Snowflake User Group Melbourne
 
 </details>
 
-<details><summary><b>Not verified</b> (25)</summary>
+<details><summary><b>Not verified</b> (26)</summary>
 
-Accenture (local presence not confirmed), Acenda Life (local presence not confirmed), Airmaster (local presence not confirmed), Alinta Energy (local presence not confirmed), Austroads (local presence not confirmed), DataEngBytes Melbourne, dbt Labs (local presence not confirmed), Fortress Melbourne, Innablr (local presence not confirmed), InterWorks (local presence not confirmed), Judo Bank (local presence not confirmed), Melbourne Databricks User Group, MYOB, Officeworks (local presence not confirmed), Profectus Group (local presence not confirmed), R-Ladies+ Melbourne, Sahaj.ai (local presence not confirmed), Snowflake A/NZ (local presence not confirmed), Suncorp (local presence not confirmed), Thoughtworks, Thryv (local presence not confirmed), Tixel (local presence not confirmed), Victorian Department of Transport and Planning (local presence not confirmed), Vivanti, Workwear Group (Wesfarmers) (local presence not confirmed)
+Accenture (local presence not confirmed), Acenda Life (local presence not confirmed), Airmaster (local presence not confirmed), Alinta Energy (local presence not confirmed), Australian Football League (AFL), Austroads (local presence not confirmed), DataEngBytes Melbourne, dbt Labs (local presence not confirmed), Fortress Melbourne, Innablr (local presence not confirmed), InterWorks (local presence not confirmed), Judo Bank (local presence not confirmed), Melbourne Databricks User Group, MYOB, Officeworks (local presence not confirmed), Profectus Group (local presence not confirmed), R-Ladies+ Melbourne, Sahaj.ai (local presence not confirmed), Snowflake A/NZ (local presence not confirmed), Suncorp (local presence not confirmed), Thoughtworks, Thryv (local presence not confirmed), Tixel (local presence not confirmed), Victorian Department of Transport and Planning (local presence not confirmed), Vivanti, Workwear Group (Wesfarmers) (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (5)</summary>
+
+Bilue (local presence not confirmed), Confluent (local presence not confirmed), Deakin University (local presence not confirmed), Employer not identified (local presence not confirmed), Monash University
 
 </details>
 
@@ -107,7 +122,7 @@ Accenture (local presence not confirmed), Acenda Life (local presence not confir
 
 </details>
 
-<details><summary><b>Other sources checked</b> (17)</summary>
+<details><summary><b>Other sources checked</b> (29)</summary>
 
 - [dbt World Tour Melbourne 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-melbourne)
 - [dbt World Tour Sydney 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-sydney) (nothing useful)
@@ -126,6 +141,18 @@ Accenture (local presence not confirmed), Acenda Life (local presence not confir
 - [Canva engineering blog](https://www.canva.dev/blog/engineering/)
 - [Pipeline To Insights (Substack)](https://pipeline2insights.substack.com/about)
 - [LinkedIn Jobs guest API (keywords=dbt, Melbourne-area)](https://www.linkedin.com/jobs/search?keywords=dbt)
+- [Meetup gql2 groupSearch near Melbourne](https://www.meetup.com/gql2)
+- [Women in Cloud Meetup Group (Meetup gql2)](https://www.meetup.com/women-in-cloud-meetup-group/)
+- [R-Ladies+ Melbourne (Meetup gql2 and event repos)](https://github.com/R-LadiesMelbourne)
+- [GDG Melbourne events API (Women Techmakers)](https://gdg.community.dev/api/event_slim/for_chapter/705/)
+- [Melbourne Women in Machine Learning & Data Science](https://www.meetup.com/Melbourne-Women-in-Machine-Learning-and-Data-Science/) (nothing useful)
+- [Tech Leading Ladies](https://www.meetup.com/Tech-Leading-Ladies/) (nothing useful)
+- [Women Coders (Melbourne)](https://www.meetup.com/women-coders/) (nothing useful)
+- [Product Women (Melbourne)](https://www.meetup.com/women-in-product-melbourne/) (nothing useful)
+- [PyLadies Melbourne](http://melbourne.pyladies.com/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [WiDS Worldwide events](https://www.widsworldwide.org/events/) (nothing useful)
+- [Women Who Code](https://womenwhocode.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -162,7 +189,7 @@ Accenture (local presence not confirmed), Acenda Life (local presence not confir
 - **Sources to try first:**
   - **After 2026-10-06:** add the dbt World Tour Melbourne recordings and any new speakers, from the `speakersArray` JSON on getdbt.com roadshow pages.
   - **Local groups:** new Snowflake User Group Melbourne, Data Engineering Melbourne and Melbourne Databricks User Group events, and DataEngBytes `/api/<year>/users`.
-  - **Women-in-data:** try Eventbrite and Luma directly for She Loves Data, WiDS and PyLadies Melbourne, and ask R-Ladies+ Melbourne for its speakers.
+  - **Women-in-data:** new Women in Cloud and R-Ladies+ Melbourne events. Try Eventbrite and Luma for She Loves Data and WiDS, which have no reachable Melbourne listing. Ask the Women in Cloud organisers for their full names.
   - **Blogs:** try REA, Seek, Culture Amp and carsales blogs through direct fetches instead of web search.
   - **Job ads:** add the Lever, Greenhouse and Ashby `site:` searches for dbt Melbourne.
 - **People to locate:**
@@ -177,3 +204,4 @@ Accenture (local presence not confirmed), Acenda Life (local presence not confir
 | 2026-09-24 | 1 | First build. dbt Labs roadshow agendas, local meetups and user groups, company blogs, women-in-data communities and a LinkedIn Jobs scan, plus chapter history. 56 people at 70 companies, 7 of them past chapter speakers. 35 dbt job ads at 31 companies. |
 | 2026-10-01 | 2 | Location pass from public pages: in-person talks at employers with a Melbourne office, and a GitHub profile. 4 people placed, 3 in Melbourne and 1 elsewhere. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 4 people placed, 3 in Melbourne and 1 in Adelaide. With the location pass, 8 people placed and 2 still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass from Women in Cloud, R-Ladies+ Melbourne and Women Techmakers events. 14 people added and 1 extended: 8 speakers, including Easygo, REA and AFL data leads, and 7 organisers as connectors. |

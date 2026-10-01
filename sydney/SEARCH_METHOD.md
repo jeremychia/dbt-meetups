@@ -7,19 +7,19 @@ This file holds what is specific to Sydney. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 164 |
-| People | 141 |
+| Companies | 166 |
+| People | 149 |
 | Tier 1 leads | 16 |
 | First-time speakers (publish, no talk yet) | 6 |
-| Proven speakers | 105 |
+| Proven speakers | 108 |
 | Spoke at this chapter before | 28 |
-| Based in the region | 109 |
+| Based in the region | 110 |
 | Based elsewhere | 10 |
-| Location unknown | 22 |
+| Location unknown | 29 |
 | With a LinkedIn profile | 54 |
 | Job ads mentioning dbt | 87 |
 | Past chapter meetups | 13 |
@@ -44,7 +44,6 @@ The first build had three parts: local meetups and communities, conferences and 
 - **[Data & Analytics Wednesday Sydney](https://www.meetup.com/data-and-analytics-wednesday-sydney/):** monthly, with many BI and analytics speakers and LinkedIn URLs inline.
 - **[DataEngBytes Luma calendar](https://luma.com/dataengbytes):** the Sydney Data Eng meetups moved here. Luma's API endpoints work when called from a luma.com page. The past list only reaches back to 2026-06.
 - **Smaller sources:** the [Power BI & Fabric User Group](https://www.meetup.com/microsoft-power-bi-fabric-user-group-sydney/), [Sydney AI + Data](https://www.meetup.com/data-science-sydney/) and [Sydney Python (SyPy)](https://luma.com/sydneypython).
-- **Women-in-data groups:** [R-Ladies Sydney](https://www.meetup.com/rladies-sydney/), [GEEQ](https://www.meetup.com/geeq-australia/) (formerly Girl Geek Sydney), [Women in Tech Australia](https://www.meetup.com/womenintechaustralia/) and [She Loves Data](https://shelovesdata.com/events/) gave speakers or organisers. 12 people are tagged from them. The talks are mostly R, general tech or GenAI, not dbt.
 - **Chapter history:** every named speaker from `../enriched/sydney-dbt-meetup.json` was added. That covers 13 events, from the inaugural meetup (2019-10-09) to the Mantel Group edition (2024-05-30). Meetup `gql2` shows 774 members, and the organiser field says "dbt Labs".
 
 ### Blogs and job ads
@@ -61,13 +60,25 @@ The first build had three parts: local meetups and communities, conferences and 
 - **LinkedIn search results:** 12 people were searched. It placed 6 in Greater Sydney and 1 in Adelaide. One more result put Kevin Dang (EdgeRed) in Docklands, which is Melbourne.
 - **Yield:** 12 people placed across both passes, and 37 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published.
+- **[R-Ladies Sydney](https://www.meetup.com/rladies-sydney/):** the only group with regular data talks. The first build took organisers and speakers from it. Its events since 2024 added Kristy Robledo on [summary tables with gtsummary](https://www.meetup.com/rladies-sydney/events/304091476/), Julia Silge (Posit) on [MLOps](https://www.meetup.com/rladies-sydney/events/302110244/), and 4 event hosts as connectors. Olivia Angelin-Bonnet's [targets pipelines talk](https://www.meetup.com/rladies-sydney/events/306694136/) was already recorded.
+- **[GEEQ](https://www.meetup.com/geeq-australia/) (formerly Girl Geek Sydney):** 5,627 members. It gave the 2024 vector database microhack and GenAI talk speakers in the first build. This pass added its event host, Azadeh Khojandi, as a connector.
+- **[The Bridge Forum](https://www.meetup.com/women-in-tech-connect-grow/) (Women in Tech: Connect & Grow):** a new group since October 2025, with 263 members. Most events are networking evenings. The [June 2026 event](https://www.meetup.com/women-in-tech-connect-grow/events/315022580/) had Silvia Xiao, a data engineer at Zip, as a featured speaker. Its organiser, Shukri Shire, is a connector.
+- **[Women in Tech Australia](https://www.meetup.com/womenintechaustralia/) and [She Loves Data](https://shelovesdata.com/):** gave speakers in the first build. Neither has had a data talk since.
+- **Also ask:** the R-Ladies Sydney hosts and Susan Luo for analytics speakers from their community.
+
 ## 2. What didn't work here
 
 - **The chapter itself:** it is dormant. The last in-person event was on 2024-05-30 at Mantel Group. After that it only cross-posted two online dbt Labs sessions in 2024, and it has had no events in 2025 or 2026. Its history is mostly 2019 to 2022.
 - **[Seek](https://www.seek.com.au/dbt-jobs/in-All-Sydney-NSW):** stuck on a Cloudflare bot check.
 - **DataEngBytes 2025 archive:** does not load.
-- **[WiDS Sydney](https://widssydney.com.au/):** returned nothing, because the page is rendered with JavaScript.
+- **[WiDS Sydney](https://widssydney.com.au/):** returned nothing in the first build, because the page is rendered with JavaScript. On the second try the site did not respond at all.
 - **Closed groups:** [Women in Big Data Sydney](https://www.meetup.com/women-in-big-data-wibd-sydney/) and PyLadies Sydney have closed or could not be found. The old [Sydney Data Engineering Meetup](https://www.meetup.com/sydney-data-engineering-meetup/) group no longer exists.
+- **Inactive women-in-data groups:** [Sydney Women in Machine Learning and Data Science](https://www.meetup.com/sydney-women-in-machine-learning-and-data-science/) has 674 members, but its last event was in November 2022. [Sydney Women and Gender Diverse People in Technology](https://www.meetup.com/sydney-women-and-gender-diverse-people-in-technology-meetup/) has not held an event. Women Who Code closed in 2024.
+- **Women Techmakers Sydney:** the [GDG Sydney](https://gdg.community.dev/gdg-sydney/) events API (`event_slim/for_chapter/539`) shows one International Women's Day event since 2024, an AI workshop with no data talk.
+- **She Loves Data and Women in Tech Australia since 2024:** She Loves Data now lists only online AI workshops, and `/events` returns 404. Women in Tech Australia ran AI, mentoring and career events only.
 - **[Snowflake Sydney Meetup group](https://www.meetup.com/Snowflake-Sydney/):** no events since 2023.
 - **[Australia Apache Airflow Meetup](https://www.meetup.com/australia-apache-airflow-meetup/):** runs only online vendor sessions.
 - **EdgeRed blog index:** timed out.
@@ -81,7 +92,7 @@ The first build had three parts: local meetups and communities, conferences and 
 - **Recruiters and talent staff:** 16 people were found through job ads. None has public content, so none is a speaker lead.
 
 <!-- companies:start -->
-163 companies and communities were looked at. A company is local when it has people or roles in the region.
+165 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (40)</summary>
 
@@ -107,6 +118,12 @@ Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence 
 
 </details>
 
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+Posit (local presence not confirmed), The Bridge Forum (Women in Tech: Connect & Grow)
+
+</details>
+
 <details><summary><b>Blogs and sites scanned</b> (14)</summary>
 
 - https://dataengbytes.com/
@@ -126,7 +143,7 @@ Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence 
 
 </details>
 
-<details><summary><b>Other sources checked</b> (45)</summary>
+<details><summary><b>Other sources checked</b> (52)</summary>
 
 - [Sydney dbt Meetup (meetup.com gql2)](https://www.meetup.com/sydney-dbt-meetup/)
 - [Snowflake User Groups Sydney (Bevy)](https://usergroups.snowflake.com/sydney/)
@@ -173,6 +190,13 @@ Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence 
 - [WebSearch site:job-boards.greenhouse.io dbt Sydney](https://job-boards.greenhouse.io)
 - [WebSearch site:jobs.ashbyhq.com dbt Sydney](https://jobs.ashbyhq.com)
 - [WebSearch smartrecruiters/workday dbt Sydney](https://jobs.smartrecruiters.com) (nothing useful)
+- [Meetup gql2 groupSearch near Sydney](https://www.meetup.com/gql2)
+- [The Bridge Forum (Meetup gql2)](https://www.meetup.com/women-in-tech-connect-grow/)
+- [Sydney Women in Machine Learning and Data Science](https://www.meetup.com/sydney-women-in-machine-learning-and-data-science/) (nothing useful)
+- [Sydney Women and Gender Diverse People in Technology Meetup](https://www.meetup.com/sydney-women-and-gender-diverse-people-in-technology-meetup/) (nothing useful)
+- [GDG Sydney events API (Women Techmakers)](https://gdg.community.dev/api/event_slim/for_chapter/539/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [Women Who Code](https://womenwhocode.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -215,7 +239,7 @@ Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence 
   - **Local groups:** new Snowflake User Group Sydney, Sydney Databricks User Group and Data & Analytics Wednesday events, and the DataEngBytes Luma calendar.
   - **Job ads:** the Lever, Greenhouse and Ashby `site:` searches for dbt Sydney.
   - **Sources not yet read:** the PyCon AU 2026 Data & AI track, the DataEngBytes 2025 archive, the EdgeRed blog index and Seek through the browser.
-  - **Women-in-data:** find the GEEQ 2023 "Diversity in data engineering" panel names, and read She Loves Data's Eventbrite events in the browser.
+  - **Women-in-data:** new R-Ladies Sydney and The Bridge Forum events. Find the GEEQ 2023 "Diversity in data engineering" panel names. Try WiDS Sydney in the browser, since it did not respond to plain fetches.
   - **Restarting the chapter:** ask Margie Iliescu, Peter Hanssens and the Snowflake organisers about co-hosting.
 - **People to locate:**
   - **Past speakers:** 37 people are still unknown, mostly chapter speakers from 2019 to 2022.
@@ -229,3 +253,4 @@ Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence 
 | 2026-09-24 | 1 | First build, in three parts: local meetups and communities, conferences and blogs, and job ads, plus chapter history. 141 people at 166 companies, 28 of them past chapter speakers. 87 dbt job ads at 56 companies. |
 | 2026-10-01 | 2 | Location pass from public pages: in-person talks at Coalesce on the Road Sydney and DataEngBytes, at employers with a Sydney office. 4 people placed. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 8 people placed, 6 in Greater Sydney and 2 elsewhere. With the location pass, 12 people placed and 37 still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass over R-Ladies Sydney, GEEQ, The Bridge Forum, Women Techmakers and other groups since 2024. 8 people added: 2 speakers (Zip, Posit) and 6 organisers as connectors. |

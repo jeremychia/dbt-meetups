@@ -7,19 +7,19 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 59 |
-| People | 58 |
+| Companies | 64 |
+| People | 69 |
 | Tier 1 leads | 20 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 48 |
+| Proven speakers | 51 |
 | Spoke at this chapter before | 20 |
-| Based in the region | 45 |
+| Based in the region | 52 |
 | Based elsewhere | 2 |
-| Location unknown | 11 |
+| Location unknown | 15 |
 | With a LinkedIn profile | 1 |
 | Job ads mentioning dbt | 28 |
 | Past chapter meetups | 12 |
@@ -56,6 +56,14 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **LinkedIn search results:** placed 1 person, Jean-Christophe Gnansounou (Cartier, Seoul). A tied profile came back for only 1 of the 11 people searched.
 - **Yield:** 15 people placed across both passes, and 12 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[AWSKRUG Women In Cloud](https://www.meetup.com/awskrug/):** the best source. It is the women's subgroup of AWSKRUG and has held 22 meetups since October 2023. Its events sit inside the AWSKRUG Meetup group, so filter AWSKRUG's past events for "Women In Cloud". Most talks are about careers and cloud. Kim Naheon, a senior data engineer at Spotify, [spoke in person](https://www.meetup.com/awskrug/events/305434782/) in January 2025. The 7 Meetup hosts are recorded as connectors. Winter Lee also hosts the AWSKRUG data group. The group has a #women-in-cloud Slack channel and an open speaker form.
+- **[PyLadies Seoul](https://www.meetup.com/seoul-pyladies-meetup/):** events since 2025 were re-read. The October 2025 DuckDB workshop is already recorded. The hosts geni, Hwayoung and saerom were added as connectors. geni also hosts Women In Cloud.
+- **[WiDS Seoul](https://www.widsworldwide.org/events/event/wids-lahore-3/):** one watch party of the WiDS Worldwide conference, in September 2023. The ambassador, Imai Jen-La Plante, is a connector.
+- **Also ask:** the Women In Cloud hosts and Winter Lee for data speakers. Post the call for speakers in #women-in-cloud.
+
 ## 2. What didn't work here
 
 - **Web search:** ran out after 15 calls, in English and Korean. The rest of the run used direct fetches and open APIs only.
@@ -65,7 +73,8 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **wanted.co.kr posting dates:** the fields read do not include one. All ads are recorded as seen on 2026-10-01.
 - **Tech blog feeds without dbt posts:** about 30 feeds were read. [Woowahan](https://techblog.woowahan.com/), Kakao, Hyperconnect, Buzzvil, Banksalad, Kakaobank, Devsisters, Inflab and Ohouse had none.
 - **Medium:** [Karrot (Daangn)](https://medium.com/daangn) and most other Korean blogs on Medium were blocked (HTTP 403 and 429). The authors of the Karrot and other company dbt posts could not be confirmed.
-- **Women-in-data groups:** Women Who Code, R-Ladies and WiMLDS have no Seoul groups on Meetup.
+- **Women-in-data groups:** Women Who Code, R-Ladies and WiMLDS have no Seoul groups on Meetup. Women Who Code closed in 2024.
+- **Other women-in-data sources:** Meetup's group search near Seoul found only social groups and AWS student clubs. [GDG Seoul](https://gdg.community.dev/gdg-seoul/) has held no Women Techmakers event since 2019. [Girls in Tech Korea](https://girlsintech.org/korea/) did not respond. The Women in AI Korea page returned HTTP 404. [event-us.kr](https://event-us.kr/) search renders by JavaScript.
 
 ## 3. Companies looked at
 
@@ -73,7 +82,7 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **Confirmed dbt users:** Toss Securities runs its batch pipelines on dbt, and the job ads add 24 companies that name dbt.
 
 <!-- companies:start -->
-57 companies and communities were looked at. A company is local when it has people or roles in the region.
+62 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (27)</summary>
 
@@ -99,9 +108,9 @@ ABLY, Bucketplace (Ohouse), Dataknows, Datarize, DK BMC, Loplat, Nexon Korea, NS
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (3)</summary>
+<details><summary><b>Uses a different stack</b> (8)</summary>
 
-AWSKRUG data group, Channel Corp, PyLadies Seoul
+AWSKRUG data group, AWSKRUG Women In Cloud, Channel Corp, Devsisters, Musinsa, PyLadies Seoul, Spotify (local presence not confirmed), WiDS Seoul (local presence not confirmed)
 
 </details>
 
@@ -111,7 +120,7 @@ AWSKRUG data group, Channel Corp, PyLadies Seoul
 
 </details>
 
-<details><summary><b>Other sources checked</b> (14)</summary>
+<details><summary><b>Other sources checked</b> (22)</summary>
 
 - [wanted.co.kr search and job APIs](https://www.wanted.co.kr/search?query=dbt)
 - [Apache Airflow Korea User Group (Meetup, forum, YouTube)](https://www.meetup.com/korea-apache-airflow-user-group/)
@@ -127,6 +136,14 @@ AWSKRUG data group, Channel Corp, PyLadies Seoul
 - [Snowflake World Tour Seoul 2026](https://www.snowflake.com/events/snowflake-world-tour-seoul/) (nothing useful)
 - [dbt Summit agenda and dbt Champions pages](https://www.getdbt.com/dbt-summit/agenda) (nothing useful)
 - [Women Who Code, R-Ladies, WiMLDS Seoul](https://www.meetup.com/) (nothing useful)
+- [Meetup gql2 groupSearch near Seoul](https://www.meetup.com/gql2)
+- [PyLadies Seoul events since 2025 (Meetup gql2)](https://www.meetup.com/seoul-pyladies-meetup/events/?type=past)
+- [GDG Seoul events API](https://gdg.community.dev/api/event_slim/for_chapter/786/?status=Completed&page_size=200) (nothing useful)
+- [WiDS Seoul](https://www.widsworldwide.org/events/event/wids-lahore-3/)
+- [WiDS Worldwide site search (Korea)](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Korea) (nothing useful)
+- [Girls in Tech Korea](https://girlsintech.org/korea/) (nothing useful)
+- [Women in AI Korea](https://www.womeninai.co/korea) (nothing useful)
+- [event-us.kr search (여성 데이터)](https://event-us.kr/search?keyword=%EC%97%AC%EC%84%B1%20%EB%8D%B0%EC%9D%B4%ED%84%B0) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -173,7 +190,12 @@ AWSKRUG data group, Channel Corp, PyLadies Seoul
   - **Job ads:** re-run the wanted.co.kr queries, keeping ads that contain the whole word "dbt". Add the Lever, Greenhouse and Ashby `site:` searches.
   - **velog:** new posts on the dbt tag.
   - **Blogs on Medium:** try the browser, or the publication's RSS feed, for Karrot, IoTrust, Musinsa and Yogiyo.
-  - **Women-in-data:** ask PyLadies Seoul about speakers from its first-talk workshop.
+  - **Women-in-data:** ask PyLadies Seoul about speakers from its first-talk workshop. Read new AWSKRUG Women In Cloud events.
+- **Women-in-data communities not yet reachable:**
+  - **Women Techmakers Korea:** no Seoul chapter page with recent events was found.
+  - **Girls in Tech Korea and Women in AI Korea:** the sites did not respond. Try them in a browser.
+  - **event-us.kr and festa.io:** search women's tech events in a browser.
+- **People from the women-in-data pass:** the 11 people added have no LinkedIn search. Most hosts are known only by a Meetup first name. Kim Naheon may be based outside Korea.
 - **People to locate:**
   - **LinkedIn:** search the past speakers still unknown and not yet searched: Louis Lee and Wynn Park.
   - **GitHub:** check the accounts linked from Seokjin Han's and zuckerfrei's velog bios.
@@ -186,3 +208,4 @@ AWSKRUG data group, Channel Corp, PyLadies Seoul
 | 2026-10-01 | 1 | First build. Airflow Korea, Flakers, AWSKRUG and PyLadies Seoul events, wanted.co.kr job ads, velog, about 30 tech blog feeds and GitHub search, plus chapter history. 59 people at 59 companies, 21 of them past chapter speakers and hosts. 28 dbt job ads at 24 companies. |
 | 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, velog bios, GitHub profiles and recent in-person talks. 14 people placed. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 1 person placed. With the location pass, 15 people placed and 12 still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass. Checked AWSKRUG Women In Cloud, PyLadies Seoul, WiDS Seoul, GDG Seoul, Girls in Tech Korea, Women in AI Korea and event-us. Added 11 people with `sourced_via: women_in_data_community`: 1 speaker (Kim Naheon, Spotify) and 10 connectors. Added 2 community channels. The assembler also added 1 past chapter speaker from the enriched file. |

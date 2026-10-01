@@ -7,19 +7,19 @@ This file holds what is specific to Tokyo. The method, scoring rules, schema and
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 73 |
-| People | 126 |
+| Companies | 87 |
+| People | 146 |
 | Tier 1 leads | 103 |
 | First-time speakers (publish, no talk yet) | 80 |
-| Proven speakers | 44 |
+| Proven speakers | 55 |
 | Spoke at this chapter before | 40 |
-| Based in the region | 97 |
+| Based in the region | 107 |
 | Based elsewhere | 5 |
-| Location unknown | 24 |
+| Location unknown | 34 |
 | With a LinkedIn profile | 4 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 19 |
@@ -57,16 +57,28 @@ Most of the content is in Japanese. Titles are kept as written, with an English 
 - **LinkedIn search results:** placed 2 people in Greater Tokyo and 2 elsewhere (Naha and Seattle).
 - **Yield:** 22 people placed across both passes, and 24 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
+### Women-in-data communities
+
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[Snowflake女子会](https://note.com/snowvillage_wmn):** the best source. It is a women-led Snowflake user community, and anyone may attend. Its [joint hands-on with primeNumber User Group](https://pug.connpass.com/event/389174/) on 28 April 2026 had two data talks. 宮原栞梨 (INTAGE) spoke on loading panel data into Snowflake with TROCCO. 山下由紀子 (Infotech) spoke on a sales data pipeline with TROCCO, Snowflake and Cortex AI. The same page names all 11 organisers with employers, and they are recorded as connectors. The [meetup #8 report](https://note.com/snowvillage_wmn/n/n2c596a3d08c9) (27 August 2026) gave 3 career talks by organisers. The note feed reads with a plain fetch.
+- **[ML女子部](https://women-ml.connpass.com/):** a women-run ML and data analysis group at Google Shibuya. Its [generative AI and data analysis meetup](https://women-ml.connpass.com/event/366580/) on 14 November 2025 gave 3 speakers. Satoru Nakamura spoke on a data analysis agent with BigQuery. KT (Canva Japan, founder of DATA Saber) and マスクドアナライズ also spoke. The organiser Sayaka Ito (unerry CTO) moderated the panel and is a connector.
+- **[Women in AI Japan](https://www.meetup.com/women-in-ai-japan/):** 16 events since 2023, found through Meetup's group search. Taku Ogawa (HAPPY ANALYTICS) gave a [web analytics interview](https://www.meetup.com/women-in-ai-japan/events/306097652/) in February 2025. Yoko Ono, the WiDS Tokyo @ Yokohama City University ambassador, gave a [data science interview](https://www.meetup.com/women-in-ai-japan/events/297367669/) in November 2023. The hosts Eriko Toda and Kana Minami are connectors.
+- **[Women Techmakers Tokyo](https://wtm-tokyo.connpass.com/event/342888/):** the International Women's Day 2025 event at LayerX had career talks only. It confirmed Sayaka Ito as a speaker.
+- **connpass:** event and search pages now answer a plain fetch with a browser user agent. Search connpass for Japanese community names, because Japanese groups rarely use Meetup.
+- **Also ask:** the Snowflake女子会 organisers and Snowflake Data Heroes for introductions to balance the line-up.
+
 ## 2. What didn't work here
 
 - **[Zenn topic page](https://zenn.dev/topics/dbt):** renders nothing when fetched. Use the API instead.
-- **[connpass](https://connpass.com/search/?q=dbt):** returns HTTP 403 to plain fetches, so the Data Engineering Study line-ups and most Tokyo meetup line-ups were not read.
+- **[connpass](https://connpass.com/search/?q=dbt):** returned HTTP 403 to plain fetches in the first build, so the Data Engineering Study line-ups and most Tokyo meetup line-ups were not read. It answered a fetch with a browser user agent in the women-in-data pass.
 - **[TECH PLAY](https://techplay.jp/event/924859):** returns HTTP 403, so the PyLadies Tokyo event was not read.
 - **[Mercari engineering blog](https://engineering.mercari.com/blog/):** the search page did not render.
 - **[SmartHR](https://tech.smarthr.jp/) and [Money Forward](https://moneyforward-dev.jp/) blogs:** no dbt posts.
 - **Japanese company sites:** most load by JavaScript, so no office address came back.
 - **Web search:** ran out after about 12 calls. No job ads were collected, and the Mercari, SmartHR and CyberAgent sweeps were only partly done.
 - **Women-in-data events:** [Women Tech Terrace 2024](https://www.cyberagent.co.jp/way/list/detail/id=30486) (CyberAgent) had no data talks. [WiDS Tokyo @ IBM](https://www.widsworldwide.org/events/event/wids-tokyo-ibm-2/) was a 2024 event with no speakers listed. No candidate came from this step.
+- **Women-in-data groups with no data talks:** [PyLadies Tokyo](https://pyladies-tokyo.connpass.com/) meetups since 2024 are Python and AI workshops, and speakers are not named. [Tokyo WiMLDS](https://www.meetup.com/tokyo-women-in-machine-learning-and-data-science/) has held one event, in 2019. The [GTUG Girls and PyLadies data analysis workshop](https://gtuggirls.connpass.com/event/304447/) (January 2024) named no speakers.
+- **Women-in-data sites that failed:** wids-tokyo.jp now hosts an unrelated blog. womendevsummit.jp did not resolve. connpass has no Women in Data Japan or Data + Women group. Snowflake女子会's TECH PLAY page returned HTTP 403.
 
 ## 3. Companies looked at
 
@@ -75,7 +87,7 @@ Most of the content is in Japanese. Titles are kept as written, with an English 
 - **Customer speakers at dbt Labs events:** Sony Bank and Mynavi speak at dbt World Tour Tokyo on 2026-10-20.
 
 <!-- companies:start -->
-72 companies and communities were looked at. A company is local when it has people or roles in the region.
+86 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (51)</summary>
 
@@ -89,9 +101,9 @@ Antway, Bandai Namco Nexus, COTEN, Cybozu, DeNA, Headwaters, INTAGE, KDDI Agile 
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (1)</summary>
+<details><summary><b>Uses a different stack</b> (15)</summary>
 
-mybest
+Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), Daihatsu Motor (local presence not confirmed), HAPPY ANALYTICS (local presence not confirmed), IHI (local presence not confirmed), Infotech (インフォテック株式会社) (local presence not confirmed), Methodologic (株式会社メソドロジック) (local presence not confirmed), ML女子部 (Women in ML Japan), MOTEX (local presence not confirmed), mybest, Snowflake (Japan), Snowflake女子会 (Snowflake women's community), unerry, Women in AI Japan, Yokohama City University
 
 </details>
 
@@ -153,7 +165,7 @@ mybest
 
 </details>
 
-<details><summary><b>Other sources checked</b> (14)</summary>
+<details><summary><b>Other sources checked</b> (29)</summary>
 
 - [Zenn dbt topic (API)](https://zenn.dev/topics/dbt)
 - [Qiita dbt tag (API)](https://qiita.com/tags/dbt)
@@ -169,6 +181,21 @@ mybest
 - [Women Tech Terrace 2024 (CyberAgent)](https://www.cyberagent.co.jp/way/list/detail/id=30486) (nothing useful)
 - [WiDS Tokyo @ IBM](https://www.widsworldwide.org/events/event/wids-tokyo-ibm-2/) (nothing useful)
 - [PyLadies Tokyo](https://techplay.jp/event/924859) (nothing useful)
+- [Meetup gql2 groupSearch near Tokyo](https://www.meetup.com/gql2)
+- [Women in AI Japan past events (Meetup gql2)](https://www.meetup.com/women-in-ai-japan/)
+- [Tokyo WiMLDS (Meetup gql2)](https://www.meetup.com/tokyo-women-in-machine-learning-and-data-science/) (nothing useful)
+- [Snowflake女子会 x pUG hands-on (connpass)](https://pug.connpass.com/event/389174/)
+- [Snowflake女子会 note feed](https://note.com/snowvillage_wmn/rss)
+- [Snowflake女子会 on TECH PLAY](https://techplay.jp/community/snowvillage_wmn) (nothing useful)
+- [ML女子部 (connpass)](https://women-ml.connpass.com/event/)
+- [PyLadies Tokyo (connpass)](https://pyladies-tokyo.connpass.com/) (nothing useful)
+- [PyLadies Tokyo site](https://tokyo.pyladies.com/) (nothing useful)
+- [WTM Tokyo (connpass)](https://wtm-tokyo.connpass.com/event/)
+- [GTUG Girls x PyLadies data analysis workshop](https://gtuggirls.connpass.com/event/304447/) (nothing useful)
+- [WiDS Worldwide site search (Tokyo, Japan)](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Tokyo)
+- [wids-tokyo.jp](https://wids-tokyo.jp/) (nothing useful)
+- [connpass searches: Women in Data, Data+Women, Women Techmakers Tokyo, 女子会 データ](https://connpass.com/search/?q=Women+in+Data) (nothing useful)
+- [Women Developers Summit](https://womendevsummit.jp/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -214,7 +241,13 @@ mybest
   - **connpass line-ups:** try the browser for Data Engineering Study and other dbt events.
   - **Zenn and Qiita:** read new articles from both APIs since `metadata.generated_at`.
   - **Blog sweeps:** finish Mercari, SmartHR and CyberAgent.
-  - **Women-in-data:** try other groups' own events, and ask the chapter hosts and Snowflake Data Heroes for introductions.
+  - **Women-in-data:** ask the chapter hosts and Snowflake Data Heroes for introductions.
+- **Women-in-data communities not yet reachable:**
+  - **Snowflake女子会 on TECH PLAY:** the community's own event pages return HTTP 403. Open them in a browser for meetups #1 to #7.
+  - **WiDS Tokyo:** the @ IBM, @ Shotoku and @ Yokohama City University pages list no speakers. Ask Yoko Ono for recent line-ups.
+  - **Women in Data Japan and Data + Women Japan:** no group page was found.
+  - **Women Who Code Tokyo:** Women Who Code closed in 2024. The Women Who Go Tokyo group on connpass is a Go language group.
+- **People from the women-in-data pass:** the 20 people added have no LinkedIn search, and most have no known location beyond the Tokyo venue.
   - **dbt World Tour Tokyo 2026:** after 2026-10-20, add the Sony Bank and Mynavi speakers if the recordings name them.
 - **People to locate:**
   - **Past speakers:** 24 people are still unknown, mostly past chapter speakers from 2022 to 2024. detaneeee, ReQ_HY and fujidev were searched on LinkedIn with no match. Search LinkedIn for the past speakers not yet searched, such as Hiroki Ishitada and Junya Morita.
@@ -228,3 +261,4 @@ mybest
 | 2026-10-01 | 1 | First build. Zenn and Qiita APIs, Hatena company blogs, dbt Labs Tokyo agendas and women-in-tech events, plus chapter history. 126 people at 75 companies, 40 of them past chapter speakers. No job ads, because web search ran out. |
 | 2026-10-01 | 1 | Location pass from public pages: GitHub profiles, in-person chapter talks and company contact pages. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 2 people placed in Greater Tokyo and 2 elsewhere. With the location pass, 22 people placed and 24 still unknown. |
+| 2026-10-01 | 2 | Women-in-data pass. Checked Snowflake女子会, ML女子部, Women in AI Japan, Women Techmakers Tokyo, PyLadies Tokyo, Tokyo WiMLDS, GTUG Girls and WiDS Tokyo. Added 20 people with `sourced_via: women_in_data_community`: 5 speakers and 15 connectors, 6 of whom also gave talks. Added organiser evidence to あれ (allllllllez). Added 6 community channels. The assembler also added 2 past chapter speakers from the enriched file. |

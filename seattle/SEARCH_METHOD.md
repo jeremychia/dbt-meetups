@@ -7,19 +7,19 @@ This file holds what is specific to Seattle. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 109 |
-| People | 79 |
+| Companies | 120 |
+| People | 97 |
 | Tier 1 leads | 2 |
 | First-time speakers (publish, no talk yet) | 2 |
-| Proven speakers | 64 |
+| Proven speakers | 81 |
 | Spoke at this chapter before | 16 |
-| Based in the region | 60 |
-| Based elsewhere | 7 |
-| Location unknown | 12 |
+| Based in the region | 65 |
+| Based elsewhere | 8 |
+| Location unknown | 24 |
 | With a LinkedIn profile | 25 |
 | Job ads mentioning dbt | 65 |
 | Past chapter meetups | 7 |
@@ -46,11 +46,14 @@ The first build covered conferences, other local meetups, women-in-data communit
 
 ### Women-in-data communities
 
-People were taken only from each community's own events.
+People were taken only from each community's own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
 
 - **[WiDS Puget Sound 2026](https://www.widspugetsound.org/2026-conference):** WiDS means Women in Data Science. The richest women-in-data source, with speakers, panellists and organisers. It names data engineers and analytics leaders at Expedia, Amazon, Pfizer and JumpCloud. The page needs a browser, because it renders empty for a plain fetch.
 - **[WiDS Puget Sound 2025 recap](https://www.widsworldwide.org/get-inspired/blog/celebrating-connection-and-innovation-the-2025-wids-puget-sound-conference/):** names only, with no employers.
-- **[R-Ladies Seattle](https://r-consortium.org/posts/diving-into-r-with-isabella-velasquez-perspectives-from-r-ladies-seattle/):** one co-organiser, from an interview.
+- **[Seattle PyLadies](https://www.meetup.com/seattle-pyladies/):** monthly open source nights in Bellevue, run with PyData Seattle, Seattle Spark + AI and GDG Bellevue. Databricks sponsors most of them, and line-ups include speakers of all genders. The [Playing with Data mini-conference](https://www.meetup.com/seattle-pyladies/events/301012521/) in May 2024 gave Fabiana Clemente (YData), Evis Drenova (Neosync), and Jasmine Wang and Weston Pace (LanceDB). The [April 2025 night](https://www.meetup.com/seattle-pyladies/events/305396007/) gave Ryan Boyd (MotherDuck) and Tim Hesterberg (Instacart). Other talks gave Denny Lee and Ginger Holt (Databricks), Gavita Regunath (Advancing Analytics), Saurabh Sarkar (Chicory AI) and Riya Joshi. The organisers Mae LaPresta (Google) and Hemie Choi are connectors.
+- **[R-Ladies Seattle](https://www.meetup.com/rladies-seattle/):** the [R Pirate Day](https://www.meetup.com/rladies-seattle/events/302526506/) in September 2024 gave data visualisation and NLP workshops by Kim Dill-McFarland, Micheleen Harris and Simran Saxena. Kim Dill-McFarland hosts most events. A joint talk with PyLadies gave Courtney Armour (UW School of Medicine). An [R Consortium interview](https://r-consortium.org/posts/diving-into-r-with-isabella-velasquez-perspectives-from-r-ladies-seattle/) gave one more co-organiser.
+- **[WiMLDS Seattle](https://www.meetup.com/seattle-women-in-machine-learning-and-data-science/):** Women in Machine Learning and Data Science, chaired by Micheleen Harris. It co-runs events with PyLadies Seattle. A January 2026 tutorial gave Rachel Wagner-Kaiser on dataset curation.
+- **[Power BI Women](https://www.meetup.com/power-bi-women/):** an online Power BI group registered in Bellevue, with organisers outside Washington. It gave Jackie Kiadii (organiser, Atlanta) and Allison Kennedy. Most event pages give only a first name for the speaker.
 
 ### Company blogs, news and job ads
 
@@ -68,7 +71,9 @@ People were taken only from each community's own events.
 
 - **Seattle Data, AI & Security:** gives names but no talk titles or dates, so its speakers are hard to rank.
 - **meetup.com pages:** not opened in the first build, so the chapter's own organisers were not captured. The [Seattle Data Meetup Group](https://www.meetup.com/seattle-data-engineering-meetup-group/events/?type=past) (last event November 2023) and [seattle-daml](https://www.meetup.com/seattle-daml/) were not opened either.
-- **[PyLadies Seattle site](https://seattle.pyladies.com/):** lists placeholder organisers.
+- **[PyLadies Seattle site](https://seattle.pyladies.com/):** lists placeholder organisers. Use the [Meetup group](https://www.meetup.com/seattle-pyladies/) instead.
+- **Women-focused Meetup groups with no data talks:** [GDG Bellevue](https://www.meetup.com/bellevue-gdg/) only cross-posts the PyLadies events. [Ladies in Seattle Tech](https://www.meetup.com/ladies-in-seattle-tech/) runs repeated AI product demos. [Power Platform Women](https://www.meetup.com/power-platform-women/) has no events.
+- **[Women in Big Data](https://www.womeninbigdata.org/?s=seattle):** no Seattle chapter events since 2024.
 - **Data + Women:** no Seattle chapter was found.
 - **Women-in-data groups not checked in depth:** Women Who Code Seattle, Ada Developers Academy and [Women in Analytics](https://www.womeninanalytics.com/speakers-bureau).
 - **Seattle company blogs:** publish almost nothing about dbt. [Zillow Tech Hub](https://medium.com/feed/zillow-tech-hub) has had no posts since February 2021. [Expedia Group Tech](https://medium.com/feed/expedia-group-tech) is active but has no dbt posts. Redfin and Remitly returned nothing.
@@ -82,7 +87,7 @@ People were taken only from each community's own events.
 - **Tier 1 is small.** Only 2 people meet the strict rule, so most strong leads sit in tier 2.
 
 <!-- companies:start -->
-108 companies and communities were looked at. A company is local when it has people or roles in the region.
+119 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (24)</summary>
 
@@ -99,6 +104,12 @@ Agoda, Amazon / AWS, Aritzia, Brex, Databricks, DoorDash, Expedia Group, Gable, 
 <details><summary><b>Not verified</b> (52)</summary>
 
 Adobe (local presence not confirmed), AgentSync (local presence not confirmed), Alaska Airlines, Amazon (local presence not confirmed), Amazon Web Services (local presence not confirmed), AMD (local presence not confirmed), Amperity, Analytic Endeavors (local presence not confirmed), Astronomer (local presence not confirmed), Babylist (local presence not confirmed), BECU, Confluent (local presence not confirmed), Consultant (local presence not confirmed), Convoy (local presence not confirmed), Data Engineer Things Seattle, Data Literacy (local presence not confirmed), Disney (local presence not confirmed), Diversity in Data Science (local presence not confirmed), Genesis Computing (local presence not confirmed), Google Cloud (local presence not confirmed), JumpCloud (local presence not confirmed), LanceDB (local presence not confirmed), LaunchDarkly (local presence not confirmed), Lincoln Financial (local presence not confirmed), Monaghan Medical Corporation (local presence not confirmed), Netflix (local presence not confirmed), Northwell Health (local presence not confirmed), OfferUp, Onehouse (local presence not confirmed), Outreach, Perceptive Analytics (local presence not confirmed), Pfizer (local presence not confirmed), Porch, Push.ai (local presence not confirmed), PyData Seattle, QBiz, Inc. (local presence not confirmed), Rad Power Bikes (local presence not confirmed), REI, Remitly, Rover, Seattle Data Guy (local presence not confirmed), Seattle Data, AI & Security, Seattle Tableau User Group (SeaTUG), Skagit Valley College (local presence not confirmed), Snowflake User Groups Seattle, Starbucks, T-Mobile, Textio, Unify Consulting, University of Washington iSchool (local presence not confirmed), WiDS Puget Sound / Diversity in Data Science, Zulily (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (11)</summary>
+
+Advancing Analytics (local presence not confirmed), Chicory AI (local presence not confirmed), Google (local presence not confirmed), Instacart (local presence not confirmed), Neosync (local presence not confirmed), Power BI Women (local presence not confirmed), PyLadies Seattle, R-Ladies Seattle, University of Washington School of Medicine, WiMLDS Seattle, YData (local presence not confirmed)
 
 </details>
 
@@ -128,7 +139,7 @@ Adobe (local presence not confirmed), AgentSync (local presence not confirmed), 
 
 </details>
 
-<details><summary><b>Other sources checked</b> (44)</summary>
+<details><summary><b>Other sources checked</b> (53)</summary>
 
 - [Seattle dbt Meetup (meetup.com)](https://www.meetup.com/seattle-dbt-meetup/) (nothing useful)
 - [Data Engineer Things Seattle](https://www.dataengineerthings.org/team)
@@ -174,6 +185,15 @@ Adobe (local presence not confirmed), AgentSync (local presence not confirmed), 
 - [WebSearch site:jobs.lever.co analytics engineer dbt Bellevue/Redmond/Kirkland](https://jobs.lever.co) (nothing useful)
 - [WebSearch site:job-boards.greenhouse.io analytics engineer dbt Seattle, WA](https://job-boards.greenhouse.io)
 - [LinkedIn Jobs guest API (keywords=dbt, Seattle WA)](https://www.linkedin.com/jobs/search?keywords=dbt&location=Seattle%2C%20Washington%2C%20United%20States)
+- [Meetup gql2 groupSearch near Seattle (women-in-data queries)](https://www.meetup.com/gql2#seattle-wid)
+- [Seattle PyLadies (Meetup)](https://www.meetup.com/seattle-pyladies/)
+- [R-Ladies Seattle (Meetup)](https://www.meetup.com/rladies-seattle/)
+- [WiMLDS Seattle (Meetup gql2)](https://www.meetup.com/seattle-women-in-machine-learning-and-data-science/events/)
+- [Power BI Women (Meetup)](https://www.meetup.com/power-bi-women/)
+- [GDG Bellevue / Women Techmakers Seattle](https://www.meetup.com/bellevue-gdg/) (nothing useful)
+- [Ladies in Seattle Tech](https://www.meetup.com/ladies-in-seattle-tech/) (nothing useful)
+- [Power Platform Women](https://www.meetup.com/power-platform-women/) (nothing useful)
+- [Women in Big Data (Seattle)](https://www.womeninbigdata.org/?s=seattle) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -210,10 +230,11 @@ Adobe (local presence not confirmed), AgentSync (local presence not confirmed), 
 
 - **Sources to try first:**
   - **LinkedIn pass:** 24 tier-1 and tier-2 people are still `not_searched`.
-  - **Meetup `gql2`:** pull the chapter's organisers, and the Seattle WiMLDS and PyLadies Seattle events.
+  - **Meetup `gql2`:** pull the chapter's organisers.
   - **GitHub user search** (`dbt location:Seattle`) for first-time speakers with public dbt work. It was the best source of first-time speakers in Atlanta, and Seattle has only 2.
   - **New events:** WiDS Puget Sound, SeaTUG and Snowflake Seattle events since `metadata.generated_at`.
-  - **Women-in-data groups not yet checked:** Women Who Code Seattle, Ada Developers Academy and Women in Analytics.
+  - **Women-in-data groups not yet checked:** Ada Developers Academy, Women in Analytics, Girl Develop It Seattle/Tacoma and Girls in Tech Seattle. Women Who Code closed in 2024.
+  - **Power BI Women:** most speakers are named by first name only. Open the event pages in a browser to find surnames and employers.
   - **Eastside job ads** (Bellevue, Redmond, Kirkland): re-run the LinkedIn Jobs guest scan with a working location filter, plus Lever, Greenhouse and Ashby `site:` searches.
 - **People to locate:** the 12 unknown locations in section 5, starting with Brandyn Lee and Irina Virnik.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `seattle/seattle_dbt_companies.json`, the chapter `seattle-dbt-meetup`, `../enriched/seattle-dbt-meetup.json` and the region "the Seattle metro (Seattle, Bellevue, Redmond and nearby), with commuter towns such as Olympia and Mount Vernon". Budget about 25 web searches.
@@ -225,3 +246,4 @@ Adobe (local presence not confirmed), AgentSync (local presence not confirmed), 
 | 2026-09-24 | 1 | First build: dbt Summit 2026, Airflow Summit 2025 and PyData Seattle 2025, local meetups and user groups, WiDS Puget Sound and other women-in-data communities, company blogs, a LinkedIn Jobs scan and ATS searches. Past chapter speakers added from `../enriched/seattle-dbt-meetup.json`. 110 companies (49 on the watchlist), 79 people, 65 job ads at 44 companies, 7 past meetups. Split: 64 proven speakers, 2 emerging voices, 13 featured. Tiers: 2 tier 1, 40 tier 2, 22 tier 3, 15 connectors. 16 people had already spoken at the chapter. |
 | 2026-10-01 | 2 | Location pass: 18 people placed from Meetup host and RSVP profiles, GitHub, speaker bios and recent in-person talks, 16 in the region and 2 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 5 people placed from LinkedIn search results, 1 in the region and 4 outside. 12 people are still unknown. |
+| 2026-10-01 | 3 | Women-in-data pass beyond WiDS Puget Sound, with fetches only: 18 people added from Seattle PyLadies, R-Ladies Seattle, WiMLDS Seattle and Power BI Women, and new talks added for Micheleen Harris and Weston Pace. 11 companies added. 9 women-focused communities checked. |
