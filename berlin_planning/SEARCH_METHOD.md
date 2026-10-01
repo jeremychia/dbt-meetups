@@ -291,6 +291,8 @@ community_channels[] name, url, note
 8. **Update the metadata:** bump `version`, set `generated_at`, recalculate `counts` and `topic_counts`, and add a line to `method`.
 9. **Log the run** in the change log below.
 
+- **Location and LinkedIn passes:** fill unknown locations with the location pass and the LinkedIn pass in [`../research/README.md`](../research/README.md) (steps 3 and 4).
+
 ---
 
 ## 5. Replication prompt
@@ -355,7 +357,7 @@ and dbt roles, people who have moved, and any topic trends.
 
 ## Appendix A: Shared-schema validator
 
-Run it from the repo root. It checks every regional file.
+Run it from the repo root. The maintained copy is [`../research/validate.py`](../research/validate.py), which checks every `<region>_dbt_companies.json` with no file list to keep up to date: `python3 research/validate.py`.
 
 ```python
 import json, sys
@@ -477,3 +479,4 @@ Speaker names can hold several people, e.g. "Marielle Dado & Eva Schreyer", so m
 | 2026-09-23 | 3 | **Data Berlin added:** 79 talk records (72 unique talks) from 26 Data Berlin meetups and 3 partner events, May 2023 – Sep 2026, bringing in 75 new people. 25 of them are tier 2; 22 have LinkedIn profiles, found by searching those 25. Also 89 dbt roles at 70 companies from `databerlin.net/skills/dbt`. **Standardised with Lithuania:** file renamed from `berlin_speaker_candidates.json` to `berlin_dbt_companies.json`. Shared schema v1 with identical keys, `field_definitions` and `counts`. Renamed `berlin_presence` → `local_presence`, `berlin_based` → `based_in_region`, `past_berlin_meetup_talks` → `past_chapter_talks`. Totals: 144 companies, 124 people, 98 job postings. |
 | 2026-09-23 | 4 | Shared schema v2 adds `lead_type` (proven_speaker / emerging_voice / featured / no_public_content). 8 emerging voices raised in priority: 4 to tier 1 (David Förster, Max Rieger, Nélson Rangel, Hiba Jamal) and 4 to tier 2 (Danny Burleigh and Lennart Scharmann were already tier 1). Split: 99 proven speakers, 16 emerging voices, 6 featured, 3 with no public content. |
 | 2026-09-23 | 5 | Shared schema v3 adds `pronouns` (self-stated only, never inferred) and `sourced_via`. **Women-in-data sourcing (Step 2b):** 28 new people from PyLadies Berlin, Women in Big Data Berlin, Women Techmakers Berlin, the Women+ in Data/AI Festival, AWS Women's User Group, WomenTech Network and WiMLDS, plus new evidence for Katharine Jarmul. 3 people have self-stated pronouns. Added a line-up balance check to the outreach order and to `event-planning-template.md`. Totals: 156 companies, 152 people. Lithuania and Kuala Lumpur moved to schema v3 too (schema-only change). Backup: `berlin_dbt_companies.v4.json`. |
+| 2026-10-01 | 6 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed 38 people: Meetup host and RSVP lists tied to the person, and recent in-person talks at Data Berlin and other Berlin events by people whose employer has a Berlin office. LinkedIn search results placed 9 more. Of the 47 placed, 42 are in Berlin and 5 elsewhere. 53 people are still unknown. |

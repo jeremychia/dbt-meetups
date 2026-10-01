@@ -1,17 +1,24 @@
 {
   "metadata": {
     "title": "Montreal dbt companies and people for the Montreal dbt Meetup",
-    "generated_at": "2026-09-24",
+    "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Montreal companies using dbt, and people who could speak at or attend the Montreal dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 3,
     "region": "Montreal (Montreal dbt Meetup)",
     "method": [
       "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/montreal-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
       "Lesson: In Montreal the Snowflake user group (Bevy pages, bilingual agendas) is a better speaker source than the dormant dbt chapter. Fetch its event pages directly.",
       "Lesson: The shared browser tab is used concurrently by other agents. Run navigate and fetch in one browser_batch and query gql2 by urlname so the results don't depend on which page the tab is showing.",
-      "Lesson: Montreal speakers often appear under a vendor/startup (Maxa) with stale LinkedIn titles. Record the employer as unclear rather than guessing."
+      "Lesson: Montreal speakers often appear under a vendor/startup (Maxa) with stale LinkedIn titles. Record the employer as unclear rather than guessing.",
+      "v2 (2026-10-01): extension run for more speakers, especially emerging voices: ~17 web searches (the session search budget ran out), Snowflake Montreal User Group event pages from 2023-2026 not read before, Maxa blog author data, the agileDSS French blog, the dbt developer blog author index, and Meetup gql2 past events for MTL Data, Data Driven Montréal, Montréal-Python, R-Ladies Montreal, GDG Montreal and GDG Cloud Montreal.",
+      "Lesson: The Snowflake Montreal User Group's older event pages (Jul 2023 to Dec 2024, Apr 2025) hold most of the new proven speakers. Try the slug pattern snowflake-montreal-presents-<season>-<year> directly.",
+      "Lesson: Maxa's blog listing hides bylines; each post's JSON-LD author field names the writer.",
+      "Lesson: Quebec consultancies publish in French on their own sites (agileDSS); each post carries the author's title.",
+      "Lesson: Meetup gql2 works from curl with no browser. The general Montreal groups (MTL Data, Data Driven Montréal, Montréal-Python) had no dbt talks since 2023.",
+      "Lesson: Medium feeds returned 429 to both curl and WebFetch, GitHub user search was rate-limited, ConFoo session pages returned 500, and dev.to's dbt tag had no Montreal-located authors.",
+      "v2 (2026-10-01): location pass. 3 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (3 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 17 people are still unknown."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -49,52 +56,54 @@
     "caveats": [
       "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
       "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
-      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+      "Emerging voices from vendor and consultancy blogs (Maxa, agileDSS) may be writing marketing copy. Check for a practitioner angle before inviting.",
+      "LinkedIn: 6 of 67 people have a profile url, taken word for word from search results. 61 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
     ],
     "counts": {
-      "companies": 44,
-      "people": 35,
+      "companies": 56,
+      "people": 67,
       "job_postings": 40,
       "companies_with_job_postings": 18,
-      "speaker_evidence_items": 41,
-      "unique_content_items": 32,
-      "people_with_linkedin": 3,
-      "people_who_spoke_at_this_chapter": 16,
+      "speaker_evidence_items": 84,
+      "unique_content_items": 65,
+      "people_with_linkedin": 6,
+      "people_who_spoke_at_this_chapter": 15,
       "internal_vinted": 0,
       "level": {
-        "leadership": 14,
-        "working": 21
+        "leadership": 22,
+        "working": 45
       },
       "speaker_potential": {
-        "high": 22,
-        "medium": 13
+        "high": 33,
+        "medium": 34
       },
       "attendee_potential": {
-        "high": 7,
-        "medium": 28
+        "high": 15,
+        "medium": 51,
+        "low": 1
       },
       "priority_tier": {
-        "1": 2,
-        "connector": 7,
-        "2": 21,
-        "3": 5
+        "1": 12,
+        "connector": 9,
+        "2": 33,
+        "3": 13
       },
-      "watchlist_companies": 15,
+      "watchlist_companies": 25,
       "past_meetups": 6,
       "lead_type": {
-        "proven_speaker": 30,
-        "emerging_voice": 2,
+        "proven_speaker": 53,
+        "emerging_voice": 11,
         "featured": 3
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
-        "conference_or_meetup_agenda": 30,
-        "company_blog_scan": 4,
+        "conference_or_meetup_agenda": 51,
+        "company_blog_scan": 15,
         "linkedin_search": 1,
-        "chapter_meetup_history": 16,
-        "women_in_data_community": 3,
-        "newsletter_or_blog": 1,
-        "podcast": 1
+        "chapter_meetup_history": 15,
+        "newsletter_or_blog": 3,
+        "podcast": 1,
+        "women_in_data_community": 10
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -127,24 +136,29 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "genai & llm": 10,
-      "community": 9,
-      "team & org design": 8,
-      "data warehouse & platforms": 7,
-      "analytics engineering": 6,
-      "data quality & testing": 6,
+      "data warehouse & platforms": 25,
+      "genai & llm": 21,
+      "community": 14,
+      "domain-specific use cases": 9,
+      "team & org design": 9,
+      "data engineering": 8,
+      "analytics engineering": 7,
+      "data quality & testing": 7,
+      "performance & scale": 7,
+      "business intelligence": 7,
+      "tools & ecosystem": 5,
+      "developer workflow": 4,
+      "data modeling": 4,
+      "dbt fundamentals": 4,
+      "dbt product features": 3,
       "semantic layer": 3,
-      "performance & scale": 3,
-      "dbt product features": 2,
-      "data modeling": 2,
-      "dbt fundamentals": 2,
-      "data governance": 2,
-      "modern data stack": 2,
-      "data engineering": 2,
-      "tools & ecosystem": 2,
-      "developer workflow": 1,
+      "data governance": 3,
+      "modern data stack": 3,
+      "dbt migration & adoption": 3,
+      "career development": 2,
       "dbt best practices": 1,
-      "domain-specific use cases": 1
+      "orchestration & ci/cd": 1,
+      "industry trends": 1
     }
   },
   "companies": [
@@ -258,9 +272,10 @@
             "speaker_potential": "high",
             "attendee_potential": "high"
           },
-          "lead_type": "emerging_voice",
+          "lead_type": "proven_speaker",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -282,6 +297,59 @@
               "suggested_talk_angle": "Spec-driven development for dbt projects in the age of coding agents",
               "url_precision": "direct",
               "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Fall 2026",
+              "title": "Talk at Snowflake Montreal User Group Fall 2026",
+              "date": "2026-09-24",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+              "content_id": "snowflake-montreal-user-group-fall-2026talk-at-snowflake-mon",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker (title not given) as Lead Data Solutions, Maxa.",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "How Spec-Driven Development Maximizes dbt Wizard",
+              "date": "2026-09-11",
+              "url": "https://maxa.ai/blog/how-spec-driven-development-maximizes-dbt-wizard",
+              "content_id": "maxa-bloghow-specdriven-development-maximizes-dbt-wizard",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Post on spec-driven development with a dbt agent.",
+              "topics": [
+                "developer workflow",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "The case for spec-driven development in analytics engineering",
+              "date": "2026-08-28",
+              "url": "https://maxa.ai/blog/the-case-for-spec-driven-development-in-analytics-engineering",
+              "content_id": "maxa-blogthe-case-for-specdriven-development-in-analytics-en",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Argues for writing specs of business rules before building models.",
+              "topics": [
+                "analytics engineering",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -289,6 +357,14 @@
             {
               "url": "https://maxa.ai/blog/how-spec-driven-development-maximizes-dbt-wizard",
               "note": "article: How Spec-Driven Development Maximizes dbt Wizard"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+              "note": "talk: Talk at Snowflake Montreal User Group Fall 2026"
+            },
+            {
+              "url": "https://maxa.ai/blog/the-case-for-spec-driven-development-in-analytics-engineering",
+              "note": "blog: The case for spec-driven development in analytics engineering"
             }
           ],
           "confidence": "Medium",
@@ -296,7 +372,7 @@
           "priority_tier": 1,
           "suggested_talk_angle": "Spec-driven development for dbt projects in the age of coding agents",
           "past_chapter_talks": [],
-          "notes": "Writes on the Maxa blog about spec-driven development and dbt agents. The city is taken from Maxa's Montreal HQ; the person's own location is not verified."
+          "notes": "Writes on the Maxa blog about spec-driven development and dbt agents. The city is taken from Maxa's Montreal HQ; the person's own location is not verified. | Now has a talk on record (Snowflake Montreal User Group, Sep 2026), so lead_type should move to proven_speaker on the next rescore."
         },
         {
           "id": "priyaanka-arora",
@@ -430,9 +506,405 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "connector - Snowflake Montreal User Group Chapter Leader at Maxa, the company co-organising the relaunched dbt chapter."
+        },
+        {
+          "id": "angie-sood",
+          "name": "Angie Sood",
+          "pronouns": null,
+          "title": "Analyst in Data Engineering",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Fall 2024",
+              "title": "Add the \"Pro\" to your \"Snow\"",
+              "date": "2024-09-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2024",
+              "content_id": "snowflake-montreal-user-group-fall-2024add-the-pro-to-your-s",
+              "co_authors": [
+                "Frédéric L'Anglais"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented with Frédéric L'Anglais at the 'Data Superhero' edition.",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "host",
+              "event": "Snowflake Montreal User Group, Fall 2025",
+              "title": "Host, Snowflake Montreal User Group Fall 2025",
+              "date": "2025-09-25",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2025",
+              "content_id": "snowflake-montreal-user-group-fall-2025host-snowflake-montre",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host of the fall 2025 meetup.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2024",
+              "note": "talk: Add the \"Pro\" to your \"Snow\""
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2025",
+              "note": "host: Host, Snowflake Montreal User Group Fall 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "What a data engineering analyst learned running dbt and Snowflake in production at a Montreal scale-up.",
+          "past_chapter_talks": [],
+          "notes": "Also listed as host of the Snowflake Montreal User Group in fall 2025, so a likely route into that community."
+        },
+        {
+          "id": "frederic-langlais",
+          "name": "Frédéric L'Anglais",
+          "pronouns": null,
+          "title": "AVP Platform Solutions",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Summer 2023",
+              "title": "How Maxa leverages native applications and Streamlit",
+              "date": "2023-07-04",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal/",
+              "content_id": "snowflake-montreal-user-group-summer-2023how-maxa-leverages",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on Snowflake native apps and Streamlit at Maxa.",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Fall 2024",
+              "title": "Add the \"Pro\" to your \"Snow\"",
+              "date": "2024-09-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2024",
+              "content_id": "snowflake-montreal-user-group-fall-2024add-the-pro-to-your-s",
+              "co_authors": [
+                "Angie Sood"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented with Angie Sood.",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal/",
+              "note": "talk: How Maxa leverages native applications and Streamlit"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2024",
+              "note": "talk: Add the \"Pro\" to your \"Snow\""
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "How Maxa builds native apps and Streamlit on Snowflake for finance teams.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "raphael-steinman",
+          "name": "Raphael Steinman",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "Introducing Maxa Autopilot: The Agentic Way to Build and Maintain Data Pipelines",
+              "date": "2026-05-29",
+              "url": "https://maxa.ai/blog/introducing-maxa-autopilot-agentic-way-build-maintain-data-pipelines",
+              "content_id": "maxa-blogintroducing-maxa-autopilot-the-agentic-way-to-build",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Product post on an agent that builds and maintains data pipelines; mentions dbt.",
+              "topics": [
+                "genai & llm",
+                "data engineering",
+                "dbt product features"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "Why Multiplayer AI Demands More Than Finance Agent Templates",
+              "date": "2026-05-29",
+              "url": "https://maxa.ai/blog/why-multiplayer-ai-demands-more-than-finance-agent-templates",
+              "content_id": "maxa-blogwhy-multiplayer-ai-demands-more-than-finance-agent",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Opinion post on AI agents for finance teams.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://maxa.ai/blog/introducing-maxa-autopilot-agentic-way-build-maintain-data-pipelines",
+              "note": "blog: Introducing Maxa Autopilot: The Agentic Way to Build and Maintain Data Pipelines"
+            },
+            {
+              "url": "https://maxa.ai/blog/why-multiplayer-ai-demands-more-than-finance-agent-templates",
+              "note": "blog: Why Multiplayer AI Demands More Than Finance Agent Templates"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Agentic pipelines that build and maintain dbt models: what works and what still needs a human.",
+          "past_chapter_talks": [],
+          "notes": "Title not shown on the posts. Some posts are product marketing, so check for a practitioner angle."
+        },
+        {
+          "id": "samuel-bouchard",
+          "name": "Samuel Bouchard",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "Reverse-engineering a chart of accounts you inherited",
+              "date": "2026-08-28",
+              "url": "https://maxa.ai/blog/reverse-engineering-a-chart-of-accounts-you-inherited",
+              "content_id": "maxa-blogreverseengineering-a-chart-of-accounts-you-inherite",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Practical post on making sense of an inherited chart of accounts for finance data.",
+              "topics": [
+                "domain-specific use cases",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://maxa.ai/blog/reverse-engineering-a-chart-of-accounts-you-inherited",
+              "note": "blog: Reverse-engineering a chart of accounts you inherited"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Reverse-engineering an inherited chart of accounts into clean finance models.",
+          "past_chapter_talks": [],
+          "notes": "Title not shown on the post."
+        },
+        {
+          "id": "fabien-rivenet",
+          "name": "Fabien Rivenet",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "What is Data Harmonization? (And Why Your Business Needs It)",
+              "date": "2026-05-06",
+              "url": "https://maxa.ai/blog/what-is-data-harmonization-and-why-your-business-needs-it",
+              "content_id": "maxa-blogwhat-is-data-harmonization-and-why-your-business-ne",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Explainer on harmonising entities and business rules across ERPs and finance systems.",
+              "topics": [
+                "data modeling",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://maxa.ai/blog/what-is-data-harmonization-and-why-your-business-needs-it",
+              "note": "blog: What is Data Harmonization? (And Why Your Business Needs It)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Harmonising data from several ERPs into one auditable model.",
+          "past_chapter_talks": [],
+          "notes": "Title not shown on the post. The post reads as marketing."
+        },
+        {
+          "id": "daniel-indig",
+          "name": "Daniel Indig",
+          "pronouns": null,
+          "title": "Analytics Developer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Summer 2025",
+              "title": "The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake",
+              "date": "2025-06-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "content_id": "snowflake-montreal-user-g-the-cool-the-corny-and-the-cortex-workin",
+              "co_authors": [
+                "Lamia Goeffon"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented a talk on analysing Slack data with Snowflake Cortex.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "note": "talk: The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Maxa analytics developer (as of 2025)."
         }
       ],
-      "notes": "Montreal HQ at 1 Place Ville-Marie. Venue and co-organiser of the 2026-08-06 chapter relaunch. Product generates dbt pipelines (Autopilot). Hosted the Montreal Data Developer Meetup (2026-07-16, about 215 attendees on Luma) and the Snowflake Summit in 60 (2026-06). Staff co-lead the Snowflake Montreal UG. Vendor-ish, so balance with practitioners."
+      "notes": "Montreal HQ at 1 Place Ville-Marie. Venue and co-organiser of the 2026-08-06 chapter relaunch. Product generates dbt pipelines (Autopilot). Hosted the Montreal Data Developer Meetup (2026-07-16, about 215 attendees on Luma) and the Snowflake Summit in 60 (2026-06). Staff co-lead the Snowflake Montreal UG. Vendor-ish, so balance with practitioners. | merged duplicate record 'Maxa AI'"
     },
     {
       "id": "montreal-analytics",
@@ -458,6 +930,11 @@
           "type": "other",
           "url": "https://hub.getdbt.com/Montreal-Analytics/",
           "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://docs.getdbt.com/blog/authors",
+          "note": "dbt developer blog author index: only two Montreal Analytics authors. montrealanalytics.com/blog now redirects to datatonic.com."
         }
       ],
       "people": [
@@ -554,7 +1031,7 @@
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -616,7 +1093,7 @@
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -675,15 +1152,17 @@
           "name": "Hassan Al-Rabea",
           "pronouns": null,
           "title": "Lead Data Consultant, Montreal Analytics",
-          "city": null,
-          "based_in_region": null,
+          "city": "Montreal",
+          "based_in_region": true,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hassan-al-rabea/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -708,6 +1187,26 @@
               "suggested_talk_angle": null,
               "url_precision": "direct",
               "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (Online) (Montreal dbt Meetup)",
+              "title": "Panel: Scaling dbt - from startup to scale up",
+              "date": "2021-10-29",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "content_id": "montreal-dbt-meetup-onlin-panel-scaling-dbt-from-startup-to-scale",
+              "co_authors": [
+                "Michael Angelo"
+              ],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -715,6 +1214,14 @@
             {
               "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
               "note": "talk: Enhancing Your Testing Strategy"
+            },
+            {
+              "url": "https://www.linkedin.com/in/hassan-al-rabea/",
+              "note": "location (high): linkedin search result: Hassan Al Rabea - Datatonic (previously Lead Consultant at Montreal Analytics), Montreal https://www.linkedin.com/in/hassan-al-rabea/"
+            },
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "note": "talk: Panel: Scaling dbt - from startup to scale up"
             }
           ],
           "confidence": "High",
@@ -728,9 +1235,129 @@
               "topics": [
                 "data quality & testing"
               ]
+            },
+            {
+              "date": "2021-10-29",
+              "talk_title": "Panel: Scaling dbt - from startup to scale up",
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ]
             }
           ],
-          "notes": ""
+          "notes": "location (high): linkedin search result: Hassan Al Rabea - Datatonic (previously Lead Consultant at Montreal Analytics), Montreal https://www.linkedin.com/in/hassan-al-rabea/ | merged duplicate record 'Hassan Al Rabea' (hassan-al-rabea)"
+        },
+        {
+          "id": "callie-white",
+          "name": "Callie White",
+          "pronouns": null,
+          "title": "Senior Analytics Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "Tips and advice to study for, and pass, the dbt Certification exam",
+              "date": "2023-02-16",
+              "url": "https://docs.getdbt.com/blog/tips-for-the-dbt-certification-exam",
+              "content_id": "dbt-developer-blogtips-and-advice-to-study-for-and-pass-the",
+              "co_authors": [
+                "Jade Milaney"
+              ],
+              "mentions_dbt": true,
+              "description": "Co-written guide to preparing for the dbt certification exam.",
+              "topics": [
+                "career development",
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://docs.getdbt.com/blog/tips-for-the-dbt-certification-exam",
+              "note": "blog: Tips and advice to study for, and pass, the dbt Certification exam"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Passing the dbt certification: a study plan from a team that certified 25+ engineers.",
+          "past_chapter_talks": [],
+          "notes": "The 2023 author bio says she leads client projects and mentors developers. Current employer not verified."
+        },
+        {
+          "id": "jade-milaney",
+          "name": "Jade Milaney",
+          "pronouns": null,
+          "title": "Analytics Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "Tips and advice to study for, and pass, the dbt Certification exam",
+              "date": "2023-02-16",
+              "url": "https://docs.getdbt.com/blog/tips-for-the-dbt-certification-exam",
+              "content_id": "dbt-developer-blogtips-and-advice-to-study-for-and-pass-the",
+              "co_authors": [
+                "Callie White"
+              ],
+              "mentions_dbt": true,
+              "description": "Co-written guide to preparing for the dbt certification exam.",
+              "topics": [
+                "career development",
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://docs.getdbt.com/blog/tips-for-the-dbt-certification-exam",
+              "note": "blog: Tips and advice to study for, and pass, the dbt Certification exam"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Passing the dbt certification: a study plan from a team that certified 25+ engineers.",
+          "past_chapter_talks": [],
+          "notes": "2023 author bio. Current employer not verified."
         }
       ],
       "notes": "dbt partner that publishes dbt packages. Organised the chapter 2021-2023. Acquired by Datatonic in March 2023. No recent Montreal-authored content found."
@@ -876,15 +1503,17 @@
           "name": "Audrey Leduc",
           "pronouns": null,
           "title": "KOHO Financial",
-          "city": null,
-          "based_in_region": null,
+          "city": "Montreal",
+          "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/audreyleduc/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -918,6 +1547,10 @@
             {
               "url": "https://www.meetup.com/montreal-dbt-meetup/events/303409442/",
               "note": "talk: (untitled)"
+            },
+            {
+              "url": "https://www.linkedin.com/in/audreyleduc/",
+              "note": "location (high): linkedin search result: Audrey Leduc - KOHO, Montreal https://www.linkedin.com/in/audreyleduc/"
             }
           ],
           "confidence": "High",
@@ -933,7 +1566,7 @@
               ]
             }
           ],
-          "notes": ""
+          "notes": "location (high): linkedin search result: Audrey Leduc - KOHO, Montreal https://www.linkedin.com/in/audreyleduc/"
         }
       ],
       "notes": "Toronto HQ. Three speakers at dbt Summit 2026. A KOHO speaker presented at the Montreal chapter in Oct 2024, so there may be Montreal staff."
@@ -1252,9 +1885,116 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Gave an intro-to-dbt talk at a Montreal DataOps Canada meetup (date unknown, probably before 2024). Partner-side."
+        },
+        {
+          "id": "stephane-burwash",
+          "name": "Stéphane Burwash",
+          "pronouns": null,
+          "title": "Lead Data Ops Engineer, Potloc",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/st%C3%A9phane-burwash/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "chapter_meetup_history",
+            "company_blog_scan",
+            "podcast",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Potloc on DEV Community",
+              "title": "Data Analytics at Potloc I: Making data integrity your priority with Elementary & Meltano",
+              "date": "2023-01-06",
+              "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
+              "content_id": "potloc-on-dev-community-data-analytics-at-potloc-i-making-data-i",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Describes Potloc's Meltano, dbt, Airflow and BigQuery stack and how Elementary was used for dbt test results and anomaly detection.",
+              "topics": [
+                "data quality & testing",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": "Three years on: what stuck from the Elementary rollout",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "podcast",
+              "event": "YouTube podcast S1E3",
+              "title": "Building trusted analytics at Potloc with Stéphane Burwash",
+              "date": null,
+              "url": "https://www.youtube.com/watch?v=nsLPa0kl5_o",
+              "content_id": "youtube-podcast-s1e3-building-trusted-analytics-at-potloc-wit",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Podcast episode on building trusted analytics at Potloc.",
+              "topics": [
+                "data quality & testing",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Turn your tests into action points with dbt & elementary",
+              "date": "2023-03-22",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+              "content_id": "montreal-dbt-meetup-in-pe-turn-your-tests-into-action-points-with",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/st%C3%A9phane-burwash/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
+              "note": "article: Data Analytics at Potloc I: Making data integrity your priority with Elementary & Meltano"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Three years on: what stuck from the Elementary rollout",
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-22",
+              "talk_title": "Turn your tests into action points with dbt & elementary",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": "Past chapter speaker (2023, while at Potloc), so only worth inviting with new content. Now at Infostrux (Snowflake/dbt consultancy). Wrote Potloc's dbt + Elementary data-integrity post and built the Meltano-Elementary integration. No 2024-2026 item found."
         }
       ],
-      "notes": "Snowflake Elite partner. Ran Montreal hands-on labs (including one at Potloc HQ) and an F1 data happy hour. Employs Stéphane Burwash."
+      "notes": "Snowflake Elite partner. Ran Montreal hands-on labs (including one at Potloc HQ) and an F1 data happy hour. Employs Stéphane Burwash. | merged duplicate record 'Infostrux Solutions'"
     },
     {
       "id": "solution-bi-canada",
@@ -1721,7 +2461,74 @@
         }
       ],
       "other_evidence": [],
-      "people": [],
+      "people": [
+        {
+          "id": "matthieu-di-mercurio",
+          "name": "Matthieu Di Mercurio",
+          "pronouns": null,
+          "title": "Dialogue",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Cyril Marques",
+                "Jean-Nicholas Hould",
+                "Sarah Corboliou"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
       "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
     },
     {
@@ -2195,7 +3002,9 @@
       "type": "independent",
       "watchlist": false,
       "excluded_from_outreach": false,
-      "cities": [],
+      "cities": [
+        "Montreal"
+      ],
       "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
@@ -2364,127 +3173,41 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "connector - WiDS Montreal ambassador (Oct 2024 conference at Google Montreal). No 2025/2026 WiDS Montreal edition found."
-        }
-      ],
-      "notes": ""
-    },
-    {
-      "id": "montreal-analytics-dialogue-breathe-life-unito",
-      "name": "Montreal Analytics; Dialogue; Breathe Life; Unito",
-      "type": "employer",
-      "watchlist": true,
-      "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
-      "people": [
-        {
-          "id": "matthieu-di-mercurio",
-          "name": "Matthieu Di Mercurio",
-          "pronouns": null,
-          "title": "Montreal Analytics; Dialogue; Breathe Life; Unito",
-          "city": null,
-          "based_in_region": null,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
-          "meetup_fit": {
-            "speaker_potential": "high",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "chapter_meetup_history",
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": null,
-          "speaker_evidence": [
-            {
-              "type": "talk",
-              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
-              "title": "Finding, training and upskilling Analytics Engineers panel",
-              "date": "2022-04-28",
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
-              "co_authors": [
-                "Cyril Marques",
-                "Jean-Nicholas Hould",
-                "Sarah Corboliou"
-              ],
-              "mentions_dbt": null,
-              "description": null,
-              "topics": [
-                "team & org design"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
-            }
-          ],
-          "confidence": "High",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [
-            {
-              "date": "2022-04-28",
-              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
-              "topics": [
-                "team & org design"
-              ]
-            }
-          ],
-          "notes": ""
         },
         {
-          "id": "jean-nicholas-hould",
-          "name": "Jean-Nicholas Hould",
+          "id": "faouzi-ali",
+          "name": "Faouzi Ali",
           "pronouns": null,
-          "title": "Montreal Analytics; Dialogue; Breathe Life; Unito",
-          "city": null,
-          "based_in_region": null,
+          "title": "Solution Architect",
+          "city": "Montreal",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
-            "speaker_potential": "high",
+            "speaker_potential": "medium",
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history",
             "conference_or_meetup_agenda"
           ],
-          "mentions_dbt": null,
+          "mentions_dbt": false,
           "speaker_evidence": [
             {
               "type": "talk",
-              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
-              "title": "Finding, training and upskilling Analytics Engineers panel",
-              "date": "2022-04-28",
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
-              "co_authors": [
-                "Cyril Marques",
-                "Matthieu Di Mercurio",
-                "Sarah Corboliou"
-              ],
-              "mentions_dbt": null,
-              "description": null,
+              "event": "Snowflake Montreal User Group, Spring 2025",
+              "title": "Native Data Quality in Snowflake & Data Metric Functions",
+              "date": "2025-04-03",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-printemps-spring-2025",
+              "content_id": "snowflake-montreal-user-group-spring-2025native-data-quality",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on Snowflake's native data quality features.",
               "topics": [
-                "team & org design"
+                "data quality & testing",
+                "data warehouse & platforms"
               ],
               "suggested_talk_angle": null,
               "url_precision": "direct",
@@ -2494,90 +3217,16 @@
           "attendee_signal": null,
           "evidence": [
             {
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-printemps-spring-2025",
+              "note": "talk: Native Data Quality in Snowflake & Data Metric Functions"
             }
           ],
-          "confidence": "High",
+          "confidence": "Medium",
           "internal_vinted": false,
           "priority_tier": 2,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [
-            {
-              "date": "2022-04-28",
-              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
-              "topics": [
-                "team & org design"
-              ]
-            }
-          ],
-          "notes": ""
-        },
-        {
-          "id": "sarah-corboliou",
-          "name": "Sarah Corboliou",
-          "pronouns": null,
-          "title": "Montreal Analytics; Dialogue; Breathe Life; Unito",
-          "city": null,
-          "based_in_region": null,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
-          "meetup_fit": {
-            "speaker_potential": "high",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "chapter_meetup_history",
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": null,
-          "speaker_evidence": [
-            {
-              "type": "talk",
-              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
-              "title": "Finding, training and upskilling Analytics Engineers panel",
-              "date": "2022-04-28",
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
-              "co_authors": [
-                "Cyril Marques",
-                "Matthieu Di Mercurio",
-                "Jean-Nicholas Hould"
-              ],
-              "mentions_dbt": null,
-              "description": null,
-              "topics": [
-                "team & org design"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
-            }
-          ],
-          "confidence": "High",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [
-            {
-              "date": "2022-04-28",
-              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
-              "topics": [
-                "team & org design"
-              ]
-            }
-          ],
-          "notes": ""
+          "suggested_talk_angle": "Native data quality checks in Snowflake with Data Metric Functions, compared with dbt tests.",
+          "past_chapter_talks": [],
+          "notes": "Employer not given on the event page."
         }
       ],
       "notes": ""
@@ -2724,72 +3373,6 @@
       "other_evidence": [],
       "people": [
         {
-          "id": "hassan-al-rabea",
-          "name": "Hassan Al Rabea",
-          "pronouns": null,
-          "title": "Gopuff",
-          "city": null,
-          "based_in_region": null,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
-          "meetup_fit": {
-            "speaker_potential": "high",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "chapter_meetup_history",
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": true,
-          "speaker_evidence": [
-            {
-              "type": "talk",
-              "event": "Montréal dbt Meetup (Online) (Montreal dbt Meetup)",
-              "title": "Panel: Scaling dbt - from startup to scale up",
-              "date": "2021-10-29",
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
-              "content_id": "montreal-dbt-meetup-onlin-panel-scaling-dbt-from-startup-to-scale",
-              "co_authors": [
-                "Michael Angelo"
-              ],
-              "mentions_dbt": true,
-              "description": null,
-              "topics": [
-                "performance & scale",
-                "team & org design"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
-              "note": "talk: Panel: Scaling dbt - from startup to scale up"
-            }
-          ],
-          "confidence": "High",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [
-            {
-              "date": "2021-10-29",
-              "talk_title": "Panel: Scaling dbt - from startup to scale up",
-              "topics": [
-                "performance & scale",
-                "team & org design"
-              ]
-            }
-          ],
-          "notes": ""
-        },
-        {
           "id": "michael-angelo",
           "name": "Michael Angelo",
           "pronouns": null,
@@ -2799,7 +3382,7 @@
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -2875,13 +3458,13 @@
           "id": "maxime-lagresle",
           "name": "Maxime Lagresle",
           "pronouns": null,
-          "title": "Head of Data; Senior Data Scientist, Veronica Beard",
+          "title": "Head of Data",
           "city": null,
           "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -2941,16 +3524,18 @@
           "id": "kristi-gourlay",
           "name": "Kristi Gourlay",
           "pronouns": null,
-          "title": "Head of Data; Senior Data Scientist, Veronica Beard",
-          "city": null,
-          "based_in_region": null,
+          "title": "Senior Data Scientist, Veronica Beard",
+          "city": "Toronto",
+          "based_in_region": false,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kristi-gourlay/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -2985,6 +3570,10 @@
             {
               "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
               "note": "talk: Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs"
+            },
+            {
+              "url": "https://www.linkedin.com/in/kristi-gourlay/",
+              "note": "location (high): linkedin search result: Kristi Gourlay - Veronica Beard, Toronto https://www.linkedin.com/in/kristi-gourlay/"
             }
           ],
           "confidence": "High",
@@ -3001,7 +3590,7 @@
               ]
             }
           ],
-          "notes": ""
+          "notes": "location (high): linkedin search result: Kristi Gourlay - Veronica Beard, Toronto https://www.linkedin.com/in/kristi-gourlay/"
         }
       ],
       "notes": ""
@@ -3035,12 +3624,13 @@
           "has_linkedin": true,
           "linkedin_confidence": "high",
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "company_blog_scan"
           ],
           "mentions_dbt": false,
           "speaker_evidence": [
@@ -3080,6 +3670,41 @@
               "suggested_talk_angle": null,
               "url_precision": "overview_page",
               "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Maxa blog",
+              "title": "Snowflake Summit in 60: Montreal data community event recap",
+              "date": "2026-06-23",
+              "url": "https://maxa.ai/blog/snowflake-summit-in-60-montreal-data-community-event-recap",
+              "content_id": "maxa-blogsnowflake-summit-in-60-montreal-data-community-even",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Recap of the June 2026 Snowflake Montreal User Group event she hosted.",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Fall 2026",
+              "title": "Talk at Snowflake Montreal User Group Fall 2026",
+              "date": "2026-09-24",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+              "content_id": "snowflake-montreal-user-group-fall-2026talk-at-snowflake-mon",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker (title not given).",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -3091,6 +3716,14 @@
             {
               "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
               "note": "talk: The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake"
+            },
+            {
+              "url": "https://maxa.ai/blog/snowflake-summit-in-60-montreal-data-community-event-recap",
+              "note": "blog: Snowflake Summit in 60: Montreal data community event recap"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+              "note": "talk: Talk at Snowflake Montreal User Group Fall 2026"
             }
           ],
           "confidence": "High",
@@ -3098,7 +3731,7 @@
           "priority_tier": "connector",
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "connector - Chapter Leader of the Snowflake Montreal User Group. Was an Analytics Developer at Maxa AI in June 2025 and is listed at Browns Shoes in June 2026. Strong co-hosting partner."
+          "notes": "connector - Chapter Leader of the Snowflake Montreal User Group. Was an Analytics Developer at Maxa AI in June 2025 and is listed at Browns Shoes in June 2026. Strong co-hosting partner. | Maxa's June 2026 blog byline gives 'Team Lead - Analytics Engineering at Maxa'; the Sep 2026 Snowflake page still lists Browns Shoes. Check the current employer before outreach."
         }
       ],
       "notes": "Employer of Lamia Goeffon (Data Platform Manager)."
@@ -3126,7 +3759,7 @@
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -3258,201 +3891,6 @@
       "notes": "Quebec education-sector IT organisation that spoke about its Snowflake adoption."
     },
     {
-      "id": "infostrux-solutions",
-      "name": "Infostrux Solutions",
-      "type": "employer",
-      "watchlist": true,
-      "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
-      "people": [
-        {
-          "id": "stephane-burwash",
-          "name": "Stéphane Burwash",
-          "pronouns": null,
-          "title": "Lead Data Ops Engineer, Potloc",
-          "city": "Montreal",
-          "based_in_region": true,
-          "level": "leadership",
-          "linkedin_urls": [
-            "https://www.linkedin.com/in/st%C3%A9phane-burwash/"
-          ],
-          "has_linkedin": true,
-          "linkedin_confidence": "high",
-          "meetup_fit": {
-            "speaker_potential": "high",
-            "attendee_potential": "high"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "newsletter_or_blog",
-            "chapter_meetup_history",
-            "company_blog_scan",
-            "podcast",
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": true,
-          "speaker_evidence": [
-            {
-              "type": "article",
-              "event": "Potloc on DEV Community",
-              "title": "Data Analytics at Potloc I: Making data integrity your priority with Elementary & Meltano",
-              "date": "2023-01-06",
-              "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
-              "content_id": "potloc-on-dev-community-data-analytics-at-potloc-i-making-data-i",
-              "co_authors": [],
-              "mentions_dbt": true,
-              "description": "Describes Potloc's Meltano, dbt, Airflow and BigQuery stack and how Elementary was used for dbt test results and anomaly detection.",
-              "topics": [
-                "data quality & testing",
-                "tools & ecosystem"
-              ],
-              "suggested_talk_angle": "Three years on: what stuck from the Elementary rollout",
-              "url_precision": "direct",
-              "confidence": "high"
-            },
-            {
-              "type": "podcast",
-              "event": "YouTube podcast S1E3",
-              "title": "Building trusted analytics at Potloc with Stéphane Burwash",
-              "date": null,
-              "url": "https://www.youtube.com/watch?v=nsLPa0kl5_o",
-              "content_id": "youtube-podcast-s1e3-building-trusted-analytics-at-potloc-wit",
-              "co_authors": [],
-              "mentions_dbt": null,
-              "description": "Podcast episode on building trusted analytics at Potloc.",
-              "topics": [
-                "data quality & testing",
-                "analytics engineering"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "medium"
-            },
-            {
-              "type": "talk",
-              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
-              "title": "Turn your tests into action points with dbt & elementary",
-              "date": "2023-03-22",
-              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
-              "content_id": "montreal-dbt-meetup-in-pe-turn-your-tests-into-action-points-with",
-              "co_authors": [],
-              "mentions_dbt": true,
-              "description": null,
-              "topics": [
-                "data quality & testing"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.linkedin.com/in/st%C3%A9phane-burwash/",
-              "note": "LinkedIn URL from a page or search result matching name + company/role"
-            },
-            {
-              "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
-              "note": "article: Data Analytics at Potloc I: Making data integrity your priority with Elementary & Meltano"
-            }
-          ],
-          "confidence": "Medium",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": "Three years on: what stuck from the Elementary rollout",
-          "past_chapter_talks": [
-            {
-              "date": "2023-03-22",
-              "talk_title": "Turn your tests into action points with dbt & elementary",
-              "topics": [
-                "data quality & testing"
-              ]
-            }
-          ],
-          "notes": "Past chapter speaker (2023, while at Potloc), so only worth inviting with new content. Now at Infostrux (Snowflake/dbt consultancy). Wrote Potloc's dbt + Elementary data-integrity post and built the Meltano-Elementary integration. No 2024-2026 item found."
-        }
-      ],
-      "notes": ""
-    },
-    {
-      "id": "maxa-ai",
-      "name": "Maxa AI",
-      "type": "employer",
-      "watchlist": true,
-      "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
-      "people": [
-        {
-          "id": "daniel-indig",
-          "name": "Daniel Indig",
-          "pronouns": null,
-          "title": "Analytics Developer",
-          "city": "Montreal",
-          "based_in_region": true,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
-          "meetup_fit": {
-            "speaker_potential": "medium",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": false,
-          "speaker_evidence": [
-            {
-              "type": "talk",
-              "event": "Snowflake Montreal User Group - Summer 2025",
-              "title": "The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake",
-              "date": "2025-06-12",
-              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
-              "content_id": "snowflake-montreal-user-g-the-cool-the-corny-and-the-cortex-workin",
-              "co_authors": [
-                "Lamia Goeffon"
-              ],
-              "mentions_dbt": false,
-              "description": "Co-presented a talk on analysing Slack data with Snowflake Cortex.",
-              "topics": [
-                "genai & llm",
-                "data warehouse & platforms"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
-              "note": "talk: The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake"
-            }
-          ],
-          "confidence": "Medium",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [],
-          "notes": "Maxa analytics developer (as of 2025)."
-        }
-      ],
-      "notes": ""
-    },
-    {
       "id": "maxa-or-lightspeed-commerce",
       "name": "Maxa or Lightspeed Commerce (unclear)",
       "type": "employer",
@@ -3528,10 +3966,14 @@
       "type": "employer",
       "watchlist": true,
       "excluded_from_outreach": false,
-      "cities": [],
+      "cities": [
+        "Montreal"
+      ],
       "local_presence": "not_confirmed",
       "dbt_signal": "weak",
-      "stack_signals": [],
+      "stack_signals": [
+        "Snowflake"
+      ],
       "job_postings": [],
       "other_evidence": [],
       "people": [
@@ -3588,6 +4030,222 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "Vendor. Speaks regularly at Snowflake Montreal UG (Summit highlights 2025, Cortex Code 2026). Useful for a vendor slot or co-hosting."
+        },
+        {
+          "id": "oliver-benning",
+          "name": "Oliver Benning",
+          "pronouns": null,
+          "title": "AI/ML Applied Field Engineer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Fall 2026",
+              "title": "Talk at Snowflake Montreal User Group Fall 2026",
+              "date": "2026-09-24",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+              "content_id": "snowflake-montreal-user-group-fall-2026talk-at-snowflake-mon",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker (title not given).",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+              "note": "talk: Talk at Snowflake Montreal User Group Fall 2026"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Snowflake AI features for analytics engineers.",
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker."
+        },
+        {
+          "id": "doneyli-de-jesus",
+          "name": "Doneyli De Jesus",
+          "pronouns": null,
+          "title": "Principal AI Architect",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Winter 2024",
+              "title": "Using GenAI for Good: How LLMs helped during a hurricane crisis",
+              "date": "2024-12-05",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "content_id": "snowflake-montreal-user-group-winter-2024using-genai-for-goo",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "GenAI talk.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "note": "talk: Using GenAI for Good: How LLMs helped during a hurricane crisis"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Using LLMs for good.",
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker."
+        },
+        {
+          "id": "camille-dube",
+          "name": "Camille Dubé",
+          "pronouns": null,
+          "title": "Sr. Solutions Architect",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Spring 2024",
+              "title": "Simplify your Devops architecture with Snowgit",
+              "date": "2024-03-21",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group/",
+              "content_id": "snowflake-montreal-user-group-spring-2024simplify-your-devop",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on Snowflake's git integration.",
+              "topics": [
+                "orchestration & ci/cd",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group/",
+              "note": "talk: Simplify your Devops architecture with Snowgit"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Git-based DevOps for Snowflake.",
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker."
+        },
+        {
+          "id": "michelle-li",
+          "name": "Michelle Li",
+          "pronouns": null,
+          "title": "Senior Sales Engineer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Summer 2024 (Women on Snowflake)",
+              "title": "Hot off the press! What you missed at Snowflake Summit",
+              "date": "2024-06-11",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "content_id": "snowflake-montreal-user-group-summer-2024-women-on-snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vendor recap of Summit announcements.",
+              "topics": [
+                "industry trends",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "note": "talk: Hot off the press! What you missed at Snowflake Summit"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Snowflake Summit recap.",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the June 2024 'Women on Snowflake' edition of the Snowflake Montreal User Group (an all-women speaker line-up). Vendor speaker."
         }
       ],
       "notes": ""
@@ -3802,6 +4460,1644 @@
       ],
       "people": [],
       "notes": "Last edition found was 2024-10-23 at Google Montreal."
+    },
+    {
+      "id": "agiledss",
+      "name": "agileDSS",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Power BI",
+        "Microsoft Fabric",
+        "Snowflake",
+        "Google Cloud"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://agiledss.com/blogue",
+          "note": "French-language BI and data consultancy blog. Bylines and author titles on each post. One post (Fabric migration) mentions dbt."
+        }
+      ],
+      "people": [
+        {
+          "id": "constant-blain",
+          "name": "Constant Blain",
+          "pronouns": null,
+          "title": "Data Engineering Consultant",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Winter 2024",
+              "title": "Unlocking Snowflake Cost Efficiency: A FinOps Approach",
+              "date": "2024-12-05",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "content_id": "snowflake-montreal-user-group-winter-2024unlocking-snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on cost management in Snowflake.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "note": "talk: Unlocking Snowflake Cost Efficiency: A FinOps Approach"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "A FinOps approach to Snowflake and dbt costs.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "alexandre-langlois",
+          "name": "Alexandre Langlois",
+          "pronouns": null,
+          "title": "Associé (partner)",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Salon Connexion 2026",
+              "title": "Harnois Énergies: de la gestion des données à l'IA en entreprise",
+              "date": "2026-05",
+              "url": "https://agiledss.com/blogue/de-la-donnee-a-lia-comment-harnois-energies-a-bati-un-ecosysteme-pret-pour-lavenir",
+              "content_id": "salon-connexion-2026harnois-energies-de-la-gestion-des-donne",
+              "co_authors": [
+                "David Lafrance"
+              ],
+              "mentions_dbt": false,
+              "description": "Conference talk with David Lafrance (Harnois Énergies), written up on the agileDSS blog.",
+              "topics": [
+                "domain-specific use cases",
+                "data warehouse & platforms",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "blog",
+              "event": "agileDSS blog",
+              "title": "De la donnée à l'IA : comment Harnois Énergies a bâti un écosystème prêt pour l'avenir",
+              "date": "2026-08",
+              "url": "https://agiledss.com/blogue/de-la-donnee-a-lia-comment-harnois-energies-a-bati-un-ecosysteme-pret-pour-lavenir",
+              "content_id": "agiledss-blogde-la-donnee-a-lia-comment-harnois-energies-a-b",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Article based on the Salon Connexion talk.",
+              "topics": [
+                "domain-specific use cases",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/de-la-donnee-a-lia-comment-harnois-energies-a-bati-un-ecosysteme-pret-pour-lavenir",
+              "note": "talk: Harnois Énergies: de la gestion des données à l'IA en entreprise"
+            },
+            {
+              "url": "https://agiledss.com/blogue/de-la-donnee-a-lia-comment-harnois-energies-a-bati-un-ecosysteme-pret-pour-lavenir",
+              "note": "blog: De la donnée à l'IA : comment Harnois Énergies a bâti un écosystème prêt pour l'avenir"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "From data to AI at a Quebec energy retailer: the platform behind natural-language questions.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "tomas-rezek",
+          "name": "Tomas Rezek",
+          "pronouns": null,
+          "title": "Conseiller Analytiques, BI et Big Data",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "agileDSS blog",
+              "title": "Comment construire son écosystème de données? Avec des trains!",
+              "date": "2024-10",
+              "url": "https://agiledss.com/blogue/comment-construire-ecosysteme-donnes",
+              "content_id": "agiledss-blogcomment-construire-son-ecosysteme-de-donnees-av",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "French post explaining data ecosystem architecture through a railway metaphor.",
+              "topics": [
+                "data engineering",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/comment-construire-ecosysteme-donnes",
+              "note": "blog: Comment construire son écosystème de données? Avec des trains!"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Designing a data ecosystem like a rail network: layers, stations and timetables.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "otmane-el-idrissi",
+          "name": "Otmane El Idrissi",
+          "pronouns": null,
+          "title": "Azure Data Ingénieur et Data Analyst",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "agileDSS blog",
+              "title": "Migration vers Microsoft Fabric : Boostez Vos Flux de Données et Votre Performance",
+              "date": "2025-02",
+              "url": "https://agiledss.com/blogue/migration-microsoft-fabric",
+              "content_id": "agiledss-blogmigration-vers-microsoft-fabric-boostez-vos-flu",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "French post on moving to Microsoft Fabric; covers dbt for modular SQL transformation in Fabric.",
+              "topics": [
+                "data warehouse & platforms",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/migration-microsoft-fabric",
+              "note": "blog: Migration vers Microsoft Fabric : Boostez Vos Flux de Données et Votre Performance"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Migrating from Power BI Premium to Microsoft Fabric, and where dbt fits.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "adrien-chaude",
+          "name": "Adrien Chaudé",
+          "pronouns": null,
+          "title": "Conseiller BI et Analytique",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "agileDSS blog",
+              "title": "Migration Tableau vers Power BI : retour d'expérience et innovation avec l'IA",
+              "date": "2026-03",
+              "url": "https://agiledss.com/blogue/migration-tableau-vers-power-bi",
+              "content_id": "agiledss-blogmigration-tableau-vers-power-bi-retour-dexperie",
+              "co_authors": [
+                "Adrien Lecellier"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-written French case write-up of a Tableau to Power BI migration for a transport client.",
+              "topics": [
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/migration-tableau-vers-power-bi",
+              "note": "blog: Migration Tableau vers Power BI : retour d'expérience et innovation avec l'IA"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Migrating Tableau reports to Power BI with AI-assisted checks.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "adrien-lecellier",
+          "name": "Adrien Lecellier",
+          "pronouns": null,
+          "title": "Conseiller BI et Analytique",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "agileDSS blog",
+              "title": "Migration Tableau vers Power BI : retour d'expérience et innovation avec l'IA",
+              "date": "2026-03",
+              "url": "https://agiledss.com/blogue/migration-tableau-vers-power-bi",
+              "content_id": "agiledss-blogmigration-tableau-vers-power-bi-retour-dexperie",
+              "co_authors": [
+                "Adrien Chaudé"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-written French case write-up of a Tableau to Power BI migration for a transport client.",
+              "topics": [
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/migration-tableau-vers-power-bi",
+              "note": "blog: Migration Tableau vers Power BI : retour d'expérience et innovation avec l'IA"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Migrating Tableau reports to Power BI with AI-assisted checks.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "ricardo-briones",
+          "name": "Ricardo Briones",
+          "pronouns": null,
+          "title": "Conseiller Analytiques, BI et Big Data",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "agileDSS blog",
+              "title": "Moderniser l'intelligence d'affaires avec Power BI et agileDSS, le cas LOU-TEC",
+              "date": "2026-02",
+              "url": "https://agiledss.com/blogue/moderneniser-intelligence-affaires-lou-tec",
+              "content_id": "agiledss-blogmoderniser-lintelligence-daffaires-avec-power-b",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "French case write-up of a Power BI modernisation.",
+              "topics": [
+                "business intelligence",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/moderneniser-intelligence-affaires-lou-tec",
+              "note": "blog: Moderniser l'intelligence d'affaires avec Power BI et agileDSS, le cas LOU-TEC"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Modernising BI at an equipment-rental company.",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Groupe agileDSS: Quebec BI, analytics and data consultancy with a France office. Spoke at the Snowflake Montreal User Group."
+    },
+    {
+      "id": "harnois-energies",
+      "name": "Harnois Énergies",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Quebec"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "david-lafrance",
+          "name": "David Lafrance",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Salon Connexion 2026",
+              "title": "Harnois Énergies: de la gestion des données à l'IA en entreprise",
+              "date": "2026-05",
+              "url": "https://agiledss.com/blogue/de-la-donnee-a-lia-comment-harnois-energies-a-bati-un-ecosysteme-pret-pour-lavenir",
+              "content_id": "salon-connexion-2026harnois-energies-de-la-gestion-des-donne",
+              "co_authors": [
+                "Alexandre Langlois"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented with Alexandre Langlois (agileDSS).",
+              "topics": [
+                "domain-specific use cases",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://agiledss.com/blogue/de-la-donnee-a-lia-comment-harnois-energies-a-bati-un-ecosysteme-pret-pour-lavenir",
+              "note": "talk: Harnois Énergies: de la gestion des données à l'IA en entreprise"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Building a data and AI platform at a Quebec energy retailer.",
+          "past_chapter_talks": [],
+          "notes": "Harnois Énergies is Quebec-based; Montreal location not verified."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "videotron",
+      "name": "Vidéotron",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "basel-alkana",
+          "name": "Basel Al-Kana",
+          "pronouns": null,
+          "title": "Director, Technology Platforms Management in Business Intelligence",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Spring 2025",
+              "title": "Transitioning from On-Prem Warehousing to the Cloud",
+              "date": "2025-04-03",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-printemps-spring-2025",
+              "content_id": "snowflake-montreal-user-group-spring-2025transitioning-from",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Migration story from on-prem warehousing to Snowflake.",
+              "topics": [
+                "data warehouse & platforms",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-printemps-spring-2025",
+              "note": "talk: Transitioning from On-Prem Warehousing to the Cloud"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Moving a telco's BI warehouse from on-prem to the cloud.",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "poka",
+      "name": "Poka",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "maxime-castello",
+          "name": "Maxime Castello",
+          "pronouns": null,
+          "title": "Analytics Team Lead",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Winter 2024",
+              "title": "From Daily Batch transformation to Near Real-Time: Cost Optimization in Snowflake",
+              "date": "2024-12-05",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "content_id": "snowflake-montreal-user-group-winter-2024from-daily-batch-tr",
+              "co_authors": [
+                "Olivier Mirandette"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented with Olivier Mirandette.",
+              "topics": [
+                "performance & scale",
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "note": "talk: From Daily Batch transformation to Near Real-Time: Cost Optimization in Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "From daily batch to near real-time transformations without blowing the Snowflake bill.",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "olivier-mirandette",
+          "name": "Olivier Mirandette",
+          "pronouns": null,
+          "title": "VP of Engineering",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Winter 2024",
+              "title": "From Daily Batch transformation to Near Real-Time: Cost Optimization in Snowflake",
+              "date": "2024-12-05",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "content_id": "snowflake-montreal-user-group-winter-2024from-daily-batch-tr",
+              "co_authors": [
+                "Maxime Castello"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented with Maxime Castello.",
+              "topics": [
+                "performance & scale",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "note": "talk: From Daily Batch transformation to Near Real-Time: Cost Optimization in Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Engineering leadership view of near real-time analytics.",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Poka Inc. (connected-worker software). Talked about moving from daily batch to near real-time transformations in Snowflake."
+    },
+    {
+      "id": "privacy-safe",
+      "name": "Privacy Safe",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "antoine-deblonde",
+          "name": "Antoine Deblonde",
+          "pronouns": null,
+          "title": "Architect",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Winter 2024",
+              "title": "Lessons learned from the Snowflake Native App Framework",
+              "date": "2024-12-05",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "content_id": "snowflake-montreal-user-group-winter-2024lessons-learned-fro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vendor architect talk on the Snowflake Native App Framework.",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+              "note": "talk: Lessons learned from the Snowflake Native App Framework"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Lessons from building a Snowflake Native App.",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cdpq",
+      "name": "CDPQ",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "francis-lafortune",
+          "name": "Francis Lafortune",
+          "pronouns": null,
+          "title": "Senior Director Strategy and Digital Initiatives",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Spring 2024",
+              "title": "The Snowflake platform at CDPQ: use cases and governance",
+              "date": "2024-03-21",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group/",
+              "content_id": "snowflake-montreal-user-group-spring-2024the-snowflake-platf",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Use cases and governance of Snowflake at CDPQ.",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group/",
+              "note": "talk: The Snowflake platform at CDPQ: use cases and governance"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Governing a Snowflake platform at a large pension fund.",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "air-transat",
+      "name": "Air Transat",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "aura-lucia-perez",
+          "name": "Aura Lucia Perez",
+          "pronouns": null,
+          "title": "BI IT Director",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Summer 2024 (Women on Snowflake)",
+              "title": "Journey to Snowflake",
+              "date": "2024-06-11",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "content_id": "snowflake-montreal-user-group-summer-2024-women-on-snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Air Transat's move to Snowflake.",
+              "topics": [
+                "data warehouse & platforms",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "note": "talk: Journey to Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "An airline's journey to a cloud data warehouse.",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the June 2024 'Women on Snowflake' edition of the Snowflake Montreal User Group (an all-women speaker line-up)."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "air-canada",
+      "name": "Air Canada",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "camila-albigezi",
+          "name": "Camila Albigezi",
+          "pronouns": null,
+          "title": "Tech Lead Customer & Loyalty BI",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Summer 2024 (Women on Snowflake)",
+              "title": "Data for Business",
+              "date": "2024-06-11",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "content_id": "snowflake-montreal-user-group-summer-2024-women-on-snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on serving the business with customer and loyalty data.",
+              "topics": [
+                "business intelligence",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "note": "talk: Data for Business"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Customer and loyalty BI at a national airline.",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the June 2024 'Women on Snowflake' edition of the Snowflake Montreal User Group (an all-women speaker line-up)."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "supercom",
+      "name": "Super.com",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kelsey-pericak",
+          "name": "Kelsey Pericak",
+          "pronouns": null,
+          "title": "Director of Analytics and Data Science",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Summer 2024 (Women on Snowflake)",
+              "title": "The Power of a Primary Metric",
+              "date": "2024-06-11",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "content_id": "snowflake-montreal-user-group-summer-2024-women-on-snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on choosing and using a primary metric.",
+              "topics": [
+                "business intelligence",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-montreal-user-group-meeting",
+              "note": "talk: The Power of a Primary Metric"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "The power of a single primary metric for an analytics team.",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the June 2024 'Women on Snowflake' edition of the Snowflake Montreal User Group (an all-women speaker line-up). Super.com is Toronto-headquartered; her own location is not verified."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "select",
+      "name": "SELECT",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "none",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ian-whitestone",
+          "name": "Ian Whitestone",
+          "pronouns": null,
+          "title": "Co-founder and CEO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group, Fall 2024",
+              "title": "Snowflake optimization essentials: a deep dive on query pruning and advanced data loading techniques",
+              "date": "2024-09-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2024",
+              "content_id": "snowflake-montreal-user-group-fall-2024snowflake-optimizatio",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vendor talk on Snowflake cost and performance.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2024",
+              "note": "talk: Snowflake optimization essentials: a deep dive on query pruning and advanced data loading techniques"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Snowflake query pruning and loading techniques, for dbt users.",
+          "past_chapter_talks": [],
+          "notes": "Vendor founder. Not known to be Montreal-based."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "warner-bros-games-montreal",
+      "name": "Warner Bros. Games Montréal",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Looker",
+        "Google Cloud"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jihoo-park",
+          "name": "Jihoo Park",
+          "pronouns": null,
+          "title": "Senior Data Analyst",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Google I/O Extended Montreal 2026 (GDG Montreal)",
+              "title": "Speaker, Google I/O Extended Montreal 2026 (Cloud, Looker & AI Studio deep dive)",
+              "date": "2026-07-02",
+              "url": "https://www.meetup.com/gdg-montreal/events/315414247/",
+              "content_id": "google-io-extended-montreal-2026-gdg-montrealspeaker-google",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker at an event whose agenda includes a deep dive on Cloud, Looker and AI Studio. Which segment she gave is not stated.",
+              "topics": [
+                "business intelligence",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "organiser",
+              "event": "Women Techmakers / GDG Montreal",
+              "title": "WTM Ambassador and GDG organiser",
+              "date": null,
+              "url": "https://www.meetup.com/gdg-montreal/events/315414247/",
+              "content_id": "women-techmakers-gdg-montrealwtm-ambassador-and-gdg-organise",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Bio lists WTM Ambassador, GDG organiser, Google BICC member.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdg-montreal/events/315414247/",
+              "note": "talk: Speaker, Google I/O Extended Montreal 2026 (Cloud, Looker & AI Studio deep dive)"
+            },
+            {
+              "url": "https://www.meetup.com/gdg-montreal/events/315414247/",
+              "note": "organiser: WTM Ambassador and GDG organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "What's new in Looker and Google Cloud for analysts, from a games studio's data team.",
+          "past_chapter_talks": [],
+          "notes": "Bio on the GDG page: WTM Ambassador, GDG organiser, Google BICC member. A connector to Women Techmakers Montreal as well as a speaker."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "gdg-montreal-women-techmakers-montreal",
+      "name": "GDG Montreal / Women Techmakers Montreal",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_page",
+          "url": "https://www.meetup.com/gdg-montreal/",
+          "note": "Google Developer Group Montreal, 1,158 members; co-runs Women Techmakers (WTM) events. Mostly mobile and AI, some Cloud/Looker."
+        }
+      ],
+      "people": [
+        {
+          "id": "laurence-de-villers",
+          "name": "Laurence de Villers",
+          "pronouns": null,
+          "title": "GDG and WTM Organizer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "GDG Montreal Build With AI",
+              "title": "Host, Build With AI (GDG Montreal)",
+              "date": "2024-05-01",
+              "url": "https://www.meetup.com/gdg-montreal/events/300159943/",
+              "content_id": "gdg-montreal-build-with-aihost-build-with-ai-gdg-montreal",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed host; organiser of GDG and Women Techmakers Montreal.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdg-montreal/events/300159943/",
+              "note": "host: Host, Build With AI (GDG Montreal)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Route to Women Techmakers Montreal speakers."
+        },
+        {
+          "id": "leticia-pires",
+          "name": "Letícia Pires",
+          "pronouns": null,
+          "title": "Data Scientist",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "GDG Montreal Build With AI",
+              "title": "Speaker, Build With AI",
+              "date": "2024-05-01",
+              "url": "https://www.meetup.com/gdg-montreal/events/300159943/",
+              "content_id": "gdg-montreal-build-with-aispeaker-build-with-ai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Speaker at an AI event; bio lists Google Certified ML Engineer and WTM Ambassador.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdg-montreal/events/300159943/",
+              "note": "talk: Speaker, Build With AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Employer not given. WTM Ambassador."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "gdg-cloud-montreal",
+      "name": "GDG Cloud Montreal",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_page",
+          "url": "https://www.meetup.com/gdg-cloud-montreal/",
+          "note": "1,114 members. Mostly online lunchtime talks on Google Cloud; one BigQuery and LookML session (Dec 2024)."
+        }
+      ],
+      "people": [
+        {
+          "id": "stacy-veronneau",
+          "name": "Stacy Véronneau",
+          "pronouns": null,
+          "title": "Senior Customer Engineer & GDE, TELUS Digital",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "GDG Cloud Montreal",
+              "title": "Unveiling Insights with AI: BigQuery Canvas & LookML",
+              "date": "2024-12-10",
+              "url": "https://www.meetup.com/gdg-cloud-montreal/events/304762571/",
+              "content_id": "gdg-cloud-montrealunveiling-insights-with-ai-bigquery-canvas",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Organiser and host of GDG Cloud Montreal sessions, including this BigQuery and LookML session.",
+              "topics": [
+                "community",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/gdg-cloud-montreal/events/304762571/",
+              "note": "host: Unveiling Insights with AI: BigQuery Canvas & LookML"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Organiser of GDG Cloud Montreal; Google Developer Expert. Employer changed between 2024 (SE Cloud Experts) and 2026 (TELUS Digital). Good route to BigQuery users in Montreal."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "breathe-life",
+      "name": "Breathe Life",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jean-nicholas-hould",
+          "name": "Jean-Nicholas Hould",
+          "pronouns": null,
+          "title": "Breathe Life",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Cyril Marques",
+                "Matthieu Di Mercurio",
+                "Sarah Corboliou"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "employer of a past Montreal chapter speaker"
+    },
+    {
+      "id": "unito",
+      "name": "Unito",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sarah-corboliou",
+          "name": "Sarah Corboliou",
+          "pronouns": null,
+          "title": "Unito",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Cyril Marques",
+                "Matthieu Di Mercurio",
+                "Jean-Nicholas Hould"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "employer of a past Montreal chapter speaker"
     }
   ],
   "sources": {
@@ -3897,6 +6193,108 @@
         "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
         "yielded": true,
         "note": "40 ads mention dbt"
+      },
+      {
+        "name": "Snowflake Montreal User Group, older events (2023-2025)",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024",
+        "yielded": true,
+        "note": "Jul 2023, Mar 2024, Jun 2024 (Women on Snowflake), Sep 2024, Dec 2024 and Apr 2025 agendas. 17 new speakers."
+      },
+      {
+        "name": "Snowflake Montreal User Group, Fall 2026",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/",
+        "yielded": true,
+        "note": "Oliver Benning, Lamia Goeffon, João Vitor de Camargo."
+      },
+      {
+        "name": "agileDSS blog (French)",
+        "url": "https://agiledss.com/blogue",
+        "yielded": true,
+        "note": "Six authors with titles; one dbt mention (Fabric migration post)."
+      },
+      {
+        "name": "dbt developer blog author index",
+        "url": "https://docs.getdbt.com/blog/authors",
+        "yielded": true,
+        "note": "Callie White and Jade Milaney (Montreal Analytics), 2023."
+      },
+      {
+        "name": "MTL Data meetup (gql2)",
+        "url": "https://www.meetup.com/mtldata/",
+        "yielded": false,
+        "note": "5,391 members; two events since 2023, both AI."
+      },
+      {
+        "name": "Data Driven Montréal meetup (gql2)",
+        "url": "https://www.meetup.com/datadrivenmontreal/",
+        "yielded": false,
+        "note": "Decision science and ML; no analytics engineering talks since 2023."
+      },
+      {
+        "name": "Montréal-Python meetup (gql2)",
+        "url": "https://www.meetup.com/montreal-python/",
+        "yielded": false,
+        "note": "No dbt or warehouse talks since 2023."
+      },
+      {
+        "name": "R-Ladies Montreal (gql2)",
+        "url": "https://www.meetup.com/rladies-montreal/",
+        "yielded": false,
+        "note": "Rebooting in June 2025; intro sessions only."
+      },
+      {
+        "name": "GDG Montreal and Women Techmakers (gql2)",
+        "url": "https://www.meetup.com/gdg-montreal/",
+        "yielded": true,
+        "note": "Jihoo Park (Warner Bros. Games) and WTM organisers."
+      },
+      {
+        "name": "GDG Cloud Montreal (gql2)",
+        "url": "https://www.meetup.com/gdg-cloud-montreal/",
+        "yielded": true,
+        "note": "Organiser Stacy Véronneau only; speakers are mostly Google staff."
+      },
+      {
+        "name": "Montreal Databricks User Group",
+        "url": "https://usergroups.databricks.com/montreal-databricks-user-group/",
+        "yielded": false,
+        "note": "Mar 2026 edition was AI vendor demos."
+      },
+      {
+        "name": "HEC Forecast",
+        "url": "https://www.csdhec.ca/hec-forecast",
+        "yielded": false,
+        "note": "No speaker list on the page."
+      },
+      {
+        "name": "ConFoo Montreal sessions",
+        "url": "https://confoo.ca/en/yul2026/sessions",
+        "yielded": false,
+        "note": "Returned HTTP 500."
+      },
+      {
+        "name": "Medium publication feeds (SSENSE, Hopper, Lightspeed, Dialogue, Transit, Workleap and others)",
+        "url": "https://medium.com/feed/ssense-tech",
+        "yielded": false,
+        "note": "HTTP 429 from Medium."
+      },
+      {
+        "name": "dev.to dbt tag authors",
+        "url": "https://dev.to/t/dbt",
+        "yielded": false,
+        "note": "112 authors, none located in Montreal or Quebec."
+      },
+      {
+        "name": "Infostrux blog",
+        "url": "https://www.infostrux.com/blog",
+        "yielded": false,
+        "note": "No bylines."
+      },
+      {
+        "name": "Datatonic insights",
+        "url": "https://www.datatonic.com/insights/",
+        "yielded": false,
+        "note": "No bylines or Montreal authors."
       }
     ]
   },
@@ -3906,7 +6304,9 @@
       "date": "2021-10-29",
       "venue": "Online",
       "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
-      "organisers": [],
+      "organisers": [
+        "Rosie Cardoso"
+      ],
       "attendees": 29,
       "talks": [
         {
@@ -3933,7 +6333,9 @@
       "date": "2022-04-28",
       "venue": "Unito, 1265 Rue Berri 7th floor, Montreal, QC",
       "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
-      "organisers": [],
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
       "attendees": 40,
       "talks": [
         {
@@ -3959,7 +6361,9 @@
       "date": "2022-09-08",
       "venue": "Dialogue, 455 Rue Sainte-Hélène Suite 200, Montréal, QC",
       "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
-      "organisers": [],
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
       "attendees": 72,
       "talks": [
         {
@@ -3987,7 +6391,9 @@
       "date": "2023-03-22",
       "venue": "Dialogue, 455 Rue Sainte-Hélène Suite 200, Montréal, QC",
       "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
-      "organisers": [],
+      "organisers": [
+        "Montréal dbt Meetup"
+      ],
       "attendees": 63,
       "talks": [
         {
@@ -4022,7 +6428,12 @@
       "date": "2024-10-03",
       "venue": "Solution BI Canada, 4200 Boul. Saint-Laurent Suite 425, Montréal, QC",
       "url": "https://www.meetup.com/montreal-dbt-meetup/events/303409442/",
-      "organisers": [],
+      "organisers": [
+        "dbt Labs (Super Organizer)",
+        "Matthew Heise",
+        "Romain LOPEZ",
+        "Mélissa (Solution BI)"
+      ],
       "attendees": 76,
       "talks": [
         {
@@ -4048,7 +6459,10 @@
       "date": "2026-08-06",
       "venue": "Maxa, 1 Place Ville Marie, Montréal, QC",
       "url": "https://www.meetup.com/montreal-dbt-meetup/events/315694937/",
-      "organisers": [],
+      "organisers": [
+        "João Vitor de Camargo",
+        "Henri Trouillard"
+      ],
       "attendees": 70,
       "talks": []
     }
@@ -4078,6 +6492,21 @@
       "name": "WiDS Montreal",
       "url": "https://www.widsworldwide.org/events/event/wids-montreal/",
       "note": "2024 edition. Ambassador only."
+    },
+    {
+      "name": "GDG Montreal (with Women Techmakers)",
+      "url": "https://www.meetup.com/gdg-montreal/",
+      "note": "1,158 members; WTM ambassadors among organisers."
+    },
+    {
+      "name": "GDG Cloud Montreal",
+      "url": "https://www.meetup.com/gdg-cloud-montreal/",
+      "note": "1,114 members; Google Cloud and BigQuery talks."
+    },
+    {
+      "name": "MTL Data",
+      "url": "https://www.meetup.com/mtldata/",
+      "note": "5,391 members; largest general data meetup, few events lately."
     }
   ]
 }

@@ -1,17 +1,24 @@
 {
   "metadata": {
     "title": "Toronto dbt companies and people for the Toronto dbt Meetup",
-    "generated_at": "2026-09-24",
+    "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Toronto companies using dbt, and people who could speak at or attend the Toronto dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 3,
     "region": "Toronto (Toronto dbt Meetup)",
     "method": [
       "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/toronto-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
       "Lesson: For mid-sized chapters, the local Snowflake and Databricks user groups (Bevy pages at usergroups.snowflake.com / usergroups.databricks.com) give the best 2025-26 local speaker lists and organisers, and they fetch cleanly with web_fetch.",
       "Lesson: Dormant or rebranded 'Modern Data Stack' meetups (TMDS here) hold the city's historic dbt speaker pool. Pull them with Meetup gql2 and re-verify current roles.",
-      "Lesson: Matching Toronto employer names against the dbt Summit speaker page's text quickly finds local conference speakers. Coalesce 2025's Cvent pages need a browser."
+      "Lesson: Matching Toronto employer names against the dbt Summit speaker page's text quickly finds local conference speakers. Coalesce 2025's Cvent pages need a browser.",
+      "v2 (2026-10-01): v2 extension (2026-10-01): ~20 web searches (exhausted the shared budget early) plus direct fetches: Meetup gql2 past events for 25 Toronto/Waterloo groups found via gql2 groupSearch (Snowflake, Airflow, Kafka, TDPC, PyLadies, R-Ladies, AWS Women in Tech Ontario, ClickHouse, PyData and others), Medium publication feeds via rss2json (Loblaw Digital, Shopify Data, Wealthsimple, Faire), the Databricks Data + AI World Tour Toronto 2025 catalog, the Toronto Generative AI Summit speaker page, the dbt Summit 2026 speaker JSON, dev.to and GitHub user search by location. Added 38 people; same scoring rules as berlin_planning/SEARCH_METHOD.md section 1 Step 6.",
+      "Lesson: Meetup gql2 works from plain curl (no browser), and groupSearch with lat/lon finds the city's data groups in one call.",
+      "Lesson: Medium blocks curl and WebFetch with Cloudflare; api.rss2json.com returns a publication's last 10 posts with full text, but rate-limits after about 10 new feeds.",
+      "Lesson: Loblaw Digital's Medium is the best Toronto company blog for dbt authors; Shopify's data posts are 2020-era and Faire's are AI/ML.",
+      "Lesson: dev.to and GitHub location search yield job-seeker portfolios rather than speakers, so they are not worth the calls.",
+      "Lesson: Databricks World Tour and AI-summit agendas give senior bank and insurer leaders, who suit panels better than technical talks.",
+      "v2 (2026-10-01): location pass. 6 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (0 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 5 people are still unknown."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -49,50 +56,58 @@
     "caveats": [
       "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
       "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
-      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+      "Titles, employers and cities come from public event pages and blog bylines, some from 2023; verify current role before outreach.",
+      "Loblaw Digital co-authors' titles were not stated in the posts.",
+      "Several Meetup event pages link speakers' LinkedIn profiles; these were not recorded because they did not come from a search result.",
+      "LinkedIn: 3 of 69 people have a profile url, taken word for word from search results. 66 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
     ],
     "counts": {
-      "companies": 84,
-      "people": 31,
+      "companies": 103,
+      "people": 69,
       "job_postings": 70,
       "companies_with_job_postings": 52,
-      "speaker_evidence_items": 33,
-      "unique_content_items": 30,
-      "people_with_linkedin": 1,
+      "speaker_evidence_items": 77,
+      "unique_content_items": 57,
+      "people_with_linkedin": 3,
       "people_who_spoke_at_this_chapter": 4,
       "internal_vinted": 0,
       "level": {
-        "working": 19,
-        "leadership": 12
+        "working": 42,
+        "leadership": 27
       },
       "speaker_potential": {
-        "medium": 22,
-        "high": 9
+        "medium": 55,
+        "high": 12,
+        "low": 2
       },
       "attendee_potential": {
-        "medium": 25,
-        "high": 6
+        "medium": 53,
+        "high": 14,
+        "low": 2
       },
       "priority_tier": {
-        "2": 11,
-        "1": 2,
-        "connector": 8,
-        "3": 10
+        "2": 22,
+        "3": 33,
+        "1": 4,
+        "connector": 10
       },
-      "watchlist_companies": 17,
+      "watchlist_companies": 33,
       "past_meetups": 4,
       "lead_type": {
-        "proven_speaker": 24,
-        "emerging_voice": 1,
-        "featured": 6
+        "proven_speaker": 51,
+        "emerging_voice": 8,
+        "featured": 6,
+        "no_public_content": 4
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
-        "conference_or_meetup_agenda": 29,
-        "chapter_meetup_history": 4,
+        "conference_or_meetup_agenda": 55,
+        "chapter_meetup_history": 5,
         "newsletter_or_blog": 1,
-        "company_blog_scan": 1,
-        "women_in_data_community": 2
+        "company_blog_scan": 8,
+        "linkedin_search": 1,
+        "women_in_data_community": 5,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -125,28 +140,30 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 8,
-      "genai & llm": 7,
-      "data governance": 5,
-      "data warehouse & platforms": 5,
-      "data engineering": 4,
-      "analytics engineering": 4,
-      "data modeling": 3,
-      "team & org design": 3,
+      "genai & llm": 19,
+      "data warehouse & platforms": 16,
+      "data engineering": 14,
+      "community": 10,
+      "data governance": 9,
+      "domain-specific use cases": 9,
+      "team & org design": 9,
+      "performance & scale": 9,
+      "analytics engineering": 8,
+      "developer workflow": 7,
+      "tools & ecosystem": 6,
+      "business intelligence": 5,
+      "industry trends": 5,
+      "orchestration & ci/cd": 5,
+      "data modeling": 4,
+      "dbt best practices": 4,
       "data quality & testing": 3,
-      "tools & ecosystem": 3,
-      "dbt best practices": 2,
-      "business intelligence": 2,
       "semantic layer": 2,
       "career development": 2,
-      "domain-specific use cases": 1,
       "dbt migration & adoption": 1,
-      "performance & scale": 1,
       "dbt product updates": 1,
       "project structure": 1,
       "data mesh": 1,
       "dbt fundamentals": 1,
-      "orchestration & ci/cd": 1,
       "modern data stack": 1
     }
   },
@@ -249,15 +266,15 @@
           "name": "Nicole Kim",
           "pronouns": null,
           "title": "Wealthsimple",
-          "city": null,
-          "based_in_region": null,
+          "city": "Toronto",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -291,6 +308,10 @@
             {
               "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
               "note": "talk: Powering Wealthsimple incentive pipeline with dbt"
+            },
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+              "note": "location (medium): in-person talk at Toronto dbt Meetup 2026-08-19 (venue Rootly, 366 Adelaide St W), employer Wealthsimple is headquartered in Toronto https://www.meetup.com/toronto-dbt-meetup/events/315920697/"
             }
           ],
           "confidence": "High",
@@ -308,22 +329,22 @@
               ]
             }
           ],
-          "notes": ""
+          "notes": "location (medium): in-person talk at Toronto dbt Meetup 2026-08-19 (venue Rootly, 366 Adelaide St W), employer Wealthsimple is headquartered in Toronto https://www.meetup.com/toronto-dbt-meetup/events/315920697/"
         },
         {
           "id": "jessie-lamontagne",
           "name": "Jessie Lamontagne",
           "pronouns": null,
           "title": "Wealthsimple",
-          "city": null,
-          "based_in_region": null,
+          "city": "Toronto",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "high"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -356,6 +377,10 @@
             {
               "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
               "note": "talk: Building a SCD2 reporting hierarchy with recursion"
+            },
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+              "note": "location (medium): in-person talk at Toronto dbt Meetup 2026-08-19 (venue Rootly, 366 Adelaide St W), employer Wealthsimple is headquartered in Toronto https://www.meetup.com/toronto-dbt-meetup/events/315920697/"
             }
           ],
           "confidence": "High",
@@ -372,7 +397,61 @@
               ]
             }
           ],
-          "notes": ""
+          "notes": "location (medium): in-person talk at Toronto dbt Meetup 2026-08-19 (venue Rootly, 366 Adelaide St W), employer Wealthsimple is headquartered in Toronto https://www.meetup.com/toronto-dbt-meetup/events/315920697/"
+        },
+        {
+          "id": "lin-liu",
+          "name": "Lin Liu",
+          "pronouns": null,
+          "title": "Director, Data Science, Wealthsimple",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Generative AI Summit Toronto (AI Accelerator Institute)",
+              "title": "Speaker (session title not listed)",
+              "date": "2025-11-20",
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "content_id": "generative-ai-summit-toronto-ai-accelerator-institutespeaker",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker at the Toronto Generative AI Summit.",
+              "topics": [
+                "genai & llm",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "note": "talk: Speaker (session title not listed)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "How a data science team works with the analytics engineering layer at Wealthsimple",
+          "past_chapter_talks": [],
+          "notes": "AI-summit speaker; data leadership role, not a dbt practitioner on record."
         }
       ],
       "notes": "Two chapter speakers in Aug 2026 (Nicole Kim, Jessie Lamontagne). Hosted TMDS in Sept 2023 at 80 Spadina. The engineering blog search found no named dbt posts."
@@ -788,9 +867,11 @@
           "city": null,
           "based_in_region": null,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/josh-harris-86188983/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -842,7 +923,7 @@
               ]
             }
           ],
-          "notes": ""
+          "notes": null
         }
       ],
       "notes": "Founder Josh Harris is a past chapter speaker (May 2026)."
@@ -2251,7 +2332,10 @@
       "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "BigQuery",
+        "Dataflow",
+        "Pub/Sub"
       ],
       "job_postings": [
         {
@@ -2268,8 +2352,524 @@
           "work_mode": null
         }
       ],
-      "other_evidence": [],
-      "people": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/loblaw-digital",
+          "note": "Loblaw Digital Medium publication: dbt + LLM documentation post (2023-11) says dbt is the ELT framework across the data organisation; Data as a Service series (2023)."
+        }
+      ],
+      "people": [
+        {
+          "id": "joseph-jing",
+          "name": "Joseph Jing",
+          "pronouns": null,
+          "title": "Analytics engineering, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Leveraging LLMs to generate AI driven dbt documentation",
+              "date": "2023-11-27",
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "content_id": "loblaw-digital-mediumleveraging-llms-to-generate-ai-driven-d",
+              "co_authors": [
+                "Rohit Bathija",
+                "Michelle Qi",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": true,
+              "description": "How the Loblaw Digital analytics engineering team used LLMs to draft dbt model documentation.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "note": "blog: Leveraging LLMs to generate AI driven dbt documentation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Generating dbt documentation with LLMs: what worked at Loblaw Digital and what needed a human",
+          "past_chapter_talks": [],
+          "notes": "Lead author of Loblaw Digital's dbt + LLM documentation post. Current employer and title not re-verified."
+        },
+        {
+          "id": "rohit-bathija",
+          "name": "Rohit Bathija",
+          "pronouns": null,
+          "title": "Data team, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Leveraging LLMs to generate AI driven dbt documentation",
+              "date": "2023-11-27",
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "content_id": "loblaw-digital-mediumleveraging-llms-to-generate-ai-driven-d",
+              "co_authors": [
+                "Joseph Jing",
+                "Michelle Qi",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": true,
+              "description": "How the Loblaw Digital analytics engineering team used LLMs to draft dbt model documentation.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "note": "blog: Leveraging LLMs to generate AI driven dbt documentation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Co-presenting the LLM-generated dbt documentation workflow",
+          "past_chapter_talks": [],
+          "notes": "Co-author on the dbt documentation post; role not stated."
+        },
+        {
+          "id": "michelle-qi",
+          "name": "Michelle Qi",
+          "pronouns": null,
+          "title": "Data team, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Leveraging LLMs to generate AI driven dbt documentation",
+              "date": "2023-11-27",
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "content_id": "loblaw-digital-mediumleveraging-llms-to-generate-ai-driven-d",
+              "co_authors": [
+                "Joseph Jing",
+                "Rohit Bathija",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": true,
+              "description": "How the Loblaw Digital analytics engineering team used LLMs to draft dbt model documentation.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "note": "blog: Leveraging LLMs to generate AI driven dbt documentation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Co-presenting the LLM-generated dbt documentation workflow",
+          "past_chapter_talks": [],
+          "notes": "Co-author on the dbt documentation post; role not stated. Not the same person as dbt Labs' Michelle Ark."
+        },
+        {
+          "id": "indrani-gorti",
+          "name": "Indrani Gorti",
+          "pronouns": null,
+          "title": "Data engineering / analytics, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Leveraging LLMs to generate AI driven dbt documentation",
+              "date": "2023-11-27",
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "content_id": "loblaw-digital-mediumleveraging-llms-to-generate-ai-driven-d",
+              "co_authors": [
+                "Joseph Jing",
+                "Rohit Bathija",
+                "Michelle Qi"
+              ],
+              "mentions_dbt": true,
+              "description": "How the Loblaw Digital analytics engineering team used LLMs to draft dbt model documentation.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Part 2: Data as a Service: Simplifying Real-Time Data Ingestion and Delivery",
+              "date": "2023-09-12",
+              "url": "https://medium.com/loblaw-digital/part-2-data-as-a-service-simplifying-real-time-data-ingestion-and-delivery-ef7cb22e144d",
+              "content_id": "loblaw-digital-mediumpart-2-data-as-a-service-simplifying-re",
+              "co_authors": [
+                "Colin Barber",
+                "Vincent Zi"
+              ],
+              "mentions_dbt": false,
+              "description": "Loblaw Digital's Data as a Service framework for real-time ingestion into BigQuery.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Part 3: Harnessing the Power of Real-Time Data Delivery with the Product Domain Aggregator and Order Aggregation Service",
+              "date": "2023-10-27",
+              "url": "https://medium.com/loblaw-digital/part-3-harnessing-the-power-of-real-time-data-delivery-with-the-product-domain-aggregator-and-bf1c264a42ff",
+              "content_id": "loblaw-digital-mediumpart-3-harnessing-the-power-of-realtime",
+              "co_authors": [
+                "Colin Barber",
+                "Vincent Zi"
+              ],
+              "mentions_dbt": false,
+              "description": "Real-time product and order aggregation services built on BigQuery, Bigtable, Dataflow and Pub/Sub.",
+              "topics": [
+                "data engineering",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5",
+              "note": "blog: Leveraging LLMs to generate AI driven dbt documentation"
+            },
+            {
+              "url": "https://medium.com/loblaw-digital/part-2-data-as-a-service-simplifying-real-time-data-ingestion-and-delivery-ef7cb22e144d",
+              "note": "blog: Part 2: Data as a Service: Simplifying Real-Time Data Ingestion and Delivery"
+            },
+            {
+              "url": "https://medium.com/loblaw-digital/part-3-harnessing-the-power-of-real-time-data-delivery-with-the-product-domain-aggregator-and-bf1c264a42ff",
+              "note": "blog: Part 3: Harnessing the Power of Real-Time Data Delivery with the Product Domain Aggregator and Order Aggregation Service"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "How one data org runs dbt for analytics next to a real-time Data as a Service platform",
+          "past_chapter_talks": [],
+          "notes": "Co-author on both the dbt documentation post and the Data as a Service series, so likely a lead or manager across the data team."
+        },
+        {
+          "id": "colin-barber",
+          "name": "Colin Barber",
+          "pronouns": null,
+          "title": "Data engineering, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Part 2: Data as a Service: Simplifying Real-Time Data Ingestion and Delivery",
+              "date": "2023-09-12",
+              "url": "https://medium.com/loblaw-digital/part-2-data-as-a-service-simplifying-real-time-data-ingestion-and-delivery-ef7cb22e144d",
+              "content_id": "loblaw-digital-mediumpart-2-data-as-a-service-simplifying-re",
+              "co_authors": [
+                "Vincent Zi",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": false,
+              "description": "Loblaw Digital's Data as a Service framework for real-time ingestion into BigQuery.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Part 3: Harnessing the Power of Real-Time Data Delivery with the Product Domain Aggregator and Order Aggregation Service",
+              "date": "2023-10-27",
+              "url": "https://medium.com/loblaw-digital/part-3-harnessing-the-power-of-real-time-data-delivery-with-the-product-domain-aggregator-and-bf1c264a42ff",
+              "content_id": "loblaw-digital-mediumpart-3-harnessing-the-power-of-realtime",
+              "co_authors": [
+                "Vincent Zi",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": false,
+              "description": "Real-time product and order aggregation services built on BigQuery, Bigtable, Dataflow and Pub/Sub.",
+              "topics": [
+                "data engineering",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/part-2-data-as-a-service-simplifying-real-time-data-ingestion-and-delivery-ef7cb22e144d",
+              "note": "blog: Part 2: Data as a Service: Simplifying Real-Time Data Ingestion and Delivery"
+            },
+            {
+              "url": "https://medium.com/loblaw-digital/part-3-harnessing-the-power-of-real-time-data-delivery-with-the-product-domain-aggregator-and-bf1c264a42ff",
+              "note": "blog: Part 3: Harnessing the Power of Real-Time Data Delivery with the Product Domain Aggregator and Order Aggregation Service"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Real-time data products on BigQuery and how they feed the dbt layer",
+          "past_chapter_talks": [],
+          "notes": "Lead author of the three-part Data as a Service series."
+        },
+        {
+          "id": "vincent-zi",
+          "name": "Vincent Zi",
+          "pronouns": null,
+          "title": "Data engineering, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Part 2: Data as a Service: Simplifying Real-Time Data Ingestion and Delivery",
+              "date": "2023-09-12",
+              "url": "https://medium.com/loblaw-digital/part-2-data-as-a-service-simplifying-real-time-data-ingestion-and-delivery-ef7cb22e144d",
+              "content_id": "loblaw-digital-mediumpart-2-data-as-a-service-simplifying-re",
+              "co_authors": [
+                "Colin Barber",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": false,
+              "description": "Loblaw Digital's Data as a Service framework for real-time ingestion into BigQuery.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Part 3: Harnessing the Power of Real-Time Data Delivery with the Product Domain Aggregator and Order Aggregation Service",
+              "date": "2023-10-27",
+              "url": "https://medium.com/loblaw-digital/part-3-harnessing-the-power-of-real-time-data-delivery-with-the-product-domain-aggregator-and-bf1c264a42ff",
+              "content_id": "loblaw-digital-mediumpart-3-harnessing-the-power-of-realtime",
+              "co_authors": [
+                "Colin Barber",
+                "Indrani Gorti"
+              ],
+              "mentions_dbt": false,
+              "description": "Real-time product and order aggregation services built on BigQuery, Bigtable, Dataflow and Pub/Sub.",
+              "topics": [
+                "data engineering",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/part-2-data-as-a-service-simplifying-real-time-data-ingestion-and-delivery-ef7cb22e144d",
+              "note": "blog: Part 2: Data as a Service: Simplifying Real-Time Data Ingestion and Delivery"
+            },
+            {
+              "url": "https://medium.com/loblaw-digital/part-3-harnessing-the-power-of-real-time-data-delivery-with-the-product-domain-aggregator-and-bf1c264a42ff",
+              "note": "blog: Part 3: Harnessing the Power of Real-Time Data Delivery with the Product Domain Aggregator and Order Aggregation Service"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Dead-letter handling and schema evolution in real-time ingestion pipelines",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "samara-xiang",
+          "name": "Samara Xiang",
+          "pronouns": null,
+          "title": "ML / experimentation, Loblaw Digital (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Loblaw Digital (Medium)",
+              "title": "Unlocking Experimentation with Helios Recommendation Engine",
+              "date": "2024-10-22",
+              "url": "https://medium.com/loblaw-digital/unlocking-experimentation-with-helios-recommendation-engine-ff91d697b943",
+              "content_id": "loblaw-digital-mediumunlocking-experimentation-with-helios-r",
+              "co_authors": [
+                "Yuhan Qin",
+                "Mefta Sadat",
+                "JC Seok",
+                "Alex Yip"
+              ],
+              "mentions_dbt": false,
+              "description": "A/B testing built into Loblaw Digital's in-house recommendation engine, using BigQuery.",
+              "topics": [
+                "domain-specific use cases",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/loblaw-digital/unlocking-experimentation-with-helios-recommendation-engine-ff91d697b943",
+              "note": "blog: Unlocking Experimentation with Helios Recommendation Engine"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Building an A/B testing layer on a recommendation engine, and the data model behind it",
+          "past_chapter_talks": [],
+          "notes": "Topic is MLOps/experimentation rather than dbt; the 2024 date lifts her to tier 1 by rule, so check fit before outreach."
+        }
+      ],
       "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
     },
     {
@@ -2684,7 +3284,62 @@
         }
       ],
       "other_evidence": [],
-      "people": [],
+      "people": [
+        {
+          "id": "olga-tsubiks",
+          "name": "Olga Tsubiks",
+          "pronouns": null,
+          "title": "Director, Data & AI, RBC",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Generative AI Summit Toronto (AI Accelerator Institute)",
+              "title": "Speaker (session title not listed)",
+              "date": "2025-11-20",
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "content_id": "generative-ai-summit-toronto-ai-accelerator-institutespeaker",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker at the Toronto Generative AI Summit.",
+              "topics": [
+                "genai & llm",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "note": "talk: Speaker (session title not listed)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Data and AI delivery inside a big Canadian bank",
+          "past_chapter_talks": [],
+          "notes": "AI-summit speaker; data leadership role, not a dbt practitioner on record."
+        }
+      ],
       "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
     },
     {
@@ -2732,7 +3387,8 @@
       "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "Snowflake"
       ],
       "job_postings": [
         {
@@ -2750,7 +3406,62 @@
         }
       ],
       "other_evidence": [],
-      "people": [],
+      "people": [
+        {
+          "id": "alvira-narshidani",
+          "name": "Alvira Narshidani",
+          "pronouns": null,
+          "title": "Senior Product Solutions Analyst, Scotia Global Asset Management",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group: Ask an Expert & Social",
+              "title": "BI & AI - Storytelling with Data expert table",
+              "date": "2026-07-21",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/",
+              "content_id": "snowflake-toronto-user-group-ask-an-expert-socialbi-ai-story",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted the table on connecting Snowflake to BI tools and using AI to surface insights.",
+              "topics": [
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/",
+              "note": "talk: BI & AI - Storytelling with Data expert table"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "From Snowflake to the slide: storytelling with BI and AI in asset management",
+          "past_chapter_talks": [],
+          "notes": "One of the few non-vendor practitioners on recent Toronto Snowflake agendas."
+        }
+      ],
       "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
     },
     {
@@ -3276,7 +3987,9 @@
       "type": "independent",
       "watchlist": false,
       "excluded_from_outreach": false,
-      "cities": [],
+      "cities": [
+        "Toronto"
+      ],
       "local_presence": "not_confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
@@ -3448,15 +4161,15 @@
           "name": "John Miner",
           "pronouns": null,
           "title": null,
-          "city": null,
-          "based_in_region": null,
+          "city": "Providence, Rhode Island, United States",
+          "based_in_region": false,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -3487,6 +4200,10 @@
             {
               "url": "https://torontodpc.ca/",
               "note": "talk: Introduction to the data build tool (dbt)"
+            },
+            {
+              "url": "https://sessionize.com/john-miner/",
+              "note": "location (high): sessionize speaker profile, Senior Data Architect at Insight, location Providence, Rhode Island https://sessionize.com/john-miner/"
             }
           ],
           "confidence": "Low",
@@ -3494,7 +4211,147 @@
           "priority_tier": 3,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Virtual intro-to-dbt session for the Toronto Data Professionals Community. Location unverified, likely not local."
+          "notes": "Virtual intro-to-dbt session for the Toronto Data Professionals Community. Location unverified, likely not local. | location (high): sessionize speaker profile, Senior Data Architect at Insight, location Providence, Rhode Island https://sessionize.com/john-miner/"
+        },
+        {
+          "id": "alex-tomic",
+          "name": "Alex Tomic",
+          "pronouns": null,
+          "title": "Data Engineering Independent Contractor",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Apache Airflow Meetup (May 2025)",
+              "title": "Contending with Complex DAG Codebases - a Codemodding Approach",
+              "date": "2025-05-27",
+              "url": "https://www.meetup.com/toronto-apache-airflow-meetup/events/306791557/",
+              "content_id": "toronto-apache-airflow-meetup-may-2025contending-with-comple",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Using codemods to maintain and onboard large Airflow DAG codebases.",
+              "topics": [
+                "orchestration & ci/cd",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-apache-airflow-meetup/events/306791557/",
+              "note": "talk: Contending with Complex DAG Codebases - a Codemodding Approach"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Codemods for large pipeline codebases: refactoring hundreds of DAGs or dbt models automatically",
+          "past_chapter_talks": [],
+          "notes": "In-person talk at the Toronto Airflow meetup."
+        },
+        {
+          "id": "jennifer-klein",
+          "name": "Jennifer Klein",
+          "pronouns": null,
+          "title": "Senior Data Analyst and Analytics Engineer (employer not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://sa.linkedin.com/in/jen-klein"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "linkedin_search"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "An analyst's route into analytics engineering with dbt",
+          "past_chapter_talks": [],
+          "notes": "Search snippet: senior data analyst and analytics engineer, SQL and dbt, Greater Toronto Area experience. Employer not shown."
+        },
+        {
+          "id": "jenny-rieck",
+          "name": "Jenny Rieck",
+          "pronouns": null,
+          "title": "R-Ladies Toronto lightning-talk speaker",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto R-Ladies Lightning Talks",
+              "title": "Automating PowerPoint slide decks with the officeverse",
+              "date": "2024-04-02",
+              "url": "https://www.meetup.com/R-Ladies-Toronto/events/299959799/",
+              "content_id": "toronto-rladies-lightning-talksautomating-powerpoint-slide-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "5-minute lightning talk on automating slide decks in R.",
+              "topics": [
+                "business intelligence",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/R-Ladies-Toronto/events/299959799/",
+              "note": "talk: Automating PowerPoint slide decks with the officeverse"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Automating recurring reports end to end, from the model to the slide deck",
+          "past_chapter_talks": [],
+          "notes": "Employer not stated."
         }
       ],
       "notes": ""
@@ -3932,8 +4789,8 @@
           "name": "Daria Sukhareva",
           "pronouns": null,
           "title": "Creator, kWwhat",
-          "city": null,
-          "based_in_region": null,
+          "city": "Toronto, Ontario, Canada",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
@@ -3973,6 +4830,10 @@
             {
               "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
               "note": "talk: Grounding ChatBI with Dimensional Models, Semantic Models, and Rules"
+            },
+            {
+              "url": "https://public.tableau.com/app/profile/daria.sukhareva1853",
+              "note": "location (high): tableau public profile linked from kwwhat.com, organization kwwhat, address city Toronto, state Ontario https://public.tableau.com/app/profile/daria.sukhareva1853"
             }
           ],
           "confidence": "High",
@@ -3989,7 +4850,7 @@
               ]
             }
           ],
-          "notes": ""
+          "notes": "location (high): tableau public profile linked from kwwhat.com, organization kwwhat, address city Toronto, state Ontario https://public.tableau.com/app/profile/daria.sukhareva1853"
         }
       ],
       "notes": ""
@@ -4563,6 +5424,1831 @@
       ],
       "people": [],
       "notes": "Mar 2025 'Lead with Data' panel; speakers never published. No past events in the Meetup group."
+    },
+    {
+      "id": "select",
+      "name": "SELECT",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://c.select.dev/blog/proven-methods-for-optimizing-your-dbt-project-dbt-coalesce-2023",
+          "note": "Coalesce 2023 dbt optimisation talk."
+        }
+      ],
+      "people": [
+        {
+          "id": "ian-whitestone",
+          "name": "Ian Whitestone",
+          "pronouns": null,
+          "title": "Co-founder & CEO, SELECT",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Coalesce 2023",
+              "title": "Proven methods for optimizing your dbt project (with Niall Woodward)",
+              "date": "2023-10",
+              "url": "https://c.select.dev/blog/proven-methods-for-optimizing-your-dbt-project-dbt-coalesce-2023",
+              "content_id": "coalesce-2023proven-methods-for-optimizing-your-dbt-project",
+              "co_authors": [
+                "Niall Woodward"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt cost and performance optimisation on Snowflake: materialisations, orchestration, SQL tuning.",
+              "topics": [
+                "performance & scale",
+                "dbt best practices",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group: Ask an Expert & Social",
+              "title": "Cost & Governance expert table",
+              "date": "2026-07-21",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/",
+              "content_id": "snowflake-toronto-user-group-ask-an-expert-socialcost-govern",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Hosted the cost and governance table (warehouse sizing, resource monitors, Horizon) at the in-person Toronto user group.",
+              "topics": [
+                "performance & scale",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Data Council",
+              "title": "The Missing Manual: Everything You Need to Know About Snowflake Optimization",
+              "date": null,
+              "url": "https://www.datacouncil.ai/talks25/the-missing-manual-everything-you-need-to-know-about-snowflake-optimization",
+              "content_id": "data-councilthe-missing-manual-everything-you-need-to-know-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Snowflake optimisation talk.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "blog",
+              "event": "Shopify Data (Medium)",
+              "title": "How to Track State with Type 2 Dimensional Models",
+              "date": "2020-08-27",
+              "url": "https://medium.com/data-shopify/how-to-track-state-with-type-2-dimensional-models-c5881b8de553",
+              "content_id": "shopify-data-mediumhow-to-track-state-with-type-2-dimensiona",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Type 2 dimensions and dbt snapshots at Shopify.",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://c.select.dev/blog/proven-methods-for-optimizing-your-dbt-project-dbt-coalesce-2023",
+              "note": "talk: Proven methods for optimizing your dbt project (with Niall Woodward)"
+            },
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/",
+              "note": "talk: Cost & Governance expert table"
+            },
+            {
+              "url": "https://www.datacouncil.ai/talks25/the-missing-manual-everything-you-need-to-know-about-snowflake-optimization",
+              "note": "talk: The Missing Manual: Everything You Need to Know About Snowflake Optimization"
+            },
+            {
+              "url": "https://medium.com/data-shopify/how-to-track-state-with-type-2-dimensional-models-c5881b8de553",
+              "note": "blog: How to Track State with Type 2 Dimensional Models"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Cutting the Snowflake bill of a dbt project: the warehouse-sizing and model-materialisation changes that matter most",
+          "past_chapter_talks": [],
+          "notes": "Formerly led data science and engineering teams at Shopify and Capital One. Present in person at the Toronto Snowflake user group in July 2026."
+        }
+      ],
+      "notes": "Snowflake cost-management vendor; CEO active in the Toronto Snowflake user group."
+    },
+    {
+      "id": "create-music-group",
+      "name": "Create Music Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "peichi-chen",
+          "name": "Pei-Chi Chen",
+          "pronouns": null,
+          "title": "Lead Data Engineer, Create Music Group",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Apache Airflow Meetup (May 2025)",
+              "title": "Harmonizing Music Rights at Scale: Airflow for Ownership Resolution and Fair Royalties",
+              "date": "2025-05-27",
+              "url": "https://www.meetup.com/toronto-apache-airflow-meetup/events/306791557/",
+              "content_id": "toronto-apache-airflow-meetup-may-2025harmonizing-music-righ",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Airflow at Create Music Group for rights-ownership resolution and royalty data, plus worker-tuning lessons.",
+              "topics": [
+                "orchestration & ci/cd",
+                "domain-specific use cases",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-apache-airflow-meetup/events/306791557/",
+              "note": "talk: Harmonizing Music Rights at Scale: Airflow for Ownership Resolution and Fair Royalties"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Resolving music-rights ownership at scale: the data pipeline and the data model",
+          "past_chapter_talks": [],
+          "notes": "Spoke in person in Toronto; Create Music Group's Toronto presence not confirmed."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "astronomer",
+      "name": "Astronomer",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "constance-martineau",
+          "name": "Constance Martineau",
+          "pronouns": null,
+          "title": "Staff Product Manager, Astronomer",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Apache Airflow Meetup (May 2025)",
+              "title": "Unlocking the Future of Data Orchestration: Introducing Apache Airflow 3",
+              "date": "2025-05-27",
+              "url": "https://www.meetup.com/toronto-apache-airflow-meetup/events/306791557/",
+              "content_id": "toronto-apache-airflow-meetup-may-2025unlocking-the-future-o",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Airflow 3 features: DAG versioning, backfills, task isolation, remote execution.",
+              "topics": [
+                "orchestration & ci/cd",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-apache-airflow-meetup/events/306791557/",
+              "note": "talk: Unlocking the Future of Data Orchestration: Introducing Apache Airflow 3"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Running dbt with Airflow 3: asset-aware scheduling and backfills",
+          "past_chapter_talks": [],
+          "notes": "Vendor product manager; location not confirmed."
+        }
+      ],
+      "notes": "Runs the Toronto Apache Airflow Meetup."
+    },
+    {
+      "id": "fiveonefour",
+      "name": "FiveOneFour",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "ClickHouse"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nicolas-joseph",
+          "name": "Nicolas Joseph",
+          "pronouns": null,
+          "title": "Co-Founder & CTO, FiveOneFour",
+          "city": "Portland",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Data Engineering Meetup with ClickHouse",
+              "title": "Talk at the ClickHouse Toronto meetup (title not listed)",
+              "date": "2026",
+              "url": "https://luma.com/8p8unbnw",
+              "content_id": "toronto-data-engineering-meetup-with-clickhousetalk-at-the-c",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Speaker at the first ClickHouse Toronto meetup of 2026, Spaces Queen West.",
+              "topics": [
+                "data engineering",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/8p8unbnw",
+              "note": "talk: Talk at the ClickHouse Toronto meetup (title not listed)"
+            },
+            {
+              "url": "https://github.com/callicles",
+              "note": "location (high): github profile Nicolas Joseph, CTO co-founder @514-labs, location: Portland https://github.com/callicles"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Analytics backends as code: where an OLAP framework meets a dbt project",
+          "past_chapter_talks": [],
+          "notes": "Talk title not given on the event page. | location (high): github profile Nicolas Joseph, CTO co-founder @514-labs, location: Portland https://github.com/callicles"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "evidence",
+      "name": "Evidence",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Evidence",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "archie-sarre-wood",
+          "name": "Archie Sarre Wood",
+          "pronouns": null,
+          "title": "evidence.dev",
+          "city": "Toronto, ON",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Data Engineering Meetup with ClickHouse",
+              "title": "Talk at the ClickHouse Toronto meetup (title not listed)",
+              "date": "2026",
+              "url": "https://luma.com/8p8unbnw",
+              "content_id": "toronto-data-engineering-meetup-with-clickhousetalk-at-the-c",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Speaker for Evidence (BI-as-code) at the ClickHouse Toronto meetup.",
+              "topics": [
+                "business intelligence",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/8p8unbnw",
+              "note": "talk: Talk at the ClickHouse Toronto meetup (title not listed)"
+            },
+            {
+              "url": "https://github.com/archiewood",
+              "note": "location (high): github profile location: Toronto, ON https://github.com/archiewood"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "BI as code on top of a dbt project with Evidence",
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker; location unknown. | location (high): github profile location: Toronto, ON https://github.com/archiewood"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "geotab",
+      "name": "Geotab",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oakville",
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Kafka",
+        "Flink"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.meetup.com/toronto-kafka/events/316272838/",
+          "note": "Hosted the Sep 2026 Toronto Kafka/Flink meetup with two data-platform talks."
+        }
+      ],
+      "people": [
+        {
+          "id": "xiao-ma",
+          "name": "Xiao Ma",
+          "pronouns": null,
+          "title": "Lead Developer, Data Platform, Geotab",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Geotab x Kafka/Flink Meet Up",
+              "title": "Data platform talk (title not listed)",
+              "date": "2026-09-09",
+              "url": "https://www.meetup.com/toronto-kafka/events/316272838/",
+              "content_id": "geotab-x-kafkaflink-meet-updata-platform-talk-title-not-list",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on Geotab's data platform at the Toronto Kafka meetup.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-kafka/events/316272838/",
+              "note": "talk: Data platform talk (title not listed)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Building Geotab's real-time data platform, and where batch transformation still fits",
+          "past_chapter_talks": [],
+          "notes": "Listed as 'Xiao (Mark) Ma'."
+        },
+        {
+          "id": "wenyang-liu",
+          "name": "Wenyang Liu",
+          "pronouns": null,
+          "title": "Data Platform Architect, Data & Analytics, Geotab",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Geotab x Kafka/Flink Meet Up",
+              "title": "Data platform talk and real-time platforms panel",
+              "date": "2026-09-09",
+              "url": "https://www.meetup.com/toronto-kafka/events/316272838/",
+              "content_id": "geotab-x-kafkaflink-meet-updata-platform-talk-and-realtime-p",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk and panel on real-time data platform architecture at the Toronto Kafka meetup.",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-kafka/events/316272838/",
+              "note": "talk: Data platform talk and real-time platforms panel"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Architecture trade-offs on a telematics-scale data and analytics platform",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sanofi",
+      "name": "Sanofi",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jasper-lam",
+          "name": "Jasper Lam",
+          "pronouns": null,
+          "title": "Sanofi (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group September 2025",
+              "title": "Leveraging Cortex to Tackle Challenges in Portfolio and Product Management",
+              "date": "2025-09-23",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/311062933/",
+              "content_id": "snowflake-toronto-user-group-september-2025leveraging-cortex",
+              "co_authors": [
+                "Aaditya Suri"
+              ],
+              "mentions_dbt": false,
+              "description": "Sanofi's use of Snowflake Cortex for portfolio and product-management problems.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/311062933/",
+              "note": "talk: Leveraging Cortex to Tackle Challenges in Portfolio and Product Management"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Using Snowflake Cortex for portfolio and product-management analytics",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "aaditya-suri",
+          "name": "Aaditya Suri",
+          "pronouns": null,
+          "title": "Sanofi (title not stated)",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group September 2025",
+              "title": "Leveraging Cortex to Tackle Challenges in Portfolio and Product Management",
+              "date": "2025-09-23",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/311062933/",
+              "content_id": "snowflake-toronto-user-group-september-2025leveraging-cortex",
+              "co_authors": [
+                "Jasper Lam"
+              ],
+              "mentions_dbt": false,
+              "description": "Sanofi's use of Snowflake Cortex for portfolio and product-management problems.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/311062933/",
+              "note": "talk: Leveraging Cortex to Tackle Challenges in Portfolio and Product Management"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Using Snowflake Cortex for portfolio and product-management analytics",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anand-vardhan-mathur",
+          "name": "Anand Vardhan Mathur",
+          "pronouns": null,
+          "title": "Solution Architect, Snowflake Canada",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group April 2026",
+              "title": "Snowflake Interactive Tables and Interactive Warehouses",
+              "date": "2026-04-21",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/313752064/",
+              "content_id": "snowflake-toronto-user-group-april-2026snowflake-interactive",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Technical demo of interactive tables and warehouses.",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group: Ask an Expert & Social",
+              "title": "AI Coding & Data Engineering expert table",
+              "date": "2026-07-21",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/",
+              "content_id": "snowflake-toronto-user-group-ask-an-expert-socialai-coding-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Expert table on AI coding tools for data engineering.",
+              "topics": [
+                "genai & llm",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/313752064/",
+              "note": "talk: Snowflake Interactive Tables and Interactive Warehouses"
+            },
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/",
+              "note": "talk: AI Coding & Data Engineering expert table"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Interactive tables and warehouses for serving dbt marts",
+          "past_chapter_talks": [],
+          "notes": "Vendor staff."
+        },
+        {
+          "id": "pradeep-bandaru",
+          "name": "Pradeep Bandaru",
+          "pronouns": null,
+          "title": "Sr Solutions Architect, Snowflake Canada",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group April 2026",
+              "title": "Demo of Snowflake's new Infrastructure as Code DCM tool",
+              "date": "2026-04-21",
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/313752064/",
+              "content_id": "snowflake-toronto-user-group-april-2026demo-of-snowflakes-ne",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Demo of Snowflake's infrastructure-as-code DCM tool.",
+              "topics": [
+                "orchestration & ci/cd",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-usergroup-toronto/events/313752064/",
+              "note": "talk: Demo of Snowflake's new Infrastructure as Code DCM tool"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Infrastructure as code for Snowflake next to a dbt project",
+          "past_chapter_talks": [],
+          "notes": "Vendor staff."
+        }
+      ],
+      "notes": "Snowflake Canada solution architects speak at most Toronto user-group events."
+    },
+    {
+      "id": "cibc",
+      "name": "CIBC",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "walid-saleh",
+          "name": "Walid Saleh",
+          "pronouns": null,
+          "title": "Head of Analytics and Data Enablement, CIBC",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Personalization in Retail Banking",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025personalization-in",
+              "co_authors": [
+                "Ritika Dhar",
+                "Lisa Hsieh",
+                "Gurpreet Sidhu"
+              ],
+              "mentions_dbt": false,
+              "description": "CIBC marketing-data and personalisation session with Deloitte.",
+              "topics": [
+                "domain-specific use cases",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Personalization in Retail Banking"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Enabling analytics across a big bank: the platform and the operating model",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        },
+        {
+          "id": "ritika-dhar",
+          "name": "Ritika Dhar",
+          "pronouns": null,
+          "title": "Sr Dir Marketing Data and Advanced Analytics, CIBC",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Personalization in Retail Banking",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025personalization-in",
+              "co_authors": [
+                "Walid Saleh",
+                "Lisa Hsieh"
+              ],
+              "mentions_dbt": false,
+              "description": "CIBC marketing-data and personalisation session.",
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Personalization in Retail Banking"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Marketing data products for personalisation in retail banking",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        },
+        {
+          "id": "lisa-hsieh",
+          "name": "Lisa Hsieh",
+          "pronouns": null,
+          "title": "Sr. Director Marketing Modernization, CIBC",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Personalization in Retail Banking",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025personalization-in",
+              "co_authors": [
+                "Walid Saleh",
+                "Ritika Dhar"
+              ],
+              "mentions_dbt": false,
+              "description": "CIBC marketing modernisation and personalisation session.",
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Personalization in Retail Banking"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Modernising a bank's marketing data stack",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        },
+        {
+          "id": "ben-vinzant",
+          "name": "Ben Vinzant",
+          "pronouns": null,
+          "title": "Chief Data & Analytics Officer Personal & Business Banking, CIBC",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Financial Services Industry forum",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025financial-services",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Financial services panel with Manulife, Intact and Databricks.",
+              "topics": [
+                "industry trends",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Financial Services Industry forum"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Panel guest: how bank data teams are organised for AI",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "manulife",
+      "name": "Manulife",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "archana-kr",
+          "name": "Archana KR",
+          "pronouns": null,
+          "title": "Director Data Platform Engineering, Manulife",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Financial Services Industry forum",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025financial-services",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Financial services panel.",
+              "topics": [
+                "data warehouse & platforms",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Financial Services Industry forum"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Running an insurer's data platform: governance and cost at scale",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "intact-financial-corporation",
+      "name": "Intact Financial Corporation",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "upal-hossain",
+          "name": "Upal Hossain",
+          "pronouns": null,
+          "title": "VP Data and AI, Intact Financial Corporation",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Financial Services Industry forum",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025financial-services",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Financial services panel.",
+              "topics": [
+                "industry trends",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Financial Services Industry forum"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Panel guest: data and AI leadership in insurance",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "apotex",
+      "name": "Apotex",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "trevor-dell",
+          "name": "Trevor Dell",
+          "pronouns": null,
+          "title": "Senior Director Data & Analytics, Apotex",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "A Practical Roadmap to AI Readiness: Apotex's Story of Transformation",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025a-practical-roadma",
+              "co_authors": [
+                "Scott Carr"
+              ],
+              "mentions_dbt": false,
+              "description": "Apotex's data and AI readiness programme, with Compass Data + AI.",
+              "topics": [
+                "data governance",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: A Practical Roadmap to AI Readiness: Apotex's Story of Transformation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "AI readiness in pharma: the data foundation work that came first",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "compass-data-ai",
+      "name": "Compass Data + AI",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "scott-carr",
+          "name": "Scott Carr",
+          "pronouns": null,
+          "title": "Managing Partner, Compass Data + AI",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "A Practical Roadmap to AI Readiness: Apotex's Story of Transformation",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025a-practical-roadma",
+              "co_authors": [
+                "Trevor Dell"
+              ],
+              "mentions_dbt": false,
+              "description": "Consultancy partner on Apotex's data and AI transformation.",
+              "topics": [
+                "data governance",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: A Practical Roadmap to AI Readiness: Apotex's Story of Transformation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Client data-foundation roadmaps, co-presented with the client",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "canadian-tire-corporation",
+      "name": "Canadian Tire Corporation",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "milena-kumurdjieva",
+          "name": "Milena Kumurdjieva",
+          "pronouns": null,
+          "title": "AVP Applied AI and Automation, Canadian Tire Corporation",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks Data + AI World Tour Toronto 2025",
+              "title": "Real-World Customer Success with Databricks",
+              "date": "2025-10-29",
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "content_id": "databricks-data-ai-world-tour-toronto-2025realworld-customer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Customer panel on Databricks use at Canadian Tire.",
+              "topics": [
+                "domain-specific use cases",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+              "note": "talk: Real-World Customer Success with Databricks"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Applied AI in Canadian retail and the data it depends on",
+          "past_chapter_talks": [],
+          "notes": "Senior leader on a vendor conference agenda; better as a panel guest or host than a technical talk."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "td-bank",
+      "name": "TD Bank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "attila-barta",
+          "name": "Attila Barta",
+          "pronouns": null,
+          "title": "Chief Architect, AI Platform & Enterprise Data Platform, TD",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Generative AI Summit Toronto (AI Accelerator Institute)",
+              "title": "Speaker (session title not listed)",
+              "date": "2025-11-20",
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "content_id": "generative-ai-summit-toronto-ai-accelerator-institutespeaker",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker at the Toronto Generative AI Summit.",
+              "topics": [
+                "data warehouse & platforms",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "note": "talk: Speaker (session title not listed)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Enterprise data platform architecture for AI at TD",
+          "past_chapter_talks": [],
+          "notes": "AI-summit speaker; data leadership role, not a dbt practitioner on record."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "interac",
+      "name": "Interac",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rugveda-gawade",
+          "name": "Rugveda Gawade",
+          "pronouns": null,
+          "title": "Director, Lead Data & AI Strategy, Interac",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Generative AI Summit Toronto (AI Accelerator Institute)",
+              "title": "Speaker (session title not listed)",
+              "date": "2025-11-20",
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "content_id": "generative-ai-summit-toronto-ai-accelerator-institutespeaker",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed speaker at the Toronto Generative AI Summit.",
+              "topics": [
+                "industry trends",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+              "note": "talk: Speaker (session title not listed)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Data and AI strategy at a payments network",
+          "past_chapter_talks": [],
+          "notes": "AI-summit speaker; data leadership role, not a dbt practitioner on record."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "granum",
+      "name": "Granum",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hubert-chan",
+          "name": "Hubert Chan",
+          "pronouns": null,
+          "title": "Principal Data & AI Architect, Granum",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Migrating a SaaS data platform to Snowflake and dbt",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile (huberthchan) gives Toronto and lists Snowflake, dbt and Databricks; personal site hubert.pro mentions AWS re:Invent PeerTalk Expert and Snowflake Squad, but no dated talk was found."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "pyladies-toronto",
+      "name": "PyLadies Toronto",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jill-cates",
+          "name": "Jill Cates",
+          "pronouns": null,
+          "title": "Organiser, PyLadies Toronto",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Toronto",
+              "title": "Organiser of PyLadies Toronto",
+              "date": "2026",
+              "url": "https://www.meetup.com/PyLadies-Toronto/",
+              "content_id": "pyladies-torontoorganiser-of-pyladies-toronto",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed organiser of the Meetup group, which held in-person lightning talks in April 2026, including one on the City of Toronto collisions data pipeline.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/PyLadies-Toronto/",
+              "note": "organiser: Organiser of PyLadies Toronto"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Route to PyLadies Toronto speakers; the group restarted in-person lightning talks in April 2026",
+          "past_chapter_talks": [],
+          "notes": "Ask about the April 2026 lightning-talk speakers (City of Toronto collisions pipeline on Airflow; a move into analytics and BI)."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "aws-user-group-women-in-tech-ontario",
+      "name": "AWS User Group Women in Tech Ontario",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Mississauga"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "vijayanirmala-gopal",
+          "name": "Vijayanirmala Gopal",
+          "pronouns": null,
+          "title": "Organiser, AWS User Group Women in Tech Ontario",
+          "city": "Mississauga",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "AWS User Group Women in Tech Ontario",
+              "title": "Organiser of AWS User Group Women in Tech Ontario",
+              "date": "2026",
+              "url": "https://www.meetup.com/aws-women-in-tech-user-group-ontario/",
+              "content_id": "aws-user-group-women-in-tech-ontarioorganiser-of-aws-user-gr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Organiser of the group; 2026 talks included multi-tenant data ingestion with S3 Tables.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/aws-women-in-tech-user-group-ontario/",
+              "note": "organiser: Organiser of AWS User Group Women in Tech Ontario"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Route to women speakers in Ontario cloud data engineering",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
     }
   ],
   "sources": {
@@ -4658,6 +7344,90 @@
         "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
         "yielded": true,
         "note": "70 ads mention dbt"
+      },
+      {
+        "name": "Toronto Snowflake User Group (Meetup gql2)",
+        "url": "https://www.meetup.com/snowflake-usergroup-toronto/",
+        "yielded": true,
+        "note": "11 events; Apr 2026, Jul 2026 expert tables and Sep 2025 speakers added."
+      },
+      {
+        "name": "Toronto Apache Airflow Meetup (Meetup gql2)",
+        "url": "https://www.meetup.com/toronto-apache-airflow-meetup/",
+        "yielded": true,
+        "note": "May 2025 in-person event: 3 speakers. Others are virtual town halls."
+      },
+      {
+        "name": "Toronto Apache Kafka Ecosystem Meetup (Meetup gql2)",
+        "url": "https://www.meetup.com/toronto-kafka/",
+        "yielded": true,
+        "note": "Sep 2026 Geotab data-platform talks."
+      },
+      {
+        "name": "Toronto Data Engineering Meetup with ClickHouse (Luma)",
+        "url": "https://luma.com/8p8unbnw",
+        "yielded": true,
+        "note": "2026 speakers from FiveOneFour and Evidence."
+      },
+      {
+        "name": "Databricks Data + AI World Tour Toronto 2025",
+        "url": "https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog",
+        "yielded": true,
+        "note": "Customer speakers from CIBC, Manulife, Intact, Apotex, Canadian Tire; mostly leaders."
+      },
+      {
+        "name": "Generative AI Summit Toronto speakers",
+        "url": "https://world.aiacceleratorinstitute.com/location/toronto/speakers",
+        "yielded": true,
+        "note": "Data leaders from Wealthsimple, RBC, TD, Interac; AI-focused."
+      },
+      {
+        "name": "Loblaw Digital Medium (rss2json)",
+        "url": "https://medium.com/loblaw-digital",
+        "yielded": true,
+        "note": "dbt + LLM documentation post and Data as a Service series; 7 authors."
+      },
+      {
+        "name": "Shopify Data Medium and shopify.engineering atom feed",
+        "url": "https://medium.com/data-shopify",
+        "yielded": true,
+        "note": "Only 2020 dbt posts (Ian Whitestone; Michelle Ark, now dbt Labs)."
+      },
+      {
+        "name": "Wealthsimple and Faire Medium feeds",
+        "url": "https://medium.com/wealthsimple",
+        "yielded": false,
+        "note": "No data-modelling posts in the latest 10."
+      },
+      {
+        "name": "Toronto Data Professionals Community (Meetup gql2)",
+        "url": "https://www.meetup.com/toronto-data-professionals-meetup-group/",
+        "yielded": false,
+        "note": "Feb 2026 intro-to-dbt talk is John Miner (already listed); Day of Data 2026 agenda not published."
+      },
+      {
+        "name": "PyLadies / R-Ladies / AWS Women in Tech Ontario (Meetup gql2)",
+        "url": "https://www.meetup.com/PyLadies-Toronto/",
+        "yielded": true,
+        "note": "Organisers as connectors; one R-Ladies lightning talk."
+      },
+      {
+        "name": "Waterloo Data Science and Data Engineering, Toronto Data Engineering and Cloud, ODSC, Analytics.Club, Toronto AI groups (Meetup gql2)",
+        "url": "https://www.meetup.com/waterloo-data-science/",
+        "yielded": false,
+        "note": "No dbt or analytics-engineering talks since 2024."
+      },
+      {
+        "name": "Snowflake World Tour Toronto 2026 speakers",
+        "url": "https://www.snowflake.com/en/world-tour/toronto/speakers/",
+        "yielded": false,
+        "note": "JS-rendered; no names."
+      },
+      {
+        "name": "dev.to tag dbt / GitHub user search by location",
+        "url": "https://dev.to/t/dbt",
+        "yielded": false,
+        "note": "No Toronto dbt writers; GitHub gave only Hubert Chan."
       }
     ]
   },
@@ -4667,7 +7437,9 @@
       "date": "2025-09-17",
       "venue": "Village by the Grange Food Court, 105 McCaul Street, Toronto, ON",
       "url": "https://www.meetup.com/toronto-dbt-meetup/events/304473218/",
-      "organisers": [],
+      "organisers": [
+        "Eddy Z"
+      ],
       "attendees": 26,
       "talks": []
     },
@@ -4676,7 +7448,10 @@
       "date": "2025-11-25",
       "venue": "New Stadium, 83 Walnut Avenue, Toronto, ON",
       "url": "https://www.meetup.com/toronto-dbt-meetup/events/311733887/",
-      "organisers": [],
+      "organisers": [
+        "Eddy Z",
+        "Sabrina"
+      ],
       "attendees": 41,
       "talks": [
         {
@@ -4704,7 +7479,10 @@
       "date": "2026-05-29",
       "venue": "OneEleven, 325 Front Street W, Suite 4, Toronto, ON",
       "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
-      "organisers": [],
+      "organisers": [
+        "Daria S",
+        "Moiz"
+      ],
       "attendees": 85,
       "talks": [
         {
@@ -4732,7 +7510,11 @@
       "date": "2026-08-19",
       "venue": "Rootly, Toronto",
       "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
-      "organisers": [],
+      "organisers": [
+        "Daria S.",
+        "pratiksha.s.sathe",
+        "Moiz"
+      ],
       "attendees": 79,
       "talks": [
         {
@@ -4792,6 +7574,21 @@
       "name": "WiDS Toronto @ Dataiku",
       "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
       "note": "Only ambassadors named; panelists not listed."
+    },
+    {
+      "name": "Toronto Apache Kafka Ecosystem Meetup",
+      "url": "https://www.meetup.com/toronto-kafka/",
+      "note": "Confluent-run; hosts company data-platform nights (Geotab)."
+    },
+    {
+      "name": "PyLadies Toronto",
+      "url": "https://www.meetup.com/PyLadies-Toronto/",
+      "note": "Back in person from April 2026 with a lightning-talk call for speakers."
+    },
+    {
+      "name": "AWS User Group Women in Tech Ontario",
+      "url": "https://www.meetup.com/aws-women-in-tech-user-group-ontario/",
+      "note": "Mississauga-based; data-ingestion talks in 2026."
     }
   ]
 }

@@ -1,17 +1,23 @@
 {
   "metadata": {
     "title": "Düsseldorf dbt companies and people for the Düsseldorf dbt Meetup",
-    "generated_at": "2026-09-24",
+    "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Düsseldorf companies using dbt, and people who could speak at or attend the Düsseldorf dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 3,
     "region": "Düsseldorf (Rhein-Ruhr dbt Meetup)",
     "method": [
       "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/rhein-ruhr-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
       "Lesson: web_fetch of meetup.com event pages returns full agendas (with speakers' LinkedIn links) even when the browser is unavailable. Go straight to /events/<id>/ URLs listed on the group page.",
       "Lesson: In Rhein-Ruhr the data-platform speaker pool sits mainly in the Databricks user group (Deichmann, Handelsblatt, BarmeniaGothaer, FIEGE), not in dbt content. Big corporates (METRO, Henkel, Vodafone, REWE) publish nothing on dbt.",
-      "Lesson: Women-in-data groups in NRW now mostly run discussion-format evenings without named speakers. Recap blog posts on womeninbigdata.org name speakers more reliably than the Meetup pages do."
+      "Lesson: Women-in-data groups in NRW now mostly run discussion-format evenings without named speakers. Recap blog posts on womeninbigdata.org name speakers more reliably than the Meetup pages do.",
+      "v2 (2026-10-01): v2 extension (2026-10-01): one sub-agent; ~20 web searches (low yield) plus direct fetches: meetup.com gql2 group search near Rhein-Ruhr and past events of 20 data groups, Sessionize schedules of Data Saturday Rheinland 2025/2026, adesso and ORAYLIS blog feeds with author boxes, the b.telligent blog, and GitHub user search by NRW location for dbt repos.",
+      "Lesson: meetup.com gql2 works from plain curl (no browser): groupSearch(lat, lon, radius) lists local groups and groupByUrlname → events(status: PAST) returns full descriptions with speaker names.",
+      "Lesson: Data Saturday pages embed Sessionize; the /api/v2/<id>/view/Sessions and /view/Speakers embeds parse into speaker names and taglines.",
+      "Lesson: consultancy blog RSS feeds (adesso, ORAYLIS) plus each post's author box are the best source of first-time speakers in NRW; they name the author and role, but rarely the office.",
+      "Lesson: Medium (feeds and rss2json), dev.to and GitHub search were rate-limited from this session; web search returned mostly job ads for NRW dbt queries.",
+      "v2 (2026-10-01): location pass. 19 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (3 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 32 people are still unknown."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -49,49 +55,52 @@
     "caveats": [
       "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
       "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
-      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+      "Titles, employers and cities come from public pages and listings; most consultancy authors do not state their office, so based_in_region is often unknown. Verify before outreach.",
+      "LinkedIn: 9 of 69 people have a profile url, taken word for word from search results. 60 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
     ],
     "counts": {
-      "companies": 49,
-      "people": 23,
+      "companies": 64,
+      "people": 69,
       "job_postings": 49,
       "companies_with_job_postings": 24,
-      "speaker_evidence_items": 25,
-      "unique_content_items": 23,
-      "people_with_linkedin": 7,
+      "speaker_evidence_items": 95,
+      "unique_content_items": 89,
+      "people_with_linkedin": 9,
       "people_who_spoke_at_this_chapter": 5,
       "internal_vinted": 0,
       "level": {
-        "working": 20,
-        "leadership": 3
+        "working": 61,
+        "leadership": 8
       },
       "speaker_potential": {
-        "high": 5,
-        "medium": 18
+        "high": 36,
+        "medium": 33
       },
       "attendee_potential": {
-        "high": 2,
-        "medium": 21
+        "high": 5,
+        "medium": 58,
+        "low": 6
       },
       "priority_tier": {
-        "1": 1,
-        "connector": 8,
-        "2": 9,
-        "3": 5
+        "1": 21,
+        "connector": 11,
+        "2": 24,
+        "3": 13
       },
-      "watchlist_companies": 17,
+      "watchlist_companies": 28,
       "past_meetups": 2,
       "lead_type": {
-        "proven_speaker": 16,
+        "proven_speaker": 43,
         "featured": 6,
-        "emerging_voice": 1
+        "emerging_voice": 20
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
-        "conference_or_meetup_agenda": 17,
+        "conference_or_meetup_agenda": 44,
         "chapter_meetup_history": 5,
-        "company_blog_scan": 2,
-        "women_in_data_community": 5
+        "company_blog_scan": 18,
+        "women_in_data_community": 5,
+        "other": 3
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -124,24 +133,31 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 8,
-      "data engineering": 5,
-      "data quality & testing": 3,
-      "team & org design": 3,
-      "data warehouse & platforms": 3,
-      "genai & llm": 3,
-      "dbt best practices": 2,
-      "business intelligence": 2,
-      "project structure": 2,
-      "developer workflow": 2,
-      "domain-specific use cases": 2,
-      "data governance": 2,
-      "dbt migration & adoption": 1,
+      "data warehouse & platforms": 29,
+      "genai & llm": 17,
+      "team & org design": 16,
+      "business intelligence": 13,
+      "community": 11,
+      "data engineering": 10,
+      "data modeling": 9,
+      "data quality & testing": 8,
+      "data governance": 7,
+      "domain-specific use cases": 6,
+      "dbt best practices": 4,
+      "developer workflow": 4,
+      "data mesh": 4,
+      "performance & scale": 4,
+      "tools & ecosystem": 4,
+      "project structure": 3,
+      "semantic layer": 3,
+      "dbt fundamentals": 3,
+      "dbt migration & adoption": 2,
+      "modern data stack": 2,
+      "orchestration & ci/cd": 2,
+      "industry trends": 2,
       "dbt product updates": 1,
-      "data modeling": 1,
-      "tools & ecosystem": 1,
-      "orchestration & ci/cd": 1,
-      "performance & scale": 1
+      "analytics engineering": 1,
+      "career development": 1
     }
   },
   "companies": [
@@ -165,7 +181,21 @@
         "Tableau",
         "Looker"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Data Engineer (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-w-m-d-at-taod-consulting-gmbh-4462155346",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "taod Consulting GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, Databricks, Fabric & dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-02",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "other",
@@ -361,7 +391,7 @@
           "notes": "connector. taod runs a regular Cologne event programme: Data Lounge & Learn, BI & BBQ (8 Sep 2026) and Data & AI After Hours (11 Jun 2026, at Microsoft Köln)."
         }
       ],
-      "notes": "Cologne HQ (Oskar-Jäger-Str. 173). Describes itself as a long-standing German dbt Labs partner. Hosted the May 2025 chapter event and runs its own Cologne event series, including at Microsoft Köln. Most obvious repeat co-host."
+      "notes": "Cologne HQ (Oskar-Jäger-Str. 173). Describes itself as a long-standing German dbt Labs partner. Hosted the May 2025 chapter event and runs its own Cologne event series, including at Microsoft Köln. Most obvious repeat co-host. | Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24) | merged duplicate record 'taod Consulting GmbH'"
     },
     {
       "id": "dbt-labs",
@@ -389,8 +419,8 @@
           "name": "Stephan Durry",
           "pronouns": null,
           "title": "dbt Labs",
-          "city": null,
-          "based_in_region": null,
+          "city": "Berlin",
+          "based_in_region": false,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/sdurry/"
@@ -399,7 +429,7 @@
           "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -470,6 +500,10 @@
             {
               "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
               "note": "organiser: Cologne dbt Meetup (co-organiser) + talk 'Sleep better with data testing'"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "location (high): meetup member profile city \"Berlin\" as host of the event https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/"
             }
           ],
           "confidence": "High",
@@ -492,15 +526,15 @@
               ]
             }
           ],
-          "notes": "connector. dbt Labs co-organiser of both Rhein-Ruhr chapter events and a speaker at both. Vendor staff, so best used as an organiser rather than a headline speaker. Home city not confirmed."
+          "notes": "connector. dbt Labs co-organiser of both Rhein-Ruhr chapter events and a speaker at both. Vendor staff, so best used as an organiser rather than a headline speaker. Home city not confirmed. | location (high): meetup member profile city \"Berlin\" as host of the event https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/"
         },
         {
           "id": "hicham-babahmed",
           "name": "Hicham Babahmed",
           "pronouns": null,
           "title": "Partner Solutions Architect (previously Data Engineer Consultant at adesso)",
-          "city": null,
-          "based_in_region": null,
+          "city": "Frankfurt",
+          "based_in_region": false,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/hichambabahmed/"
@@ -509,7 +543,7 @@
           "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "medium",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
           "lead_type": "featured",
           "sourced_via": [
@@ -544,6 +578,10 @@
             {
               "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
               "note": "organiser: Cologne dbt Meetup"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "location (high): meetup member profile city \"Frankfurt\" as host of the event he organised (listed as \"Hisham Babahmed\") https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/"
             }
           ],
           "confidence": "Medium",
@@ -551,7 +589,7 @@
           "priority_tier": "connector",
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "connector. Co-organised the Dec 2024 event while at adesso Cologne. Search results say he moved to dbt Labs around Aug 2025 and has since posted about events in French, so he may no longer cover the Rhein-Ruhr region. Worth asking for a warm intro back to adesso."
+          "notes": "connector. Co-organised the Dec 2024 event while at adesso Cologne. Search results say he moved to dbt Labs around Aug 2025 and has since posted about events in French, so he may no longer cover the Rhein-Ruhr region. Worth asking for a warm intro back to adesso. | location (high): meetup member profile city \"Frankfurt\" as host of the event he organised (listed as \"Hisham Babahmed\") https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/"
         }
       ],
       "notes": "Co-organiser of the chapter (Stephan Durry)."
@@ -676,8 +714,8 @@
           "name": "Pádraic Slattery",
           "pronouns": null,
           "title": "Xebia",
-          "city": null,
-          "based_in_region": null,
+          "city": "Amsterdam",
+          "based_in_region": false,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/padraicslattery/"
@@ -686,7 +724,7 @@
           "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "medium"
+            "attendee_potential": "low"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
@@ -724,6 +762,10 @@
             {
               "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
               "note": "talk: Maintaining your conventions amid the chaos of dbt"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "location (high): meetup member profile city \"Amsterdam\" on the RSVP list of the event where they spoke https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/"
             }
           ],
           "confidence": "High",
@@ -740,7 +782,7 @@
               ]
             }
           ],
-          "notes": "Strong dbt speaker, probably based in the Netherlands rather than NRW. Useful as a visiting speaker, not as local supply."
+          "notes": "Strong dbt speaker, probably based in the Netherlands rather than NRW. Useful as a visiting speaker, not as local supply. | location (high): meetup member profile city \"Amsterdam\" on the RSVP list of the event where they spoke https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/"
         }
       ],
       "notes": "Supplied a visiting speaker (Pádraic Slattery)."
@@ -768,9 +810,70 @@
           "type": "other",
           "url": "https://www.btelligent.com/en/training/basics-of-dbt",
           "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.btelligent.com/en/blog",
+          "note": "Blog page 1 scanned 2026-10-01; one dbt post."
         }
       ],
-      "people": [],
+      "people": [
+        {
+          "id": "mathias-heinze",
+          "name": "Mathias Heinze",
+          "pronouns": null,
+          "title": "Principal Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "b.telligent blog",
+              "title": "Adding the E to dbt: Extracting Source Systems With dbt Core and Snowflake",
+              "date": "2026-08-05",
+              "url": "https://www.btelligent.com/en/blog/extracting-source-systems-dbt-core-snowflake",
+              "content_id": "btelligent-blogadding-the-e-to-dbt-extracting-source-systems",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Extracts Salesforce data inside a dbt Core pipeline using Snowflake Python table functions.",
+              "topics": [
+                "dbt best practices",
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.btelligent.com/en/blog/extracting-source-systems-dbt-core-snowflake",
+              "note": "blog: Adding the E to dbt: Extracting Source Systems With dbt Core and Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Doing extraction inside dbt with Snowflake table functions",
+          "past_chapter_talks": [],
+          "notes": "Location not stated; b.telligent's Rhein-Ruhr presence is unconfirmed."
+        }
+      ],
       "notes": "dbt partner offering dbt training. A Düsseldorf office was not confirmed in this pass."
     },
     {
@@ -875,7 +978,9 @@
       "dbt_signal": "medium",
       "stack_signals": [
         "dbt",
-        "Databricks"
+        "Databricks",
+        "Snowflake",
+        "Microsoft Fabric"
       ],
       "job_postings": [
         {
@@ -1123,10 +1228,667 @@
           "type": "other",
           "url": "https://www.partnerbase.com/adesso/fishtown-analytics",
           "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.adesso.de/de/news/blog/blog-rss.xml",
+          "note": "adesso blog RSS scanned 2026-10-01 for 2024-2026 data posts; authors taken from each post's author box."
         }
       ],
-      "people": [],
-      "notes": "Cologne office at Agrippinawerft 26 hosted the Dec 2024 chapter event. Its internal organiser (Hicham Babahmed) has since moved to dbt Labs, so the adesso relationship may need rebuilding. | Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+      "people": [
+        {
+          "id": "jonas-thiele",
+          "name": "Jonas Thiele",
+          "pronouns": null,
+          "title": "Senior Consultant, Competence Center Snowflake Data Platforms",
+          "city": "Münster, Germany",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jonas-thiele-bb77451b6/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Von SAP-Daten zur Antwort in Sekunden: Ein Cortex Agent für den unternehmensweiten Überblick",
+              "date": "2026-09-24",
+              "url": "https://www.adesso.de/de/news/blog/von-sap-daten-zur-antwort-in-sekunden-ein-cortex-agent-fuer-den-unternehmensweiten-ueberblick.jsp",
+              "content_id": "adesso-blogvon-sapdaten-zur-antwort-in-sekunden-ein-cortex-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Builds a Snowflake Cortex agent on top of SAP data.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Von der Theorie zur Praxis: So verbinden Sie SAP BDC technisch mit Snowflake",
+              "date": "2026-08-21",
+              "url": "https://www.adesso.de/de/news/blog/von-der-theorie-zur-praxis-so-verbinden-sie-sap-bdc-technisch-mit-snowflake.jsp",
+              "content_id": "adesso-blogvon-der-theorie-zur-praxis-so-verbinden-sie-sap-b",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Technical walkthrough of connecting SAP Business Data Cloud to Snowflake.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Vom ERP-Silo zur AI Data Cloud: Wie SAP und Snowflake Ihre Datenstrategie zukunftssicher machen",
+              "date": "2026-07-09",
+              "url": "https://www.adesso.de/de/news/blog/vom-erp-silo-zur-ai-data-cloud-wie-sap-und-snowflake-ihre-datenstrategie-zukunftssicher-machen.jsp",
+              "content_id": "adesso-blogvom-erpsilo-zur-ai-data-cloud-wie-sap-und-snowfla",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Why SAP data belongs on a cloud data platform such as Snowflake.",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/von-sap-daten-zur-antwort-in-sekunden-ein-cortex-agent-fuer-den-unternehmensweiten-ueberblick.jsp",
+              "note": "blog: Von SAP-Daten zur Antwort in Sekunden: Ein Cortex Agent für den unternehmensweiten Überblick"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/von-der-theorie-zur-praxis-so-verbinden-sie-sap-bdc-technisch-mit-snowflake.jsp",
+              "note": "blog: Von der Theorie zur Praxis: So verbinden Sie SAP BDC technisch mit Snowflake"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/vom-erp-silo-zur-ai-data-cloud-wie-sap-und-snowflake-ihre-datenstrategie-zukunftssicher-machen.jsp",
+              "note": "blog: Vom ERP-Silo zur AI Data Cloud: Wie SAP und Snowflake Ihre Datenstrategie zukunftssicher machen"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jonas-thiele-bb77451b6/",
+              "note": "location (high): linkedin search result: Jonas Thiele - adesso SE, Münster, Germany https://www.linkedin.com/in/jonas-thiele-bb77451b6/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Getting SAP data into Snowflake so analytics engineers can model it",
+          "past_chapter_talks": [],
+          "notes": "Three posts in 2026. adesso is headquartered in Dortmund; his own office is not stated. | location (high): linkedin search result: Jonas Thiele - adesso SE, Münster, Germany https://www.linkedin.com/in/jonas-thiele-bb77451b6/ | tier 2: based outside the region, so the first-time-speaker tier-1 rule no longer applies"
+        },
+        {
+          "id": "tim-pursche",
+          "name": "Tim Pursche",
+          "pronouns": null,
+          "title": "Data Engineer, Cloud-Native Platforms (adesso Data & AI)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Implementierung eines Data Quality Monitorings mit Data Metric Functions in Snowflake",
+              "date": "2026-07-22",
+              "url": "https://www.adesso.de/de/news/blog/implementierung-eines-data-quality-monitorings-mit-data-metric-functions-in-snowflake.jsp",
+              "content_id": "adesso-blogimplementierung-eines-data-quality-monitorings-mi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Sets up data quality monitoring with Snowflake Data Metric Functions.",
+              "topics": [
+                "data quality & testing",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/implementierung-eines-data-quality-monitorings-mit-data-metric-functions-in-snowflake.jsp",
+              "note": "blog: Implementierung eines Data Quality Monitorings mit Data Metric Functions in Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Warehouse-native data quality checks next to dbt tests",
+          "past_chapter_talks": [],
+          "notes": "adesso is headquartered in Dortmund; his own office is not stated."
+        },
+        {
+          "id": "stefan-rahlf",
+          "name": "Stefan Rahlf",
+          "pronouns": null,
+          "title": "Managing Consultant, Data & Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Von der Toolbox zur Datenlandschaft",
+              "date": "2026-08-27",
+              "url": "https://www.adesso.de/de/news/blog/von-der-toolbox-zur-datenlandschaft.jsp",
+              "content_id": "adesso-blogvon-der-toolbox-zur-datenlandschaft",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Argues for designing a data landscape rather than collecting tools.",
+              "topics": [
+                "data warehouse & platforms",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Fabric Workspaces als atomare Bausteine",
+              "date": "2026-07-31",
+              "url": "https://www.adesso.de/de/news/blog/fabric-workspaces-als-atomare-bausteine.jsp",
+              "content_id": "adesso-blogfabric-workspaces-als-atomare-bausteine",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Uses Microsoft Fabric workspaces as the building blocks of a platform design.",
+              "topics": [
+                "project structure",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/von-der-toolbox-zur-datenlandschaft.jsp",
+              "note": "blog: Von der Toolbox zur Datenlandschaft"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/fabric-workspaces-als-atomare-bausteine.jsp",
+              "note": "blog: Fabric Workspaces als atomare Bausteine"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Structuring a data platform into workspaces and domains",
+          "past_chapter_talks": [],
+          "notes": "20+ years in analytics solutions per his author bio. Office not stated."
+        },
+        {
+          "id": "tobias-jasinski",
+          "name": "Tobias Jasinski",
+          "pronouns": null,
+          "title": "Principal Consultant, Lead Consultant Data & AI Strategy",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Jenseits der Plattform: Warum Architecture & Tools über Data Mesh hinausgehen müssen",
+              "date": "2026-04-14",
+              "url": "https://www.adesso.de/de/news/blog/jenseits-der-plattform-warum-architecture-tools-ueber-data-mesh-hinausgehen-muessen.jsp",
+              "content_id": "adesso-blogjenseits-der-plattform-warum-architecture-tools-u",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Argues that architecture and tooling choices must go beyond data mesh.",
+              "topics": [
+                "data mesh",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/jenseits-der-plattform-warum-architecture-tools-ueber-data-mesh-hinausgehen-muessen.jsp",
+              "note": "blog: Jenseits der Plattform: Warum Architecture & Tools über Data Mesh hinausgehen müssen"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "What data mesh leaves out: architecture and tooling choices",
+          "past_chapter_talks": [],
+          "notes": "Office not stated."
+        },
+        {
+          "id": "shahab-saffari",
+          "name": "Shahab Saffari",
+          "pronouns": null,
+          "title": "Data Engineer and Consultant, Data & Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Data Mesh und das Risiko organisatorischer Fragmentierung",
+              "date": "2026-03-25",
+              "url": "https://www.adesso.de/de/news/blog/data-mesh-und-das-risiko-organisatorischer-fragmentierung.jsp",
+              "content_id": "adesso-blogdata-mesh-und-das-risiko-organisatorischer-fragme",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Discusses how data mesh can fragment an organisation and how to avoid it.",
+              "topics": [
+                "data mesh",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/data-mesh-und-das-risiko-organisatorischer-fragmentierung.jsp",
+              "note": "blog: Data Mesh und das Risiko organisatorischer Fragmentierung"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Data mesh without fragmenting the organisation",
+          "past_chapter_talks": [],
+          "notes": "At adesso since October 2022 per author bio. Office not stated."
+        },
+        {
+          "id": "michael-peichl",
+          "name": "Michael Peichl",
+          "pronouns": null,
+          "title": "Data Engineer (Dr.)",
+          "city": "Leipzig",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/michael-peichl/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Schluss mit dem Tool-Zoo: Wie Lakeflow und Lakebase die Datenarchitektur radikal vereinfachen",
+              "date": "2026-02-27",
+              "url": "https://www.adesso.de/de/news/blog/schluss-mit-dem-tool-zoo-wie-lakeflow-und-lakebase-die-datenarchitektur-radikal-vereinfachen.jsp",
+              "content_id": "adesso-blogschluss-mit-dem-toolzoo-wie-lakeflow-und-lakebase",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Compares Databricks Lakeflow and Lakebase with a multi-tool stack; mentions dbt.",
+              "topics": [
+                "data warehouse & platforms",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Der CFO fragt nach Zahlen – So rechnet sich die Lakehouse-Migration",
+              "date": "2026-03-06",
+              "url": "https://www.adesso.de/de/news/blog/der-cfo-fragt-nach-zahlen-so-rechnet-sich-die-lakehouse-migration.jsp",
+              "content_id": "adesso-blogder-cfo-fragt-nach-zahlen-so-rechnet-sich-die-lak",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Business case for a lakehouse migration.",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Vom Datensilo zu KI-Agenten: Data Intelligence im Mittelstand",
+              "date": "2026-01-30",
+              "url": "https://www.adesso.de/de/news/blog/vom-datensilo-zu-ki-agenten-data-intelligence-im-mittelstand.jsp",
+              "content_id": "adesso-blogvom-datensilo-zu-kiagenten-data-intelligence-im-m",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data platforms and AI agents for mid-sized companies.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/schluss-mit-dem-tool-zoo-wie-lakeflow-und-lakebase-die-datenarchitektur-radikal-vereinfachen.jsp",
+              "note": "blog: Schluss mit dem Tool-Zoo: Wie Lakeflow und Lakebase die Datenarchitektur radikal vereinfachen"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/der-cfo-fragt-nach-zahlen-so-rechnet-sich-die-lakehouse-migration.jsp",
+              "note": "blog: Der CFO fragt nach Zahlen – So rechnet sich die Lakehouse-Migration"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/vom-datensilo-zu-ki-agenten-data-intelligence-im-mittelstand.jsp",
+              "note": "blog: Vom Datensilo zu KI-Agenten: Data Intelligence im Mittelstand"
+            },
+            {
+              "url": "https://www.linkedin.com/in/michael-peichl/",
+              "note": "location (high): linkedin search result: Dr. Michael Peichl - adesso SE, Leipzig https://www.linkedin.com/in/michael-peichl/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "When a Databricks-native pipeline replaces dbt plus other tools, and when it does not",
+          "past_chapter_talks": [],
+          "notes": "Four Databricks posts in early 2026. Office not stated. | location (high): linkedin search result: Dr. Michael Peichl - adesso SE, Leipzig https://www.linkedin.com/in/michael-peichl/ | tier 2: based outside the region, so the first-time-speaker tier-1 rule no longer applies"
+        },
+        {
+          "id": "mahlyar-ahmadsay",
+          "name": "Mahlyar Ahmadsay",
+          "pronouns": null,
+          "title": "Snowflake Consultant, Competence Center Snowflake Data Platforms",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Implementierung von Snowflake Intelligence",
+              "date": "2025-12-05",
+              "url": "https://www.adesso.de/de/news/blog/implementierung-von-snowflake-intelligence.jsp",
+              "content_id": "adesso-blogimplementierung-von-snowflake-intelligence",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "How to implement Snowflake Intelligence (natural-language questions on warehouse data).",
+              "topics": [
+                "semantic layer",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Snowflake Intelligence: Fragt doch eure Daten",
+              "date": "2025-11-18",
+              "url": "https://www.adesso.de/de/news/blog/snowflake-intelligence-fragt-doch-eure-daten.jsp",
+              "content_id": "adesso-blogsnowflake-intelligence-fragt-doch-eure-daten",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Introduces Snowflake Intelligence.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/implementierung-von-snowflake-intelligence.jsp",
+              "note": "blog: Implementierung von Snowflake Intelligence"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/snowflake-intelligence-fragt-doch-eure-daten.jsp",
+              "note": "blog: Snowflake Intelligence: Fragt doch eure Daten"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "What a semantic model needs before people can ask a warehouse questions in plain language",
+          "past_chapter_talks": [],
+          "notes": "Co-wrote the December 2025 post with David Wedman. Office not stated."
+        },
+        {
+          "id": "sebastian-lang",
+          "name": "Sebastian Lang",
+          "pronouns": null,
+          "title": "Cloud Data Engineer, D&A Data Platforms",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Snowflake Openflow: Datenintegration der nächsten Generation",
+              "date": "2025-07-08",
+              "url": "https://www.adesso.de/de/news/blog/snowflake-openflow-datenintegration-der-naechsten-generation.jsp",
+              "content_id": "adesso-blogsnowflake-openflow-datenintegration-der-nachsten",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Introduces Snowflake Openflow for data integration; mentions dbt.",
+              "topics": [
+                "data engineering",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Snowflake GenAI: Daten intelligent nutzen - Level Up your Data!",
+              "date": "2024-07-29",
+              "url": "https://www.adesso.de/de/news/blog/snowflake-genai-daten-intelligent-nutzen-level-up-your-data.jsp",
+              "content_id": "adesso-blogsnowflake-genai-daten-intelligent-nutzen-level-up",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "GenAI functions in Snowflake.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/snowflake-openflow-datenintegration-der-naechsten-generation.jsp",
+              "note": "blog: Snowflake Openflow: Datenintegration der nächsten Generation"
+            },
+            {
+              "url": "https://www.adesso.de/de/news/blog/snowflake-genai-daten-intelligent-nutzen-level-up-your-data.jsp",
+              "note": "blog: Snowflake GenAI: Daten intelligent nutzen - Level Up your Data!"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Ingestion with Openflow feeding a dbt project on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "Co-wrote the Openflow post with Christian Wagner. At adesso since January 2024. Office not stated."
+        },
+        {
+          "id": "siver-rajab",
+          "name": "Siver Rajab",
+          "pronouns": null,
+          "title": "Consultant, Banking",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "adesso blog",
+              "title": "Der Umstieg von PostgreSQL zu Databricks: Wann ist es sinnvoll?",
+              "date": "2024-08-07",
+              "url": "https://www.adesso.de/de/news/blog/der-umstieg-von-postgresql-zu-databricks-wann-ist-es-sinnvoll.jsp",
+              "content_id": "adesso-blogder-umstieg-von-postgresql-zu-databricks-wann-ist",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "When a move from PostgreSQL to Databricks makes sense.",
+              "topics": [
+                "data warehouse & platforms",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.adesso.de/de/news/blog/der-umstieg-von-postgresql-zu-databricks-wann-ist-es-sinnvoll.jsp",
+              "note": "blog: Der Umstieg von PostgreSQL zu Databricks: Wann ist es sinnvoll?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Choosing when to leave a single database for a data platform",
+          "past_chapter_talks": [],
+          "notes": "Also wrote a Snowflake overview in February 2024. Office not stated."
+        }
+      ],
+      "notes": "Cologne office at Agrippinawerft 26 hosted the Dec 2024 chapter event. Its internal organiser (Hicham Babahmed) has since moved to dbt Labs, so the adesso relationship may need rebuilding. | Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24) | Headquartered in Dortmund. Its blog has a steady stream of Snowflake, Databricks and data mesh posts by named consultants, a good pool of first-time speakers."
     },
     {
       "id": "agoda",
@@ -1821,39 +2583,6 @@
       "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
     },
     {
-      "id": "taod-consulting-gmbh",
-      "name": "taod Consulting GmbH",
-      "type": "consultancy",
-      "watchlist": false,
-      "excluded_from_outreach": false,
-      "cities": [
-        "Düsseldorf"
-      ],
-      "local_presence": "confirmed",
-      "dbt_signal": "medium",
-      "stack_signals": [
-        "dbt"
-      ],
-      "job_postings": [
-        {
-          "title": "Data Engineer (w/m/d)",
-          "url": "https://www.linkedin.com/jobs/view/data-engineer-w-m-d-at-taod-consulting-gmbh-4462155346",
-          "source": "LinkedIn Jobs",
-          "linkedin_company_name": "taod Consulting GmbH",
-          "dbt_mentioned_in_text": true,
-          "dbt_snippet": "Snowflake, Databricks, Fabric & dbt",
-          "job_poster": null,
-          "posted_date": "2026-09-02",
-          "last_seen": "2026-09-24",
-          "job_family": null,
-          "work_mode": null
-        }
-      ],
-      "other_evidence": [],
-      "people": [],
-      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
-    },
-    {
       "id": "thermengruppe-josef-wund",
       "name": "Thermengruppe Josef Wund",
       "type": "employer",
@@ -2017,7 +2746,7 @@
           "pronouns": null,
           "title": "Cloud Engineer, Data Analytics Platform",
           "city": null,
-          "based_in_region": null,
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
@@ -2059,6 +2788,10 @@
             {
               "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
               "note": "talk: Data and Freedom: Providing Teams with the Data They Need and the Tools They Love"
+            },
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "note": "location (medium): in-person talk at Databricks user group in Köln (2025-07-03); employer has a BarmeniaGothaer Köln office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/"
             }
           ],
           "confidence": "Medium",
@@ -2066,7 +2799,7 @@
           "priority_tier": 2,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Insurer based in Wuppertal and Cologne. Gave a joint talk with Carsten Düllmann on self-service platforms and governance."
+          "notes": "Insurer based in Wuppertal and Cologne. Gave a joint talk with Carsten Düllmann on self-service platforms and governance. | location (medium): in-person talk at Databricks user group in Köln (2025-07-03); employer has a BarmeniaGothaer Köln office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/"
         },
         {
           "id": "carsten-dullmann",
@@ -2074,7 +2807,7 @@
           "pronouns": null,
           "title": "Cloud Engineer, Data Analytics Platform",
           "city": null,
-          "based_in_region": null,
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
@@ -2115,6 +2848,10 @@
             {
               "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
               "note": "talk: Data and Freedom: Providing Teams with the Data They Need and the Tools They Love"
+            },
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "note": "location (medium): in-person talk at Databricks user group in Köln (2025-07-03); employer has a BarmeniaGothaer Köln office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/"
             }
           ],
           "confidence": "Medium",
@@ -2122,7 +2859,7 @@
           "priority_tier": 2,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Co-speaker with Florian Schulz."
+          "notes": "Co-speaker with Florian Schulz. | location (medium): in-person talk at Databricks user group in Köln (2025-07-03); employer has a BarmeniaGothaer Köln office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/"
         }
       ],
       "notes": "Insurer based in Wuppertal and Cologne. Talk was on platform self-service and governance."
@@ -2145,8 +2882,8 @@
           "name": "Inna Zykova",
           "pronouns": null,
           "title": null,
-          "city": null,
-          "based_in_region": null,
+          "city": "Düsseldorf",
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [
             "https://www.linkedin.com/in/innazykova/"
@@ -2190,6 +2927,10 @@
             {
               "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
               "note": "talk: Building AI agents with low/no-code tools"
+            },
+            {
+              "url": "https://www.linkedin.com/in/innazykova/",
+              "note": "location (high): same person as in the berlin_planning file: linkedin search result: Inna Zykova - Data Engineer - Thoughtworks, Düsseldorf https://www.linkedin.com/in/innazykova/ https://www.linkedin.com/in/innazykova/"
             }
           ],
           "confidence": "Medium",
@@ -2197,7 +2938,7 @@
           "priority_tier": 3,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Talk was about AI agents, not analytics engineering. Employer not stated."
+          "notes": "Talk was about AI agents, not analytics engineering. Employer not stated. | location (high): same person as in the berlin_planning file: linkedin search result: Inna Zykova - Data Engineer - Thoughtworks, Düsseldorf https://www.linkedin.com/in/innazykova/ https://www.linkedin.com/in/innazykova/"
         },
         {
           "id": "liisel-jessop",
@@ -2251,6 +2992,525 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "connector. Lead organiser listed for WiBD NRW (1,150 members). Other organisers visible only by first name (Antje, super organiser; Ann-Katrin, event host). The group runs small 'Data Date' evenings in Düsseldorf (8-17 attendees in 2025-26) and would suit a joint event."
+        },
+        {
+          "id": "jan-krings",
+          "name": "Jan Krings",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "retail_bi_pipeline_rewe",
+              "date": "2026-05-12",
+              "url": "https://github.com/jan-krings-dev/retail_bi_pipeline_rewe",
+              "content_id": "githubretailbipipelinerewe",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "End-to-end retail analytics pipeline with Python, PostgreSQL and dbt: validation, dimensional marts, monitoring.",
+              "topics": [
+                "analytics engineering",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/jan-krings-dev/retail_bi_pipeline_rewe",
+              "note": "oss: retail_bi_pipeline_rewe"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Building a retail analytics pipeline with dbt end to end",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile says Cologne; employer not stated."
+        },
+        {
+          "id": "marcphilipp-esser",
+          "name": "Marc-Philipp Esser",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "ecom_data_vault",
+              "date": "2024-03-22",
+              "url": "https://github.com/m-p-esser/ecom_data_vault",
+              "content_id": "githubecomdatavault",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Proof-of-concept data warehouse on a Data Vault with dbt and Snowflake.",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/m-p-esser/ecom_data_vault",
+              "note": "oss: ecom_data_vault"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Data Vault with dbt on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile says Cologne; employer not stated."
+        },
+        {
+          "id": "diana-ackermann",
+          "name": "Diana Ackermann",
+          "pronouns": null,
+          "title": "Statistician and freelance Power BI data analyst",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "Design dashboards that guide action - not just display data",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026design-dashboards-that-guide-act",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Dashboard design that leads to action.",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2025",
+              "title": "Power BI + LLMs: Practical Applications for the Busy Developer",
+              "date": "2025-06-28",
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "content_id": "data-saturday-rheinland-2025power-bi-llms-practical-applicat",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Practical LLM uses for Power BI developers.",
+              "topics": [
+                "genai & llm",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: Design dashboards that guide action - not just display data"
+            },
+            {
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "note": "talk: Power BI + LLMs: Practical Applications for the Busy Developer"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Dashboards that guide action",
+          "past_chapter_talks": [],
+          "notes": "2025 tagline: head of big data analysis GmbH."
+        },
+        {
+          "id": "mario-muller",
+          "name": "Mario Müller",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Engineering Kiosk Rhine-Ruhr",
+              "title": "Data Production at Scale: Functional Verticalization for Data Teams",
+              "date": "2024-08-29",
+              "url": "https://www.meetup.com/engineering-kiosk-rhine-ruhr/events/302290771/",
+              "content_id": "engineering-kiosk-rhineruhrdata-production-at-scale-function",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Scaling a single data team into a functionally verticalised data platform.",
+              "topics": [
+                "team & org design",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/engineering-kiosk-rhine-ruhr/events/302290771/",
+              "note": "talk: Data Production at Scale: Functional Verticalization for Data Teams"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Splitting one data team into vertical data teams",
+          "past_chapter_talks": [],
+          "notes": "Engineer turned manager; employer not stated on the listing (event sponsored by CHECK24)."
+        },
+        {
+          "id": "christopher-konig",
+          "name": "Christopher König",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Lounge & Learn Köln (taod)",
+              "title": "Bedeutet AI das Ende von Dashboards?",
+              "date": "2025-07-03",
+              "url": "https://www.meetup.com/data-analytics-ai-koeln/events/308428183/",
+              "content_id": "data-lounge-learn-koln-taodbedeutet-ai-das-ende-von-dashboar",
+              "co_authors": [
+                "Stephan Dahlmann"
+              ],
+              "mentions_dbt": false,
+              "description": "Whether AI ends dashboards.",
+              "topics": [
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-ai-koeln/events/308428183/",
+              "note": "talk: Bedeutet AI das Ende von Dashboards?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Does AI end dashboards?",
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the listing (taod event at Microsoft Köln)."
+        },
+        {
+          "id": "stephan-dahlmann",
+          "name": "Stephan Dahlmann",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Lounge & Learn Köln (taod)",
+              "title": "Bedeutet AI das Ende von Dashboards?",
+              "date": "2025-07-03",
+              "url": "https://www.meetup.com/data-analytics-ai-koeln/events/308428183/",
+              "content_id": "data-lounge-learn-koln-taodbedeutet-ai-das-ende-von-dashboar",
+              "co_authors": [
+                "Christopher König"
+              ],
+              "mentions_dbt": false,
+              "description": "Whether AI ends dashboards.",
+              "topics": [
+                "business intelligence",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-ai-koeln/events/308428183/",
+              "note": "talk: Bedeutet AI das Ende von Dashboards?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Does AI end dashboards?",
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the listing."
+        },
+        {
+          "id": "andreas-schiffer",
+          "name": "Andreas Schiffer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Lounge & Learn Köln (taod)",
+              "title": "Make your data AI-ready",
+              "date": "2025-07-03",
+              "url": "https://www.meetup.com/data-analytics-ai-koeln/events/308428183/",
+              "content_id": "data-lounge-learn-koln-taodmake-your-data-aiready",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Preparing data foundations for AI.",
+              "topics": [
+                "data quality & testing",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-ai-koeln/events/308428183/",
+              "note": "talk: Make your data AI-ready"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Making data AI-ready",
+          "past_chapter_talks": [],
+          "notes": "Employer not stated on the listing."
+        },
+        {
+          "id": "philipp-lenz",
+          "name": "Philipp Lenz",
+          "pronouns": null,
+          "title": null,
+          "city": "Köln",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Power Platform & Fabric User Group Cologne",
+              "title": "Continuous deployment of Power BI reports",
+              "date": "2024-02-20",
+              "url": "https://www.meetup.com/power-platform-ug-cologne/events/298561111/",
+              "content_id": "power-platform-fabric-user-group-colognecontinuous-deploymen",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Continuous deployment of Power BI with DevOps, PowerShell and Tabular Editor.",
+              "topics": [
+                "orchestration & ci/cd",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/power-platform-ug-cologne/events/298561111/",
+              "note": "talk: Continuous deployment of Power BI reports"
+            },
+            {
+              "url": "https://www.meetup.com/power-platform-ug-cologne/events/298561111/",
+              "note": "location (high): meetup member profile city \"Köln\" on the RSVP list of the event where they spoke https://www.meetup.com/power-platform-ug-cologne/events/298561111/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "CI/CD for BI artefacts",
+          "past_chapter_talks": [],
+          "notes": "location (high): meetup member profile city \"Köln\" on the RSVP list of the event where they spoke https://www.meetup.com/power-platform-ug-cologne/events/298561111/"
+        },
+        {
+          "id": "hanswilli-jackmuth",
+          "name": "Hans-Willi Jackmuth",
+          "pronouns": null,
+          "title": null,
+          "city": "Köln",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Power Platform & Fabric User Group Cologne",
+              "title": "Wenn „gleich“ nicht gleich ist",
+              "date": "2026-06-22",
+              "url": "https://www.meetup.com/power-platform-ug-cologne/events/313767606/",
+              "content_id": "power-platform-fabric-user-group-colognewenn-gleich-nicht-gl",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Four kinds of equality in data analysis, fuzzy matching and Kölner Phonetik.",
+              "topics": [
+                "data quality & testing",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/power-platform-ug-cologne/events/313767606/",
+              "note": "talk: Wenn „gleich“ nicht gleich ist"
+            },
+            {
+              "url": "https://www.meetup.com/power-platform-ug-cologne/events/313767606/",
+              "note": "location (high): meetup member profile city \"Köln\" on the RSVP list of the event where they spoke https://www.meetup.com/power-platform-ug-cologne/events/313767606/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "When equal is not equal: matching rules in data models",
+          "past_chapter_talks": [],
+          "notes": "location (high): meetup member profile city \"Köln\" on the RSVP list of the event where they spoke https://www.meetup.com/power-platform-ug-cologne/events/313767606/"
         }
       ],
       "notes": ""
@@ -2269,10 +3529,17 @@
       "stack_signals": [
         "Databricks",
         "Azure",
-        "Power BI"
+        "Power BI",
+        "Microsoft Fabric"
       ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.oraylis.de/feed",
+          "note": "ORAYLIS blog feed scanned 2026-10-01 (2024-2026 posts, no dbt mentions)."
+        }
+      ],
       "people": [
         {
           "id": "christoph-epping",
@@ -2280,7 +3547,7 @@
           "pronouns": null,
           "title": "Senior Consultant - IoT",
           "city": null,
-          "based_in_region": null,
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
@@ -2321,6 +3588,10 @@
             {
               "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
               "note": "talk: Data in Motion: How igus enhances Real-Time Insights with Custom State Management"
+            },
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "note": "location (medium): in-person talk at Databricks user group in Cologne (2025-03-20); employer has a ORAYLIS Düsseldorf office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/"
             }
           ],
           "confidence": "Medium",
@@ -2328,7 +3599,7 @@
           "priority_tier": 3,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "ORAYLIS is a consultancy in Meerbusch, next to Düsseldorf. The talk was a client case on streaming, not dbt."
+          "notes": "ORAYLIS is a consultancy in Meerbusch, next to Düsseldorf. The talk was a client case on streaming, not dbt. | location (medium): in-person talk at Databricks user group in Cologne (2025-03-20); employer has a ORAYLIS Düsseldorf office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/"
         },
         {
           "id": "julian-kruger",
@@ -2336,7 +3607,7 @@
           "pronouns": null,
           "title": "Senior Consultant",
           "city": null,
-          "based_in_region": null,
+          "based_in_region": true,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
@@ -2376,6 +3647,10 @@
             {
               "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
               "note": "talk: Data in Motion: How igus enhances Real-Time Insights with Custom State Management"
+            },
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "note": "location (medium): in-person talk at Databricks user group in Cologne (2025-03-20); employer has a ORAYLIS Düsseldorf office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/"
             }
           ],
           "confidence": "Medium",
@@ -2383,7 +3658,415 @@
           "priority_tier": 3,
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
-          "notes": "Co-speaker with Christoph Epping."
+          "notes": "Co-speaker with Christoph Epping. | location (medium): in-person talk at Databricks user group in Cologne (2025-03-20); employer has a ORAYLIS Düsseldorf office https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/"
+        },
+        {
+          "id": "kevin-letellier",
+          "name": "Kevin Letellier",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Data Mesh in Azure – Schritt für Schritt zum Governed Mesh",
+              "date": "2024-09-03",
+              "url": "https://oraylis.de/blog/2024/data-mesh-in-azure",
+              "content_id": "oraylis-blogdata-mesh-in-azure-schritt-fur-schritt-zum-gover",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Step-by-step guide to a governed data mesh on Azure.",
+              "topics": [
+                "data mesh",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://oraylis.de/blog/2024/data-mesh-in-azure",
+              "note": "blog: Data Mesh in Azure – Schritt für Schritt zum Governed Mesh"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Building a governed data mesh step by step",
+          "past_chapter_talks": [],
+          "notes": "ORAYLIS is a Düsseldorf/Meerbusch data consultancy; his own office is not stated."
+        },
+        {
+          "id": "lasse-jenzen",
+          "name": "Lasse Jenzen",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Datenplattformen automatisieren: DataM8 spart Zeit, Kosten & Know-how",
+              "date": "2025-03-31",
+              "url": "https://oraylis.de/blog/2025/datenplattformen-automatisieren-datam8",
+              "content_id": "oraylis-blogdatenplattformen-automatisieren-datam8-spart-zei",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Introduces DataM8, ORAYLIS's tool for generating data platform code.",
+              "topics": [
+                "developer workflow",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "KRITIS-Gesetz: Confidential Computing als Schlüsselelement für den IT-Schutz",
+              "date": "2026-02-02",
+              "url": "https://oraylis.de/blog/2026/kritis-confidential-computing",
+              "content_id": "oraylis-blogkritisgesetz-confidential-computing-als-schlusse",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Confidential computing for critical-infrastructure companies.",
+              "topics": [
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://oraylis.de/blog/2025/datenplattformen-automatisieren-datam8",
+              "note": "blog: Datenplattformen automatisieren: DataM8 spart Zeit, Kosten & Know-how"
+            },
+            {
+              "url": "https://oraylis.de/blog/2026/kritis-confidential-computing",
+              "note": "blog: KRITIS-Gesetz: Confidential Computing als Schlüsselelement für den IT-Schutz"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Generating data platform code from metadata, compared with dbt",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "dennis-lohmandrella",
+          "name": "Dennis Loh-Mandrella",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Fabric Mirroring: Wie Sie SAP-Daten effizient einbinden und nutzen",
+              "date": "2026-02-25",
+              "url": "https://oraylis.de/blog/2026/fabric-mirroring-sap-daten",
+              "content_id": "oraylis-blogfabric-mirroring-wie-sie-sapdaten-effizient-einb",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Bringing SAP data into Microsoft Fabric with mirroring.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Azure Synapse vs. Microsoft Fabric: Ein Vergleich der modernen Datenplattformen",
+              "date": "2025-02-07",
+              "url": "https://oraylis.de/blog/2025/azure-synapse-microsoft-fabric",
+              "content_id": "oraylis-blogazure-synapse-vs-microsoft-fabric-ein-vergleich",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Compares Azure Synapse and Microsoft Fabric.",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://oraylis.de/blog/2026/fabric-mirroring-sap-daten",
+              "note": "blog: Fabric Mirroring: Wie Sie SAP-Daten effizient einbinden und nutzen"
+            },
+            {
+              "url": "https://oraylis.de/blog/2025/azure-synapse-microsoft-fabric",
+              "note": "blog: Azure Synapse vs. Microsoft Fabric: Ein Vergleich der modernen Datenplattformen"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Choosing between Synapse and Fabric for a warehouse",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "hendrik-ullenboom",
+          "name": "Hendrik Ullenboom",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Enterprise Self-Service: Wie Telefónica effektive Vertriebsanalysen ermöglicht",
+              "date": "2026-08-14",
+              "url": "https://oraylis.de/blog/2026/enterprise-self-service-telefonica",
+              "content_id": "oraylis-blogenterprise-selfservice-wie-telefonica-effektive",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "How Telefónica enabled self-service sales analytics.",
+              "topics": [
+                "business intelligence",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://oraylis.de/blog/2026/enterprise-self-service-telefonica",
+              "note": "blog: Enterprise Self-Service: Wie Telefónica effektive Vertriebsanalysen ermöglicht"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Enterprise self-service BI at Telefónica: what the data model had to provide",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "insa-menzel",
+          "name": "Insa Menzel",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Datenkultur: Warum die beste Strategie ohne den „Faktor Mensch“ scheitert",
+              "date": "2026-04-24",
+              "url": "https://oraylis.de/blog/2026/datenkultur",
+              "content_id": "oraylis-blogdatenkultur-warum-die-beste-strategie-ohne-den-f",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Why data strategy fails without data culture.",
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Ohne Datenstrategie keine Data & AI Driven Company: So gelingt der Einstieg",
+              "date": "2026-03-18",
+              "url": "https://oraylis.de/blog/2026/einstieg-datenstrategie-data-ai-driven-company",
+              "content_id": "oraylis-blogohne-datenstrategie-keine-data-ai-driven-company",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Getting started with a data strategy.",
+              "topics": [
+                "team & org design",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://oraylis.de/blog/2026/datenkultur",
+              "note": "blog: Datenkultur: Warum die beste Strategie ohne den „Faktor Mensch“ scheitert"
+            },
+            {
+              "url": "https://oraylis.de/blog/2026/einstieg-datenstrategie-data-ai-driven-company",
+              "note": "blog: Ohne Datenstrategie keine Data & AI Driven Company: So gelingt der Einstieg"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Data culture as the missing piece of a data strategy",
+          "past_chapter_talks": [],
+          "notes": "Also writes on sustainability and the EU AI Act."
+        },
+        {
+          "id": "nils-kux",
+          "name": "Nils Kux",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Microsoft Fabric: Die 10 häufigsten Fragen einfach beantwortet",
+              "date": "2026-09-15",
+              "url": "https://oraylis.de/blog/2026/microsoft-fabric-10-fragen",
+              "content_id": "oraylis-blogmicrosoft-fabric-die-10-haufigsten-fragen-einfac",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Answers the ten most common Microsoft Fabric questions.",
+              "topics": [
+                "data warehouse & platforms",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "ORAYLIS blog",
+              "title": "Microsoft Fabric vs. Power BI: Der ultimative Vergleich für Ihre Datenanalyse",
+              "date": "2025-05-20",
+              "url": "https://oraylis.de/blog/2025/microsoft-fabric-vs-power-bi",
+              "content_id": "oraylis-blogmicrosoft-fabric-vs-power-bi-der-ultimative-verg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Compares Microsoft Fabric with Power BI.",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://oraylis.de/blog/2026/microsoft-fabric-10-fragen",
+              "note": "blog: Microsoft Fabric: Die 10 häufigsten Fragen einfach beantwortet"
+            },
+            {
+              "url": "https://oraylis.de/blog/2025/microsoft-fabric-vs-power-bi",
+              "note": "blog: Microsoft Fabric vs. Power BI: Der ultimative Vergleich für Ihre Datenanalyse"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Fabric for teams coming from Power BI",
+          "past_chapter_talks": [],
+          "notes": null
         }
       ],
       "notes": "Meerbusch, bordering Düsseldorf. Hosted the Databricks user group in Mar 2025."
@@ -3019,6 +4702,11 @@
           "type": "blog_scanned",
           "url": "https://tech.trivago.com/categories/data-analytics",
           "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "talk",
+          "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+          "note": "trivago hosted a \"Building Data Platforms\" meetup in Aug 2025 (StepStone, SumUp, trivago)."
         }
       ],
       "people": [
@@ -3074,9 +4762,63 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "connector (venue). Wrote up trivago's July 2026 QA Meetup at its Düsseldorf campus (~90 attendees), which shows trivago still hosts external meetups. The trivago tech blog has no dbt posts; its last data post was on Great Expectations in 2023."
+        },
+        {
+          "id": "andres-sopena-perez",
+          "name": "Andrés Sopeña Pérez",
+          "pronouns": null,
+          "title": null,
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Building Data Platforms – trivago meetup (Düsseldorf)",
+              "title": "Plenty of Mistakes",
+              "date": "2025-08-14",
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "content_id": "building-data-platforms-trivago-meetup-dusseldorfplenty-of-m",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Lessons from two years of moving trivago's data platform to the cloud.",
+              "topics": [
+                "data warehouse & platforms",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "note": "talk: Plenty of Mistakes"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "What a platform team learned moving trivago's data platform to the cloud",
+          "past_chapter_talks": [],
+          "notes": null
         }
       ],
-      "notes": "No dbt content on the tech blog. Hosts external meetups at its Düsseldorf campus (QA Meetup, ~90 people, Jul 2026) and has hosted the Düsseldorf Data Science Meetup. Good venue option for Düsseldorf itself."
+      "notes": "No dbt content on the tech blog. Hosts external meetups at its Düsseldorf campus (QA Meetup, ~90 people, Jul 2026) and has hosted the Düsseldorf Data Science Meetup. Good venue option for Düsseldorf itself. | Runs its own meetup group (trivago Tech, Data & Product) and hosted a data platform evening in Aug 2025."
     },
     {
       "id": "accenture-intions",
@@ -3232,6 +4974,1692 @@
       ],
       "people": [],
       "notes": "1,150 members, Düsseldorf-based. Its 2025-26 events are small café 'Data Dates' (6-17 attendees) plus occasional company-hosted talks. Good partner for a co-branded evening."
+    },
+    {
+      "id": "stepstone",
+      "name": "StepStone",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "aditya-cherukumudi",
+          "name": "Aditya Cherukumudi",
+          "pronouns": null,
+          "title": null,
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Building Data Platforms – trivago meetup (Düsseldorf)",
+              "title": "Platforms for Data & AI at StepStone",
+              "date": "2025-08-14",
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "content_id": "building-data-platforms-trivago-meetup-dusseldorfplatforms-f",
+              "co_authors": [
+                "Hari Natarajan"
+              ],
+              "mentions_dbt": false,
+              "description": "Building platforms for a 200+ person data community across BI and AI.",
+              "topics": [
+                "data warehouse & platforms",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "note": "talk: Platforms for Data & AI at StepStone"
+            },
+            {
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "note": "location (medium): in-person talk at trivago meetup in Düsseldorf (2025-08-14); employer has a StepStone Düsseldorf office https://www.meetup.com/trivago-tech-data-product/events/309266552/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Platforms for a 200-person data community",
+          "past_chapter_talks": [],
+          "notes": "location (medium): in-person talk at trivago meetup in Düsseldorf (2025-08-14); employer has a StepStone Düsseldorf office https://www.meetup.com/trivago-tech-data-product/events/309266552/"
+        },
+        {
+          "id": "hari-natarajan",
+          "name": "Hari Natarajan",
+          "pronouns": null,
+          "title": null,
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Building Data Platforms – trivago meetup (Düsseldorf)",
+              "title": "Platforms for Data & AI at StepStone",
+              "date": "2025-08-14",
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "content_id": "building-data-platforms-trivago-meetup-dusseldorfplatforms-f",
+              "co_authors": [
+                "Aditya Cherukumudi"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented StepStone's data and AI platform journey.",
+              "topics": [
+                "data warehouse & platforms",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "note": "talk: Platforms for Data & AI at StepStone"
+            },
+            {
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "note": "location (medium): in-person talk at trivago meetup in Düsseldorf (2025-08-14); employer has a StepStone Düsseldorf office https://www.meetup.com/trivago-tech-data-product/events/309266552/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Platforms for a 200-person data community",
+          "past_chapter_talks": [],
+          "notes": "location (medium): in-person talk at trivago meetup in Düsseldorf (2025-08-14); employer has a StepStone Düsseldorf office https://www.meetup.com/trivago-tech-data-product/events/309266552/"
+        }
+      ],
+      "notes": "Headquartered in Düsseldorf. Large data community (200+ data people per its Aug 2025 talk). dbt use not verified."
+    },
+    {
+      "id": "sumup",
+      "name": "SumUp",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jake-mongaya",
+          "name": "Jake Mongaya",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Building Data Platforms – trivago meetup (Düsseldorf)",
+              "title": "When Data Mesh Becomes a Mess",
+              "date": "2025-08-14",
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "content_id": "building-data-platforms-trivago-meetup-dusseldorfwhen-data-m",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Challenges, mistakes and pivots building a data mesh for thousands of users in 20+ locations.",
+              "topics": [
+                "data mesh",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/trivago-tech-data-product/events/309266552/",
+              "note": "talk: When Data Mesh Becomes a Mess"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "When data mesh becomes a mess, and how SumUp recovered",
+          "past_chapter_talks": [],
+          "notes": "Spoke in Düsseldorf; SumUp's data team is mainly in Berlin, so his base is unknown."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "oh22information-services-gmbh",
+      "name": "oh22information services GmbH",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Königswinter"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/",
+          "note": "Hosts the Data Platform Usergroup Rheinland at its Königswinter office."
+        }
+      ],
+      "people": [
+        {
+          "id": "tillmann-eitelberg",
+          "name": "Tillmann Eitelberg",
+          "pronouns": null,
+          "title": null,
+          "city": "Königswinter",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "From Broken Data to Trusted Data Products",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026from-broken-data-to-trusted-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Turning unreliable data into trusted data products.",
+              "topics": [
+                "data quality & testing",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Datamonsters Ruhrgebiet",
+              "title": "Unlocking even more Power in PBI",
+              "date": "2024-09-19",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/303356231/",
+              "content_id": "datamonsters-ruhrgebietunlocking-even-more-power-in-pbi",
+              "co_authors": [
+                "Samudra Bandaranayake"
+              ],
+              "mentions_dbt": false,
+              "description": "Power BI session.",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: From Broken Data to Trusted Data Products"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/303356231/",
+              "note": "talk: Unlocking even more Power in PBI"
+            },
+            {
+              "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/",
+              "note": "location (medium): meetup member profile city \"Königswinter\" as host of a PASS Rheinland event (name match, not his own talk) https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "From broken data to trusted data products",
+          "past_chapter_talks": [],
+          "notes": "Gave the Data Saturday Rheinland 2026 welcome keynote with Ben Weissman and Oliver Engels. His employer hosts the Rheinland Data Platform user group at its Königswinter office. | location (medium): meetup member profile city \"Königswinter\" as host of a PASS Rheinland event (name match, not his own talk) https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/"
+        },
+        {
+          "id": "katharina-ricken",
+          "name": "Katharina Ricken",
+          "pronouns": null,
+          "title": "Junior Data Engineer",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "Building Data Literacy in the Microsoft Data Platform Era",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026building-data-literacy-in-the-mi",
+              "co_authors": [
+                "Oliver Engels"
+              ],
+              "mentions_dbt": false,
+              "description": "Building and measuring data literacy on the Microsoft data platform.",
+              "topics": [
+                "team & org design",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Datamonsters Ruhrgebiet / Niederrhein",
+              "title": "Data Literacy",
+              "date": "2026-07-08",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/315283832/",
+              "content_id": "datamonsters-ruhrgebiet-niederrheindata-literacy",
+              "co_authors": [
+                "Oliver Engels"
+              ],
+              "mentions_dbt": false,
+              "description": "Same data literacy session at the Ruhrgebiet user group.",
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: Building Data Literacy in the Microsoft Data Platform Era"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/315283832/",
+              "note": "talk: Data Literacy"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/315283832/",
+              "note": "location (medium): in-person talk at Datamonsters Ruhrgebiet in Kamp-Lintfort (2026-07-08); employer has a oh22 Königswinter office https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/315283832/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Data literacy as an early-career data engineer",
+          "past_chapter_talks": [],
+          "notes": "Tagline: Junior Data Engineer at oh22 (which oh22 company is not stated). Early-career speaker with two 2026 talks. | location (medium): in-person talk at Datamonsters Ruhrgebiet in Kamp-Lintfort (2026-07-08); employer has a oh22 Königswinter office https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/315283832/"
+        },
+        {
+          "id": "samudra-bandaranayake",
+          "name": "Samudra Bandaranayake",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Königswinter",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2025",
+              "title": "From Parquet to Delta Tables in Microsoft Fabric: A Modern Data Journey",
+              "date": "2025-06-28",
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "content_id": "data-saturday-rheinland-2025from-parquet-to-delta-tables-in",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Moving from Parquet files to Delta tables in Fabric.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "note": "talk: From Parquet to Delta Tables in Microsoft Fabric: A Modern Data Journey"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/303356231/",
+              "note": "location (high): meetup member profile city \"Königswinter\" on the RSVP list of the event where they spoke (event titled with his talk) https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/303356231/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Parquet to Delta tables in practice",
+          "past_chapter_talks": [],
+          "notes": "location (high): meetup member profile city \"Königswinter\" on the RSVP list of the event where they spoke (event titled with his talk) https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/303356231/"
+        }
+      ],
+      "notes": "Königswinter (near Bonn). Microsoft data platform consultancy; runs the Rheinland Data Platform user group and Data Saturday Rheinland."
+    },
+    {
+      "id": "oh22data-ag",
+      "name": "oh22data AG",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "oliver-engels",
+          "name": "Oliver Engels",
+          "pronouns": null,
+          "title": "CEO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "Building Data Literacy in the Microsoft Data Platform Era",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026building-data-literacy-in-the-mi",
+              "co_authors": [
+                "Katharina Ricken"
+              ],
+              "mentions_dbt": false,
+              "description": "Data literacy on the Microsoft data platform.",
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2025",
+              "title": "X-Ray your Microsoft Fabric Landscape with FUAM",
+              "date": "2025-06-28",
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "content_id": "data-saturday-rheinland-2025xray-your-microsoft-fabric-lands",
+              "co_authors": [
+                "Gellert Gintli"
+              ],
+              "mentions_dbt": false,
+              "description": "Monitoring a Fabric estate with FUAM.",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: Building Data Literacy in the Microsoft Data Platform Era"
+            },
+            {
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "note": "talk: X-Ray your Microsoft Fabric Landscape with FUAM"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Data literacy programmes",
+          "past_chapter_talks": [],
+          "notes": "Co-organiser of Data Saturday Rheinland; route to the Microsoft data community speakers in the region."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sascha-dittmann",
+          "name": "Sascha Dittmann",
+          "pronouns": null,
+          "title": "Customer Engineer (Smart Analytics), Google Germany",
+          "city": "Frankfurt",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "Abfragen in Warp-Geschwindigkeit: Google BigQuery meistern",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026abfragen-in-warpgeschwindigkeit",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "BigQuery query performance.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "workshop",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "Data Engineering mit KI: Von \"Vibe Coding\" zu zuverlässigem, KI-gesteuertem Engineering",
+              "date": "2026-07-10",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026data-engineering-mit-ki-von-vibe",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Workshop on reliable AI-assisted data engineering.",
+              "topics": [
+                "genai & llm",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Data Platform Usergroup Rheinland",
+              "title": "DuckDB, from zero to 100",
+              "date": "2025-01-30",
+              "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/",
+              "content_id": "data-platform-usergroup-rheinlandduckdb-from-zero-to-100",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Demo-heavy DuckDB introduction.",
+              "topics": [
+                "tools & ecosystem",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: Abfragen in Warp-Geschwindigkeit: Google BigQuery meistern"
+            },
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "workshop: Data Engineering mit KI: Von \"Vibe Coding\" zu zuverlässigem, KI-gesteuertem Engineering"
+            },
+            {
+              "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/",
+              "note": "talk: DuckDB, from zero to 100"
+            },
+            {
+              "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/",
+              "note": "location (high): meetup member profile city \"Frankfurt\" on the RSVP list of the event where they spoke https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "AI-assisted data engineering that stays reliable",
+          "past_chapter_talks": [],
+          "notes": "Speaks regularly in the Rheinland Microsoft data community; base not stated. | location (high): meetup member profile city \"Frankfurt\" on the RSVP list of the event where they spoke https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/events/304394624/"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "aldi-sud",
+      "name": "ALDI SÜD",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Essen"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "margarita-neumuller",
+          "name": "Margarita Neumüller",
+          "pronouns": null,
+          "title": "Manager Data & Analytics",
+          "city": null,
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2025",
+              "title": "The Power of „no“ - and why it helps your team",
+              "date": "2025-06-28",
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "content_id": "data-saturday-rheinland-2025the-power-of-no-and-why-it-helps",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Why saying no helps a data team.",
+              "topics": [
+                "team & org design",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Datamonsters Ruhrgebiet / Niederrhein",
+              "title": "SQL Konferenz Impressions",
+              "date": "2026-03-19",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313468771/",
+              "content_id": "datamonsters-ruhrgebiet-niederrheinsql-konferenz-impressions",
+              "co_authors": [
+                "Peter Görtz",
+                "Gabi Münster"
+              ],
+              "mentions_dbt": false,
+              "description": "Report from SQL Konferenz 2026.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Datamonsters Ruhrgebiet / Niederrhein",
+              "title": "Co-organiser (Monsterkeeper)",
+              "date": "2025-10-08",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/311038020/",
+              "content_id": "datamonsters-ruhrgebiet-niederrheincoorganiser-monsterkeeper",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Joined the organising team of the Ruhrgebiet Microsoft data user group.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "note": "talk: The Power of „no“ - and why it helps your team"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313468771/",
+              "note": "talk: SQL Konferenz Impressions"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/311038020/",
+              "note": "organiser: Co-organiser (Monsterkeeper)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Running a data and analytics team at a large retailer",
+          "past_chapter_talks": [],
+          "notes": "Tagline spells it \"Neumueller\". Co-organises the Ruhrgebiet user group, so a route to its speakers."
+        }
+      ],
+      "notes": "ALDI SÜD headquarters is in Mülheim an der Ruhr."
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gabi-munster",
+          "name": "Gabi Münster",
+          "pronouns": null,
+          "title": "Principal Program Manager, Fabric CAT",
+          "city": "Gevelsberg",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "OneLake Security - Centralized Data Security for Microsoft Fabric",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026onelake-security-centralized-dat",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Central data security for Fabric OneLake.",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Datamonsters Ruhrgebiet / Niederrhein",
+              "title": "Co-organiser",
+              "date": "2026-04-14",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/",
+              "content_id": "datamonsters-ruhrgebiet-niederrheincoorganiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Signs the group's invitations with Peter and Klaus.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: OneLake Security - Centralized Data Security for Microsoft Fabric"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/",
+              "note": "organiser: Co-organiser"
+            },
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/",
+              "note": "location (high): meetup member profile city \"Gevelsberg\" as host of the event she spoke at https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Securing data in a lakehouse",
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker; most useful as a connector into the Ruhrgebiet user group. | location (high): meetup member profile city \"Gevelsberg\" as host of the event she spoke at https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "gds-business-intelligence-gmbh",
+      "name": "GDS Business Intelligence GmbH",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "frank-geisler",
+          "name": "Frank Geisler",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Datamonsters Ruhrgebiet / Niederrhein",
+              "title": "AI Agents (real-time discussion)",
+              "date": "2026-04-14",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/",
+              "content_id": "datamonsters-ruhrgebiet-niederrheinai-agents-realtime-discus",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Session and discussion on AI agents.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2025",
+              "title": "KQL Kickstart: Dein Einstieg in die Kusto-Abfragesprache",
+              "date": "2025-06-28",
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "content_id": "data-saturday-rheinland-2025kql-kickstart-dein-einstieg-in-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Introduction to KQL.",
+              "topics": [
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/313983347/",
+              "note": "talk: AI Agents (real-time discussion)"
+            },
+            {
+              "url": "https://datasaturdays.com/Event/20250628-datasaturday0070",
+              "note": "talk: KQL Kickstart: Dein Einstieg in die Kusto-Abfragesprache"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "AI agents on a data platform",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "teccle-group",
+      "name": "teccle group",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hanna-schwab",
+          "name": "Hanna Schwab",
+          "pronouns": null,
+          "title": "Team Lead Data & AI",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "From Data to Decisions: Building Intelligent Analytics with Microsoft Fabric & Fabric IQ",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026from-data-to-decisions-building",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Analytics with Microsoft Fabric and Fabric IQ.",
+              "topics": [
+                "business intelligence",
+                "semantic layer"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: From Data to Decisions: Building Intelligent Analytics with Microsoft Fabric & Fabric IQ"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "From data to decisions with a semantic model",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "anastasia-senitz",
+          "name": "Anastasia Senitz",
+          "pronouns": null,
+          "title": "Data & AI Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "Building AI Data Agents in Microsoft Fabric: From Raw Data to Context-Aware Answers",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026building-ai-data-agents-in-micro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Building data agents that answer with context.",
+              "topics": [
+                "genai & llm",
+                "semantic layer"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: Building AI Data Agents in Microsoft Fabric: From Raw Data to Context-Aware Answers"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "What raw data needs before an AI agent can answer from it",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "noventum-consulting",
+      "name": "noventum consulting",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marco-nielinger",
+          "name": "Marco Nielinger",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Rheinland 2026",
+              "title": "GenAI for Data & Analytics: What’s hot and what’s not?",
+              "date": "2026-07-11",
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "content_id": "data-saturday-rheinland-2026genai-for-data-analytics-whats-h",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Which GenAI uses in data and analytics work.",
+              "topics": [
+                "genai & llm",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+              "note": "talk: GenAI for Data & Analytics: What’s hot and what’s not?"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "GenAI in analytics: what works and what does not",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "borussia-monchengladbach",
+      "name": "Borussia Mönchengladbach",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "johannes-riegger",
+          "name": "Johannes Riegger",
+          "pronouns": null,
+          "title": null,
+          "city": "Mönchengladbach",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Datamonsters Ruhrgebiet / Niederrhein (Borussia Special)",
+              "title": "Technical questions at Borussia Mönchengladbach",
+              "date": "2026-09-08",
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/316228805/",
+              "content_id": "datamonsters-ruhrgebiet-niederrhein-borussia-specialtechnica",
+              "co_authors": [
+                "Clemens Vasters"
+              ],
+              "mentions_dbt": false,
+              "description": "Insight into the club's technical and data questions, with Clemens Vasters (Microsoft).",
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/events/316228805/",
+              "note": "talk: Technical questions at Borussia Mönchengladbach"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Data at a Bundesliga club",
+          "past_chapter_talks": [],
+          "notes": "Talk title not given on the listing."
+        }
+      ],
+      "notes": "Mönchengladbach, about 25 km from Düsseldorf. Hosted the Ruhrgebiet user group in Sep 2026."
+    },
+    {
+      "id": "ruhragency",
+      "name": "ruhr.agency",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Essen"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "malte-berneaudkotz",
+          "name": "Malte Berneaud-Kötz",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Essen",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "dbt-example: dbt training project on the jaffle-shop template",
+              "date": "2024-10-24",
+              "url": "https://github.com/mberneaud-ruhrdot/dbt-example",
+              "content_id": "githubdbtexample-dbt-training-project-on-the-jaffleshop-temp",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "dbt example project built for internal training.",
+              "topics": [
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/mberneaud-ruhrdot/dbt-example",
+              "note": "oss: dbt-example: dbt training project on the jaffle-shop template"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Teaching dbt inside a small agency",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile gives Essen/Berlin. Only content found is a training repo."
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "analytics-pioneers",
+      "name": "Analytics Pioneers",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "none",
+      "dbt_signal": "medium",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/",
+          "note": "Free online trainings (BigQuery, dbt, GA4) and an in-person Cologne meetup in Nov 2025."
+        }
+      ],
+      "people": [
+        {
+          "id": "benedikt-buchert",
+          "name": "Benedikt Buchert",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "Analytics Pioneers community training",
+              "title": "Effektive Datenmodellierung mit dbt für Einsteiger",
+              "date": "2024-05-17",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/300609816/",
+              "content_id": "analytics-pioneers-community-trainingeffektive-datenmodellie",
+              "co_authors": [
+                "Daniel Schmidt"
+              ],
+              "mentions_dbt": true,
+              "description": "Online beginner training on data modelling with dbt.",
+              "topics": [
+                "dbt fundamentals",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "workshop",
+              "event": "Analytics Pioneers community training",
+              "title": "Introduction Data Modelling for Data Warehousing",
+              "date": "2024-03-08",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/299310230/",
+              "content_id": "analytics-pioneers-community-trainingintroduction-data-model",
+              "co_authors": [
+                "Beatrix Stade"
+              ],
+              "mentions_dbt": false,
+              "description": "Online training on data warehouse modelling.",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/300609816/",
+              "note": "workshop: Effektive Datenmodellierung mit dbt für Einsteiger"
+            },
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/299310230/",
+              "note": "workshop: Introduction Data Modelling for Data Warehousing"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt modelling for marketing-analytics teams",
+          "past_chapter_talks": [],
+          "notes": "Online trainings; employer and location not stated. Analytics Pioneers is a Munich-based community."
+        },
+        {
+          "id": "daniel-schmidt",
+          "name": "Daniel Schmidt",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "Analytics Pioneers community training",
+              "title": "Effektive Datenmodellierung mit dbt für Einsteiger",
+              "date": "2024-05-17",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/300609816/",
+              "content_id": "analytics-pioneers-community-trainingeffektive-datenmodellie",
+              "co_authors": [
+                "Benedikt Buchert"
+              ],
+              "mentions_dbt": true,
+              "description": "Online beginner training on data modelling with dbt.",
+              "topics": [
+                "dbt fundamentals",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "workshop",
+              "event": "Analytics Pioneers community training",
+              "title": "Identity Resolution (Connected Components Algorithm) in SQL",
+              "date": "2025-02-21",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/305841246/",
+              "content_id": "analytics-pioneers-community-trainingidentity-resolution-con",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Identity resolution in SQL.",
+              "topics": [
+                "data modeling",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/300609816/",
+              "note": "workshop: Effektive Datenmodellierung mit dbt für Einsteiger"
+            },
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/305841246/",
+              "note": "workshop: Identity Resolution (Connected Components Algorithm) in SQL"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Identity resolution in SQL",
+          "past_chapter_talks": [],
+          "notes": "Common name; employer and location not stated. Verify before outreach."
+        },
+        {
+          "id": "benjamin-kirsche",
+          "name": "Benjamin Kirsche",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Analytics Pioneers Meetup Köln",
+              "title": "Real-Time Alerting with Google Analytics and BigQuery",
+              "date": "2025-11-18",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/311563464/",
+              "content_id": "analytics-pioneers-meetup-kolnrealtime-alerting-with-google",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Real-time alerting on GA and BigQuery data (in person at denkwerk, Cologne).",
+              "topics": [
+                "data quality & testing",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/311563464/",
+              "note": "talk: Real-Time Alerting with Google Analytics and BigQuery"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Alerting on analytics data",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "moritz-bauer",
+          "name": "Moritz Bauer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "Analytics Pioneers community training",
+              "title": "Marketing Data Warehouse – Build Your Own Series (parts 1-4)",
+              "date": "2024-08-30",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/302528612/",
+              "content_id": "analytics-pioneers-community-trainingmarketing-data-warehous",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Four-part online series on building a marketing data warehouse.",
+              "topics": [
+                "data warehouse & platforms",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "workshop",
+              "event": "Analytics Pioneers community training",
+              "title": "BigQuery meets LLM: MCP-Server in der Praxis",
+              "date": "2025-11-21",
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/311670351/",
+              "content_id": "analytics-pioneers-community-trainingbigquery-meets-llm-mcps",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "MCP servers on BigQuery.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/302528612/",
+              "note": "workshop: Marketing Data Warehouse – Build Your Own Series (parts 1-4)"
+            },
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/events/311670351/",
+              "note": "workshop: BigQuery meets LLM: MCP-Server in der Praxis"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Building a marketing data warehouse",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Munich-based digital analytics community run by mohrstade; its meetup.com group is labelled Düsseldorf and it held a Cologne meetup in Nov 2025."
+    },
+    {
+      "id": "datamonsters-ruhrgebiet-niederrhein",
+      "name": "Datamonsters Ruhrgebiet / Niederrhein",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kamp-Lintfort",
+        "Mönchengladbach"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/",
+          "note": "Microsoft data platform user group, bi-monthly in person (Kamp-Lintfort, Mönchengladbach)."
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "data-platform-usergroup-rheinland",
+      "name": "Data Platform Usergroup Rheinland",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Königswinter",
+        "Cologne"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/",
+          "note": "Monthly Microsoft data platform meetups in Königswinter and Cologne."
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "data-saturday-rheinland",
+      "name": "Data Saturday Rheinland",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sankt Augustin"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+          "note": "Yearly free conference at Hochschule Bonn-Rhein-Sieg, Sankt Augustin; about 30 sessions."
+        }
+      ],
+      "people": [],
+      "notes": null
     }
   ],
   "sources": {
@@ -3339,6 +6767,132 @@
         "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
         "yielded": true,
         "note": "49 ads mention dbt"
+      },
+      {
+        "name": "meetup.com gql2 group search (lat 51.3, lon 6.9, radius 50)",
+        "url": "https://www.meetup.com/gql2",
+        "yielded": true,
+        "note": "~120 local groups listed; 20 data groups pulled."
+      },
+      {
+        "name": "trivago Tech, Data & Product meetup",
+        "url": "https://www.meetup.com/trivago-tech-data-product/",
+        "yielded": true,
+        "note": "Aug 2025 data platform evening."
+      },
+      {
+        "name": "Data Platform Usergroup Rheinland",
+        "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/",
+        "yielded": true,
+        "note": "Many listings omit the speaker name."
+      },
+      {
+        "name": "Datamonsters Ruhrgebiet / Niederrhein",
+        "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/",
+        "yielded": true,
+        "note": null
+      },
+      {
+        "name": "Data Saturday Rheinland 2025 and 2026 (Sessionize)",
+        "url": "https://datasaturdays.com/Event/20260711-datasaturday0084",
+        "yielded": true,
+        "note": "About 60 sessions; mostly Microsoft stack, many speakers from outside the region."
+      },
+      {
+        "name": "Power Platform & Fabric User Group Cologne",
+        "url": "https://www.meetup.com/power-platform-ug-cologne/",
+        "yielded": true,
+        "note": null
+      },
+      {
+        "name": "Engineering Kiosk Rhine-Ruhr",
+        "url": "https://www.meetup.com/engineering-kiosk-rhine-ruhr/",
+        "yielded": true,
+        "note": "One data talk (Aug 2024)."
+      },
+      {
+        "name": "Analytics Pioneers (Düsseldorf/Köln groups)",
+        "url": "https://www.meetup.com/analytics-pioneers-dusseldorf/",
+        "yielded": true,
+        "note": "Online trainings incl. a dbt course; Munich-based organisers."
+      },
+      {
+        "name": "Data Analytics & AI Köln (taod)",
+        "url": "https://www.meetup.com/data-analytics-ai-koeln/",
+        "yielded": true,
+        "note": "Mostly webinars; July 2025 Cologne evening named speakers."
+      },
+      {
+        "name": "PyCologne, PyData Dortmund, inovex Cologne, Female Dev Club, Women in Tech Köln",
+        "url": "https://www.meetup.com/pycologne/",
+        "yielded": false,
+        "note": "No analytics engineering talks since 2024; PyData Dortmund is discussion format."
+      },
+      {
+        "name": "adesso blog RSS",
+        "url": "https://www.adesso.de/de/news/blog/blog-rss.xml",
+        "yielded": true,
+        "note": "Authors from post author boxes; two posts mention dbt."
+      },
+      {
+        "name": "ORAYLIS blog feed",
+        "url": "https://www.oraylis.de/feed",
+        "yielded": true,
+        "note": "No dbt mentions; Fabric and Databricks."
+      },
+      {
+        "name": "b.telligent blog",
+        "url": "https://www.btelligent.com/en/blog",
+        "yielded": true,
+        "note": "One dbt post (Aug 2026)."
+      },
+      {
+        "name": "codecentric feed and blog",
+        "url": "https://www.codecentric.de/feed",
+        "yielded": false,
+        "note": "No data posts."
+      },
+      {
+        "name": "inovex blog search for dbt",
+        "url": "https://www.inovex.de/de/blog/?s=dbt",
+        "yielded": false,
+        "note": null
+      },
+      {
+        "name": "areto consulting blog (Cologne)",
+        "url": "https://areto.de/blog/",
+        "yielded": false,
+        "note": "No dbt posts visible."
+      },
+      {
+        "name": "datadice blog",
+        "url": "https://www.datadice.io/en/blog/",
+        "yielded": false,
+        "note": "Coburg-based; Dataform not dbt; NRW location pages are SEO."
+      },
+      {
+        "name": "GitHub user search (dbt / data engineer, NRW cities)",
+        "url": "https://github.com/search?type=users",
+        "yielded": true,
+        "note": "Three people with their own dbt repos; rest are tutorials."
+      },
+      {
+        "name": "Medium feeds (datadice, StepStone) via WebFetch and rss2json",
+        "url": "https://medium.com/feed/the-stepstone-group-tech-blog",
+        "yielded": false,
+        "note": "HTTP 429 / Cloudflare challenge."
+      },
+      {
+        "name": "dev.to API tag=dbt",
+        "url": "https://dev.to/api/articles?tag=dbt",
+        "yielded": false,
+        "note": "HTTP 429."
+      },
+      {
+        "name": "Snowflake user groups Germany",
+        "url": "https://usergroups.snowflake.com/germany/",
+        "yielded": false,
+        "note": "No NRW chapter (Berlin, Hamburg, Munich, Rhein-Main only)."
       }
     ]
   },
@@ -3348,7 +6902,11 @@
       "date": "2024-12-05",
       "venue": "adesso SE, Agrippinawerft 26, Köln",
       "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
-      "organisers": [],
+      "organisers": [
+        "Hisham Babahmed",
+        "Stephan Durry",
+        "dbt Labs (Super Organizer)"
+      ],
       "attendees": 22,
       "talks": [
         {
@@ -3384,7 +6942,10 @@
       "date": "2025-05-15",
       "venue": "taod Consulting GmbH, Oskar-Jäger-Str. 173, K4, Cologne",
       "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
-      "organisers": [],
+      "organisers": [
+        "taod Consulting GmbH",
+        "Stephan Durry"
+      ],
       "attendees": 30,
       "talks": [
         {
@@ -3449,6 +7010,31 @@
       "name": "Women in AI Cologne #3 (KI.NRW)",
       "url": "https://www.ki.nrw/women-in-ai-cologne-meetup-3/",
       "note": "One speaker. AI-transformation topic."
+    },
+    {
+      "name": "Data Platform Usergroup Rheinland (meetup.com)",
+      "url": "https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/",
+      "note": "Microsoft data community, Königswinter/Cologne."
+    },
+    {
+      "name": "Datamonsters Ruhrgebiet / Niederrhein (meetup.com)",
+      "url": "https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/",
+      "note": "Bi-monthly, in person."
+    },
+    {
+      "name": "Data Saturday Rheinland",
+      "url": "https://datasaturdays.com/",
+      "note": "Yearly, Sankt Augustin, June/July."
+    },
+    {
+      "name": "trivago Tech, Data & Product (meetup.com)",
+      "url": "https://www.meetup.com/trivago-tech-data-product/",
+      "note": "Düsseldorf venue and co-host option."
+    },
+    {
+      "name": "Engineering Kiosk Rhine-Ruhr (meetup.com)",
+      "url": "https://www.meetup.com/engineering-kiosk-rhine-ruhr/",
+      "note": "General engineering meetup, Düsseldorf."
     }
   ]
 }

@@ -191,6 +191,8 @@ community_channels[] name, url, note
    - Add a line to `metadata.method` describing what the new run added.
 7. **Log the run** in the change log at the bottom of this file.
 
+- **Location and LinkedIn passes:** fill unknown locations with the location pass and the LinkedIn pass in [`../research/README.md`](../research/README.md) (steps 3 and 4).
+
 ---
 
 ## 5. Replication prompt
@@ -317,3 +319,4 @@ The meetup event pages can be read the same way: open any meetup.com page, then
 | 2026-09-23 | 5 | Shared schema v2 adds `lead_type`. Emerging voices, meaning people who publish but have no talk yet, are prioritised for first-time speaker invitations; the rule is in `../berlin_planning/SEARCH_METHOD.md` §1 Step 6. Split: 23 proven speakers, 1 emerging voice (Albinas Plesnys, dbt CI/CD articles), 1 featured, 79 with no public content. Most Lithuanian leads came from job-ad searches, so the next run should look for people who post (Medium, LinkedIn posts, Uncle Data guests). |
 | 2026-09-23 | 6 | Search for emerging voices (Step 3b). Added 6 people: Simas Janušas (tier 1), Martynas Mickevičius, Paulius Alaburda, Žymantė Guogaitė (tier 2), Jurgita Zukauskaite and Kaloyan Todorov Hristov. Added new content for Rytis Ulys (now `proven_speaker`), Tomas Peluritis, Aurimas Griciūnas and Dovilė Bakšytė. Now 110 people: 24 proven speakers, 5 emerging voices, 2 featured. The organiser dashboard now ranks emerging voices first within each tier and has a lead-type filter. `metadata.counts` puts `lead_type` last, to match Berlin and KL. Backup: `lithuania_dbt_companies.v5.json`. |
 | 2026-09-23 | 7 | Shared schema v3 adds `pronouns` and `sourced_via` (schema-only change). `pronouns` records only pronouns people publish themselves; none were found for tier-1/2 people, so all are `null`. `sourced_via` is derived from each person's evidence; people found through the job-ad company search are `job_ad_company_search`. For women-in-data sourcing and the line-up balance check, see `../berlin_planning/SEARCH_METHOD.md` Step 2b and §1 Step 6. Next run: check Vilnius women-in-data groups (e.g. PyLadies Vilnius, Women Go Tech). Backup: `lithuania_dbt_companies.v6.json`. |
+| 2026-10-01 | 8 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed no one, because most unknown people have no evidence link other than a LinkedIn profile. LinkedIn search results placed 9 people: 7 in Lithuania and 2 elsewhere (Paris and Chicago). 49 people are still unknown. |

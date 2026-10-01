@@ -150,6 +150,8 @@ See `../berlin_planning/SEARCH_METHOD.md` §3, shared schema v3. Paris-specific 
 
 Follow `../berlin_planning/SEARCH_METHOD.md` §4, using `paris_dbt_companies.v<N>.json` for backups and `../enriched/paris-dbt-meetup.json` for `past_meetups` and `past_chapter_talks`.
 
+- **Location and LinkedIn passes:** fill unknown locations with the location pass and the LinkedIn pass in [`../research/README.md`](../research/README.md) (steps 3 and 4).
+
 ## 5. Replication prompt
 
 ````
@@ -194,3 +196,4 @@ companies and dbt roles, people who have moved, and topic trends.
 |---|---|---|
 | 2026-09-24 | 1 | First search, with 5 parallel sub-agents covering large companies, partners/vendors/media, meetups and conferences, job ads, and women-in-data communities, plus chapter history. 238 companies (94 on the watchlist), 186 people, 147 dbt job ads at 109 companies, 207 unique content items. Split: 137 proven speakers, 26 emerging voices, 8 featured, 16 with no public content. Tiers: 37 tier 1, 86 tier 2, 54 tier 3, 9 connectors. 17 people had already spoken at the Paris dbt Meetup. The LinkedIn pass is incomplete because the web-search limit was reached; 38 people have LinkedIn URLs. |
 | 2026-09-24 | 2 | Rebuilt with the same merge rules; adds 3 job ads the v1 build had dropped (150 in total), otherwise unchanged. Backup: `paris_dbt_companies.v1.json`. |
+| 2026-10-01 | 3 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed 4 people: co-written Ippon posts and in-person talks at the chapter. LinkedIn search results placed 5 more. Of the 9 placed, 3 are in Paris and 6 elsewhere (Bordeaux, Nantes, Lille, Niort and Lyon). 18 people are still unknown. |

@@ -132,6 +132,8 @@ Shared schema version 3 (v2 added `lead_type`; v3 added `pronouns` and `sourced_
 8. **Update the metadata:** bump `version`, set `generated_at`, recalculate `counts` (`standard_counts()` in Berlin Appendix A) and `topic_counts`, add a line to `method`.
 9. **Log the run** in the change log below.
 
+- **Location and LinkedIn passes:** fill unknown locations with the location pass and the LinkedIn pass in [`../research/README.md`](../research/README.md) (steps 3 and 4).
+
 ### Open items
 
 - No LinkedIn profile found for Wei Jian, Syakeer Rahman, Ng Ser Jie or Michael Rorig; try other name spellings, or ask Lee Boon Keong / DCKL for introductions.
@@ -234,3 +236,4 @@ print("ok")
 | 2026-09-23 | 2 | Moved to shared schema v2 (`lead_type`): 26 proven speakers, 8 emerging voices, 1 featured, 9 with no public content; tier 1 now 6. LinkedIn pass in a new session: 18 people searched, 14 URLs found (38 of 44 people now have one). Location fixes: Yun Fei Choo and Harvey Li are Singapore-based; Zi Qin Yeow is Malaysia-based; Wei Jian is in Penang; Syakeer Rahman is in Putrajaya. Backup of v1 at `kuala_lumpur_dbt_companies.v1.json`. |
 | 2026-09-23 | 3 | Marked 4 women in data to highlight in `notes` (prefix `HIGHLIGHT`): Bee Teng Lim, Goh Pei Xuan, Katie Huang Xiemin, Caroline Chong. No schema change. Organiser page rebuilt with the Kuala Lumpur chapter. |
 | 2026-09-23 | 4 | Shared schema v3 adds `pronouns` (self-stated only, never inferred; none recorded yet) and `sourced_via`, which is derived from evidence (e.g. `women_in_data_community` for the PyLadies x PyData KL speaker). The field list is in `../berlin_planning/SEARCH_METHOD.md` §3. For women-in-data sourcing and the line-up balance check, see that file's Step 2b and §1 Step 6. Backup: `kuala_lumpur_dbt_companies.v3.json`. |
+| 2026-10-01 | 5 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. An in-person talk at a Snowflake community meetup in Kuala Lumpur placed Chang Boon Heng. LinkedIn search results placed Izzudin Hafiz in Kuala Lumpur and Feng Cheng in Singapore. 3 people are still unknown. |
