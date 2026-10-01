@@ -4,7 +4,7 @@ This file goes with `boston_dbt_companies.json`. It explains how the dataset was
 
 - **First built:** 2026-09-24
 - **Goal:** find people in Greater Boston who could **speak at** (or attend) the [Boston dbt Meetup](https://www.meetup.com/boston-dbt-meetup/), and the local companies that use dbt.
-- **Region:** Greater Boston. Boston, Cambridge and Burlington count. Providence does not.
+- **Region:** Greater Boston. Boston, Cambridge and Burlington count. Commuter towns are local for this chapter, so Providence counts too.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -17,8 +17,8 @@ This file goes with `boston_dbt_companies.json`. It explains how the dataset was
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 37 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 31 |
-| Based elsewhere | 5 |
+| Based in the region | 32 |
+| Based elsewhere | 4 |
 | Location unknown | 7 |
 | With a LinkedIn profile | 6 |
 | Job ads mentioning dbt | 62 |
@@ -116,7 +116,7 @@ People were taken only from each community's own events. Nobody's gender is reco
 - [ ] **Skip or re-rank people outside the region.** Divyakumar Savla is in the San Francisco Bay Area, and Adrien Ledoux is in Zurich.
 - [ ] **Check Kasey Mazza's chapter talk** against the Meetup page before treating it as a repeat invite.
 - [ ] **Treat Boston Data and AI Saturday entries as unconfirmed** until the schedule for 3 October 2026 is out.
-- [ ] **Leave out dbt Labs staff:** Stephen Thibeault, Jason Ganz, Grace Goheen and Jeremy Cohen.
+- [ ] **dbt Labs staff are labelled.** Stephen Thibeault, Jason Ganz, Grace Goheen and Jeremy Cohen work there. They can speak, but check the line-up has practitioners first.
 
 ## 5. Next run
 
@@ -133,7 +133,8 @@ You are extending my dataset of Greater Boston companies that use dbt, and peopl
 at or attend the Boston dbt Meetup. The file is boston/boston_dbt_companies.json in
 /Users/jeremychia/Documents/Github/dbt-meetups. Read boston/SEARCH_METHOD.md, then
 research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
-The region is Greater Boston (Boston, Cambridge, Burlington and nearby).
+The region is Greater Boston (Boston, Cambridge, Burlington and nearby). Commuter towns such as
+Providence count as local.
 
 Budget about 25 web searches. Try these first:
 1. LinkedIn search results for tier 1-2 people with linkedin_confidence "not_searched".

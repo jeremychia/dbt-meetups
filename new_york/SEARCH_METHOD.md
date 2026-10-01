@@ -127,7 +127,7 @@ A tier is a priority level. Tier 1 means a person in the region (or not known to
 - [ ] **Check name-only matches.** Kenny Ning, Andi Muskaj and Randy Au matched a profile by name, with nothing tying it to their employer. Their locations stay unknown.
 - [ ] **Check Sean McIntyre.** The Vienna location comes from a GitHub profile that lists dbt Labs. Nothing ties it to the 2019 Warby Parker talk.
 - [ ] **Check tier-1 people raised by the rule.** Nicholas Thomson (Datadog) is a content writer. Brooklyn Data's marketing author Jill Roberson is also tier 1.
-- [ ] **Skip dbt Labs staff.** dbt Labs is excluded from outreach. Elias DeFaria, Ben Butler and Stephen Robb are tier 1 but work there.
+- [ ] **dbt Labs staff are labelled.** Elias DeFaria, Ben Butler and Stephen Robb are tier 1 and work there. They can speak, but check the line-up has practitioners first.
 - [ ] **Check two records.** Millie Symns's employer may be out of date, and "Velir x Brooklyn Data" is a joint company record.
 - [ ] **Check current employers** for anyone sourced from 2022 or 2023 pages.
 - [ ] **Check who is already booked.** Compare leads with the chapter's upcoming events.

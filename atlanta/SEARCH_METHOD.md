@@ -100,7 +100,7 @@ People are taken only from each community's own events. Nobody's gender is recor
 - **Watch out for:**
   - **GitHub leads are mostly portfolio or course projects.** Their tier 1 comes from the scoring rule, not from judgement.
   - **Corporate panels are not dbt talks.** Most COLLIDE, TAG and Tableau speakers are data leaders who have not spoken about dbt.
-  - **dbt Labs staff** spoke at several chapter events, including a recorded Coalesce watch party. Their locations are unknown, and they are excluded from outreach.
+  - **dbt Labs staff** spoke at several chapter events, including a recorded Coalesce watch party. Their locations are unknown, and they are labelled in the cockpit.
 
 ## 3. Key leads
 
@@ -131,7 +131,7 @@ People are taken only from each community's own events. Nobody's gender is recor
 - [ ] **Confirm the 15 unknown locations.** They include Cox Automotive's 2024 speakers, the FanDuel career panel and Mike Sandt. Mike Sandt has an Atlanta LinkedIn profile, but nothing ties it to Salesloft.
 - [ ] **Check the medium location calls.** Grant Cloud's LinkedIn result says Atlanta, but its text mentions a move to Kalshi in New York. Zach Lancaster was matched as "Zachary Lancaster" at WarnerMedia.
 - [ ] **Skip or re-rank people outside the region.** Francisco Moya is in Medellín, and Nate Nunta is in the Bay Area.
-- [ ] **Leave out dbt Labs staff:** Nate Nunta, Katherine Brock, Brandon Sweeney, Jason Ganz, Erica Louie and Cole Fraser.
+- [ ] **dbt Labs staff are labelled.** Nate Nunta, Katherine Brock, Brandon Sweeney, Jason Ganz, Erica Louie and Cole Fraser work there. They can speak, but check the line-up has practitioners first.
 
 ## 5. Next run
 

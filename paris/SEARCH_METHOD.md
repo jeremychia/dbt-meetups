@@ -34,7 +34,7 @@ Five sub-agents ran in parallel, following one output format: people, companies,
   - Ippon Technologies (the best source: 12 dbt posts with named authors)
   - Modeo, Artefact, Theodo, OCTO, Converteo, Devoteam, Infinite Lambda Paris, Zenika, Ekimetrics
 - **Vendors:** nao Labs, Kestra, Sifflet, CastorDoc, DataGalaxy, Dataiku, Altertable and others.
-- **dbt Labs' Paris-related staff:** they are excluded from outreach, as in Berlin.
+- **dbt Labs' Paris-related staff:** they are labelled in the cockpit, as are Fivetran staff. `excluded_from_outreach` is now true only for internal records (Vinted).
 - **French data media:**
   - The **DataGen** newsletter and podcast by Robin Conquet (`datageneration.substack.com`). This was the richest single source of named Paris dbt and analytics engineering practitioners: Doctolib, Qonto, Back Market, Ornikar, Decathlon, Swile, Modeo and more.
   - **blef.fr Data News**, by Christophe Blefari.

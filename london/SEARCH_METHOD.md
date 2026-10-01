@@ -4,7 +4,7 @@ This file goes with `london_dbt_companies.json`. It explains how the dataset was
 
 - **First built:** 2026-10-01
 - **Goal:** find people in Greater London who could **speak at** (or attend) the [London dbt Meetup](https://www.meetup.com/london-dbt-meetup/), and the local companies that use dbt.
-- **Region:** Greater London.
+- **Region:** Greater London. Commuter towns are local for this chapter, so Oxford and Brighton count too.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -17,8 +17,8 @@ This file goes with `london_dbt_companies.json`. It explains how the dataset was
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 104 |
 | Spoke at this chapter before | 33 |
-| Based in the region | 92 |
-| Based elsewhere | 7 |
+| Based in the region | 94 |
+| Based elsewhere | 5 |
 | Location unknown | 21 |
 | With a LinkedIn profile | 3 |
 | Job ads mentioning dbt | 3 |
@@ -74,7 +74,7 @@ This step finds speakers through women-focused groups' own events. It never reco
 
 The location rules are in [`../research/README.md`](../research/README.md). In short, a location needs the person's own profile, or a recent in-person local talk plus a local office.
 
-- **Location pass (page fetches):** 13 people placed, 7 in London and 6 elsewhere. Most came from GitHub profiles that name the person's company. Four came from recent in-person talks at an employer with a London office.
+- **Location pass (page fetches):** 13 people placed, 9 in the region and 4 elsewhere. Most came from GitHub profiles that name the person's company. Four came from recent in-person talks at an employer with a London office.
 - **LinkedIn pass (search results only):** 12 people searched and 3 placed, all in London: [Gordon Curzon](https://www.linkedin.com/in/gordon-curzon-714a1713/), [Pearl Prakash](https://www.linkedin.com/in/pearl-prakash/) and [Christelle Xu](https://www.linkedin.com/in/christellexu/).
 - **Still unknown:** 21 people.
 
@@ -123,7 +123,7 @@ A tier is a priority level. Tier 1 means a person in London (or not known to be 
 
 - [ ] **Check unknown locations.** 21 people have no known location. They include Melissa Simpson, Konrad Maliszewski, Sarah Levy and Lucy Kendrick.
 - [ ] **Check tier-1 people raised by the rule.** Milon James (Wise) is tier 1, but dbt is one line in a tech stack post.
-- [ ] **Skip dbt Labs staff.** dbt Labs is excluded from outreach. Kshitij Aranke and Richard Persaud are tier 1 but work there.
+- [ ] **dbt Labs staff are labelled.** Kshitij Aranke and Richard Persaud are tier 1 and work there. They can speak, but check the line-up has practitioners first.
 - [ ] **Check current employers.** 2022 and 2023 talks may show an old employer.
 - [ ] **Check who is already booked.** Compare leads with the chapter's upcoming events.
 
@@ -141,7 +141,8 @@ A tier is a priority level. Tier 1 means a person in London (or not known to be 
 ````
 You are extending my dataset of London companies that use dbt, and people who could speak at or
 attend the London dbt Meetup. The file is london/london_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Region: Greater London.
+/Users/jeremychia/Documents/Github/dbt-meetups. Region: Greater London; commuter towns such as
+Oxford and Brighton count as local.
 Read london/SEARCH_METHOD.md first, then research/README.md, research/raw-format.md,
 research/location-task.md and research/linkedin-task.md.
 
@@ -163,5 +164,5 @@ print ok), then add a change-log row below.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-01 | 1 | First build from one research run: 75 companies, 120 people, 3 job ads at 2 companies, 22 past meetups. 33 people had spoken at the chapter. Tiers: 38 tier 1, 55 tier 2, 19 tier 3, 7 connectors, 1 organiser. Lead types: 104 proven speakers, 11 emerging voices, 1 featured, 4 with no public content. |
-| 2026-10-01 | 1 | Location pass from public pages: 13 people placed, 7 in London and 6 elsewhere. |
+| 2026-10-01 | 1 | Location pass from public pages: 13 people placed, 9 in the region and 4 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 12 people searched, 3 placed in London. 21 people are still unknown. |

@@ -4,7 +4,7 @@ This file goes with `taipei_dbt_companies.json`. It explains how the dataset was
 
 - **First built:** 2026-10-01
 - **Goal:** find people in the Taipei metro area who could **speak at** (or attend) the [Taipei dbt Meetup](https://www.meetup.com/taipei-dbt-meetup/), and the local companies that use dbt. The chapter is the most active dbt chapter worldwide, with 46 past meetups from 2022-08-17 to 2026-08-26.
-- **Region:** the Taipei metro area. That is Taipei, New Taipei and Keelung, so Hsintien and Yungho count. Taoyuan and Hsinchu do not.
+- **Region:** the Taipei metro area. That is Taipei, New Taipei and Keelung, so Hsintien and Yungho count. Commuter towns are local for this chapter, so Taoyuan counts too. Hsinchu does not.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -17,8 +17,8 @@ This file goes with `taipei_dbt_companies.json`. It explains how the dataset was
 | First-time speakers (publish, no talk yet) | 23 |
 | Proven speakers | 46 |
 | Spoke at this chapter before | 30 |
-| Based in the region | 22 |
-| Based elsewhere | 3 |
+| Based in the region | 23 |
+| Based elsewhere | 2 |
 | Location unknown | 44 |
 | With a LinkedIn profile | 1 |
 | Job ads mentioning dbt | 2 |
@@ -70,9 +70,9 @@ This step looks for speakers through women-focused groups' own events. It never 
   - Meetup's `gql2` endpoint returns each event's hosts and RSVPs with their profile city. It was read for 36 in-person or hybrid chapter events and for R-Ladies Taipei. A host or an RSVP to the event where the person spoke gave high confidence.
   - The KKTIX pages for DevOps Taiwan #67 and #70, COSCUP 2025 speaker bios, GitHub profile pages and the OSYS (新立資訊) company site gave the rest.
   - An in-person talk in the last 2 years at an employer with a Taipei office gave medium confidence. So did a Meetup member with the same name in Taipei, Yungho or Hsintien.
-  - It placed 23 people: 21 in the region and 2 outside it.
+  - It placed 23 people: 22 in the region and 1 outside it.
 - **LinkedIn pass:** search results only, never a LinkedIn page. 15 people were searched. It placed 1, Katy Yuan, in the San Francisco Bay Area.
-- **Result:** 22 people are in the region, 3 are outside it and 44 are unknown.
+- **Result:** 23 people are in the region, 2 are outside it and 44 are unknown.
 
 ## 2. What we learnt
 
@@ -119,7 +119,7 @@ This step looks for speakers through women-focused groups' own events. It never 
 - **Check Ning Chen's location.** The Meetup profile says Seattle, but Ning Chen co-hosts R-Ladies Taipei events held in person in 2025. The location stays unknown.
 - **Check two-city and name-only calls.** Ian Ma's GitHub location reads "New Jersey / Taipei", so Ian Ma is in region at medium only. CL Kao, Joshua Lin, Bruce Huang, Bowen Kuo, Ping-Lin Chang and douenergy are in region from name-only Meetup matches.
 - **Check people likely elsewhere.** Terrence Toh's employer is in Singapore. Datacoves and Infinite Lambda have no confirmed Taipei office, so Noel Gomez and Michael Han stay unknown.
-- **Skip people outside the region.** Stacy Lo is in Taoyuan, Zhe-You (Jason) Liu is in Tainan and Katy Yuan is in the San Francisco Bay Area.
+- **Skip people outside the region.** Zhe-You (Jason) Liu is in Tainan and Katy Yuan is in the San Francisco Bay Area.
 
 ## 5. Next run
 
@@ -141,7 +141,8 @@ speak at or attend the Taipei dbt Meetup. The file is taipei/taipei_dbt_companie
 /Users/jeremychia/Documents/Github/dbt-meetups. Read taipei/SEARCH_METHOD.md first, then
 research/README.md, research/raw-format.md, research/location-task.md and
 research/linkedin-task.md. Keep the shared schema (berlin_planning/SEARCH_METHOD.md §3).
-The region is Taipei, New Taipei and Keelung; Taoyuan and Hsinchu are outside it.
+The region is Taipei, New Taipei and Keelung; Taoyuan counts as local, since commuter towns are
+local for this chapter. Hsinchu is outside it.
 
 Try first: new iThome 鐵人賽 series (data-engineering search terms, not only the dbt tag;
 fetch with curl and a browser user agent); new chapter, R-Ladies Taipei and DevOps Taiwan
@@ -160,5 +161,5 @@ research/validate.py and add a change-log row below.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-01 | 1 | First build. iThome 鐵人賽, the chapter's Medium publication, the Recce blog, DevOps Taiwan on KKTIX, COSCUP, R-Ladies Taipei and Taipei Women in Tech, GitHub and Yourator, plus chapter history. 69 people at 44 companies, 30 of them past chapter speakers. 23 emerging voices and 30 tier-1 leads. 2 job ads, neither read. |
-| 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, KKTIX and COSCUP speaker pages, GitHub profiles and recent in-person talks. 23 people placed, 21 of them in the region. |
-| 2026-10-01 | 1 | LinkedIn pass from search results: 15 people searched and 1 placed, outside the region. With the location pass, 22 people are in the region, 3 outside it and 44 unknown. |
+| 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, KKTIX and COSCUP speaker pages, GitHub profiles and recent in-person talks. 23 people placed, 22 of them in the region. |
+| 2026-10-01 | 1 | LinkedIn pass from search results: 15 people searched and 1 placed, outside the region. With the location pass, 23 people are in the region, 2 outside it and 44 unknown. |

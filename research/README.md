@@ -48,6 +48,7 @@ Location decides the cockpit's "in region only" filter and the attendee ranking,
 - **High:** the person's own profile states a city. That means a GitHub location, a speaker bio, an author box, a Meetup profile tied to the person, or a LinkedIn search result that shows their name, employer and location.
 - **Medium:** an in-person talk or organiser role at a local event in the last 2 years, and the employer has a local office.
 - **Outside the region:** needs the same standard, a stated city elsewhere.
+- **Commuter towns count as local.** A town within about an hour of the chapter city is in the region. Examples are Uppsala for Stockholm, Santa Cruz for San Francisco, Münster for Düsseldorf, Aarhus for Copenhagen, Taoyuan for Taipei, Olympia and Mount Vernon for Seattle, Providence for Boston, and Oxford and Brighton for London. A town in a different country does not count.
 - **Otherwise unknown.** Never infer a location from a name, a hometown, a university or a company's head office alone.
 - **Meetup member profiles** count only when the member is tied to the person: the RSVP or host of the event they spoke at. A name match alone is medium at best, and never supports "outside the region".
 

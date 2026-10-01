@@ -56,6 +56,7 @@ A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), 
 - **First-time speakers first.** Within each tier, the speaker list puts **emerging voices** (people who publish about dbt but have no talk on record) ahead of proven speakers, then everyone else. A filter shows just one group. A balanced line-up pairs one proven speaker with one or two first-time speakers.
 - **Outreach status** is saved in your browser only. Use **Export CSV** to take a list elsewhere.
 - **Vinted colleagues are labelled**, since the source files mark them as not for outreach. A checkbox hides them.
+- **dbt Labs and Fivetran staff are labelled**, and a checkbox hides them.
 
 ### Rebuild after the research changes
 

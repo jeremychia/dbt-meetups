@@ -141,7 +141,7 @@ These rules are the same in both regional files. They are also written out in `m
   - **weak:** not verified.
   - **none:** the company uses a different stack (e.g. Zalando uses Databricks Metric Views; idealo uses Spark and Glue).
 - **`watchlist`** is true if `local_presence` isn't confirmed, or `dbt_signal` is weak or none.
-- **`excluded_from_outreach`** is true only for dbt Labs, because their Berlin staff already give product updates.
+- **`excluded_from_outreach`** is true only for internal records (Vinted). dbt Labs and Fivetran staff are labelled in the cockpit instead.
 - **`past_meetups`** is copied from `../enriched/berlin-dbt-meetup.json`. Don't maintain it by hand.
 
 ### Step 7: Parallel sub-agents

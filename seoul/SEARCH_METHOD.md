@@ -121,7 +121,7 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Chris Song:** probably the same person as 송호연, formerly VP at NFTBank.
 - **Check two organisers' locations.** Joshua Kim and Kyung-jun Lee stay unknown because their Meetup cities conflict with their Seoul roles.
 - **Check tier 1.** Jung Won-hyung is a job seeker who writes about dbt. The tier rule put this lead in tier 1, but a lightning talk fits better.
-- **Skip dbt Labs staff.** Benoit Perigaud is excluded from outreach and is in Madrid.
+- **dbt Labs staff are labelled.** Benoit Perigaud works there and is in Madrid. Thomas Kim works at Fivetran, so is labelled too. They can speak, but check the line-up has practitioners first.
 - **Check speakers based elsewhere.** Zoe Yim spoke at meetup #9 but is in Atlanta.
 
 ## 5. Next run

@@ -4,7 +4,7 @@ This file goes with `seattle_dbt_companies.json`. It explains how the dataset wa
 
 - **First built:** 2026-09-24
 - **Goal:** find people in the Seattle metro who could **speak at** (or attend) the [Seattle dbt Meetup](https://www.meetup.com/seattle-dbt-meetup/), and the local companies that use dbt.
-- **Region:** the Seattle metro. Seattle, Bellevue, Redmond, Bothell and Mercer Island count. Olympia and Mount Vernon do not.
+- **Region:** the Seattle metro. Seattle, Bellevue, Redmond, Bothell and Mercer Island count. Commuter towns are local for this chapter, so Olympia and Mount Vernon count too.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -17,8 +17,8 @@ This file goes with `seattle_dbt_companies.json`. It explains how the dataset wa
 | First-time speakers (publish, no talk yet) | 2 |
 | Proven speakers | 64 |
 | Spoke at this chapter before | 16 |
-| Based in the region | 58 |
-| Based elsewhere | 9 |
+| Based in the region | 60 |
+| Based elsewhere | 7 |
 | Location unknown | 12 |
 | With a LinkedIn profile | 25 |
 | Job ads mentioning dbt | 65 |
@@ -75,7 +75,7 @@ People were taken only from each community's own events. Nobody's gender is reco
 
 ### Step 7: Location and LinkedIn passes (2026-10-01)
 
-- **Page fetches:** 18 people placed, 15 in the region and 3 outside.
+- **Page fetches:** 18 people placed, 16 in the region and 2 outside.
   - The Meetup `gql2` endpoint gave the profile city of each chapter event's hosts and RSVPs.
   - GitHub profiles, speaker bios and recent in-person talks at an employer with a Seattle office gave the rest.
 - **LinkedIn search results:** 5 people placed, 1 in the region and 4 outside. No LinkedIn page was opened.
@@ -95,7 +95,7 @@ People were taken only from each community's own events. Nobody's gender is reco
 - **Watch out for:**
   - **Tier 1 is small.** Only 2 people meet the strict rule: a local or unknown location plus a dbt item from 2024 onwards. Most strong leads sit in tier 2.
   - **Locations from a head office.** Many first-build cities come from the employer's Seattle or Bellevue head office, not from the person. Priya Tanwar, Nadine Bruxel and Nate Sooter are examples.
-  - **dbt Labs has a Seattle team**, from its purchase of SDF Labs. Its staff are excluded from outreach.
+  - **dbt Labs has a Seattle team**, from its purchase of SDF Labs. Its staff are labelled in the cockpit. They can speak, but check the line-up has practitioners first.
   - **The "Seattle Data Guy" has moved.** Ben Rogojan is now in Denver, according to a podcast title.
 
 ## 3. Key leads
@@ -122,9 +122,9 @@ People were taken only from each community's own events. Nobody's gender is reco
 - [ ] **Confirm locations taken from a head office.** Priya Tanwar, Nadine Bruxel, Nate Sooter and Vikas Ranjan are placed by their employer's office only.
 - [ ] **Confirm the 12 unknown locations.** Brandyn Lee (AgentSync) and Irina Virnik (JumpCloud) are very likely in Seattle, from truncated LinkedIn results. Andres Astorga Espriella may be in Mexico City and at Qbiz rather than independent.
 - [ ] **Check the weak location calls.** Wendy Grus and Mira Winkel were placed by a name match to a chapter member only.
-- [ ] **Skip or re-rank people outside the region.** Pooja Crahen is in New York, Ben Rogojan in Denver, Mitesh Mangaonkar in Austin and Britton Stamper in San Francisco. Weston Pace (Olympia) and Gina Mulligan (Mount Vernon) are outside the metro. Bernardo Dionisi is in Durham, North Carolina, Ivan Perez Avellaneda in Plattsburgh and Dipankar Mazumdar in Canada.
+- [ ] **Skip or re-rank people outside the region.** Pooja Crahen is in New York, Ben Rogojan in Denver, Mitesh Mangaonkar in Austin and Britton Stamper in San Francisco. Bernardo Dionisi is in Durham, North Carolina, Ivan Perez Avellaneda in Plattsburgh and Dipankar Mazumdar in Canada.
 - [ ] **Confirm current roles** for people whose evidence is old: Nate Sooter (2022), Deepak Konidena (Zillow, before 2024) and Vikas Ranjan (T-Mobile, 2023).
-- [ ] **Leave out dbt Labs staff:** Elias DeFaria, Lukas Schulte, William Weld, Alexander Bogdanowicz and Wolfram Shulte.
+- [ ] **dbt Labs staff are labelled.** Elias DeFaria, Lukas Schulte, William Weld, Alexander Bogdanowicz and Wolfram Shulte work there. They can speak, but check the line-up has practitioners first.
 
 ## 5. Next run
 
@@ -141,7 +141,8 @@ You are extending my dataset of Seattle-metro companies that use dbt, and people
 at or attend the Seattle dbt Meetup. The file is seattle/seattle_dbt_companies.json in
 /Users/jeremychia/Documents/Github/dbt-meetups. Read seattle/SEARCH_METHOD.md, then
 research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
-The region is the Seattle metro (Seattle, Bellevue, Redmond and nearby; not Olympia).
+The region is the Seattle metro (Seattle, Bellevue, Redmond and nearby). Commuter towns such as
+Olympia and Mount Vernon count as local.
 
 Budget about 25 web searches. Try these first:
 1. LinkedIn search results for tier 1-2 people with linkedin_confidence "not_searched".
@@ -160,5 +161,5 @@ never guess gender, and record pronouns only when self-stated. Assemble with res
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-24 | 1 | First build: dbt Summit 2026, Airflow Summit 2025 and PyData Seattle 2025, local meetups and user groups, WiDS Puget Sound and other women-in-data communities, company blogs, a LinkedIn Jobs scan and ATS searches. Past chapter speakers added from `../enriched/seattle-dbt-meetup.json`. 110 companies (49 on the watchlist), 79 people, 65 job ads at 44 companies, 7 past meetups. Split: 64 proven speakers, 2 emerging voices, 13 featured. Tiers: 2 tier 1, 40 tier 2, 22 tier 3, 15 connectors. 16 people had already spoken at the chapter. |
-| 2026-10-01 | 2 | Location pass: 18 people placed from Meetup host and RSVP profiles, GitHub, speaker bios and recent in-person talks, 15 in the region and 3 outside. |
+| 2026-10-01 | 2 | Location pass: 18 people placed from Meetup host and RSVP profiles, GitHub, speaker bios and recent in-person talks, 16 in the region and 2 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 5 people placed from LinkedIn search results, 1 in the region and 4 outside. 12 people are still unknown. |

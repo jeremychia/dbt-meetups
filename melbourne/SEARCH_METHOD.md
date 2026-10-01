@@ -117,13 +117,13 @@ This step looks for speakers through women-focused groups' own events. It never 
 - **Check people already booked.** RMIT (Vishesh Jain and Will Chan), Onyx Gaming (Aaron Pratt and Edmond Yeo) and Suncorp (Sudheer Chalamcharla) speak at dbt World Tour Melbourne on 2026-10-06.
 - **Merge duplicate companies.** Examples are MECCA and MECCA Brands, Cevo and Cevo Australia, and Wesfarmers and Workwear Group (Wesfarmers).
 - **Check one spelling.** The dbt Labs page spells Samuel Ellett as "Samuel Ellet".
-- **Skip dbt Labs staff.** Tristan Handy and Pat Kearns are excluded from outreach.
+- **dbt Labs staff are labelled.** Tristan Handy and Pat Kearns work there. They can speak, but check the line-up has practitioners first.
 - **Use pronouns only where recorded.** 6 people stated their pronouns on DataEngBytes. Everyone else has none.
 
 ## 5. Next run
 
 - **After 2026-10-06:** add the dbt World Tour Melbourne recordings and any new speakers.
-- **People still without a location:** 2. Evan Williams's LinkedIn result shows only Mantel's Sydney head office. Pat Kearns works at dbt Labs and is excluded anyway.
+- **People still without a location:** 2. Evan Williams's LinkedIn result shows only Mantel's Sydney head office. Pat Kearns works at dbt Labs and is labelled.
 - **Women-in-data:** try Eventbrite and Luma directly for She Loves Data, WiDS and PyLadies Melbourne, and ask R-Ladies+ Melbourne for its speakers.
 - **Blogs:** try REA, Seek, Culture Amp and carsales blogs through direct fetches instead of web search.
 - **Job ads:** add the Lever, Greenhouse and Ashby `site:` searches for dbt Melbourne.

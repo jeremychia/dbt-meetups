@@ -126,7 +126,7 @@ This step looks for speakers through women-focused groups' own events. It never 
 - **Check most "in region" calls.** Only 10 of the people marked in Greater Sydney have a location note with evidence. The rest were placed from their employer or event during the first build.
 - **Check people already booked.** Mitti (Zarmina Muhammad and Filip Milanovic), Brighte, Bankwest and Suncorp speak at dbt World Tour Sydney on 2026-10-08.
 - **Merge duplicate companies.** Examples are Mitti and SafetyCulture, CBA, Commonwealth Bank and Commonwealth Bank of Australia, Vivanti and Vivanti Consulting, and Zip Co and Zip Money.
-- **Skip dbt Labs staff.** Shabbir Khanbhai is excluded from outreach. Kelly Hotta's record sits under "dbt (Fishtown Analytics)" and is not excluded yet.
+- **dbt Labs staff are labelled.** Shabbir Khanbhai works there. Kelly Hotta's record sits under "dbt (Fishtown Analytics)", which counts as dbt Labs. Dominic Colyer works at Fivetran, so is labelled too. They can speak, but check the line-up has practitioners first.
 - **Use pronouns only where recorded.** 5 people stated their pronouns on DataEngBytes. Everyone else has none.
 
 ## 5. Next run

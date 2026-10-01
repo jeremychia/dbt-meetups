@@ -124,7 +124,7 @@ This step looks for speakers through women-focused groups' own events. It never 
   - Camila Birocchi now works at Rituals.
   - Dumky de Wilde wrote the TDD post at Xebia and now works at MotherDuck.
   - Lucas Ortiz and Cor Zuurmond have not been re-checked since their 2023 and 2022 posts.
-- **Skip dbt Labs staff.** Bart van Delft is tier 1 under a company named "dbt", which is not marked as excluded.
+- **dbt Labs staff are labelled.** Bart van Delft is tier 1 under a company named "dbt", which the cockpit does not label as dbt Labs. Bart van Delft can speak, but check the line-up has practitioners first.
 - **Check two weak leads.** The Holland Casino speakers may be consultants on the project. The Xebia Women in Data talks by Taís Laurindo Pereira and Sohi Sudhir are known only from a search summary.
 - **Check people listed elsewhere.** Sam Debruyn is in Belgium. Hamzah Chaudhary is in San Francisco.
 

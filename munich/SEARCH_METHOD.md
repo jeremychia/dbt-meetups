@@ -121,7 +121,7 @@ This file goes with `munich_dbt_companies.json`. It explains how the dataset was
 - [ ] **Check the name-only matches.** Thomas Lindner and Mathias Heinze are placed in Munich from a Meetup profile with a matching name only.
 - [ ] **Decide on borderline locations.** Bergzeit's office is in Otterfing, about 25 km south of Munich. Athar Nawaz is in Ingolstadt, about 70 km away.
 - [ ] **Check stale roles.** Helena Steurer's and Stephanie Hubert's Bergzeit roles date from 2022. Jorrit Posor has left FINN.
-- [ ] **Exclude dbt Labs staff** from speaker outreach: Stephan Durry.
+- [ ] **dbt Labs staff are labelled.** Stephan Durry works there. Stephan Durry can speak, but check the line-up has practitioners first.
 
 ## 5. Next run
 

@@ -105,7 +105,7 @@ The location rules are in [`../research/README.md`](../research/README.md). In s
   - **Old posts:** the Loblaw Digital posts are from 2023, and the authors' titles were not stated. Check current roles.
   - **Off-topic posts:** a first-time speaker (an "emerging voice") is someone who publishes about dbt but has no talk on record. Samara Xiang reached tier 1 by the rule, but the post is about machine learning experiments, not dbt.
   - **People in two cities:** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
-  - **Vendor speakers:** Snowflake, Astronomer, FiveOneFour, Evidence and Artemis staff fill several slots. dbt Labs is excluded from outreach, so Muneeb Master is a contact, not a lead.
+  - **Vendor speakers:** Snowflake, Astronomer, FiveOneFour, Evidence and Artemis staff fill several slots. dbt Labs staff are labelled in the cockpit. Muneeb Master works there and can speak, but check the line-up has practitioners first.
 
 ## 3. Key leads
 

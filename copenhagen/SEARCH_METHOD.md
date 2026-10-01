@@ -4,7 +4,7 @@ This file goes with `copenhagen_dbt_companies.json`. It explains how the dataset
 
 - **First built:** 2026-10-01
 - **Goal:** find people in Denmark who could **speak at** (or attend) the [Copenhagen dbt Meetup](https://www.meetup.com/copenhagen-dbt-meetup/), and the local companies that use dbt.
-- **Region:** the Copenhagen metro area, including Ballerup and Hørsholm. Aarhus and the rest of Denmark count as outside.
+- **Region:** the Copenhagen metro area, including Ballerup and Hørsholm. Commuter towns are local for this chapter, so Aarhus counts too. The rest of Denmark counts as outside.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -17,8 +17,8 @@ This file goes with `copenhagen_dbt_companies.json`. It explains how the dataset
 | First-time speakers (publish, no talk yet) | 6 |
 | Proven speakers | 71 |
 | Spoke at this chapter before | 32 |
-| Based in the region | 64 |
-| Based elsewhere | 14 |
+| Based in the region | 71 |
+| Based elsewhere | 7 |
 | Location unknown | 12 |
 | With a LinkedIn profile | 8 |
 | Job ads mentioning dbt | 11 |
@@ -80,7 +80,7 @@ This step looks for speakers through women-focused groups' own events. It never 
   - Meetup member profiles tied to a person placed Johan Baltzar in Stockholm and Ernesto Ongaro in Dublin. Each member had joined, by RSVP, the Stockholm dbt meetup where that person spoke.
   - Together they placed 12 people: 9 in Copenhagen and 3 elsewhere.
 - **LinkedIn pass:** search results only, never a LinkedIn page. 10 people were searched and 2 placed: Petr Janda in Copenhagen and Stephen O'Kennedy in Dublin.
-- **Yield:** 14 people placed across both passes, and 15 still unknown.
+- **Yield:** 14 people placed across both passes. 3 more (Erica Louie, Hicham Babahmed and Benoit Perigaud) are placed from the same person's record in another city's file. 12 are still unknown.
 
 ## 2. What we learnt
 
@@ -95,8 +95,8 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Jobindex ads** link off-site, so the dbt wording was visible for one ad only.
 - **Watch out for:**
   - **Few first-time speakers.** Most Danish leads are proven speakers from Databricks, Snowflake and data engineering meetups, where dbt rarely appears in titles.
-  - **Aarhus.** Several speakers at Databricks and Snowflake user group events work in Aarhus, which is outside the region.
-  - **dbt Labs staff.** Seven past chapter speakers work at dbt Labs, which is excluded from outreach.
+  - **Aarhus counts as local.** Several speakers at Databricks and Snowflake user group events work in Aarhus. Commuter towns are local for this chapter, so they are marked in the region.
+  - **dbt Labs staff are labelled.** Seven past chapter speakers work at dbt Labs. They can speak, but check the line-up has practitioners first.
 
 ## 3. Key leads
 
@@ -121,16 +121,16 @@ This step looks for speakers through women-focused groups' own events. It never 
 ## 4. Before outreach
 
 - **Check the "Denmark" calls.** 4 people marked in the region give only "Denmark" as their city.
-- **Check most "in region" calls.** Only 10 of the 64 people marked in the region have a location note with evidence. The rest were placed from an event city or an employer's office during research.
+- **Check most "in region" calls.** Only 10 of the 71 people marked in the region have a location note with evidence. The rest were placed from an event city or an employer's office during research.
 - **Don't invite the vol. 11 speakers for that event.** Rasmus Rottwitt, Ernesto Ongaro and Hicham Babahmed speak on 2026-10-21.
-- **Skip dbt Labs staff.** Benoit Perigaud, Nina Anderson and Rachel Ryan are tier 1, but dbt Labs is excluded from outreach.
+- **dbt Labs staff are labelled.** Benoit Perigaud, Nina Anderson and Rachel Ryan are tier 1 and work there. They can speak, but check the line-up has practitioners first.
 - **Check people who have moved:**
   - Kilian Tscherny spoke at vol. 6 for Skatteguiden and now leads data engineering at Heyra.
   - Henrik Varmer is now Head of Data Engineering at VELUX.
   - Stephen O'Kennedy's search result names Kinertic, not ZeroNorth.
   - Van Bui has a second GitHub account that names Ageras.
 - **Treat Jobindex ads as medium.** Only Dagrofa's ad visibly says dbt.
-- **Check one weak location.** Martha Scheffler is tier 1, but Qarma's Danish office is in Aarhus. The location stays unknown.
+- **Check one weak location.** Martha Scheffler is tier 1. Qarma's Danish office is in Aarhus, which counts as local, but Martha Scheffler's own location is unconfirmed.
 
 ## 5. Next run
 
@@ -150,7 +150,8 @@ at or attend the Copenhagen dbt Meetup. The file is copenhagen/copenhagen_dbt_co
 /Users/jeremychia/Documents/Github/dbt-meetups. Read copenhagen/SEARCH_METHOD.md first, then
 research/README.md, research/raw-format.md, research/location-task.md and
 research/linkedin-task.md. Keep the shared schema (berlin_planning/SEARCH_METHOD.md §3).
-The region is the Copenhagen metro area; Aarhus counts as outside.
+The region is the Copenhagen metro area; Aarhus counts as local, since commuter towns are
+local for this chapter.
 
 Try first: new events since metadata.generated_at from Copenhagen Data Engineering,
 Databricks User Group Denmark, Snowflake User Group Denmark and TechWomen Cph (Meetup gql2),

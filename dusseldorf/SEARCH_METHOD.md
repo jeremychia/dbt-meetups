@@ -4,7 +4,7 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
 
 - **First built:** 2026-09-24
 - **Goal:** find people in the Rhein-Ruhr area who could **speak at** (or attend) the [Rhein-Ruhr dbt Meetup](https://www.meetup.com/rhein-ruhr-dbt-meetup/), and the local companies that use dbt.
-- **Region:** Düsseldorf, Cologne, Essen, Dortmund, Bonn and nearby towns. Münster and Leipzig count as outside.
+- **Region:** Düsseldorf, Cologne, Essen, Dortmund, Bonn and nearby towns. Commuter towns are local for this chapter, so Münster counts. Leipzig counts as outside.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -13,12 +13,12 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
 |---|---|
 | Companies | 64 |
 | People | 69 |
-| Tier 1 leads | 21 |
+| Tier 1 leads | 22 |
 | First-time speakers (publish, no talk yet) | 20 |
 | Proven speakers | 43 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 31 |
-| Based elsewhere | 6 |
+| Based in the region | 32 |
+| Based elsewhere | 5 |
 | Location unknown | 32 |
 | With a LinkedIn profile | 9 |
 | Job ads mentioning dbt | 49 |
@@ -71,7 +71,7 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
 
 - **Method:** one or two LinkedIn searches per person, using search results only. No LinkedIn page was opened.
 - **Who:** the 15 tier-1 blog authors without a location.
-- **Result:** 2 people were placed, both outside the region. Michael Peichl is in Leipzig and Jonas Thiele is in Münster. 33 locations are still unknown.
+- **Result:** 2 people were placed. Michael Peichl is in Leipzig, outside the region. Jonas Thiele is in Münster, which counts as local. 33 locations are still unknown.
 
 ## 2. What we learnt
 
@@ -87,7 +87,7 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
   - **Big corporates** publish nothing on dbt.
 - **Watch out for:**
   - **adesso dominates.** It has 9 of the 20 emerging voices and 18 of the 49 job ads. Plan one speaker per company per event.
-  - **Tier 1 is generous here.** 15 of the 21 tier-1 people have no item that mentions dbt. Most are adesso and ORAYLIS authors writing about Fabric, Databricks or Snowflake.
+  - **Tier 1 is generous here.** 16 of the 22 tier-1 people have no item that mentions dbt. Most are adesso and ORAYLIS authors writing about Fabric, Databricks or Snowflake.
   - **Consultancy authors rarely state an office.** That is why most tier-1 people have no known location.
   - **Hicham Babahmed** is also spelled "Hisham". This organiser of the first event (then at adesso) now works at dbt Labs, with a Frankfurt profile.
   - **Shared with the Munich file:** Mathias Heinze (b.telligent) and Benedikt Buchert (Analytics Pioneers) appear in both. The Munich file places Mathias Heinze in Munich, on a name match only.
@@ -115,17 +115,16 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
 
 ## 4. Before outreach
 
-- [ ] **Check tier-1 blog authors for dbt.** 15 of the 21 have never written about dbt.
+- [ ] **Check tier-1 blog authors for dbt.** 16 of the 22 have never written about dbt.
 - [ ] **Confirm each consultancy author's office.** None of the adesso, ORAYLIS or b.telligent author boxes states a city.
 - [ ] **Check the LinkedIn hints that had no profile link.** Search summaries put Lasse Jenzen, Insa Menzel, Nils Kux and Tobias Jasinski in Düsseldorf, but no profile carried the evidence.
 - [ ] **Check Inna Zykova.** A LinkedIn result from the Berlin search places this person in Düsseldorf. This file still records the location as unknown.
-- [ ] **Decide on Münster.** Jonas Thiele is marked outside. Flip the call if Münster counts as nearby.
 - [ ] **Treat visiting speakers as visitors.** Pádraic Slattery is in Amsterdam, Stephan Durry in Berlin, and Sascha Dittmann and Hicham Babahmed in Frankfurt.
-- [ ] **Exclude dbt Labs staff** from speaker outreach: Stephan Durry and Hicham Babahmed.
+- [ ] **dbt Labs staff are labelled.** Stephan Durry and Hicham Babahmed work there. They can speak, but check the line-up has practitioners first.
 
 ## 5. Next run
 
-- **People still without a location:** 33. All 15 LinkedIn targets have now been searched once or twice, with no in-region result. The 17 people below were never searched on LinkedIn:
+- **People still without a location:** 33. All 15 LinkedIn targets have now been searched once or twice. Only Jonas Thiele, in Münster, was placed in the region. The 17 people below were never searched on LinkedIn:
   - Tier 1: Siver Rajab (adesso).
   - Tier 2: Alex Rupp, Anastasia Senitz, Hanna Schwab, Benedikt Buchert, Daniel Schmidt, Diana Ackermann, Jake Mongaya, Marco Nielinger, Mario Müller and Simon Schröder.
   - Tier 3: Andreas Schiffer, Benjamin Kirsche, Christopher König, Frank Geisler, Moritz Bauer, Sebastian Grünwald and Stephan Dahlmann.
@@ -138,7 +137,8 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
 ````
 You are extending the Rhein-Ruhr dbt dataset: dusseldorf/dusseldorf_dbt_companies.json in
 /Users/jeremychia/Documents/Github/dbt-meetups. The region is Düsseldorf, Cologne, Essen,
-Dortmund, Bonn and nearby towns. Read dusseldorf/SEARCH_METHOD.md first, then
+Dortmund, Bonn and nearby towns; commuter towns such as Münster count as local.
+Read dusseldorf/SEARCH_METHOD.md first, then
 research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
 
 Budget about 25 web searches. Most NRW dbt searches return job ads, so prefer direct fetches.
@@ -163,4 +163,4 @@ only, never gender, and pronouns only when self-stated. Assemble with research/a
 | 2026-09-24 | 1 | First build, from one research pass and a LinkedIn Jobs scan. 49 companies, 23 people and 49 dbt job ads at 24 companies. 16 proven speakers, 6 featured and 1 emerging voice. 5 people had spoken at the chapter. 7 people had LinkedIn profiles. |
 | 2026-10-01 | 2 | Extension run through meetup.com, Sessionize, consultancy blog feeds and GitHub. 46 people and 15 companies added, for 69 people and 64 companies. Emerging voices rose from 1 to 20. Tier 1 rose from 1 to 21. |
 | 2026-10-01 | 2 | Location pass from public pages. 16 people placed: 12 in the region and 4 elsewhere. Unknown locations fell from 51 to 35. |
-| 2026-10-01 | 2 | LinkedIn pass on the 15 tier-1 blog authors without a location. 2 people placed, both outside the region. 33 locations are still unknown. |
+| 2026-10-01 | 2 | LinkedIn pass on the 15 tier-1 blog authors without a location. 2 people placed: 1 in the region and 1 elsewhere. 33 locations are still unknown. |

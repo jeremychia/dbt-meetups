@@ -4,7 +4,7 @@ This file goes with `stockholm_dbt_companies.json`. It explains how the dataset 
 
 - **First built:** 2026-09-24
 - **Goal:** find people in the Stockholm area who could **speak at** (or attend) the [Stockholm dbt Meetup](https://www.meetup.com/stockholm-dbt-meetup/), and the local companies that use dbt.
-- **Region:** the Stockholm metro area. Uppsala counts as outside.
+- **Region:** the Stockholm metro area. Commuter towns are local for this chapter, so Uppsala counts as in the region.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -17,8 +17,8 @@ This file goes with `stockholm_dbt_companies.json`. It explains how the dataset 
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 40 |
 | Spoke at this chapter before | 19 |
-| Based in the region | 37 |
-| Based elsewhere | 7 |
+| Based in the region | 40 |
+| Based elsewhere | 4 |
 | Location unknown | 7 |
 | With a LinkedIn profile | 20 |
 | Job ads mentioning dbt | 62 |
@@ -66,13 +66,13 @@ This file goes with `stockholm_dbt_companies.json`. It explains how the dataset 
 
 - **Method:** each person's base was looked up on public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
 - **Best source:** meetup.com RSVP lists. They give the profile city of the person who spoke at that event.
-- **Result:** 11 people were placed, 6 in the region and 5 elsewhere. Unknown locations fell from 21 to 10.
+- **Result:** 11 people were placed, 8 in the region and 3 elsewhere. Unknown locations fell from 21 to 10.
 
 ### Step 7: LinkedIn pass
 
 - **Method:** up to two LinkedIn searches per person, using search results only. No LinkedIn page was opened.
 - **Who:** 7 past chapter speakers without a location.
-- **Result:** 3 people were placed. Filip Vitez is in Stockholm. Niklas Kullberg is in the Uppsala area and Salma Bakouk in New York. 7 locations are still unknown.
+- **Result:** 3 people were placed. Filip Vitez is in Stockholm. Niklas Kullberg is in the Uppsala area, which counts as local. Salma Bakouk is in New York. 7 locations are still unknown.
 
 ## 2. What we learnt
 
@@ -113,9 +113,8 @@ This file goes with `stockholm_dbt_companies.json`. It explains how the dataset 
 - [ ] **Confirm current roles** of the 2023 chapter speakers before asking them back.
 - [ ] **Check for dbt use** at Svedea, Tele2, Adapteo and Funnel. Their speakers talk about data platforms, but dbt is not confirmed.
 - [ ] **Check unconfirmed details.** Ece Kural's employer is not stated. Baaba Bonuedie's city is not confirmed, since Nordea has several Nordic hubs.
-- [ ] **Decide on Uppsala.** Mammar Rahmani, Fernando Brito and Niklas Kullberg are marked outside. Flip them if commuter towns count.
 - [ ] **Treat visiting speakers as visitors.** Ernesto Ongaro is in Dublin, Kshitij Aranke and Stephen Murphy in London, and Salma Bakouk in New York.
-- [ ] **Exclude dbt Labs staff** from speaker outreach: Ernesto Ongaro, Kshitij Aranke, Lucas Paes, Mike Burke and probably Ludwig Sewall.
+- [ ] **dbt Labs staff are labelled.** Ernesto Ongaro, Kshitij Aranke, Lucas Paes and Mike Burke work there. They can speak, but check the line-up has practitioners first. Ludwig Sewall probably works there too, but is recorded at Solita, so is not labelled.
 
 ## 5. Next run
 
@@ -133,8 +132,9 @@ This file goes with `stockholm_dbt_companies.json`. It explains how the dataset 
 ````
 You are extending the Stockholm dbt dataset: stockholm/stockholm_dbt_companies.json in
 /Users/jeremychia/Documents/Github/dbt-meetups. The region is the Stockholm metro area;
-Uppsala counts as outside. Read stockholm/SEARCH_METHOD.md first, then research/README.md
-and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
+Uppsala counts as local, since commuter towns are local for this chapter.
+Read stockholm/SEARCH_METHOD.md first, then research/README.md and the briefs it links
+(raw-format.md, location-task.md, linkedin-task.md).
 
 Budget about 25 web searches. Prefer direct fetches and APIs.
 
@@ -155,5 +155,5 @@ only, never gender, and pronouns only when self-stated. Assemble with research/a
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-24 | 1 | First build, from one research pass and a LinkedIn Jobs scan. 90 companies, 51 people and 62 dbt job ads at 55 companies. 40 proven speakers, 11 featured and no emerging voices. 19 people had spoken at the chapter. 17 people had LinkedIn profiles. |
-| 2026-10-01 | 2 | Location pass from public pages. 11 people placed: 6 in the region and 5 elsewhere. Unknown locations fell from 21 to 10. |
-| 2026-10-01 | 2 | LinkedIn pass on 7 past chapter speakers. 3 placed: 1 in the region and 2 elsewhere. 7 locations are still unknown, and 20 people now have LinkedIn profiles. |
+| 2026-10-01 | 2 | Location pass from public pages. 11 people placed: 8 in the region and 3 elsewhere. Unknown locations fell from 21 to 10. |
+| 2026-10-01 | 2 | LinkedIn pass on 7 past chapter speakers. 3 placed: 2 in the region and 1 elsewhere. 7 locations are still unknown, and 20 people now have LinkedIn profiles. |

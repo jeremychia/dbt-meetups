@@ -125,7 +125,7 @@ This step looks for speakers through women-focused groups' own events. It never 
   - Florian Thoen now works in Paris.
   - Paolo Léonard is now at NEO, Nemish Mehta at IBA and Katarina Milosevic at Datanesis.
 - **Fill missing employers and titles.** Titles marked "(title not stated)" are placeholders. Murilo Cunha's employer is inferred from co-hosting the dataroots podcast.
-- **Skip dbt Labs staff.** Bart van Delft is tier 1, but dbt Labs is excluded from outreach.
+- **dbt Labs staff are labelled.** Bart van Delft is tier 1 and works there. Bart van Delft can speak, but check the line-up has practitioners first.
 - **Check people listed in other chapters.** Mikkel Dengsøe, Bart van Delft, Pádraic Slattery, Juan Manuel Perafán and Niko Korvenlaita also appear in other city files.
 - **Read the 2025-12-04 chapter entry** as the joint Snowflake user group evening at Telenet.
 

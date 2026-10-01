@@ -4,7 +4,7 @@ This file goes with `san_francisco_dbt_companies.json`. It explains how the data
 
 - **First built:** 2026-10-01
 - **Goal:** find people in the SF Bay Area who could **speak at** (or attend) the [San Francisco dbt Meetup](https://www.meetup.com/san-francisco-dbt-meetup/), and the local companies that use dbt.
-- **Region:** the nine SF Bay Area counties. San Francisco, the Peninsula (San Mateo, Menlo Park, Portola Valley) and the South Bay (Sunnyvale) count. Santa Cruz, San Diego and Irvine do not.
+- **Region:** the nine SF Bay Area counties. San Francisco, the Peninsula (San Mateo, Menlo Park, Portola Valley) and the South Bay (Sunnyvale) count. Commuter towns are local for this chapter, so Santa Cruz counts too. San Diego and Irvine do not.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -13,12 +13,12 @@ This file goes with `san_francisco_dbt_companies.json`. It explains how the data
 |---|---|
 | Companies | 61 |
 | People | 76 |
-| Tier 1 leads | 23 |
+| Tier 1 leads | 24 |
 | First-time speakers (publish, no talk yet) | 10 |
 | Proven speakers | 51 |
 | Spoke at this chapter before | 36 |
-| Based in the region | 39 |
-| Based elsewhere | 11 |
+| Based in the region | 40 |
+| Based elsewhere | 10 |
 | Location unknown | 26 |
 | With a LinkedIn profile | 7 |
 | Job ads mentioning dbt | 3 |
@@ -75,8 +75,8 @@ People were taken only from each community's own events. Nobody's gender is reco
 - **Page fetches:** 18 people placed, 12 in the region and 6 outside.
   - The Meetup `gql2` endpoint gave the profile city of each event's hosts and RSVPs.
   - GitHub profiles gave the rest.
-- **LinkedIn search results:** 7 people placed, 3 in the region and 4 outside. No LinkedIn page was opened.
-- **Still unknown:** 27 people.
+- **LinkedIn search results:** 7 people placed, 4 in the region and 3 outside. No LinkedIn page was opened.
+- **Still unknown:** 26 people. One more, Karen Hsieh, is placed from the same person's record in the Taipei file.
 
 ## 2. What we learnt
 
@@ -90,7 +90,7 @@ People were taken only from each community's own events. Nobody's gender is reco
   - **GitHub user search** finds mostly job-seeker portfolios. Only a few are usable speaker leads.
 - **Watch out for:**
   - **Vendors dominate the Bay Area.** Hex, Omni, Sigma, Fivetran and dbt Labs staff publish the most. Treat them below practitioners at non-vendor companies.
-  - **Fivetran and dbt Labs have merged.** Decide whether Fivetran and Census staff fall under the dbt Labs outreach exclusion. This affects Toby Mao and Donny Flynn (Fivetran) and Boris Jabes (Census). Dave Fowler already sits under dbt Labs.
+  - **Fivetran and dbt Labs have merged.** Fivetran staff are labelled like dbt Labs staff, so Toby Mao and Donny Flynn are labelled. Census staff are not labelled, so Boris Jabes is not. Dave Fowler already sits under dbt Labs.
   - **Featured people:** a featured person is quoted or profiled in someone else's content, but has no talk or post of their own. Many San Francisco leads are featured, so ask them for a first talk rather than a repeat.
 
 ## 3. Key leads
@@ -113,13 +113,13 @@ People were taken only from each community's own events. Nobody's gender is reco
 
 ## 4. Before outreach
 
-- [ ] **Check the tier-1 people raised by the rule.** An emerging voice is someone who publishes about dbt but has no talk on record. The rule raises any emerging voice with a post from 2024 onwards to tier 1. That includes 4 vendor bloggers: Katie Bauer and Rachel Herrera (Hex), and Jamie Davidson and Colin Zima (Omni). Deepanshu Girsa is tier 1 on one personal repo.
-- [ ] **Skip or re-rank tier-1 people outside the region.** Lexi Galantino is in San Diego, Pooja Crahen in New York and Emily Hawkins in Boston. Hamzah Chaudhary is in London and Juan Manuel Perafan in Norwalk. Izzy Miller is tier 2 because Santa Cruz is outside the nine counties. Raise Izzy Miller back to tier 1 if you count it.
-- [ ] **Confirm the 27 unknown locations.** They include Matt Senick, Logan Cochran and Harsha Reddy. Harsha Reddy has two possible LinkedIn matches, in Fremont and Santa Clara.
+- [ ] **Check the tier-1 people raised by the rule.** An emerging voice is someone who publishes about dbt but has no talk on record. The rule raises any emerging voice with a post from 2024 onwards to tier 1. That includes 5 vendor bloggers: Katie Bauer, Rachel Herrera and Izzy Miller (Hex), and Jamie Davidson and Colin Zima (Omni). Deepanshu Girsa is tier 1 on one personal repo.
+- [ ] **Skip or re-rank tier-1 people outside the region.** Lexi Galantino is in San Diego, Pooja Crahen in New York and Emily Hawkins in Boston. Hamzah Chaudhary is in London and Juan Manuel Perafan in Norwalk.
+- [ ] **Confirm the 26 unknown locations.** They include Matt Senick, Logan Cochran and Harsha Reddy. Harsha Reddy has two possible LinkedIn matches, in Fremont and Santa Clara.
 - [ ] **Check the weak location calls.** Jason Lally, Boris Jabes, Raul Maldonado and Pradnesh Patil were placed by a name match to a chapter member only.
 - [ ] **Resolve conflicting profiles.** Karen Hsieh's Meetup accounts say Taipei. Gleb Mezhanskiy's Meetup profile says San Francisco but GitHub says New York.
 - [ ] **Confirm current employers.** The Chime story lists Dori Wilson at Chime, not Recce. Several dbt Developer Blog authors' roles date from 2022–23.
-- [ ] **Leave out dbt Labs staff** (excluded from outreach), and decide on Fivetran and Census staff.
+- [ ] **dbt Labs and Fivetran staff are labelled.** Dave Fowler, Ani Venkateshwaran, Paige Berry, Lauren Benezra and Julia Schottenstein work at dbt Labs, and Toby Mao and Donny Flynn at Fivetran. They can speak, but check the line-up has practitioners first.
 
 ## 5. Next run
 
@@ -137,7 +137,7 @@ You are extending my dataset of SF Bay Area companies that use dbt, and people w
 or attend the San Francisco dbt Meetup. The file is san_francisco/san_francisco_dbt_companies.json
 in /Users/jeremychia/Documents/Github/dbt-meetups. Read san_francisco/SEARCH_METHOD.md, then
 research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
-The region is the nine SF Bay Area counties.
+The region is the nine SF Bay Area counties, and commuter towns such as Santa Cruz count as local.
 
 Budget about 25 web searches. Try these first:
 1. LinkedIn search results for tier 1-2 people with linkedin_confidence "not_searched".
@@ -157,4 +157,4 @@ never guess gender, and record pronouns only when self-stated. Assemble with res
 |---|---|---|
 | 2026-10-01 | 1 | First build: dbt Summit 2026 and Coalesce 2025 agendas, vendor customer stories (Hex, Omni, Monte Carlo), the dbt Developer Blog, the Snowflake Bay Area User Group, 3 women-in-data events, GitHub user search and job ads from web search. Past chapter speakers added from `../enriched/san-francisco-dbt-meetup.json`. 61 companies (36 on the watchlist), 76 people, 3 job ads, 13 past meetups. Split: 51 proven speakers, 10 emerging voices, 13 featured, 2 with no public content. Tiers: 24 tier 1, 41 tier 2, 9 tier 3, 2 connectors. 36 people had already spoken at the chapter. |
 | 2026-10-01 | 1 | Location pass: 18 people placed from Meetup host and RSVP profiles and GitHub, 12 in the region and 6 outside. |
-| 2026-10-01 | 1 | LinkedIn pass: 7 people placed from LinkedIn search results, 3 in the region and 4 outside. 27 people are still unknown. |
+| 2026-10-01 | 1 | LinkedIn pass: 7 people placed from LinkedIn search results, 4 in the region and 3 outside. 27 people are still unknown. |

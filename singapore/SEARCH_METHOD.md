@@ -119,7 +119,7 @@ This step looks for speakers through women-focused groups' own events. It never 
 - **Check two name-only matches.** Chin Hwee Ong and Umesh Ramakrishnan are placed at medium from Meetup RSVPs that match on name only.
 - **Check one LinkedIn match.** Feng Cheng's result shows the name surname first, "Cheng Feng - Grab".
 - **Check Michael Han's title.** The 2026-09 meetup lists "General Manager", and GovTech lists "Head of APAC, Infinite Lambda".
-- **Skip dbt Labs staff.** Mark Wan and Sin Ta Poon are excluded from outreach. Mark Wan's location is unknown, and LinkedIn found no matching profile, so check whether Mark Wan is still at dbt Labs.
+- **dbt Labs staff are labelled.** Mark Wan and Sin Ta Poon work there. They can speak, but check the line-up has practitioners first. Mark Wan's location is unknown, and LinkedIn found no matching profile, so check whether Mark Wan is still at dbt Labs.
 - **Skip the backup.** The backup speaker is a Vinted colleague based in Berlin.
 - **Check speakers based elsewhere.** Nas Radev and Hamzah Chaudhary are in London, Thanh Dinh Khac in Ho Chi Minh City, and Josh Beemster in Sydney.
 

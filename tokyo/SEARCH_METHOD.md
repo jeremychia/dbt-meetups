@@ -123,7 +123,7 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Toshitei Ito** may be Toshitaka Ito, a dbt Labs solutions architect in Tokyo.
   - **Company records:** several companies appear twice, once from research and once from the chapter history. Examples are Kurashiru (dely) and dely Inc., and Finatext Holdings (Finatext / Nowcast) and Nowcast Inc.
 - **Fix placeholder employers.** One company record is named "Inc.". "Anthropic Japan G.K." holds Tristan Handy, which comes from the talk text.
-- **Skip dbt Labs staff.** Mark Wan, Andrew Escay and Elias DeFaria are excluded from outreach. Elias DeFaria is in Seattle.
+- **dbt Labs staff are labelled.** Mark Wan, Andrew Escay and Elias DeFaria work there. Elias DeFaria is in Seattle. They can speak, but check the line-up has practitioners first.
 - **Check one weak location.** AZEGAMI Kazuya's Zenn bio suggests Sukagawa, Fukushima, but names no home city. The employer, youthful days, lists an office in Nagano. The location stays unknown.
 - **Check people already booked.** Sony Bank and Mynavi speak at dbt World Tour Tokyo on 2026-10-20.
 
