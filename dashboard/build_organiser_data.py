@@ -19,23 +19,27 @@ OUTPUT_FILE = os.environ.get(
 )
 
 # keyed by the file name before "_dbt_companies.json"; a file with no entry still loads, with goal "both".
-# goal decides which view the cockpit opens on: speakers, attendees or both.
+# goal decides which view the cockpit opens on: speakers, attendees or both. area groups chapters in the city picker.
 CHAPTERS = {
-    "berlin": {"label": "Berlin", "goal": "speakers"},
-    "lithuania": {"label": "Vilnius", "goal": "attendees"},
-    "kuala_lumpur": {"label": "Kuala Lumpur", "goal": "speakers"},
-    "paris": {"label": "Paris", "goal": "speakers"},
-    "seattle": {"label": "Seattle", "goal": "speakers"},
-    "sydney": {"label": "Sydney", "goal": "speakers"},
-    "boston": {"label": "Boston", "goal": "speakers"},
-    "melbourne": {"label": "Melbourne", "goal": "speakers"},
-    "stockholm": {"label": "Stockholm", "goal": "speakers"},
-    "munich": {"label": "Munich", "goal": "speakers"},
-    "dusseldorf": {"label": "Düsseldorf", "goal": "speakers"},
-    "montreal": {"label": "Montreal", "goal": "speakers"},
-    "atlanta": {"label": "Atlanta", "goal": "speakers"},
-    "toronto": {"label": "Toronto", "goal": "speakers"},
+    "berlin": {"label": "Berlin", "goal": "speakers", "area": "Europe"},
+    "lithuania": {"label": "Vilnius", "goal": "attendees", "area": "Europe"},
+    "kuala_lumpur": {"label": "Kuala Lumpur", "goal": "speakers", "area": "Asia-Pacific"},
+    "paris": {"label": "Paris", "goal": "speakers", "area": "Europe"},
+    "seattle": {"label": "Seattle", "goal": "speakers", "area": "North America"},
+    "sydney": {"label": "Sydney", "goal": "speakers", "area": "Asia-Pacific"},
+    "boston": {"label": "Boston", "goal": "speakers", "area": "North America"},
+    "melbourne": {"label": "Melbourne", "goal": "speakers", "area": "Asia-Pacific"},
+    "stockholm": {"label": "Stockholm", "goal": "speakers", "area": "Europe"},
+    "munich": {"label": "Munich", "goal": "speakers", "area": "Europe"},
+    "dusseldorf": {"label": "Düsseldorf", "goal": "speakers", "area": "Europe"},
+    "montreal": {"label": "Montreal", "goal": "speakers", "area": "North America"},
+    "atlanta": {"label": "Atlanta", "goal": "speakers", "area": "North America"},
+    "toronto": {"label": "Toronto", "goal": "speakers", "area": "North America"},
 }
+
+AREA_ORDER = ["Europe", "North America", "Asia-Pacific", "Other"]
+# placeholder company ids that stand for "no employer", so they never link chapters
+PLACEHOLDER_COMPANY_IDS = {"independent"}
 
 TIER_ORDER = {"1": 0, "2": 1, "backup": 2, "3": 3, "connector": 4, "organiser": 5}
 # within a tier, emerging voices (publish, but no talk yet) come before proven speakers:
@@ -244,6 +248,7 @@ def build_chapter(path):
         "key": key,
         "label": label,
         "goal": config.get("goal", "both"),
+        "area": config.get("area", "Other"),
         "region": data["metadata"]["region"],
         "generated_at": data["metadata"]["generated_at"],
         "version": data["metadata"]["version"],
@@ -266,17 +271,18 @@ def mark_cross_chapter(chapters):
         for p in ch["people"]:
             person_chapters[p["id"]].add(ch["label"])
         for c in ch["companies"]:
-            company_chapters[c["id"]].add(ch["label"])
+            if c["id"] not in PLACEHOLDER_COMPANY_IDS:
+                company_chapters[c["id"]].add(ch["label"])
     for ch in chapters:
         for p in ch["people"]:
             p["also_in"] = sorted(person_chapters[p["id"]] - {ch["label"]})
         for c in ch["companies"]:
-            c["also_in"] = sorted(company_chapters[c["id"]] - {ch["label"]})
+            c["also_in"] = sorted(company_chapters[c["id"]] - {ch["label"]}) if c["id"] not in PLACEHOLDER_COMPANY_IDS else []
 
 
 def build_output(source_glob=SOURCE_GLOB):
     paths = sorted(p for p in glob.glob(source_glob) if "/.venv/" not in p)
-    chapters = [build_chapter(p) for p in paths]
+    chapters = sorted((build_chapter(p) for p in paths), key=lambda c: (AREA_ORDER.index(c["area"]), c["label"]))
     mark_cross_chapter(chapters)
     return {"chapters": chapters}
 

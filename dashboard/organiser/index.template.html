@@ -47,14 +47,19 @@
   }
   .theme-toggle button.active { background: var(--surface-2); border-color: var(--border); }
 
-  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-  .tab {
-    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary);
-    border-radius: 12px; padding: 10px 16px; cursor: pointer; text-align: left; font: inherit;
+  .picker { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .area { display: flex; gap: 10px; align-items: baseline; }
+  .area-label { flex: 0 0 116px; white-space: nowrap; font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .cities { display: flex; gap: 6px; flex-wrap: wrap; }
+  .city {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text-primary);
+    border-radius: 999px; padding: 4px 11px; cursor: pointer; font: inherit; font-size: 13px;
   }
-  .tab strong { display: block; color: var(--text-primary); font-size: 15px; }
-  .tab span { font-size: 12px; }
-  .tab.active { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .city span { color: var(--text-muted); font-size: 11.5px; font-variant-numeric: tabular-nums; margin-left: 3px; }
+  .city:hover { border-color: var(--text-secondary); }
+  .city.active { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .chapter-line { margin: 0 0 16px; font-size: 13px; color: var(--text-secondary); }
+  .chapter-line strong { color: var(--text-primary); font-size: 16px; margin-right: 4px; }
 
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 18px; }
   .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
@@ -136,7 +141,11 @@
     .row-head { flex-wrap: wrap; }
     .row-side { flex-direction: row; align-items: center; width: 100%; justify-content: flex-start; }
     .two-col { grid-template-columns: 1fr; }
-    .tab { flex: 1 1 140px; }
+    .area { flex-direction: column; gap: 4px; }
+    .area-label { flex: none; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .stat { padding: 8px 10px; }
+    .stat b { font-size: 18px; }
   }
 </style>
 
@@ -153,7 +162,8 @@
     </div>
   </header>
 
-  <div class="tabs" id="chapter-tabs"></div>
+  <nav class="picker" id="chapter-tabs" aria-label="chapter"></nav>
+  <p class="chapter-line" id="chapter-line"></p>
   <div class="stat-row" id="stat-row"></div>
 
   <nav class="views" id="view-nav">
@@ -225,11 +235,21 @@ function goalText(goal) {
 // ---- url hash keeps chapter + view shareable: #berlin/speakers
 function readHash() {
   const [key, view] = location.hash.slice(1).split('/');
-  const ch = DATA.chapters.find(c => c.key === key) || DATA.chapters[0];
+  const remembered = store.get('organiser-chapter', null);
+  const ch = DATA.chapters.find(c => c.key === key) || DATA.chapters.find(c => c.key === remembered) || DATA.chapters[0];
   state.chapter = ch ? ch.key : null;
   state.view = VIEW_NOTES.hasOwnProperty(view) ? view : (ch ? defaultView(ch) : 'speakers');
 }
-function writeHash() { history.replaceState(null, '', `#${state.chapter}/${state.view}`); }
+function writeHash() {
+  history.replaceState(null, '', `#${state.chapter}/${state.view}`);
+  store.set('organiser-chapter', state.chapter);
+}
+// a company found in many chapters (a vendor, a global employer) gets a count rather than a long list
+function alsoInChip(names) {
+  if (!names.length) return '';
+  const text = names.length > 3 ? `also in ${names.length} other chapters` : `also in ${names.join(', ')}`;
+  return `<span class="chip good" title="${esc(names.join(', '))}">${esc(text)}</span>`;
+}
 
 // ---- filtering
 function matchesPerson(p) {
@@ -300,7 +320,7 @@ function personRow(p) {
           ${reasons.map(r => `<span class="chip${r.startsWith('first-time') ? ' good' : ''}">${esc(r)}</span>`).join('')}
           ${speakerView ? levelChip(p.speaker_potential, 'speaker') : levelChip(p.attendee_potential, 'attendee')}
           ${speakerView ? regionChip(p) : ''}
-          ${p.also_in.length ? `<span class="chip good">also in ${esc(p.also_in.join(', '))}</span>` : ''}
+          ${alsoInChip(p.also_in)}
           ${p.last_active ? `<span class="chip">last active ${esc(p.last_active.slice(0, 7))}</span>` : ''}
         </div>
         ${speakerView && p.talk_angle ? `<div class="angle">${esc(p.talk_angle)}</div>` : ''}
@@ -332,7 +352,7 @@ function companyRow(c, i) {
           <span class="chip">${c.people_count} ${c.people_count === 1 ? 'person' : 'people'}</span>
           ${c.watchlist ? '<span class="chip warn">watchlist</span>' : ''}
           ${c.excluded_from_outreach ? '<span class="chip bad">not for outreach</span>' : ''}
-          ${c.also_in.length ? `<span class="chip good">also in ${esc(c.also_in.join(', '))}</span>` : ''}
+          ${alsoInChip(c.also_in)}
         </div>
         ${c.stack.length ? `<div class="row-sub" style="margin-top:6px">stack: ${esc(c.stack.join(', '))}</div>` : ''}
         ${people.length || c.jobs.length || c.notes ? `<details><summary>${people.length} ${people.length === 1 ? 'person' : 'people'} · ${c.jobs.length} job ad${c.jobs.length === 1 ? '' : 's'}</summary>
@@ -400,9 +420,13 @@ function render() {
   if (!ch) { document.getElementById('view').innerHTML = '<div class="empty">No chapter files found.</div>'; return; }
   writeHash();
 
-  document.getElementById('chapter-tabs').innerHTML = DATA.chapters.map(c =>
-    `<button class="tab${c.key === state.chapter ? ' active' : ''}" data-chapter="${c.key}"><strong>${esc(c.label)}</strong><span>${goalText(c.goal)} · ${c.people.length} people · ${c.companies.length} companies</span></button>`
+  const areas = [...new Set(DATA.chapters.map(c => c.area))];
+  document.getElementById('chapter-tabs').innerHTML = areas.map(area =>
+    `<div class="area"><span class="area-label">${esc(area)}</span><div class="cities">${DATA.chapters.filter(c => c.area === area).map(c =>
+      `<button class="city${c.key === state.chapter ? ' active' : ''}" data-chapter="${c.key}" aria-pressed="${c.key === state.chapter}" title="${esc(goalText(c.goal))}">${esc(c.label)}<span>${c.people.length}</span></button>`
+    ).join('')}</div></div>`
   ).join('');
+  document.getElementById('chapter-line').innerHTML = `<strong>${esc(ch.label)}</strong> ${esc(goalText(ch.goal))} · ${ch.people.length} people · ${ch.companies.length} companies`;
   document.querySelectorAll('#view-nav button').forEach(b => {
     b.classList.toggle('active', b.dataset.view === state.view);
     const isGoal = b.dataset.view === defaultView(ch) && ch.goal !== 'both';

@@ -6,6 +6,7 @@ Run from the repo root: python3 -m unittest discover -s tests -v
 import os
 import sys
 import unittest
+from unittest import mock
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DASHBOARD_DIR = os.path.join(REPO_ROOT, "dashboard")
@@ -31,10 +32,21 @@ class BuildOrganiserOutputTests(unittest.TestCase):
     def test_unconfigured_chapter_uses_region_label_and_both_goal(self):
         self.assertEqual(self.testtown["label"], "Testtown")
         self.assertEqual(self.testtown["goal"], "both")
+        self.assertEqual(self.testtown["area"], "Other")
 
     def test_configured_chapters_have_a_known_goal(self):
         for key, config in bod.CHAPTERS.items():
             self.assertIn(config["goal"], {"speakers", "attendees", "both"}, key)
+
+    def test_configured_chapters_have_a_known_area(self):
+        for key, config in bod.CHAPTERS.items():
+            self.assertIn(config.get("area"), bod.AREA_ORDER, key)
+
+    def test_chapters_sort_by_area_before_label(self):
+        # othertown sorts first by name, so testtown leading proves area is the first key
+        with mock.patch.dict(bod.CHAPTERS, {"testtown": {"area": "Europe"}}):
+            output = bod.build_output(source_glob=os.path.join(FIXTURES_DIR, "*_dbt_companies.json"))
+        self.assertEqual([c["key"] for c in output["chapters"]], ["testtown", "othertown"])
 
     def test_vinted_colleagues_are_kept_and_tagged(self):
         self.assertTrue(self.people["vic-colleague"]["internal_vinted"])
@@ -93,6 +105,15 @@ class BuildOrganiserOutputTests(unittest.TestCase):
         shared = next(c for c in self.testtown["companies"] if c["id"] == "shared-co")
         self.assertEqual(shared["also_in"], ["Othertown"])
         self.assertEqual(self.people["gus-local"]["also_in"], [])
+
+    def test_placeholder_company_never_links_chapters(self):
+        chapters = [
+            {"label": label, "people": [], "companies": [{"id": "independent"}, {"id": "dbt-labs"}]}
+            for label in ("Berlin", "Paris")
+        ]
+        bod.mark_cross_chapter(chapters)
+        also_in = {c["id"]: c["also_in"] for c in chapters[0]["companies"]}
+        self.assertEqual(also_in, {"independent": [], "dbt-labs": ["Paris"]})
 
 
 if __name__ == "__main__":
