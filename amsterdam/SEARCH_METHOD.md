@@ -7,21 +7,21 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 65 |
+| Companies | 67 |
 | People | 116 |
 | Tier 1 leads | 43 |
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 97 |
-| Spoke at this chapter before | 34 |
+| Spoke at this chapter before | 33 |
 | Based in the region | 79 |
 | Based elsewhere | 6 |
 | Location unknown | 31 |
-| With a LinkedIn profile | 18 |
-| Job ads mentioning dbt | 7 |
+| With a LinkedIn profile | 41 |
+| Job ads mentioning dbt | 12 |
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->
 
@@ -56,6 +56,9 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
   - **Mollie:** an [analytics engineering manager](https://jobs.ashbyhq.com/mollie/1bb9f4e2-bc29-4050-afe2-c16796971ef5) and an [analytics engineer](https://jobs.mollie.com/vacancies/aeii).
   - **Xomnia:** a [data analytics engineer](https://careers.xomnia.com/o/data-analytics-engineer) and a [medior data engineer](https://careers.xomnia.com/o/medior-data-engineer).
   - **One each:** [Floryn](https://jobs.floryn.com/o/data-analytics-engineer), [Booking.com](https://nl.engineering.jobs/nl/vacature/data-analytics-engineer-ii-7939174) and [Lightdash](https://jobs.ashbyhq.com/lightdash/309706bc-1081-48b6-89dc-f769bbe17e6d).
+- **Company job boards, second run:** about 85 Dutch employers on Greenhouse, Lever, Ashby and Recruitee. Only Mollie, Xomnia, Floryn, Snowflake and Databricks had a Dutch ad whose text has the word dbt. The Snowflake ads confirm its Amsterdam office.
+- **HN Who is hiring:** the Algolia API, queried once per monthly thread since January 2023. It gave 3 ads at 2 new companies: [DataChef](https://news.ycombinator.com/item?id=43251524) (hybrid, Netherlands) and [Return](https://news.ycombinator.com/item?id=46134504) (remote, battery storage in the Netherlands).
+- **GitHub code search:** the godatadriven (Xebia) organisation has 26 public dbt projects, mostly training material.
 
 ### Chapter history and locations
 
@@ -79,6 +82,9 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 - **Women Techmakers:** the [GDG Amsterdam events API](https://gdg.community.dev/api/event_slim/for_chapter/1358/?status=Completed&page_size=100) lists only Coffee Coding and AppDevCon since 2024.
 - **[WiDS](https://www.widsworldwide.org/) and [She Loves Data](https://www.shelovesdata.com/events):** no Netherlands event since 2020, and no European She Loves Data events.
 - **Chapter Sessionize:** the [call for speakers](https://sessionize.com/amsterdam-dbt-meetup) is closed and lists no one.
+- **Job boards under the obvious name:** Picnic, bol, Coolblue, bunq, Booking.com, WeTransfer, Ohpen, Otrium and TicketSwap are not on Greenhouse, Lever, Ashby or Recruitee under that name. Adyen, Elastic, Catawiki and Miro have boards, but no Dutch ad mentions dbt.
+- **GitHub code search:** no public dbt projects for the City of Amsterdam or Picnic.
+- **dbt Labs case-study file:** it has no Dutch company.
 
 ## 3. Companies looked at
 
@@ -87,11 +93,11 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 - **Two placeholder employers.** "Independent / employer not stated" and "Independent / no company" hold people whose employer was not given. Titles are left empty where the source page did not state one.
 
 <!-- companies:start -->
-62 companies and communities were looked at. A company is local when it has people or roles in the region.
+64 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (35)</summary>
+<details><summary><b>Strong dbt use</b> (37)</summary>
 
-ANWB, Avo (local presence not confirmed), Curative (local presence not confirmed), Databao / JetBrains (local presence not confirmed), Datafold (local presence not confirmed), dataroots (local presence not confirmed), dbt (local presence not confirmed), Eindhoven Data Community, Floryn, Greenpeace International, Holland Casino, i-spark (local presence not confirmed), ING, Instapro Group (local presence not confirmed), Kramp, Lightdash (local presence not confirmed), Miele X (local presence not confirmed), Mollie, MotherDuck, Nimbus Intelligence (local presence not confirmed), Omni (local presence not confirmed), Otrium (local presence not confirmed), Picnic, reconfigured (local presence not confirmed), Schiphol (local presence not confirmed), Snowflake (local presence not confirmed), Snowplow (local presence not confirmed), Studyportals, SYNQ (local presence not confirmed), Tasman Analytics (local presence not confirmed), Teradata (local presence not confirmed), The Future Group (local presence not confirmed), TicketSwap Data Engineering Team (local presence not confirmed), Xebia, Xomnia
+ANWB, Avo (local presence not confirmed), Curative (local presence not confirmed), Databao / JetBrains (local presence not confirmed), DataChef, Datafold (local presence not confirmed), dataroots (local presence not confirmed), dbt (local presence not confirmed), Eindhoven Data Community, Floryn, Greenpeace International, Holland Casino, i-spark (local presence not confirmed), ING, Instapro Group (local presence not confirmed), Kramp, Lightdash (local presence not confirmed), Miele X (local presence not confirmed), Mollie, MotherDuck, Nimbus Intelligence (local presence not confirmed), Omni (local presence not confirmed), Otrium (local presence not confirmed), Picnic, reconfigured (local presence not confirmed), Return, Schiphol (local presence not confirmed), Snowflake, Snowplow (local presence not confirmed), Studyportals, SYNQ (local presence not confirmed), Tasman Analytics (local presence not confirmed), Teradata (local presence not confirmed), The Future Group (local presence not confirmed), TicketSwap Data Engineering Team (local presence not confirmed), Xebia, Xomnia
 
 </details>
 
@@ -211,3 +217,4 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Ilionx, Odido (l
 | 2026-10-01 | 1 | Location pass from public pages: in-person chapter talks, event pages and Sessionize. 15 people placed, 14 in the Netherlands and 1 in Belgium. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 15 people searched, 6 placed in the Netherlands and 2 elsewhere. With the location pass, 23 people placed and 29 still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass from Meetup data: Xebia Women in Data, PyLadies Amsterdam, Dutch Women in Tech and Rotterdam Women in Tech. 17 people added (9 speakers, 8 organisers as connectors) and 3 updated with new talks. SheSharp, Girl Code, WeCode, GDG Amsterdam, WiDS and She Loves Data had no data talks. |
+| 2026-10-01 | 3 | Company pass from fetches: company job boards, HN Who is hiring, the dbt Labs case-study file and GitHub code search. Companies went from 65 to 67, and job ads from 7 to 12. DataChef and Return are new with a strong dbt signal. Snowflake now has a confirmed Amsterdam office. |

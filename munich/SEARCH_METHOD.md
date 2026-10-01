@@ -7,11 +7,11 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 73 |
+| Companies | 78 |
 | People | 89 |
 | Tier 1 leads | 20 |
 | First-time speakers (publish, no talk yet) | 23 |
@@ -20,8 +20,8 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 | Based in the region | 58 |
 | Based elsewhere | 12 |
 | Location unknown | 19 |
-| With a LinkedIn profile | 16 |
-| Job ads mentioning dbt | 24 |
+| With a LinkedIn profile | 33 |
+| Job ads mentioning dbt | 34 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
 
@@ -59,6 +59,11 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 ### Job ads
 
 - **LinkedIn Jobs:** a search for dbt around Munich. 24 ads at 18 companies mention dbt. adesso posted 6 ads and JobRad 2. Personio, AutoScout24, Octopus Energy and E.ON posted one each.
+- **Company job boards:** the open Greenhouse, Lever and Ashby job APIs (`boards-api.greenhouse.io/v1/boards/<slug>/jobs?content=true`, `api.lever.co/v0/postings/<slug>?mode=json`, `api.ashbyhq.com/posting-api/job-board/<slug>`) return the full ad text, so one call per company checks for the whole word dbt and the location. Flix, Yazio, Helsing, Holidu, AutoScout24 and FINN have Munich or Germany ads that mention dbt.
+- **[arbeitnow.com API](https://www.arbeitnow.com/api/job-board-api):** `?page=N` returns German job ads with full text. 14 pages (1,851 ads) were read before it returned HTTP 429. It added Reev and confirmed Flix and Holidu ads in Munich.
+- **HN Who is hiring:** the Algolia search for "dbt munich" gave Return, which has a Munich office.
+- **[dbt Labs case studies](https://www.getdbt.com/sitemap-0.xml):** the sitemap lists 61 `/case-studies/` pages. Each page states the company headquarters. The [Siemens case study](https://www.getdbt.com/case-studies/siemens) raised Siemens to strong.
+- **[Munich Snowflake User Group](https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/?type=past) and [Analytics Pioneers Munich](https://www.meetup.com/analytics-pioneers-munich/events/?type=past) on Meetup gql2:** a February 2025 dbt talk by Project A Ventures and a May 2024 dbt training by the mohrstade founders raised both to strong.
 
 ### Locations
 
@@ -75,6 +80,9 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 - **Low-yield meetups and conferences:** [Data Modeling Meetup Munich](https://www.meetup.com/data-modeling-dm3/) (speakers are international and online), [PyData Munich](https://www.meetup.com/pydata-munchen/events/?type=past) (GenAI only), the [TDWI conference programme](https://www.tdwi-konferenz.de/de/programm/konferenzprogramm), [PyCon DE](https://pretalx.com/pyconde-pydata-2026/schedule/) and the [Munich Database Meetup](https://munichdatabases.xyz/).
 - **Dormant women-in-data groups:** [Munich WiMLDS](https://www.meetup.com/munich-women-in-machine-learning-and-data-science/) has had no events since 2021. [Google Women Techmakers Munich](https://www.meetup.com/Google-Women-in-Technology-Munchen/) on Meetup has had none since 2023.
 - **Other women-in-data networks:** Meetup's group search found no R-Ladies, Women in Big Data or She Loves Data group near Munich. Two new groups, the [Data & Digital Skills Study Club](https://www.meetup.com/data-digital-skills-study-club/) and Women thinktank, had no talks. [Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/) has held no Munich event.
+- **GitHub code search:** `filename:dbt_project.yml org:<org>` found no public dbt project in the orgs tried. The search rate limit cut several calls short. Orgs tried: Celonis, Personio, Holidu, Flix and Scalable Capital.
+- **Job boards with no Munich dbt ad:** Celonis, Sixt, IDnow, EGYM, Parloa, NavVis, Wemolo and Personio have no Munich ad that mentions dbt. Scalable Capital, Trade Republic, tado and Freeletics have no open Greenhouse, Lever or Ashby board.
+- **Munich Datageeks venues:** the 2024–26 hosts (PAYBACK, KPMG, Allianz, E.ON, Celonis, BSH, QAware, Netlight, JetBrains) show local presence only. No event text mentions dbt.
 
 ## 3. Companies looked at
 
@@ -82,23 +90,29 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 - **Consultancy blogs give most first-time speakers.** b.telligent and synvert name an author on every post, but neither states an office.
 
 <!-- companies:start -->
-72 companies and communities were looked at. A company is local when it has people or roles in the region.
+77 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (5)</summary>
+<details><summary><b>Strong dbt use</b> (11)</summary>
 
-b.telligent, CELUS, Databricks (local presence not confirmed), inovex (local presence not confirmed), Wemolo (VMO)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (26)</summary>
-
-4flow, adesso SE, Agoda, AutoScout24, Celonis, codecentric AG, Daiichi Sankyo, E.ON Deutschland, Eraneos, EY, Holidu, INFOMOTION GmbH, JobRad Deutschland, Kartenliebe GmbH, mohrstade, Munich Snowflake User Group (MSUG), myposter GmbH, Octopus Energy, Personio, Skalar – Digitale Steuerberatung, Synabi Business Solutions GmbH, Trade Republic (local presence not confirmed), Verlag C.H.Beck, Woodmark Consulting, x1F, ZEISS (local presence not confirmed)
+b.telligent, CELUS, Databricks (local presence not confirmed), FINN (local presence not confirmed), FlixMobility, inovex (local presence not confirmed), mohrstade, Project A Ventures (local presence not confirmed), Siemens AG, Wemolo (VMO), Yazio
 
 </details>
 
-<details><summary><b>Not verified</b> (40)</summary>
+<details><summary><b>Some dbt signal</b> (27)</summary>
 
-Bayerischer Rundfunk (BR Data / BR Recherche) (local presence not confirmed), Bergzeit (local presence not confirmed), BMW Group, CorrelAid (local presence not confirmed), Data Modeling Meetup Munich (DM3), dbt Labs (local presence not confirmed), Finanz Informatik (local presence not confirmed), FINN (local presence not confirmed), Firebolt (local presence not confirmed), Frontify (local presence not confirmed), Hochschule München (Munich University of Applied Sciences) (local presence not confirmed), HSE (local presence not confirmed), IDEX.Q (local presence not confirmed), In516ht (local presence not confirmed), Infineon Technologies (local presence not confirmed), Lakekeeper (Vakamo) (local presence not confirmed), LMU Munich (Social Data Science and AI Lab) (local presence not confirmed), Microsoft Fabric (local presence not confirmed), Munich Data Science Institute (TUM) (local presence not confirmed), Munich Database Meetup, Munich Datageeks e.V., Nordcloud (local presence not confirmed), OMMAX (local presence not confirmed), Project A Ventures (local presence not confirmed), Pruna AI (local presence not confirmed), PyLadies Munich (local presence not confirmed), SAP (local presence not confirmed), Scalable Capital, Siemens AG, SIXT SE (local presence not confirmed), Snowflake (local presence not confirmed), SOS Children's Villages (local presence not confirmed), Sundeck (local presence not confirmed), SVA System Vertrieb Alexander (local presence not confirmed), synvert (synvert Data Insights), Süddeutsche Zeitung (local presence not confirmed), Technische Hochschule Ingolstadt (local presence not confirmed), Unstated employer (Munich) (local presence not confirmed), virtual7 GmbH (local presence not confirmed), Women in Data Science (WiDS) Munich
+4flow, adesso SE, Agoda, AutoScout24, Celonis, codecentric AG, Daiichi Sankyo, E.ON Deutschland, Eraneos, EY, Helsing, Holidu, INFOMOTION GmbH, JobRad Deutschland, Kartenliebe GmbH, Munich Snowflake User Group (MSUG), myposter GmbH, Octopus Energy, Personio, Return, Skalar – Digitale Steuerberatung, Synabi Business Solutions GmbH, Trade Republic (local presence not confirmed), Verlag C.H.Beck, Woodmark Consulting, x1F, ZEISS (local presence not confirmed)
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Reev
+
+</details>
+
+<details><summary><b>Not verified</b> (37)</summary>
+
+Bayerischer Rundfunk (BR Data / BR Recherche) (local presence not confirmed), Bergzeit (local presence not confirmed), BMW Group, CorrelAid (local presence not confirmed), Data Modeling Meetup Munich (DM3), dbt Labs (local presence not confirmed), Finanz Informatik (local presence not confirmed), Firebolt (local presence not confirmed), Frontify (local presence not confirmed), Hochschule München (Munich University of Applied Sciences) (local presence not confirmed), HSE (local presence not confirmed), IDEX.Q (local presence not confirmed), In516ht (local presence not confirmed), Infineon Technologies (local presence not confirmed), Lakekeeper (Vakamo) (local presence not confirmed), LMU Munich (Social Data Science and AI Lab) (local presence not confirmed), Microsoft Fabric (local presence not confirmed), Munich Data Science Institute (TUM) (local presence not confirmed), Munich Database Meetup, Munich Datageeks e.V., Nordcloud (local presence not confirmed), OMMAX (local presence not confirmed), Pruna AI (local presence not confirmed), PyLadies Munich (local presence not confirmed), SAP (local presence not confirmed), Scalable Capital, SIXT SE (local presence not confirmed), Snowflake (local presence not confirmed), SOS Children's Villages (local presence not confirmed), Sundeck (local presence not confirmed), SVA System Vertrieb Alexander (local presence not confirmed), synvert (synvert Data Insights), Süddeutsche Zeitung (local presence not confirmed), Technische Hochschule Ingolstadt (local presence not confirmed), Unstated employer (Munich) (local presence not confirmed), virtual7 GmbH (local presence not confirmed), Women in Data Science (WiDS) Munich
 
 </details>
 
@@ -235,3 +249,4 @@ Aiven (local presence not confirmed)
 | 2026-10-01 | 2 | Location pass from public pages. 18 people placed: 10 in the region and 8 elsewhere. Unknown locations fell from 40 to 22. |
 | 2026-10-01 | 2 | LinkedIn pass on 15 people. 5 placed: 1 in the region and 4 elsewhere. 17 locations are still unknown, and 16 people now have LinkedIn profiles. |
 | 2026-10-01 | 3 | Women-in-data pass. Checked WiDS Munich (2024 agenda and 2026 team), AWS Women's User Group Munich, PyLadies Munich (past events and hosts), Women Techmakers Munich (through Meetup and GDG Cloud Munich), two new Meetup groups and Women on Snowflake. Added 16 people with `sourced_via: women_in_data_community`: 7 speakers and 9 organisers as connectors. Added a talk to Patricia Goldberg. Added community channels for the WiDS Munich 2024 agenda, Google Women Techmakers Munich and GDG Cloud Munich. |
+| 2026-10-01 | 4 | Company pass from open job boards (Greenhouse, Lever, Ashby, arbeitnow), HN Who is hiring, dbt Labs case studies and Meetup gql2 line-ups. 5 companies added, for 78. 2 of them have a strong dbt signal: FlixMobility and Yazio. 4 companies raised to strong: Siemens AG, FINN, Project A Ventures and mohrstade. People are unchanged. |

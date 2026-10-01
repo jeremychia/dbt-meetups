@@ -7,11 +7,11 @@ This file holds what is specific to Atlanta. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 91 |
+| Companies | 92 |
 | People | 96 |
 | Tier 1 leads | 11 |
 | First-time speakers (publish, no talk yet) | 13 |
@@ -20,8 +20,8 @@ This file holds what is specific to Atlanta. The method, scoring rules, schema a
 | Based in the region | 75 |
 | Based elsewhere | 4 |
 | Location unknown | 17 |
-| With a LinkedIn profile | 11 |
-| Job ads mentioning dbt | 35 |
+| With a LinkedIn profile | 23 |
+| Job ads mentioning dbt | 40 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->
 
@@ -57,6 +57,9 @@ Atlanta's live data community is on the Bevy event platform (Snowflake and Table
 - **[GitHub user search](https://github.com/search?q=dbt+location%3AAtlanta&type=users):** `location:Atlanta` with dbt, data engineer or snowflake in the bio. 11 users mention dbt. 9 first-time speakers and Stewart Bryson were recorded. This was the only source that found Atlanta first-time speakers.
 - **LinkedIn search results:** 2 data practitioners with no public content, from search summaries that mention dbt.
 - **[LinkedIn Jobs](https://www.linkedin.com/jobs/search?keywords=dbt), logged out:** up to 150 Atlanta-area ads checked for the whole word "dbt". 35 ads at 31 companies mention it.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt%20georgia&tags=comment):** the Algolia API, searched for dbt with Atlanta or Georgia, and for analytics and data engineer roles in Atlanta. Posts were kept when they place the role in Atlanta and use the whole word dbt. Only Fullstory qualified. Its hybrid Atlanta data roles build dbt models.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 35 Atlanta employers were tried and 18 had a board. Ads at OneTrust, FanDuel and Incident IQ list dbt among other tools, so they stay at medium.
+- **[GitHub repository search](https://github.com/search?q=dbt+org%3Afullstorydev&type=repositories):** `dbt org:<org>` found [Fullstory's official dbt package](https://github.com/fullstorydev/dbt_fullstory). Fullstory is the only new Atlanta company with a strong dbt signal.
 
 ### Locations
 
@@ -91,6 +94,10 @@ Atlanta's live data community is on the Bevy event platform (Snowflake and Table
   - **[Women in Technology](https://www.womenintechnology.org/):** this site is the Washington DC group, not Atlanta's.
   - **Closed:** Women Who Code closed in 2024.
 - **Unreachable sites:** Atlanta's Women in Technology site (witlinc.org) and girlsintech.org did not resolve. The Georgia Tech and Georgia State calendar searches render with JavaScript, so a fetch returns no events. WiDS regional event pages for Atlanta return 404.
+- **Company job boards with no dbt ads:** Salesloft, Calendly, Greenlight, PrizePicks, Pindrop, Flock Safety, Homebound, Kin, Bandwidth, SageSure and Trella Health. Cardlytics, Stord, Bakkt, BitPay, Sharecare and Waystar have no open Greenhouse, Lever or Ashby board.
+- **GitHub code search (`filename:dbt_project.yml org:<org>`):** no public dbt project at Salesloft, Mailchimp, OneTrust, Home Depot, Chick-fil-A, Calendly, Greenlight or Delta. It also missed the Fullstory package, which repository search found. Code search is rate-limited to about 10 calls a minute.
+- **[dbt Labs case studies](https://www.getdbt.com/sitemap-0.xml):** none for an Atlanta company. PetScreening is in North Carolina.
+- **Meetup venues:** [PyData Atlanta](https://www.meetup.com/pydata-atlanta/) meets in breweries and at Georgia State, [PyAtl](https://www.meetup.com/python-atlanta/) at a tavern, and [Data Science ATL](https://www.meetup.com/data-science-atl/) online. None names a company host.
 
 ## 3. Companies looked at
 
@@ -100,11 +107,11 @@ Atlanta's live data community is on the Bevy event platform (Snowflake and Table
 - **GitHub leads are mostly portfolio or course projects.** The tier 1 on these comes from the scoring rule, not from judgement.
 
 <!-- companies:start -->
-90 companies and communities were looked at. A company is local when it has people or roles in the region.
+91 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (3)</summary>
+<details><summary><b>Strong dbt use</b> (4)</summary>
 
-Aimpoint Digital, Cox Automotive / Cox Enterprises, NCR Voyix
+Aimpoint Digital, Cox Automotive / Cox Enterprises, Fullstory, NCR Voyix
 
 </details>
 
@@ -248,3 +255,4 @@ Blue Cross Blue Shield (local presence not confirmed), Emory University, Kennesa
 | 2026-10-01 | 2 | Location pass: 6 people placed from speaker bios and recent in-person talks, 5 in the region and 1 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 4 people placed from LinkedIn search results, all in the region. 15 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass: Women Techmakers Atlanta (through GDG Atlanta), R-Ladies Atlanta, WiDS Atlanta, REFACTR.TECH and Women Building AI. 15 new people and 2 updated: 10 speakers and panellists, and 7 organisers as connectors. |
+| 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code and repository search, and Meetup venues. 91 to 92 companies. Fullstory added with a strong dbt signal. 3 job ads added at OneTrust, FanDuel and Incident IQ. |

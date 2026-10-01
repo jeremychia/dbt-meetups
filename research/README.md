@@ -13,6 +13,7 @@ This is the one method behind every `<folder>/<city>_dbt_companies.json` researc
 | Europe | Munich | [munich](../munich/SEARCH_METHOD.md) |
 | Europe | Paris | [paris](../paris/SEARCH_METHOD.md) |
 | Europe | Stockholm | [stockholm](../stockholm/SEARCH_METHOD.md) |
+| Europe | Sofia (no chapter yet) | [sofia](../sofia/SEARCH_METHOD.md) |
 | Europe | Vilnius | [baltics](../baltics/SEARCH_METHOD.md) |
 | North America | Atlanta | [atlanta](../atlanta/SEARCH_METHOD.md) |
 | North America | Boston | [boston](../boston/SEARCH_METHOD.md) |
@@ -82,6 +83,7 @@ Work through these sources in order. Each city's notes say which local sources m
 ### LinkedIn profiles
 
 - **Search, don't fetch:** search `"<name>" <company> site:linkedin.com/in`, logged out. Use only what the search results show.
+- **Or take it from a page tied to the person:** a profile link on the person's event, speaker or author page, or in their GitHub social accounts, copied word for word. The link must name the person, and no one else on the page may match it. [`harvest_linkedin.py`](harvest_linkedin.py) does this without searching. GitHub links are high confidence; page links are medium.
 - **Accept a URL** only when the result's title or snippet matches the **name** and the **company or role**. Never guess URLs.
 - **`linkedin_confidence` high:** the name and the company or role both appear in the result title.
 - **`linkedin_confidence` medium:** indirect evidence or a name variant.
@@ -300,8 +302,9 @@ You may split the work into 3-4 parallel runs (e.g. other meetups, blogs, confer
 LinkedIn). Ask each to return records in the format in research/raw-format.md.
 
 Rules:
-- LinkedIn: use search results only. Never fetch linkedin.com pages or the jobs API. Only
-  record linkedin.com/in URLs that appear word for word in a search result. Never guess.
+- LinkedIn: never fetch linkedin.com pages or the jobs API. Only record linkedin.com/in URLs
+  that appear word for word in a search result, or on a page tied to the person (event,
+  speaker or author page, GitHub social accounts). Never guess.
 - Collect only professional information: name, title, company, public talks and posts. No
   personal contact details.
 - Every item needs a URL and a confidence rating. Set url_precision to overview_page when the

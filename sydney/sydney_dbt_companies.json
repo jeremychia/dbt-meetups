@@ -4,14 +4,18 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Sydney companies using dbt, and people who could speak at or attend the Sydney dbt Meetup.",
-    "version": 3,
+    "version": 4,
     "schema_version": 3,
     "region": "Sydney (Sydney dbt Meetup)",
     "method": [
       "Built by planning/build.py from planning/raw/sydney/ (1 run(s), 3 file(s)) + planning/overrides/sydney.json.",
       "v2 (2026-10-01): location pass. 27 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (23 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 22 people are still unknown.",
       "v3 (2026-10-01): women-in-data pass with fetches only (no web search, about 15 fetches): Meetup gql2 groupSearch near Sydney with 19 queries, past events since 2024 of R-Ladies Sydney, GEEQ, Women in Tech Australia, The Bridge Forum, Sydney WiMLDS and one new group, the GDG Sydney events API for Women Techmakers, and the WiDS Sydney and She Loves Data sites. 8 people added (2 speakers and 6 organisers as connectors). Nobody's gender is recorded or inferred.",
-      "Lesson: Sydney women-in-tech groups since 2024 run mostly AI, career and networking events. R-Ladies Sydney is the only one with regular data talks, and its event hosts are the best connectors."
+      "Lesson: Sydney women-in-tech groups since 2024 run mostly AI, career and networking events. R-Ladies Sydney is the only one with regular data talks, and its event hosts are the best connectors.",
+      "v4 (2026-10-01): company pass with fetches only (no web search, about 15 fetches): the freehire.me open API (skills=dbt, countries=AU, 365 ads, full text read where the search result was cut), Greenhouse, Lever and Ashby boards for about 50 Australian employers, Hacker News Who is hiring through Algolia (5 queries), and the getdbt.com case-study text file.",
+      "Lesson: the freehire.me JSON API (freehire.me/api/v1/jobs/search?skills=dbt&countries=AU) returns all 365 Australian dbt-tagged ads in four calls, including Seek and Workday ads that do not render when fetched. Filter the location for Sydney and NSW.",
+      "Lesson: freehire.me also mirrors aggregator ads (whatjobs, arbeitnow) whose employer field is sometimes a job title; those were left out.",
+      "Lesson: the getdbt.com file llms-full-case-studies.txt has every case study as text in one fetch, with each company's headquarters."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -48,13 +52,15 @@
     },
     "caveats": [
       "LinkedIn: 39 of 141 people have a profile url, taken word for word from search results. 102 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
-      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred."
+      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred.",
+      "Employers and dbt wording come from public job ads on 2026-10-01; ads close, so check the employer before outreach.",
+      "Recruiter ads rarely name the client. A role listed under a recruiter does not show which company uses dbt."
     ],
     "counts": {
-      "companies": 166,
+      "companies": 210,
       "people": 149,
-      "job_postings": 87,
-      "companies_with_job_postings": 56,
+      "job_postings": 252,
+      "companies_with_job_postings": 107,
       "speaker_evidence_items": 151,
       "unique_content_items": 127,
       "people_with_linkedin": 54,
@@ -80,7 +86,7 @@
         "1": 16,
         "connector": 23
       },
-      "watchlist_companies": 87,
+      "watchlist_companies": 80,
       "past_meetups": 13,
       "lead_type": {
         "proven_speaker": 108,
@@ -190,6 +196,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Leadership",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Analytics Engineer - User Voice",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-user-voice-canva-ncxpkrui",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "systems. Maintaining, operating, and tuning data infrastructure (Fivetran, Snowflake, Redshift, dbt, Looker, Mode Analytics, Census) at scale. Developing infrastructure, tools and scalable data ingestion",
+          "job_poster": null,
+          "posted_date": "2026-07-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -1460,6 +1479,58 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Staff Data Engineer",
+          "url": "https://freehire.me/jobs/staff-data-engineer-synechron-oa6kyc6d",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "We are seeking an experienced Data Engineer with strong expertise in Snowflake, dbt (Data Build Tool), and Data Modelling to join a high-performing data team. The ideal candidate will be responsible for designing",
+          "job_poster": null,
+          "posted_date": "2026-09-25",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer Data Engineer (Snowflake, DBT & AWS)",
+          "url": "https://freehire.me/jobs/data-engineer-data-engineer-snowflake-dbt-aws-synechron-xbxdhjor",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "developing modern data pipelines, ETL/ELT frameworks, and data integration solutions using Snowflake, DBT, AWS, Python, and SQL . The ideal candidate will have strong hands-on experience building and operating",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer | dbt & Data Modeling",
+          "url": "https://freehire.me/jobs/snowflake-data-engineer-dbt-data-modeling-synechron-australia-pty-ltd-company-mzebmilm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "build and optimize scalable data pipelines and cloud-based data warehouse solutions, leveraging Snowflake, dbt and modern data modelling techniques. You will collaborate with data analysts, architects and engineers",
+          "job_poster": null,
+          "posted_date": "2026-09-27",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Staff Data Engineer",
+          "url": "https://freehire.me/jobs/staff-data-engineer-synechron-australia-pty-ltd-company-mkh3eut4",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "We are seeking an experienced Data Engineer with strong expertise in Snowflake, dbt (Data Build Tool), and Data Modelling to join a high-performing data team. The ideal candidate will be responsible for designing",
+          "job_poster": null,
+          "posted_date": "2026-09-27",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -1751,9 +1822,37 @@
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt Platform",
-        "AWS"
+        "AWS",
+        "dbt"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-humm-bnpl-4tcebnjq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and enhance existing data warehouse platforms and services. Design and build data solutions using Snowflake, dbt, and Azure Data Factory (ADF). Help transition business capabilities to the modern data platform where",
+          "job_poster": null,
+          "posted_date": "2026-09-13",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-hummgroup-bu5diggo",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and enhance existing data warehouse platforms and services. Design and build data solutions using Snowflake, dbt, and Azure Data Factory (ADF). Help transition business capabilities to the modern data platform where",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "other",
@@ -2125,6 +2224,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer – GCP Lakehouse & dbt Pioneer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-gcp-lakehouse-dbt-pioneer-bendigo-bank-63lp6qax",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "You will shape robust data pipelines and modern analytics, mentoring squads and driving best practices in dbt modelling and CI/CD automation. Join a cross-functional, agile team as part of a broader shift toward a",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer - Data Products",
+          "url": "https://freehire.me/jobs/senior-data-engineer-data-products-bendigo-bank-rvrxdtnw",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and measured by their ability to deliver safely, quickly, and reliably. As a Senior Data Engineer (dbt & GCP Pioneer)",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -2198,6 +2323,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://freehire.me/jobs/junior-data-engineer-bizcover-ladeiujn",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "delivery of data pipelines, models, and tests Implement reusable patterns and model structures in MSSQL, dbt Cloud, and Snowflake Monitor data quality, lineage, and job",
+          "job_poster": null,
+          "posted_date": "2026-09-06",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -2409,6 +2547,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Analytics / BI",
           "work_mode": null
+        },
+        {
+          "title": "Senior BI Business Analyst",
+          "url": "https://freehire.me/jobs/senior-bi-business-analyst-cmc-markets-qrekqi6p",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and analytics activities using SQL (SQL Server / Snowflake) Hands on knowledge of data modelling and DBT within a Snowflake environment A strong understanding of data warehouse and ETL principles Strong",
+          "job_poster": null,
+          "posted_date": "2026-08-13",
+          "last_seen": "2026-10-01",
+          "job_family": "business_analysis",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -2694,6 +2845,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Sr. Analytics Engineer",
+          "url": "https://freehire.me/jobs/sr-analytics-engineer-eftsure-m4ix5vw3",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "in Analytics Engineering, Data Analytics, Data Engineering or a similar role Strong hands-on experience with dbt in production environments Advanced SQL skills, including complex transformations, optimisation and data",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -2846,6 +3010,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Data Analytics Engineering Lead",
+          "url": "https://freehire.me/jobs/data-analytics-engineering-lead-hipages-group-xm5bdztq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "within our data platform. This role is vital in scaling our current data architecture and capabilities on DBT, Databricks and Tableau to enable self-service analytics. This role will be reporting into the Head of",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -3031,6 +3208,45 @@
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Analytics Engineer—Hybrid Sydney|AI Data Pipelines",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-hybrid-sydney-ai-data-pipelines-nexventure-pgw4juam",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "workflows across the analytics stack. You’ll collaborate with cross‑functional stakeholders, develop SQL/dbt models, Python pipelines, and cloud data solutions on a modern stack, while upholding data quality and",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-nexventure-xtjukk7u",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and LLM‑driven workflows. About the opportunity In this role, you’ll build and maintain high‑quality SQL and dbt models that the business can rely on for clarity and decision‑making. You’ll develop reliable, scalable",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior AI Analytics Engineer",
+          "url": "https://freehire.me/jobs/senior-ai-analytics-engineer-nexventure-jcrgayjf",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and LLM-driven workflows. About the opportunity In this role, you’ll build and maintain high-quality SQL and dbt models that the business can rely on for clarity and decision-making. You’ll develop reliable, scalable",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -3175,7 +3391,21 @@
         "dbt",
         "Snowflake"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://freehire.me/jobs/analytics-engineer-scape-australia-clakwgv6",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with stakeholders to understand what they need and translating that into clean, reliable, well-documented dbt models. Day-to-day you will be (but not limited to): Contributing to the Snowflake data platform",
+          "job_poster": null,
+          "posted_date": "2026-08-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "other",
@@ -3356,6 +3586,97 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-talent-insights-kp53kuw2",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Sydney based hybrid role Initial 6 months with extensions GCP, BigQuery, dbt, Airflow stack Senior Data Engineer | GCP & Data Platforms | 6 Month Contract with extensions $800-1000 a day including super I’m working",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior GCP Data Engineer - Hybrid, Real-Time Data Platforms",
+          "url": "https://freehire.me/jobs/senior-gcp-data-engineer-hybrid-real-time-data-platforms-talent-insights-yvdecizx",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "a large-scale data transformation in Sydney on a 6–12 month contract. The role is hybrid, focusing on GCP, dbt and modern data engineering, with ownership from problem to delivery and a hands-on engineering approach.",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Gcp Data Engineer",
+          "url": "https://freehire.me/jobs/senior-gcp-data-engineer-talent-insights-h6xhmiqq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Senior Data Engineer – GCP / dbt / Data Platforms 6–12 Month Contract | Sydney | Hybrid $700-1000 a day including super DOE We’re looking for both Mid level and Senior",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior GCP Data Engineer - Hybrid, BigQuery & dbt",
+          "url": "https://freehire.me/jobs/senior-gcp-data-engineer-hybrid-bigquery-dbt-talent-insights-group-46qxqo2z",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Group in Sydney is seeking a Senior Data Engineer to design, build and optimise data platforms in GCP and dbt, with hands-on ownership from end to end. The 6–12 month contract offers a hybrid arrangement, with ~2",
+          "job_poster": null,
+          "posted_date": "2026-09-25",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-talent-insights-group-e4vw4s7d",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "across the GCP data ecosystem Build robust data pipelines and transformations using BigQuery, SQL and dbt Design data models that are performant, maintainable and fit for purpose Implement new database fields",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior GCP Data Engineer",
+          "url": "https://freehire.me/jobs/senior-gcp-data-engineer-talent-insights-group-2talhz6e",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Senior Data Engineer – GCP / dbt / Data Platforms 6–12 Month Contract | Sydney | Hybrid $700-1000 a day including super DOE We’re looking for both Mid level and Senior",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Lead Data Engineer x 2",
+          "url": "https://freehire.me/jobs/lead-data-engineer-x-2-talent-insights-group-3626dqtv",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data pipelines Strong understanding of cloud data architecture and data modelling Experience with Python, dbt, Airflow and AWS native data services Experience leading technical delivery and mentoring engineers",
+          "job_poster": null,
+          "posted_date": "2026-08-19",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -3491,6 +3812,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-baptistcare-ugjrou7z",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "roles Experience developing ELT pipelines using Azure Data Factory, Snowflake, Azure Synapse and dbt Strong SQL development, data modelling and data warehousing experience, including experience with large",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -3530,6 +3864,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-blinq-technologies-pty-ltd-a2wefqzm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "education around your data. Strong SQL data wrangling skills. Experience in using a data modeling tool like dbt. Experience in using Python or R. You have worked on a modern event data stack and are familiar with",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -3583,6 +3930,123 @@
           "posted_date": "2026-09-04",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Lead Data Engineer (Snowflake, dbt) – 12-Month Fixed-Term Contract",
+          "url": "https://freehire.me/jobs/lead-data-engineer-snowflake-dbt-12-month-fixed-term-contract-commbank-o572765l",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Lead Data Engineer (Snowflake, dbt) – 12-Month Fixed-Term Contract See yourself in our team Financial Crime Compliance (FCC) is a team of over 190 professionals and is an",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "onsite"
+        },
+        {
+          "title": "Senior Data Engineer - Big Data, Snowflake & AWS Architect",
+          "url": "https://freehire.me/jobs/senior-data-engineer-big-data-snowflake-aws-architect-commonwealth-bank-k4bwrcxw",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "capability and drive critical technology decisions, while hands-on building on Big Data AWS, Snowflake and dbt. You will shape data pipelines across the full lifecycle, mentor engineers, and collaborate with",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Lead Data Engineer (Snowflake, dbt) – 12-Month Contract",
+          "url": "https://freehire.me/jobs/lead-data-engineer-snowflake-dbt-12-month-contract-commonwealth-bank-fsbo56sq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Commonwealth Bank is seeking a Lead Data Engineer (Snowflake, dbt) for a 12-month fixed-term contract in Sydney. You will lead a small team while also contributing hands-on to design, code and data",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Staff Data Engineer: Big Data, AWS & Snowflake Architect",
+          "url": "https://freehire.me/jobs/staff-data-engineer-big-data-aws-snowflake-architect-commonwealth-bank-3lxvmgxf",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "capability and drive critical technology decisions, while hands-on building on Big Data AWS, Snowflake and dbt. You will shape data pipelines across the full lifecycle, mentor engineers, and collaborate with",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Lead Data Engineer (Snowflake, dbt) – 12-Month Fixed-Term Contract",
+          "url": "https://freehire.me/jobs/lead-data-engineer-snowflake-dbt-12-month-fixed-term-contract-commonwealth-bank-xkxxth7y",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Lead Data Engineer (Snowflake, dbt) - 12-Month Fixed-Term Contract See yourself in our team Financial Crime Compliance (FCC) is a team of over 190 professionals and is an",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Staff Data Engineer (Big Data, AWS and Snowflake)",
+          "url": "https://freehire.me/jobs/staff-data-engineer-big-data-aws-and-snowflake-commonwealth-bank-37kkovpj",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "engineering capability and influence critical technology decisions. Build with Big Data AWS, Snowflake and dbt as CommBank modernises its data estate. Do Work That Matters Be part of the team at the heart of how",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Lead Data Engineer (Snowflake, dbt) – 12-Month Fixed-Term Contract",
+          "url": "https://freehire.me/jobs/lead-data-engineer-snowflake-dbt-12-month-fixed-term-contract-commonwealth-bank-of-australia-joysckgx",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Lead Data Engineer (Snowflake, dbt) – 12-Month Fixed-Term Contract See yourself in our team Financial Crime Compliance (FCC) is a team of over 190 professionals and is an",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Staff Data Engineer (Big Data, Aws And Snowflake)",
+          "url": "https://freehire.me/jobs/staff-data-engineer-big-data-aws-and-snowflake-commonwealth-bank-of-australia-v7bmv6bw",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "engineering capability and influence critical technology decisions. Build with Big Data AWS, Snowflake and dbt as CommBank modernises its data estate. Do Work That Matters Be part of the team at the heart of how",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer - Big Data, AWS & Snowflake Lead",
+          "url": "https://freehire.me/jobs/senior-data-engineer-big-data-aws-snowflake-lead-commonwealth-bank-of-australia-3m2zgmyc",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "leadership, guiding data pipelines, governance, and platform modernization using Big Data AWS, Snowflake and dbt to deliver secure, scalable production data",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -3839,6 +4303,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer - Data Platform",
+          "url": "https://freehire.me/jobs/senior-data-engineer-data-platform-costar-gk63cehi",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "products and internal data teams. Pipeline Development: Build and maintain robust, reliable pipelines using DBT, Apache Airflow, Snowflake, Databricks and AWS services. Streaming & Real-Time: Develop real-time data",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer - Product",
+          "url": "https://freehire.me/jobs/senior-data-engineer-product-costar-group-33vfotbm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "products and internal data teams. Pipeline Development: Build and maintain robust, reliable pipelines using DBT, Apache Airflow, Snowflake, Databricks and AWS services. Streaming & Real-Time: Develop real-time data",
+          "job_poster": null,
+          "posted_date": "2026-08-07",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -3940,6 +4430,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data & AI Platform Engineer – Snowflake AI",
+          "url": "https://freehire.me/jobs/senior-data-ai-platform-engineer-snowflake-ai-helia-abmctpsn",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "embedded intelligence across the organisation. The role requires hands-on experience with Snowflake, SQL, dbt, Python, and Snowpark, plus familiarity with LLM/embedding use cases. You will partner with AI engineers",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "devops",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -3986,6 +4489,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://jobs.lever.co/immutable/a3e009ba-350d-499c-b923-9e90c057df08",
+          "source": "Lever job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "for the platform as our products scale Own warehouse datasets and transformations end to end in BigQuery, dbt, SQL, and Python Set data quality, testing, and observability standards across streaming and batch",
+          "job_poster": null,
+          "posted_date": "2026-08-06",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://freehire.me/jobs/lead-data-engineer-immutable-7uknjhqn",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "for the platform as our products scale Own warehouse datasets and transformations end to end in BigQuery, dbt, SQL, and Python Set data quality, testing, and observability standards across streaming and batch",
+          "job_poster": null,
+          "posted_date": "2026-08-06",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -4026,6 +4555,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-launch-group-goems6au",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "years' experience in data engineering or data warehousing roles Strong hands-on experience with Snowflake, DBT, and SQL (essential) Solid experience with DataOps/DevOps practices, ideally within an Azure environment",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-launch-recruitment-dxgmy2vk",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "years' experience in data engineering or data warehousing roles Strong hands-on experience with Snowflake, DBT, and SQL (essential) Solid experience with DataOps/DevOps practices, ideally within an Azure environment",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -4066,6 +4621,19 @@
           "posted_date": "2026-08-25",
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Analytics Engineer",
+          "url": "https://freehire.me/jobs/analytics-engineer-lyka-pet-food-pty-4auv6wkc",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data capabilities and decision-making. Build and maintain robust, scalable data pipelines using tools like dbt, Airflow, and Python to transform raw data into clean, reliable datasets. Develop and optimise semantic",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
           "work_mode": null
         }
       ],
@@ -4164,6 +4732,32 @@
           "posted_date": "2026-09-05",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Engineer",
+          "url": "https://freehire.me/jobs/principal-data-engineer-optiver-uneewjlb",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design and build scalable data pipelines, data models, and governed data products using Databricks, dbt, SQL, and PySpark Implement governance capabilities end-to-end, including Unity Catalog access controls",
+          "job_poster": null,
+          "posted_date": "2026-07-29",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-optiver-dyumnfc7",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design and build scalable data pipelines, data models, and governed data products using Databricks, dbt, SQL, and PySpark Implement governance capabilities end-to-end, including Unity Catalog access controls",
+          "job_poster": null,
+          "posted_date": "2026-07-29",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -4300,6 +4894,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Science",
           "work_mode": null
+        },
+        {
+          "title": "GTM Engineer",
+          "url": "https://freehire.me/jobs/gtm-engineer-upguard-5hvivlf7",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Customer Data Platforms, and Sales Engagement tools. Interface with Data Warehouses using tools such as dbt and reverse-ETL platforms. What will you bring? A track record of leveraging Large Language Models (LLMs)",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-10-01",
+          "job_family": "sales",
+          "work_mode": "remote"
+        },
+        {
+          "title": "Marketing Data Science Lead",
+          "url": "https://freehire.me/jobs/marketing-data-science-lead-upguard-xuedqjgr",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "maintain foundational marketing data assets – translating loose marketing requirements into well-specified dbt models and a governed semantic/metrics layer that both humans and AI agents can reliably query and",
+          "job_poster": null,
+          "posted_date": "2026-05-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_science",
+          "work_mode": "remote"
         }
       ],
       "other_evidence": [
@@ -4338,6 +4958,32 @@
           "posted_date": "2026-09-21",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Platform Engineer: dbt, Snowflake & AWS Orchestration",
+          "url": "https://freehire.me/jobs/data-platform-engineer-dbt-snowflake-aws-orchestration-viable-solutions-pty-ltd-l4frxron",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Viable Solutions Pty Ltd in Sydney seeks a data engineer to build and maintain dbt transformation models across pipeline layers, from raw ingestion to governed datasets. You will write Snowflake SQL for complex",
+          "job_poster": null,
+          "posted_date": "2026-09-25",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-viable-solutions-pty-ltd-5phylaev",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Building and maintaining dbt transformation models across multiple pipeline layers — from raw ingestion through to governed, consumer-ready datasets Writing Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -4397,6 +5043,45 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Science",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Data & Analytics Enablement Lead",
+          "url": "https://jobs.ashbyhq.com/xero/dbfc4c14-2b57-4542-b4bf-e9d54e2bb9fd",
+          "source": "Ashby job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "- Our stack: SQL based querying across cloud data warehouses, dbt for transformation, and Tableau alongside other BI platforms for reporting and",
+          "job_poster": null,
+          "posted_date": "2026-09-28",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data & Analytics Enablement Lead",
+          "url": "https://jobs.ashbyhq.com/xero/a7d02205-19ea-40ba-80e0-1c9a448998c3",
+          "source": "Ashby job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "- Our stack: SQL based querying across cloud data warehouses, dbt for transformation, and Tableau alongside other BI platforms for reporting and",
+          "job_poster": null,
+          "posted_date": "2026-09-29",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data & Analytics Enablement Lead",
+          "url": "https://jobs.ashbyhq.com/xero/6c8a857d-0e7a-4d6e-a6de-3bff8193adab",
+          "source": "Ashby job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "- Our stack: SQL based querying across cloud data warehouses, dbt for transformation, and Tableau alongside other BI platforms for reporting and",
+          "job_poster": null,
+          "posted_date": "2026-09-29",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -4444,6 +5129,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Solutions / Pre-sales",
           "work_mode": null
+        },
+        {
+          "title": "Principal Solution Engineer",
+          "url": "https://freehire.me/jobs/principal-solution-engineer-snowflake-lfxp7fm4",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "units (Retail, Business, Institutional, Wealth, Risk) Experience working with modern data technology (e.g. dbt, spark, containers, devops tooling, orchestration tools, git, etc.) Deep expertise in cloud data",
+          "job_poster": null,
+          "posted_date": "2026-06-30",
+          "last_seen": "2026-10-01",
+          "job_family": "solutions_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -5048,7 +5746,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "PySpark"
@@ -5065,6 +5763,45 @@
           "posted_date": "2026-09-24",
           "last_seen": "2026-09-24",
           "job_family": "Data QA",
+          "work_mode": null
+        },
+        {
+          "title": "Lead AWS Data Engineer",
+          "url": "https://freehire.me/jobs/lead-aws-data-engineer-carecone-group-4lft262y",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with common data services such as : Amazon S3, AWS Glue, Amazon Redshift, Amazon Athena, Amazon EMR and",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior AWS Data Engineer - Enterprise Data Pipelines",
+          "url": "https://freehire.me/jobs/senior-aws-data-engineer-enterprise-data-pipelines-carecone-group-vtmcctfe",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "work with Teradata and Siebel CRM data. You will leverage AWS services (S3, Glue, Redshift, Athena, EMR) and dbt to enable analytics across the business. Strong collaboration with analytics and engineering teams is",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-carecone-group-t3m34svm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and near real-time data pipelines on AWS. Build ETL/ELT workflows using AWS Glue, S3, Redshift, Athena, EMR, dbt, and Airflow. Ingest data from databases, APIs, files, and event streams into raw, cleansed, and curated",
+          "job_poster": null,
+          "posted_date": "2026-09-28",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -5205,7 +5942,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "Snowflake",
         "dbt",
@@ -5317,6 +6054,71 @@
           "posted_date": "2026-09-06",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "AI & Data Platform Engineering| Multiple Opportunities Available",
+          "url": "https://freehire.me/jobs/ai-data-platform-engineering-multiple-opportunities-available-deloitte-4hknkz2p",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "database skills Experience in Data and/or AI Engineering, with hands-on experience in either Python or SQL, dbt highly regarded. Experience with Data modelling will be highly regarded Experience building AI, data or",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineering Manager (Snowflake/Databricks) | Sydney",
+          "url": "https://freehire.me/jobs/data-engineering-manager-snowflake-databricks-sydney-deloitte-hploiypj",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong experience across at least two of the following : Spark (preferably pySpark) experience. SQL and dbt experience. data ingestion experience highly regarded, either from streaming data sources or",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer | Sydney",
+          "url": "https://freehire.me/jobs/snowflake-data-engineer-sydney-deloitte-neo2pmbe",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "across at least two of the following: Advanced Snowflake SQL, data modelling and performance optimisation. dbt and SQL-based transformation frameworks. Python and Snowpark development. Batch and streaming ingestion",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Platform Engineer",
+          "url": "https://freehire.me/jobs/data-platform-engineer-deloitte-gcbkirbb",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "knowledge of modern data platforms and tooling, including Azure Databricks, Snowflake, Synapse, Fabric, and dbt Strong knowledge of integration and orchestration tooling, including Azure Data Factory, Apache Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Director - Platform & Data Engineering | Sydney",
+          "url": "https://freehire.me/jobs/director-platform-data-engineering-sydney-deloitte-uw3dpjc6",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and senior stakeholders. Technical Expertise Deep expertise in Apache Spark (PySpark preferred) , SQL, and dbt . Experience designing and implementing modern data platforms, including data lakes, lakehouses, and data",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -5606,7 +6408,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Snowflake",
@@ -5625,6 +6427,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Architecture",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Snowflake Data Architect/Engineer - Hybrid Sydney",
+          "url": "https://freehire.me/jobs/snowflake-data-architect-engineer-hybrid-sydney-hawksworth-xmh7gsju",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "needs. The candidate should be comfortable working across Snowflake, ETL tools, and data orchestration with DBT and Airflow, while collaborating",
+          "job_poster": null,
+          "posted_date": "2026-08-22",
+          "last_seen": "2026-10-01",
+          "job_family": "architecture",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Snowflake Data Architect / Engineer - $180k-$220k - Global Consultancy",
+          "url": "https://freehire.me/jobs/snowflake-data-architect-engineer-180k-220k-global-consultancy-hawksworth-sp65tusz",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "how Snowflake interacts with the cloud platform ecosystem and how you can leverage the likes of ETL, CI/CD, DBT, Airflow, etc.? We need hands‑on Architects / Engineers who have a progressive mind‑set, excellent",
+          "job_poster": null,
+          "posted_date": "2026-08-22",
+          "last_seen": "2026-10-01",
+          "job_family": "architecture",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -5678,7 +6506,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Snowflake",
@@ -5698,6 +6526,58 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-lendi-group-x4jhjl7m",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "solutions using technologies such as Snowflake, Databricks, S3 and PostgreSQL, with ETL tools including dbt, Airflow, Spark and Python. Utilise cloud infrastructure and CI/CD tooling (e.g. AWS, Terraform, Docker)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior Data Engineer - AI-Driven Pipelines, Cloud & Hybrid",
+          "url": "https://freehire.me/jobs/senior-data-engineer-ai-driven-pipelines-cloud-hybrid-lendi-group-4e5yfbqn",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data models and cloud data warehouse solutions using Snowflake and Databricks, with ETL tools such as dbt and Airflow. You will collaborate with analysts, data scientists and engineers to deliver high‑quality",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-lendigroup1-t2xnvqan",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "solutions using technologies such as Snowflake, Databricks, S3 and PostgreSQL, with ETL tools including dbt, Airflow, Spark and Python. Utilise cloud infrastructure and CI/CD tooling (e.g. AWS, Terraform, Docker)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior Data Scientist",
+          "url": "https://freehire.me/jobs/senior-data-scientist-lendigroup1-qwfdzafd",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "libraries and products (e.g., PowerBI, Streamlit) and working in a DevOps environment (e.g., Git,dbt) Lendi Group teams operate across Australia and the Philippines. Bringing together diverse expertise",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-10-01",
+          "job_family": "data_science",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -5705,6 +6585,11 @@
           "type": "other",
           "url": "https://www.linkedin.com/jobs/view/4462924747",
           "note": "dbt evidence"
+        },
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/case-studies/lendi",
+          "note": "dbt Labs case study (2026-07): Sydney headquarters, dbt platform, migrated with the partner Data Army; platform outages cut to zero."
         }
       ],
       "people": [
@@ -5781,7 +6666,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Snowflake",
@@ -5812,6 +6697,45 @@
           "posted_date": "2026-09-14",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer: AWS, Snowflake & DBT (Sydney)",
+          "url": "https://freehire.me/jobs/senior-data-engineer-aws-snowflake-dbt-sydney-tata-consultancy-services-nmqyh3rh",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern data platforms, pipelines, and analytics projects across clients, leveraging Postgres, Snowflake, and DBT to deliver scalable solutions. The role requires 7+ years of hands-on database experience, familiarity",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-tata-consultancy-services-b2wq2dse",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "multiple environments Experience working in an AWS environment Experience with Snowflake Experience with DBT (Data Build Tool) Top Reasons to Join Our Team at TCS Australia Attractive compensation & rewards We",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-tata-consultancy-services-hjscuivj",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "more of the major cloud providers (e.g. AWS, GCP, Azure). Experience with a modern data stack, particularly dbt, Databricks, Redshift, Airflow. Ideal, but not required: Software engineering, DevOps experience (e.g.",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -6055,7 +6979,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Snowflake",
@@ -6102,6 +7026,45 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer (GCP) – Scale, Growth, Sponsorship",
+          "url": "https://freehire.me/jobs/senior-data-engineer-gcp-scale-growth-sponsorship-vivanti-consulting-kreg4z5g",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "global client projects. You’ll work with Python, Java, Scala and SQL, plus BigQuery, Dataflow, Airflow and dbt to drive real-time and batch analytics. The role offers learning, certifications and team engagement in",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer - GCP",
+          "url": "https://freehire.me/jobs/senior-data-engineer-gcp-vivanti-consulting-6bs4e6g6",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Scala, SQL Google BigQuery, Cloud Storage, Dataproc, Dataflow Pub/Sub, Cloud Composer (Apache Airflow), dbt Your work matters and so do you. That’s why we back your skills with a structure that supports your",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-vivanti-consulting-pty-ltd-qaxvh22d",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and platform teams You might work with: Python, Spark, Airflow Snowflake, Databricks, BigQuery, Neo4J dbt, Fivetran, Terraform Azure, GCP, AWS Perks & Benefits Your work matters—and so do you. That’s why we back",
+          "job_poster": null,
+          "posted_date": "2026-09-01",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "onsite"
         }
       ],
       "other_evidence": [
@@ -6182,6 +7145,32 @@
           "posted_date": "2026-09-21",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Cloud Data Engineer - AWS, Spark & ETL",
+          "url": "https://freehire.me/jobs/cloud-data-engineer-aws-spark-etl-zone-it-solutions-iomancgr",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with stakeholders, and contribute to modern data engineering practices across projects. Snowflake/DBT familiarity is a",
+          "job_poster": null,
+          "posted_date": "2026-09-25",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-zone-it-solutions-g7wmw66j",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong problem‑solving, stakeholder engagement, and Agile delivery skills are required. Snowflake and DBT is nice to have About Us We specialize in Digital, ERP, and larger IT Services. We offer flexible",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -6430,14 +7419,28 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "Snowflake",
         "Streamlit",
         "Cortex Analyst",
         "dbt"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Data Platform",
+          "url": "https://freehire.me/jobs/senior-data-engineer-data-platform-domain-mlmi5avf",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "products and internal data teams. Pipeline Development: Build and maintain robust, reliable pipelines using DBT, Apache Airflow, Snowflake, Databricks and AWS services. Streaming & Real-Time: Develop real-time data",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "blog_scanned",
@@ -6477,6 +7480,32 @@
           "posted_date": "2026-06-18",
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer - Azure / Databricks",
+          "url": "https://freehire.me/jobs/data-engineer-azure-databricks-ingrity-wngk3hw6",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "the ability to work effectively with both technical and business stakeholders. Nice to have Experience with dbt . Exposure to Terraform / Infrastructure as Code . Understanding of Databricks Unity Catalog. Experience",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer (Snowflake)",
+          "url": "https://freehire.me/jobs/data-engineer-snowflake-ingrity-lvvnkxgu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "warehouse/lakehouse architectures on Snowflake Develop and optimise ETL/ELT pipelines using tools such as dbt, Airflow, Fivetran, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -6531,6 +7560,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Solutions / Pre-sales",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Solutions Engineer (ANZ)",
+          "url": "https://freehire.me/jobs/senior-solutions-engineer-anz-mixpanel-kkydkwmz",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "or related role Experience in data querying, modelling, and transformation using tools such as SQL, dbt, Python, Business Intelligence platforms, or Product Analytics tools Familiarity with databases and cloud",
+          "job_poster": null,
+          "posted_date": "2026-07-10",
+          "last_seen": "2026-10-01",
+          "job_family": "solutions_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -6558,7 +7600,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Iceberg",
@@ -6577,6 +7619,58 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Architecture",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Solution Designer / Lead Data Engineer",
+          "url": "https://freehire.me/jobs/solution-designer-lead-data-engineer-ncs-group-australia-ycrdhzdv",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Certified Data Engineer, or Microsoft Certified: Azure Data Engineer Associate). Hands‑on experience with dbt , Apache Iceberg/Delta Lake , or enterprise data catalog frameworks. Knowledge of regulatory compliance",
+          "job_poster": null,
+          "posted_date": "2026-08-10",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Solution Designer / Lead Data Engineer",
+          "url": "https://freehire.me/jobs/solution-designer-lead-data-engineer-ncsaustralia-ya4sze4a",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Certified Data Engineer , or Microsoft Certified: Azure Data Engineer Associate ). Hands-on experience with dbt , Apache Iceberg/Delta Lake , or enterprise data catalog frameworks. Knowledge of regulatory compliance",
+          "job_poster": null,
+          "posted_date": "2026-08-04",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Solution Designer (Google Cloud Platform)",
+          "url": "https://freehire.me/jobs/solution-designer-google-cloud-platform-ncsaustralia-nursb2oh",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Cloud Storage, Pub/Sub, and Cloud Composer . Data Transformation: Design modular transformation logic using dbt and Python , ensuring data models are optimised for performance and cost. Pipeline Engineering: Build",
+          "job_poster": null,
+          "posted_date": "2026-05-13",
+          "last_seen": "2026-10-01",
+          "job_family": "design",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Solution Designer",
+          "url": "https://freehire.me/jobs/solution-designer-ncsaustralia-jqqtju2q",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "will lead data migration and replatforming initiatives, define transformation logic using SQL, Python, and dbt, and ensure strong DevOps",
+          "job_poster": null,
+          "posted_date": "2026-05-11",
+          "last_seen": "2026-10-01",
+          "job_family": "design",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -6618,6 +7712,32 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-nine-6xlz27i2",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "the team. Qualifications Strong technical background in Python, SQL, data modeling, and workflow tools like DBT and Apache Airflow. Proven experience building cloud data infrastructure (GCP, AWS, or Azure). Degree in",
+          "job_poster": null,
+          "posted_date": "2026-07-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer - Nine Entertainment Co. Pty Ltd",
+          "url": "https://freehire.me/jobs/data-engineer-nine-entertainment-co-pty-ltd-nine-entertainment-co-pty-ltd-nx5jv3ua",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "the team. Qualifications Strong technical background in Python, SQL, data modeling, and workflow tools like DBT and Apache Airflow. Proven experience building cloud data infrastructure (GCP, AWS, or Azure). Degree in",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -6640,7 +7760,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Databricks",
@@ -6660,6 +7780,71 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Data Engineer - Build Scalable Cloud Data Platforms",
+          "url": "https://freehire.me/jobs/senior-data-engineer-build-scalable-cloud-data-platforms-novon-4z73zumr",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "You will develop reliable data pipelines using Python and SQL, and work with Databricks, Snowflake, dbt, Airflow, Spark and Kafka across AWS or Azure environments. Join a connected community and contribute to",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer — Hybrid (Databricks/Snowflake)",
+          "url": "https://freehire.me/jobs/senior-data-engineer-hybrid-databricks-snowflake-novon-5oozoas7",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "support the full engineering lifecycle in a hybrid Sydney setup. You will work with Databricks, Snowflake, dbt, Airflow, Spark and Kafka, delivering scalable data solutions across cloud environments such as AWS or",
+          "job_poster": null,
+          "posted_date": "2026-09-20",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-novon-q2h56szy",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "| Hybrid Join Novon, a specialist Data and Engineering consulting company. Work with Databricks, Snowflake, dbt, Airflow, Spark and Kafka. Become part of a connected and specialised Data and Engineering community.",
+          "job_poster": null,
+          "posted_date": "2026-09-20",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-novon-euch7mez",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "· Join Novon, a specialist Data and Engineering consulting company. · Work with Databricks, Snowflake, dbt, Airflow, Spark and Kafka. · Become part of a connected and specialised Data and Engineering community.",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer (AWS / Spark)",
+          "url": "https://freehire.me/jobs/senior-data-engineer-aws-spark-novon-dbeujuku",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and maintain AWS-native data solutions leveraging services including Glue, Glue Catalog, S3, Airflow, DBT, and Starburst/Presto. Supporting large-scale migration of legacy and bespoke data pipelines. Developing",
+          "job_poster": null,
+          "posted_date": "2026-08-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -6698,6 +7883,32 @@
           "posted_date": "2026-09-23",
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Analytics Engineer | Senior Manager",
+          "url": "https://freehire.me/jobs/analytics-engineer-senior-manager-pwc-2wroykxn",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "service management, product, AI, automation or managed service data preferred. Experience with Python, dbt or equivalent transformation tooling, BI platforms, data observability, data catalogues or lineage tools",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        },
+        {
+          "title": "Analytics Engineer | Senior Manager",
+          "url": "https://freehire.me/jobs/analytics-engineer-senior-manager-pwc-australia-77xyudmu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "service management, product, AI, automation or managed service data preferred. Experience with Python, dbt or equivalent transformation tooling, BI platforms, data observability, data catalogues or lineage tools",
+          "job_poster": null,
+          "posted_date": "2026-09-27",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
           "work_mode": null
         }
       ],
@@ -6740,6 +7951,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Science",
           "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Data Scientist",
+          "url": "https://freehire.me/jobs/senior-data-scientist-qantasgroup-hv6kkuiu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Practical experience with modern data science tooling e.g. Python, Docker, SQL, Git and CI/CD systems, dbt, Airflow etc Experience with data visualisation tools e.g. Streamlit, Power BI and bespoke dashboarding",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_science",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -6762,7 +7986,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Great Expectations",
@@ -6807,6 +8031,32 @@
           "posted_date": "2026-09-07",
           "last_seen": "2026-09-24",
           "job_family": "Data Leadership",
+          "work_mode": null
+        },
+        {
+          "title": "Principal - Technical Business Analyst, Data Products & Platforms",
+          "url": "https://freehire.me/jobs/principal-technical-business-analyst-data-products-platforms-simple-machines-3iftlvlh",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "validate) Data modelling and source-to-target mapping Modern stack: Databricks / Snowflake / BigQuery, dbt, Azure / AWS / GCP Pipelines and ETL / ELT; Jira / Confluence Written and communication capabilities",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-10-01",
+          "job_family": "business_analysis",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Platform Engineer",
+          "url": "https://freehire.me/jobs/senior-data-platform-engineer-simple-machines-gyvktyj2",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Pulumi ) CI/CD pipelines using tools like GitHub Actions, ArgoCD Data testing and quality frameworks ( dbt, Great Expectations, Soda ) Nice to Have JVM or systems languages ( Scala, Java, Go, Rust ) Graph or",
+          "job_poster": null,
+          "posted_date": "2026-08-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -6913,6 +8163,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data QA",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data & AI Engineer, Cloud Data Platforms",
+          "url": "https://freehire.me/jobs/senior-data-ai-engineer-cloud-data-platforms-slalom-qiakrycq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Cosmos DB, or MongoDB •Experience with Modern Data Workflows and orchestration tools such as Apache Airflow, dbt, Dagster, or AWS Step Functions •AI/ML Tools: Amazon SageMaker, Databricks ML/MLflow, Azure ML Studio",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "ai_engineering",
+          "work_mode": null
         }
       ],
       "other_evidence": [
@@ -6995,7 +8258,7 @@
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "dbt Core",
@@ -7014,6 +8277,32 @@
           "posted_date": "2026-09-21",
           "last_seen": "2026-09-24",
           "job_family": "Analytics Engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Analytics Engineer (Health Manager Level 4)",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-health-manager-level-4-sydney-local-health-district-z3er6qrv",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "large-scale, production-grade cloud data platforms end-to-end, including experience with Snowflake and dbt Core (or an equivalent modern cloud data stack). Strong SQL and Python engineering skills applied to",
+          "job_poster": null,
+          "posted_date": "2026-09-29",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Analytics Engineer - Cloud Data Platform Lead",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-cloud-data-platform-lead-sydney-local-health-district-yzd5kvy6",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "insights for clinical and operational needs. The role requires hands-on experience with Snowflake and dbt Core, strong SQL/Python skills, and a track record of delivering large-scale data infrastructures in",
+          "job_poster": null,
+          "posted_date": "2026-09-29",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -7157,6 +8446,19 @@
           "last_seen": "2026-09-24",
           "job_family": "Data Engineering",
           "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer - Snowflake",
+          "url": "https://freehire.me/jobs/senior-data-engineer-snowflake-versent-sj4gbjcw",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "platform experience Infrastructure as Code experience using Terraform Experience with tools such as Airflow, dbt, Kafka or similar Strong understanding of data modelling, governance and security practices Experience",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
         }
       ],
       "other_evidence": [
@@ -7197,6 +8499,32 @@
           "posted_date": "2026-09-20",
           "last_seen": "2026-09-24",
           "job_family": "Data Architecture",
+          "work_mode": null
+        },
+        {
+          "title": "Technical Solutions Architect II - Data Engineer",
+          "url": "https://freehire.me/jobs/technical-solutions-architect-ii-data-engineer-world-wide-technology-acrtu6uh",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Metadata management, lineage tooling, and data observability/monitoring experience. Familiarity with dbt, Apache Airflow, Azure Data Factory, Kafka, Event Hubs, or comparable orchestration/integration tools.",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Technical Solutions Architect II - Data Engineer",
+          "url": "https://freehire.me/jobs/technical-solutions-architect-ii-data-engineer-wwtexternalcareersite-tddj3nfn",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Metadata management, lineage tooling, and data observability/monitoring experience. Familiarity with dbt, Apache Airflow, Azure Data Factory, Kafka, Event Hubs, or comparable orchestration/integration tools.",
+          "job_poster": null,
+          "posted_date": "2026-09-28",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
           "work_mode": null
         }
       ],
@@ -9005,14 +10333,24 @@
       "id": "safetyculture",
       "name": "SafetyCulture",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/case-studies/safetyculture",
+          "note": "dbt Labs case study (2022-04): Sydney headquarters; company OKRs built on dbt Cloud. The company now trades as Mitti, which has its own record."
+        }
+      ],
       "people": [
         {
           "id": "oscar-lukersmith",
@@ -9153,19 +10491,29 @@
       "id": "zip-co",
       "name": "Zip Co",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "weak",
+      "dbt_signal": "strong",
       "stack_signals": [
         "Snowflake",
-        "Databricks"
+        "Databricks",
+        "dbt",
+        "Snowplow",
+        "Fivetran",
+        "Census"
       ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/case-studies/zip",
+          "note": "dbt Labs case study (2023-03): Sydney headquarters; Snowflake, dbt Cloud, Snowplow, Fivetran and Census for audience segmentation."
+        }
+      ],
       "people": [
         {
           "id": "samantha-manila",
@@ -9494,18 +10842,33 @@
       "id": "atlassian",
       "name": "Atlassian",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "weak",
+      "dbt_signal": "medium",
       "stack_signals": [
         "Databricks",
-        "Delta Sharing"
+        "Delta Sharing",
+        "dbt"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Senior Data Platform Engineer",
+          "url": "https://freehire.me/jobs/senior-data-platform-engineer-atlassian-bykbcbju",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with any of the big data processing frameworks and technologies - Spark, Flink, StarRocks, Databricks, DBT, Airflow, etc. Qualifications At Atlassian, we strive to design equitable, explainable, and competitive",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "remote"
+        }
+      ],
       "other_evidence": [
         {
           "type": "blog_scanned",
@@ -10639,13 +12002,31 @@
       "id": "fivetran",
       "name": "Fivetran",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Business Development Representative (Sydney)",
+          "url": "https://freehire.me/jobs/business-development-representative-sydney-fivetran-t4bygqc4",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "continue to leverage our technology every day to become truly data-driven. About Us Fivetran and dbt Labs are bringing together two industry-leading companies with a shared mission: helping organizations",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "sales",
+          "work_mode": "hybrid"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -10719,7 +12100,7 @@
           "notes": "location (high): linkedin search result: Dominic Colyer - Fivetran, based in Sydney https://www.linkedin.com/in/dominic-colyer/"
         }
       ],
-      "notes": ""
+      "notes": "a Sydney Business Development Representative ad describes the Fivetran and dbt Labs merger."
     },
     {
       "id": "iag",
@@ -12415,13 +13796,31 @@
       "id": "sonder",
       "name": "Sonder",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Revenue Systems Engineer",
+          "url": "https://freehire.me/jobs/senior-revenue-systems-engineer-sonder-io-7n5ubnje",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "systems using REST APIs, webhooks and serverless functions, including at least one CRM or billing platform dbt (or equivalent) SQL modelling in production against a cloud warehouse, ideally Snowflake, with tests and",
+          "job_poster": null,
+          "posted_date": "2026-09-22",
+          "last_seen": "2026-10-01",
+          "job_family": "software_engineering",
+          "work_mode": "remote"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -13137,16 +14536,27 @@
       "id": "deputy",
       "name": "Deputy",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Stitch",
+        "Workato"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/case-studies/deputy",
+          "note": "dbt Labs case study (2023-03): founded and headquartered in Sydney; Snowflake, Stitch, Workato and dbt Cloud."
+        }
+      ],
       "people": [],
       "notes": "Only a Mantel AI case study. No dbt content found."
     },
@@ -13824,15 +15234,31 @@
       "id": "woolworths-quantium",
       "name": "Woolworths / Quantium",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Sydney"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Scientist - Technical AI Solutions",
+          "url": "https://freehire.me/jobs/data-scientist-technical-ai-solutions-quantium-l6plrklz",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "metrics to ensure solution quality and performance Develop APIs and build data pipelines using SQL, DBT, and orchestration tools Collaborate with clients and domain experts to understand problems, validate",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-10-01",
+          "job_family": "data_science",
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [],
       "notes": "Not searched separately (budget)."
@@ -13983,6 +15409,1666 @@
         }
       ],
       "notes": "Networking community for early and mid-career women in technology, data and AI. Its organiser is a connector."
+    },
+    {
+      "id": "accenture",
+      "name": "Accenture",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake Solutions Architect",
+          "url": "https://freehire.me/jobs/snowflake-solutions-architect-accenture-nylo3wh2",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "using Snowflake. Design modern data platforms leveraging Snowflake and a range of modern tools such as dbt, Fivetran, Coalesce. Collaborate with stakeholders to understand business requirements and translate them",
+          "job_poster": null,
+          "posted_date": "2026-08-05",
+          "last_seen": "2026-10-01",
+          "job_family": "architecture",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "aged-care-quality-and-safety-commission",
+      "name": "Aged Care Quality and Safety Commission",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-aged-care-quality-and-safety-commission-tooahpqm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "optimise data pipelines and workflows in Snowflake and related cloud platforms. Build, test, and maintain dbt models and transformations aligned with Medallion architecture principles (Bronze, Silver, Gold). Apply",
+          "job_poster": null,
+          "posted_date": "2026-09-01",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "airtree-ventures",
+      "name": "AirTree Ventures",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://freehire.me/jobs/analytics-engineer-airtree-ventures-uz7j4brg",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "able to self-validate assumptions and potential data gaps Strong sense of ownership Familiarity with dbt or similar transformation tools Familiarity with financial concepts, e.g. Revenue, CAC, Payback, LTV",
+          "job_poster": null,
+          "posted_date": "2026-07-12",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "algo-talent",
+      "name": "Algo Talent",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-algo-talent-al5qle7u",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "highly data-driven organisation where analytics powers business decisions. Work hands‑on with Databricks and dbt Hybrid working model (3 days a week in office) About the Role: Our client is looking for an experienced",
+          "job_poster": null,
+          "posted_date": "2026-08-22",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "allura-partners",
+      "name": "Allura Partners",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (Snowflake, AWS) | 12-Month Day Rate Contract | Sydney",
+          "url": "https://freehire.me/jobs/senior-data-engineer-snowflake-aws-12-month-day-rate-contract-sydney-allura-partners-kp76gxrt",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Solutions Architect or DevOps Engineer) Advanced SQL and Python, with orchestration and ELT tooling such as dbt, Airflow, Matillion, Fivetran or Qlik Replicate Demonstrated use of AI or generative-AI services (e.g.",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "asx",
+      "name": "ASX",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data Engineer (Apache Spark, dbt, Airflow)",
+          "url": "https://freehire.me/jobs/principal-data-engineer-apache-spark-dbt-airflow-asx-uoh3qoki",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "in AWS cloud environment. Demonstrated experience with enterprise data pipeline tooling (Apache Spark, dbt, Airflow), providing guidance on best practices and helping enable major programs to deliver business",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "australian-payments-plus",
+      "name": "Australian Payments Plus",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-australian-payments-plus-5zl6ii7g",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ideally in payments, banking or financial services. Prior experience in cloud databases like Snowflake, DBT, orchestration tools like airflow, event streaming platform like Kafka. Building and maintaining software",
+          "job_poster": null,
+          "posted_date": "2026-09-05",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "blackai",
+      "name": "black.ai",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer — Build Trusted Data & Dashboards",
+          "url": "https://freehire.me/jobs/analytics-engineer-build-trusted-data-dashboards-black-ai-dbysongk",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "into clear metrics, analysis, and data products. Build and maintain scalable ELT workflows using SQL, dbt, and modern cloud data tools. Define canonical metrics and semantic models so teams work from consistent",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "centaur-software-development",
+      "name": "Centaur Software Development",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Software Engineer",
+          "url": "https://freehire.me/jobs/software-engineer-centaur-software-development-bshongav",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "semi-structured data; Developing and maintaining Data Warehouse using ClickHouse; Creating and maintaining",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-10-01",
+          "job_family": "software_engineering",
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "cox-purtell",
+      "name": "Cox Purtell",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer / Data Architect – Databricks & AWS",
+          "url": "https://freehire.me/jobs/senior-data-engineer-data-architect-databricks-aws-cox-purtell-mq4iv4bd",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "practitioners nationally, sitting inside tier-one vendor alliances spanning AWS, Databricks, Google Cloud, dbt Labs, Snowflake, Salesforce and Informatica. The programs here run at genuine scale: think large",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer / Data Architect - Databricks & AWS",
+          "url": "https://freehire.me/jobs/senior-data-engineer-data-architect-databricks-aws-cox-purtell-staffing-services-rxfheuka",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "practitioners nationally, sitting inside tier-one vendor alliances spanning AWS, Databricks, Google Cloud, dbt Labs, Snowflake, Salesforce and Informatica. The programs here run at genuine scale: think large",
+          "job_poster": null,
+          "posted_date": "2026-09-20",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Senior Data Engineer / Data Architect - Databricks & AWS",
+          "url": "https://freehire.me/jobs/senior-data-engineer-data-architect-databricks-aws-sociable-tech-pk3wb4ir",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "practitioners nationally, sitting inside tier-one vendor alliances spanning AWS Databricks, Google Cloud, dbt Labs, Snowflake, Salesforce and Informatica. The programs here run at genuine scale: think large",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 3 local job ads that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "dyflex-solutions",
+      "name": "DyFlex Solutions",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Consulting AI / Data Engineer",
+          "url": "https://freehire.me/jobs/principal-consulting-ai-data-engineer-dyflex-solutions-lrz35mmg",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "in production environments. Strong proficiency in Python and SQL, plus experience with Spark, Airflow, dbt, Kafka, or Flink. Experience with cloud platforms (AWS, Azure, or GCP) and Databricks. Ability to",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "eatclub",
+      "name": "EatClub",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Platform Engineer",
+          "url": "https://freehire.me/jobs/data-platform-engineer-eatclub-4ql2zd3p",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "workflows, AI in your daily loop It would be extra awesome if you also had Experience using Databricks and dbt Core Familiarity working with AWS Cost and performance tuning on Spark or Databricks — partitioning",
+          "job_poster": null,
+          "posted_date": "2026-09-29",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "endgame-economics",
+      "name": "EndGame Economics",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Platform Engineer — Build Core Pipelines",
+          "url": "https://freehire.me/jobs/senior-data-platform-engineer-build-core-pipelines-endgame-economics-brsi4xsv",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ambiguous needs into effective data solutions ABOUT YOU Strong SQL and hands-on data modelling, ideally with dbt (version-controlled models, testing and documentation). Strong Python for building ingestion and",
+          "job_poster": null,
+          "posted_date": "2026-08-17",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-endgame-economics-56cw4kw7",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ambiguous needs into effective data solutions ABOUT YOU Strong SQL and hands-on data modelling, ideally with dbt (version‑controlled models, testing and documentation). Strong Python for building ingestion and",
+          "job_poster": null,
+          "posted_date": "2026-08-17",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "eucalyptus",
+      "name": "Eucalyptus",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-eucalyptus-tsazgt6u",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "able to self‑validate assumptions and potential data gaps Strong sense of ownership Familiarity with dbt or similar transformation tools Familiarity with financial concepts, eg. Revenue, CAC, Payback, LTV",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "farlow",
+      "name": "Farlow",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer: dbt, Snowflake & Data Modeling",
+          "url": "https://freehire.me/jobs/senior-analytics-engineer-dbt-snowflake-data-modeling-farlow-abpfjsu3",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "engineering team and analysts. You’ll transform raw data into clean, tested data models within a Snowflake/dbt environment. The role focuses on transformation pipelines, dimensional modelling, and high-quality data",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "firmus-technologies",
+      "name": "Firmus Technologies",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data Engineer",
+          "url": "https://freehire.me/jobs/principal-data-engineer-firmus-technologies-x4xc7ahu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "such as Apache Spark. Experience with pipeline orchestration and transformation tooling such as Airflow and dbt , with data quality testing built into standard pipeline development. Kubernetes experience covering",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "go-fractional",
+      "name": "Go Fractional",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer – Snowflake/dbt, 12-Month Contract",
+          "url": "https://freehire.me/jobs/lead-data-engineer-snowflake-dbt-12-month-contract-go-fractional-3ujwcib7",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "You will combine hands-on engineering with team leadership to deliver data solutions using Snowflake and dbt. You will design, develop and optimize data pipelines, review code, mentor 3–4 engineers, and collaborate",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Interim Lead Data Engineer",
+          "url": "https://freehire.me/jobs/interim-lead-data-engineer-go-fractional-rievysqi",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Lead Data Engineer (Snowflake, dbt) – 12-Month Fixed-Term Contract Location: Sydney CBD Area Employment Type: Full time Contract Duration: 12 Months Fixed-Term Job",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "guzman-y-gomez",
+      "name": "Guzman y Gomez",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-guzman-y-gomez-mexican-kitchen-4z6b6giw",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "owns problems through to production without hand‑hanging, and pushes back when the data approach is wrong dbt, Great Expectations, or similar data quality/transformation frameworks highly regarded but not essential",
+          "job_poster": null,
+          "posted_date": "2026-08-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "halcyon-knights",
+      "name": "Halcyon Knights",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Snowflake DW Migration (Hybrid)",
+          "url": "https://freehire.me/jobs/senior-data-engineer-snowflake-dw-migration-hybrid-halcyon-knights-biuxcdwb",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "pipelines to support a large‑scale data warehouse migration. You’ll contribute hands-on with Snowflake, dbt, and Informatica IICS, in a hybrid Sydney environment, collaborating with both technical teams and",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-halcyon-knights-ruxwk27d",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "across large-scale migration programmes. You'll ideally have hands-on experience with Snowflake and dbt, alongside strong data modelling, ETL/ELT and stakeholder management capability. You'll be hands-on",
+          "job_poster": null,
+          "posted_date": "2026-09-26",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "hub24",
+      "name": "HUB24",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst",
+          "url": "https://freehire.me/jobs/data-analyst-hub24management-ubcmvmqp",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with a continuous improvement mindset. Experience in financial services, data consulting, Databricks or dbt will be highly regarded. Our process We aim to keep the process simple and respectful of your time",
+          "job_poster": null,
+          "posted_date": "2026-08-10",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "insight-enterprises",
+      "name": "Insight Enterprises",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Forward Deployed Engineer Principal",
+          "url": "https://freehire.me/jobs/forward-deployed-engineer-principal-insight-enterprises-oolcnbdu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "across Python, .NET/C#, or TypeScript; SQL; cloud platforms (Azure preferred); data engineering (pipelines, dbt, SQL warehouses); LLM/agent application development; API design; and comfort in the terminal (git",
+          "job_poster": null,
+          "posted_date": "2026-07-21",
+          "last_seen": "2026-10-01",
+          "job_family": "solutions_engineering",
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "insight-resourcing",
+      "name": "Insight Resourcing",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer | Data & Insights | AI - Global Energy Tech leader",
+          "url": "https://freehire.me/jobs/analytics-engineer-data-insights-ai-global-energy-tech-leader-insight-resourcing-k65whk2e",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "or closely related role Deep, hands-on SQL expertise, along with strong experience using BigQuery and either dbt or SQLMesh Confidence working with at least one BI tool, with Looker experience considered a strong",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "intelligen-group",
+      "name": "Intelligen Group",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "GCP Data & Cloud Engineer",
+          "url": "https://freehire.me/jobs/gcp-data-cloud-engineer-intelligen-group-tzpwkkzy",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "(IaC) approaches for cloud configuration and access controls, ideally using Terraform. Support Terraform and dbt‑based deployment and access‑control patterns where required. Troubleshoot GCP configuration, permissions",
+          "job_poster": null,
+          "posted_date": "2026-09-13",
+          "last_seen": "2026-10-01",
+          "job_family": "devops",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "internetwork-expert",
+      "name": "Internetwork Expert",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data Platform Engineer",
+          "url": "https://freehire.me/jobs/principal-data-platform-engineer-internetwork-expert-b52vcfmu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Pulumi ) CI/CD pipelines using tools like GitHub Actions, ArgoCD Data testing and quality frameworks ( dbt, Great Expectations, Soda ) Delivery & Consulting Mindset Experience in consulting or professional",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "kaizen-global-technologies",
+      "name": "Kaizen Global Technologies",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "AWS Data Engineer",
+          "url": "https://freehire.me/jobs/aws-data-engineer-kaizen-global-technologies-3ouh3hsq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "databases. Exposure to Kafka/MSK, Terraform, and event-driven architectures; experience with Snowflake and dbt is an added advantage. Strong problem-solving, stakeholder management, communication, and Agile delivery",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "king-river-capital-group",
+      "name": "King River Capital Group",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Engineering Manager - Data Platform",
+          "url": "https://freehire.me/jobs/engineering-manager-data-platform-king-river-capital-group-i33vufol",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "APIs, and streaming services. Define and own the strategic roadmap for our Data Platform (BigQuery, Airflow, dbt, Dataflow), ensuring scalability, reliability and cost-effectiveness against agreed KPIs. Leverage",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "remote"
+        },
+        {
+          "title": "Data Platform Engineering Manager - Hybrid + Stock Options",
+          "url": "https://freehire.me/jobs/data-platform-engineering-manager-hybrid-stock-options-king-river-capital-group-cymeph7o",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "APIs, and streaming services. Define and own the strategic roadmap for our Data Platform (BigQuery, Airflow, dbt, Dataflow), ensuring scalability, reliability and cost-effectiveness against agreed KPIs. Leverage",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "liquor-marketing-group",
+      "name": "Liquor Marketing Group",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer – Snowflake/dbt + AI-Driven Platform",
+          "url": "https://freehire.me/jobs/lead-data-engineer-snowflake-dbt-ai-driven-platform-liquor-marketing-group-w6snh4cw",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "a Lead Data Engineer to own architecture and guide engineers in a hybrid role. You will shape the Snowflake/dbt platform, drive data quality and performance, and report to the CIO. The team works with AI tooling to",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://freehire.me/jobs/lead-data-engineer-liquor-marketing-group-p2y4nk33",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "· Full-time · Competitive package · Reports to the CIO Own the technical direction of a mature Snowflake and dbt platform, direct the engineers — human and AI - who build on it, and report straight to the CIO. About us",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "mt-resources",
+      "name": "M&T Resources",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data Engineer",
+          "url": "https://freehire.me/jobs/principal-data-engineer-m-t-resources-n7dmt6ge",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "What we’re looking for: Strong AWS data platform and p ipeline experience. Expertise in Python, Spark, dbt and Airflow . Strong knowledge of distributed systems and data architecture . Experience with Redshift",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "matchbox",
+      "name": "Matchbox",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer — Core Banking Migrations & Pipelines",
+          "url": "https://freehire.me/jobs/senior-data-engineer-core-banking-migrations-pipelines-matchbox-7n36jjj4",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data accuracy, and develop reusable tooling for onboarding multiple clients. You will work with Snowflake, dbt, Python, and SQL to deliver robust data pipelines, validation, and post-migration reporting.",
+          "job_poster": null,
+          "posted_date": "2026-08-10",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer, Core Banking Migrations",
+          "url": "https://freehire.me/jobs/senior-data-engineer-core-banking-migrations-matchbox-cvnmbv47",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "will set your application apart Proficient with Snowflake including pipeline development, data modelling, dbt transformations, and performance optimisation in a Snowflake environment Strong proficiency in Python and",
+          "job_poster": null,
+          "posted_date": "2026-08-10",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "mip",
+      "name": "MIP",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer – Microsoft Fabric (Snowflake or Databricks)",
+          "url": "https://freehire.me/jobs/senior-data-engineer-microsoft-fabric-snowflake-or-databricks-mip-imw42dk5",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Pipelines, Dataflows Gen2, Semantic Models) and at least one of Snowflake or Databricks. Implement notebook/dbt transformations (tests, docs, exposures) and enforce best practices (modularity, lineage, CI checks). Set",
+          "job_poster": null,
+          "posted_date": "2026-09-02",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "nixil",
+      "name": "Nixil",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineering Consultant",
+          "url": "https://freehire.me/jobs/lead-data-engineering-consultant-nixil-jeryqbgy",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data modelling experience (financial reconciliation preferred) ETL/ELT tooling experience (Glue, Airflow, or dbt) Data lake and warehouse design experience Experience in regulated financial environments (banking",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "nsw-health",
+      "name": "NSW Health",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer/Architect (Health Manager Level 3) - District Wide Services",
+          "url": "https://freehire.me/jobs/senior-data-engineer-architect-health-manager-level-3-district-wide-services-nsw-health-ugegvqgs",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data integration, orchestration and processing services such as AWS Glue and transformation tools such as dbt. Strong working knowledge and skills in one or more contemporary programming or scripting languages",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer/Architect — District-Wide Health Data",
+          "url": "https://freehire.me/jobs/senior-data-engineer-architect-district-wide-health-data-nsw-health-ie6jcprj",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data integration, orchestration and processing services such as AWS Glue and transformation tools such as dbt. Strong working knowledge and skills in one or more contemporary programming or scripting languages",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "opus-recruitment-solutions",
+      "name": "Opus Recruitment Solutions",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Fullstack Engineer",
+          "url": "https://freehire.me/jobs/fullstack-engineer-opus-recruitment-solutions-lxwt4yda",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools e.g. Splunk, Grafana, CloudWatch Neo4j, BigQuery Graph Angular, Next.js, Vue.js, Java, Go, DBT Experience integrating with GCP e.g. GCS, BigQuery Experience with",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "fullstack",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "shopgrok",
+      "name": "ShopGrok",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Platform Engineer",
+          "url": "https://freehire.me/jobs/data-platform-engineer-shopgrok-vnw3btj3",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and system trade-offs to internal stakeholders. Highly Desirable (Or Demonstrated Willingness to Learn) dbt & Semantic Layers: Experience using dbt (or a similar tool) to build scalable data architectures",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "showtime-consulting",
+      "name": "Showtime Consulting",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior AWS Data Engineer: Cloud-Native Data Platform Lead",
+          "url": "https://freehire.me/jobs/senior-aws-data-engineer-cloud-native-data-platform-lead-showtime-consulting-42kku3ln",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "candidate brings strong AWS data engineering expertise, advanced SQL and Python skills, and experience with dbt and Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-28",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior AWS Data Engineer",
+          "url": "https://freehire.me/jobs/senior-aws-data-engineer-showtime-consulting-zceplqib",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "advanced SQL and Python skills, and experience building modern ETL/ELT solutions using AWS native services, dbt, and orchestration platforms such as Airflow. Key Responsibilities Build and support AWS data pipelines",
+          "job_poster": null,
+          "posted_date": "2026-09-28",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "skl-technology",
+      "name": "SKL Technology",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer: Snowflake, dbt & Azure Pipelines",
+          "url": "https://freehire.me/jobs/data-engineer-snowflake-dbt-azure-pipelines-skl-technology-mmfeqnal",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "seeking a hands-on Data Engineer to help build a modern cloud data platform. You’ll work across Snowflake, dbt and Azure Data Factory, focusing on pipelines, data models and improving data quality for reporting and",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-skl-technology-qdn7tzoh",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "team and help build out a modern cloud data platform. This is a hands‑on role working across Snowflake, dbt and Azure Data Factory, with a strong focus on building pipelines, developing data models and improving",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-skl-technology-skt2zrgq",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with Infrastructure as Code tools such as CloudFormation or Terraform. Exposure to ETL tools such as DBT, Talend, or Informatica. Experience working with SAS platforms (Base, EG, or SAS Viya). Seniority level",
+          "job_poster": null,
+          "posted_date": "2026-09-01",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Data Platform Engineer: Snowflake & Azure | Hybrid Sydney",
+          "url": "https://freehire.me/jobs/data-platform-engineer-snowflake-azure-hybrid-sydney-skl-technology-pr2wos7u",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Data Engineer to join its Data & Insights team in Sydney. You will build and maintain ELT pipelines, develop dbt models, and design dimensional data structures to support analytics and future AI initiatives. You will",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-skl-technology-5p3ophnc",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and help build out a modern data platform. This is a hands-on role where you'll be working across Snowflake, dbt and Azure, bringing together data from operational, ecommerce, marketing and legacy systems and turning",
+          "job_poster": null,
+          "posted_date": "2026-08-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 5 local job ads that mention dbt. Recruiter ad; the client is not named."
+    },
+    {
+      "id": "software-at-scale",
+      "name": "Software at Scale",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-software-at-scale-qg6236sd",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Architecture & Orchestration: Build and optimise robust data pipelines, ELT frameworks (using tools like dbt), and orchestration layers (such as Airflow) to feed analytical and AI systems seamlessly. Data",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "spriggy",
+      "name": "Spriggy",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://freehire.me/jobs/senior-data-engineer-spriggy-gj3uopnm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "raw sources and the business, following Medallion architecture (bronze/silver/gold) across our Snowflake and dbt setup. Own and evolve Spriggy’s semantic layer: clear, consistent definitions of the metrics and",
+          "job_poster": null,
+          "posted_date": "2026-06-12",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "techclover",
+      "name": "TechClover",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Forward Deployed Engineer – Enterprise Data & Databricks",
+          "url": "https://freehire.me/jobs/senior-forward-deployed-engineer-enterprise-data-databricks-techclover-hdvntpvb",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Delta Lake, Unity Catalog and Databricks Workflows Production experience with SQL, Python/PySpark and dbt and/or Spark Declarative Pipelines Strong understanding of data governance, security and access‑control",
+          "job_poster": null,
+          "posted_date": "2026-09-20",
+          "last_seen": "2026-10-01",
+          "job_family": "solutions_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "the-gpt-group",
+      "name": "The GPT Group",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://freehire.me/jobs/analytics-engineer-the-gpt-group-gmua44zc",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "BI and AI use cases? Reporting to the Data Engineering Manager, you'll be the day-to-day owner of our dbt transformation layer, semantic layer and",
+          "job_poster": null,
+          "posted_date": "2026-08-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        },
+        {
+          "title": "Analytics Engineer — AI Data Modeller (Flexible)",
+          "url": "https://freehire.me/jobs/analytics-engineer-ai-data-modeller-flexible-the-gpt-group-lrpa2nrm",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "raw ingested data into curated, tested models for analytics, BI and AI use cases. You will manage the dbt layer, semantic definitions, and AI semantics while partnering with the Analytics Enablement Lead and",
+          "job_poster": null,
+          "posted_date": "2026-08-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "the-living-company",
+      "name": "The Living Company",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer: Snowflake Data Platform & Pipelines",
+          "url": "https://freehire.me/jobs/analytics-engineer-snowflake-data-platform-pipelines-the-living-company-b52lxxxd",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "power Finance, Sales, Marketing and Operations reporting. Day-to-day you will migrate legacy data, build dbt models across bronze to platinum layers, develop ingestion via Fivetran and Snowpark, and translate",
+          "job_poster": null,
+          "posted_date": "2026-08-28",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Analytics Engineer",
+          "url": "https://freehire.me/jobs/analytics-engineer-the-living-company-idmosfsy",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "with stakeholders to understand what they need and translating that into clean, reliable, well-documented dbt models. Day-to-day you will be (but not limited to): Contributing to the Snowflake data platform",
+          "job_poster": null,
+          "posted_date": "2026-08-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 2 local job ads that mention dbt."
+    },
+    {
+      "id": "tmgm",
+      "name": "TMGM",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst - Trading Desk",
+          "url": "https://freehire.me/jobs/data-analyst-trading-desk-tmgm-vgf3uorx",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ClickHouse (or another columnar/OLAP store — Druid, BigQuery, Snowflake) Airflow or similar orchestration; dbt; Git-based workflows BI tooling (Superset, Metabase, Power BI, Grafana) Benefits Competitive salary and",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-10-01",
+          "job_family": "data_analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "tpg-telecom",
+      "name": "TPG Telecom",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Scientist (12 month FTC)",
+          "url": "https://freehire.me/jobs/senior-data-scientist-12-month-ftc-tpg-telecom-z4ciu5qu",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "and advanced statistical techniques. Programming & Data Manipulation: Strong proficiency in Python, SQL, and dbt with deep experience using data manipulation and modelling libraries, as well as visualisation tools.",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-10-01",
+          "job_family": "data_science",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
+    },
+    {
+      "id": "umbrella-club",
+      "name": "Umbrella Club",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sydney"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://freehire.me/jobs/data-engineer-umbrella-club-vxjkoqh2",
+          "source": "freehire.me",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Agile delivery environments. Nice to have Kafka / Amazon MSK Terraform Event-driven architectures Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data_engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "found through 1 local job ad that mention dbt."
     }
   ],
   "sources": {
@@ -14298,6 +17384,30 @@
         "url": "https://womenwhocode.com/",
         "yielded": false,
         "note": "Closed in 2024; not checked further."
+      },
+      {
+        "name": "freehire.me API, Australia, skill dbt",
+        "url": "https://freehire.me/api/v1/jobs/search?skills=dbt&countries=AU",
+        "yielded": true,
+        "note": "365 ads; 176 in Sydney or NSW mention dbt"
+      },
+      {
+        "name": "getdbt.com case studies (llms-full-case-studies.txt)",
+        "url": "https://www.getdbt.com/llms-full-case-studies.txt",
+        "yielded": true,
+        "note": "Lendi, Deputy, Zip and SafetyCulture are headquartered in Sydney"
+      },
+      {
+        "name": "Greenhouse, Lever and Ashby boards",
+        "url": "https://jobs.ashbyhq.com/xero",
+        "yielded": true,
+        "note": "about 50 slugs; dbt ads at Immutable and Xero"
+      },
+      {
+        "name": "Hacker News Who is hiring (Algolia)",
+        "url": "https://hn.algolia.com/api/v1/search?query=dbt%20sydney&tags=comment",
+        "yielded": false,
+        "note": "only a Go1 remote-in-Australia ad, based in Brisbane"
       }
     ],
     "chapter_past_events": "https://www.meetup.com/sydney-dbt-meetup/events/?type=past",

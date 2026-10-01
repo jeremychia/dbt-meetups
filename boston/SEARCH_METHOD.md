@@ -7,11 +7,11 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 85 |
+| Companies | 93 |
 | People | 61 |
 | Tier 1 leads | 6 |
 | First-time speakers (publish, no talk yet) | 0 |
@@ -20,8 +20,8 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 | Based in the region | 43 |
 | Based elsewhere | 4 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 6 |
-| Job ads mentioning dbt | 62 |
+| With a LinkedIn profile | 9 |
+| Job ads mentioning dbt | 79 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
 
@@ -57,6 +57,9 @@ The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan
 
 - **[Klaviyo Engineering](https://klaviyo.tech/):** the only dbt posts are a CI series by Corey Angers, a past chapter speaker.
 - **[LinkedIn Jobs](https://www.linkedin.com/jobs/search?keywords=dbt), logged out:** up to 150 Boston-area ads checked for the whole word "dbt". 62 ads at 48 companies mention it. WHOOP, MFS Investment Management and Dynatrace have 3 ads each. Xometry, IDEXX, Prenuvo, Northeastern University, Counsel Health, SmithRx, Grant Thornton and Tata Consultancy Services have 2 each.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt&tags=comment):** the Algolia API searched each monthly thread since January 2023 for dbt, one call per thread. Posts were kept when the header names the Boston area and the text uses the whole word dbt. Gave Tive and meQuilibrium as new strong leads, and raised Connie Health and Global Partners LP to strong.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 40 employers were checked, and ads located in the Boston area that use the word dbt were kept. Gave Toast and Agero as new strong leads. Their dbt ads are remote, but the boards show a Boston office and a Medford headquarters. EverQuote and Hometap list dbt as a plus. Starburst Data has a Boston role that lists dbt as a plus.
+- **GitHub code search for `dbt_project.yml`:** the WhoopInc org holds a public repo that builds Snowflake semantic views from a dbt project.
 
 ### Locations
 
@@ -78,6 +81,10 @@ The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan
 - **Not found:** She Loves Data, Girls in Tech and Lesbians Who Tech have no Boston Meetup group. [Women in Data](https://www.womenindata.org/) lists no Boston chapter.
 - **[Wayfair tech blog](https://www.aboutwayfair.com/careers/tech-blog):** BigQuery and ML content, with no dbt. No local company blog had new dbt authors.
 - **Old chapter talks:** give no location evidence. Most talks from 2020–23 could not be placed.
+- **GitHub code search for `dbt_project.yml`:** found nothing in 15 other Boston orgs, among them HubSpot, wayfair, toasttab, klaviyo, cargurus, rapid7 and tripadvisor.
+- **Meetup venue scan:** Data, Cloud and AI in Boston and Data Engineering Boston events since 2024 were held at IBM, Moderna and Microsoft. None of the events mentions dbt.
+- **Job boards with no open JSON:** hubspot, wayfair, ezcater, datarobot, devotedhealth, rapid7, chewy, draftkings and flywire answered none of the three APIs. SimpliSafe, Formlabs, Tripadvisor and Motional had no ad that uses the word dbt.
+- **HN posts skipped:** posts that name dbt only as an investor or as a product integration, and posts with no company name, were not counted as dbt users.
 
 ## 3. Companies looked at
 
@@ -86,23 +93,29 @@ The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan
 - **No first-time speakers yet.** Boston has none, so the list leans on people who already speak.
 
 <!-- companies:start -->
-84 companies and communities were looked at. A company is local when it has people or roles in the region.
+92 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (6)</summary>
+<details><summary><b>Strong dbt use</b> (12)</summary>
 
-CarGurus, Cleartelligence, EF Education First (local presence not confirmed), HubSpot, Klaviyo, WHOOP
+Agero, CarGurus, Cleartelligence, Connie Health, EF Education First (local presence not confirmed), Global Partners LP, HubSpot, Klaviyo, meQuilibrium, Tive, Toast, WHOOP
 
 </details>
 
 <details><summary><b>Some dbt signal</b> (49)</summary>
 
-AAA Northeast, ABCorp, Agoda, Alexander Technology Group, Analog Devices, Arbor, Axon, Beacon Biosignals, Bevi, Coforge, Connie Health, Counsel Health, Curaleaf, Datadog, Dynatrace, Flywire, Geode Capital Management, Global Partners LP, Grant Thornton (US), IDEXX, InvestM Technology LLC, JobGet, Keystone, Leader Bank, LinkSquares, MathWorks, MCS Group - USA, MFS Investment Management, Northeastern University, Patient Funding Alternatives, Perimeter, Plymouth Rock Assurance, Prenuvo, Purple Carrot, Rapid7, SDL Tech Search, SharkNinja, Slalom, SmithRx, Snowflake User Group Boston, Spoiler Alert, Stellix, Strategic Employment Partners (SEP), Tata Consultancy Services, Tenable, Topline Pro, Vero, Xometry, Zelis
+AAA Northeast, ABCorp, Agoda, Alexander Technology Group, Analog Devices, Arbor, Axon, Beacon Biosignals, Bevi, Coforge, CommunityScale (local presence not confirmed), Counsel Health, Curaleaf, Datadog, Delfina, Dynatrace, Flywire, Geode Capital Management, Grant Thornton (US), IDEXX, InvestM Technology LLC, JobGet, Keystone, Leader Bank, LinkSquares, MathWorks, MCS Group - USA, MFS Investment Management, Northeastern University, Patient Funding Alternatives, Perimeter, Plymouth Rock Assurance, Prenuvo, Purple Carrot, Rapid7, SDL Tech Search, SharkNinja, Slalom, SmithRx, Snowflake User Group Boston, Spoiler Alert, Stellix, Strategic Employment Partners (SEP), Tata Consultancy Services, Tenable, Topline Pro, Vero, Xometry, Zelis
 
 </details>
 
-<details><summary><b>Not verified</b> (21)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (3)</summary>
 
-Battery Ventures (local presence not confirmed), dbt Labs (local presence not confirmed), Drizly (local presence not confirmed), Fidelity Investments (local presence not confirmed), Grand Circle Corp. (local presence not confirmed), InterSystems (local presence not confirmed), Kensho, Microsoft New England (NERD Center), Moderna, PyData Boston - Cambridge, PyLadies Boston, R-Ladies Boston, Simply Business (local presence not confirmed), Starburst Data (local presence not confirmed), Stratdigy (formerly DataOps.live) (local presence not confirmed), Strategic Data Insights, LLC (local presence not confirmed), VaultSpeed (local presence not confirmed), WiDS Cambridge, Wistia (local presence not confirmed), Women in Data (Boston), Zing Data (local presence not confirmed)
+EverQuote, Hometap, Starburst Data
+
+</details>
+
+<details><summary><b>Not verified</b> (20)</summary>
+
+Battery Ventures (local presence not confirmed), dbt Labs (local presence not confirmed), Drizly (local presence not confirmed), Fidelity Investments (local presence not confirmed), Grand Circle Corp. (local presence not confirmed), InterSystems (local presence not confirmed), Kensho, Microsoft New England (NERD Center), Moderna, PyData Boston - Cambridge, PyLadies Boston, R-Ladies Boston, Simply Business (local presence not confirmed), Stratdigy (formerly DataOps.live) (local presence not confirmed), Strategic Data Insights, LLC (local presence not confirmed), VaultSpeed (local presence not confirmed), WiDS Cambridge, Wistia (local presence not confirmed), Women in Data (Boston), Zing Data (local presence not confirmed)
 
 </details>
 
@@ -215,3 +228,4 @@ Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI
 | 2026-10-01 | 2 | Location pass: 8 people placed from Meetup host and RSVP profiles, GitHub and recent in-person talks, 7 in the region and 1 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 5 people placed from LinkedIn search results, 4 in the region and 1 outside. 9 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass: WEST, WiDS Boston, Women Techmakers through GDG Boston and GDG Cloud Boston, Metro Boston Data Ladies, AWS User Group Women in AI Cambridge and new PyLadies Boston hosts. 18 new people: 4 speakers and panellists, and 14 organisers as connectors. |
+| 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code search and Meetup venues. 85 to 93 companies. 8 added, 4 with a strong dbt signal (Tive, meQuilibrium, Toast, Agero). Connie Health and Global Partners LP raised to strong. Starburst Data raised to nice-to-have, with Boston presence confirmed. Job ads 62 to 79. |

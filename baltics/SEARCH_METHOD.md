@@ -8,11 +8,11 @@ This file holds what is specific to Vilnius. The method, scoring rules, schema a
 - **Language:** search in English and Lithuanian.
 
 <!-- at-a-glance:start -->
-**At a glance** (version 9, 2026-10-01)
+**At a glance** (version 10, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 57 |
+| Companies | 61 |
 | People | 120 |
 | Tier 1 leads | 15 |
 | First-time speakers (publish, no talk yet) | 5 |
@@ -21,8 +21,8 @@ This file holds what is specific to Vilnius. The method, scoring rules, schema a
 | Based in the region | 62 |
 | Based elsewhere | 2 |
 | Location unknown | 56 |
-| With a LinkedIn profile | 100 |
-| Job ads mentioning dbt | 43 |
+| With a LinkedIn profile | 103 |
+| Job ads mentioning dbt | 62 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
 
@@ -34,6 +34,10 @@ Job ads are the most reliable sign that a Lithuanian company uses dbt, because c
 
 - **LinkedIn Jobs, logged out:** the best company signal. Search [linkedin.com/jobs/search?keywords=dbt&location=Lithuania](https://www.linkedin.com/jobs/search?keywords=dbt&location=Lithuania), which works without logging in. The keyword search is loose: it returned 415 ads, but only 43 mentioned dbt in the ad text. So fetch each ad's full description and check it for the whole word `dbt` with the scanner below. Each ad page also shows who posted it ("Meet the hiring team"), which can give a named contact.
 - **CVbankas.lt:** [cvbankas.lt/?keyw=dbt](https://www.cvbankas.lt/?keyw=dbt) searches the ad text and catches Lithuanian-language ads. It found Artea bankas, Lietuvos bankas, IKI and Ltintus.
+- **CVMarket.lt:** [the dbt keyword search](https://www.cvmarket.lt/joboffers.php?op=search&search%5Bkeyword%5D=dbt) now searches the ad text. It returned 30 ads, and each ad page gives the full text and the posting date. It added Wargaming's Vilnius analytics engineer ad, which owns dbt Cloud. Some ads come from a sister company with the same text, such as Tesonet Global for Oxylabs and UAB Helis Play for Eneba.
+- **Company job boards:** the Greenhouse, Lever and Ashby boards of about 60 Lithuanian employers. Eneba, Oxylabs, Surfshark, Welltech, Ruby Labs and Mediatech had Lithuanian ads that say dbt.
+- **Meetup hosts:** Meetup gql2 past events of the Vilnius Snowflake, PyData, SEB Talks IT and Danske Tech groups. They confirm Infotrust, SEB and Danske Bank in Vilnius, with no dbt seen. A [PyData Vilnius talk](https://www.meetup.com/pydata-vilnius/events/299190786/) (2024-02) covers dbt Python models at Surfshark.
+- **GitHub organisation repositories:** TransferGo publishes [a fork of dbt-checkpoint](https://github.com/TransferGo/dbt-checkpoint).
 - **Web search in English:** `dbt data engineer Vilnius`, `analytics engineer Vilnius dbt`, `data scientist Kaunas dbt`.
 - **Web search in Lithuanian:** `dbt duomenų analitikas`, `"dbt" duomenų inžinierius`, `duomenų mokslininkas dbt`.
 - **Job platforms:** `"dbt" Vilnius site:teamtailor.com OR site:greenhouse.io OR site:jobs.lever.co OR site:ashbyhq.com`.
@@ -107,7 +111,9 @@ The meetup event pages can be read the same way: open any meetup.com page, then 
 
 ## 2. What didn't work here
 
-- **CV-Online and CVMarket keyword search:** only matches job titles, so a dbt search returns nothing.
+- **CV-Online keyword search:** only matches job titles, so a dbt search returns nothing. CVMarket now works (section 1).
+- **HN Who is hiring:** no Lithuanian ad since 2023 mentions dbt.
+- **GitHub code search:** it hit the shared rate limit. Repository lists of 16 Lithuanian organisations found dbt only at TransferGo.
 - **meetup.com attendee lists:** need a login.
 - **LinkedIn people search:** needs a login, and search engines index only a small share of profiles.
 - **`site:linkedin.com/posts dbt ...`:** noisy. It returns worldwide results and therapy "DBT" (dialectical behaviour therapy).
@@ -125,17 +131,17 @@ The meetup event pages can be read the same way: open any meetup.com page, then 
 - **Open leadership roles:** many "no leader found" gaps are real vacancies. Head of Data roles are open at Hostinger, Eneba, Nord (Saily), Barbora and Oxylabs.
 
 <!-- companies:start -->
-57 companies and communities were looked at. A company is local when it has people or roles in the region.
+61 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (21)</summary>
+<details><summary><b>Strong dbt use</b> (22)</summary>
 
-Artea bankas (ex-Šiaulių bankas), CoinGate, Eldorado.gg, Eneba, Hostinger, IKI Lietuva, Intetics, Kilo Health (Kilo / Kiloverse), Lietuvos bankas (Bank of Lithuania), Nord Security (NordVPN, Saily, NordLayer), Omnisend, Ovoko / RRR.LT, Oxylabs, PVcase, Scoris, Surfshark (incl. Incogni), Telia Lietuva, TeraSky Europe, TransferGo, Vinted, Welltech
+Artea bankas (ex-Šiaulių bankas), CoinGate, Eldorado.gg, Eneba, Hostinger, IKI Lietuva, Intetics, Kilo Health (Kilo / Kiloverse), Lietuvos bankas (Bank of Lithuania), Nord Security (NordVPN, Saily, NordLayer), Omnisend, Ovoko / RRR.LT, Oxylabs, PVcase, Scoris, Surfshark (incl. Incogni), Telia Lietuva, TeraSky Europe, TransferGo, Vinted, Wargaming (Vilnius), Welltech
 
 </details>
 
-<details><summary><b>Some dbt signal</b> (13)</summary>
+<details><summary><b>Some dbt signal</b> (14)</summary>
 
-Bonapolia, DATAHEAD, foxity.io, Luminor, Mediatech (Cybernews), MWDN, Nasdaq (Vilnius), OAG (ex-Infare), PAYSTRAX, Ruby Labs, Tesonet, Topo grupė, twoday Lithuania
+Bonapolia, DATAHEAD, EPAM Systems (Lithuania), foxity.io, Luminor, Mediatech (Cybernews), MWDN, Nasdaq (Vilnius), OAG (ex-Infare), PAYSTRAX, Ruby Labs, Tesonet, Topo grupė, twoday Lithuania
 
 </details>
 
@@ -145,9 +151,9 @@ BARBORA Lietuva, Cast AI, ECOSERVICE grupė, Macaw Lithuania
 
 </details>
 
-<details><summary><b>Not verified</b> (17)</summary>
+<details><summary><b>Not verified</b> (19)</summary>
 
-Adform (local presence not confirmed), Beyond Analysis, BITĖ Lietuva, Bolt (local presence not confirmed), BURGA (local presence not confirmed), EPAM Systems (Lithuania), Flo Health, Genius Sports (Vilnius), HomeToGo (Kaunas), Ignitis Group, Other / independent, Paysera (local presence not confirmed), Revolut (Vilnius), Scrambly, Shopify (remote) (local presence not confirmed), UAB Ltintus (local presence not confirmed), Wix (Vilnius)
+Adform (local presence not confirmed), Beyond Analysis, BITĖ Lietuva, Bolt (local presence not confirmed), BURGA (local presence not confirmed), Danske Bank (Vilnius), Flo Health, Genius Sports (Vilnius), HomeToGo (Kaunas), Ignitis Group, Infotrust, Other / independent, Paysera (local presence not confirmed), Revolut (Vilnius), Scrambly, SEB (Vilnius), Shopify (remote) (local presence not confirmed), UAB Ltintus (local presence not confirmed), Wix (Vilnius)
 
 </details>
 
@@ -157,7 +163,7 @@ PyLadies Lithuania, Women Go Tech
 
 </details>
 
-<details><summary><b>Other sources checked</b> (9)</summary>
+<details><summary><b>Other sources checked</b> (11)</summary>
 
 - [Meetup gql2 groupSearch near Vilnius and Kaunas](https://www.meetup.com/gql2)
 - [PyLadies Lithuania (Meetup gql2)](https://www.meetup.com/pyladies-lithuania/)
@@ -168,6 +174,8 @@ PyLadies Lithuania, Women Go Tech
 - [Women in AI Lithuania](https://www.womeninai.co/lithuania) (nothing useful)
 - [Rails Girls Vilnius](https://railsgirls.com/vilnius.html) (nothing useful)
 - [Women Who Code](https://womenwhocode.com/) (nothing useful)
+- [CVMarket.lt dbt search](https://www.cvmarket.lt/joboffers.php?op=search&search%5Bkeyword%5D=dbt)
+- [HN Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt&tags=comment) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -223,3 +231,4 @@ PyLadies Lithuania, Women Go Tech
 | 2026-09-23 | 7 | Shared schema v3 adds `pronouns` and `sourced_via` (schema-only change). `pronouns` records only pronouns people publish themselves; none were found for tier-1/2 people, so all are `null`. `sourced_via` is derived from each person's evidence; people found through the job-ad company search are `job_ad_company_search`. For women-in-data sourcing and the line-up balance check, see `../berlin_planning/SEARCH_METHOD.md` Step 2b and §1 Step 6. Next run: check Vilnius women-in-data groups (e.g. PyLadies Vilnius, Women Go Tech). Backup: `lithuania_dbt_companies.v6.json`. |
 | 2026-10-01 | 8 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed no one, because most unknown people have no evidence link other than a LinkedIn profile. LinkedIn search results placed 9 people: 7 in Lithuania and 2 elsewhere (Paris and Chicago). 49 people are still unknown. |
 | 2026-10-01 | 9 | Women-in-data pass from PyLadies Lithuania and Women Go Tech. 10 people added: 2 Oxylabs workshop speakers, and 8 organisers and staff as connectors. |
+| 2026-10-01 | 10 | Company pass from CVMarket, CVbankas, company job boards, Meetup hosts and GitHub. 4 companies added: Wargaming (strong), and Infotrust, SEB and Danske Bank as Vilnius meetup hosts with no dbt seen. EPAM rose from weak to medium. 19 job ads added, now 62. |

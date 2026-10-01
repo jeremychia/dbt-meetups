@@ -7,11 +7,11 @@ This file holds what is specific to Tokyo. The method, scoring rules, schema and
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 87 |
+| Companies | 135 |
 | People | 146 |
 | Tier 1 leads | 103 |
 | First-time speakers (publish, no talk yet) | 80 |
@@ -20,8 +20,8 @@ This file holds what is specific to Tokyo. The method, scoring rules, schema and
 | Based in the region | 107 |
 | Based elsewhere | 5 |
 | Location unknown | 34 |
-| With a LinkedIn profile | 4 |
-| Job ads mentioning dbt | 0 |
+| With a LinkedIn profile | 5 |
+| Job ads mentioning dbt | 47 |
 | Past chapter meetups | 19 |
 <!-- at-a-glance:end -->
 
@@ -41,6 +41,12 @@ Most of the content is in Japanese. Titles are kept as written, with an English 
 - **[LayerX](https://tech.layerx.co.jp/):** two open-source dbt packages for Snowflake governance.
 - **[ZOZO](https://techblog.zozo.com/):** dbt adoption on Cloud Composer.
 - **Money Forward on Zenn:** one dbt post on its Zenn publication.
+
+### Companies and job ads
+
+- **[green-japan.com dbt search](https://www.green-japan.com/search?keyword=dbt):** the best source of Tokyo dbt employers. Search pages and ad pages answer a plain fetch and embed `__NEXT_DATA__` JSON. Each ad has separate fields for the work, the requirements and the welcome skills, plus the work prefectures. 160 ads in 8 pages; one ad per company was read. It added 42 Tokyo companies, 14 of them strong, such as MonotaRO, TimeTree, CARTA HOLDINGS, Marui Group and Hacobu. It also raised DeNA, TRIBEAU and unerry to strong. An ad open to every prefecture does not confirm a Tokyo office.
+- **Zenn company publications:** the dbt topic API groups posts by company publication. Reading the post bodies added Skyfall, StoreHero, COUNTERWORKS, M&A Cloud and YUMEMI. It raised 10 companies from medium to strong, such as PKSHA Technology, Loglass, COTEN and READYFOR.
+- **[dbt Labs Japan case studies](https://www.getdbt.com/jp/blog/case-study-telecy):** the getdbt.com sitemap lists Telecy's case study. It moved from dbt Core to dbt platform.
 
 ### Conferences and the chapter
 
@@ -76,6 +82,9 @@ Most of the content is in Japanese. Titles are kept as written, with an English 
 - **[SmartHR](https://tech.smarthr.jp/) and [Money Forward](https://moneyforward-dev.jp/) blogs:** no dbt posts.
 - **Japanese company sites:** most load by JavaScript, so no office address came back.
 - **Web search:** ran out after about 12 calls. No job ads were collected, and the Mercari, SmartHR and CyberAgent sweeps were only partly done.
+- **[findy-code.io](https://findy-code.io/companies?keyword=dbt):** a fetch ignores the keyword and returns every company.
+- **HN Who is hiring:** no Tokyo ad since 2023 mentions dbt.
+- **dbt Labs Japan event pages:** the How-to and partner pages name no customer speakers. The customer session page names only Timee.
 - **Women-in-data events:** [Women Tech Terrace 2024](https://www.cyberagent.co.jp/way/list/detail/id=30486) (CyberAgent) had no data talks. [WiDS Tokyo @ IBM](https://www.widsworldwide.org/events/event/wids-tokyo-ibm-2/) was a 2024 event with no speakers listed. No candidate came from this step.
 - **Women-in-data groups with no data talks:** [PyLadies Tokyo](https://pyladies-tokyo.connpass.com/) meetups since 2024 are Python and AI workshops, and speakers are not named. [Tokyo WiMLDS](https://www.meetup.com/tokyo-women-in-machine-learning-and-data-science/) has held one event, in 2019. The [GTUG Girls and PyLadies data analysis workshop](https://gtuggirls.connpass.com/event/304447/) (January 2024) named no speakers.
 - **Women-in-data sites that failed:** wids-tokyo.jp now hosts an unrelated blog. womendevsummit.jp did not resolve. connpass has no Women in Data Japan or Data + Women group. Snowflake女子会's TECH PLAY page returned HTTP 403.
@@ -87,23 +96,29 @@ Most of the content is in Japanese. Titles are kept as written, with an English 
 - **Customer speakers at dbt Labs events:** Sony Bank and Mynavi speak at dbt World Tour Tokyo on 2026-10-20.
 
 <!-- companies:start -->
-86 companies and communities were looked at. A company is local when it has people or roles in the region.
+134 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (51)</summary>
+<details><summary><b>Strong dbt use</b> (84)</summary>
 
-10X Inc. (local presence not confirmed), Anthropic Japan G.K. (local presence not confirmed), Chura Data (local presence not confirmed), commmune Inc. (local presence not confirmed), CyberAgent, DATUM STUDIO, dbt Labs (local presence not confirmed), dbt Tokyo Crew, DMM.com, estie Inc. (local presence not confirmed), Fez, Finatext Holdings (Finatext / Nowcast), GA technologies, GENDA, GMO Pepabo, hokan, istyle, IVRy, JINS, Knowledge Work, Kurashiru (dely), LayerX, Macbee Planet, MeDiCU, Mitsumore Inc. (local presence not confirmed), Mizuho Research & Technologies (local presence not confirmed), Money Forward, Mynavi, newmo Inc. (local presence not confirmed), Nowcast Inc. (local presence not confirmed), NTT DATA, PIVOT, pixiv, primeNumber, RAKSUL, RAKUDEJI (local presence not confirmed), Rehab for JAPAN, Sansan, SIGNATE Inc. (local presence not confirmed), Snowflake Data Heroes (Japan), Sony Bank, stable Inc. (local presence not confirmed), Stanby, Supership, Timee, truestar, Ubie, VALUES, Works Human Intelligence, ZOZO, Zucks Ad Products Division (local presence not confirmed)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (20)</summary>
-
-Antway, Bandai Namco Nexus, COTEN, Cybozu, DeNA, Headwaters, INTAGE, KDDI Agile Development Center, Loglass, MBK Digital, PKSHA Technology, Quick Network (local presence not confirmed), READYFOR, Rec Technology Consulting (local presence not confirmed), Saison Technology, SimpleForm (local presence not confirmed), TRIBEAU, USEN ICT Solutions, Yappli, youthful days (local presence not confirmed)
+10X Inc. (local presence not confirmed), ANDPAD (アンドパッド), Anthropic Japan G.K. (local presence not confirmed), Antway, CARTA HOLDINGS, Chura Data (local presence not confirmed), Cograph (コグラフ株式会社), commmune Inc. (local presence not confirmed), COTEN, COUNTERWORKS (local presence not confirmed), CyberAgent, Cybozu, DATUM STUDIO, dbt Labs (local presence not confirmed), dbt Tokyo Crew, DeNA, DMM.com, estie Inc., Fez, Finatext Holdings (Finatext / Nowcast), GA technologies, GENDA, GMO Pepabo, Hacobu, Headwaters, hokan, istyle, IVRy, jinjer, JINS, Knowledge Work, Kurashiru (dely), LayerX, Loglass, M&A Cloud (M&Aクラウド) (local presence not confirmed), Macbee Planet, Management Solutions (MSOL), Marui Group (丸井グループ), MeDiCU, Mitsumore Inc. (local presence not confirmed), Mizuho Research & Technologies (local presence not confirmed), Money Forward, MonotaRO, Mynavi, newmo Inc. (local presence not confirmed), Nowcast Inc. (local presence not confirmed), NTT DATA, PIVOT, pixiv, PKSHA Technology, PLEX (株式会社プレックス), primeNumber, Quick Network (local presence not confirmed), RAKSUL, RAKUDEJI (local presence not confirmed), READYFOR, Rehab for JAPAN, Sansan, Shimauma Print (しまうまプリント), SIGNATE Inc. (local presence not confirmed), Skyfall (local presence not confirmed), Snowflake Data Heroes (Japan), Sony Bank, Squad (株式会社Squad), stable Inc. (local presence not confirmed), Stanby, StoreHero (local presence not confirmed), Supership, Tech Lab (株式会社Tech Lab), Telecy (株式会社テレシー) (local presence not confirmed), Timee, TimeTree, TRIBEAU, truestar, TSR (TSR株式会社), Ubie, unerry, USEN ICT Solutions, VALUES, Works Human Intelligence, youthful days (local presence not confirmed), YUMEMI (ゆめみ) (local presence not confirmed), ZOZO, Zucks Ad Products Division (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (15)</summary>
+<details><summary><b>Some dbt signal</b> (19)</summary>
 
-Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), Daihatsu Motor (local presence not confirmed), HAPPY ANALYTICS (local presence not confirmed), IHI (local presence not confirmed), Infotech (インフォテック株式会社) (local presence not confirmed), Methodologic (株式会社メソドロジック) (local presence not confirmed), ML女子部 (Women in ML Japan), MOTEX (local presence not confirmed), mybest, Snowflake (Japan), Snowflake女子会 (Snowflake women's community), unerry, Women in AI Japan, Yokohama City University
+Almondo, AMBL, Bandai Namco Nexus, DSS (株式会社ディーエスエス), FLARETECH (local presence not confirmed), HERP, INTAGE, Kauche (カウシェ), KDDI Agile Development Center, Lightcode (ライトコード), MBK Digital, Monstar Lab (モンスターラボ), Rec Technology Consulting (local presence not confirmed), Saison Technology, Sharing Innovations, SimpleForm (local presence not confirmed), Triarrow (トライアロー), TSUIDE, Yappli
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (17)</summary>
+
+bitA (ビットエー), Data One (データ・ワン), Exture (エクスチュア), Fellowship (フェローシップ), freee, Geekly (ギークリー), Japan System (ジャパンシステム), JMDC, KIYONO, LegalOn Technologies, Makip (メイキップ), oneroots, OpenStreet, SORAMICHI, Trustline (トラストライン), WealthNavi (ウェルスナビ), YOUTRUST
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (14)</summary>
+
+Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), Daihatsu Motor (local presence not confirmed), HAPPY ANALYTICS (local presence not confirmed), IHI (local presence not confirmed), Infotech (インフォテック株式会社) (local presence not confirmed), Methodologic (株式会社メソドロジック) (local presence not confirmed), ML女子部 (Women in ML Japan), MOTEX (local presence not confirmed), mybest, Snowflake (Japan), Snowflake女子会 (Snowflake women's community), Women in AI Japan, Yokohama City University
 
 </details>
 
@@ -165,7 +180,7 @@ Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), 
 
 </details>
 
-<details><summary><b>Other sources checked</b> (29)</summary>
+<details><summary><b>Other sources checked</b> (32)</summary>
 
 - [Zenn dbt topic (API)](https://zenn.dev/topics/dbt)
 - [Qiita dbt tag (API)](https://qiita.com/tags/dbt)
@@ -196,6 +211,9 @@ Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), 
 - [wids-tokyo.jp](https://wids-tokyo.jp/) (nothing useful)
 - [connpass searches: Women in Data, Data+Women, Women Techmakers Tokyo, 女子会 データ](https://connpass.com/search/?q=Women+in+Data) (nothing useful)
 - [Women Developers Summit](https://womendevsummit.jp/) (nothing useful)
+- [green-japan.com dbt search](https://www.green-japan.com/search?keyword=dbt)
+- [Zenn dbt topic API](https://zenn.dev/api/articles?topicname=dbt&order=latest)
+- [findy-code.io company search](https://findy-code.io/companies?keyword=dbt) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -262,3 +280,4 @@ Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), 
 | 2026-10-01 | 1 | Location pass from public pages: GitHub profiles, in-person chapter talks and company contact pages. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 2 people placed in Greater Tokyo and 2 elsewhere. With the location pass, 22 people placed and 24 still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass. Checked Snowflake女子会, ML女子部, Women in AI Japan, Women Techmakers Tokyo, PyLadies Tokyo, Tokyo WiMLDS, GTUG Girls and WiDS Tokyo. Added 20 people with `sourced_via: women_in_data_community`: 5 speakers and 15 connectors, 6 of whom also gave talks. Added organiser evidence to あれ (allllllllez). Added 6 community channels. The assembler also added 2 past chapter speakers from the enriched file. |
+| 2026-10-01 | 3 | Company pass from green-japan.com, Zenn company publications and the dbt Labs sitemap. 48 companies added: 42 from job ads (14 strong, 11 medium, 17 nice-to-have), 5 from Zenn and Telecy from a case study. 13 companies raised to strong, and estie's Tokyo presence confirmed. 47 job ads added; the file had none before. |

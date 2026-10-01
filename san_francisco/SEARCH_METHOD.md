@@ -7,11 +7,11 @@ This file holds what is specific to San Francisco. The method, scoring rules, sc
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 70 |
+| Companies | 96 |
 | People | 97 |
 | Tier 1 leads | 24 |
 | First-time speakers (publish, no talk yet) | 10 |
@@ -20,8 +20,8 @@ This file holds what is specific to San Francisco. The method, scoring rules, sc
 | Based in the region | 56 |
 | Based elsewhere | 13 |
 | Location unknown | 28 |
-| With a LinkedIn profile | 19 |
-| Job ads mentioning dbt | 3 |
+| With a LinkedIn profile | 25 |
+| Job ads mentioning dbt | 48 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->
 
@@ -58,6 +58,9 @@ People were taken only from each community's own events and are tagged `sourced_
 - **[Snowflake Bay Area User Group](https://usergroups.snowflake.com/san-francisco/):** lists its 2 leaders, but not its event speakers.
 - **[GitHub user search](https://github.com/search?q=dbt+location%3A%22San+Francisco%22&type=users):** "dbt" in the bio and a San Francisco location. Mostly job-seeker portfolios. Two people were kept.
 - **Job ads:** only 3, found through web search, at World, Perplexity and Slash. No LinkedIn Jobs scan was run.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt&tags=comment):** the Algolia API searched each monthly thread since January 2023 for dbt, one call per thread. Posts were kept when the header names the Bay Area and the text uses the whole word dbt. Gave 7 companies, among them COVU, Folio, Pomelo Care and the DataSF team of the City & County of San Francisco.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 60 employers were checked, and ads located in the Bay Area that use the word dbt were kept. Gave Discord, Brex, Plaid, Gusto, Robinhood, Anthropic, Benchling and Vanta as new strong leads. It raised Snowflake and Mercor to strong and PagerDuty to medium.
+- **[dbt Labs case studies, full text](https://www.getdbt.com/llms-full-case-studies.txt):** one file, linked from the sitemap, holds every case study with its headquarters line. It added Retool, Vivian Health, Vida Health, SpotOn, Blend, Reforge, Sunrun and Aktify, all with Bay Area headquarters, and confirmed Tempo.
 
 ### Locations
 
@@ -77,6 +80,10 @@ People were taken only from each community's own events and are tagged `sourced_
 - **[AI Council Bay Area](https://www.aicouncil.com/bay-2025):** Data Council was renamed, and the page lists no speakers.
 - **Company Medium feeds:** [Gusto](https://medium.com/feed/gusto-engineering) and Faire had no dbt posts. [Airbnb](https://medium.com/feed/airbnb-engineering), Lyft and Instacart returned HTTP 429 (too many requests), so Bay Area company tech blogs are still unscanned.
 - **GitHub user search:** finds mostly job-seeker portfolios. Only a few are usable speaker leads.
+- **GitHub code search for `dbt_project.yml`:** found nothing in about 25 Bay Area orgs, among them stripe, airbnb, lyft, dropbox, instacart, plaid, figma and discord. Vendor orgs return only their own dbt packages.
+- **Meetup venue scan:** Snowflake Bay Area, Bay Area Apache Airflow and Data Council SF events since 2024 were held at Snowflake, Lyft, Amazon, Samba TV and Astronomer. None of the events mentions dbt.
+- **Job boards with no open JSON:** doordash, rippling, retool, modern-treasury, whatnot and grove answered none of the three APIs. Stripe, Airbnb, Notion, OpenAI, Pinterest, Reddit and Carta had no ad that uses the word dbt.
+- **HN posts skipped:** posts that name dbt only as an investor or as a product integration, and posts with no company name, were not counted as dbt users.
 
 ## 3. Companies looked at
 
@@ -85,23 +92,29 @@ People were taken only from each community's own events and are tagged `sourced_
 - **Many leads are featured** in someone else's content, with no talk or post of their own. Ask these people for a first talk rather than a repeat.
 
 <!-- companies:start -->
-69 companies and communities were looked at. A company is local when it has people or roles in the region.
+95 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (37)</summary>
+<details><summary><b>Strong dbt use</b> (58)</summary>
 
-Absolunet.com (local presence not confirmed), Altimate AI (local presence not confirmed), Census (local presence not confirmed), Chime, City & County of San Francisco (local presence not confirmed), Cribl, Datafold (local presence not confirmed), dbt Labs, Decodable (local presence not confirmed), DocuSign, DoorDash, Envoy (local presence not confirmed), Fastly (local presence not confirmed), Figma, Fishtown Analytics (local presence not confirmed), Fivetran, Grove Collaborative (local presence not confirmed), Hex, Instacart, Kaelio (local presence not confirmed), Landed (local presence not confirmed), LangChain, Mainspring Energy, Merit (local presence not confirmed), Metabase (local presence not confirmed), Nimbus Intelligence (local presence not confirmed), Okta, Omni, Sigma Computing, Stealth (local presence not confirmed), Tempo (local presence not confirmed), Whatnot (local presence not confirmed), World, Yerdle Recommerce (local presence not confirmed), Zing (local presence not confirmed), Zipline, Zoox (local presence not confirmed)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (8)</summary>
-
-Hightouch, Mode, Monte Carlo, MotherDuck, Perplexity, Slash, Snowflake, Spinwheel (local presence not confirmed)
+Absolunet.com (local presence not confirmed), Aktify, Altimate AI (local presence not confirmed), Anthropic, Benchling, Blend, Brex, Census, Chime, City & County of San Francisco, COVU, Cribl, Datafold (local presence not confirmed), dbt Labs, Decodable (local presence not confirmed), Discord, DocuSign, DoorDash, Envoy (local presence not confirmed), Fastly (local presence not confirmed), Figma, Fishtown Analytics (local presence not confirmed), Fivetran, Folio, Grove Collaborative (local presence not confirmed), Gusto, Hex, Instacart, Kaelio (local presence not confirmed), Landed (local presence not confirmed), LangChain, Mainspring Energy, Mercor, Merit (local presence not confirmed), Metabase (local presence not confirmed), Nimbus Intelligence (local presence not confirmed), Okta, Omni, Plaid, Pomelo Care, Reforge, Retool, Robinhood, Sigma Computing, Snowflake, SpotOn, Stealth (local presence not confirmed), Sunrun, Tempo, Vanta, Vida Health, Vivian Health, Whatnot (local presence not confirmed), World, Yerdle Recommerce (local presence not confirmed), Zing (local presence not confirmed), Zipline, Zoox (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Not verified</b> (14)</summary>
+<details><summary><b>Some dbt signal</b> (14)</summary>
 
-Big Time Data (local presence not confirmed), Credit Karma, CrowdStrike (local presence not confirmed), DatologyAI (local presence not confirmed), Engage3 (local presence not confirmed), Handshake, Mercor, Meta, Modern Treasury, Notion, PagerDuty, Reddit, Ross Stores, Spaulding Ridge (local presence not confirmed)
+Databricks, Delfina, Faire, Hightouch, InScope, Mercury, Mode, Monte Carlo, MotherDuck, PagerDuty, Perplexity, Poshmark, Slash, Spinwheel (local presence not confirmed)
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Scale AI
+
+</details>
+
+<details><summary><b>Not verified</b> (12)</summary>
+
+Big Time Data (local presence not confirmed), Credit Karma, CrowdStrike (local presence not confirmed), DatologyAI (local presence not confirmed), Engage3 (local presence not confirmed), Handshake, Meta, Modern Treasury, Notion, Reddit, Ross Stores, Spaulding Ridge (local presence not confirmed)
 
 </details>
 
@@ -206,3 +219,4 @@ Bay Area WiMLDS, Data Transfer Initiative (local presence not confirmed), IBM (l
 | 2026-10-01 | 1 | Location pass: 18 people placed from Meetup host and RSVP profiles and GitHub, 12 in the region and 6 outside. |
 | 2026-10-01 | 1 | LinkedIn pass: 7 people placed from LinkedIn search results, 4 in the region and 3 outside. 27 people are still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass with fetches only: 21 people added from PyLadies SF, Bay Area WiMLDS and R-Ladies SF, 15 speakers and 6 connectors, and a new talk added for Dori Wilson. 9 companies added. 13 women-focused communities checked. |
+| 2026-10-01 | 3 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code search and Meetup venues. 70 to 96 companies. 26 added, 19 with a strong dbt signal. Snowflake and Mercor raised to strong, PagerDuty to medium. Bay Area presence confirmed for the City & County of San Francisco, Tempo and Census. Job ads 3 to 48. |

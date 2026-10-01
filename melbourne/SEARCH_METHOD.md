@@ -7,11 +7,11 @@ This file holds what is specific to Melbourne. The method, scoring rules, schema
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 76 |
+| Companies | 105 |
 | People | 70 |
 | Tier 1 leads | 13 |
 | First-time speakers (publish, no talk yet) | 2 |
@@ -20,8 +20,8 @@ This file holds what is specific to Melbourne. The method, scoring rules, schema
 | Based in the region | 56 |
 | Based elsewhere | 2 |
 | Location unknown | 12 |
-| With a LinkedIn profile | 12 |
-| Job ads mentioning dbt | 35 |
+| With a LinkedIn profile | 15 |
+| Job ads mentioning dbt | 130 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
 
@@ -50,6 +50,9 @@ One research run used about 18 web searches, plus a logged-out LinkedIn Jobs sca
 - **[Canva engineering blog](https://www.canva.dev/blog/engineering/):** a Snowflake monitoring post from 2024-11.
 - **[Pipeline To Insights](https://pipeline2insights.substack.com/about):** a Melbourne-written Substack with a dbt series.
 - **[LinkedIn Jobs](https://www.linkedin.com/jobs/search?keywords=dbt), logged out:** search `keywords=dbt` for the Melbourne area. Up to 150 ads were checked for the whole word dbt. That gave 35 job ads at 31 companies, for example REA, carsales, Xero, Kogan.com and MECCA Brands. Recruiters are recorded with type `other` and a "RECRUITER" note.
+- **[freehire.me API](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=AU):** the JSON API behind freehire.me answers a plain fetch. Four calls return all 365 Australian ads tagged dbt. Many Melbourne ads give only Victoria as the place, so check that the ad is not in Bendigo or Geelong. The search results cut each ad at about 1,000 characters, so read `/api/v1/jobs/<slug>` for the full text. It added La Trobe University, SEEK, PFD Food Services, Angle Auto Finance and the Victorian Department of Justice and Community Safety.
+- **[getdbt.com case-study text](https://www.getdbt.com/llms-full-case-studies.txt):** one fetch gives every dbt Labs case study as text, with each company's headquarters. Pepperstone and RMIT University are headquartered in Melbourne.
+- **Greenhouse, Lever and Ashby boards:** Xero's Melbourne ads say its stack uses dbt for transformation. Kogan.com's Lever board has a dbt data engineer ad.
 
 ### Locations
 
@@ -75,6 +78,10 @@ One research run used about 18 web searches, plus a logged-out LinkedIn Jobs sca
 - **Women-in-data groups with no data talks:** [Melbourne Women in Machine Learning & Data Science](https://www.meetup.com/Melbourne-Women-in-Machine-Learning-and-Data-Science/) has 1,415 members, but its last event was in February 2022. [Tech Leading Ladies](https://www.meetup.com/Tech-Leading-Ladies/), [Women Coders](https://www.meetup.com/women-coders/) and [Product Women](https://www.meetup.com/women-in-product-melbourne/) run career, coding and AI events only.
 - **Women-in-data networks with no Melbourne chapter:** the [PyLadies Melbourne](http://melbourne.pyladies.com/) site returns 404, and no Meetup group was found. [She Loves Data](https://www.shelovesdata.com/) now lists only online AI workshops. [WiDS](https://www.widsworldwide.org/events/) lists no Australian regional event. Women Who Code closed in 2024. Meetup's group search found no Women in Big Data, Data + Women or Girls in Tech group.
 - **Head-office locations on LinkedIn:** Mantel's LinkedIn location is its Sydney head office, so it does not place a Melbourne employee.
+- **Melbourne, Florida:** a location filter on Melbourne also matches Melbourne in Florida. A Northrop Grumman ad was left out.
+- **freehire.me ads placed in the wrong city:** BaptistCare NSW ads and Sydney recruiter ads appear under Victoria. They were left out.
+- **Hacker News Who is hiring:** no Melbourne role mentions dbt.
+- **GitHub code search:** no public `dbt_project.yml` in the Xero or Culture Amp organisations.
 
 ## 3. Companies looked at
 
@@ -83,29 +90,29 @@ One research run used about 18 web searches, plus a logged-out LinkedIn Jobs sca
 - **Customer speakers at dbt Labs events:** RMIT, REA, John Holland and Pepperstone all have dbt talks on record.
 
 <!-- companies:start -->
-75 companies and communities were looked at. A company is local when it has people or roles in the region.
+104 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (7)</summary>
+<details><summary><b>Strong dbt use</b> (29)</summary>
 
-Canva, John Holland Group, Mantel, MECCA, Onyx Gaming (local presence not confirmed), REA Group, RMIT University
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (36)</summary>
-
-Agoda, Bendigo Bank, BGL Corporate Solutions, Capital.com, carsales, Cevo, Cevo Australia, Commonwealth Bank, Data Engineering Melbourne (meetup), David Jones, Deloitte, Easygo, EdgeRed, Eightcap, Flo Energy, Fusion Markets, GamblingCareers.com, Hawksworth, Heidi, Jenny Barbour IT and Project Recruitment, Kogan.com, Kraken, Latitude Financial Services, Leidos, Lyka, Marketplacer, MECCA Brands, Omio, Otic Group, Pepperstone, Slalom, Synechron, Trideca, UpGuard, Wesfarmers, Xero
+Angle Auto Finance, Avance Consulting, Bendigo Bank, Canva, carsales, Commonwealth Bank, Department of Justice and Community Safety, Victoria, Flo Energy, FourQuarters Recruitment, Heidi, Jenny Barbour IT and Project Recruitment, John Holland Group, Kogan.com, Konnexus, Kraken, La Trobe University, Mantel, MECCA, Motion Recruitment, N2S.Global, Onyx Gaming, Pepperstone, PFD Food Services, Professional Search Group, Quantium, REA Group, RMIT University, SEEK, Xero
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+<details><summary><b>Some dbt signal</b> (42)</summary>
 
-Snowflake User Group Melbourne
+Accenture, Agoda, Allume ANZ, Altis Consulting, BGL Corporate Solutions, Capital.com, Cevo, Cevo Australia, Data Engineering Melbourne (meetup), David Jones, Deloitte, Easygo, EdgeRed, Eightcap, Endeavour Group, Fusion Markets, GamblingCareers.com, Global 360, Hawksworth, Intelligen Group, Ippon Technologies, Latitude Financial Services, Leidos, Lyka, Marketplacer, MECCA Brands, NCS Group Australia, Omio, Otic Group, Slalom, Snowflake A/NZ, Synechron, TalentReady, The Commons, Trideca, UpGuard, Vericent, VicRoads Registration and Licensing Services, Vivanti, Wesfarmers, Wex, Xephyr
 
 </details>
 
-<details><summary><b>Not verified</b> (26)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (6)</summary>
 
-Accenture (local presence not confirmed), Acenda Life (local presence not confirmed), Airmaster (local presence not confirmed), Alinta Energy (local presence not confirmed), Australian Football League (AFL), Austroads (local presence not confirmed), DataEngBytes Melbourne, dbt Labs (local presence not confirmed), Fortress Melbourne, Innablr (local presence not confirmed), InterWorks (local presence not confirmed), Judo Bank (local presence not confirmed), Melbourne Databricks User Group, MYOB, Officeworks (local presence not confirmed), Profectus Group (local presence not confirmed), R-Ladies+ Melbourne, Sahaj.ai (local presence not confirmed), Snowflake A/NZ (local presence not confirmed), Suncorp (local presence not confirmed), Thoughtworks, Thryv (local presence not confirmed), Tixel (local presence not confirmed), Victorian Department of Transport and Planning (local presence not confirmed), Vivanti, Workwear Group (Wesfarmers) (local presence not confirmed)
+Alinta Energy, InfoCentric, Murdoch Children's Research Institute, News Corporation, RACV Limited, Snowflake User Group Melbourne
+
+</details>
+
+<details><summary><b>Not verified</b> (22)</summary>
+
+Acenda Life (local presence not confirmed), Airmaster (local presence not confirmed), Australian Football League (AFL), Austroads (local presence not confirmed), DataEngBytes Melbourne, dbt Labs (local presence not confirmed), Fortress Melbourne, Innablr (local presence not confirmed), InterWorks (local presence not confirmed), Judo Bank (local presence not confirmed), Melbourne Databricks User Group, MYOB, Officeworks (local presence not confirmed), Profectus Group (local presence not confirmed), R-Ladies+ Melbourne, Sahaj.ai (local presence not confirmed), Suncorp (local presence not confirmed), Thoughtworks, Thryv (local presence not confirmed), Tixel (local presence not confirmed), Victorian Department of Transport and Planning (local presence not confirmed), Workwear Group (Wesfarmers) (local presence not confirmed)
 
 </details>
 
@@ -122,7 +129,7 @@ Bilue (local presence not confirmed), Confluent (local presence not confirmed), 
 
 </details>
 
-<details><summary><b>Other sources checked</b> (29)</summary>
+<details><summary><b>Other sources checked</b> (33)</summary>
 
 - [dbt World Tour Melbourne 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-melbourne)
 - [dbt World Tour Sydney 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-sydney) (nothing useful)
@@ -153,6 +160,10 @@ Bilue (local presence not confirmed), Confluent (local presence not confirmed), 
 - [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
 - [WiDS Worldwide events](https://www.widsworldwide.org/events/) (nothing useful)
 - [Women Who Code](https://womenwhocode.com/) (nothing useful)
+- [freehire.me API, Australia, skill dbt](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=AU)
+- [getdbt.com case studies (llms-full-case-studies.txt)](https://www.getdbt.com/llms-full-case-studies.txt)
+- [Greenhouse, Lever and Ashby boards](https://jobs.ashbyhq.com/xero)
+- [Hacker News Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt%20melbourne&tags=comment) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -205,3 +216,4 @@ Bilue (local presence not confirmed), Confluent (local presence not confirmed), 
 | 2026-10-01 | 2 | Location pass from public pages: in-person talks at employers with a Melbourne office, and a GitHub profile. 4 people placed, 3 in Melbourne and 1 elsewhere. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 4 people placed, 3 in Melbourne and 1 in Adelaide. With the location pass, 8 people placed and 2 still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass from Women in Cloud, R-Ladies+ Melbourne and Women Techmakers events. 14 people added and 1 extended: 8 speakers, including Easygo, REA and AFL data leads, and 7 organisers as connectors. |
+| 2026-10-01 | 4 | Company pass from job ads and case studies: the freehire.me API, Greenhouse, Lever and Ashby boards, and the getdbt.com case-study text. 29 companies and 95 job ads added. 15 companies raised, including Pepperstone, Xero, carsales, Kraken and Heidi to strong. Onyx Gaming, Accenture and Alinta Energy now confirmed in Melbourne. |

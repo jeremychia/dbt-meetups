@@ -7,11 +7,11 @@ This file holds what is specific to Sydney. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 166 |
+| Companies | 210 |
 | People | 149 |
 | Tier 1 leads | 16 |
 | First-time speakers (publish, no talk yet) | 6 |
@@ -21,7 +21,7 @@ This file holds what is specific to Sydney. The method, scoring rules, schema an
 | Based elsewhere | 10 |
 | Location unknown | 29 |
 | With a LinkedIn profile | 54 |
-| Job ads mentioning dbt | 87 |
+| Job ads mentioning dbt | 252 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->
 
@@ -53,6 +53,9 @@ The first build had three parts: local meetups and communities, conferences and 
 - **[LinkedIn Jobs](https://www.linkedin.com/jobs/search?keywords=dbt&location=Sydney%2C%20New%20South%20Wales%2C%20Australia), logged out:** 250 ads listed (the cap) and 250 checked. 82 contain the whole word dbt. 16 ads named the person who posted them.
 - **ATS search:** `site:jobs.lever.co`, `site:job-boards.greenhouse.io` and `site:jobs.ashbyhq.com` with dbt Sydney. They added Blinq, Tracksuit, Mixpanel and Xero.
 - **Yield:** 87 job ads at 56 companies. Recruiters are recorded with type `other` and a "RECRUITER" note.
+- **[freehire.me API](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=AU):** the JSON API behind freehire.me answers a plain fetch. Four calls return all 365 Australian ads tagged dbt, including Seek and Workday ads that do not render when fetched. Filter the location for Sydney and NSW. The search results cut each ad at about 1,000 characters, so read `/api/v1/jobs/<slug>` for the full text. It added ASX, The GPT Group, TPG Telecom, Spriggy, Liquor Marketing Group and the Aged Care Quality and Safety Commission.
+- **[getdbt.com case-study text](https://www.getdbt.com/llms-full-case-studies.txt):** one fetch gives every dbt Labs case study as text, with each company's headquarters. Lendi, Deputy, Zip and SafetyCulture are headquartered in Sydney.
+- **Greenhouse, Lever and Ashby boards:** about 50 employer slugs were tried. Immutable and Xero have Sydney ads that mention dbt.
 
 ### Locations
 
@@ -84,6 +87,9 @@ The first build had three parts: local meetups and communities, conferences and 
 - **EdgeRed blog index:** timed out.
 - **[Mantel dbt page](https://mantelgroup.com.au/uplift-your-business-with-dbt):** redirects to the homepage.
 - **Company feeds:** the [SafetyCulture](https://medium.com/feed/safetyculture), [Airwallex](https://medium.com/feed/airwallex-engineering), [Domain](https://tech.domain.com.au/feed) and [Atlassian](https://www.atlassian.com/blog/atlassian-engineering/feed) feeds had no dbt posts or came back empty.
+- **freehire.me aggregator ads:** ads copied from whatjobs and arbeitnow sometimes carry a job title as the employer name. Those were left out, as were remote ads and Southern NSW ads.
+- **Hacker News Who is hiring:** only a Go1 ad for remote work in Australia, based in Brisbane.
+- **GitHub code search:** no public `dbt_project.yml` in the Canva, SafetyCulture, Culture Amp, Zip, Envato or SEEK organisations.
 
 ## 3. Companies looked at
 
@@ -92,29 +98,29 @@ The first build had three parts: local meetups and communities, conferences and 
 - **Recruiters and talent staff:** 16 people were found through job ads. None has public content, so none is a speaker lead.
 
 <!-- companies:start -->
-165 companies and communities were looked at. A company is local when it has people or roles in the region.
+209 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (40)</summary>
+<details><summary><b>Strong dbt use</b> (73)</summary>
 
-Advance Delivery Consulting, AEMO (local presence not confirmed), Bankwest (CBA) (local presence not confirmed), BaptistCare, Bendigo Bank, BizCover, Blinq, Brighte, Canva, CMC Markets ANZ, Cochlear, Commonwealth Bank, CoStar Group, dbt Labs (APAC), Eftsure, Envato (local presence not confirmed), Heidi, Helia, hipages Group, humm group, Immutable, Launch Group, Lyka, Macquarie Group, Mantel Group, Mitti (formerly SafetyCulture), NexVenture, nib Group, Omio, Optiver, Rezdy, Scape Australia, Snowflake User Groups Sydney, Suncorp (local presence not confirmed), Synechron, Talent Insights Group, Tracksuit, UpGuard, Viable Solutions Pty Ltd, Xero
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (36)</summary>
-
-Agoda, Airwallex (local presence not confirmed), BINGO INDUSTRIES, CareCone Group, Cevo Australia, Databricks, Datacom, Deloitte, Domain, EdgeRed, FR Consultancy, Hawksworth, Ingrity, Lendi Group, Mixpanel, NCS Group Australia, Nine, NOVON, OneStop (local presence not confirmed), PwC Australia, Qantas, Simple Machines, Slalom, Snowflake, Supermetrics, Sydney Local Health District, synogize, Tata Consultancy Services, tekFinder, The Iconic, Trideca, Versent, Vivanti, Vivanti Consulting, World Wide Technology, Zone IT Solutions
+Advance Delivery Consulting, AEMO (local presence not confirmed), Aged Care Quality and Safety Commission, Algo Talent, ASX, Bankwest (CBA) (local presence not confirmed), BaptistCare, Bendigo Bank, BizCover, black.ai, Blinq, Brighte, Canva, CareCone Group, Centaur Software Development, CMC Markets ANZ, Cochlear, Commonwealth Bank, CoStar Group, Cox Purtell, dbt Labs (APAC), Deloitte, Deputy, Domain, Eftsure, Envato (local presence not confirmed), Fivetran, Go Fractional, Halcyon Knights, Hawksworth, Heidi, Helia, hipages Group, humm group, Immutable, King River Capital Group, Launch Group, Lendi Group, Liquor Marketing Group, Lyka, Macquarie Group, Mantel Group, Matchbox, Mitti (formerly SafetyCulture), NCS Group Australia, NexVenture, nib Group, NOVON, Omio, Optiver, Rezdy, SafetyCulture, Scape Australia, Showtime Consulting, Simple Machines, SKL Technology, Snowflake User Groups Sydney, Spriggy, Suncorp (local presence not confirmed), Sydney Local Health District, Synechron, Talent Insights Group, Tata Consultancy Services, The GPT Group, The Living Company, TPG Telecom, Tracksuit, UpGuard, Viable Solutions Pty Ltd, Vivanti Consulting, Woolworths / Quantium, Xero, Zip Co
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+<details><summary><b>Some dbt signal</b> (43)</summary>
 
-DataEngBytes
+Accenture, Agoda, AirTree Ventures, Airwallex (local presence not confirmed), Allura Partners, Atlassian, Australian Payments Plus, BINGO INDUSTRIES, Cevo Australia, Databricks, Datacom, EdgeRed, Eucalyptus, Farlow, Firmus Technologies, FR Consultancy, Ingrity, Insight Resourcing, Internetwork Expert, M&T Resources, MIP, Mixpanel, Nine, NSW Health, OneStop (local presence not confirmed), Opus Recruitment Solutions, PwC Australia, Qantas, Slalom, Snowflake, Software at Scale, Sonder, Supermetrics, synogize, TechClover, tekFinder, The Iconic, TMGM, Trideca, Versent, Vivanti, World Wide Technology, Zone IT Solutions
 
 </details>
 
-<details><summary><b>Not verified</b> (86)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (12)</summary>
 
-Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence not confirmed), Airtasker, Altis Consulting, AMP, Assembly Payments (local presence not confirmed), Atlassian, Ausgrid (local presence not confirmed), Australian Energy Market Operator (AEMO) (local presence not confirmed), Azility (local presence not confirmed), Brooklyn Data Co. (local presence not confirmed), Cevo, Contino (local presence not confirmed), Culture Amp (local presence not confirmed), DashByte Co. (local presence not confirmed), Data & Analytics Wednesday Sydney, DataEngBytes / Cloud Shuttle (local presence not confirmed), Dataro (local presence not confirmed), DAZN Foxtel Group (local presence not confirmed), dbt (Fishtown Analytics) (local presence not confirmed), Deputy, Did Someone Say Data (local presence not confirmed), Easygo (local presence not confirmed), Eliiza (local presence not confirmed), Employment Hero, Endeavour Drinks (local presence not confirmed), Excelerator BI (local presence not confirmed), ExeQution Analytics (local presence not confirmed), Finder, Fivetran (local presence not confirmed), GEEQ (formerly Girl Geek Sydney), Harrison.ai, Hypothesis (local presence not confirmed), IAG (local presence not confirmed), Innova (local presence not confirmed), InterWorks (local presence not confirmed), Judo Bank (local presence not confirmed), Kinso AI (local presence not confirmed), Linktree (local presence not confirmed), Luxury Escapes (local presence not confirmed), Mable (local presence not confirmed), Macquarie University (local presence not confirmed), Manuka (local presence not confirmed), Mathspace (local presence not confirmed), Microsoft (local presence not confirmed), Microsoft Power BI & Fabric User Group - Sydney, NAB, Nearmap (local presence not confirmed), Nine / Stan, Octopus Deploy (local presence not confirmed), Omnata (local presence not confirmed), Open Colleges (local presence not confirmed), Optiver Australia (local presence not confirmed), Organon (local presence not confirmed), Poplin Data (local presence not confirmed), Presciient (local presence not confirmed), Prospa (local presence not confirmed), QMetrix (local presence not confirmed), R-Ladies Sydney, REA Group (local presence not confirmed), Rheem Australia (local presence not confirmed), Rokt, RoundRect (local presence not confirmed), SafetyCulture (local presence not confirmed), Seek (local presence not confirmed), Servian (Cognizant), She Loves Data (local presence not confirmed), Shippit (local presence not confirmed), Snowplow (local presence not confirmed), Sonder (local presence not confirmed), Sydney Databricks User Group, Syenchron Australia (local presence not confirmed), Telstra, Temple & Webster, The New Zealand Institute for Plant and Food Research (local presence not confirmed), Trustpower (local presence not confirmed), Tyro, Vendo (local presence not confirmed), Versix (local presence not confirmed), Westpac, Women in Tech Australia, Woolworths / Quantium, XPON Technologies Group (local presence not confirmed), Zip Co, Zip Money (local presence not confirmed)
+DataEngBytes, DyFlex Solutions, EatClub, EndGame Economics, Guzman y Gomez, HUB24, Insight Enterprises, Intelligen Group, Kaizen Global Technologies, Nixil, ShopGrok, Umbrella Club
+
+</details>
+
+<details><summary><b>Not verified</b> (79)</summary>
+
+Actian (local presence not confirmed), Afterpay / Block, Aginic (local presence not confirmed), Airtasker, Altis Consulting, AMP, Assembly Payments (local presence not confirmed), Ausgrid (local presence not confirmed), Australian Energy Market Operator (AEMO) (local presence not confirmed), Azility (local presence not confirmed), Brooklyn Data Co. (local presence not confirmed), Cevo, Contino (local presence not confirmed), Culture Amp (local presence not confirmed), DashByte Co. (local presence not confirmed), Data & Analytics Wednesday Sydney, DataEngBytes / Cloud Shuttle (local presence not confirmed), Dataro (local presence not confirmed), DAZN Foxtel Group (local presence not confirmed), dbt (Fishtown Analytics) (local presence not confirmed), Did Someone Say Data (local presence not confirmed), Easygo (local presence not confirmed), Eliiza (local presence not confirmed), Employment Hero, Endeavour Drinks (local presence not confirmed), Excelerator BI (local presence not confirmed), ExeQution Analytics (local presence not confirmed), Finder, GEEQ (formerly Girl Geek Sydney), Harrison.ai, Hypothesis (local presence not confirmed), IAG (local presence not confirmed), Innova (local presence not confirmed), InterWorks (local presence not confirmed), Judo Bank (local presence not confirmed), Kinso AI (local presence not confirmed), Linktree (local presence not confirmed), Luxury Escapes (local presence not confirmed), Mable (local presence not confirmed), Macquarie University (local presence not confirmed), Manuka (local presence not confirmed), Mathspace (local presence not confirmed), Microsoft (local presence not confirmed), Microsoft Power BI & Fabric User Group - Sydney, NAB, Nearmap (local presence not confirmed), Nine / Stan, Octopus Deploy (local presence not confirmed), Omnata (local presence not confirmed), Open Colleges (local presence not confirmed), Optiver Australia (local presence not confirmed), Organon (local presence not confirmed), Poplin Data (local presence not confirmed), Presciient (local presence not confirmed), Prospa (local presence not confirmed), QMetrix (local presence not confirmed), R-Ladies Sydney, REA Group (local presence not confirmed), Rheem Australia (local presence not confirmed), Rokt, RoundRect (local presence not confirmed), Seek (local presence not confirmed), Servian (Cognizant), She Loves Data (local presence not confirmed), Shippit (local presence not confirmed), Snowplow (local presence not confirmed), Sydney Databricks User Group, Syenchron Australia (local presence not confirmed), Telstra, Temple & Webster, The New Zealand Institute for Plant and Food Research (local presence not confirmed), Trustpower (local presence not confirmed), Tyro, Vendo (local presence not confirmed), Versix (local presence not confirmed), Westpac, Women in Tech Australia, XPON Technologies Group (local presence not confirmed), Zip Money (local presence not confirmed)
 
 </details>
 
@@ -143,7 +149,7 @@ Posit (local presence not confirmed), The Bridge Forum (Women in Tech: Connect &
 
 </details>
 
-<details><summary><b>Other sources checked</b> (52)</summary>
+<details><summary><b>Other sources checked</b> (56)</summary>
 
 - [Sydney dbt Meetup (meetup.com gql2)](https://www.meetup.com/sydney-dbt-meetup/)
 - [Snowflake User Groups Sydney (Bevy)](https://usergroups.snowflake.com/sydney/)
@@ -197,6 +203,10 @@ Posit (local presence not confirmed), The Bridge Forum (Women in Tech: Connect &
 - [GDG Sydney events API (Women Techmakers)](https://gdg.community.dev/api/event_slim/for_chapter/539/) (nothing useful)
 - [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
 - [Women Who Code](https://womenwhocode.com/) (nothing useful)
+- [freehire.me API, Australia, skill dbt](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=AU)
+- [getdbt.com case studies (llms-full-case-studies.txt)](https://www.getdbt.com/llms-full-case-studies.txt)
+- [Greenhouse, Lever and Ashby boards](https://jobs.ashbyhq.com/xero)
+- [Hacker News Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt%20sydney&tags=comment) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -254,3 +264,4 @@ Posit (local presence not confirmed), The Bridge Forum (Women in Tech: Connect &
 | 2026-10-01 | 2 | Location pass from public pages: in-person talks at Coalesce on the Road Sydney and DataEngBytes, at employers with a Sydney office. 4 people placed. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 8 people placed, 6 in Greater Sydney and 2 elsewhere. With the location pass, 12 people placed and 37 still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass over R-Ladies Sydney, GEEQ, The Bridge Forum, Women Techmakers and other groups since 2024. 8 people added: 2 speakers (Zip, Posit) and 6 organisers as connectors. |
+| 2026-10-01 | 4 | Company pass from job ads and case studies: the freehire.me API, Greenhouse, Lever and Ashby boards, and the getdbt.com case-study text. 44 companies and 165 job ads added. 18 companies raised, including Lendi, Deputy, Zip Co and SafetyCulture to strong from dbt Labs case studies. |

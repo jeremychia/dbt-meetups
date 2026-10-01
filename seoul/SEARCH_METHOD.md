@@ -7,11 +7,11 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 64 |
+| Companies | 71 |
 | People | 69 |
 | Tier 1 leads | 20 |
 | First-time speakers (publish, no talk yet) | 8 |
@@ -20,8 +20,8 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 | Based in the region | 52 |
 | Based elsewhere | 2 |
 | Location unknown | 15 |
-| With a LinkedIn profile | 1 |
-| Job ads mentioning dbt | 28 |
+| With a LinkedIn profile | 3 |
+| Job ads mentioning dbt | 38 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
 
@@ -40,6 +40,8 @@ Search in English and Korean. Korean names are romanised family name first, unle
 ### Job ads
 
 - **[wanted.co.kr](https://www.wanted.co.kr/search?query=dbt):** the fastest way to find Seoul dbt employers. The open search API (`api/chaos/search/v1/position`) and job detail API (`api/v4/jobs/<id>`) need no login. The queries were dbt, analytics engineer, data engineer, Snowflake and BigQuery. 284 ads were read, and 28 ads at 24 companies that mention the word dbt are in the file. Examples are Toss Income, Hyperconnect, Buzzvil, Next Securities and AITRICS.
+- **wanted.co.kr, second pass:** 7 queries, including 데이터 분석가 and 데이터 플랫폼, read 970 more ads and skipped those already in the file. 9 new ads at 8 companies. Most list dbt only as a plus (우대 사항), such as Yeogi Eottae, Bagelcode, PaytaLab and CJ Olive Young. A Wrtn Technologies ad confirms its Seoul office.
+- **Company job boards:** the Greenhouse, Lever and Ashby boards of about 45 employers. Only Coupang had a Seoul ad that says dbt, as a plus.
 
 ### Blogs and open source
 
@@ -71,6 +73,9 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **[Snowflake World Tour Seoul 2026](https://www.snowflake.com/events/snowflake-world-tour-seoul/):** names no speakers.
 - **[dbt Summit agenda](https://www.getdbt.com/dbt-summit/agenda) and dbt Champions pages:** show no Korean companies.
 - **wanted.co.kr posting dates:** the fields read do not include one. All ads are recorded as seen on 2026-10-01.
+- **HN Who is hiring:** no Seoul ad since 2023 mentions dbt.
+- **GitHub:** code search hit the shared rate limit after 3 calls. Repository lists of 20 Korean organisations, such as Karrot, Toss, Devsisters and Bucketplace, show no dbt project of their own.
+- **dbt Labs case studies:** none for a Korean company.
 - **Tech blog feeds without dbt posts:** about 30 feeds were read. [Woowahan](https://techblog.woowahan.com/), Kakao, Hyperconnect, Buzzvil, Banksalad, Kakaobank, Devsisters, Inflab and Ohouse had none.
 - **Medium:** [Karrot (Daangn)](https://medium.com/daangn) and most other Korean blogs on Medium were blocked (HTTP 403 and 429). The authors of the Karrot and other company dbt posts could not be confirmed.
 - **Women-in-data groups:** Women Who Code, R-Ladies and WiMLDS have no Seoul groups on Meetup. Women Who Code closed in 2024.
@@ -82,11 +87,11 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **Confirmed dbt users:** Toss Securities runs its batch pipelines on dbt, and the job ads add 24 companies that name dbt.
 
 <!-- companies:start -->
-62 companies and communities were looked at. A company is local when it has people or roles in the region.
+69 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (27)</summary>
 
-AB180, Ajeong Networks, Boosters, Buzzvil, Cartier (local presence not confirmed), Databricks (local presence not confirmed), DataMarketingKorea (local presence not confirmed), dbt Community Korea (local presence not confirmed), dbt Labs (local presence not confirmed), Fivetran (local presence not confirmed), Gear Second, Hyperconnect, Imagoworks, IoTrust (local presence not confirmed), Karrot (Daangn Market), Konny by Erin, National Vision Inc. (local presence not confirmed), NFTBank (local presence not confirmed), Pinnu Analytics (local presence not confirmed), Snowflake (local presence not confirmed), Snowflake Korea, SOCAR (local presence not confirmed), Toss Income, Toss Securities, Willog, Wrtn Technologies (local presence not confirmed), Zigbang (local presence not confirmed)
+AB180, Ajeong Networks, Boosters, Buzzvil, Cartier (local presence not confirmed), Databricks (local presence not confirmed), DataMarketingKorea (local presence not confirmed), dbt Community Korea (local presence not confirmed), dbt Labs (local presence not confirmed), Fivetran (local presence not confirmed), Gear Second, Hyperconnect, Imagoworks, IoTrust (local presence not confirmed), Karrot (Daangn Market), Konny by Erin, National Vision Inc. (local presence not confirmed), NFTBank (local presence not confirmed), Pinnu Analytics (local presence not confirmed), Snowflake (local presence not confirmed), Snowflake Korea, SOCAR (local presence not confirmed), Toss Income, Toss Securities, Willog, Wrtn Technologies, Zigbang (local presence not confirmed)
 
 </details>
 
@@ -96,9 +101,9 @@ Apache Airflow Korea User Group, Cubig, Deloitte Korea, F&L Corporation, Fairsqu
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (6)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (13)</summary>
 
-AITRICS, Asta, iShopCare, Next Securities, Seers Technology, Wished
+AITRICS, Asta, Bagelcode (베이글코드), CJ Olive Young (CJ올리브영), Coupang, iShopCare, Next Securities, PaytaLab (Passorder) (페이타랩), Seers Technology, Turtle Knowledge (터틀날리지), UMOS ONE (유모스원), Wished, Yeogi Eottae (여기어때컴퍼니)
 
 </details>
 
@@ -120,7 +125,7 @@ AWSKRUG data group, AWSKRUG Women In Cloud, Channel Corp, Devsisters, Musinsa, P
 
 </details>
 
-<details><summary><b>Other sources checked</b> (22)</summary>
+<details><summary><b>Other sources checked</b> (24)</summary>
 
 - [wanted.co.kr search and job APIs](https://www.wanted.co.kr/search?query=dbt)
 - [Apache Airflow Korea User Group (Meetup, forum, YouTube)](https://www.meetup.com/korea-apache-airflow-user-group/)
@@ -144,6 +149,8 @@ AWSKRUG data group, AWSKRUG Women In Cloud, Channel Corp, Devsisters, Musinsa, P
 - [Girls in Tech Korea](https://girlsintech.org/korea/) (nothing useful)
 - [Women in AI Korea](https://www.womeninai.co/korea) (nothing useful)
 - [event-us.kr search (여성 데이터)](https://event-us.kr/search?keyword=%EC%97%AC%EC%84%B1%20%EB%8D%B0%EC%9D%B4%ED%84%B0) (nothing useful)
+- [wanted.co.kr search and job APIs](https://www.wanted.co.kr/api/chaos/search/v1/position?query=dbt)
+- [GitHub organisation repositories](https://api.github.com/orgs/daangn/repos) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -209,3 +216,4 @@ AWSKRUG data group, AWSKRUG Women In Cloud, Channel Corp, Devsisters, Musinsa, P
 | 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, velog bios, GitHub profiles and recent in-person talks. 14 people placed. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 1 person placed. With the location pass, 15 people placed and 12 still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass. Checked AWSKRUG Women In Cloud, PyLadies Seoul, WiDS Seoul, GDG Seoul, Girls in Tech Korea, Women in AI Korea and event-us. Added 11 people with `sourced_via: women_in_data_community`: 1 speaker (Kim Naheon, Spotify) and 10 connectors. Added 2 community channels. The assembler also added 1 past chapter speaker from the enriched file. |
+| 2026-10-01 | 3 | Company pass from wanted.co.kr and company job boards. 7 companies added, all with dbt as a plus: Yeogi Eottae, Bagelcode, PaytaLab, CJ Olive Young, UMOS ONE, Turtle Knowledge and Coupang. Wrtn Technologies' Seoul presence confirmed. 10 job ads added, now 38. |

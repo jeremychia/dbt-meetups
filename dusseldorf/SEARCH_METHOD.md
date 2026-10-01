@@ -7,11 +7,11 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 74 |
+| Companies | 78 |
 | People | 87 |
 | Tier 1 leads | 22 |
 | First-time speakers (publish, no talk yet) | 20 |
@@ -20,8 +20,8 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 | Based in the region | 45 |
 | Based elsewhere | 8 |
 | Location unknown | 34 |
-| With a LinkedIn profile | 9 |
-| Job ads mentioning dbt | 49 |
+| With a LinkedIn profile | 15 |
+| Job ads mentioning dbt | 54 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
 
@@ -66,6 +66,10 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 ### Job ads
 
 - **LinkedIn Jobs:** a search for dbt around Düsseldorf and the Rhein-Ruhr area. 49 ads at 24 companies mention dbt. adesso posted 18 of the 49 ads. viadee and Redcare Pharmacy posted 4 each.
+- **[dbt Labs case studies](https://www.getdbt.com/sitemap-0.xml):** the sitemap lists 61 `/case-studies/` pages. Each page states the company headquarters. The [DISH Digital Solutions case study](https://www.getdbt.com/case-studies/dish-digital-solutions) names Düsseldorf as headquarters and raised DISH to strong.
+- **Personio job feeds:** `https://<company>.jobs.personio.de/xml` returns every open ad with full text. Scalefree has a Cologne "dbt Engineer" role, which raised it to strong.
+- **[arbeitnow.com API](https://www.arbeitnow.com/api/job-board-api):** `?page=N` returns German job ads with full text. 14 pages (1,851 ads) were read before it returned HTTP 429. It added Real Digital and cbs Corporate Business Solutions (Dortmund), both with dbt as a plus, and a new METYCLE ad in Cologne.
+- **Meetup gql2 venues:** Milestone Consult (Kamp-Lintfort) hosts most Datamonsters Ruhrgebiet meetings and prodot (Duisburg) runs its own data and Azure meetups. Both were added for local presence only.
 
 ### Locations
 
@@ -81,6 +85,10 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 - **Large corporates:** REWE, METRO, Henkel and Vodafone publish nothing on dbt.
 - **Women-in-data groups with no data speakers:** PyCologne, PyData Dortmund, inovex Cologne and [Women in Tech Köln](https://www.meetup.com/women-in-tech-koln/), which runs career workshops.
 - **Women-in-data networks with no NRW chapter:** gdg.community.dev has no GDG chapter for Düsseldorf, Cologne, Essen, Dortmund or Bonn, so there is no Women Techmakers route. [PyLadies](https://pyladies.com/locations/) has no NRW chapter, and [Women on Snowflake](https://usergroups.snowflake.com/women-on-snowflake/) has held no NRW event. A new Cologne group, [Networking in IT und Tech von Frauen für Frauen](https://www.meetup.com/networking-im-umfeld-von-it-und-digitalisierung/), had no past events.
+- **HN Who is hiring:** searches for dbt with Düsseldorf, Cologne, Essen, Dortmund, Bonn and NRW found no role placed in the region.
+- **Company job boards:** trivago, DeepL, IONOS, StepStone, Gigs and FREE NOW have open boards, but no Rhein-Ruhr ad there mentions dbt. Douglas, REWE digital, METRO.digital, Henkel, ERGO and Ströer have no open Greenhouse, Lever or Ashby board.
+- **Personio feeds with no dbt ad:** METYCLE and Schüttflix. taod, ORAYLIS, viadee, Infomotion and oh22 have no open Personio feed.
+- **Meetup line-ups:** the trivago, Databricks User Group Rhein-Ruhr, Fabric Rhein-Ruhr, Datamonsters Ruhrgebiet and Data Analytics & AI Köln events since 2024 never mention dbt.
 
 ## 3. Companies looked at
 
@@ -90,23 +98,29 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 - **Large NRW employers use a different stack.** REWE, METRO, Henkel and Vodafone show no public dbt use.
 
 <!-- companies:start -->
-73 companies and communities were looked at. A company is local when it has people or roles in the region.
+77 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (5)</summary>
+<details><summary><b>Strong dbt use</b> (8)</summary>
 
-b.telligent (local presence not confirmed), dbt Labs (local presence not confirmed), Schüttflix (local presence not confirmed), taod Consulting, Xebia (local presence not confirmed)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (26)</summary>
-
-adesso SE, Agoda, Analytics Pioneers (local presence not confirmed), AVS Verkehrssicherung GmbH, AXA, codecentric AG, Cognitive Group, DeepL, Deutsche Glasfaser Unternehmensgruppe, Douglas, E.ON Deutschland, EY, eye-level consulting GmbH, Founderful, Intersnack IT KG, Inverto / A BCG Company, ISR Information Products AG, Metycle, Redcare Pharmacy, REWE Group, ruhr.agency, Scalefree, SKOPOS, Thermengruppe Josef Wund, Trianel GmbH, viadee Unternehmensberatung AG
+Analytics Pioneers (local presence not confirmed), b.telligent (local presence not confirmed), dbt Labs (local presence not confirmed), DISH Digital Solutions (METRO), Scalefree, Schüttflix (local presence not confirmed), taod Consulting, Xebia (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Not verified</b> (37)</summary>
+<details><summary><b>Some dbt signal</b> (24)</summary>
 
-ABN AMRO Bank (Frankfurt Branch) (local presence not confirmed), Accenture / intions (Essen Innovation Hub), ALDI SÜD, BarmeniaGothaer, Borussia Mönchengladbach, Data Natives Düsseldorf & Köln (local presence not confirmed), Databricks (local presence not confirmed), Databricks User Group Rhein-Ruhr, Deichmann SE, DISH Digital Solutions (METRO), Düsseldorf Data Science Meetup, Female Dev Club (local presence not confirmed), FIEGE Logistik (local presence not confirmed), GDS Business Intelligence GmbH (local presence not confirmed), Handelsblatt Media Group, Infomotion, noventum consulting (local presence not confirmed), oh22data AG (local presence not confirmed), oh22information services GmbH, ORAYLIS, Picnic (local presence not confirmed), Point 8 (local presence not confirmed), PyMC Labs (local presence not confirmed), R-Ladies Cologne (local presence not confirmed), REWE digital, Slalom (local presence not confirmed), StepStone, SumUp (local presence not confirmed), teccle group (local presence not confirmed), Thoughtworks (Cologne), trivago, Unstated employer (Rhein-Ruhr) (local presence not confirmed), Vaillant Group (local presence not confirmed), Vodafone (local presence not confirmed), Volvo Car Deutschland (local presence not confirmed), Women in AI Cologne, Women in Big Data NRW
+adesso SE, Agoda, AVS Verkehrssicherung GmbH, AXA, codecentric AG, Cognitive Group, DeepL, Deutsche Glasfaser Unternehmensgruppe, Douglas, E.ON Deutschland, EY, eye-level consulting GmbH, Founderful, Intersnack IT KG, Inverto / A BCG Company, ISR Information Products AG, Metycle, Redcare Pharmacy, REWE Group, ruhr.agency, SKOPOS, Thermengruppe Josef Wund, Trianel GmbH, viadee Unternehmensberatung AG
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (2)</summary>
+
+cbs Corporate Business Solutions, Real Digital
+
+</details>
+
+<details><summary><b>Not verified</b> (38)</summary>
+
+ABN AMRO Bank (Frankfurt Branch) (local presence not confirmed), Accenture / intions (Essen Innovation Hub), ALDI SÜD, BarmeniaGothaer, Borussia Mönchengladbach, Data Natives Düsseldorf & Köln (local presence not confirmed), Databricks (local presence not confirmed), Databricks User Group Rhein-Ruhr, Deichmann SE, Düsseldorf Data Science Meetup, Female Dev Club (local presence not confirmed), FIEGE Logistik (local presence not confirmed), GDS Business Intelligence GmbH (local presence not confirmed), Handelsblatt Media Group, Infomotion, Milestone Consult, noventum consulting (local presence not confirmed), oh22data AG (local presence not confirmed), oh22information services GmbH, ORAYLIS, Picnic (local presence not confirmed), Point 8 (local presence not confirmed), prodot, PyMC Labs (local presence not confirmed), R-Ladies Cologne (local presence not confirmed), REWE digital, Slalom (local presence not confirmed), StepStone, SumUp (local presence not confirmed), teccle group (local presence not confirmed), Thoughtworks (Cologne), trivago, Unstated employer (Rhein-Ruhr) (local presence not confirmed), Vaillant Group (local presence not confirmed), Vodafone (local presence not confirmed), Volvo Car Deutschland (local presence not confirmed), Women in AI Cologne, Women in Big Data NRW
 
 </details>
 
@@ -246,3 +260,4 @@ Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgeb
 | 2026-10-01 | 2 | Location pass from public pages. 16 people placed: 12 in the region and 4 elsewhere. Unknown locations fell from 51 to 35. |
 | 2026-10-01 | 2 | LinkedIn pass on the 15 tier-1 blog authors without a location. 2 people placed: 1 in the region and 1 elsewhere. 33 locations are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass. Checked Women in Big Data NRW (past events and hosts), Female Dev Club, R-Ladies Cologne, Women in Tech Köln, GDG chapters in NRW, PyLadies and Women on Snowflake. Added 18 people with `sourced_via: women_in_data_community`: 10 Women in Big Data NRW speakers and 8 hosts and organisers as connectors. Added a talk to Inna Zykova. Added community channels for the current Women in Big Data NRW page, R-Ladies Cologne and Female Dev Club. |
+| 2026-10-01 | 4 | Company pass from open job boards (Greenhouse, Lever, Ashby, Personio, arbeitnow), HN Who is hiring, dbt Labs case studies and Meetup gql2 line-ups. 4 companies added, for 78, none with a strong dbt signal. 3 raised to strong: DISH Digital Solutions (METRO), Scalefree and Analytics Pioneers. People are unchanged. |

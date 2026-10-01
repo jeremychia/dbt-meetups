@@ -1,0 +1,2645 @@
+{
+  "metadata": {
+    "title": "Sofia dbt companies and people for the Sofia dbt Meetup (not yet founded)",
+    "generated_at": "2026-10-01",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Sofia companies using dbt, and people who could speak at or attend the Sofia dbt Meetup (not yet founded).",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Sofia (Sofia dbt Meetup (not yet founded))",
+    "method": [
+      "v1 (2026-10-01): first build, no web search: Meetup gql2 groupSearch near Sofia and past events of 12 Sofia groups since 2023; dev.bg dbt and analytics engineer job searches (32 ads read, 26 mention dbt); Greenhouse, Lever, Ashby and Workable boards for about 50 Sofia employers; HN Who is hiring; Discovery Day, DSC Europe, Data Science Society and AWS Community Day sites; GitHub user and repo search for Sofia data engineers and dbt projects; women-in-tech communities through Meetup, GDG and PyLadies.",
+      "Lesson (Sofia): dev.bg search (?s=dbt&post_type=job_listing) is server-rendered and lists every active Bulgarian ad with dbt in the text; read the location from the search card, because the ad page sidebar lists every city.",
+      "Lesson (Sofia): no Sofia data meetup has ever run a dbt talk; the local data communities are Microsoft-platform (Let's SQL Together, Fabric) or ML-focused (PyData Sofia with the Data Science Society).",
+      "Lesson (Sofia): Greenhouse, Lever and Ashby cover few Sofia employers; SumUp, Tide, Trading 212 and LucidLink had Sofia roles but none mention dbt.",
+      "Lesson (Sofia): GDG Sofia is no longer on gdg.community.dev (only GDG Plovdiv is listed for Bulgaria), and PyLadies lists no Sofia chapter.",
+      "Lesson (Sofia): the \"Data Science Conference\" (DSC Europe) runs in Belgrade, not Sofia; the Data Science Society in Sofia runs meetups, not a conference."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public event pages, job ads and GitHub profiles on 2026-10-01; verify before outreach.",
+      "Most job ads are hybrid or fully remote within Bulgaria; a fully remote ad does not show a Sofia team.",
+      "Recruiter ads (People and Places, Gamito, CADABRA, Talent Hunter) do not name the client.",
+      "Two tier-1 people (Ivan Krumov, Dimitar Hadzhiev) are raised by the rule from GitHub projects alone; their location and employer are unknown.",
+      "No Sofia data talk on record mentions dbt."
+    ],
+    "counts": {
+      "companies": 43,
+      "people": 22,
+      "job_postings": 22,
+      "companies_with_job_postings": 20,
+      "speaker_evidence_items": 11,
+      "unique_content_items": 10,
+      "people_with_linkedin": 2,
+      "people_who_spoke_at_this_chapter": 0,
+      "internal_vinted": 0,
+      "level": {
+        "working": 20,
+        "leadership": 2
+      },
+      "speaker_potential": {
+        "low": 12,
+        "high": 3,
+        "medium": 7
+      },
+      "attendee_potential": {
+        "medium": 21,
+        "low": 1
+      },
+      "priority_tier": {
+        "3": 3,
+        "1": 3,
+        "2": 3,
+        "connector": 13
+      },
+      "watchlist_companies": 14,
+      "past_meetups": 0,
+      "lead_type": {
+        "no_public_content": 12,
+        "proven_speaker": 8,
+        "emerging_voice": 2
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "other": 5,
+        "conference_or_meetup_agenda": 17
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "data engineering": 4,
+      "data warehouse & platforms": 4,
+      "data governance": 3,
+      "genai & llm": 3,
+      "business intelligence": 3,
+      "community": 2,
+      "domain-specific use cases": 2,
+      "data quality & testing": 2,
+      "modern data stack": 1,
+      "performance & scale": 1,
+      "developer workflow": 1,
+      "dbt fundamentals": 1,
+      "data modeling": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "capitalcom",
+      "name": "Capital.com",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Redshift",
+        "Airflow",
+        "AWS"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (Data Engineering Team)",
+          "url": "https://dev.bg/company/jobads/capital-com-data-engineer-data-engineering-team/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proven experience with Redshift and Snowflake. Experience with DBT. Experience with Apache Airflow for workflow orchestration.",
+          "job_poster": null,
+          "posted_date": "2026-10-01",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://dev.bg/company/jobads/capital-com-team-lead-financial-analytics/",
+          "note": "Team Lead Financial Analytics ad in Sofia, no dbt in the text"
+        }
+      ],
+      "people": [],
+      "notes": "Trading platform with a Sofia data engineering team. Its Sofia data engineer ad requires dbt with Snowflake and Redshift. No named data lead found yet."
+    },
+    {
+      "id": "nion",
+      "name": "Nion",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Dagster"
+      ],
+      "job_postings": [
+        {
+          "title": "Mid/Senior Data Engineer",
+          "url": "https://dev.bg/company/jobads/nion-mid-senior-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Previous experience with the open source tools dbt, Apache Airflow and Dagster",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Sofia hybrid data engineer ad requires dbt, Airflow and Dagster."
+    },
+    {
+      "id": "dataart-bulgaria",
+      "name": "DataArt (Bulgaria)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks",
+        "Airflow",
+        "Dagster",
+        "Spark"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://dev.bg/company/jobads/dataart-senior-data-engineer-1/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Cloud data platforms: Snowflake and/or Databricks ... Data transformation and modeling with DBT",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Consultancy. The ad is posted for Bulgaria as fully remote and lists dbt among the core skills."
+    },
+    {
+      "id": "people-and-places",
+      "name": "People and Places",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://dev.bg/company/jobads/people-and-places-senior-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with Snowflake – Data transformation tools like DBT (Data Build Tool) – SQL – Python",
+          "job_poster": null,
+          "posted_date": "2026-10-01",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Bulgarian recruitment agency. The client is not named. The Sofia hybrid role requires dbt and Snowflake."
+    },
+    {
+      "id": "gamito",
+      "name": "Gamito",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior or Lead Data Engineer with Snowflake",
+          "url": "https://dev.bg/company/jobads/gamito-senior-or-lead-data-engineer-with-snowflake/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "We are looking for experienced Senior or Lead Data Engineer with Snowflake and dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Bulgarian recruitment agency. The client is not named. The role is fully remote within Bulgaria."
+    },
+    {
+      "id": "softserve-bulgaria",
+      "name": "SoftServe Bulgaria",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Dataform",
+        "BigQuery",
+        "Databricks",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Big Data Engineer",
+          "url": "https://dev.bg/company/jobads/softserve-bulgaria-lead-big-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Implement data transformation, modeling, and analytics engineering practices using dbt and Dataform",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        },
+        {
+          "title": "Senior/Lead Big Data Engineer (Databricks + GCP)",
+          "url": "https://dev.bg/company/jobads/softserve-bulgaria-senior-lead-big-data-engineer-databricks-gcp/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with data transformation and modeling tools such as dbt and Dataform",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Two GCP data roles in Bulgaria. Both list dbt next to Dataform."
+    },
+    {
+      "id": "dataciders-roiti",
+      "name": "Dataciders ROITI",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Power BI",
+        "Matillion",
+        "Azure Data Factory",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer (BI & Data Engineering)",
+          "url": "https://dev.bg/company/jobads/roiti-senior-analytics-engineer-bi-data-engineering/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with ETL tools – ADF, Matillion, DBT or similar",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "denis-alekov",
+          "name": "Denis Alekov",
+          "pronouns": null,
+          "title": "Junior Data Engineer",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/dalekov/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "GitHub profile (github.com/dalekov) states Sofia and ROITI. The LinkedIn link comes from the GitHub social accounts."
+        }
+      ],
+      "notes": "Sofia consultancy hiring an analytics engineer. dbt is one of several listed tools."
+    },
+    {
+      "id": "createfuture",
+      "name": "CreateFuture",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Kafka",
+        "AWS Kinesis"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Cloud Engineer",
+          "url": "https://dev.bg/company/jobads/createfuture-senior-cloud-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data orchestration (dbt, Airflow), and managing Vector Databases for RAG architectures",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "platform engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Sofia hybrid cloud role that includes data pipeline work with dbt."
+    },
+    {
+      "id": "customertimes-bulgaria",
+      "name": "Customertimes Bulgaria",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Project Manager Senior",
+          "url": "https://dev.bg/company/jobads/customertimes-bulgaria-project-manager-senior/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "cloud-based data platforms and orchestration tools such as Airflow, dbt, or similar",
+          "job_poster": null,
+          "posted_date": "2026-10-01",
+          "last_seen": "2026-10-01",
+          "job_family": "project management",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Data project manager role, fully remote in Bulgaria."
+    },
+    {
+      "id": "xebia-bulgaria",
+      "name": "Xebia (Bulgaria)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Snowflake",
+        "Azure",
+        "GCP",
+        "BigQuery",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Azure Data Platform Engineer",
+          "url": "https://dev.bg/company/jobads/xebia-azure-data-platform-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with dbt, Apache Airflow, or other modern data platform technologies.",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        },
+        {
+          "title": "Data Quality Analyst / Data Tester",
+          "url": "https://dev.bg/company/jobads/xebia-data-quality-analyst-data-tester/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Nice to Have: Looker, dbt, Airflow/Composer, GCP ... (eg. dbt tests)",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-10-01",
+          "job_family": "data quality",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://dev.bg/company/jobads/xebia-automation-lead-engineer/",
+          "note": "Xebia ads in Bulgaria say it is a trusted partner of Databricks, dbt and Snowflake"
+        }
+      ],
+      "people": [],
+      "notes": "dbt partner consultancy that hires in Bulgaria, mostly fully remote. Xebia dominates the Amsterdam research; check whether any Bulgarian staff work on dbt projects."
+    },
+    {
+      "id": "talent-hunter",
+      "name": "Talent Hunter",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "AWS",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Cloud Engineer (AWS and Databricks)",
+          "url": "https://dev.bg/company/jobads/talent-hunter-cloud-engineer-aws-and-databricks/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "You will not be responsible for: Data pipelines; dbt transformations ... These areas will be owned by the Data Engineer",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-10-01",
+          "job_family": "platform engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Recruiter ad for an unnamed client whose data engineers own dbt transformations."
+    },
+    {
+      "id": "sumup-sofia",
+      "name": "SumUp (Sofia)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://boards-api.greenhouse.io/v1/boards/sumup/jobs?content=true",
+          "note": "28 open Sofia roles on 2026-10-01, none mention dbt. Two Berlin roles (Senior Analytics Engineer, Data Platform Engineer) require dbt."
+        }
+      ],
+      "people": [],
+      "notes": "SumUp uses dbt, but its dbt roles are in Berlin. The Sofia office hires engineers. Ask whether any Sofia staff work on the data platform."
+    },
+    {
+      "id": "fourth-sofia",
+      "name": "Fourth (Sofia)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Microsoft Fabric",
+        "Azure Data Factory",
+        "Power BI",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://dev.bg/company/jobads/fourth-junior-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Familiarity with dbt or another transformation framework.",
+          "job_poster": null,
+          "posted_date": "2026-10-01",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "teodor-kostadinov",
+          "name": "Teodor Kostadinov",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "GitHub profile (github.com/tkostadinov-fourth) states Sofia, Bulgaria and Fourth."
+        },
+        {
+          "id": "asen-krasimirov",
+          "name": "Asen Krasimirov",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "GitHub profile (github.com/asen-krasimirov) states Sofia and Fourth."
+        }
+      ],
+      "notes": "Hospitality software company with a Sofia data team. The junior ad lists dbt as preferred, next to Microsoft Fabric."
+    },
+    {
+      "id": "ocado-technology-sofia",
+      "name": "Ocado Technology (Sofia)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://dev.bg/company/jobads/ocado-technology-senior-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Exposure to dbt, BigQuery, or other cloud data-warehouse tooling.",
+          "job_poster": null,
+          "posted_date": "2026-09-29",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Sofia engineering centre. dbt appears as one option among warehouse tools."
+    },
+    {
+      "id": "a1-bulgaria",
+      "name": "A1 Bulgaria",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Trino",
+        "Iceberg"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer for AI Stack (f/m/d) @ A1 Competence Delivery Center",
+          "url": "https://dev.bg/company/jobads/a1-bulgaria-data-engineer-for-ai-stack-f-m-d-a1-competence-delivery-center/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Nice to have: Airflow, Airbyte, Meltano, OpenMetadata, dbt, Spark, Trino",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Telecom. dbt is a nice-to-have on an AI data platform role in Sofia."
+    },
+    {
+      "id": "betty-technology",
+      "name": "Betty Technology",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Kafka"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer | Betty CA",
+          "url": "https://dev.bg/company/jobads/betty-technology-senior-data-engineer-betty-ca/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Nice to have: Experience with DBT.",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Sofia role; dbt is a nice-to-have."
+    },
+    {
+      "id": "b-eye",
+      "name": "B EYE",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Snowflake",
+        "Azure Data Factory"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://dev.bg/company/jobads/b-eye-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with dbt, Databricks, ADF or Snowflake is considered a strong advantage.",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Data consultancy hiring in Bulgaria, fully remote."
+    },
+    {
+      "id": "dsk-bank",
+      "name": "DSK Bank",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Spark",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer – Customer Value Management",
+          "url": "https://dev.bg/company/jobads/dsk-bank-data-engineer-customer-value-management/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "It would be considered an advantage ... Experience with Python, Airflow and/or dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Large Bulgarian bank (OTP Group). dbt is an advantage on a Sofia customer analytics role."
+    },
+    {
+      "id": "opentag",
+      "name": "OpenTag",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Kafka",
+        "GitLab CI"
+      ],
+      "job_postings": [
+        {
+          "title": "Middle Data Engineer",
+          "url": "https://dev.bg/company/jobads/opentag-middle-data-engineer/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Nice to have: ... Experience with data tools: DBT.",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Sofia hybrid role; dbt is a nice-to-have."
+    },
+    {
+      "id": "sqilline",
+      "name": "Sqilline",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Scientist (AI-first)",
+          "url": "https://dev.bg/company/jobads/sqilline-data-scientist-ai-first/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Nice to have: ... Airflow, dbt, or similar pipeline tooling.",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-10-01",
+          "job_family": "data science",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Healthcare data company in Sofia."
+    },
+    {
+      "id": "cadabra",
+      "name": "CADABRA",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Scientist (AI-native)",
+          "url": "https://dev.bg/company/jobads/cadabra-data-scientist-ai-native/",
+          "source": "dev.bg job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Brownie points: ... Airflow, dbt, or similar pipeline tooling.",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-10-01",
+          "job_family": "data science",
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Recruitment agency. The client is not named."
+    },
+    {
+      "id": "paysafe-sofia",
+      "name": "Paysafe (Sofia)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Databricks",
+        "GCP",
+        "Azure",
+        "AWS"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/",
+          "note": "Paysafe Talks, 25 events since 2023, in person at Capital Fort or online"
+        }
+      ],
+      "people": [
+        {
+          "id": "miroslav-dimitrov",
+          "name": "Miroslav Dimitrov",
+          "pronouns": null,
+          "title": "Senior Manager of Data Engineering",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "webinar",
+              "event": "Paysafe Talks",
+              "title": "AI-Driven Engineering Documentation",
+              "date": "2026-02-19",
+              "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/events/313278042/",
+              "content_id": "paysafetalks-2026-02-19-ai-driven-engineering-documentation",
+              "co_authors": [
+                "Martines Angeliev"
+              ],
+              "mentions_dbt": false,
+              "description": "introduces an AI tool that documents code, data and infrastructure for data engineers and analysts",
+              "topics": [
+                "data governance",
+                "genai & llm",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/events/313278042/",
+              "note": "webinar: AI-Driven Engineering Documentation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "documenting a Snowflake and Databricks data platform so it does not depend on a few people",
+          "past_chapter_talks": [],
+          "notes": "Speaker bio says this person leads a SQL Server course at Sofia University and has a track record as a speaker and trainer. Location is medium: the talk was online, but the course is in Sofia and Paysafe has a Sofia office. Ask whether Paysafe uses dbt."
+        },
+        {
+          "id": "martines-angeliev",
+          "name": "Martines Angeliev",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "webinar",
+              "event": "Paysafe Talks",
+              "title": "AI-Driven Engineering Documentation",
+              "date": "2026-02-19",
+              "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/events/313278042/",
+              "content_id": "paysafetalks-2026-02-19-ai-driven-engineering-documentation",
+              "co_authors": [
+                "Miroslav Dimitrov"
+              ],
+              "mentions_dbt": false,
+              "description": "co-presented an AI documentation tool for data and platform teams; works on Snowflake and GCP pipelines",
+              "topics": [
+                "data governance",
+                "genai & llm",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/events/313278042/",
+              "note": "webinar: AI-Driven Engineering Documentation"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "building marketing analytics pipelines on Snowflake and GCP at a fintech",
+          "past_chapter_talks": [],
+          "notes": "Location not confirmed: the talk was online."
+        },
+        {
+          "id": "hristina-hristova",
+          "name": "Hristina Hristova",
+          "pronouns": null,
+          "title": "Paysafe Talks host",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event. Hosts Paysafe Talks, including its data talks and the women-in-IT panel of March 2024. The route to a Paysafe venue."
+        }
+      ],
+      "notes": "Large Sofia fintech employer. Its data engineers speak about Snowflake, Databricks, GCP and Azure. No dbt evidence found. Paysafe hosts the Paysafe Talks meetup (2,065 members) at Capital Fort, a likely venue."
+    },
+    {
+      "id": "adastra-bulgaria",
+      "name": "Adastra Bulgaria",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "AWS"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "peter-mendev",
+          "name": "Peter Mendev",
+          "pronouns": null,
+          "title": "Solution Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "AWS Bulgaria User Group #45",
+              "title": "Modern Data Architecture with AWS",
+              "date": "2023-06-01",
+              "url": "https://www.meetup.com/aws-bulgaria/events/293545484/",
+              "content_id": "aws-bulgaria-2023-06-01-modern-data-architecture",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "walks through the AWS services for each area of a data analytics platform: ingestion, storage, processing, governance and visualisation",
+              "topics": [
+                "data warehouse & platforms",
+                "modern data stack",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/aws-bulgaria/events/293545484/",
+              "note": "talk: Modern Data Architecture with AWS"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how a consultancy builds an AWS analytics platform from ingestion to governance",
+          "past_chapter_talks": [],
+          "notes": "Location not confirmed: the in-person talk in Sofia was in June 2023, more than two years ago. The talk was in Bulgarian."
+        }
+      ],
+      "notes": "Data and cloud consultancy with a Sofia office (M Plaza, Atanas Dukov St). It hosted AWS Bulgaria #45 on modern data architecture. No dbt evidence found."
+    },
+    {
+      "id": "inspirit",
+      "name": "INSPIRIT",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "SQL Server",
+        "Microsoft Fabric",
+        "Power BI",
+        "Azure"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "conference",
+          "url": "https://discoverydaysofia.com/speakers/",
+          "note": "Discovery Day 2026 speaker page; the 20 speakers are mostly international Microsoft MVPs and staff"
+        }
+      ],
+      "people": [
+        {
+          "id": "margarita-naumova",
+          "name": "Margarita Naumova",
+          "pronouns": null,
+          "title": "CEO, INSPIRIT; founder of the Bulgarian SQL & BI User Group and Azure Analytics User Group Bulgaria",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/maginaumova/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Discovery Day Sofia 2025",
+              "title": "Discovery Day 2025 technical track (speaker)",
+              "date": "2025-06-12",
+              "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/events/306007894/",
+              "content_id": "discovery-day-sofia-2025discovery-day-2025-technical-track-s",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed speaker at the conference this person organises; focus on SQL Server 2025, Microsoft Fabric and AI",
+              "topics": [
+                "data warehouse & platforms",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            },
+            {
+              "type": "organiser",
+              "event": "Discovery Day Sofia 2026",
+              "title": "Discovery Day 2026: Inspire. Build. Lead. WITH DATA.",
+              "date": "2026-06-03",
+              "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/events/313222173/",
+              "content_id": "discovery-day-sofia-2026discovery-day-2026-inspire-build-lea",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "organises the two-day Bulgarian data community conference with the two user groups",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/events/306007894/",
+              "note": "talk: Discovery Day 2025 technical track (speaker)"
+            },
+            {
+              "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/events/313222173/",
+              "note": "organiser: Discovery Day 2026: Inspire. Build. Lead. WITH DATA."
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "what a Microsoft data platform team gains or loses by adding dbt to Fabric",
+          "past_chapter_talks": [],
+          "notes": "Meetup organiser profile city is Sofia. The LinkedIn link is on the Discovery Day 2025 Meetup page and the Discovery Day speaker page. Runs the largest Sofia data community and its conference, so a natural co-host."
+        },
+        {
+          "id": "vili-koleva",
+          "name": "Vili Koleva",
+          "pronouns": null,
+          "title": "Community Event Organizer, INSPIRIT",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event. Co-hosts the Bulgarian SQL & BI User Group and Discovery Day Sofia."
+        }
+      ],
+      "notes": "Microsoft data platform consultancy in Sofia and Oslo, run by Margarita Naumova. It hosts and sponsors Discovery Day Sofia. No dbt evidence."
+    },
+    {
+      "id": "siteground",
+      "name": "SiteGround",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://api.lever.co/v0/postings/siteground?mode=json",
+          "note": "5 Sofia roles, none mention dbt"
+        }
+      ],
+      "people": [
+        {
+          "id": "lyuboslav-karev",
+          "name": "Lyuboslav Karev",
+          "pronouns": null,
+          "title": "Software engineer, Coderick AI",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyData Sofia & DSS Meetup June 2026",
+              "title": "Subinterpreters & GIL-less Python",
+              "date": "2026-06-18",
+              "url": "https://www.meetup.com/pydata-sofia/events/315051356/",
+              "content_id": "pydata-sofia-2026-06-18-subinterpreters",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "explains Python subinterpreters and free-threaded builds",
+              "topics": [
+                "performance & scale",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-sofia/events/315051356/",
+              "note": "talk: Subinterpreters & GIL-less Python"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event. Co-hosts PyData Sofia and spoke there. The talk was on Python internals, not data."
+        }
+      ],
+      "notes": "Web hosting company. Its Sofia HQ (6 Olimpiyska St) hosts PyData Sofia with food and parking. No dbt evidence; 5 open Sofia roles on Lever mention no dbt."
+    },
+    {
+      "id": "tide-sofia",
+      "name": "Tide (Sofia)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://boards-api.greenhouse.io/v1/boards/tide/jobs?content=true",
+          "note": "16 Sofia roles, none mention dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Business banking fintech with a Sofia tech hub. 16 open Sofia roles on 2026-10-01; no open role anywhere mentions dbt."
+    },
+    {
+      "id": "trading-212",
+      "name": "Trading 212",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://api.ashbyhq.com/posting-api/job-board/trading212",
+          "note": "21 Sofia roles, none mention dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Trading app with its HQ in Sofia. 21 open Sofia roles on Ashby; none mention dbt."
+    },
+    {
+      "id": "lucidlink",
+      "name": "LucidLink",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://api.ashbyhq.com/posting-api/job-board/lucidlink",
+          "note": "5 Sofia roles, none mention dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Sofia engineering office; also has a Meetup group. 5 open Sofia roles on Ashby; none mention dbt."
+    },
+    {
+      "id": "coherent-solutions",
+      "name": "Coherent Solutions",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://boards-api.greenhouse.io/v1/boards/coherentsolutions/jobs?content=true",
+          "note": "5 Sofia roles, none mention dbt"
+        }
+      ],
+      "people": [],
+      "notes": "5 open Sofia roles on Greenhouse; none mention dbt."
+    },
+    {
+      "id": "experian-sofia",
+      "name": "Experian (Sofia)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://dev.bg/company/jobads/experian-senior-data-analytics-engineer/",
+          "note": "Senior Data Analytics Engineer, posted 2026-09-03, no dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Sofia hybrid Senior Data Analytics Engineer ad, with no dbt in the text."
+    },
+    {
+      "id": "insurify-sofia",
+      "name": "Insurify (Sofia)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://dev.bg/company/jobads/insurify-senior-data-analytics-engineer/",
+          "note": "Senior Data Analytics Engineer, posted 2026-09-29, no dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Sofia hybrid Senior Data Analytics Engineer ad, with no dbt in the text."
+    },
+    {
+      "id": "dreamix",
+      "name": "Dreamix",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://dev.bg/company/jobads/dreamix-senior-data-engineer/",
+          "note": "Senior Data Engineer, posted 2026-09-30, no dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Bulgarian software consultancy. Its Senior Data Engineer ad (fully remote) has no dbt in the text."
+    },
+    {
+      "id": "techpods",
+      "name": "TechPods",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://dev.bg/company/jobads/techpods-senior-data-engineer/",
+          "note": "Senior Data Engineer, posted 2026-09-28, no dbt"
+        }
+      ],
+      "people": [],
+      "notes": "Sofia Senior Data Engineer ad, with no dbt in the text."
+    },
+    {
+      "id": "large-sofia-employers-checked-no-public-job-board-found-payh",
+      "name": "Large Sofia employers checked, no public job board found (Payhawk, Uber, Experian, Endava, VMware/Broadcom, SAP Labs Bulgaria, Bosch, Shelly, Nexo, Progress, Playtech, MentorMate, HedgeServ)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Greenhouse, Lever, Ashby and Workable returned no board or no open roles for these slugs. Check their own careers pages or dev.bg company pages next time."
+    },
+    {
+      "id": "infinite-lambda",
+      "name": "Infinite Lambda",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "oss",
+          "url": "https://github.com/infinitelambda",
+          "note": "34 public repos, many dbt packages"
+        }
+      ],
+      "people": [],
+      "notes": "dbt partner consultancy. Its public dbt packages (dq-tools, dbt-data-diff, dbt-tags) have contributors in Vietnam and the UK. No Sofia office or staff confirmed; the website returned HTTP 403."
+    },
+    {
+      "id": "independent-employer-not-identified",
+      "name": "Independent / employer not identified",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ivan-krumov",
+          "name": "Ivan Krumov",
+          "pronouns": null,
+          "title": "Data engineer (employer not identified)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "sofia-air-quality-pipeline",
+              "date": "2025-11-23",
+              "url": "https://github.com/IvanKrumov/sofia-air-quality-pipeline",
+              "content_id": "githubsofiaairqualitypipeline",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "data pipeline for Sofia air quality analysis using BigQuery and dbt",
+              "topics": [
+                "data engineering",
+                "domain-specific use cases",
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/IvanKrumov/sofia-air-quality-pipeline",
+              "note": "oss: sofia-air-quality-pipeline"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "building a Sofia air quality pipeline with BigQuery and dbt",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile states no location or employer. The project is about Sofia, which is not location evidence. Confirm the person is in Sofia before outreach."
+        },
+        {
+          "id": "dimitar-hadzhiev",
+          "name": "Dimitar Hadzhiev",
+          "pronouns": null,
+          "title": "BI developer (employer not identified)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "Embedded Finance Unit Economics Dashboard (fintech-bi)",
+              "date": "2026-05-17",
+              "url": "https://github.com/hadzhiev96/fintech-bi",
+              "content_id": "githubembedded-finance-unit-economics-dashboard-fintechbi",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "portfolio project: PostgreSQL, dbt Core staging, intermediate and mart layers with 27 tests, then a Power BI semantic model",
+              "topics": [
+                "data modeling",
+                "business intelligence",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/hadzhiev96/fintech-bi",
+              "note": "oss: Embedded Finance Unit Economics Dashboard (fintech-bi)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "a tested dbt layer feeding a Power BI semantic model with row-level security",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile states no location or employer. The README models a card processor like Paynetics or Payhawk, which suggests a Bulgarian focus but is not location evidence."
+        },
+        {
+          "id": "yordan-darakchiev",
+          "name": "Yordan Darakchiev",
+          "pronouns": null,
+          "title": "Data scientist and technical trainer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "PyData Sofia & DSS Meetup March 2026",
+              "title": "Everybody Lies: How Language Models (and People) Cheat",
+              "date": "2026-03-18",
+              "url": "https://www.meetup.com/pydata-sofia/events/313537093/",
+              "content_id": "pydata-sofia-2026-03-18-everybody-lies",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "a small BI-style benchmark (SQL, data summaries, insights) graded by several LLM judges, and how to make LLM evaluation harder to game",
+              "topics": [
+                "genai & llm",
+                "data quality & testing",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-sofia/events/313537093/",
+              "note": "panel: Everybody Lies: How Language Models (and People) Cheat"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "why LLM judges fail on BI-style SQL tasks, and how to test analytics agents",
+          "past_chapter_talks": [],
+          "notes": "Spoke in person at a Sofia meetup in March 2026, but no employer was named, so location stays unknown."
+        }
+      ],
+      "notes": "People with public dbt work whose employer is not known."
+    },
+    {
+      "id": "bulgarian-sql-bi-user-group-lets-sql-together-and-azure-anal",
+      "name": "Bulgarian SQL & BI User Group \"Let's SQL Together!\" and Azure Analytics User Group Bulgaria",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/",
+          "note": "7 events since 2023"
+        },
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/azure-analytics-user-group-bulgaria/",
+          "note": "9 events since 2023"
+        },
+        {
+          "type": "conference",
+          "url": "https://www.discoverydaysofia.com",
+          "note": "Discovery Day Sofia, sixth edition 3-4 June 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "krasi-donchev",
+          "name": "Krasi Donchev",
+          "pronouns": null,
+          "title": "Azure Analytics User Group Bulgaria co-host",
+          "city": "Oslo",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "low"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Oslo. Co-hosts Azure Analytics User Group Bulgaria events."
+        }
+      ],
+      "notes": "The largest Sofia data user group (896 members), with its sister Azure Analytics group (273). It runs Discovery Day Sofia at Capital Fort each June and online webinars. Microsoft data platform focus. Led by Margarita Naumova and Vili Koleva (INSPIRIT)."
+    },
+    {
+      "id": "pydata-sofia-and-data-science-society",
+      "name": "PyData Sofia and Data Science Society",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/pydata-sofia/",
+          "note": "16 events since 2023"
+        },
+        {
+          "type": "community_site",
+          "url": "https://www.datasciencesociety.net/events/",
+          "note": "Data Science Society events; next: DSS & AIEF BG networking, 7 October 2026, Barter Community Hub"
+        }
+      ],
+      "people": [
+        {
+          "id": "yasen-kiprov",
+          "name": "Yasen Kiprov",
+          "pronouns": null,
+          "title": "PyData Sofia organiser",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup organiser profile city is Sofia. Has hosted PyData Sofia since 2023."
+        },
+        {
+          "id": "milen-chechev",
+          "name": "Milen Chechev",
+          "pronouns": null,
+          "title": "PyData Sofia co-organiser",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyData Sofia",
+              "title": "Modern forecasting approaches and challenges",
+              "date": "2024-05-15",
+              "url": "https://www.meetup.com/pydata-sofia/events/300918629/",
+              "content_id": "pydata-sofia-2024-05-15-modern-forecasting",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "compares current forecasting algorithms when forecasting is set up as an ML problem",
+              "topics": [
+                "domain-specific use cases",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-sofia/events/300918629/",
+              "note": "talk: Modern forecasting approaches and challenges"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event."
+        },
+        {
+          "id": "alexander-ignatov",
+          "name": "Alexander Ignatov",
+          "pronouns": null,
+          "title": "PyData Sofia co-host",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event."
+        },
+        {
+          "id": "georgi-karadzhov",
+          "name": "Georgi Karadzhov",
+          "pronouns": null,
+          "title": "PyData Sofia co-host",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event. Co-hosted the PyData x GDG x Google meetup in May 2025."
+        }
+      ],
+      "notes": "PyData Sofia (763 members) meets with the Data Science Society (Sofia, Serdika 20) about monthly. Venues have been SiteGround HQ, Barter Community Hub and Sofia University. Topics are mostly ML and LLMs. The Data Science Society also runs beer networking evenings with AI Engineer Foundation Bulgaria."
+    },
+    {
+      "id": "sofia-microsoft-fabric-meetup-and-data-saturday-sofia",
+      "name": "Sofia Microsoft Fabric Meetup and Data Saturday Sofia",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/sofia-fabric-meetup/",
+          "note": "4 events since 2023"
+        },
+        {
+          "type": "conference",
+          "url": "https://www.meetup.com/sofia-fabric-meetup/events/311252354/",
+          "note": "Data Saturday Sofia 2025; speakers include Margarita Naumova, Ivelin Andreev and Mihail Mateev"
+        }
+      ],
+      "people": [
+        {
+          "id": "mihail-mateev",
+          "name": "Mihail Mateev",
+          "pronouns": null,
+          "title": "Organiser, Sofia Microsoft Fabric Meetup and Data Saturday Sofia",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Saturday Sofia 2025",
+              "title": "Data Saturday Sofia 2025 (speaker and organiser)",
+              "date": "2025-10-04",
+              "url": "https://www.meetup.com/sofia-fabric-meetup/events/311252354/",
+              "content_id": "data-saturday-sofia-2025data-saturday-sofia-2025-speaker-and",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "named speaker at the Microsoft data platform training day this person organises",
+              "topics": [
+                "data warehouse & platforms",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/sofia-fabric-meetup/events/311252354/",
+              "note": "talk: Data Saturday Sofia 2025 (speaker and organiser)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup organiser profile city is Sofia."
+        }
+      ],
+      "notes": "Sofia Microsoft Fabric Meetup (131 members) and the Bulgarian Software Community run Global Azure Bulgaria and Data Saturday Sofia (4 October 2025, Sofia Tech Park). Led by Mihail Mateev."
+    },
+    {
+      "id": "sofia-lowkey-data-meetup",
+      "name": "Sofia Low-Key Data Meetup",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/sofia-low-key-data-meetup/",
+          "note": "New informal monthly social for data engineers, analysts and scientists (44 members). First event 17 September 2026 at S"
+        }
+      ],
+      "people": [],
+      "notes": "New informal monthly social for data engineers, analysts and scientists (44 members). First event 17 September 2026 at Stroeja Open Air Music Bar. No agenda or sponsor. Organiser is listed only as \"Ian\", Sofia. A good first audience and co-host for a dbt meetup."
+    },
+    {
+      "id": "aws-bulgaria-user-group",
+      "name": "AWS Bulgaria User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/aws-bulgaria/",
+          "note": "The largest Sofia cloud group (2,273 members). Runs AWS Community Day Bulgaria at Sofia Tech Park each October. Regular "
+        }
+      ],
+      "people": [
+        {
+          "id": "daniel-rankov",
+          "name": "Daniel Rankov",
+          "pronouns": null,
+          "title": "AWS Bulgaria User Group organiser",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup organiser profile city is Sofia."
+        },
+        {
+          "id": "vasilena-vasileva",
+          "name": "Vasilena Vasileva",
+          "pronouns": null,
+          "title": "AWS Community Day Bulgaria co-host",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event."
+        },
+        {
+          "id": "ivaylo-bratoev",
+          "name": "Ivaylo Bratoev",
+          "pronouns": null,
+          "title": "AWS Bulgaria User Group co-host",
+          "city": "Sofia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Meetup host profile city is Sofia, and the person hosted an in-person Sofia event."
+        }
+      ],
+      "notes": "The largest Sofia cloud group (2,273 members). Runs AWS Community Day Bulgaria at Sofia Tech Park each October. Regular venue is WorkBetter; hosts have included SAP Labs, Bosch Digital, Merkle, Nemetschek and Adastra."
+    },
+    {
+      "id": "python-meetup-at-sofia-hackbulgaria",
+      "name": "Python Meetup at Sofia (HackBulgaria)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/sofia-python-meetup-group/",
+          "note": "Monthly Python meetup (1,005 members) at Barter Community Hub, run by HackBulgaria. 22 events since May 2024, 30 to 98 a"
+        }
+      ],
+      "people": [],
+      "notes": "Monthly Python meetup (1,005 members) at Barter Community Hub, run by HackBulgaria. 22 events since May 2024, 30 to 98 attendees. Few data talks, but Barter Community Hub is the default community venue in Sofia."
+    },
+    {
+      "id": "women-in-agile-bulgaria",
+      "name": "Women in Agile Bulgaria",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Sofia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_group",
+          "url": "https://www.meetup.com/women-in-agile-bulgaria/",
+          "note": "Women-in-tech community (318 members); 7 events since 2023, none on data. Paysafe hosted one at Capital Fort. Organisers"
+        }
+      ],
+      "people": [],
+      "notes": "Women-in-tech community (318 members); 7 events since 2023, none on data. Paysafe hosted one at Capital Fort. Organisers: Ivelina Chaldakova, Bogdana Boncheva, Severina Todorova. Not a data community, but a route to more speakers."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": null,
+    "past_meetups_derived_from": null,
+    "checked": [
+      {
+        "name": "Meetup gql2 groupSearch near Sofia",
+        "url": "https://www.meetup.com/gql2",
+        "yielded": true,
+        "note": "57 Sofia groups; 12 data or tech groups read"
+      },
+      {
+        "name": "Bulgarian SQL & BI User Group past events (Meetup gql2)",
+        "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/",
+        "yielded": true,
+        "note": "Discovery Day and webinars; organisers"
+      },
+      {
+        "name": "Azure Analytics User Group Bulgaria past events (Meetup gql2)",
+        "url": "https://www.meetup.com/azure-analytics-user-group-bulgaria/",
+        "yielded": true,
+        "note": "same organisers; one Oslo co-host"
+      },
+      {
+        "name": "PyData Sofia past events (Meetup gql2)",
+        "url": "https://www.meetup.com/pydata-sofia/",
+        "yielded": true,
+        "note": "16 events since 2023, mostly ML; one BI-style LLM benchmark panel"
+      },
+      {
+        "name": "Paysafe Talks past events (Meetup gql2)",
+        "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/",
+        "yielded": true,
+        "note": "one data engineering talk (February 2026) and a host"
+      },
+      {
+        "name": "AWS Bulgaria User Group past events (Meetup gql2)",
+        "url": "https://www.meetup.com/aws-bulgaria/",
+        "yielded": true,
+        "note": "one data architecture talk (2023), venues and organisers"
+      },
+      {
+        "name": "Sofia Microsoft Fabric Meetup past events (Meetup gql2)",
+        "url": "https://www.meetup.com/sofia-fabric-meetup/",
+        "yielded": true,
+        "note": "Data Saturday Sofia 2025, organiser"
+      },
+      {
+        "name": "Sofia Low-Key Data Meetup (Meetup gql2)",
+        "url": "https://www.meetup.com/sofia-low-key-data-meetup/",
+        "yielded": true,
+        "note": "new data social, September 2026"
+      },
+      {
+        "name": "Python Meetup at Sofia past events (Meetup gql2)",
+        "url": "https://www.meetup.com/sofia-python-meetup-group/",
+        "yielded": false,
+        "note": "22 events, no analytics or dbt talks"
+      },
+      {
+        "name": "dxTechTalk Sofia past events (Meetup gql2)",
+        "url": "https://www.meetup.com/dxttsofia/",
+        "yielded": false,
+        "note": "frontend, backend and QA only"
+      },
+      {
+        "name": "Progress Connect: Bulgaria past events (Meetup gql2)",
+        "url": "https://www.meetup.com/progressbulgaria/",
+        "yielded": false,
+        "note": "career and engineering talks, no data"
+      },
+      {
+        "name": "Nortal Tech Talks Sofia past events (Meetup gql2)",
+        "url": "https://www.meetup.com/nortal-tech-meetups-sofia/",
+        "yielded": false,
+        "note": "Java and algorithms only"
+      },
+      {
+        "name": "Women in Agile Bulgaria past events (Meetup gql2)",
+        "url": "https://www.meetup.com/women-in-agile-bulgaria/",
+        "yielded": false,
+        "note": "7 events since 2023, none on data"
+      },
+      {
+        "name": "dev.bg job search: dbt",
+        "url": "https://dev.bg/?s=dbt&post_type=job_listing",
+        "yielded": true,
+        "note": "26 active ads, all mention dbt"
+      },
+      {
+        "name": "dev.bg job search: analytics engineer",
+        "url": "https://dev.bg/?s=analytics+engineer&post_type=job_listing",
+        "yielded": true,
+        "note": "6 extra ads read, none mention dbt"
+      },
+      {
+        "name": "Greenhouse, Lever, Ashby and Workable boards (about 50 Sofia employers)",
+        "url": "https://boards-api.greenhouse.io/v1/boards/sumup/jobs?content=true",
+        "yielded": false,
+        "note": "boards found for SumUp, Tide, Coherent Solutions, SiteGround, Trading 212, LucidLink; no Sofia role mentions dbt"
+      },
+      {
+        "name": "HN Who is hiring (dbt Sofia)",
+        "url": "https://hn.algolia.com/api/v1/search?query=dbt%20Sofia&tags=comment",
+        "yielded": false,
+        "note": "147 hits, none mention both dbt and Sofia or Bulgaria"
+      },
+      {
+        "name": "Discovery Day Sofia speakers",
+        "url": "https://discoverydaysofia.com/speakers/",
+        "yielded": false,
+        "note": "20 speakers, all international except the organiser"
+      },
+      {
+        "name": "DSC Europe speakers",
+        "url": "https://www.datasciconference.com/speakers",
+        "yielded": false,
+        "note": "Belgrade conference, not Sofia"
+      },
+      {
+        "name": "Data Science Society events",
+        "url": "https://www.datasciencesociety.net/events/",
+        "yielded": true,
+        "note": "community and partners"
+      },
+      {
+        "name": "AWS Community Day Bulgaria speakers",
+        "url": "https://www.aws-community-day.bg/speakers-2025",
+        "yielded": false,
+        "note": "Wix page, JavaScript-only"
+      },
+      {
+        "name": "Data Saturday Sofia 2025 (Eventbrite)",
+        "url": "https://www.eventbrite.com/e/data-saturdays-sofia-2025-tickets-1071745723309",
+        "yielded": false,
+        "note": "no schedule on the page"
+      },
+      {
+        "name": "GitHub user search: data engineer, location Sofia",
+        "url": "https://github.com/search?q=%22data+engineer%22+location%3ASofia&type=users",
+        "yielded": true,
+        "note": "17 users, no dbt repos; 3 recorded at dbt-signal employers"
+      },
+      {
+        "name": "GitHub repo search: dbt with Sofia or Bulgaria",
+        "url": "https://github.com/search?q=dbt+sofia&type=repositories",
+        "yielded": true,
+        "note": "2 dbt projects by people with no stated location"
+      },
+      {
+        "name": "Infinite Lambda GitHub contributors",
+        "url": "https://github.com/infinitelambda",
+        "yielded": false,
+        "note": "contributors in Vietnam and the UK, none in Sofia"
+      },
+      {
+        "name": "GDG chapters API (Bulgaria)",
+        "url": "https://gdg.community.dev/api/chapter_slim/",
+        "yielded": false,
+        "note": "GDG Sofia not listed; only GDG Plovdiv"
+      },
+      {
+        "name": "PyLadies locations",
+        "url": "https://pyladies.com/locations/",
+        "yielded": false,
+        "note": "no Sofia chapter"
+      },
+      {
+        "name": "Women in Tech Bulgaria sites",
+        "url": "https://womenintech.bg",
+        "yielded": false,
+        "note": "domain did not resolve"
+      },
+      {
+        "name": "Meetup gql2 women-in-tech groups near Sofia",
+        "url": "https://www.meetup.com/gql2",
+        "yielded": false,
+        "note": "no PyLadies, R-Ladies, Women Who Code or Women Techmakers group near Sofia"
+      },
+      {
+        "name": "Paysafe Talks and Progress women-in-IT panels",
+        "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/events/299792697/",
+        "yielded": false,
+        "note": "March 2024 panels at Paysafe and Progress; speakers are in mobile and frontend, not data"
+      }
+    ]
+  },
+  "past_meetups": [],
+  "community_channels": [
+    {
+      "name": "Bulgarian SQL & BI User Group \"Let's SQL Together!\"",
+      "url": "https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/",
+      "note": "largest Sofia data user group (896); runs Discovery Day Sofia"
+    },
+    {
+      "name": "Azure Analytics User Group Bulgaria",
+      "url": "https://www.meetup.com/azure-analytics-user-group-bulgaria/",
+      "note": "sister group, same organisers (273)"
+    },
+    {
+      "name": "Discovery Day Sofia",
+      "url": "https://www.discoverydaysofia.com",
+      "note": "two-day data community conference at Capital Fort each June"
+    },
+    {
+      "name": "PyData Sofia",
+      "url": "https://www.meetup.com/pydata-sofia/",
+      "note": "monthly with the Data Science Society (763)"
+    },
+    {
+      "name": "Data Science Society",
+      "url": "https://www.datasciencesociety.net/events/",
+      "note": "Sofia data science community; Slack and networking evenings"
+    },
+    {
+      "name": "Sofia Low-Key Data Meetup",
+      "url": "https://www.meetup.com/sofia-low-key-data-meetup/",
+      "note": "new monthly data social (44), from September 2026"
+    },
+    {
+      "name": "Sofia Microsoft Fabric Meetup",
+      "url": "https://www.meetup.com/sofia-fabric-meetup/",
+      "note": "runs Data Saturday Sofia and Global Azure Bulgaria"
+    },
+    {
+      "name": "Paysafe Talks",
+      "url": "https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/",
+      "note": "Paysafe-hosted meetup (2,065) at Capital Fort"
+    },
+    {
+      "name": "AWS Bulgaria User Group",
+      "url": "https://www.meetup.com/aws-bulgaria/",
+      "note": "largest Sofia cloud group (2,273); AWS Community Day each October"
+    },
+    {
+      "name": "Python Meetup at Sofia",
+      "url": "https://www.meetup.com/sofia-python-meetup-group/",
+      "note": "monthly at Barter Community Hub (1,005)"
+    },
+    {
+      "name": "Women in Agile Bulgaria",
+      "url": "https://www.meetup.com/women-in-agile-bulgaria/",
+      "note": "women-in-tech community (318), not data-focused"
+    },
+    {
+      "name": "dbt Slack",
+      "url": "https://www.getdbt.com/community/join-the-community",
+      "note": "no Sofia or Bulgaria channel checked; look for #local-bulgaria by hand"
+    }
+  ]
+}

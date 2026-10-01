@@ -7,11 +7,11 @@ This file holds what is specific to Seattle. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 120 |
+| Companies | 122 |
 | People | 97 |
 | Tier 1 leads | 2 |
 | First-time speakers (publish, no talk yet) | 2 |
@@ -20,8 +20,8 @@ This file holds what is specific to Seattle. The method, scoring rules, schema a
 | Based in the region | 65 |
 | Based elsewhere | 8 |
 | Location unknown | 24 |
-| With a LinkedIn profile | 25 |
-| Job ads mentioning dbt | 65 |
+| With a LinkedIn profile | 39 |
+| Job ads mentioning dbt | 81 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
 
@@ -61,6 +61,8 @@ People were taken only from each community's own events and are tagged `sourced_
 - **[GeekWire](https://www.geekwire.com/2025/seattle-startup-gable-lands-20m-to-coordinate-data-changes-between-teams/):** good for confirming a startup is in Seattle (SDF Labs, Gable).
 - **[LinkedIn Jobs](https://www.linkedin.com/jobs/search?keywords=dbt&location=Seattle%2C%20Washington%2C%20United%20States), logged out:** 250 ads listed and checked, and 48 mention the whole word "dbt".
 - **Applicant tracking systems:** `site:` searches on [Lever](https://jobs.lever.co), [Greenhouse](https://job-boards.greenhouse.io) and [Ashby](https://jobs.ashbyhq.com) added 17 more ads. Examples are Rover, AllTrails, Anthropic, Gusto, Plaid and Thumbtack.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt&tags=comment):** the Algolia API searched each monthly thread since January 2023 for dbt, one call per thread. Posts were kept when the header names the Seattle area and the text uses the whole word dbt. Gave Adora AI (on site in Seattle) as a new strong lead, plus Delfina and DigitalOcean.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 40 employers were checked, and ads located in the Seattle area that use the word dbt were kept. Seattle office ads at Plaid raised it to strong. Ads at Anthropic, Headway, Brex and Snowflake Bellevue added evidence to existing records.
 
 ### Locations
 
@@ -79,6 +81,10 @@ People were taken only from each community's own events and are tagged `sourced_
 - **Seattle company blogs:** publish almost nothing about dbt. [Zillow Tech Hub](https://medium.com/feed/zillow-tech-hub) has had no posts since February 2021. [Expedia Group Tech](https://medium.com/feed/expedia-group-tech) is active but has no dbt posts. Redfin and Remitly returned nothing.
 - **Grouped web searches** for Seattle consumer brands (Starbucks, REI, Alaska Airlines, Zillow and others) returned only generic dbt content.
 - **Eastside job ads:** no Bellevue, Redmond or Kirkland ads were confirmed, because the location filter was not applied.
+- **GitHub code search for `dbt_project.yml`:** found nothing in 16 Seattle orgs, among them zillow, redfin, Nordstrom, expedia, remitly, smartsheet, AllTrails and roverdotcom.
+- **Meetup venue scan:** Seattle Spark+AI and Seattle-DAML events since 2024 were held at Databricks Bellevue, Snowflake Bellevue, Blueprint Technologies, Microsoft and GitHub. None of the events mentions dbt.
+- **Job boards with no open JSON:** most large Seattle employers use Workday or their own sites. Zillow, Redfin, Nordstrom, Expedia, Remitly, Avalara, Highspot, Porch and Wizards of the Coast answered none of the three APIs. Smartsheet, OfferUp, Amperity, Textio and Tanium had no ad that uses the word dbt.
+- **HN posts skipped:** posts that name dbt only as an investor or as a product integration, and posts with no company name, were not counted as dbt users.
 
 ## 3. Companies looked at
 
@@ -87,17 +93,17 @@ People were taken only from each community's own events and are tagged `sourced_
 - **Tier 1 is small.** Only 2 people meet the strict rule, so most strong leads sit in tier 2.
 
 <!-- companies:start -->
-119 companies and communities were looked at. A company is local when it has people or roles in the region.
+121 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (24)</summary>
+<details><summary><b>Strong dbt use</b> (26)</summary>
 
-AllTrails, Anthropic, Axon, Cambia Health Solutions, dbt Labs (Seattle / ex-SDF Labs), DigitalOcean, DocuSign, Gusto, Haus, Headway, IT Labs, Microsoft, MotherDuck, Nordstrom, Okta (Auth0) (local presence not confirmed), Redfin, Rover.com, Russell Investments, Seattle dbt Meetup, Smartsheet, Snowflake, WEX, Weyerhaeuser, Wizards of the Coast
+Adora AI, AllTrails, Anthropic, Axon, Cambia Health Solutions, dbt Labs (Seattle / ex-SDF Labs), DigitalOcean, DocuSign, Gusto, Haus, Headway, IT Labs, Microsoft, MotherDuck, Nordstrom, Okta (Auth0) (local presence not confirmed), Plaid, Redfin, Rover.com, Russell Investments, Seattle dbt Meetup, Smartsheet, Snowflake, WEX, Weyerhaeuser, Wizards of the Coast
 
 </details>
 
 <details><summary><b>Some dbt signal</b> (32)</summary>
 
-Agoda, Amazon / AWS, Aritzia, Brex, Databricks, DoorDash, Expedia Group, Gable, Golden Analytics, Hasbro, Haus Analytics, Jobgether, Mercury, Metropolis, Otter, phData (local presence not confirmed), Plaid, QXO, RentSpree, Seattle Storm, Slalom, SmithRx, SoFi, Storable, Superhuman, Tableau / Salesforce, TechWish, Thumbtack, Valorem Reply, Weights & Biases, Whatnot, Zillow
+Agoda, Amazon / AWS, Aritzia, Brex, Databricks, Delfina, DoorDash, Expedia Group, Gable, Golden Analytics, Hasbro, Haus Analytics, Jobgether, Mercury, Metropolis, Otter, phData (local presence not confirmed), QXO, RentSpree, Seattle Storm, Slalom, SmithRx, SoFi, Storable, Superhuman, Tableau / Salesforce, TechWish, Thumbtack, Valorem Reply, Weights & Biases, Whatnot, Zillow
 
 </details>
 
@@ -247,3 +253,4 @@ Advancing Analytics (local presence not confirmed), Chicory AI (local presence n
 | 2026-10-01 | 2 | Location pass: 18 people placed from Meetup host and RSVP profiles, GitHub, speaker bios and recent in-person talks, 16 in the region and 2 outside. |
 | 2026-10-01 | 2 | LinkedIn pass: 5 people placed from LinkedIn search results, 1 in the region and 4 outside. 12 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass beyond WiDS Puget Sound, with fetches only: 18 people added from Seattle PyLadies, R-Ladies Seattle, WiMLDS Seattle and Power BI Women, and new talks added for Micheleen Harris and Weston Pace. 11 companies added. 9 women-focused communities checked. |
+| 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, GitHub code search and Meetup venues. 120 to 122 companies. Adora AI added with a strong dbt signal, and Delfina added. Plaid raised to strong. Job ads 65 to 81. |

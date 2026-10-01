@@ -7,11 +7,11 @@ This file holds what is specific to New York. The method, scoring rules, schema 
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 96 |
+| Companies | 118 |
 | People | 166 |
 | Tier 1 leads | 45 |
 | First-time speakers (publish, no talk yet) | 24 |
@@ -20,8 +20,8 @@ This file holds what is specific to New York. The method, scoring rules, schema 
 | Based in the region | 72 |
 | Based elsewhere | 17 |
 | Location unknown | 77 |
-| With a LinkedIn profile | 24 |
-| Job ads mentioning dbt | 7 |
+| With a LinkedIn profile | 38 |
+| Job ads mentioning dbt | 59 |
 | Past chapter meetups | 30 |
 <!-- at-a-glance:end -->
 
@@ -66,6 +66,9 @@ One research run covered New York. It used about 22 web searches before the sess
 - **[Built In NYC](https://www.builtinnyc.com/jobs/data-analytics/search/analytics-engineer):** ads from Clay, Datavations, Brainforge and Zocdoc quote dbt.
 - **Venture capital job boards:** gave ads at Zocdoc, GlossGenius and Peloton.
 - **Result:** 7 ads at 6 companies. All 7 show dbt in the ad text.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt&tags=comment):** the Algolia API searched each monthly thread since January 2023 for dbt, one call per thread. Posts were kept when the header names New York and the text uses the whole word dbt. Gave 9 companies, among them Atria Health, Garner Health, iCapital, EnergyHub (Brooklyn office) and Absinthe Labs.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 60 employers were checked, and ads located in New York that use the word dbt were kept. Gave CLEAR and Ro as new strong leads. It also found NYC data roles at Anthropic, Plaid, Gusto, Headway, Figma, Maven Clinic and Sigma Computing. It confirmed New York presence for Oscar Health, Peloton, Justworks and Rent the Runway.
+- **[dbt Labs case studies, full text](https://www.getdbt.com/llms-full-case-studies.txt):** one file, linked from the sitemap, holds every case study with its headquarters line. Its headquarters lines confirm J.Crew, Wellthy, Bilt, Ramp, Nasdaq and JetBlue in New York.
 
 ### Locations
 
@@ -88,6 +91,10 @@ One research run covered New York. It used about 22 web searches before the sess
 - **Web search:** the session limit stopped the run after about 22 searches.
 - **dbt Summit bios:** none of the 18 bios checked names a city.
 - **Brooklyn Data posts:** the author line has no profile link, so most of its consultants stay unplaced.
+- **GitHub code search for `dbt_project.yml`:** found nothing in about 35 New York orgs, among them spotify, squarespace, etsy, seatgeek, zocdoc, justworks, nytimes and ramp.
+- **Meetup venue scan:** the venues of New York Data and AI, NYC Apache Airflow, Databricks Community NYC, NYC MLOps and Real Time Analytics events since 2024 named Ramp, Zocdoc and Astronomer. All three were already in the file.
+- **Job boards with no open JSON:** chainalysis, noom, bilt, etsy, doubleverify, dataminr, warbyparker, glossgenius, cityblockhealth, nytimes and hebbia answered none of the three APIs.
+- **HN posts skipped:** posts that name dbt only as an investor or as a product integration, and posts with no company name, were not counted as dbt users.
 
 ## 3. Companies looked at
 
@@ -96,17 +103,23 @@ One research run covered New York. It used about 22 web searches before the sess
 - **Bilt** has the strongest company story, with two dbt Summit 2026 talks and a dbt case study.
 
 <!-- companies:start -->
-95 companies and communities were looked at. A company is local when it has people or roles in the region.
+117 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (68)</summary>
+<details><summary><b>Strong dbt use</b> (86)</summary>
 
-A&E Networks (local presence not confirmed), AlphaSense, Astronomer, Avenue One (local presence not confirmed), BARK (local presence not confirmed), Better.com (local presence not confirmed), Billie (local presence not confirmed), Bilt, BMG (local presence not confirmed), Bombas (local presence not confirmed), Bowery Farming (local presence not confirmed), Brainforge, Brooklyn Data, Casper (local presence not confirmed), Cityblock Health (local presence not confirmed), Clay, Dandy (local presence not confirmed), Data Culture (local presence not confirmed), Data for Progress (local presence not confirmed), DatabaseTycoon (local presence not confirmed), Datadog, Datavations, dbt Labs (local presence not confirmed), DonorsChoose (local presence not confirmed), DoubleVerify (local presence not confirmed), Elevate Labs (local presence not confirmed), Espresso AI, Fanatics Betting & Gaming (local presence not confirmed), Flywire (local presence not confirmed), GameChanger (local presence not confirmed), GlossGenius, Greenhouse (local presence not confirmed), Hex, J.Crew (local presence not confirmed), JetBlue, Justworks (local presence not confirmed), Kaplan North America (local presence not confirmed), Lyft Bikes & Scooters (local presence not confirmed), Materialize (local presence not confirmed), Mode Analytics (local presence not confirmed), Nasdaq, OM1 (local presence not confirmed), P.volve (local presence not confirmed), Peloton (local presence not confirmed), PICO Portal (local presence not confirmed), Planned Parenthood Federation of America (local presence not confirmed), pymetrics (local presence not confirmed), Qventus (local presence not confirmed), Ramp, Rec Room (local presence not confirmed), Rent the Runway (local presence not confirmed), Snowflake, Sorare (local presence not confirmed), Spotify, Squarespace (local presence not confirmed), Steady (local presence not confirmed), TeePublic (local presence not confirmed), Textql (local presence not confirmed), The Atlantic (local presence not confirmed), The Trevor Project (local presence not confirmed), Thinx Inc. (local presence not confirmed), Velir x Brooklyn Data (local presence not confirmed), Verisk (local presence not confirmed), Warby Parker (local presence not confirmed), Wellthy (local presence not confirmed), Westchester Medical Center, WeWork (local presence not confirmed), Zocdoc
+A&E Networks (local presence not confirmed), Absinthe Labs, AlphaSense, Anthropic, Astronomer, Atria Health, Avenue One (local presence not confirmed), BARK (local presence not confirmed), Better.com (local presence not confirmed), Billie (local presence not confirmed), Bilt, BMG (local presence not confirmed), Bombas (local presence not confirmed), Bowery Farming (local presence not confirmed), Brainforge, Brooklyn Data, Casper (local presence not confirmed), Cityblock Health (local presence not confirmed), Clay, CLEAR, Dandy (local presence not confirmed), Data Culture (local presence not confirmed), Data for Progress (local presence not confirmed), DatabaseTycoon (local presence not confirmed), Datadog, Datavations, dbt Labs (local presence not confirmed), DonorsChoose (local presence not confirmed), DoubleVerify (local presence not confirmed), Elevate Labs (local presence not confirmed), EnergyHub, Espresso AI, Fanatics Betting & Gaming (local presence not confirmed), Figma, Flywire (local presence not confirmed), Folio, GameChanger (local presence not confirmed), Garner Health, GlossGenius, Greenhouse (local presence not confirmed), Gusto, Headway, Hex, iCapital, J.Crew, JetBlue, Justworks, Kaplan North America (local presence not confirmed), Lyft Bikes & Scooters (local presence not confirmed), Materialize, Maven Clinic, Mode Analytics (local presence not confirmed), Nasdaq, OM1 (local presence not confirmed), Oscar Health, P.volve (local presence not confirmed), Peloton, PICO Portal (local presence not confirmed), Plaid, Planned Parenthood Federation of America (local presence not confirmed), Pomelo Care, pymetrics (local presence not confirmed), Qventus (local presence not confirmed), Ramp, Rec Room (local presence not confirmed), Rent the Runway, Ro, Share Local Media (SLM), Sigma Computing, Snowflake, Sorare (local presence not confirmed), Spotify, Squarespace (local presence not confirmed), Steady (local presence not confirmed), TeePublic (local presence not confirmed), Textql (local presence not confirmed), The Atlantic (local presence not confirmed), The Trevor Project (local presence not confirmed), Thinx Inc. (local presence not confirmed), Velir x Brooklyn Data (local presence not confirmed), Verisk (local presence not confirmed), Warby Parker (local presence not confirmed), Wellthy, Westchester Medical Center, WeWork (local presence not confirmed), Zocdoc
 
 </details>
 
-<details><summary><b>Some dbt signal</b> (9)</summary>
+<details><summary><b>Some dbt signal</b> (12)</summary>
 
-Bluecore (local presence not confirmed), Braze, Evidence (local presence not confirmed), Gen Digital (MoneyLion) (local presence not confirmed), MotherDuck (local presence not confirmed), NY Times, Oscar Health (local presence not confirmed), SeatGeek (local presence not confirmed), The Information Lab
+Bluecore (local presence not confirmed), Braze, Delfina, Evidence (local presence not confirmed), Faire, Gen Digital (MoneyLion) (local presence not confirmed), Mercury, MotherDuck (local presence not confirmed), NY Times, Robinhood, SeatGeek (local presence not confirmed), The Information Lab
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Scale AI
 
 </details>
 
@@ -229,3 +242,4 @@ Amazon (local presence not confirmed), Fitch Ratings (local presence not confirm
 | 2026-10-01 | 1 | Location pass from public pages: 26 people placed, 20 in the region and 6 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 12 people searched, 6 placed, 2 in the region and 4 elsewhere. 86 people are still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass with fetches only: 16 people added from GDG NYC and Women Techmakers NYC and R-Ladies New York, 8 speakers and 8 connectors. 7 companies added. 20 women-focused communities checked. |
+| 2026-10-01 | 3 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code search and Meetup venues. 96 to 118 companies. 22 added, 17 with a strong dbt signal. Oscar Health raised to strong. New York presence confirmed for Peloton, Oscar Health, J.Crew, Wellthy, Rent the Runway, Materialize and Justworks. Job ads 7 to 59. |

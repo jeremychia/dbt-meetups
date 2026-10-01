@@ -7,11 +7,11 @@ This file holds what is specific to Montreal. The method, scoring rules, schema 
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 58 |
+| Companies | 61 |
 | People | 73 |
 | Tier 1 leads | 12 |
 | First-time speakers (publish, no talk yet) | 11 |
@@ -20,8 +20,8 @@ This file holds what is specific to Montreal. The method, scoring rules, schema 
 | Based in the region | 54 |
 | Based elsewhere | 1 |
 | Location unknown | 18 |
-| With a LinkedIn profile | 6 |
-| Job ads mentioning dbt | 40 |
+| With a LinkedIn profile | 8 |
+| Job ads mentioning dbt | 43 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->
 
@@ -62,6 +62,8 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 ### Job ads and locations
 
 - **LinkedIn Jobs (first build):** a logged-out scan for "dbt" in the Montreal area. Up to 150 ads were checked for the whole word "dbt". 40 ads at 18 companies mention it. Many ads are in French.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 35 Montreal employers were tried. An AlayaCare Staff Data Developer ad in Montreal requires strong dbt skills, which raised it to strong. Cohere lists dbt as a plus for a role open in Montreal. Super.com ads say the data team are long-time dbt users, but they name Canada, not Montreal.
+- **Meetup venues:** Sid Lee hosts every [Snowflake Montreal User Group](https://www.meetup.com/snowflake-montreal-user-group/) meetup. Zinnia hosted [MTL Data](https://www.meetup.com/mtldata/) in April 2024.
 - **Location pass (page fetches):** no one qualified under the [central location rules](../research/README.md#6-location-rules). Most chapter talks were from 2021 to 2023, too old for in-person evidence. The bios on event pages state no city. Audrey Leduc spoke in person in October 2024, but KOHO's Montreal office could not be confirmed.
 - **LinkedIn pass (search results only):** 12 people searched and 3 placed. [Hassan Al-Rabea](https://www.linkedin.com/in/hassan-al-rabea/) and [Audrey Leduc](https://www.linkedin.com/in/audreyleduc/) are in Montreal. [Kristi Gourlay](https://www.linkedin.com/in/kristi-gourlay/) is in Toronto. Results that gave only "Canada" or "United States", or did not tie the profile to the recorded employer, were skipped.
 
@@ -84,6 +86,10 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **French searches:** Meetup's group search for "femmes", "femmes en tech" and "elles" returns social groups only.
 - **Data + Women:** no Montreal Tableau user group or Data + Women page was found. Both guessed pages return 404.
 - **Web search:** the session limit stopped the extension after about 17 searches, and most results were job ads.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt%20montreal&tags=comment):** no post since 2023 places a dbt role in Montreal or Quebec.
+- **Company job boards with no Montreal dbt ads:** Workleap, Hopper, Lightspeed, AppDirect, Poka, Behavox, Zinnia, Osedea, Mirego, Sonder, Gopuff and Wealthsimple. SSENSE, Coveo, Dialogue, Potloc, Flinks, Nesto, Unito, Breathe Life, Plusgrade, Busbud and Nuvei have no open Greenhouse, Lever or Ashby board.
+- **GitHub code and repository search:** no public dbt project at Hopper, Lightspeed, Workleap, SSENSE, Coveo, Potloc, Dialogue, AlayaCare, Mila, Unito or Infostrux.
+- **[dbt Labs case studies](https://www.getdbt.com/sitemap-0.xml):** none for a Montreal company.
 
 ## 3. Companies looked at
 
@@ -93,29 +99,29 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Toronto file.
 
 <!-- companies:start -->
-57 companies and communities were looked at. A company is local when it has people or roles in the region.
+60 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (6)</summary>
+<details><summary><b>Strong dbt use</b> (8)</summary>
 
-Breathe Life (local presence not confirmed), KOHO Financial (local presence not confirmed), Maxa, Montreal Analytics (a Datatonic company), Potloc, Unito (local presence not confirmed)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (21)</summary>
-
-Aduna Global, Agoda, AlayaCare, AppDirect, Astek, Autodesk, Behaviour Interactive, Data Sciences, Dialogue, Flinks, Infostrux (local presence not confirmed), Kake, KPMG Canada, Lightspeed Commerce, MaintainX, SELECT (local presence not confirmed), Slalom, Solution BI Canada, Toboggan Labs, TS Imagine, ValPay
+AlayaCare, Breathe Life (local presence not confirmed), KOHO Financial (local presence not confirmed), Maxa, Montreal Analytics (a Datatonic company), Potloc, Super.com (local presence not confirmed), Unito (local presence not confirmed)
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+<details><summary><b>Some dbt signal</b> (20)</summary>
 
-Snowflake Montreal User Group
+Aduna Global, Agoda, AppDirect, Astek, Autodesk, Behaviour Interactive, Data Sciences, Dialogue, Flinks, Infostrux (local presence not confirmed), Kake, KPMG Canada, Lightspeed Commerce, MaintainX, SELECT (local presence not confirmed), Slalom, Solution BI Canada, Toboggan Labs, TS Imagine, ValPay
 
 </details>
 
-<details><summary><b>Not verified</b> (25)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (2)</summary>
 
-agileDSS, Air Canada, Air Transat, Altitude Sports, Browns Shoes, CDPQ, Datafold (local presence not confirmed), Gopuff (local presence not confirmed), GRICS, Harnois Énergies (local presence not confirmed), Maxa or Lightspeed Commerce (unclear) (local presence not confirmed), Montreal Artificial Intelligence and Data Engineering (meetup), Montreal Women in Machine Learning and Data Science, Poka, Privacy Safe (local presence not confirmed), PyLadies Montréal, R-Ladies Montréal, Snowflake (local presence not confirmed), SSENSE, Super.com (local presence not confirmed), Veronica Beard (local presence not confirmed), Vidéotron, Warner Bros. Games Montréal, WiDS Montreal, Workleap
+Cohere, Snowflake Montreal User Group
+
+</details>
+
+<details><summary><b>Not verified</b> (26)</summary>
+
+agileDSS, Air Canada, Air Transat, Altitude Sports, Browns Shoes, CDPQ, Datafold (local presence not confirmed), Gopuff (local presence not confirmed), GRICS, Harnois Énergies (local presence not confirmed), Maxa or Lightspeed Commerce (unclear) (local presence not confirmed), Montreal Artificial Intelligence and Data Engineering (meetup), Montreal Women in Machine Learning and Data Science, Poka, Privacy Safe (local presence not confirmed), PyLadies Montréal, R-Ladies Montréal, Sid Lee, Snowflake (local presence not confirmed), SSENSE, Veronica Beard (local presence not confirmed), Vidéotron, Warner Bros. Games Montréal, WiDS Montreal, Workleap, Zinnia
 
 </details>
 
@@ -242,3 +248,4 @@ GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal, Vooban (local pres
 | 2026-10-01 | 2 | Location pass from public pages: no one qualified. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 12 people searched, 3 placed, 2 in the region and 1 elsewhere. 17 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass: Women Techmakers Montreal IWD pages, R-Ladies Montreal and Women In The Loop. 6 new people, all organisers recorded as connectors. |
+| 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code and repository search, and Meetup venues. 58 to 61 companies. Cohere, Sid Lee and Zinnia added. AlayaCare raised from medium to strong, and Super.com from weak to strong. |

@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Tokyo companies using dbt, and people who could speak at or attend the Tokyo dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 3,
     "region": "Tokyo (Tokyo dbt Meetup)",
     "method": [
@@ -19,7 +19,11 @@
       "Lesson: connpass event and search pages now answer a plain curl with a browser user agent; earlier runs got HTTP 403.",
       "Lesson: Snowflake女子会 is the most useful women-in-data community in Tokyo. Its connpass collaboration pages list all 11 organisers with employers, and its note.com feed (note.com/snowvillage_wmn/rss) has event reports with speakers. Its own events are on TECH PLAY, which returns HTTP 403.",
       "Lesson: Meetup groupSearch near Tokyo returns mostly social groups for 'women'; only Women in AI Japan and Tokyo WiMLDS (one event, 2019) are women-in-data groups there. Japanese communities run on connpass instead.",
-      "Lesson: wids-tokyo.jp is now an unrelated site; WiDS Tokyo events are only on widsworldwide.org and connpass."
+      "Lesson: wids-tokyo.jp is now an unrelated site; WiDS Tokyo events are only on widsworldwide.org and connpass.",
+      "v3 (2026-10-01): company pass with fetches only (about 70 fetches): the green-japan.com dbt keyword search (8 pages, 160 ads) and one ad page per company, the Zenn dbt topic API (384 posts) and 24 post bodies, the dbt Labs sitemap (case studies and Japanese event pages), HN Who is hiring and findy-code.io.",
+      "Lesson: green-japan.com answers a fetch. The search page and each ad page embed __NEXT_DATA__ JSON with the work areas and separate work, requirement and welcome fields.",
+      "Lesson: findy-code.io ignores the keyword when fetched, so it returns every company.",
+      "v3 (2026-10-01): 1 LinkedIn profiles taken from pages already tied to each person (event, speaker and author pages, GitHub social accounts) with research/harvest_linkedin.py, without searching. Page links are medium confidence, GitHub links high."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -63,16 +67,17 @@
       "Only public professional information is recorded; no contact details. Pronouns only when self-stated (none found).",
       "LinkedIn: 4 of 126 people have a profile url, taken word for word from search results. 122 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
       "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred.",
-      "Most Snowflake女子会 organisers publish under a handle; names are recorded as written, with the handle."
+      "Most Snowflake女子会 organisers publish under a handle; names are recorded as written, with the handle.",
+      "Job ads were read on 2026-10-01. Ads close, so check the link before quoting one."
     ],
     "counts": {
-      "companies": 87,
+      "companies": 135,
       "people": 146,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
+      "job_postings": 47,
+      "companies_with_job_postings": 47,
       "speaker_evidence_items": 138,
       "unique_content_items": 115,
-      "people_with_linkedin": 4,
+      "people_with_linkedin": 5,
       "people_who_spoke_at_this_chapter": 40,
       "internal_vinted": 0,
       "level": {
@@ -95,7 +100,7 @@
         "organiser": 2,
         "3": 2
       },
-      "watchlist_companies": 30,
+      "watchlist_companies": 35,
       "past_meetups": 19,
       "lead_type": {
         "proven_speaker": 55,
@@ -2448,16 +2453,32 @@
       "excluded_from_outreach": false,
       "cities": [
         "Okinawa",
-        "Tokyo"
+        "Tokyo",
+        "Osaka"
       ],
       "local_presence": "not_confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Snowflake",
-        "Lightdash"
+        "Lightdash",
+        "Terraform"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "＼全国リモート可／《データエンジニア（ミドル）募集》｜沖縄移住も歓迎｜データ基盤構築プロジェクトを牽引！",
+          "url": "https://www.green-japan.com/company/10623/job/283741",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "長していこうとしています。 ミドルクラスでは、顧客の業務を理解した上でのクライアントワークや小規模チームのリードを担います。具体的には Snowflake + dbt + Terraform を中心としたモダンデータスタックでのデータ基盤構築・マイグレーション、生成AI連携、Iceberg / Unity Catalog な",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "blog_scanned",
@@ -2780,7 +2801,7 @@
           "notes": null
         }
       ],
-      "notes": "Okinawa-based consultancy with remote staff; CTO Yuta Hishinuma is a past chapter speaker. | employer of a past Tokyo dbt Meetup speaker | merged duplicate record 'Chura Data Inc.'"
+      "notes": "Okinawa-based consultancy with remote staff; CTO Yuta Hishinuma is a past chapter speaker. | employer of a past Tokyo dbt Meetup speaker | merged duplicate record 'Chura Data Inc.' | the Green ad is open to remote work from any prefecture"
     },
     {
       "id": "kurashiru-dely",
@@ -4194,9 +4215,11 @@
           "city": "Tokyo",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hiroki-ono-a95395202/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -4231,6 +4254,10 @@
             {
               "url": "https://zenn.dev/gatechnologies/articles/76b3f400c26d1a",
               "note": "blog: データ基盤にDagsterを導入した話"
+            },
+            {
+              "url": "https://www.linkedin.com/in/hiroki-ono-a95395202/",
+              "note": "linkedin profile linked from https://zenn.dev/gatechnologies/articles/76b3f400c26d1a"
             }
           ],
           "confidence": "Medium",
@@ -5033,11 +5060,26 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "BigQuery"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "医療データ基盤をゼロから育て、予防医療×AI活用の未来を技術で支えるデータエンジニア",
+          "url": "https://www.green-japan.com/company/1324/job/328170",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "/ Python / Shell Script ・技術スタック：Google Cloud全般（BigQuery, Cloud Runなど）／データパイプライン（dbt, Cloud Workflows）／BIツール（Data Studio〈旧Looker Studio〉）／構成管理（Terraform） Infrastruc",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "blog_scanned",
@@ -5401,9 +5443,10 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "Lightdash"
       ],
       "job_postings": [],
       "other_evidence": [
@@ -5411,6 +5454,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/pksha",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/pksha/articles/5a1dc6470019d6",
+          "note": "Zenn post 'AI ネイティブなデータ分析基盤を作った話' (2026-09-17): dbt schema.yml is the single source for a Lightdash semantic layer"
         }
       ],
       "people": [
@@ -5481,11 +5529,26 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "BigQuery"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "【データサイエンティスト】 ラウンドCで総額23億円の資金調達！国内DL数最大級を誇るウェルネス/医療系口コミ予約プラットフォーム「トリビュー」を展開◎リモート＆フレックス可",
+          "url": "https://www.green-japan.com/company/6597/job/316289",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "進していただきます。 データ基盤の構築・整備 ・各種アプリ・サーバー・外部ツール（広告、CRM、BIなど）からのデータ収集・ETL設計 ・BigQuery / dbt / Cloud Functions 等を活用したデータパイプラインの維持、アップデート ・データ品質管理・スキーマ設計・メタデータ整備（再現性・信頼性の確保）",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "blog_scanned",
@@ -5856,9 +5919,10 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "Snowflake"
       ],
       "job_postings": [],
       "other_evidence": [
@@ -5866,6 +5930,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/coten",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/coten/articles/be8a8cb22947f0",
+          "note": "Zenn post 'COTENのデータ分析基盤とその運用を支える技術' (2025-10-31): ELT runs on dbt and AWS Step Functions into Snowflake"
         }
       ],
       "people": [
@@ -5936,10 +6005,11 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
-        "Snowflake"
+        "Snowflake",
+        "AWS Glue"
       ],
       "job_postings": [],
       "other_evidence": [
@@ -5947,6 +6017,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/loglass",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/loglass/articles/3a3ccbcc3cf0f2",
+          "note": "Zenn post 'Snowflakeを利用したデータアナリティクス基盤始めました' (2026-01-08): stack is S3, Iceberg, dbt Core, dbt-glue and dbt-snowflake"
         }
       ],
       "people": [
@@ -6017,7 +6092,7 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "kintone"
@@ -6028,6 +6103,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/cybozu_data",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/cybozu_data/articles/403cfed7840f31",
+          "note": "Zenn post 'kintoneをデータソースとしたDWHへのデータ連携で注意すべきポイントとサイボウズでの対策の紹介' (2025-10-06): dbt SQL for kintone source tables in the DWH"
         }
       ],
       "people": [
@@ -6666,7 +6746,7 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "dbt Wizard"
@@ -6677,6 +6757,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/usen_ict",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/usen_ict/articles/12bd61ad5ab606",
+          "note": "Zenn post 'Claude Code をハブにして、dbt の仕事だけ dbt Wizard に任せてみた' (2026-06-19): hands dbt work to dbt Wizard from Claude Code"
         }
       ],
       "people": [
@@ -6828,7 +6913,7 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Vertex AI"
@@ -6839,6 +6924,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/antway",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/antway/articles/dlin-cli-for-agents",
+          "note": "Zenn post 'dbtリネージツール「dlin」を作ってClaude Codeに使わせてみた' (2026-04-14): built a dbt lineage tool, dlin"
         }
       ],
       "people": [
@@ -6909,7 +6999,7 @@
         "Tokyo"
       ],
       "local_presence": "not_confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Snowflake",
@@ -6921,6 +7011,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/youthfuldays",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/youthfuldays/articles/263ea223f44bdf",
+          "note": "Zenn post 'dbtのメタデータをSnowflakeのCOMMENTに同期する方法' (2026-08-19): syncs dbt metadata into Snowflake comments"
         }
       ],
       "people": [
@@ -6991,7 +7086,7 @@
         "Tokyo"
       ],
       "local_presence": "not_confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt"
       ],
@@ -7001,6 +7096,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/qn_tech",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/qn_tech/articles/cacc66524a41fb",
+          "note": "Zenn post 'レガシーDBを業務ドメインへ移行する——dbtで作る再実行可能な変換とテスト' (2026-08-27): migrates a legacy database with re-runnable dbt transformations and tests"
         }
       ],
       "people": [
@@ -7152,10 +7252,11 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "BigQuery",
-        "ADK"
+        "ADK",
+        "dbt"
       ],
       "job_postings": [],
       "other_evidence": [
@@ -7163,6 +7264,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/readyfor_blog",
           "note": "blog scanned"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/readyfor_blog/articles/3f6909aff58261",
+          "note": "Zenn post '社内データ基盤 × Agent Engine × ADK × Next.jsで、分析エージェントを作っている話（技術編）' (2025-12-04): existing dbt pipeline builds BigQuery tables for an analysis agent"
         }
       ],
       "people": [
@@ -7456,7 +7562,7 @@
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "medium",
+      "dbt_signal": "strong",
       "stack_signals": [
         "dbt",
         "Microsoft Fabric",
@@ -7468,6 +7574,11 @@
           "type": "blog_scanned",
           "url": "https://zenn.dev/p/headwaters",
           "note": "Headwaters on Zenn"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/headwaters/articles/e13a7cd33f21ce",
+          "note": "Zenn post 'Microsoft Fabric に dbt を導入して得られる価値' (2026-04-29): introduces dbt Core on Microsoft Fabric"
         }
       ],
       "people": [
@@ -8891,15 +9002,33 @@
       "id": "estie-inc",
       "name": "estie Inc.",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Tokyo"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
-      "job_postings": [],
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "データ基盤エンジニアを募集！日本一のオフィス不動産データプラットフォームを共に構築しませんか？",
+          "url": "https://www.green-japan.com/company/9991/job/314942",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "を可視化するBIダッシュボードの構築、運用に携わって頂きます。 技術環境 [データ管理基盤] DWH: Snowflake ETL/ELT: Fivetran、dbt IaC: Terraform BI: Tableau、Streamlit in Snowflake [開発ツール] コード管理: GitHub CI/CD:",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -10357,15 +10486,31 @@
       "id": "unerry",
       "name": "unerry",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Tokyo"
       ],
       "local_presence": "confirmed",
-      "dbt_signal": "none",
-      "stack_signals": [],
-      "job_postings": [],
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "【アナリティクスエンジニア】日本最大級の位置情報系IoTプラットフォームを活用し、ビッグデータ活用を推進！",
+          "url": "https://www.green-japan.com/company/6004/job/237671",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "握し、データマートやBIツールの構築・整備、パイプラインの構築によるデータの効率性、信頼性、スケーラビリティの向上を期待しています。 【具体的な業務内容】 ◼︎dbtを用いたデータマートやデータウェアハウスの設計・構築・運用 ■ 各事業で必要なデータ信頼性の要件定義や監視の仕組み導入 ■ データアナリストと協力してのデータ利",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -10516,6 +10661,1617 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "tech-lab",
+      "name": "Tech Lab (株式会社Tech Lab)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "【《勤務地：関東》データエンジニア（dbt/BigQuery）】dbt×BigQueryでモダンデータ基盤を構築／驚異の離職率1%【女性最年少IPO準備中の急成長AIテックベンチャー】",
+          "url": "https://www.green-japan.com/company/11060/job/320163",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "【《勤務地：関東》データエンジニア（dbt/BigQuery）】dbt×BigQueryでモダンデータ基盤を構築／驚異の離職率1%【女性最年少IPO準備中の急成長AIテックベンチャー】 Tech Lab（テクラボ）は、2023年創",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "flaretech",
+      "name": "FLARETECH",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo",
+        "Osaka"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "BigQuery",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "データエンジニア｜BigQuery・Snowflakeで挑むデータ基盤構築｜全国募集",
+          "url": "https://www.green-japan.com/company/10550/job/323346",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "クトがあります。 ・データウェアハウス／データレイクの設計・構築（BigQuery, Snowflake 等） ・ETL／ELTパイプラインの設計・実装・運用（dbt, Airflow 等） ・大規模データの分散処理・バッチ処理基盤の開発（Spark 等） ・データ品質管理・パフォーマンスチューニング・監視／運用 ・分析・機",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "tsr",
+      "name": "TSR (TSR株式会社)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "※期間限定※【データエンジニアリング】Databricks×Snowflake！大規模データ分析システム移行",
+          "url": "https://www.green-japan.com/company/11200/job/321539",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ゴールドの各層にデータを構造化する「メダリオンアーキテクチャ」の設計と、Databricksを用いたデータレイクハウス環境の構築。 ●ELTパイプラインの開発：dbt (data build tool) を活用した、Snowflake上での効率的なデータ変換処理（ELT）の設計、SQLを用いたデータモデリングとテストコードの",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "systems integrator; the ad is a Snowflake and Databricks migration project built with dbt"
+    },
+    {
+      "id": "triarrow",
+      "name": "Triarrow (トライアロー)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア】BigQuery・SQLによるデータ分析基盤開発｜dbt未経験可｜リモート中心",
+          "url": "https://www.green-japan.com/company/6186/job/324395",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "【データエンジニア】BigQuery・SQLによるデータ分析基盤開発｜dbt未経験可｜リモート中心 サービス業向けのデータ分析基盤プロジェクトへ参画していただきます。 具体的には、BigQueryを使用してデータ抽出・集計、モデリングを",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "the ad title says no dbt experience is needed for a BigQuery project that uses dbt"
+    },
+    {
+      "id": "timetree",
+      "name": "TimeTree",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "【ユーザー数7,500万人超】カレンダーシェアアプリ「TimeTree」をグローバルサービスへ！データエンジニアを募集しています！",
+          "url": "https://www.green-japan.com/company/7330/job/244946",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "スのためのアクセス管理 - IaC（Terraform）を用いた環境構築 ■データモデリング・民主化の推進 - セマンティックレイヤーの構築 - Looker・dbtを活用した全社横断で一貫したKPI・メトリクス定義の実現 - データ活用しやすいマート設計 - AI Agentを活用した分析環境の整備 - BIツールの運用・",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "cograph",
+      "name": "Cograph (コグラフ株式会社)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Looker",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "【データアナリスト】経験者大募集！python,SQL,Tableau等でデータ分析をするポジション｜平均残業月10時間／年休125日",
+          "url": "https://www.green-japan.com/company/2469/job/281562",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "・クライアントから分析したい内容や目的をヒアリング ・アプリユーザーの行動や課金履歴などのデータを抽出・分析 ・使用技術：SQL、GCP、Looker、Git、dbt、KARTE ■Tableauダッシュボード開発 ・営業向けダッシュボードをTableauで開発・改修 ・ダッシュボード開発に必要なデータソースの作成 ・使用技",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "analytics services firm; the ad lists dbt among the tools used on client work"
+    },
+    {
+      "id": "freee",
+      "name": "freee",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "LookML"
+      ],
+      "job_postings": [
+        {
+          "title": "SaaSの命運を握るKPIを設計。事業成長を加速させるデータモデルを構築！",
+          "url": "https://www.green-japan.com/company/2974/job/327153",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "やスクラム開発を行った経験 ソフトスキル ・DataLake, DWHのデータから、ビジネスロジックを取り入れてKPIや指標策定を推進した経験 ・技術スタック(dbt, Semantic Layer, LookML etc)への好奇心 ・未知の分野でも受け入れ、培ったスキルを周囲に還元できる方 ・エンジニア部署以外の人たちと",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "the ad asks for curiosity about the stack, which it names as dbt, a semantic layer and LookML"
+    },
+    {
+      "id": "almondo",
+      "name": "Almondo",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Redshift",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "データ基盤エンジニア/DWH・データマート設計からビジネス活用推進・データ定義統一まで！事業成長を加速させるデータ基盤の構築者を募集！",
+          "url": "https://www.green-japan.com/company/10622/job/325890",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "運用 ・AWS (Redshift/S3等) や GCP (BigQuery/Dataform等) を活用したDWH・データマート（ DM）の設計および構築 ・dbt等を活用したデータモデリング、データパイプライン（ETL/ELT）の実装・運用および データ品質・リネージの管理 ・クエリパフォーマンスチューニング（sort",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "sharing-innovations",
+      "name": "Sharing Innovations",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Fivetran",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "【SE・インフラエンジニア経験者歓迎】データ基盤構築エンジニア（DWH・BI・ETL領域）",
+          "url": "https://www.green-japan.com/company/3343/job/319898",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "基盤の設計・構築 ・クラウドDWH（Snowflake、Databricks等）の設計・構築・運用 ・ETL/ELTパイプラインの設計・開発（Fivetran、dbt、Talend等） ・データモデリング、データ品質管理の設計・実装 ■BI環境の構築・導入支援 ・BIツール（Tableau、Thoughtspot等）の導入・",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "kiyono",
+      "name": "KIYONO",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア】住友商事・DNPのパートナー企業で、データ基盤構築の要件定義・基本設計等の上流工程をお任せ！PM候補週2日のリモート/微経験可/フレックスタイム導入",
+          "url": "https://www.green-japan.com/company/6878/job/260898",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "e Cloud、AWS、Azureなどのパブリッククラウドの利用経験 ・BI（Looker Studio、Tableau、Power BI）、Fivetran、dbtなどのデータ分析プロダクトの利用経験 ・データ分析ソリューションのコンサルティング経験 【開発環境】 言語：Python,SQL インフラ：GCP(メイン),A",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "jinjer",
+      "name": "jinjer",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "trocco",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "【リモートOK/フレックス】HR領域を変革する意思決定者！クラウド型人事システムのプロダクト戦略を担うBizOpsマネージャー（システム企画/DX推進）募集！",
+          "url": "https://www.green-japan.com/company/8929/job/310306",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "サブ ・UiPath / AUTORO / Power Automate ・GAS ・AskOne ・Zoom ・BringOut ・trocco（ETL） ・dbt ・GCP 【必須（MUST）】 ・ミッション、バリューへの共感 ・社会人経験5年以上 ・事業会社でのオペレーション改善、または業務システム構築プロジェクトのリ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "carta-holdings",
+      "name": "CARTA HOLDINGS",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "【インフラエンジニア】急成長プロダクトを支えるPlatform・Security組織立ち上げ｜AWS構築からセキュリティ戦略まで主導",
+          "url": "https://www.green-japan.com/company/653/job/327791",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "策の整備 ・生成AI利用ガイドラインやサプライチェーン攻撃への対策設計 ・パフォーマンス改善、コスト最適化、CI/CDパイプラインの整備 ・Snowflake、dbt Cloudを用いたデータ基盤の運用支援 ▼将来的に取り組みたいこと ●社内AIエージェント基盤のインフラ・セキュリティ設計 ・今後、社内業務を変革するAIエー",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "monotaro",
+      "name": "MonotaRO",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo",
+        "Osaka"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "BigQuery",
+        "Terraform"
+      ],
+      "job_postings": [
+        {
+          "title": "ユーザー1000万・アナリティクスエンジニアとして、データの可能性を追求して事業貢献しませんか？",
+          "url": "https://www.green-japan.com/company/9224/job/270385",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ットフォームの整備・運用と、他チームがアナリティクスエンジニアリングのプラクティスを自律的に実践できるような支援の2種類があります。 【プラットフォーム運用】 dbt Cloudを用いたデータモデリングと、分析コードベースへのバージョン管理・CI/CD・テスト、およびTerraform等によるデータ基盤のIaC管理 BigQ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Tokyo and Osaka; the analytics engineer runs the dbt Cloud platform"
+    },
+    {
+      "id": "dss",
+      "name": "DSS (株式会社ディーエスエス)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア】東証グロース上場Gの豊富なデータ基盤を構築｜モダン技術で「勝てる」キャリアを",
+          "url": "https://www.green-japan.com/company/7060/job/312939",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "データ連携基盤の開発 【この仕事のやりがい・キャリア価値】 今後さらに需要が高まる「データエンジニアリング」のスキルを、モダンな技術スタック（Airflow, dbt等）を通じて習得できます。 「自分が作った基盤」が、製造業の在庫最適化や小売の需要予測といった具体的な利益改善を実感できます。 グループの安定基盤とベンチャーの",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "youtrust",
+      "name": "YOUTRUST",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "全社のデータ意思決定を支えるYOUTRUSTのデータアナリスト募集！",
+          "url": "https://www.green-japan.com/company/8127/job/150347",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "みの拡張・運用 - 各チームへのデータ活用支援 ＜必須スキル＞ ・データアナリストとしての経験 ・BigQueryを用いた分析業務のご経験 ＜歓迎スキル＞ - dbt、データマート・DWH構築の経験 - マーケティング部門でのアナリスト経験 - GCP/AWSなどクラウド環境でのデータ基盤経験 - アプリケーションログ設計の",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "oneroots",
+      "name": "oneroots",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Dataform",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "【フルリモート／フレックス】AIスタートアップでスペシャリストとして活躍いただけるアナリティクスエンジニア募集",
+          "url": "https://www.green-japan.com/company/8803/job/289698",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ォーマンス、信頼性向上に対する高い意識と改善実績 【歓迎（WANT）】 ・コンピューターサイエンスもしくは隣接領域の大学院の修了資格 ・パイプライン構築ツール（dbt, Dataform, Apache Airflow等）の利用経験 ・分析クエリエンジン（Apache Spark, BigQuery, Athena）の利用経",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "squad",
+      "name": "Squad (株式会社Squad)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "〜Ruby / TypeScript / AI活用で、Web広告のインフラへ成長するプロダクトを牽引〜",
+          "url": "https://www.green-japan.com/company/6929/job/313435",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "otによるコンテナ運用フローの整備 ・GitHub Actionsを活用したCI/CDパイプラインの構築による、デリバリー速度の最大化 ・BigQuery / dbtを用いた分析基盤との連携機能の実装 ・AIエージェントや各種AIツールを活用した、要件整理・設計・実装・レビュー・検証プロセスの効率化 ・AIを組み込んだ開発ワ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "plex",
+      "name": "PLEX (株式会社プレックス)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airbyte",
+        "Hightouch"
+      ],
+      "job_postings": [
+        {
+          "title": "企業マッチングプラットフォームの開発をするフルスタックエンジニアを募集＜リモートOK＞",
+          "url": "https://www.green-japan.com/company/7101/job/278576",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "マッチングプラットフォームの開発 - マッチングの精度をあげる機械学習を用いたレコメンドエンジンや検索システムの開発 - BigQuery, Airbyte, dbt, Hightouchなどを用いたモダンデータスタックの構築 - 生成AIやLLMを活用したM&Aアドバイザーのオペレーションの最適化 ・品質向上・開発プロセス",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "fellowship",
+      "name": "Fellowship (フェローシップ)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflakeを用いたデータ基盤開発｜正社員｜案件番号：128150",
+          "url": "https://www.green-japan.com/company/11194/job/328942",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "主体的に業務を進められる方 【歓迎条件】 ・Snowflakeでの開発経験 ・AWSなどのクラウド環境での開発経験 ・GitHubなどを用いたソース管理経験 ・dbtでの開発経験 【共通必須条件】 ・日本に在住している方 ・外国籍の場合は日本語能力試験N1取得者 Snowflake、SQL、DWHを用いたデータ加工・集計に加",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "marui-group",
+      "name": "Marui Group (丸井グループ)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Snowflake",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "【社内SE】創業90年以上/国内最大級の小売×フィンテックグループ 自社ビジネスのデータ基盤の企画・開発に幅広く携わっていただきます！",
+          "url": "https://www.green-japan.com/company/9430/job/284254",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ョンです。 【環境・ツール】 クラウド／データ基盤：AWS、Google Cloud、Snowflake、Bigquery データパイプライン：Airflow、dbt 開発言語：Python、SQL OS：Linux（Ubuntu など） BIツール：QuickSight、Looker など コード管理：GitHub など",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "hacobu",
+      "name": "Hacobu",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo",
+        "Osaka"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Fivetran",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア/EM候補】社会インフラの課題に挑む。物流ビッグデータ基盤の企画・設計から組織づくりまでリード",
+          "url": "https://www.green-japan.com/company/4330/job/324915",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Cloud Storage -ETL: Fivetran, BigQuery Data Transfer, Google Storage Transfer, dbt, AWS Glue, AWS Athena -IaC: Terraform -BI: Data Studio, Looker -コード管理: GitHub -",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "lightcode",
+      "name": "Lightcode (ライトコード)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo",
+        "Osaka"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "AIネイティブな組織の心臓部を創るデータエンジニア募集！DWHやパイプライン構築にとどまらず、データを「事業価値」に変える。データ品質管理からクライアントの事業やサービス改善まで！",
+          "url": "https://www.green-japan.com/company/4127/job/323412",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "領域＞ ・AWS / GCP などのクラウド環境 ・SQL / Python ・BigQuery / Redshift / Snowflake などのDWH ・dbt などのデータ変換・モデリングツール ・ETL / ELT、データパイプライン ・BIツール、ダッシュボード設計 ・データ品質管理、ログ設計、データモデリング",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "trustline",
+      "name": "Trustline (トラストライン)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "AIをフル活用｜年商100億円超D2Cの1人目データ＆自動化エンジニア",
+          "url": "https://www.green-japan.com/company/10371/job/322092",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "データ基盤の構築・運用 ・データパイプラインの設計・運用 ・生成AI・LLM等を活用した開発、または業務効率化・自動化 ▍歓迎 ・業務自動化／内製ツール開発 ・dbt／ワークフローオーケストレーション（Airflow・Cloud Composer等）／MLOps ・音声認識・音声データ分析を活用したシステム構築 ・非エンジニ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "herp",
+      "name": "HERP",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Metabase"
+      ],
+      "job_postings": [
+        {
+          "title": "BizOpsチーム立ち上げ / 仕組み化のプロフェッショナル募集",
+          "url": "https://www.green-japan.com/company/4897/job/311288",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "で、具体的には以下いずれかの実務経験がある方 1.以下に挙げるようなOps実務経験（2年以上） ・KPIの設計・運用 ・CRMやMAを活用した営業企画・管理 ・dbtやMetabaseを活用したデータ可視化 2.営業マネージャー等の立場で、自ら（Opsチームと協働し）チームの生産性を高めるための型やプロセス設計を主導したご経",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "legalon-technologies",
+      "name": "LegalOn Technologies",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Dataform"
+      ],
+      "job_postings": [
+        {
+          "title": "データドリブンな意思決定の推進を担う、データアナリストを募集！",
+          "url": "https://www.green-japan.com/company/5209/job/319944",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "力 【歓迎スキル】 - WebサービスのKPI設計経験 - Webマーケティングへの一定の理解 - GitHubなどのバージョン管理システムを利用した経験 - dbt, Dataformなどのデータ加工ツールの利用経験 - データを利用する各ステークホルダーに向けた、質の高いドキュメントを執筆する能力 私たちは、専門性とAI",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "andpad",
+      "name": "ANDPAD (アンドパッド)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Dataform",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "建築× SaaS｜大規模サービスのデータ基盤を支えるデータエンジニア募集！",
+          "url": "https://www.green-japan.com/company/4593/job/299775",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "aform ・DWH：BigQuery ・BIツール：Metabase, Looker ・ワークフロー管理ツール：Luigi ・データトランスフォーメーション：dbt, Dataform ・VCS：GitHub ・その他：Slack/GitHub issues/JIRA 【必須条件】 ・アンドパッドのミッションとバリューへの",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "the ad lists both dbt and Dataform as the transformation tools in use"
+    },
+    {
+      "id": "geekly",
+      "name": "Geekly (ギークリー)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "「IT人材の適材適所で成長機会あふれる社会へ」『Geekly』運営の東証上場企業◆モダン環境（Go/TS）への技術刷新を推進するフロントエンドエンジニア！年収700万~/週2リモート・副業可/SIer出身歓迎/専門職・管理職選べるキャリア！",
+          "url": "https://www.green-japan.com/company/5694/job/329330",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "利活用におけるセキュリティおよびデータガバナンスの知識 【歓迎】 ・Redshift、BigQuery、SnowflakeなどのクラウドDWH運用・構築経験 ・dbt等を用いたデータモデリングやパイプライン構築の経験 ・生成AI/LLMを活用したデータ活用（検索基盤、RAG構築等）の実務経験 ・AI・機械学習での活用を見据え",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "management-solutions-msol",
+      "name": "Management Solutions (MSOL)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "trocco"
+      ],
+      "job_postings": [
+        {
+          "title": "MSOLグループ全体のコーポレートエンジニアリングに携わっていただきます",
+          "url": "https://www.green-japan.com/company/2056/job/326327",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "rosoft365 Slack、Zoom、カオナビ、Sansan Salesforce、TeamSpirit、Soarize、Snowflake、trocco、dbt、workato AWS、Azure、ASTERIA Warp、Alteryx、Tableau ■応募条件 以下いずれも必須 ・エンジニアとして、何らかのシステ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "kauche",
+      "name": "Kauche (カウシェ)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Dataform",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "【Data Engineer/ 正社員】700万DL超えのソーシャルコマースアプリ「カウシェ」のData Engineer を募集します！",
+          "url": "https://www.green-japan.com/company/8984/job/300118",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "基盤の設計・構築・保守・運用の経験 ・データモデリング経験、高度なSQL構築能力 ・データ基盤の非機能要件を定義し、設計・実装できる能力 ・Dataform, dbt, BigQueryなどの利用経験 ・Github, Terrafrom, CI/CD, プログラミング言語を用いたソフトウェア開発経験 【歓迎要件】 ・ML基",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "exture",
+      "name": "Exture (エクスチュア)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "【ハイブリッド出社/フレックス】BIエンジニア/TableauやLooker Studioを用いたデータ活用支援",
+          "url": "https://www.green-japan.com/company/3846/job/290433",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ス設計（部署横断的なBI再構築などの経験） ・ThoughtSpot / Sigma / Lightdash / PowerBI 等の導入・PoC・選定経験 ・dbt、Snowflake、Fivetran 等とのデータ連携・可視化連携経験 ・クライアントワーク or 複数部署と並走するプロジェクトマネジメント経験 【エンジニ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "shimauma-print",
+      "name": "Shimauma Print (しまうまプリント)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airbyte",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "【印刷システムリードエンジニア】印刷生産システム／次世代投資｜完全内製・年間数億枚のミッションクリティカルシステム｜リファクタ＆刷新の比重をさらに拡大｜ハイブリッド勤務(週2出社)",
+          "url": "https://www.green-japan.com/company/5262/job/325644",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "S, Secrets Manager, API Gateway, SSM, CloudWatch, IAM, SQS, AppSync 他 ・データ基盤ツール：dbt, Mage.ai, Airbyte, Tableau, b→dash, OpenMetadata ・フロントエンド：React (Vite) ・IaC：Ter",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "wealthnavi",
+      "name": "WealthNavi (ウェルスナビ)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア】ものづくりする金融機関/三菱UFJグループの大規模データ基盤の内製開発",
+          "url": "https://www.green-japan.com/company/4408/job/183684",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "】 ・大規模データにおけるETLの設計・実装経験 ・GCP/AWSなどのパブリッククラウドの知識 ・Webアプリケーションの開発経験 ・クエリレビューの経験 ・dbtなどを用い、データ品質チェックを自動化した経験 ・BIツールを活用したダッシュボード構築の経験 ・新規事業の核となる「データ基盤構築」 弊社は従来からデータ分析",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "jmdc",
+      "name": "JMDC",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア】ビッグデータを活用し医療現場のDXを実現",
+          "url": "https://www.green-japan.com/company/5611/job/309522",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "開発経験（3年以上） ・Pythonを用いたデータ加工処理経験 ・AWSコンソールからのLambdaの構築経験 ・Gitを用いたチーム開発経験 【歓迎条件】 ・dbtを用いたデータ変換、データモデル開発経験 ・フルスタックでのWebサービス開発・運用・保守経験 ・テスト駆動の実践、CI/CDの構築経験 ・AIエージェントを用",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "monstar-lab",
+      "name": "Monstar Lab (モンスターラボ)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Dagster",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "AIエージェントエンジニア",
+          "url": "https://www.green-japan.com/company/2466/job/287236",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ker, Kubernetes, Terraform, GitHub Actions (CI/CD) 【データパイプライン】Airflow, Dagster, dbt, Fivetran 等 【データ基盤（連携先）】BigQuery, Snowflake, Redshift, Databricks, Kafka, PubSu",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "makip",
+      "name": "Makip (メイキップ)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Redshift"
+      ],
+      "job_postings": [
+        {
+          "title": "【急成長AI×SaaS】Go/Pythonで上流設計から自動化・実装までをリードするフルスタックエンジニア募集",
+          "url": "https://www.green-japan.com/company/4900/job/321744",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "用） ・Go言語でのスケーラブルなバックエンド開発経験 ・AWS（S3, Glue, Lambda, Redshift等）を用いたデータエンジニアリング経験 ・dbt, Airflow等を用いたモダンなデータ活用基盤の構築 ・運用経験 ・CI/CDパイプラインの構築や運用自動化（IaCなど）の実務経験 ・AIエージェント／ツ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "data-one",
+      "name": "Data One (データ・ワン)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "BigQuery",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "【バックエンドエンジニア】Scala｜6,000万超IDの購買データ×広告配信ロジック開発（大手4社合弁）",
+          "url": "https://www.green-japan.com/company/11247/job/323943",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "たSPA開発経験（React等／フロントも担っていただける方歓迎） ・クラウドDWHの運用経験（Databricks／BigQuery／Snowflake等）／dbtの利用経験 ・データサイエンティストやMLエンジニアと協業し、予測モデル・最適化ロジックをプロダクトに組み込んだ経験 ■配信ロジックの中核を設計する経験 広告配",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "openstreet",
+      "name": "OpenStreet",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "日本最大級シェアサイクル「HELLO CYCLING」/Databricksデータエンジニア/リモート・フレックス",
+          "url": "https://www.green-japan.com/company/8389/job/324202",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "経験 ■あれば好ましいスキル・経験■ ・DWH/データレイク環境におけるデータマート（Star Schemaなど）の設計・データモデリング経験またはその理解 ・dbt（data build tool）を用いたデータモデリング・CI/CD環境の構築経験 ・Databricks AI/BI、または何らかのBIツールを用いたダッシ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "ambl",
+      "name": "AMBL",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "【データ基盤構築エンジニア・データサイエンティスト】PM・PL経験者歓迎◆在宅勤務可◆大手クライアント・ビッグデータPJをお任せ！",
+          "url": "https://www.green-japan.com/company/111/job/265617",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ableau、Looker Studio、PowerBI、DOMO ・ETLツール例：Informatica、Glue、Dataflow、DataSpider、dbt ・その他ツール例：Google Analytics、Adobe Analytics、SAS、SPSS ▼必須スキル ※以下スキル全てを満たす方 ・データ関連プ",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "tsuide",
+      "name": "TSUIDE",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Fivetran",
+        "trocco",
+        "Dataform"
+      ],
+      "job_postings": [
+        {
+          "title": "直販98％・元GS代表直下！データ基盤構築から利活用まで、企業の意思決定を変革するデータコンサルタント/エンジニア募集",
+          "url": "https://www.green-japan.com/company/11055/job/324643",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "/ Redshift / Databricks ・BI： Tableau / PowerBI / Looker / QuickSight ・ETL/ELT： dbt / Fivetran / Trocco / Dataform ・言語： SQL / Python ⚪︎直販（プライム）案件約98%： クライアントと直接対話し",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "bita",
+      "name": "bitA (ビットエー)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Dataform",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "【データエンジニア】ビッグデータ時代を支える分析基盤を創るデータエンジニアチームのリーダーを募集しています！",
+          "url": "https://www.green-japan.com/company/3470/job/154493",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "・クライアントワークまたは社外との折衝・調整経験 【歓迎要件】 ・Adobe AnalyticsやGoogle Analytics等のログデータの処理経験 ・dbt（data build tool）またはDataformの使用経験 ・Apache Airflow等のワークフローオーケストレーションツール経験 ・Terraf",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "soramichi",
+      "name": "SORAMICHI",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "【正社員 データエンジニア（データ基盤）】データで企業の意思決定を支える！クラウド時代の基盤構築をリードするエンジニアを募集",
+          "url": "https://www.green-japan.com/company/8013/job/298870",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "owflake、BigQuery、Redshift等のクラウドDWH経験 ・DatabricksやSparkなどを用いた大規模データ処理経験 ・Airflow、dbt等のワークフロー／データ変換ツール利用経験 ・データ品質管理やメタデータ管理の仕組み構築経験 ・機械学習基盤やデータサイエンスとの連携プロジェクト経験 【求める",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "japan-system",
+      "name": "Japan System (ジャパンシステム)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "★東京★BI分野のシステム開発_SE募集",
+          "url": "https://www.green-japan.com/company/6743/job/324615",
+          "source": "green-japan.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "方 ・SQLを用いた大規模データの抽出・加工経験のある方 ・ETLツール（ASTERIA Warp、DataSpider、Informatica、Talend、dbt 等）を用いたデータパイプライン構築経験のある方 ・アジャイル開発経験のある方 ・Python/Rによるデータ分析経験のある方 ■求める人物像■ ・自分の考えを",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "skyfall",
+      "name": "Skyfall",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/skyfall/articles/207c762553e474",
+          "note": "Zenn post 'dbtのYAML Selectorsで任意のモデルを一括更新' (2026-05-11): transforms Aurora data in Snowflake with dbt Cloud"
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "storehero",
+      "name": "StoreHero",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/storehero/articles/ea96313db6e0cd",
+          "note": "Zenn post 'Devin活用事例 - 未整理なデータ分析基盤をdbtで構造化し、自然言語でSQLを生成するまで' (2025-04-09): restructured its BigQuery analytics base with dbt"
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "counterworks",
+      "name": "COUNTERWORKS",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Digdag",
+        "Embulk",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/counterworks/articles/d4a1ac252d2ce4",
+          "note": "Zenn post '新卒5ヶ月目で任された分析基盤構築 - Digdag/Embulk/dbtによるデータパイプライン開発記' (2025-01-30): built its analytics pipeline with Digdag, Embulk and dbt"
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "ma-cloud",
+      "name": "M&A Cloud (M&Aクラウド)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/macloud/articles/b54a2dbdd84942",
+          "note": "Zenn post 'デフォルトでdbtのビルド対象からモデルを除外する' (2024-12-16): a data engineer explains excluding models from dbt build by default"
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "yumemi",
+      "name": "YUMEMI (ゆめみ)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "BigQuery",
+        "Looker Studio"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://zenn.dev/yumemi_inc/articles/ac108995e1f829",
+          "note": "Zenn post 'OSSなPython製ETLライブラリ「dlt」の紹介' (2024-12-15): the author uses dbt Cloud on BigQuery for internal data"
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "telecy",
+      "name": "Telecy (株式会社テレシー)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Tokyo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/jp/blog/case-study-telecy",
+          "note": "dbt Labs Japan case study: moved from Snowflake and dbt Core to dbt platform, using dbt YAML as a guardrail for AI-built models"
+        }
+      ],
+      "people": [],
+      "notes": "TV advertising company; the case study does not give an office city"
     }
   ],
   "sources": {
@@ -10695,6 +12451,24 @@
         "url": "https://womendevsummit.jp/",
         "yielded": false,
         "note": "Domain did not resolve."
+      },
+      {
+        "name": "green-japan.com dbt search",
+        "url": "https://www.green-japan.com/search?keyword=dbt",
+        "yielded": true,
+        "note": "160 ads; 42 new Tokyo companies"
+      },
+      {
+        "name": "Zenn dbt topic API",
+        "url": "https://zenn.dev/api/articles?topicname=dbt&order=latest",
+        "yielded": true,
+        "note": "company publications; 5 new companies and 10 upgraded"
+      },
+      {
+        "name": "findy-code.io company search",
+        "url": "https://findy-code.io/companies?keyword=dbt",
+        "yielded": false,
+        "note": "keyword not applied to the fetched page"
       }
     ]
   },

@@ -7,11 +7,11 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 100 |
+| Companies | 102 |
 | People | 72 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
@@ -20,8 +20,8 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 | Based in the region | 55 |
 | Based elsewhere | 6 |
 | Location unknown | 11 |
-| With a LinkedIn profile | 20 |
-| Job ads mentioning dbt | 62 |
+| With a LinkedIn profile | 28 |
+| Job ads mentioning dbt | 66 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
 
@@ -34,6 +34,12 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **A Luma event page:** the page for a [Nextory talk](https://luma.com/4f8lqzsp) confirmed a speaker's role.
 - **meetup.com RSVP lists:** the best location source. They placed most of the past chapter speakers.
 - **LinkedIn search results:** 7 past chapter speakers without a location were searched. Filip Vitez was placed in Stockholm. Niklas Kullberg was placed in the Uppsala area, which counts as local. Salma Bakouk was placed in New York.
+
+### Companies and job ads
+
+- **[dbt Labs case studies](https://www.getdbt.com/sitemap-0.xml):** the sitemap lists 61 `/case-studies/` pages. Each page states the company headquarters. The [Rebtel](https://www.getdbt.com/case-studies/rebtel) and [McDonald's Nordics](https://www.getdbt.com/case-studies/mcdonalds-nordics) case studies both name Stockholm as headquarters.
+- **HN Who is hiring:** the Algolia search for "dbt stockholm" gave Anyfin, with BigQuery and dbt in its stack.
+- **Company job boards:** the open Greenhouse, Lever and Ashby job APIs (`boards-api.greenhouse.io/v1/boards/<slug>/jobs?content=true`, `api.lever.co/v0/postings/<slug>?mode=json`, `api.ashbyhq.com/posting-api/job-board/<slug>`) return the full ad text, so one call per company checks for the whole word dbt and the location. Spotify and Wolt have Stockholm ads that mention dbt.
 
 ### Women-in-data communities
 
@@ -63,6 +69,9 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **Dormant or new women-in-data groups:** [R-Ladies Stockholm](https://www.meetup.com/rladies-stockholm/) has had no events since 2019. Two groups founded in 2026, Let's Talk (for women and non-binary people in tech) and SoHer Society, have held discussion and café evenings with no talks.
 - **WiDS Sweden 2026:** no page was found. The wids2026 page and the confetti.events site root return 404.
 - **Women in Tech Sweden partner meetups:** the [meetups archive](https://womenintech.se/wp-json/wp/v2/meetups) ends in 2023. Its January 2023 SEB data meetup falls before the window for talks.
+- **Company job boards with no Stockholm dbt ad:** Mentimeter, Lovable, Legora, Trustly, Truecaller, Paradox, Lunar, Pleo, Betsson and Kambi. Klarna, King, Voi, Epidemic Sound, Storytel, Kivra and most other Swedish employers tried use Teamtailor or Workday, which have no open job API.
+- **GitHub code search:** `filename:dbt_project.yml org:<org>` found no public dbt project in the orgs tried. The search rate limit cut several calls short. Orgs tried: Spotify, Klarna, Epidemic Sound, Kivra and Voi.
+- **Meetup line-ups:** the Stockholm MLOps, Power BI and Fabric, SQL, ClickHouse, GDG Cloud and Real Time Data groups since 2024 never mention dbt. The Stockholm Snowflake Meetup group on meetup.com has no events, because it now runs on the Snowflake user group site.
 
 ## 3. Companies looked at
 
@@ -71,17 +80,17 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **No company dominates the job ads.** 62 ads are spread across 55 companies.
 
 <!-- companies:start -->
-99 companies and communities were looked at. A company is local when it has people or roles in the region.
+101 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (3)</summary>
+<details><summary><b>Strong dbt use</b> (5)</summary>
 
-Drake Analytics, Epidemic Sound, Solita
+Drake Analytics, Epidemic Sound, McDonald's Nordics, Rebtel, Solita
 
 </details>
 
 <details><summary><b>Some dbt signal</b> (57)</summary>
 
-Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, Bravura Sverige, Cognizant, Confidential, CoreChange Group, Ctrl Digital, Deploja, Devoteam / Google Cloud Partner, Doktor.Se, Epico Tech, Etraveli Group, FDJ UNITED, Fortnox, Haypp Group, Ictech, Kivra, Knowit, Liminity AB, Lovable, Marginalen Bank, Natlink, Netlight, Nexer Group, Nion, NOBA Bank Group, Norrin, Novax, Omni (local presence not confirmed), Playground Tech, Qliro, Rebtel, Sambla Group, Schibsted, Snowflake User Group Stockholm / Women on Snowflake, Spiris / Visma, Spotify, Steep, Storytel, Strawberry, StressTerapi, Stretch AB, SVT, Tandem Health, Tenth Revolution Group, Tieto, Toca Boca, Vitamin Well Group, VNTRS, Voyado, Wolt, WPP Media
+Academedia, Adavo, Agio, Agoda, ANIMARUM, Anyfin, Avalanche Studios Group, Bokadirekt, Bravura Sverige, Cognizant, Confidential, CoreChange Group, Ctrl Digital, Deploja, Devoteam / Google Cloud Partner, Doktor.Se, Epico Tech, Etraveli Group, FDJ UNITED, Fortnox, Haypp Group, Ictech, Kivra, Knowit, Liminity AB, Lovable, Marginalen Bank, Natlink, Netlight, Nexer Group, Nion, NOBA Bank Group, Norrin, Novax, Omni (local presence not confirmed), Playground Tech, Qliro, Sambla Group, Schibsted, Snowflake User Group Stockholm / Women on Snowflake, Spiris / Visma, Spotify, Steep, Storytel, Strawberry, StressTerapi, Stretch AB, SVT, Tandem Health, Tenth Revolution Group, Tieto, Toca Boca, Vitamin Well Group, VNTRS, Voyado, Wolt, WPP Media
 
 </details>
 
@@ -190,3 +199,4 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Avalanche Studios Group, Bokadirekt, B
 | 2026-10-01 | 2 | Location pass from public pages. 11 people placed: 8 in the region and 3 elsewhere. Unknown locations fell from 21 to 10. |
 | 2026-10-01 | 2 | LinkedIn pass on 7 past chapter speakers. 3 placed: 2 in the region and 1 elsewhere. 7 locations are still unknown, and 20 people now have LinkedIn profiles. |
 | 2026-10-01 | 3 | Women-in-data pass. Checked Women in Tech Sweden (speakers and sessions), PyLadies Stockholm and AWS Women's User Group Sweden (past events and hosts), Women on Snowflake, Women Techmakers through GDG Stockholm, WiDS Sweden, R-Ladies Stockholm and two new Meetup groups. Added 21 people with `sourced_via: women_in_data_community`: 13 speakers and 8 organisers as connectors. Added new events for Anastasiia Stefanska and Isabella Renzetti. Added 6 community channels. |
+| 2026-10-01 | 4 | Company pass from open job boards (Greenhouse, Lever, Ashby), HN Who is hiring, dbt Labs case studies and Meetup gql2 line-ups. 2 companies added, for 102. McDonald's Nordics has a strong dbt signal. Rebtel raised to strong. People are unchanged. |

@@ -9,11 +9,11 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **Approach:** public content (blogs, podcasts, conferences and other meetups' line-ups), a job-ad scan, and every past Paris dbt Meetup speaker.
 
 <!-- at-a-glance:start -->
-**At a glance** (version 4, 2026-10-01)
+**At a glance** (version 5, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 244 |
+| Companies | 250 |
 | People | 207 |
 | Tier 1 leads | 34 |
 | First-time speakers (publish, no talk yet) | 26 |
@@ -22,8 +22,8 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 | Based in the region | 170 |
 | Based elsewhere | 12 |
 | Location unknown | 25 |
-| With a LinkedIn profile | 46 |
-| Job ads mentioning dbt | 150 |
+| With a LinkedIn profile | 56 |
+| Job ads mentioning dbt | 160 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->
 
@@ -57,6 +57,9 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **LinkedIn Jobs, logged out:** search `keywords=dbt&location=Paris, Île-de-France`. From the browser page, list the ads with in-page `fetch()` on `/jobs-guest/jobs/api/seeMoreJobPostings/search?...&start=N`, fetch each ad from `/jobs-guest/jobs/api/jobPosting/<id>`, and keep the ads whose text contains the whole word `dbt`. The script is in the [Baltic city notes](../baltics/SEARCH_METHOD.md#job-ads). On 2026-09-24, 300 ads were listed and 250 checked, and 120 mentioned dbt. The run stopped at a 250-ad cap, so 50 were left unchecked.
 - **ATS search:** `site:jobs.lever.co`, `site:job-boards.greenhouse.io` and `site:jobs.ashbyhq.com` with dbt Paris. These added 27 ads from in-house tech companies that LinkedIn's ranking missed (Mistral AI, Pigment, BeReal, Aircall). Their `dbt_snippet` is the search engine's summary, marked "[search summary]".
 - **Welcome to the Jungle:** use `site:welcometothejungle.com` searches, because search URLs on the site now go to a login page.
+- **Company job boards:** the open JSON boards at Greenhouse, Lever and Ashby, tried for about 90 Paris employers. 39 boards answered, and 12 had a Paris ad whose text has the word dbt. They raised Pigment, Voodoo and Pennylane to strong and confirmed Snowflake's Paris office. They found no new companies, because the LinkedIn pass had already listed them.
+- **GitHub code search:** `filename:dbt_project.yml org:<org>` found public dbt projects at [beta.gouv.fr](https://github.com/betagouv), the ecological transition ministry's digital team ([MTES-MCT](https://github.com/MTES-MCT)), [GIP Plateforme de l'inclusion](https://github.com/gip-inclusion) and [pass Culture](https://github.com/pass-culture/data-gcp). French public-sector teams publish their code, so their GitHub organisations are worth checking.
+- **Meetup hosts:** gql2 past events of Modern Data Stack France and Databricks France name the hosts. dcube presented a client architecture built on dbt in [June 2024](https://www.meetup.com/modern-data-stack-france/events/301317296/). Data Reply France and I-Shane hosted Databricks evenings.
 
 ### Chapter history
 
@@ -76,6 +79,10 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **[Social Builder](https://socialbuilder.org/evenements/) and [Girls in Tech France](https://girlsintech.org/france/):** the events page returned almost no content, and the Girls in Tech request timed out.
 - **Duchess France, Women Techmakers and Ladies of Code Paris:** nothing data-related.
 - **Speakers picked from conference bios:** some Forward Data Conference speakers were picked using wording in their conference bios. Those people are tagged `sourced_via: conference_or_meetup_agenda`, not `women_in_data_community`, and the dataset records no gender for anyone. Take women-in-data speakers only from the community's own events.
+- **HN Who is hiring:** no Paris ad since 2023 mentions dbt.
+- **dbt Labs case-study file:** it has no Paris company. The French-language Groupe Holder case study is not in it.
+- **Job boards under the obvious name:** leboncoin, Criteo, Dailymotion, ManoMano, Deezer, Spendesk, Mirakl, Brevo, PayFit, Photoroom and Sorare have no open Greenhouse, Lever or Ashby board under that name.
+- **Small user groups:** the Paris Snowflake User Group has had 3 events since 2024, all at Devoteam. DuckDB Paris has none.
 
 ## 3. Companies looked at
 
@@ -85,23 +92,23 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 - **Labelled staff:** dbt Labs' Paris-related staff and Fivetran staff are labelled in the cockpit. `excluded_from_outreach` is true only for internal records (Vinted).
 
 <!-- companies:start -->
-243 companies and communities were looked at. A company is local when it has people or roles in the region.
+249 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (105)</summary>
+<details><summary><b>Strong dbt use</b> (112)</summary>
 
-1G-LINK, Accor, Actinvision, Aircall, Alan, Alma, ALTEN, Altertable, Artefact, Aubay, Back Market, BeReal, Bigblue, BlaBlaCar, Capgemini Invent, Caprikorn, Cartelis, CGI, Contentsquare, Cozi, Dashlane, DataGen (Robin Conquet), Dataworks, Davidson consulting, dbt Labs, Decathlon / Decathlon Digital, DEODIS, Devoteam, Doctolib, DPD France, Ekwateur, Elax Energie, EY, Fitness Park, Free2move, FullEnrich, GazelTech, GLOBE GROUPE SHOPPER HOUSE, Groupe EOLEN, Havas Media France, ICADE, Implicity, In Tandem, Infinite Lambda, INFOGENE, Innoha, Innova Solutions, Ippon Technologies, JAKALA, Jems Group, Joko, Kaino, Key Performance Consulting (KPC), Kiiro, Ledger, Leetchi, Lenstra, Leonar, Luxurynsight, M13h, Macif (local presence not confirmed), Malt, Manutan Group, Mediaperformances, MeltOne Advisory, Modeo, mym, nao Labs, Neosoft, NEXTON, Odaseva, Onepoint, Optimize matter, Ornikar, Orus, Oventi, pass Culture, PREREQUIS, Pretto, Pyl.Tech, QOLIBRIS, Qonto, Qover (local presence not confirmed), Sancare, SEVETYS, Shift Technology, Shine, Sia, Skello, SKIILS, Smartpoint, Smile, STORM GROUP, Swile, Talan, The Information Lab, Trade Republic, TRIMANE, Valtech, VISEO, WeeFin, WHIZE, Yuri & Neil, Zefir, Édifice
+1G-LINK, Accor, Actinvision, Aircall, Alan, Alma, ALTEN, Altertable, Artefact, Aubay, Back Market, BeReal, beta.gouv.fr, Bigblue, BlaBlaCar, Capgemini Invent, Caprikorn, Cartelis, CGI, Contentsquare, Cozi, Dashlane, DataGen (Robin Conquet), Dataworks, Davidson consulting, dbt Labs, dcube, Decathlon / Decathlon Digital, DEODIS, Devoteam, Doctolib, DPD France, Ekwateur, Elax Energie, EY, Fabrique numérique du ministère de la Transition écologique (MTES-MCT), Fitness Park, Free2move, FullEnrich, GazelTech, GIP Plateforme de l'inclusion (local presence not confirmed), GLOBE GROUPE SHOPPER HOUSE, Groupe EOLEN, Havas Media France, ICADE, Implicity, In Tandem, Infinite Lambda, INFOGENE, Innoha, Innova Solutions, Ippon Technologies, JAKALA, Jems Group, Joko, Kaino, Key Performance Consulting (KPC), Kiiro, Ledger, Leetchi, Lenstra, Leonar, Luxurynsight, M13h, Macif (local presence not confirmed), Malt, Manutan Group, Mediaperformances, MeltOne Advisory, Modeo, mym, nao Labs, Neosoft, NEXTON, Odaseva, Onepoint, Optimize matter, Ornikar, Orus, Oventi, pass Culture, Pennylane, Pigment, PREREQUIS, Pretto, Pyl.Tech, QOLIBRIS, Qonto, Qover (local presence not confirmed), Sancare, SEVETYS, Shift Technology, Shine, Sia, Skello, SKIILS, Smartpoint, Smile, STORM GROUP, Swile, Talan, The Information Lab, Trade Republic, TRIMANE, Valtech, VISEO, Voodoo, WeeFin, WHIZE, Yuri & Neil, Zefir, Édifice
 
 </details>
 
-<details><summary><b>Some dbt signal</b> (37)</summary>
+<details><summary><b>Some dbt signal</b> (36)</summary>
 
-Agoda, Axway, blef.fr (Data News), Blent.ai (local presence not confirmed), Brevo, BROTHER FRANCE, Capgemini, CastorDoc (Coalesce), Catalina Marketing France, Converteo, Datadog (Paris), Decathlon, Emeria, Equativ, eXalt Value, Gorgias, Kestra, Keyrus, Kolecto, Lacoste, LineUP7, Mirakl, Mistral AI, Pigment, Quickscale AI, Riot, SFEIR, Sifflet, Spendesk, Stuart (local presence not confirmed), Tellent, Theodo Data & AI (ex-Sicara), Vestiaire Collective, Vibe.co, Voodoo, Xebia France, Yield Studio & Advisory
+Agoda, Axway, blef.fr (Data News), Blent.ai (local presence not confirmed), Brevo, BROTHER FRANCE, Capgemini, CastorDoc (Coalesce), Catalina Marketing France, Converteo, Datadog (Paris), Decathlon, Emeria, Equativ, eXalt Value, Gorgias, Kestra, Keyrus, Kolecto, Lacoste, LineUP7, Mirakl, Mistral AI, Quickscale AI, Riot, SFEIR, Sifflet, Snowflake, Spendesk, Stuart (local presence not confirmed), Tellent, Theodo Data & AI (ex-Sicara), Vestiaire Collective, Vibe.co, Xebia France, Yield Studio & Advisory
 
 </details>
 
 <details><summary><b>Not verified</b> (95)</summary>
 
-AB Tasty, Agicap / Libeo, Air France-KLM, Airbyte (local presence not confirmed), Ankorstore, Aquila Data Enabler, Aramis Group, BearingPoint, Believe, BNP Paribas / AXA / Société Générale, Brigad (local presence not confirmed), Brigad / Side, Carbonfact, Carrefour, Clean Data Architecture, Clever Cloud, Count (local presence not confirmed), Criteo, Dailymotion, Data Value Consulting (local presence not confirmed), DataGalaxy, Dataiku, Deezer, Dust, Département du Gard (local presence not confirmed), Ekimetrics, ENGIE, Eurazeo, Evaneos, ex-Galeries Lafayette (local presence not confirmed), Fifty-five, Freelance (Back Market mission) (local presence not confirmed), Galeries Lafayette, Getaround, GitGuardian, GRDF (at time of talk) (local presence not confirmed), Groupe La Poste, Hightouch (local presence not confirmed), Hivebrite, Hubvisor (local presence not confirmed), Hugging Face, Hymaïa, Jolimoi, L'Oréal, Lalilo (local presence not confirmed), leboncoin (Adevinta), Lightdash (local presence not confirmed), Luko / Leocare / Lalilo, LVMH / Sephora, Lydia / Sumeria, Maketools, ManoMano, Metabase (local presence not confirmed), Mooncard, MotherDuck (local presence not confirmed), Neo4j (ex-Sifflet) (local presence not confirmed), Nibble (local presence not confirmed), Nissan United AMIEO (local presence not confirmed), Numberly (1000mercis Group), OCTO Technology (Accenture), Omni (local presence not confirmed), Open Value, Optic 2000, Owkin (at time of 2024 talk) (local presence not confirmed), Paris Data Ladies, Paris Women in Machine Learning & Data Science, PayFit, Pennylane, Photoroom, Pigment / Yousign / Payplug, Positive Thinking Company (local presence not confirmed), PyLadies Paris, R-Ladies Paris, Scaleway, Selfr (local presence not confirmed), Sicara, SNCF Connect & Tech, Snowflake (local presence not confirmed), Social Good Accelerator, Sopht, Sorare, Stellantis, Supabase (local presence not confirmed), Taktile (local presence not confirmed), TotalEnergies, TotalEnergies Renewables, Toucan, Ubisoft / Dailymotion / Le Monde / Radio France, Van Cleef & Arpels, Veesion, Welcome to the Jungle, Weld (local presence not confirmed), Women in Big Data Paris, Ynsect, Zenika
+AB Tasty, Agicap / Libeo, Air France-KLM, Airbyte (local presence not confirmed), Ankorstore, Aquila Data Enabler, Aramis Group, BearingPoint, Believe, BNP Paribas / AXA / Société Générale, Brigad (local presence not confirmed), Brigad / Side, Carbonfact, Carrefour, Clean Data Architecture, Clever Cloud, Count (local presence not confirmed), Criteo, Dailymotion, Data Reply France, Data Value Consulting (local presence not confirmed), DataGalaxy, Dataiku, Deezer, Dust, Département du Gard (local presence not confirmed), Ekimetrics, ENGIE, Eurazeo, Evaneos, ex-Galeries Lafayette (local presence not confirmed), Fifty-five, Freelance (Back Market mission) (local presence not confirmed), Galeries Lafayette, Getaround, GitGuardian, GRDF (at time of talk) (local presence not confirmed), Groupe La Poste, Hightouch (local presence not confirmed), Hivebrite, Hubvisor (local presence not confirmed), Hugging Face, Hymaïa, I-Shane, Jolimoi, L'Oréal, Lalilo (local presence not confirmed), leboncoin (Adevinta), Lightdash (local presence not confirmed), Luko / Leocare / Lalilo, LVMH / Sephora, Lydia / Sumeria, Maketools, ManoMano, Metabase (local presence not confirmed), Mooncard, MotherDuck (local presence not confirmed), Neo4j (ex-Sifflet) (local presence not confirmed), Nibble (local presence not confirmed), Nissan United AMIEO (local presence not confirmed), Numberly (1000mercis Group), OCTO Technology (Accenture), Omni (local presence not confirmed), Open Value, Optic 2000, Owkin (at time of 2024 talk) (local presence not confirmed), Paris Data Ladies, Paris Women in Machine Learning & Data Science, PayFit, Photoroom, Pigment / Yousign / Payplug, Positive Thinking Company (local presence not confirmed), PyLadies Paris, R-Ladies Paris, Scaleway, Selfr (local presence not confirmed), Sicara, SNCF Connect & Tech, Social Good Accelerator, Sopht, Sorare, Stellantis, Supabase (local presence not confirmed), Taktile (local presence not confirmed), TotalEnergies, TotalEnergies Renewables, Toucan, Ubisoft / Dailymotion / Le Monde / Radio France, Van Cleef & Arpels, Veesion, Welcome to the Jungle, Weld (local presence not confirmed), Women in Big Data Paris, Ynsect, Zenika
 
 </details>
 
@@ -312,3 +319,4 @@ Tier 1 is stricter here than the central rule. The first build proposed 52 tier-
 | 2026-09-24 | 2 | Rebuilt with the same merge rules; adds 3 job ads the v1 build had dropped (150 in total), otherwise unchanged. Backup: `paris_dbt_companies.v1.json`. |
 | 2026-10-01 | 3 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed 4 people: co-written Ippon posts and in-person talks at the chapter. LinkedIn search results placed 5 more. Of the 9 placed, 3 are in Paris and 6 elsewhere (Bordeaux, Nantes, Lille, Niort and Lyon). 18 people are still unknown. |
 | 2026-10-01 | 4 | Women-in-data pass from Meetup data and the Women in AI France team page. 21 people added: 8 speakers and panellists from Paris Data Ladies, Women in Big Data Paris and PyLadies Paris, plus 13 organisers as connectors. WiDS Paris is inactive. Social Builder and Girls in Tech France were not reachable. |
+| 2026-10-01 | 5 | Company pass from fetches: company job boards, HN Who is hiring, the dbt Labs case-study file, GitHub code search and Meetup hosts. Companies went from 244 to 250, and job ads from 150 to 160. 4 new companies have a strong dbt signal, 3 of them public-sector teams with public dbt projects. Pigment, Voodoo and Pennylane were raised to strong. |

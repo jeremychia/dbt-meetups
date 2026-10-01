@@ -7,11 +7,11 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 105 |
+| Companies | 112 |
 | People | 76 |
 | Tier 1 leads | 4 |
 | First-time speakers (publish, no talk yet) | 8 |
@@ -20,8 +20,8 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 | Based in the region | 68 |
 | Based elsewhere | 2 |
 | Location unknown | 6 |
-| With a LinkedIn profile | 3 |
-| Job ads mentioning dbt | 70 |
+| With a LinkedIn profile | 16 |
+| Job ads mentioning dbt | 83 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
 
@@ -66,6 +66,9 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 ### Job ads and locations
 
 - **LinkedIn Jobs (first build):** a logged-out scan for "dbt" in the Toronto area. Up to 150 ads were checked for the whole word "dbt". 70 ads at 52 companies mention it.
+- **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 40 Toronto employers were tried. Super.com ads say the data team are long-time dbt users, which raised it to strong. Instacart has remote Analytics Engineer roles open to Ontario that require dbt. 1Password, PointClickCare (Mississauga) and Docebo list dbt among other tools. Cohere lists it as a plus.
+- **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt%20canada&tags=comment):** the Algolia API, searched for dbt with Toronto, Ontario, Canada or Waterloo. Posts were kept when they place the role in Toronto. Gave Borrowell and Squaredance, both from 2023. Most Canadian posts are remote with no Toronto office.
+- **Meetup venues:** the Toronto Modern Data Stack meetup, now Toronto Enterprise AI, was hosted by Cohere in February 2024 and by Georgian with Dagster in October 2024.
 - **Location pass (page fetches):** 6 people placed under the [central location rules](../research/README.md#6-location-rules), 4 in the region and 2 elsewhere.
   - **Daria Sukhareva:** a Tableau Public profile linked from kwwhat.com.
   - **Archie Sarre Wood:** a GitHub profile.
@@ -91,6 +94,9 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
   - **[QueerTech Toronto](https://www.meetup.com/queertech-toronto/):** runs career and networking events, with no data talks.
   - **Not on Meetup:** She Loves Data, Lesbians Who Tech, Women in AI and Data + Women have no Toronto group.
 - **Web search:** the session limit stopped the extension after about 20 searches.
+- **GitHub code and repository search:** no public dbt project at Wealthsimple, KOHO, Wattpad, 1Password, Cohere, Loblaw, Geotab, ecobee or Faire.
+- **[dbt Labs case studies](https://www.getdbt.com/sitemap-0.xml):** none for a Toronto company. Fullscript is in Ottawa and Symend is in Calgary.
+- **Company job boards with no Toronto dbt ads:** Faire, Mejuri, Geotab, KOHO, Clearco, Dialpad, Wattpad, Waabi, Float, League, Granum, Achievers, PolicyMe, Wave and Ritual. Rootly, Ada, Borrowell, Questrade, ecobee, Clio, FreshBooks, Top Hat and Vena have no open Greenhouse, Lever or Ashby board. The Greenhouse slug `super` belongs to a different company. Super.com is on Ashby.
 
 ## 3. Companies looked at
 
@@ -100,29 +106,29 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
 
 <!-- companies:start -->
-104 companies and communities were looked at. A company is local when it has people or roles in the region.
+111 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (6)</summary>
+<details><summary><b>Strong dbt use</b> (8)</summary>
 
-KOHO Financial, Secoda, SELECT, Shopify, Toronto Modern Data Stack (now 'Toronto Enterprise AI'), Wealthsimple
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (58)</summary>
-
-Agoda, Akkodis, AnswerLayer, Artemis (local presence not confirmed), Autodesk, Aviva Canada, Bayview Asset Management, LLC, Big Viking Games, CGI, CI Financial, Clio, Clutch, Coforge, commonsku, CoStar Group, Direct IT Recruiting Inc., Docebo, eBay, ecobee, Enterprise Solutions Inc., FacilityOS, Felix, Financeit, Generac, Granum (local presence not confirmed), HelloFresh, Homebase, Kake, Lakeview Loan Servicing, LLC., Loblaw Digital, Lyft, MaintainX, McKesson, Millennium Software and Staffing Inc, Movable Ink, Pacific Smoke International Inc., Passage, Princeton IT Services, Inc, Propel, Propel Holdings, RAVL, RBC, Relay, Scotiabank, Sienna Senior Living, Slalom, Spaulding Ridge, Spectrum Health Care (SHC), Tactable, TekRek, Thomson Reuters, Thumbtack, Toptal, Toronto Databricks User Group, Venterra Realty, Wave Financial, ZoomInfo, Zynga
+Instacart (local presence not confirmed), KOHO Financial, Secoda, SELECT, Shopify, Super.com, Toronto Modern Data Stack (now 'Toronto Enterprise AI'), Wealthsimple
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (3)</summary>
+<details><summary><b>Some dbt signal</b> (62)</summary>
 
-Archetype Consulting Inc., Snowflake Toronto User Group, Zeta Global (local presence not confirmed)
+1Password, Agoda, Akkodis, AnswerLayer, Artemis (local presence not confirmed), Autodesk, Aviva Canada, Bayview Asset Management, LLC, Big Viking Games, Borrowell, CGI, CI Financial, Clio, Clutch, Coforge, commonsku, CoStar Group, Direct IT Recruiting Inc., Docebo, eBay, ecobee, Enterprise Solutions Inc., FacilityOS, Felix, Financeit, Generac, Granum (local presence not confirmed), HelloFresh, Homebase, Kake, Lakeview Loan Servicing, LLC., Loblaw Digital, Lyft, MaintainX, McKesson, Millennium Software and Staffing Inc, Movable Ink, Pacific Smoke International Inc., Passage, PointClickCare, Princeton IT Services, Inc, Propel, Propel Holdings, RAVL, RBC, Relay, Scotiabank, Sienna Senior Living, Slalom, Spaulding Ridge, Spectrum Health Care (SHC), Squaredance, Tactable, TekRek, Thomson Reuters, Thumbtack, Toptal, Toronto Databricks User Group, Venterra Realty, Wave Financial, ZoomInfo, Zynga
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (4)</summary>
+
+Archetype Consulting Inc., Cohere, Snowflake Toronto User Group, Zeta Global (local presence not confirmed)
 
 </details>
 
 <details><summary><b>Not verified</b> (34)</summary>
 
-Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CBC, CIBC, Cineplex, Compass Data + AI (local presence not confirmed), Create Music Group (local presence not confirmed), Data Engineers in Toronto, Databricks (local presence not confirmed), Dataiku (local presence not confirmed), dbt Labs (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), FiveOneFour (local presence not confirmed), Geotab, Intact Financial Corporation, Interac, kWwhat (local presence not confirmed), Manulife, Mejuri, MHS Analytics Inc. (local presence not confirmed), Moneris, New Stadium, OneEleven, Polar Labs, Rootly, Sanofi, Snowflake, Super.com, TD Bank, Toronto Apache Airflow Meetup, Viafoura (local presence not confirmed), Women in Big Data Toronto
+Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CBC, CIBC, Cineplex, Compass Data + AI (local presence not confirmed), Create Music Group (local presence not confirmed), Data Engineers in Toronto, Databricks (local presence not confirmed), Dataiku (local presence not confirmed), dbt Labs (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), FiveOneFour (local presence not confirmed), Georgian, Geotab, Intact Financial Corporation, Interac, kWwhat (local presence not confirmed), Manulife, Mejuri, MHS Analytics Inc. (local presence not confirmed), Moneris, New Stadium, OneEleven, Polar Labs, Rootly, Sanofi, Snowflake, TD Bank, Toronto Apache Airflow Meetup, Viafoura (local presence not confirmed), Women in Big Data Toronto
 
 </details>
 
@@ -244,3 +250,4 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto, Women Techmakers Toronto
 | 2026-10-01 | 2 | Location pass from public pages: 6 people placed, 4 in the region and 2 elsewhere. |
 | 2026-10-01 | 2 | LinkedIn pass from search results: 1 person searched; the profile link was recorded but the location stays unknown. 5 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass: AWS User Group Women in Tech Ontario, PyLadies Toronto and Women Techmakers Toronto. 7 new people: 1 speaker, and 6 organisers as connectors. |
+| 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code and repository search, and Meetup venues. 105 to 112 companies. 7 added: Instacart with a strong dbt signal, and 1Password, PointClickCare, Borrowell, Squaredance, Cohere and Georgian. Super.com raised from weak to strong. Job ads added at Wealthsimple and Docebo. |

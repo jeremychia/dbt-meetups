@@ -7,21 +7,21 @@ This file holds what is specific to London. The method, scoring rules, schema an
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 79 |
-| People | 129 |
+| Companies | 104 |
+| People | 134 |
 | Tier 1 leads | 38 |
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 109 |
 | Spoke at this chapter before | 33 |
 | Based in the region | 99 |
 | Based elsewhere | 6 |
-| Location unknown | 24 |
-| With a LinkedIn profile | 8 |
-| Job ads mentioning dbt | 3 |
+| Location unknown | 29 |
+| With a LinkedIn profile | 35 |
+| Job ads mentioning dbt | 34 |
 | Past chapter meetups | 22 |
 <!-- at-a-glance:end -->
 
@@ -53,6 +53,11 @@ This file holds what is specific to London. The method, scoring rules, schema an
 ### Job ads
 
 - **Built In London and a green-jobs board:** 3 ads at 2 companies, Infinite Lambda and Octopus Energy. None of the 3 search snippets showed the word dbt, so `dbt_mentioned_in_text` is null for all three.
+- **Company job boards:** the open JSON boards at Greenhouse, Lever and Ashby, tried for about 100 London employers. 54 boards answered, and 22 had a London ad whose text has the word dbt. New companies that require dbt include Lendable, Multiverse, Trainline, Zego, Beamery, Kaluza, Marshmallow and ElevenLabs. The boards also confirmed London offices for Moneybox, Taptap Send, Voy, Dojo, Lawhive and Snowflake.
+- **HN Who is hiring:** the Algolia API, queried once per monthly thread since January 2023 (45 threads) and filtered to comments with the word dbt. It gave 2 London ads, at Amazon and Google DeepMind.
+- **[dbt Labs case studies](https://www.getdbt.com/llms-full-case-studies.txt):** this one file holds every case study as text. Four companies have a London headquarters: Secret Escapes, Plentific, LendInvest and Car & Classic. Each study names a data lead.
+- **GitHub code search:** `filename:dbt_project.yml org:<org>` found public dbt projects at Octopus Energy ([dbt-intervals](https://github.com/octoenergy/dbt-intervals)) and Orchestra ([orchestra-blueprints](https://github.com/orchestra-hq/orchestra-blueprints)).
+- **Meetup hosts:** gql2 past events of the London Snowflake User Group, Databricks London, Data Engineering London and The Friendly Data Meetup name the venue hosts. Dremio hosted a dbt talk at its London office. Theodo UK, MMC Ventures, Slalom, Sigma Computing and CFC Underwriting hosted or sponsored events.
 
 ### Chapter history and locations
 
@@ -75,6 +80,10 @@ This file holds what is specific to London. The method, scoring rules, schema an
 - **Women Techmakers and IWD at GDG London:** the [events API](https://gdg.community.dev/api/event_slim/for_chapter/995/?status=Completed&page_size=200) lists IWD 2024, IWD 2025 and a May 2026 evening. None had data talks. The IWD 2025 site did not respond.
 - **[PyData London 2025 call for papers](https://cfp.pydata.org/london2025/speaker/):** no dbt or analytics engineering talks. The PyData London schedule is rendered by JavaScript.
 - **[Women in Data UK meet-ups archive](https://womenindata.co.uk/category/meet-ups/):** it stops in 2020.
+- **Job boards under the obvious name:** Octopus Energy, Checkout.com, Starling, Lyst, Depop, Gousto, Secret Escapes, Not On The High Street, Tails.com, Simply Business, RVU, Beauty Pie, Ocado, ClearScore and Huel have no open Greenhouse, Lever or Ashby board under that name. Wise, GoCardless, Tide, Wayve and Synthesia have boards, but no London ad mentions dbt.
+- **HN keyword search:** a search for "dbt london" returns mostly unrelated comments. Query each Who is hiring thread instead.
+- **GitHub code search:** no public dbt projects for Monzo, GoCardless, Deliveroo, Wise, the BBC, GOV.UK, the ONS, the Financial Times or Skyscanner. The Ministry of Justice has only a test project. The limit is about 10 calls a minute and other sessions share it, so many calls had to wait.
+- **Meetup groups with no company hosts:** the London Apache Airflow group (mostly online) and Analytics.Club London (online job fairs).
 
 ## 3. Companies looked at
 
@@ -83,23 +92,29 @@ This file holds what is specific to London. The method, scoring rules, schema an
 - **Cognify:** the recruiter runs the London Analytics Engineering Meetup, the richest source of London talks.
 
 <!-- companies:start -->
-77 companies and communities were looked at. A company is local when it has people or roles in the region.
+102 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (38)</summary>
+<details><summary><b>Strong dbt use</b> (57)</summary>
 
-Biztory, Cleo, Comcast (local presence not confirmed), Crisp (local presence not confirmed), Datatonic, dbt Labs, Depop (local presence not confirmed), Dojo (local presence not confirmed), Euno (local presence not confirmed), Farfetch (local presence not confirmed), Fishtown Analytics (local presence not confirmed), Freelance consultant (local presence not confirmed), Fresha, GoCardless, Growth Street (local presence not confirmed), Infinite Lambda, Lawhive (local presence not confirmed), Lightdash, Lyst, Moneybox (local presence not confirmed), Monzo, Paradime (local presence not confirmed), Rittman Analytics (local presence not confirmed), RVU (local presence not confirmed), Sahaj Software, Sainsbury's, SELECT (local presence not confirmed), Simply Business (local presence not confirmed), Snowflake (local presence not confirmed), Spectacles CI (local presence not confirmed), SYNQ, Tails.com (local presence not confirmed), Talan (local presence not confirmed), Tesco, The Information Lab, Virgin Media O2, VTS (local presence not confirmed), Wise
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (10)</summary>
-
-Checkout.com, Cognify, Compare the Market (local presence not confirmed), Count, Data Engineers London, Gelato (local presence not confirmed), Not On The High Street (local presence not confirmed), Starling Bank (local presence not confirmed), Taptap Send (local presence not confirmed), Voy (local presence not confirmed)
+Amazon, Beamery, Biztory, Car & Classic, Cleo, Comcast (local presence not confirmed), Crisp (local presence not confirmed), Datatonic, dbt Labs, Depop (local presence not confirmed), Dojo, Dremio, ElevenLabs, Euno (local presence not confirmed), Farfetch (local presence not confirmed), Fishtown Analytics (local presence not confirmed), Freelance consultant (local presence not confirmed), Fresha, GoCardless, Growth Street (local presence not confirmed), Infinite Lambda, Kaluza, Lawhive, Lendable, LendInvest, Lightdash, Lyst, Marshmallow, Moneybox, Monzo, Multiverse, Octopus Energy, Orchestra, Paddle (local presence not confirmed), Paradime (local presence not confirmed), Plentific, Rittman Analytics (local presence not confirmed), RVU (local presence not confirmed), Sahaj Software, Sainsbury's, Secret Escapes, SELECT (local presence not confirmed), Simply Business (local presence not confirmed), Snowflake, Spectacles CI (local presence not confirmed), SYNQ, Tails.com (local presence not confirmed), Talan (local presence not confirmed), Taptap Send, Tesco, The Information Lab, Trainline, Virgin Media O2, Voy, VTS (local presence not confirmed), Wise, Zego
 
 </details>
 
-<details><summary><b>Not verified</b> (24)</summary>
+<details><summary><b>Some dbt signal</b> (14)</summary>
 
-Astrato Analytics, Baringa, Beauty Pie (local presence not confirmed), Co-op, Day1Data (local presence not confirmed), Deliveroo, Entain (local presence not confirmed), Global (local presence not confirmed), Gousto, HP Inc (local presence not confirmed), IAG (local presence not confirmed), John Lewis Partnership, Kubrick, Lloyds Banking Group, Medik8 (local presence not confirmed), Octopus Energy, Reward (local presence not confirmed), Secret Escapes (local presence not confirmed), Spark Foundry (local presence not confirmed), Spotify, Tem (local presence not confirmed), TXOdds (local presence not confirmed), Tyme Technologies (local presence not confirmed), Venatus (local presence not confirmed)
+Checkout.com, Codat, Cognify, Compare the Market (local presence not confirmed), Count, Data Engineers London, Deliveroo, Gelato (local presence not confirmed), Google DeepMind, Not On The High Street (local presence not confirmed), Spotify, Starling Bank (local presence not confirmed), Zilch, Zopa
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Moonpig
+
+</details>
+
+<details><summary><b>Not verified</b> (25)</summary>
+
+Astrato Analytics, Baringa, Beauty Pie (local presence not confirmed), CFC Underwriting, Co-op, Day1Data (local presence not confirmed), Entain (local presence not confirmed), Global (local presence not confirmed), Gousto, HP Inc (local presence not confirmed), IAG (local presence not confirmed), John Lewis Partnership, Kubrick, Lloyds Banking Group, Medik8 (local presence not confirmed), MMC Ventures, Reward (local presence not confirmed), Sigma Computing, Slalom, Spark Foundry (local presence not confirmed), Tem (local presence not confirmed), Theodo UK, TXOdds (local presence not confirmed), Tyme Technologies (local presence not confirmed), Venatus (local presence not confirmed)
 
 </details>
 
@@ -203,3 +218,4 @@ B&Q (local presence not confirmed), Financial Conduct Authority, OakNorth, Quant
 | 2026-10-01 | 1 | Location pass from public pages: 13 people placed, 9 in the region and 4 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 12 people searched, 3 placed in London. 21 people are still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass: the Women in Data UK podcast, PyLadies London and WiDS London. 9 people added: 5 speakers and podcast guests, plus 4 connectors. London WiMLDS and R-Ladies London are inactive. Women Coding Community, Ladies of Code, Rise and GDG London had no data talks. |
+| 2026-10-01 | 3 | Company pass from fetches: company job boards, HN Who is hiring, the dbt Labs case-study file, GitHub code search and Meetup hosts. Companies went from 79 to 104, and job ads from 3 to 34. 15 new companies have a strong dbt signal. Secret Escapes, Octopus Energy, Taptap Send and Voy were raised to strong, and 7 companies now have a confirmed London office. 5 data leads named in case studies were added as featured people. |

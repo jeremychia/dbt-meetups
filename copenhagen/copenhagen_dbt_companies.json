@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Copenhagen companies using dbt, and people who could speak at or attend the Copenhagen dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 3,
     "region": "Copenhagen (Copenhagen dbt Meetup)",
     "method": [
@@ -16,7 +16,11 @@
       "Lesson: Meetup's eventSearch query surfaced the upcoming chapter vol. 11 line-up, which is not yet in the enriched chapter history.",
       "v1 (2026-10-01): location pass. 17 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (2 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 12 people are still unknown.",
       "v2 (2026-10-01): women-in-data pass with fetches only (no web search, about 8 fetches): Meetup gql2 groupSearch near Copenhagen with 19 queries, past events of TechWomen Cph, Women Techmakers Copenhagen and Ascend, the GDG Copenhagen events API, and the PyLadies and She Loves Data sites. 9 people added (1 speaker and 8 organisers and hosts as connectors). Nobody's gender is recorded or inferred.",
-      "Lesson: TechWomen Cph is still the only active women-in-data group in Copenhagen. Its event hosts change from event to event, and they are useful connectors. Women Techmakers Copenhagen has been inactive since November 2023."
+      "Lesson: TechWomen Cph is still the only active women-in-data group in Copenhagen. Its event hosts change from event to event, and they are useful connectors. Women Techmakers Copenhagen has been inactive since November 2023.",
+      "v3 (2026-10-01): company pass with fetches only (about 35 fetches and 25 GitHub calls): HN Who is hiring comments since 2023, Greenhouse, Lever, Ashby and Workable boards for about 75 Danish employers, the thehub.io search API, Jobindex searches for dbt and analytics engineer, the dbt Labs case-study sitemap and GitHub organisation repository lists.",
+      "Lesson: thehub.io answers a fetch through its search API (api/v2/jobsandfeatured?search=dbt&countryCode=DK), and each ad page carries the full text.",
+      "Lesson: HN Who is hiring had no Danish ad with dbt since 2023.",
+      "v3 (2026-10-01): 1 LinkedIn profiles taken from pages already tied to each person (event, speaker and author pages, GitHub social accounts) with research/harvest_linkedin.py, without searching. Page links are medium confidence, GitHub links high."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -58,30 +62,31 @@
       "Jobindex ads marked 'matched a full-text dbt search' did not show the word dbt in what could be read; treat their dbt signal as medium until the ad is opened.",
       "Women-in-data sourcing came from TechWomen Cph, whose panels are mostly AI and career topics; R-Ladies Copenhagen and Copenhagen WiMLDS have been dormant since 2019.",
       "LinkedIn URLs are recorded only where they appeared in a search result. The Snowflake UG pages link more profiles, which were not copied.",
-      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred."
+      "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred.",
+      "Job ads were read on 2026-10-01. Ads close, so check the link before quoting one."
     ],
     "counts": {
-      "companies": 76,
-      "people": 98,
-      "job_postings": 11,
-      "companies_with_job_postings": 10,
-      "speaker_evidence_items": 72,
-      "unique_content_items": 62,
-      "people_with_linkedin": 8,
+      "companies": 82,
+      "people": 99,
+      "job_postings": 24,
+      "companies_with_job_postings": 18,
+      "speaker_evidence_items": 73,
+      "unique_content_items": 63,
+      "people_with_linkedin": 9,
       "people_who_spoke_at_this_chapter": 32,
       "internal_vinted": 0,
       "level": {
         "leadership": 33,
-        "working": 65
+        "working": 66
       },
       "speaker_potential": {
-        "medium": 40,
+        "medium": 41,
         "low": 12,
         "high": 46
       },
       "attendee_potential": {
         "high": 30,
-        "medium": 61,
+        "medium": 62,
         "low": 7
       },
       "priority_tier": {
@@ -89,20 +94,20 @@
         "organiser": 1,
         "3": 30,
         "1": 21,
-        "2": 33
+        "2": 34
       },
       "watchlist_companies": 41,
       "past_meetups": 11,
       "lead_type": {
         "proven_speaker": 72,
         "no_public_content": 19,
-        "featured": 1,
+        "featured": 2,
         "emerging_voice": 6
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "conference_or_meetup_agenda": 35,
-        "other": 11,
+        "other": 12,
         "women_in_data_community": 16,
         "newsletter_or_blog": 2,
         "chapter_meetup_history": 30,
@@ -147,8 +152,8 @@
       "performance & scale": 8,
       "career development": 7,
       "community": 7,
+      "data modeling": 6,
       "data governance": 5,
-      "data modeling": 5,
       "team & org design": 5,
       "analytics engineering": 5,
       "dbt best practices": 4,
@@ -156,13 +161,13 @@
       "developer workflow": 4,
       "orchestration & ci/cd": 4,
       "modern data stack": 3,
+      "dbt migration & adoption": 3,
       "business intelligence": 3,
       "dbt fundamentals": 3,
       "data mesh": 2,
       "tools & ecosystem": 2,
       "semantic layer": 2,
       "project structure": 2,
-      "dbt migration & adoption": 2,
       "dbt product updates": 2,
       "industry trends": 1,
       "dbt product features": 1
@@ -1870,9 +1875,25 @@
       "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
-        "agents"
+        "agents",
+        "dbt",
+        "Snowflake"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Data Engineer - On-site Copenhagen",
+          "url": "https://thehub.io/jobs/6a92238683763633917eb4f8",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "echnical teams and decision makers Shaping how modern AI infrastructure is built in practice Requirements You probably have experience with dbt, SnowFlake, Databricks, Fabric, BigQuery or similar ecosystems SQL, Python and APIs Data modelling and warehousing GenAI, ML or MLOps workf",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -1883,9 +1904,11 @@
           "city": "Copenhagen",
           "based_in_region": true,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kiliantscherny/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "medium"
@@ -1942,6 +1965,10 @@
             {
               "url": "https://github.com/kiliantscherny/Fun-With-LEGO-data",
               "note": "oss: Fun-With-LEGO-data"
+            },
+            {
+              "url": "https://www.linkedin.com/in/kiliantscherny/",
+              "note": "linkedin profile linked from https://github.com/kiliantscherny/Fun-With-LEGO-data"
             }
           ],
           "confidence": "High",
@@ -5385,14 +5412,48 @@
       "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "BigQuery",
+        "Looker"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Senior Fullstack Data Analyst (Commercial Analytics)",
+          "url": "https://jobs.ashbyhq.com/pleo/721a8d09-088b-4db7-b0eb-f8352ec70d58",
+          "source": "Ashby (Pleo careers)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ling layer your analysis depends on. For extra context, you'll also be leveraging technologies including SQL, dbt, BigQuery, Looker, Amplitude, HubSpot, Zuora, or Vitally. What you'll be doing Build and maintain the analyti",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Staff Fullstack Data Analyst (Commercial Analytics)",
+          "url": "https://jobs.ashbyhq.com/pleo/a74bbe26-8e3e-4c34-9be5-4611455dada9",
+          "source": "Ashby (Pleo careers)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "-grade analytics looks like at Pleo. For extra context, you'll also be leveraging technologies including SQL, dbt, BigQuery, Looker, Amplitude, HubSpot, Zuora, or Vitally. What you bring Prior experience operating at Staff",
+          "job_poster": null,
+          "posted_date": "2026-09-25",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "job_data_aggregator",
           "url": "https://theirstack.com/en/technology/dbt/dk",
           "note": "listed on TheirStack's 'companies using dbt in Denmark' page (116 companies, inferred from job ads); not verified against a single ad"
+        },
+        {
+          "type": "oss",
+          "url": "https://github.com/pleo-io/dbt-checkpoint-pleo",
+          "note": "public fork of dbt-checkpoint with Pleo's own dbt checks, updated 2026-06"
         }
       ],
       "people": [
@@ -5756,9 +5817,39 @@
       "local_presence": "confirmed",
       "dbt_signal": "strong",
       "stack_signals": [
-        "dbt"
+        "dbt",
+        "Airflow",
+        "Redshift",
+        "dlt"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://jobs.ashbyhq.com/toogoodtogo/a631b2af-9f61-4049-b3fd-60f0fd167369",
+          "source": "Ashby (Too Good To Go careers)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "cture. Tech Stack Our data stack consists of Airflow, Python, dlt, AWS (Redshift, Lambda, Kinesis, S3, Glue), dbt, Metaflow, and Terraform managed via GitOps principles. Key Responsibilities Product-Embedded Data Architectu",
+          "job_poster": null,
+          "posted_date": "2026-08-20",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Machine Learning Engineer",
+          "url": "https://jobs.ashbyhq.com/toogoodtogo/fa883e40-e815-445e-9825-b0a1d9c9df12",
+          "source": "Ashby (Too Good To Go careers)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "engineering degree). Experience in a cloud environment (AWS, Google Cloud, or Azure). Bonus: experience with dbt, Snowflake, Airflow, or Metaflow; experience in complex ML system design; and experience in statistical hypot",
+          "job_poster": null,
+          "posted_date": "2026-08-24",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "job_data_aggregator",
@@ -5879,7 +5970,10 @@
       ],
       "local_presence": "confirmed",
       "dbt_signal": "medium",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
       "job_postings": [
         {
           "title": "Senior ML Data Engineer",
@@ -5892,6 +5986,19 @@
           "posted_date": "2026-09-16",
           "last_seen": "2026-10-01",
           "job_family": "data",
+          "work_mode": null
+        },
+        {
+          "title": "Senior ML Data Engineer",
+          "url": "https://thehub.io/jobs/6aa9dcc7f0b1bfe4cfb04942",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "onal databases, caches, and Feature Stores. This is a role for a performance-driven engineer who excels at pipeline orchestration (Airflow, dbt), Infrastructure as Code (Terraform, Docker), and database tuning, ensuring our recommendation systems receive reliable data under strict l",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
           "work_mode": null
         }
       ],
@@ -5910,7 +6017,9 @@
       ],
       "local_presence": "confirmed",
       "dbt_signal": "medium",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [
         {
           "title": "Data Engineer",
@@ -5923,6 +6032,19 @@
           "posted_date": "2026-09-21",
           "last_seen": "2026-10-01",
           "job_family": "data",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://thehub.io/jobs/6ab0dbdeb6dc196e5a6bd1cc",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "uct analytics (schemas, versioning, instrumentation). Experience with finance data and/or subscription/transaction domains. Experience with dbt (understanding of transformation layer and how it interfaces with pipelines). Experience using AI/LLM tools in a data engineering context M",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
           "work_mode": null
         }
       ],
@@ -5941,7 +6063,10 @@
       ],
       "local_presence": "confirmed",
       "dbt_signal": "medium",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "Power BI"
+      ],
       "job_postings": [
         {
           "title": "BI Analyst",
@@ -5954,6 +6079,19 @@
           "posted_date": "2026-09-15",
           "last_seen": "2026-10-01",
           "job_family": "data",
+          "work_mode": null
+        },
+        {
+          "title": "BI Analyst",
+          "url": "https://thehub.io/jobs/6aa1f3cd961a30471ccb36e1",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "rcial or operational performance analysis Experience creating reporting for senior management Familiarity with data modelling tools such as dbt Experience working in a fast-growing or international company Knowledge of the payments or fintech industry Why Flatpay? Work from our HQ i",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
           "work_mode": null
         }
       ],
@@ -6167,16 +6305,24 @@
       "id": "intellishore",
       "name": "Intellishore",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Copenhagen"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "organiser",
+          "url": "https://www.meetup.com/copenhagen-dbt-meetup/events/303230047/",
+          "note": "named as organiser of Copenhagen dbt Meetup vol. 5 in Copenhagen (2024-10-10)"
+        }
+      ],
       "people": [
         {
           "id": "anders-boje-hertz",
@@ -6997,6 +7143,262 @@
         }
       ],
       "notes": "Women-in-tech group run by Women Techmakers ambassadors. Inactive since November 2023, but its organisers are connectors."
+    },
+    {
+      "id": "lb-forsikring",
+      "name": "LB Forsikring",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Copenhagen"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Data engineer med solide dbt- og Snowflake-kompetencer",
+          "url": "https://lbforsikring.career.emply.com/ad/data-engineer-med-solide-dbt-og-snowflake-kompetencer/9ralma/da",
+          "source": "Jobindex",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Har solid praktisk erfaring med dbt, Snowflake, SQL og datamodellering.",
+          "job_poster": null,
+          "posted_date": "2026-10-01",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "insurer at Amerika Plads, København Ø; the ad says Snowflake and dbt are among the platform's main technologies"
+    },
+    {
+      "id": "skatteguiden",
+      "name": "Skatteguiden",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Copenhagen"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Dagster"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://thehub.io/jobs/6a9fbdce1c7923d66bfc1eff",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "t those who can afford an accountant. None of that works without a data platform people can trust. Ours is built on Snowflake, Dagster, and dbt, turning messy source data into the numbers people rely on. We're investing further in it, and we need a data engineer who can take real ow",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "tax-filing service; the ad says its data platform is built on Snowflake, Dagster and dbt"
+    },
+    {
+      "id": "landfolk",
+      "name": "Landfolk",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Aarhus"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Internship at Landfolk",
+          "url": "https://thehub.io/jobs/6aadd162654390c4ab00306b",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "p turn data into insights and solutions that make a real difference across Landfolk. You will get hands-on experience with SQL, Python, and dbt while working across analytics engineering, data engineering, and analysis. You might help build reliable data models and pipelines, make t",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "holiday-home rental company in Aarhus; the internship ad promises hands-on work with SQL, Python and dbt"
+    },
+    {
+      "id": "dreamdata",
+      "name": "Dreamdata",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Copenhagen"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Dataform"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Insights Engineer",
+          "url": "https://thehub.io/jobs/6a9769644d03aefee3b654cf",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ve worked on a warehouse project end-to-end. This includes dimensional or semantic modeling, a transformation framework such as Dataform or dbt with models, tests, docs and CI, orchestration, and the discipline that keeps it from rotting. We run BigQuery on Google Cloud. Real statis",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "B2B revenue attribution software; the ad lists Dataform or dbt as the transformation framework"
+    },
+    {
+      "id": "timelog",
+      "name": "TimeLog",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Copenhagen"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Quality Engineer",
+          "url": "https://thehub.io/jobs/69fd27bb07ec7fb4328e0029",
+          "source": "thehub.io",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "reliability (e.g., in Databricks, Apache Spark, or similar platforms). Familiarity with data testing frameworks such as Great Expectations, dbt tests, or similar tools for asserting data correctness and completeness. What We're Looking For Ownership mentality that extends beyond wri",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "the quality engineer ad lists dbt tests among similar data-testing tools"
+    },
+    {
+      "id": "mcdonalds-nordics-food-folk",
+      "name": "McDonald's Nordics (Food Folk)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Copenhagen",
+        "Stockholm"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Cloud",
+        "Snowflake",
+        "Fivetran",
+        "Data Vault"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/case-studies/mcdonalds-nordics",
+          "note": "dbt Labs case study: one dbt Cloud and Data Vault platform on Snowflake for Sweden, Denmark, Norway and Finland"
+        }
+      ],
+      "people": [
+        {
+          "id": "cristian-ivanoff",
+          "name": "Cristian Ivanoff",
+          "pronouns": null,
+          "title": "Data Engineer, Food Folk",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "dbt Labs case study",
+              "title": "McDonald's Nordics unifies data with dbt Cloud and Data Vault",
+              "date": null,
+              "url": "https://www.getdbt.com/case-studies/mcdonalds-nordics",
+              "content_id": "dbt-labs-case-studymcdonalds-nordics-unifies-data-with-dbt-c",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "quoted on building one Data Vault platform with dbt Cloud",
+              "topics": [
+                "data modeling",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/case-studies/mcdonalds-nordics",
+              "note": "article: McDonald's Nordics unifies data with dbt Cloud and Data Vault"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "running Data Vault on dbt Cloud across four Nordic markets",
+          "past_chapter_talks": [],
+          "notes": "quoted in the dbt Labs case study; the page gives no city"
+        }
+      ],
+      "notes": "Food Folk runs McDonald's in four Nordic markets; the case study does not say which office the data team works from"
     }
   ],
   "sources": {
@@ -7170,6 +7572,18 @@
         "url": "https://womenwhocode.com/",
         "yielded": false,
         "note": "Closed in 2024; not checked further."
+      },
+      {
+        "name": "thehub.io search API",
+        "url": "https://thehub.io/api/v2/jobsandfeatured?search=dbt&countryCode=DK",
+        "yielded": true,
+        "note": "10 ads, all with the full text"
+      },
+      {
+        "name": "HN Who is hiring (Algolia)",
+        "url": "https://hn.algolia.com/api/v1/search?query=dbt&tags=comment",
+        "yielded": false,
+        "note": "no Danish dbt ad since 2023"
       }
     ]
   },

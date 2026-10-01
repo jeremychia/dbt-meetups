@@ -7,21 +7,21 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 76 |
-| People | 98 |
+| Companies | 82 |
+| People | 99 |
 | Tier 1 leads | 21 |
 | First-time speakers (publish, no talk yet) | 6 |
 | Proven speakers | 72 |
 | Spoke at this chapter before | 32 |
 | Based in the region | 72 |
 | Based elsewhere | 7 |
-| Location unknown | 19 |
-| With a LinkedIn profile | 8 |
-| Job ads mentioning dbt | 11 |
+| Location unknown | 20 |
+| With a LinkedIn profile | 9 |
+| Job ads mentioning dbt | 24 |
 | Past chapter meetups | 11 |
 <!-- at-a-glance:end -->
 
@@ -56,6 +56,11 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **[Jobindex search for dbt](https://www.jobindex.dk/jobsoegning?q=dbt):** 12 ads. The results embed a JSON list of ads, but each ad links off-site. Only [Dagrofa's ad](https://www.jobindex.dk/vis-job/r14003203) visibly says dbt.
 - **[TheirStack](https://theirstack.com/en/technology/dbt/dk):** it shows 10 of the 116 Danish companies it lists as using dbt.
 - **LinkedIn search results:** 6 people came from posts about dbt work or dbt hiring.
+- **[thehub.io search API](https://thehub.io/api/v2/jobsandfeatured?search=dbt&countryCode=DK):** 10 Danish ads, and each ad page carries the full text. It added Skatteguiden (Snowflake, Dagster and dbt), Landfolk in Aarhus, Dreamdata and TimeLog.
+- **Jobindex ads on Emply:** the [LB Forsikring ad](https://lbforsikring.career.emply.com/ad/data-engineer-med-solide-dbt-og-snowflake-kompetencer/9ralma/da) asks for solid dbt and Snowflake experience.
+- **Company job boards:** the Greenhouse, Lever and Ashby boards of about 75 Danish employers. Only Pleo and Too Good To Go had a Copenhagen ad that says dbt.
+- **[dbt Labs case studies](https://www.getdbt.com/case-studies/mcdonalds-nordics):** McDonald's Nordics (Food Folk) runs Data Vault on dbt Cloud. The page does not say which office the data team works from.
+- **GitHub organisation repositories:** Pleo publishes [a fork of dbt-checkpoint](https://github.com/pleo-io/dbt-checkpoint-pleo) with its own dbt checks.
 
 ### Chapter history and locations
 
@@ -76,7 +81,10 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **[Analytics Pioneers Copenhagen](https://www.meetup.com/analytics-pioneers-copenhagen/):** online trainings by a German agency.
 - **[R-Ladies Copenhagen](https://www.meetup.com/rladies-copenhagen/) and [Copenhagen Women in Machine Learning & Data Science](https://www.meetup.com/copenhagen-women-in-machine-learning-and-data-science/):** no events since 2019.
 - **Other women-in-data networks:** [Ascend - Women in Data & Analytics](https://www.meetup.com/women-in-data-analytics/) shows up in a Copenhagen search, but it meets at Wise in London. The [GDG Copenhagen](https://gdg.community.dev/gdg-copenhagen/) events API (`event_slim/for_chapter/1018`) has no women-in-tech or data events since 2023. pyladies.com lists no Danish chapter. She Loves Data lists no Copenhagen events. Women Who Code closed in 2024. Meetup's group search found no WiDS, Women in Big Data or Girls in Tech group.
-- **[thehub.io](https://thehub.io/jobs?search=dbt):** it loads results in the browser, so a fetch saw only 3 ads from outside Denmark.
+- **[thehub.io](https://thehub.io/jobs?search=dbt) search page:** it loads results in the browser, so a fetch saw only 3 ads from outside Denmark. Use the search API in section 1 instead.
+- **HN Who is hiring:** no Danish ad since 2023 mentions dbt.
+- **Workable boards:** Ageras, Keepit, LEO Pharma, Qarma and Monta had no open ads, so their Copenhagen presence is still not confirmed. ZeroNorth, TDC Net, Steep and Mrs Wordsmith have no Greenhouse, Lever, Ashby, Workable, Recruitee or SmartRecruiters board.
+- **GitHub code search:** it hit the shared rate limit. Listing each organisation's repositories found dbt only at Pleo.
 - **Jobindex ads:** they link off-site, so the dbt wording was visible for one ad only.
 - **[dbt Summit speakers page](https://www.getdbt.com/dbt-summit/speakers):** it now shows only the 2027 waitlist.
 - **GitHub learning repositories:** a "dbt-learn" or "dbt-training" repo is not published content. Those people are recorded with no public content.
@@ -89,17 +97,17 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 - **dbt Labs staff are labelled.** Seven past chapter speakers work at dbt Labs.
 
 <!-- companies:start -->
-75 companies and communities were looked at. A company is local when it has people or roles in the region.
+81 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (27)</summary>
+<details><summary><b>Strong dbt use</b> (31)</summary>
 
-Ageras (local presence not confirmed), Better Collective, Dagrofa, dbt Labs (local presence not confirmed), DUOS, group.one, Intellishore (local presence not confirmed), Keepit (local presence not confirmed), LEAP, LEGO Group, LEO Pharma (local presence not confirmed), Lunar, Lundbeck, Mrs Wordsmith (local presence not confirmed), Novo Holdings, Omni (local presence not confirmed), Pas Normal Studios, Pleo, Qarma (local presence not confirmed), Steep (local presence not confirmed), SYNQ, TDC Net (local presence not confirmed), TooGoodToGo, VELUX, Veo Technologies, Vipps MobilePay, ZeroNorth (local presence not confirmed)
+Ageras (local presence not confirmed), Better Collective, Dagrofa, dbt Labs (local presence not confirmed), DUOS, group.one, Intellishore, Keepit (local presence not confirmed), Landfolk, LB Forsikring, LEAP, LEGO Group, LEO Pharma (local presence not confirmed), Lunar, Lundbeck, McDonald's Nordics (Food Folk) (local presence not confirmed), Mrs Wordsmith (local presence not confirmed), Novo Holdings, Omni (local presence not confirmed), Pas Normal Studios, Pleo, Qarma (local presence not confirmed), Skatteguiden, Steep (local presence not confirmed), SYNQ, TDC Net (local presence not confirmed), TooGoodToGo, VELUX, Veo Technologies, Vipps MobilePay, ZeroNorth (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Some dbt signal</b> (22)</summary>
+<details><summary><b>Some dbt signal</b> (24)</summary>
 
-7N, Ascendis Pharma, BESTSELLER, Coelacanth Company (local presence not confirmed), DK Company (local presence not confirmed), Flatpay, Genmab, GoWish, Hamamatsu Photonics, HelloFresh (local presence not confirmed), Heyra, Inspari, Knowit (local presence not confirmed), Quiver, ROCKWOOL Group, Santander Nordics (local presence not confirmed), Saxo Bank, Scania Danmark (local presence not confirmed), Snowflake, Spirii, Trustpilot, Udviklings- og Forenklingsstyrelsen (local presence not confirmed)
+7N, Ascendis Pharma, BESTSELLER, Coelacanth Company (local presence not confirmed), DK Company (local presence not confirmed), Dreamdata, Flatpay, Genmab, GoWish, Hamamatsu Photonics, HelloFresh (local presence not confirmed), Heyra, Inspari, Knowit (local presence not confirmed), Quiver, ROCKWOOL Group, Santander Nordics (local presence not confirmed), Saxo Bank, Scania Danmark (local presence not confirmed), Snowflake, Spirii, TimeLog, Trustpilot, Udviklings- og Forenklingsstyrelsen (local presence not confirmed)
 
 </details>
 
@@ -115,7 +123,7 @@ Copenhagen Data Engineering, Employer not identified (local presence not confirm
 
 </details>
 
-<details><summary><b>Other sources checked</b> (28)</summary>
+<details><summary><b>Other sources checked</b> (30)</summary>
 
 - Local chapter history (enriched/copenhagen-dbt-meetup.json): `enriched/copenhagen-dbt-meetup.json`
 - [Copenhagen dbt Meetup vol. 11 (upcoming)](https://www.meetup.com/copenhagen-dbt-meetup/events/316677743/)
@@ -145,6 +153,8 @@ Copenhagen Data Engineering, Employer not identified (local presence not confirm
 - [PyLadies chapter list](https://pyladies.com/locations/) (nothing useful)
 - [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
 - [Women Who Code](https://womenwhocode.com/) (nothing useful)
+- [thehub.io search API](https://thehub.io/api/v2/jobsandfeatured?search=dbt&countryCode=DK)
+- [HN Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt&tags=comment) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -204,3 +214,4 @@ Copenhagen Data Engineering, Employer not identified (local presence not confirm
 | 2026-10-01 | 1 | Location pass from public pages: in-person chapter talks, Sessionize and tied Meetup member profiles. 12 people placed, 9 in Copenhagen and 3 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 10 people searched, 1 placed in Copenhagen and 1 in Dublin. With the location pass, 14 people placed and 15 still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass over TechWomen Cph, Women Techmakers Copenhagen and other networks. 9 people added: 1 digital analytics engineer and 8 organisers and hosts as connectors. |
+| 2026-10-01 | 3 | Company pass from the thehub.io API, Jobindex, company job boards, dbt Labs case studies and GitHub. 6 companies added: LB Forsikring, Skatteguiden and Landfolk (strong), Dreamdata and TimeLog (medium), and McDonald's Nordics (strong, office not confirmed). Intellishore's Copenhagen presence is confirmed. 13 job ads added, now 24. |

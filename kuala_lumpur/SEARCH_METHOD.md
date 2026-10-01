@@ -7,11 +7,11 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 - **First built:** 2026-09-23
 
 <!-- at-a-glance:start -->
-**At a glance** (version 6, 2026-10-01)
+**At a glance** (version 7, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 94 |
+| Companies | 101 |
 | People | 53 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 8 |
@@ -21,7 +21,7 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 | Based elsewhere | 4 |
 | Location unknown | 12 |
 | With a LinkedIn profile | 38 |
-| Job ads mentioning dbt | 50 |
+| Job ads mentioning dbt | 92 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
 
@@ -41,6 +41,7 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **LinkedIn Jobs:** [a dbt search with `location=Malaysia`](https://www.linkedin.com/jobs/search?keywords=dbt&location=Malaysia), scanned with the in-page script from `../baltics/SEARCH_METHOD.md` Appendix A. It returned 627 unique listings, and pages stop after `start=630`. Only the 488 data-titled ads were opened. 27 ads at 24 employers contained the whole word "dbt", and most hits came in the first ~250 results. Two parallel workers at 1.5 s spacing hit 94 HTTP 429 errors, all recovered by the back-off.
 - **[freehire.me](https://freehire.me/jobs?countries=my&skills=dbt):** about 65 Malaysian jobs tagged dbt in four fetches, often with full ad text. It mirrors Workday, Ashby and Zoho ads that don't render when fetched.
 - **[Indeed Malaysia](https://malaysia.indeed.com/q-dbt-jobs.html):** readable with a plain fetch, including `?start=10`. It found Wilhelmsen, Coforge, Rapsodo, Rotate and a recruiter ad that LinkedIn missed.
+- **[freehire.me API](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=MY):** the JSON API behind freehire.me answers a plain fetch. One call returns all 52 Malaysian ads tagged dbt. The search results cut each ad at about 1,000 characters, so read `/api/v1/jobs/<slug>` for the full text. It added Faculty Digital, MetaComp and Focal Consulting, and new ads for GXBank, onsemi and ams OSRAM.
 
 ### People
 
@@ -77,6 +78,9 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **Singapore dbt Meetup speakers:** `../enriched/singapore-dbt-meetup.json` was checked, and none is based in Kuala Lumpur.
 - **Search snippets that swap employers:** a snippet credited GXBank's "dbt within Snowflake" ad to AirAsia. Always open the ad.
 - **Snippet summaries:** they go stale, but result titles don't. Lee Boon Keong's summary still said MoneyLion, while the title said Lance Data.
+- **Hacker News Who is hiring:** no Malaysian role mentions dbt.
+- **GitHub code search:** no public `dbt_project.yml` in the Carsome or Deriv organisations.
+- **freehire.me ads tagged Malaysia that are elsewhere:** some ads are for Singapore, Karachi or Dubai, and one Danish ad is placed in Kelantan. They were left out.
 
 ## 3. Companies looked at
 
@@ -86,29 +90,29 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **Many large firms are on the watchlist.** 55 of the 94 companies are watchlisted, mostly large Malaysian firms checked without finding dbt. They are kept so they are not researched again. Grab, Shopee, Lazada and Xendit have their data teams mostly in Singapore, Indonesia or China.
 
 <!-- companies:start -->
-92 companies and communities were looked at. A company is local when it has people or roles in the region.
+99 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (16)</summary>
+<details><summary><b>Strong dbt use</b> (19)</summary>
 
-Askheadhunter / Timesconsult (recruiter, unnamed telco client), Fivetran / dbt Labs (merged 2026) (local presence not confirmed), foodpanda Malaysia (Delivery Hero), KL analytics hub, Funding Societies | Modalku (Malaysia), GXBank, Intrepid Asia, Nitka Technologies, onsemi (Malaysia), ROCKWOOL (Malaysia), Ryt Bank (YTL Digital Bank), ShopBack (local presence not confirmed), Star Media Group Berhad, TIME dotCom Berhad, Vinted (local presence not confirmed), Wilhelmsen (KL GBS Data & Analytics), Xendit (Malaysia office, KL Sentral)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (21)</summary>
-
-Agoda (KL office), Airwallex (local presence not confirmed), ams OSRAM (Kulim), Bank Islam Malaysia, BonusLink, CloudMile, Coforge, Decube (local presence not confirmed), Deriv, DFI Retail Group (PJ), Employment Hero (local presence not confirmed), Endava (KL), G-AsiaPacific, Ikano Retail (IKEA franchisee), MoneyLion (Gen Digital), KL tech hub, Oxydata Software Sdn Bhd, Prudential Services Asia, Rapsodo (KL), Sime Darby Industrial, Snowflake Malaysia / Snowflake User Group KL, Synogize (KL office)
+ams OSRAM (Kulim), Askheadhunter / Timesconsult (recruiter, unnamed telco client), BonusLink, Fivetran / dbt Labs (merged 2026) (local presence not confirmed), foodpanda Malaysia (Delivery Hero), KL analytics hub, Funding Societies | Modalku (Malaysia), GXBank, Ikano Retail (IKEA franchisee), Intrepid Asia, Nitka Technologies, onsemi (Malaysia), ROCKWOOL (Malaysia), Ryt Bank (YTL Digital Bank), ShopBack (local presence not confirmed), Star Media Group Berhad, TIME dotCom Berhad, Vinted (local presence not confirmed), Wilhelmsen (KL GBS Data & Analytics), Xendit (Malaysia office, KL Sentral)
 
 </details>
 
-<details><summary><b>dbt as a nice-to-have</b> (6)</summary>
+<details><summary><b>Some dbt signal</b> (25)</summary>
 
-Concentrix (KL), K3 Advisory Group (incl. Quantuma), Reap (KL), Rotate (KL), Standard Chartered (KL), WPP Media (KL)
+Agoda (KL office), AirAsia / Capital A / airasia MOVE / Teleport / BigPay, Airwallex (local presence not confirmed), Alphv Recruit, Bank Islam Malaysia, CloudMile, Coforge, Decube (local presence not confirmed), Deriv, DFI Retail Group (PJ), Employment Hero (local presence not confirmed), Endava (KL), Faculty Digital, Focal Consulting, G-AsiaPacific, MetaComp, MoneyLion (Gen Digital), KL tech hub, Oxydata Software Sdn Bhd, Pan Asia Group, Prudential Services Asia, Rapsodo (KL), Sime Darby Industrial, Snowflake Malaysia / Snowflake User Group KL, SolveIT Consultant, Synogize (KL office)
 
 </details>
 
-<details><summary><b>Not verified</b> (36)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (7)</summary>
 
-AirAsia / Capital A / airasia MOVE / Teleport / BigPay, Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), Fasset (KL), Fave, Fuku, iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), Petronas / Petronas Digital, RBC Shared Services Malaysia, Roche (KL), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), Wise (KL office)
+Concentrix (KL), K3 Advisory Group (incl. Quantuma), ONL Biz Solutions, Reap (KL), Rotate (KL), Standard Chartered (KL), WPP Media (KL)
+
+</details>
+
+<details><summary><b>Not verified</b> (35)</summary>
+
+Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), Fasset (KL), Fave, Fuku, iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), Petronas / Petronas Digital, RBC Shared Services Malaysia, Roche (KL), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), Wise (KL office)
 
 </details>
 
@@ -131,7 +135,7 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identi
 
 </details>
 
-<details><summary><b>Other sources checked</b> (15)</summary>
+<details><summary><b>Other sources checked</b> (18)</summary>
 
 - [Meetup gql2 groupSearch near Kuala Lumpur](https://www.meetup.com/gql2)
 - [R-Ladies Kuala Lumpur (Meetup gql2)](https://www.meetup.com/rladies-kuala-lumpur/) (nothing useful)
@@ -148,6 +152,9 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identi
 - [WiDS Worldwide site search](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Malaysia) (nothing useful)
 - [Women in Tech Malaysia](https://womenintechmalaysia.com/) (nothing useful)
 - [Luma Kuala Lumpur discover](https://api.lu.ma/discover/get-paginated-events?discover_place_api_id=discplace-O15L1VZiYe0GYGm) (nothing useful)
+- [freehire.me API, Malaysia, skill dbt](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=MY)
+- [Hacker News Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt%20malaysia&tags=comment) (nothing useful)
+- [getdbt.com case studies (llms-full-case-studies.txt)](https://www.getdbt.com/llms-full-case-studies.txt) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -208,3 +215,4 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identi
 | 2026-09-23 | 4 | Shared schema v3 adds `pronouns` (self-stated only, never inferred; none recorded yet) and `sourced_via`, which is derived from evidence (e.g. `women_in_data_community` for the PyLadies x PyData KL speaker). The field list is in `../berlin_planning/SEARCH_METHOD.md` §3. For women-in-data sourcing and the line-up balance check, see that file's Step 2b and §1 Step 6. Backup: `kuala_lumpur_dbt_companies.v3.json`. |
 | 2026-10-01 | 5 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. An in-person talk at a Snowflake community meetup in Kuala Lumpur placed Chang Boon Heng. LinkedIn search results placed Izzudin Hafiz in Kuala Lumpur and Feng Cheng in Singapore. 3 people are still unknown. |
 | 2026-10-01 | 6 | Women-in-data pass. Removed the `HIGHLIGHT` notes. Checked PyLadies KL, Women Techmakers Ambassadors KL (through GDG KL), R-Ladies KL, WiDS, She Loves Data, Girls in Tech Malaysia and Women in Tech Malaysia. Added 9 people with `sourced_via: women_in_data_community`: 4 speakers (Cheuk Ting Ho, Kim-Ann Git, Surabhi Pandey, Christine Tee) and 5 PyLadies KL organisers as connectors. Added community channels for Women Techmakers KL and R-Ladies KL. |
+| 2026-10-01 | 7 | Company pass from job ads: the freehire.me API. 7 companies and 42 job ads added. BonusLink, Ikano Retail and ams OSRAM raised to strong. AirAsia raised to medium. The file has no chapter, so `enriched_file` is null. |

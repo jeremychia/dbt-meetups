@@ -4,7 +4,7 @@
     "generated_at": "2026-10-01",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Seoul companies using dbt, and people who could speak at or attend the Seoul dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 3,
     "region": "Seoul (Seoul dbt Meetup)",
     "method": [
@@ -18,7 +18,11 @@
       "v2 (2026-10-01): women-in-data pass with fetches only (no web search, about 14 fetches): Meetup gql2 groupSearch near Seoul with 21 queries; past events of PyLadies Seoul and AWSKRUG (22 Women In Cloud meetups since 2023); the GDG Seoul events API; WiDS site search for Seoul and Korea; Girls in Tech Korea, Women in AI Korea and event-us search. 11 people added (1 speaker and 10 connectors). Nobody's gender is recorded or inferred; no pronouns were self-published.",
       "Lesson: AWSKRUG Women In Cloud runs inside the AWSKRUG Meetup group, so a groupSearch for women does not find it. Filter AWSKRUG's past events for 'Women In Cloud' instead.",
       "Lesson: GDG Seoul (gdg.community.dev chapter 786) has held no Women Techmakers event since 2019.",
-      "Lesson: event-us.kr search pages render by JavaScript and return no results to a plain fetch."
+      "Lesson: event-us.kr search pages render by JavaScript and return no results to a plain fetch.",
+      "v3 (2026-10-01): company pass with fetches only (about 25 search calls, 970 ad reads through the open job API, and 40 GitHub calls): wanted.co.kr search and job APIs for 7 queries, skipping ads already in the file, Greenhouse, Lever and Ashby boards for about 45 Korean and global employers, HN Who is hiring, and GitHub code search and organisation repository lists.",
+      "Lesson: most new wanted.co.kr ads list dbt only as a plus (우대 사항), so new Seoul companies come in at nice-to-have.",
+      "Lesson: GitHub code search hit its rate limit after 3 calls; listing an organisation's repositories uses the core API instead, but no Korean organisation has a public dbt repository.",
+      "v3 (2026-10-01): 2 LinkedIn profiles taken from pages already tied to each person (event, speaker and author pages, GitHub social accounts) with research/harvest_linkedin.py, without searching. Page links are medium confidence, GitHub links high."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -61,16 +65,17 @@
       "Job ads were read on 2026-10-01; wanted.co.kr does not expose posting dates in the fields read.",
       "LinkedIn: 1 of 59 people have a profile url, taken word for word from search results. 58 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first.",
       "Speakers from women-in-data community events are recorded by where they spoke (sourced_via women_in_data_community). No one's gender is recorded or inferred.",
-      "Several community hosts are known only by a Meetup first name or handle; confirm full names before outreach."
+      "Several community hosts are known only by a Meetup first name or handle; confirm full names before outreach.",
+      "Job ads were read on 2026-10-01. Ads close, so check the link before quoting one."
     ],
     "counts": {
-      "companies": 64,
+      "companies": 71,
       "people": 69,
-      "job_postings": 28,
-      "companies_with_job_postings": 24,
+      "job_postings": 38,
+      "companies_with_job_postings": 32,
       "speaker_evidence_items": 62,
       "unique_content_items": 53,
-      "people_with_linkedin": 1,
+      "people_with_linkedin": 3,
       "people_who_spoke_at_this_chapter": 20,
       "internal_vinted": 0,
       "level": {
@@ -93,7 +98,7 @@
         "3": 15,
         "connector": 13
       },
-      "watchlist_companies": 27,
+      "watchlist_companies": 26,
       "past_meetups": 12,
       "lead_type": {
         "emerging_voice": 8,
@@ -516,9 +521,11 @@
           "city": "Seoul",
           "based_in_region": true,
           "level": "leadership",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/seong-yun-byeon-8183a8113/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -597,6 +604,10 @@
             {
               "url": "https://zzsza.github.io/about/",
               "note": "talk: talks listed on his about page"
+            },
+            {
+              "url": "https://www.linkedin.com/in/seong-yun-byeon-8183a8113/",
+              "note": "linkedin profile linked from https://zzsza.github.io/data-engineering/2025/01/30/dbt-with-bigquery/"
             }
           ],
           "confidence": "High",
@@ -2810,9 +2821,11 @@
           "city": "Seoul, South Korea",
           "based_in_region": true,
           "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jaewon-lim-563510159/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
           "meetup_fit": {
             "speaker_potential": "high",
             "attendee_potential": "high"
@@ -2851,6 +2864,10 @@
             {
               "url": "https://github.com/jaelim095",
               "note": "location (high): github profile jaelim095 (linked from velog bio): location 'Seoul, South Korea'; meetup member jaelim095 also lists Seoul https://github.com/jaelim095"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jaewon-lim-563510159/",
+              "note": "linkedin profile linked from github.com/jaelim095 social accounts"
             }
           ],
           "confidence": "Low",
@@ -4272,15 +4289,32 @@
       "id": "wrtn-technologies",
       "name": "Wrtn Technologies",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Seoul"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
-      "job_postings": [],
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Product Analyst",
+          "url": "https://www.wanted.co.kr/wd/377119",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "한 데이터 분석 경험이 있으신 분 • 인과추론에 대한 이해가 있으신 분 (ITS, PSM-DID 등) • 택소노미에 대한 이해도가 있으신 분 • Airflow, dbt를 이용하여 마트 제작을 경험해 보신 분",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -4406,7 +4440,7 @@
           "notes": "location (medium): in-person talk at Seoul dbt Meetup #9 (2026-07-03, MARU360 Gangnam); employer Wrtn Technologies is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/315240680/"
         }
       ],
-      "notes": "employer of a past Seoul dbt Meetup speaker"
+      "notes": "employer of a past Seoul dbt Meetup speaker | office in Seocho, Seoul per the wanted.co.kr ad"
     },
     {
       "id": "cartier",
@@ -5618,6 +5652,274 @@
         }
       ],
       "notes": "WiDS regional event: a 2023 watch party of the WiDS Worldwide conference, in English. No event since."
+    },
+    {
+      "id": "yeogi-eottae",
+      "name": "Yeogi Eottae (여기어때컴퍼니)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst [User Behavior]",
+          "url": "https://www.wanted.co.kr/wd/386902",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "데이터를 통합한 대용량 데이터 분석에 대한 경험이 있는 분 • 통계, 데이터 사이언스, 컴퓨터 사이언스, 경영정보, 산업공학 관련 전공인 분 • Airflow, dbt, BigQuery 활용 경험이 있는 분",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "travel and accommodation platform in Gangnam"
+    },
+    {
+      "id": "bagelcode",
+      "name": "Bagelcode (베이글코드)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "[DATA&AI] Data Engineer",
+          "url": "https://www.wanted.co.kr/wd/370398",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "afka, Flink 등 분산 데이터 처리 시스템의 설계 및 구축 경험이 있으신 분 • Databricks · Delta Lake 기반 레이크하우스 구축, 또는 dbt를 활용한 데이터 모델링·품질 관리 경험이 있으신 분 • Airflow 등 워크플로우 오케스트레이션 운영 경험이 있으신 분 • 백엔드 및 서버 엔지니어로 3년 이",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "mobile game studio in Gangnam"
+    },
+    {
+      "id": "paytalab-passorder",
+      "name": "PaytaLab (Passorder) (페이타랩)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "[시니어] 데이터 엔지니어 (Growth Data Engineer), 서울",
+          "url": "https://www.wanted.co.kr/wd/321822",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "있는 분 • Snowflake를 활용해 데이터 적재/권한설정/비용 최적화 등 운영 경험이 있으신 분 • AI/ML 파이프라인 설계 및 구현 경험이 있는 분 • dbt를 활용한 데이터 품질 관리 및 데이터 카탈로그 구축 경험이 있으신 분 • 빠르게 성장하는 IT 스타트업 환경, 특히 O2O·모바일 앱·식음료 도메인에서 근무한",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "[주니어] 데이터 엔지니어 (Growth Data Engineer), 서울",
+          "url": "https://www.wanted.co.kr/wd/321821",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "있는 분 • Snowflake를 활용해 데이터 적재/권한설정/비용 최적화 등 운영 경험이 있으신 분 • AI/ML 파이프라인 설계 및 구현 경험이 있는 분 • dbt를 활용한 데이터 품질 관리 및 데이터 카탈로그 구축 경험이 있으신 분 • 빠르게 성장하는 IT 스타트업 환경, 특히 O2O·모바일 앱·식음료 도메인에서 근무한",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "[병역특례] 데이터 엔지니어 (Growth Data Engineer), 서울",
+          "url": "https://www.wanted.co.kr/wd/326794",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "있는 분 • Snowflake를 활용해 데이터 적재/권한설정/비용 최적화 등 운영 경험이 있으신 분 • AI/ML 파이프라인 설계 및 구현 경험이 있는 분 • dbt를 활용한 데이터 품질 관리 및 데이터 카탈로그 구축 경험이 있으신 분 • 빠르게 성장하는 IT 스타트업 환경, 특히 O2O·모바일 앱·식음료 도메인에서 근무한",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "mobile ordering app Passorder, Gangnam"
+    },
+    {
+      "id": "cj-olive-young",
+      "name": "CJ Olive Young (CJ올리브영)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Kafka",
+        "Flink"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://www.wanted.co.kr/wd/382625",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "않고, 명확한 데이터 구조와 효율적 활용 관점에서 기준을 제시할 수 있는 분 주문·상품·재고·회원 등 커머스 트랜잭션 및 마스터 데이터 모델링 경험이 있으신 분 dbt 등 변환 모델링 프레임워크 기반 개발·운영 경험이 있으신 분 CDC(Debezium, OGG 등), Kafka, Flink 등 실시간 데이터 처리 환경 구축·운",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "health and beauty retailer, Yongsan; the analytics engineer ad names dbt among transformation frameworks"
+    },
+    {
+      "id": "umos-one",
+      "name": "UMOS ONE (유모스원)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Spark"
+      ],
+      "job_postings": [
+        {
+          "title": "AI Data Engineer (Ontology & Knowledge Base)",
+          "url": "https://www.wanted.co.kr/wd/379390",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "AG 시스템의 평가(Evaluation) 파이프라인 구축 및 프롬프트 엔지니어링 경험 • 대용량 데이터 전처리 및 분석 과정에서 Spark(PySpark) 또는 dbt 활용 경험 • Mobility/Logistics 도메인 데이터에 대한 이해 및 경험",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "turtle-knowledge",
+      "name": "Turtle Knowledge (터틀날리지)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Gwacheon"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "MLflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Databricks Data Engineer",
+          "url": "https://www.wanted.co.kr/wd/371923",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "eal-time) 스트리밍 데이터 처리 인프라 구축 경험자 4. MLflow 등을 활용한 MLOps 파이프라인 구축 및 AI 모델 라이프사이클 관리 경험자 5. dbt를 활용한 데이터 모델링 최적화 경험 및 타 데이터 솔루션(BigQuery, Snowflake 등) 혼합 환경 운영 경험자 6. Tableau, PowerBI 등",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "office in Gwacheon, Gyeonggi, in the Seoul Capital Area"
+    },
+    {
+      "id": "coupang",
+      "name": "Coupang",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff, Security Data Platform Engineer ",
+          "url": "https://www.coupang.jobs/en/jobs/?gh_jid=8188042",
+          "source": "Greenhouse (Coupang careers)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "계 및 운영 경험 Git 기반 협업 및 CI/CD 파이프라인 운영 경험 우대 사항 클라우드 데이터 웨어하우스를 활용한 대규모 데이터 플랫폼 구축 및 운영 경험 데이터 변환/오케스트레이션 프레임워크(dbt, Airflow 등) 운영 경험 Detection-as-Code 철학에 대한 이해 및 관련 플랫폼 사용 또는 개발 경험 IaC(Terraform, CloudFormation 등)를 활용한 인프라",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-10-01",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
     }
   ],
   "sources": {
@@ -5755,6 +6057,18 @@
         "url": "https://event-us.kr/search?keyword=%EC%97%AC%EC%84%B1%20%EB%8D%B0%EC%9D%B4%ED%84%B0",
         "yielded": false,
         "note": "Search renders by JavaScript; no results in the fetched page."
+      },
+      {
+        "name": "wanted.co.kr search and job APIs",
+        "url": "https://www.wanted.co.kr/api/chaos/search/v1/position?query=dbt",
+        "yielded": true,
+        "note": "970 ads read; 9 new ads at 8 companies"
+      },
+      {
+        "name": "GitHub organisation repositories",
+        "url": "https://api.github.com/orgs/daangn/repos",
+        "yielded": false,
+        "note": "no public dbt project in 20 Korean organisations"
       }
     ]
   },

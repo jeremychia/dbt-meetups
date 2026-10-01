@@ -7,11 +7,11 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 65 |
+| Companies | 68 |
 | People | 120 |
 | Tier 1 leads | 34 |
 | First-time speakers (publish, no talk yet) | 13 |
@@ -20,8 +20,8 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 | Based in the region | 84 |
 | Based elsewhere | 6 |
 | Location unknown | 30 |
-| With a LinkedIn profile | 23 |
-| Job ads mentioning dbt | 3 |
+| With a LinkedIn profile | 49 |
+| Job ads mentioning dbt | 8 |
 | Past chapter meetups | 14 |
 <!-- at-a-glance:end -->
 
@@ -55,6 +55,9 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 
 - **[TheirStack](https://theirstack.com/en/technology/dbt/be):** it shows 10 of the 167 Belgian companies it lists as using dbt.
 - **Ads found:** 3, at [Datashift](https://careers.datashift.eu/o/analytics-engineer), [Lighthouse](https://startup.jobs/senior-analytics-engineer-lighthouse-8769874) and [Deliverect](https://careers.redpoint.com/companies/deliverect/jobs/59856833-analytics-engineer).
+- **Company job boards:** the open JSON boards at Greenhouse, Lever, Ashby and Recruitee, tried for about 50 Belgian employers. Datashift, dataroots, Lighthouse, DPG Media and Alan had a Belgian ad whose text has the word dbt. Alan is new: its [data engineer ad](https://jobs.ashbyhq.com/alan/ff5b0060-3d47-4d4d-bbed-baef57e1a0d3) lists Brussels. DPG Media's Antwerp ad confirms its Belgian office.
+- **GitHub code search:** dataroots, Data Minded and its Conveyor product have public dbt projects.
+- **Meetup hosts:** Luzmo hosted an event at its Ghent office and Amaris at its Brussels office. The Belgian Snowflake User Group's [December 2025 evening](https://www.meetup.com/belgian-snowflake-user-group/events/312060739/) at Telenet covered dbt.
 
 ### Chapter history and locations
 
@@ -76,6 +79,8 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 - **[Brussels WiMLDS](https://www.meetup.com/brussels-women-in-machine-learning-and-data-science/):** dormant. Its last event was a networking session in June 2023.
 - **Other women-in-data networks:** [Women in AI Belgium](https://www.womeninai.co/belgium) and the [Women in Big Data chapter list](https://www.womeninbigdata.org/chapters/) returned 404 errors. [Girls in Tech Belgium](https://girlsintech.org/belgium/) timed out. No Belgian Data + Women group, She Loves Data event or Women on Snowflake event was found. Meetup's group search found no other women-in-data group, and the 8 Belgian data groups had no women-in-data events since 2023.
 - **Belgian job boards:** a [Stepstone search](https://www.stepstone.be/emplois/dbt/a-gand) returned 0 results, and the aijobs pages redirected. Job-ad coverage is thin.
+- **Job boards under the obvious name:** Odoo, Showpad, Deliverect, Teamleader, Collibra, Proximus and most consultancies are not on these boards under that name, or have no ad that mentions dbt.
+- **HN Who is hiring and the dbt Labs case-study file:** neither has a Belgian company with dbt.
 
 ## 3. Companies looked at
 
@@ -84,11 +89,11 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 - **One placeholder employer.** 8 speakers whose employer the event page did not name sit under "Unstated employer (Belgium)".
 
 <!-- companies:start -->
-65 companies and communities were looked at. A company is local when it has people or roles in the region.
+68 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (27)</summary>
+<details><summary><b>Strong dbt use</b> (28)</summary>
 
-Astrafy (local presence not confirmed), Biztory, Bmatix (local presence not confirmed), Dataminded, dataroots, Datashift, dbt Labs (local presence not confirmed), Devoteam G Cloud (local presence not confirmed), Digital Hive (local presence not confirmed), DPG Media (local presence not confirmed), element61, GoDataDriven/Xebia (local presence not confirmed), IBA, Immoscoop (local presence not confirmed), Infofarm (local presence not confirmed), Lighthouse, Orfium (local presence not confirmed), OTA Insight (local presence not confirmed), POLITICO (local presence not confirmed), Qover (local presence not confirmed), reconfigured (local presence not confirmed), Snowflake (local presence not confirmed), Streamz (local presence not confirmed), SYNQ (local presence not confirmed), Telenet, Volvo Trucks, Xebia Data (local presence not confirmed)
+Alan, Astrafy (local presence not confirmed), Biztory, Bmatix (local presence not confirmed), Dataminded, dataroots, Datashift, dbt Labs (local presence not confirmed), Devoteam G Cloud (local presence not confirmed), Digital Hive (local presence not confirmed), DPG Media, element61, GoDataDriven/Xebia (local presence not confirmed), IBA, Immoscoop (local presence not confirmed), Infofarm (local presence not confirmed), Lighthouse, Orfium (local presence not confirmed), OTA Insight (local presence not confirmed), POLITICO (local presence not confirmed), Qover (local presence not confirmed), reconfigured (local presence not confirmed), Snowflake (local presence not confirmed), Streamz (local presence not confirmed), SYNQ (local presence not confirmed), Telenet, Volvo Trucks, Xebia Data (local presence not confirmed)
 
 </details>
 
@@ -98,9 +103,9 @@ AE, Agoya (local presence not confirmed), Cegeka, Deliverect, Inspari (local pre
 
 </details>
 
-<details><summary><b>Not verified</b> (25)</summary>
+<details><summary><b>Not verified</b> (27)</summary>
 
-Aivix (local presence not confirmed), Beyond Data Group (local presence not confirmed), Brussels Airlines, Capgemini (local presence not confirmed), Collibra, Datasense, delaware, DPD Belgium, Ghent University, Hict (local presence not confirmed), imec, Nordsky (local presence not confirmed), Plainsight, Proximus, Pure APP (local presence not confirmed), QuantumBlack (McKinsey) (local presence not confirmed), Raito (local presence not confirmed), SPF Finances (Belgian Federal Public Service Finance) (local presence not confirmed), The Linux Foundation (local presence not confirmed), The School of Industrial Biology (local presence not confirmed), Tinder, Torfs, TP Vision (local presence not confirmed), Unstated employer (Belgium) (local presence not confirmed), Vattenfall (local presence not confirmed)
+Aivix (local presence not confirmed), Amaris, Beyond Data Group (local presence not confirmed), Brussels Airlines, Capgemini (local presence not confirmed), Collibra, Datasense, delaware, DPD Belgium, Ghent University, Hict (local presence not confirmed), imec, Luzmo, Nordsky (local presence not confirmed), Plainsight, Proximus, Pure APP (local presence not confirmed), QuantumBlack (McKinsey) (local presence not confirmed), Raito (local presence not confirmed), SPF Finances (Belgian Federal Public Service Finance) (local presence not confirmed), The Linux Foundation (local presence not confirmed), The School of Industrial Biology (local presence not confirmed), Tinder, Torfs, TP Vision (local presence not confirmed), Unstated employer (Belgium) (local presence not confirmed), Vattenfall (local presence not confirmed)
 
 </details>
 
@@ -216,3 +221,4 @@ WiDS Belgium
 | 2026-10-01 | 1 | Location pass from public pages: Sessionize speaker pages and in-person chapter talks. 25 people placed, 21 in Belgium and 4 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 14 people searched, 10 placed in Belgium and 1 in Paris. With the location pass, 36 people placed and 24 still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass. Checked the WiDS Belgium site, Women Techmakers Brussels (through GDG Brussels), Brussels WiMLDS, R-Ladies Brussels, PyLadies Brussels, Women on Snowflake, Women in AI, Girls in Tech, Women in Big Data, Data + Women and She Loves Data. Added 14 people with `sourced_via: women_in_data_community`: 5 WiDS Belgium speakers and 9 organisers as connectors. Added community channels for WiDS Belgium, Women Techmakers Brussels, Brussels WiMLDS and R-Ladies Brussels. |
+| 2026-10-01 | 3 | Company pass from fetches: company job boards, HN Who is hiring, the dbt Labs case-study file, GitHub code search and Meetup hosts. Companies went from 65 to 68, and job ads from 3 to 8. Alan is new with a strong dbt signal. Luzmo and Amaris were added as local event hosts. DPG Media now has a confirmed Belgian office. |

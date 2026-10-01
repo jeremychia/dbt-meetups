@@ -39,6 +39,7 @@ CHAPTERS = {
     "london": {"label": "London", "goal": "speakers", "area": "Europe"},
     "amsterdam": {"label": "Amsterdam", "goal": "speakers", "area": "Europe"},
     "copenhagen": {"label": "Copenhagen", "goal": "speakers", "area": "Europe"},
+    "sofia": {"label": "Sofia", "goal": "speakers", "area": "Europe"},
     "belgium": {"label": "Belgium", "goal": "speakers", "area": "Europe"},
     "new_york": {"label": "New York", "goal": "speakers", "area": "North America"},
     "san_francisco": {"label": "San Francisco", "goal": "speakers", "area": "North America"},

@@ -7,11 +7,11 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 60 |
+| Companies | 136 |
 | People | 89 |
 | Tier 1 leads | 20 |
 | First-time speakers (publish, no talk yet) | 14 |
@@ -20,8 +20,8 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 | Based in the region | 70 |
 | Based elsewhere | 5 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 9 |
-| Job ads mentioning dbt | 21 |
+| With a LinkedIn profile | 34 |
+| Job ads mentioning dbt | 211 |
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->
 
@@ -49,6 +49,10 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **[freehire.me](https://freehire.me/jobs?countries=sg&skills=dbt):** the one job board that fetches without a login. 4 of its 10 pages were read, 80 ads in all. Direct employers include Endowus, Grasshopper, Secretlab, Traveloka, OCBC and LTA. About half the ads are from recruiters with unnamed clients.
 - **[TheirStack](https://theirstack.com/en/technology/dbt/sg):** the top 10 of 137 companies that use dbt are visible without a login.
 - **Yield:** 21 job ads at 19 companies.
+- **[MyCareersFuture API](https://api.mycareersfuture.gov.sg/v2/jobs?search=dbt&limit=100):** the government job board answers a plain fetch with the full ad text, the registered employer name and the posting date. A search for dbt returns 36 ads. Searches for data engineer, snowflake and bigquery, filtered for the whole word dbt, found no more. It added Workato, Pluang and many recruiters.
+- **[freehire.me API](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=SG):** the JSON API behind freehire.me answers a plain fetch. Two calls return all 200 Singapore ads tagged dbt. The search results cut each ad at about 1,000 characters, so read `/api/v1/jobs/<slug>` for the full text. It added Wise, Coda, Ascenda, Agilent, Sofina, Boku and Flo Energy.
+- **Greenhouse, Lever and Ashby boards:** about 100 employer slugs were tried. Airwallex, Workato, Coinhako and Thunes have Singapore ads that mention dbt.
+- **Yield of the company pass:** 190 more job ads and 76 new companies. About a third of the new companies are recruiters.
 
 ### Locations
 
@@ -78,6 +82,10 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **Grab and Holistics author pages:** list posts only, with no location.
 - **Women-in-data groups:** no Singapore women-in-data group was found with dbt talks.
 - **Other women-in-data sources:** [Singapore WiMLDS](https://www.meetup.com/singapore-women-in-machine-learning-and-data-science/) has held no event since 2023. The Women Techmakers International Women's Day events with [GDG Singapore](https://gdg.community.dev/gdg-singapore/) (2024 and 2025) had AI workshops and named no speakers. [She Loves Data](https://www.shelovesdata.com/) now runs global online AI courses, and its events page returns 404. Girls in Tech Singapore did not resolve. Women Who Code closed in 2024.
+- **Company job boards:** Grab, Shopee, Carousell, ShopBack, PropertyGuru, Endowus, Gojek and foodpanda have no public Greenhouse, Lever or Ashby board.
+- **Hacker News Who is hiring:** no Singapore role mentions dbt. The only hit was a global remote ad.
+- **GitHub code search:** no public `dbt_project.yml` in the Grab, Carousell, GovTech, Open Government Products, data.gov.sg or Traveloka organisations.
+- **Ads left out:** remote ads, an ad in French, and ads where DBT means digital business transformation.
 
 ## 3. Companies looked at
 
@@ -87,23 +95,29 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **Overlap with Kuala Lumpur:** Feng Cheng and Chang Boon Heng appear in both datasets.
 
 <!-- companies:start -->
-59 companies and communities were looked at. A company is local when it has people or roles in the region.
+135 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (20)</summary>
+<details><summary><b>Strong dbt use</b> (46)</summary>
 
-almapay (local presence not confirmed), CFGI Singapore, dbt Labs, Endowus, foodpanda, Grasshopper, Infinite Lambda, Keppel, Lightdash (local presence not confirmed), Mandai Wildlife Group, Meta (local presence not confirmed), Secretlab, ShopBack, Snowflake, Snowplow (local presence not confirmed), Spenmo (local presence not confirmed), Teleport (local presence not confirmed), Toggl (local presence not confirmed), Traveloka, Vinted (local presence not confirmed)
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (17)</summary>
-
-BAH Partners, Dyson (local presence not confirmed), GovTech Singapore (Government Technology Agency), Holistics Software (local presence not confirmed), HTX (Home Team Science & Technology Agency), Intrepid Asia (local presence not confirmed), Klook (local presence not confirmed), Kopi Recruit, Land Transport Authority (LTA), Momcozy (local presence not confirmed), OCBC, Paradex (local presence not confirmed), PathSource Consulting, Razer, Sciente International, SensorFlow (local presence not confirmed), Straive (local presence not confirmed)
+Agilent Technologies, Allium, almapay, Ascenda, BAH Partners, Boku, CFGI Singapore, Coda, dbt Labs, Endowus, ExpressVPN, Flo Energy, foodpanda, Grasshopper, Hyphen Connect, Infinite Lambda, Intellect Minds, Keppel, Lightdash (local presence not confirmed), Mandai Wildlife Group, Meta (local presence not confirmed), Michael Faith HR Consultants, OCBC, OX Consultancy, PathSource Consulting, Pluang, Principle Partners, Qualcomm, Randstad, Razer, Sciente International, Secretlab, ShopBack, Snowflake, Snowplow (local presence not confirmed), Sofina, Spenmo (local presence not confirmed), Techcom Solutions, Teleport (local presence not confirmed), Toggl (local presence not confirmed), Traveloka, Trinity HR Solutions, Unchain Data, Vinted (local presence not confirmed), Wise, Workato
 
 </details>
 
-<details><summary><b>Not verified</b> (16)</summary>
+<details><summary><b>Some dbt signal</b> (61)</summary>
 
-Airwallex, Amazon Web Services (AWS), Carousell, ClickHouse (local presence not confirmed), Grab, Health Promotion Board (HPB), Infocomm Media Development Authority (IMDA), Microsoft, Ninja Van, Open Government Products (OGP) / data.gov.sg, Redis, Singapore Customs, Tata Consultancy Services (TCS), Tech in Asia, Temasek, Urban Redevelopment Authority (URA)
+3 Cubed Business Consulting, Accord Innovations, Airwallex, Apple, Argyll Scott, Assurity Trusted Solutions, Career International, Cartier, Centience, CI&T, Coinhako, Console Connect, Dell Technologies, dtcpay, Dyson (local presence not confirmed), Eames Consulting Group, Evolution Recruitment Solutions, EY, Firmus, FPT Software, GIC, GlobalCatalyst International, Goodnotes, Google, GovTech Singapore (Government Technology Agency), heymax, Holistics Software (local presence not confirmed), HTX (Home Team Science & Technology Agency), Intrepid Asia (local presence not confirmed), JCO Analytics, Jobster, JonDavidson, K2 Partnering Solutions, Klook (local presence not confirmed), Kopi Recruit, Kris Infotech, Land Transport Authority (LTA), Merck, Michael Page, Momcozy, NAS Education, NCS, OneByZero, Optimum Solutions, Paradex, PERSOL Singapore, Rakuten Viki, Rapsys Technologies, Red Alpha Cybersecurity, ScienTec Personnel, SensorFlow (local presence not confirmed), Skinlab The Medical Spa, Straive (local presence not confirmed), Talentreq Partners, Temasek, Thunes, TikTok, Trinity Consulting Services, Valor Capital Group, Vinova, Websparks
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (8)</summary>
+
+A*STAR, AIM Global Talent, Climate Impact X, JPMorgan Chase, Minden.ai, Simular, Supermetrics, Western Digital
+
+</details>
+
+<details><summary><b>Not verified</b> (14)</summary>
+
+Amazon Web Services (AWS), Carousell, ClickHouse (local presence not confirmed), Grab, Health Promotion Board (HPB), Infocomm Media Development Authority (IMDA), Microsoft, Ninja Van, Open Government Products (OGP) / data.gov.sg, Redis, Singapore Customs, Tata Consultancy Services (TCS), Tech in Asia, Urban Redevelopment Authority (URA)
 
 </details>
 
@@ -127,7 +141,7 @@ Databricks, Dataiku, DataScience SG, PyLadies Singapore, R Ladies Singapore, Wom
 
 </details>
 
-<details><summary><b>Other sources checked</b> (27)</summary>
+<details><summary><b>Other sources checked</b> (32)</summary>
 
 - [GovTech STACK [Data] meetups](https://www.developer.tech.gov.sg/communities/events/stack-meetups/)
 - [Snowflake User Group Singapore](https://usergroups.snowflake.com/singapore/)
@@ -156,6 +170,11 @@ Databricks, Dataiku, DataScience SG, PyLadies Singapore, R Ladies Singapore, Wom
 - [WiDS Singapore (online)](https://www.widsworldwide.org/events/event/wids-singapore/) (nothing useful)
 - [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
 - [Girls in Tech Singapore](https://girlsintech.org/singapore/) (nothing useful)
+- [MyCareersFuture API](https://api.mycareersfuture.gov.sg/v2/jobs?search=dbt&limit=100)
+- [freehire.me API, Singapore, skill dbt](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=SG)
+- [Greenhouse, Lever and Ashby boards](https://api.ashbyhq.com/posting-api/job-board/airwallex)
+- [Hacker News Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt%20singapore&tags=comment) (nothing useful)
+- [getdbt.com case studies (llms-full-case-studies.txt)](https://www.getdbt.com/llms-full-case-studies.txt) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -219,3 +238,4 @@ Databricks, Dataiku, DataScience SG, PyLadies Singapore, R Ladies Singapore, Wom
 | 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, and recent in-person chapter talks. 11 people placed, 8 in Singapore and 3 elsewhere. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 6 people placed, 5 in Singapore and 1 in Sydney. With the location pass, 17 people placed and 14 still unknown. |
 | 2026-10-01 | 2 | Women-in-data pass. Checked Women Devs SG, R-Ladies Singapore, Singapore WiMLDS, Women Techmakers through GDG Singapore, WiDS Singapore, She Loves Data and Girls in Tech Singapore. Added 7 people with `sourced_via: women_in_data_community`: 1 speaker (AnLei Huang, Databricks, from WiDS Taipei 2026) and 6 connectors. Added 4 community channels. |
+| 2026-10-01 | 3 | Company pass from job ads: the MyCareersFuture API, the freehire.me API and Greenhouse, Lever and Ashby boards. 76 companies and 190 job ads added. OCBC, Razer, PathSource, BAH Partners and Sciente raised to strong. Airwallex and Temasek raised to medium. almapay, Momcozy and Paradex now confirmed in Singapore. |

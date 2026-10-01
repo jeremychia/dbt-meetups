@@ -125,6 +125,12 @@ def merge(base, raw_companies):
             target["other_evidence"] = merge_lists(target["other_evidence"], c["other_evidence"], lambda e: e["url"])
             target["stack_signals"] = list(dict.fromkeys(target["stack_signals"] + c["stack_signals"]))
             target["cities"] = list(dict.fromkeys(target["cities"] + c["cities"]))
+            # new evidence can only strengthen what is known about a company
+            order = ["none", "weak", "nice-to-have", "medium", "strong"]
+            if c.get("dbt_signal") in order and order.index(c["dbt_signal"]) > order.index(target["dbt_signal"]) and rc.get("dbt_signal"):
+                target["dbt_signal"] = c["dbt_signal"]
+            if rc.get("local_presence") == "confirmed":
+                target["local_presence"] = "confirmed"
             if c["notes"] and c["notes"] not in (target["notes"] or ""):
                 target["notes"] = " | ".join(x for x in [target["notes"], c["notes"]] if x)
         for p in new_people:
@@ -204,7 +210,8 @@ def rescore(companies, past):
             c["watchlist"] = c["type"] not in ("community", "independent") and (
                 c["local_presence"] != "confirmed" or c["dbt_signal"] in ("weak", "none"))
         for p in c["people"]:
-            p["past_chapter_talks"] = past_chapter_talks(p["name"], past)
+            # keep talks a record already holds (e.g. merged from another spelling), and add any its name now matches
+            p["past_chapter_talks"] = merge_lists(p["past_chapter_talks"], past_chapter_talks(p["name"], past), lambda t: (t["date"], t["talk_title"]))
             if id(p) not in touched:
                 continue
             ev = p["speaker_evidence"]

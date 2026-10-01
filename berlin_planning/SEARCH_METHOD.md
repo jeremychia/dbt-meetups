@@ -9,11 +9,11 @@ This file holds what is specific to Berlin. The method, scoring rules, schema an
 - **Reference file:** this file's `metadata.field_definitions` is the reference copy for every city ([§4](../research/README.md#4-shared-schema-version-3)).
 
 <!-- at-a-glance:start -->
-**At a glance** (version 7, 2026-10-01)
+**At a glance** (version 8, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 157 |
+| Companies | 168 |
 | People | 165 |
 | Tier 1 leads | 11 |
 | First-time speakers (publish, no talk yet) | 16 |
@@ -22,8 +22,8 @@ This file holds what is specific to Berlin. The method, scoring rules, schema an
 | Based in the region | 101 |
 | Based elsewhere | 11 |
 | Location unknown | 53 |
-| With a LinkedIn profile | 71 |
-| Job ads mentioning dbt | 98 |
+| With a LinkedIn profile | 110 |
+| Job ads mentioning dbt | 128 |
 | Past chapter meetups | 15 |
 <!-- at-a-glance:end -->
 
@@ -47,6 +47,14 @@ Data Berlin is Berlin's largest general data meetup and job board, run by France
 - **Partner events:** events on the Data Berlin Luma calendar, such as OSA Community and Metabase × dltHub, are tagged in `speaker_evidence.event` as "(partner event on the Data Berlin calendar)".
 - **Scoring Data Berlin speakers:** every speaker became a person, with the talk as `speaker_evidence`. Tier 2 for talks relevant to a dbt meetup, tier 3 for vendor pitches, pure ML or LLM, and marketing-science talks.
 - **Job board, dbt skill page:** [databerlin.net/skills/dbt](https://databerlin.net/skills/dbt) pulls ads directly from company ATS platforms and tags skills automatically from the ad text. On 2026-09-23 it listed 89 open Berlin roles at 70 companies. Each role became a `job_postings` entry with source "Data Berlin job board". It is plain server-rendered HTML, so one fetch reads it.
+
+### Companies and job ads
+
+- **Data Berlin job board (2026-10-01):** [databerlin.net/skills/dbt](https://databerlin.net/skills/dbt) listed 77 roles. 5 came from companies not yet in the file. Reading 14 role pages raised 6 companies to strong, because their ads require dbt.
+- **Company job boards:** the open Greenhouse, Lever and Ashby job APIs (`boards-api.greenhouse.io/v1/boards/<slug>/jobs?content=true`, `api.lever.co/v0/postings/<slug>?mode=json`, `api.ashbyhq.com/posting-api/job-board/<slug>`) return the full ad text, so one call per company checks for the whole word dbt and the location. About 30 of 70 Berlin employers tried have a board. Superchat, Yazio, Taktile, GetYourGuide, Enpal, Doctolib, Solaris and Zenjob have Berlin ads that mention dbt.
+- **[arbeitnow.com API](https://www.arbeitnow.com/api/job-board-api):** `?page=N` returns German job ads with full text. 14 pages (1,851 ads) were read before it returned HTTP 429. It added Good Hood (nebenan.de) and Real Digital.
+- **HN Who is hiring:** the Algolia search for "dbt berlin" gave 4 companies with Berlin roles and dbt in the stack: Seen Finance, dotplay.games, WAY and Return.
+- **[applydata data engineering meetup](https://www.meetup.com/applydata-berlin/events/?type=past):** its line-ups at the diconium office name dbt talks. They raised Ratepay and diconium to strong.
 
 ### Women-in-data communities
 
@@ -89,6 +97,10 @@ Data Berlin is Berlin's largest general data meetup and job board, run by France
 - **Inactive or paused since the last run:** [Berlin WiMLDS](https://www.meetup.com/Berlin-Women-in-Machine-Learning-and-Data-Science/) last met in November 2023. The [Women+ in Data/AI Festival](https://women-in-data-ai.tech/) is paused in 2025.
 - **Women-in-tech groups with no data talks:** [Women Techmakers Berlin](https://www.meetup.com/wtm-berlin/) in 2025–26 (roundtables, IWD, AI and careers), [Empowered in Tech](https://www.meetup.com/empowered-in-tech/), [IT_Frauen Berlin](https://www.meetup.com/it_frauen-berlin/) and AI for Women Berlin (no events).
 - **Data Berlin talks as dbt evidence:** none of the 78 talk descriptions mentioned dbt. The programme has been heavy on AI and agents since 2025.
+- **GitHub code search:** `filename:dbt_project.yml org:<org>` found no public dbt project in the orgs tried. The search rate limit cut several calls short. Orgs tried: idealo, Zalando, Flink, JustWatch, Delivery Hero, Ecosia, HelloFresh, Taxfix, Contentful, GetYourGuide, Trade Republic, N26 and Gemma Analytics (only its dbt utilities).
+- **Job boards with no Berlin dbt ad:** idealo, Zalando, Bolt, Delivery Hero, Taxfix, Omio and Sennder have no open Greenhouse, Lever or Ashby board. Flink, JustWatch, Scout24, GROPYUS, N26, HelloFresh, Contentful, Babbel and Raisin have one, but no Berlin ad there mentions dbt.
+- **dbt Labs case studies:** only Enpal and TIER are Berlin companies, and both were already in the file.
+- **Meetup venues for companies:** the 2024–26 venues of Data Berlin, PyData Berlin and the Berlin Airflow meetup were already in the file or were event spaces. Bonial hosted PyData Berlin in November 2024, but nothing ties it to dbt. BEADS and Analytics Pioneers Berlin meet at a university or online.
 
 ## 3. Companies looked at
 
@@ -98,23 +110,29 @@ Data Berlin is Berlin's largest general data meetup and job board, run by France
 - **Roles based elsewhere:** some roles on the Berlin board are remote or outside Berlin, such as Fivetran's Costa Rica role and Grafana's Sweden and Spain roles.
 
 <!-- companies:start -->
-156 companies and communities were looked at. A company is local when it has people or roles in the region.
+167 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (23)</summary>
+<details><summary><b>Strong dbt use</b> (35)</summary>
 
-Bolt (local presence not confirmed), Choco, Contentful, dbt Labs (Berlin staff), Delivery Hero, dltHub, Ecosia, Enpal, Gemma Analytics, GetYourGuide, HelloFresh, Kestra (local presence not confirmed), Kleinanzeigen (ex-eBay Kleinanzeigen / Adevinta), Lightdash, MotherDuck (local presence not confirmed), N26, Personio, SYNQ (acquired by Coalesce) (local presence not confirmed), Tasman Analytics (local presence not confirmed), Taxfix, TIER (now Dott), Vinted, Y42
-
-</details>
-
-<details><summary><b>Some dbt signal</b> (77)</summary>
-
-1Global, 1KOMMA5°, About You, aconium GmbH, adsquare, Almedia, Alpaca, AutoStore, Babbel, Bettermile, Bikeleasing Gruppe, Billie, Blinkist, CarOnSale, celebrate company GmbH, ClickHouse, Correlation One, Cosuno, Cursor, Dataciders, DataTalks.Club, diconium, Doctolib, Eberlein Kunz, Europace AG, Eventim, EY, finanzen.net GmbH, Finn, Fivetran, FlixMobility, Forto, getolo, Gigs, GLS/NXT, Grafana Labs, HubSpot, ista, Jupus, Just Eat Takeaway / Lieferando (local presence not confirmed), Kaufland e-commerce, Kolibri Games, Leadfeeder, Liqid, Moonfare, n8n, Nansen, Octopus Energy Group, Omio, OneFootball, PERGOLUX, Planet, Qonto, Qualifyze, Raisin, Redcare Pharmacy, RSG Group GmbH, Scalable Capital, Shine, Shopware, Smartbroker, Snowflake, Solaris Bank, StackFuel, Statista, SumUp, Team Passerelle, The Pioneer, Tierarzt Plus Partner, Trade Republic, Trawa, Urban Sports Club, Vestiaire Collective, Wikimedia Foundation, Wolt, Zendesk, Zenjob
+Alpaca, Bolt (local presence not confirmed), Choco, Contentful, Cosuno, dbt Labs (Berlin staff), Delivery Hero, diconium, dltHub, Ecosia, Enpal, Flinn, FlixMobility, Gemma Analytics, GetYourGuide, Good Hood GmbH (nebenan.de), HelloFresh, Kestra (local presence not confirmed), Kleinanzeigen (ex-eBay Kleinanzeigen / Adevinta), Lightdash, MotherDuck (local presence not confirmed), N26, Octopus Energy Group, PERGOLUX, Personio, Ratepay, SumUp, Superchat, SYNQ (acquired by Coalesce) (local presence not confirmed), Tasman Analytics (local presence not confirmed), Taxfix, TIER (now Dott), Vinted, Y42, Yazio
 
 </details>
 
-<details><summary><b>Not verified</b> (51)</summary>
+<details><summary><b>Some dbt signal</b> (76)</summary>
 
-Alligator Company (local presence not confirmed), Altinity (local presence not confirmed), AstraZeneca (local presence not confirmed), Astronomer (local presence not confirmed), Bayer (local presence not confirmed), Bayerischer Rundfunk (local presence not confirmed), Bruin, Cognee, Databricks (local presence not confirmed), Decodable (local presence not confirmed), Deloitte (local presence not confirmed), DHL (local presence not confirmed), Digital Pills (local presence not confirmed), DocMorris, Dremio (local presence not confirmed), EDB (local presence not confirmed), EQOM Group (local presence not confirmed), Exasol (local presence not confirmed), Exxeta (local presence not confirmed), FGS Global, Flink, GlassFlow, GROPYUS, HelloPrint (local presence not confirmed), JustWatch, Keboola (local presence not confirmed), Kertos (local presence not confirmed), Lessmore (local presence not confirmed), Look Beyond Solutions (local presence not confirmed), Metabase (local presence not confirmed), METRO.digital, MILES Mobility, Miro (local presence not confirmed), nao Labs, Neugelb Studios (Commerzbank), Picnic Technologies (local presence not confirmed), Ratepay, RisingWave (local presence not confirmed), Schüttflix (local presence not confirmed), Scout24, ScramDB (local presence not confirmed), SirDash (local presence not confirmed), Snap (local presence not confirmed), StepStone (local presence not confirmed), thermondo, Tower.dev, TUI (local presence not confirmed), Vakamo (local presence not confirmed), Wandernary (local presence not confirmed), Zattoo, zerobang (local presence not confirmed)
+1Global, 1KOMMA5°, About You, aconium GmbH, adsquare, Almedia, AutoStore, Babbel, Bettermile, Bikeleasing Gruppe, Billie, Blinkist, CarOnSale, celebrate company GmbH, ClickHouse, Correlation One, Cursor, Dataciders, DataTalks.Club, Doctolib, dotplay.games, Eberlein Kunz, Europace AG, Eventim, EY, finanzen.net GmbH, Finn, Fivetran, Forto, getolo, Gigs, GLS/NXT, Grafana Labs, HubSpot, ista, Jupus, Just Eat Takeaway / Lieferando (local presence not confirmed), Kaufland e-commerce, Kolibri Games, Leadfeeder, Liqid, Moonfare, n8n, Nansen, neuefische, Omio, OneFootball, Planet, Qonto, Qualifyze, Raisin, Redcare Pharmacy, Return, RSG Group GmbH, Scalable Capital, Seen Finance, Shine, Shopware, Smartbroker, Snowflake, Solaris Bank, StackFuel, Statista, Taktile, Team Passerelle, The Pioneer, Tierarzt Plus Partner, Trade Republic, Trawa, Urban Sports Club, Vestiaire Collective, WAY, Wikimedia Foundation, Wolt, Zendesk, Zenjob
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Real Digital
+
+</details>
+
+<details><summary><b>Not verified</b> (50)</summary>
+
+Alligator Company (local presence not confirmed), Altinity (local presence not confirmed), AstraZeneca (local presence not confirmed), Astronomer (local presence not confirmed), Bayer (local presence not confirmed), Bayerischer Rundfunk (local presence not confirmed), Bruin, Cognee, Databricks (local presence not confirmed), Decodable (local presence not confirmed), Deloitte (local presence not confirmed), DHL (local presence not confirmed), Digital Pills (local presence not confirmed), DocMorris, Dremio (local presence not confirmed), EDB (local presence not confirmed), EQOM Group (local presence not confirmed), Exasol (local presence not confirmed), Exxeta (local presence not confirmed), FGS Global, Flink, GlassFlow, GROPYUS, HelloPrint (local presence not confirmed), JustWatch, Keboola (local presence not confirmed), Kertos (local presence not confirmed), Lessmore (local presence not confirmed), Look Beyond Solutions (local presence not confirmed), Metabase (local presence not confirmed), METRO.digital, MILES Mobility, Miro (local presence not confirmed), nao Labs, Neugelb Studios (Commerzbank), Picnic Technologies (local presence not confirmed), RisingWave (local presence not confirmed), Schüttflix (local presence not confirmed), Scout24, ScramDB (local presence not confirmed), SirDash (local presence not confirmed), Snap (local presence not confirmed), StepStone (local presence not confirmed), thermondo, Tower.dev, TUI (local presence not confirmed), Vakamo (local presence not confirmed), Wandernary (local presence not confirmed), Zattoo, zerobang (local presence not confirmed)
 
 </details>
 
@@ -236,3 +254,4 @@ d-fine, Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
 | 2026-09-23 | 5 | Shared schema v3 adds `pronouns` (self-stated only, never inferred) and `sourced_via`. **Women-in-data sourcing (Step 2b):** 28 new people from PyLadies Berlin, Women in Big Data Berlin, Women Techmakers Berlin, the Women+ in Data/AI Festival, AWS Women's User Group, WomenTech Network and WiMLDS, plus new evidence for Katharine Jarmul. 3 people have self-stated pronouns. Added a line-up balance check to the outreach order and to `event-planning-template.md`. Totals: 156 companies, 152 people. Lithuania and Kuala Lumpur moved to schema v3 too (schema-only change). Backup: `berlin_dbt_companies.v4.json`. |
 | 2026-10-01 | 6 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. Public pages placed 38 people: Meetup host and RSVP lists tied to the person, and recent in-person talks at Data Berlin and other Berlin events by people whose employer has a Berlin office. LinkedIn search results placed 9 more. Of the 47 placed, 42 are in Berlin and 5 elsewhere. 53 people are still unknown. |
 | 2026-10-01 | 7 | Women-in-data pass from Meetup data and the Women on Snowflake user group page. 13 people added: 7 speakers from PyLadies Berlin, Women in Big Data Berlin and AWS Women's User Group Berlin, plus 6 organisers as connectors. Anastasiia Stefanska gained a talk. R-Ladies Berlin and Berlin WiMLDS are inactive, and the Women+ in Data/AI Festival is paused in 2025. |
+| 2026-10-01 | 8 | Company pass from Data Berlin, open job boards (Greenhouse, Lever, Ashby, arbeitnow), HN Who is hiring, dbt Labs case studies and meetup line-ups. 11 companies added, for 168. 4 of them have a strong dbt signal: Superchat, Yazio, Flinn and Good Hood (nebenan.de). 8 companies raised to strong: SumUp, diconium, FlixMobility, Alpaca, PERGOLUX, Cosuno, Octopus Energy Group and Ratepay. People are unchanged. |

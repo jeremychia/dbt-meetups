@@ -7,11 +7,11 @@ This file holds what is specific to Taipei. The method, scoring rules, schema an
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-01)
+**At a glance** (version 3, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 50 |
+| Companies | 52 |
 | People | 87 |
 | Tier 1 leads | 31 |
 | First-time speakers (publish, no talk yet) | 23 |
@@ -20,8 +20,8 @@ This file holds what is specific to Taipei. The method, scoring rules, schema an
 | Based in the region | 40 |
 | Based elsewhere | 3 |
 | Location unknown | 44 |
-| With a LinkedIn profile | 1 |
-| Job ads mentioning dbt | 2 |
+| With a LinkedIn profile | 2 |
+| Job ads mentioning dbt | 7 |
 | Past chapter meetups | 46 |
 <!-- at-a-glance:end -->
 
@@ -52,6 +52,8 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 ### Job ads
 
 - **[Yourator](https://www.yourator.co/jobs?term[]=dbt) search API:** works, and returned 2 ads, at [Rayark](https://www.yourator.co/companies/rayark/jobs/35836) and [PChome](https://www.yourator.co/companies/PChome/jobs/40514). The ad text was never read, so neither proves dbt use.
+- **[freehire.me API](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=TW):** the JSON API behind freehire.me answers a plain fetch. It returns only 3 Taiwanese ads tagged dbt. The search results cut each ad at about 1,000 characters, so read `/api/v1/jobs/<slug>` for the full text. It found [Berry AI](https://jobs.ashbyhq.com/berry-ai/42cf7a6d-b3a7-4f05-b351-e77c40772f8a), a Neihu start-up that builds dbt models, and a Coupang analyst ad.
+- **Greenhouse, Lever and Ashby boards:** about 55 employer slugs were tried. Appier, Dcard, Coupang, Ubiquiti, OKX and Lalamove have Taipei ads. Only Berry AI and Coupang mention dbt.
 
 ### Locations
 
@@ -80,6 +82,11 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **Other local groups:** [PyData Taipei](https://www.meetup.com/pydata-taipei/), GDG Taipei, Taipei.py and AI Engineers in Taiwan had no data-stack talks since 2023.
 - **[PyCon TW](https://tw.pycon.org/):** the talk list needs a login, so it was not read.
 - **Women-in-data sources with nothing new:** Meetup's group search near Taipei found only R-Ladies Taipei and Taipei Women in Tech, both already covered. [PyLadies Taiwan on KKTIX](https://pyladies.kktix.cc/events.json) has had no event since 2014. [Girls in Tech Taiwan](https://girlsintech.org/taiwan/) did not respond. The WiDS Taipei 2025 page shows speakers only in images.
+- **[104 job bank API](https://www.104.com.tw/jobs/search/api/jobs?keyword=dbt):** returns a Cloudflare challenge.
+- **[Yourator search API](https://www.yourator.co/api/v4/jobs?term[]=dbt):** matches DDT and DBA as well as dbt. The ad pages are still blocked.
+- **Meetup `gql2` near Taipei:** no data, Snowflake, Databricks or BigQuery group beyond the chapter. Venues since 2024 are Dcard and AppWorks, both already in the file.
+- **GitHub code search:** no public `dbt_project.yml` in the Dcard, 91APP, Appier, Gogoro, KKday, Hahow or iKala organisations. Pinkoi and CakeResume hit the rate limit.
+- **Hacker News Who is hiring:** no Taiwanese role mentions dbt.
 
 ## 3. Companies looked at
 
@@ -88,17 +95,23 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **Recce:** the employer of Karen Hsieh, who organises the chapter, and of two first-time speakers, Kent Chen and Even Wei.
 
 <!-- companies:start -->
-49 companies and communities were looked at. A company is local when it has people or roles in the region.
+51 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (19)</summary>
+<details><summary><b>Strong dbt use</b> (20)</summary>
 
-Census (local presence not confirmed), Databricks (local presence not confirmed), Datacoves (local presence not confirmed), Dcard, DeepHow (local presence not confirmed), Ethyca (local presence not confirmed), ex-ByteDance (local presence not confirmed), foodpanda (local presence not confirmed), Infinite Lambda (local presence not confirmed), Junyi Academy (均一平台教育基金會), KKday (local presence not confirmed), Migo, NTNU (local presence not confirmed), Pinkoi (local presence not confirmed), Recce (InfuseAI), Replware (睿博資訊), Teamson (local presence not confirmed), TVBS, Wise (formerly Transferwise) (local presence not confirmed)
+Berry AI, Census (local presence not confirmed), Databricks (local presence not confirmed), Datacoves (local presence not confirmed), Dcard, DeepHow (local presence not confirmed), Ethyca (local presence not confirmed), ex-ByteDance (local presence not confirmed), foodpanda (local presence not confirmed), Infinite Lambda (local presence not confirmed), Junyi Academy (均一平台教育基金會), KKday (local presence not confirmed), Migo, NTNU (local presence not confirmed), Pinkoi (local presence not confirmed), Recce (InfuseAI), Replware (睿博資訊), Teamson (local presence not confirmed), TVBS, Wise (formerly Transferwise) (local presence not confirmed)
 
 </details>
 
 <details><summary><b>Some dbt signal</b> (4)</summary>
 
 91APP, iCook (愛料理), Xtraspots Inc (local presence not confirmed), 線性成長數位 (Linear Growth Digital)
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Coupang
 
 </details>
 
@@ -122,7 +135,7 @@ AILogora (local presence not confirmed), Chung-Hua Institution for Economic Rese
 
 </details>
 
-<details><summary><b>Other sources checked</b> (25)</summary>
+<details><summary><b>Other sources checked</b> (31)</summary>
 
 - [iThome 鐵人賽 dbt search and tag](https://ithelp.ithome.com.tw/tags/articles/dbt)
 - [iThome 鐵人賽 data-engineering searches](https://ithelp.ithome.com.tw/search?tab=ironman&search=BigQuery)
@@ -149,6 +162,12 @@ AILogora (local presence not confirmed), Chung-Hua Institution for Economic Rese
 - [WTM Taipei Design x Data Meetup](https://gdg.community.dev/e/my8yxb/)
 - [PyLadies Taiwan on KKTIX](https://pyladies.kktix.cc/events.json) (nothing useful)
 - [Girls in Tech Taiwan](https://girlsintech.org/taiwan/) (nothing useful)
+- [freehire.me API, Taiwan, skill dbt](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=TW)
+- [Greenhouse, Lever and Ashby boards](https://api.ashbyhq.com/posting-api/job-board/berry-ai)
+- [Yourator search API](https://www.yourator.co/api/v4/jobs?term[]=dbt) (nothing useful)
+- [104 job bank API](https://www.104.com.tw/jobs/search/api/jobs?keyword=dbt) (nothing useful)
+- [GitHub code search for dbt_project.yml](https://github.com/search?q=filename%3Adbt_project.yml&type=code) (nothing useful)
+- [Hacker News Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt%20taipei&tags=comment) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -218,3 +237,4 @@ AILogora (local presence not confirmed), Chung-Hua Institution for Economic Rese
 | 2026-10-01 | 1 | Location pass from public pages: Meetup hosts and RSVPs, KKTIX and COSCUP speaker pages, GitHub profiles and recent in-person talks. 23 people placed, 22 of them in the region. |
 | 2026-10-01 | 1 | LinkedIn pass from search results: 15 people searched and 1 placed, outside the region. With the location pass, 23 people are in the region, 2 outside it and 44 unknown. |
 | 2026-10-01 | 2 | Women-in-data pass. Checked WiDS Taipei (2024 to 2026 and its Medium feed), WTM Taipei through GDG Taipei, PyLadies Taiwan and Girls in Tech Taiwan. Added 18 people with `sourced_via: women_in_data_community`: 9 speakers and 9 WiDS Taipei ambassadors as connectors. Added talks for Alyssa Chen, Karen Hsieh, Lany Liu, Jamin Fan and Ricky Yu. Added 2 community channels. |
+| 2026-10-01 | 3 | Company pass from job ads: the freehire.me API and Greenhouse, Lever and Ashby boards. 2 companies added: Berry AI (strong) and Coupang (nice-to-have). The 104, Yourator, Meetup and GitHub checks found nothing new. |
