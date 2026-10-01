@@ -1,0 +1,3975 @@
+{
+  "metadata": {
+    "title": "Munich dbt companies and people for the Munich dbt Meetup",
+    "generated_at": "2026-09-24",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Munich companies using dbt, and people who could speak at or attend the Munich dbt Meetup.",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Munich (Munich dbt Meetup)",
+    "method": [
+      "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/munich-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
+      "Lesson: In Munich, dbt activity sits in the Snowflake User Group (b.telligent/synvert/Synabi) and in Munich Datageeks' recorded talk write-ups. Named dbt authors on company blogs are close to zero, so check community recordings before company blogs.",
+      "Lesson: The Synabi/b.telligent cluster (Oskar-Schlemmer-Str. / Walter-Gropius-Str., 80807) is the recurring venue hub; one contact (Mathias Höreth) can unlock venue, co-host and speakers.",
+      "Lesson: Munich women-in-data communities (WiDS, WiMLDS) are academic or ML-oriented or dormant. Use them for organiser contacts at Sixt, LMU and BR rather than for dbt speakers."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
+      "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
+      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+    ],
+    "counts": {
+      "companies": 52,
+      "people": 32,
+      "job_postings": 24,
+      "companies_with_job_postings": 18,
+      "speaker_evidence_items": 37,
+      "unique_content_items": 33,
+      "people_with_linkedin": 11,
+      "people_who_spoke_at_this_chapter": 16,
+      "internal_vinted": 0,
+      "level": {
+        "working": 28,
+        "leadership": 4
+      },
+      "speaker_potential": {
+        "medium": 15,
+        "high": 17
+      },
+      "attendee_potential": {
+        "high": 3,
+        "medium": 29
+      },
+      "priority_tier": {
+        "connector": 8,
+        "2": 19,
+        "1": 1,
+        "3": 4
+      },
+      "watchlist_companies": 23,
+      "past_meetups": 7,
+      "lead_type": {
+        "proven_speaker": 25,
+        "emerging_voice": 1,
+        "featured": 6
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 27,
+        "company_blog_scan": 2,
+        "chapter_meetup_history": 16,
+        "linkedin_search": 2,
+        "women_in_data_community": 4
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 9,
+      "data warehouse & platforms": 7,
+      "developer workflow": 7,
+      "genai & llm": 7,
+      "data governance": 5,
+      "dbt best practices": 4,
+      "modern data stack": 3,
+      "data modeling": 3,
+      "performance & scale": 3,
+      "semantic layer": 3,
+      "team & org design": 3,
+      "industry trends": 2,
+      "dbt migration & adoption": 2,
+      "orchestration & ci/cd": 2,
+      "data mesh": 2,
+      "dbt product updates": 2,
+      "project structure": 1,
+      "business intelligence": 1,
+      "domain-specific use cases": 1,
+      "data quality & testing": 1,
+      "dbt product features": 1,
+      "data engineering": 1,
+      "career development": 1,
+      "dbt fundamentals": 1,
+      "tools & ecosystem": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "btelligent",
+      "name": "b.telligent",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "BigQuery",
+        "Azure Synapse",
+        "Redshift",
+        "SAP"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.btelligent.com/en/partner/dbt",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "mathias-horeth",
+          "name": "Mathias Höreth",
+          "pronouns": null,
+          "title": null,
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mathoe/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Groups Munich",
+              "title": "Snowflake & dbt User Group Meeting in Munich (host)",
+              "date": "2025-02-20",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "content_id": "snowflake-user-groups-mun-snowflake-dbt-user-group-meeting-in-muni",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Host and co-organiser of a joint Snowflake and dbt community evening held at Synabi's Munich office.",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "MSUG: WOD meets Snowflake Summit",
+              "title": "Snowflake Summit: Impressions",
+              "date": "2026-06-11",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/314753503/",
+              "content_id": "msug-wod-meets-snowflake--snowflake-summit-impressions",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Short personal recap of Snowflake Summit, given at a user-group evening co-located with b.telligent's World of Data conference.",
+              "topics": [
+                "industry trends",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/mathoe/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "note": "organiser: Snowflake & dbt User Group Meeting in Munich (host)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Organises and hosts the Munich Snowflake User Group, which ran a joint 'Snowflake & dbt' evening at Synabi in Feb 2025. b.telligent (a dbt Preferred Consulting Partner headquartered in Munich) runs the World of Data conference. Natural co-host contact."
+        },
+        {
+          "id": "olaf-bowe",
+          "name": "Olaf Bowe",
+          "pronouns": null,
+          "title": "Domain Lead",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "chapter_meetup_history",
+            "linkedin_search",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "post",
+              "event": "b.telligent partner page",
+              "title": "Partnership With dbt",
+              "date": null,
+              "url": "https://www.btelligent.com/en/partner/dbt",
+              "content_id": "b-telligent-partner-page-partnership-with-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Quoted recommending dbt for anyone building a DWH today, as a fit for best-of-breed architectures.",
+              "topics": [
+                "dbt migration & adoption",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": "Lessons from many client dbt rollouts at a German consultancy (anonymised patterns, anti-patterns)",
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Talking Bout My (Code) Generation",
+              "date": "2023-04-17",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/292276168/",
+              "content_id": "munich-dbt-meetup-munich--talking-bout-my-code-generation",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "developer workflow",
+                "project structure"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.btelligent.com/en/partner/dbt",
+              "note": "post: Partnership With dbt"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Lessons from many client dbt rollouts at a German consultancy (anonymised patterns, anti-patterns)",
+          "past_chapter_talks": [
+            {
+              "date": "2023-04-17",
+              "talk_title": "Talking Bout My (Code) Generation",
+              "topics": [
+                "developer workflow",
+                "project structure"
+              ]
+            }
+          ],
+          "notes": "Named voice of b.telligent's dbt partnership (dbt Labs Preferred Consulting Partner badge). Likely a senior dbt practitioner or sponsor inside the consultancy. City not confirmed; b.telligent is headquartered in Munich but has 9 offices."
+        },
+        {
+          "id": "thomas-lindner",
+          "name": "Thomas Lindner",
+          "pronouns": null,
+          "title": "Senior Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tholi/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan",
+            "linkedin_search"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "post",
+              "event": "b.telligent partner page",
+              "title": "Partnership With dbt - contact person",
+              "date": null,
+              "url": "https://www.btelligent.com/en/partner/dbt",
+              "content_id": "b-telligent-partner-page-partnership-with-dbt-contact-person",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Named as the contact person for dbt-related projects at b.telligent.",
+              "topics": [
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/tholi/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.btelligent.com/en/partner/dbt",
+              "note": "post: Partnership With dbt - contact person"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Listed as the contact for b.telligent's dbt partnership. Probably a hands-on dbt consultant, but no talks or articles found. Verify location."
+        },
+        {
+          "id": "johannes-becker",
+          "name": "Johannes Becker",
+          "pronouns": null,
+          "title": "Senior Consultant, b.telligent",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (in-person) (Munich dbt Meetup)",
+              "title": "If you have a run-operation, everything looks like a {{nail()}}",
+              "date": "2023-10-10",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+              "content_id": "munich-dbt-meetup-in-pers-if-you-have-a-run-operation-everything-l",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "developer workflow",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+              "note": "talk: If you have a run-operation, everything looks like a {{nail()}}"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-10",
+              "talk_title": "If you have a run-operation, everything looks like a {{nail()}}",
+              "topics": [
+                "developer workflow",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "christian-eberhardt",
+          "name": "Christian Eberhardt",
+          "pronouns": null,
+          "title": "btelligent",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "How dbt saved the day on a toxic join issue",
+              "date": "2026-02-19",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/312785951/",
+              "content_id": "munich-dbt-meetup-munich--how-dbt-saved-the-day-on-a-toxic-join-is",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "developer workflow",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/312785951/",
+              "note": "talk: How dbt saved the day on a toxic join issue"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-02-19",
+              "talk_title": "How dbt saved the day on a toxic join issue",
+              "topics": [
+                "developer workflow",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Headquartered at Walter-Gropius-Str. 17, 80807 München, with a dbt Labs Preferred Consulting Partner badge. Co-organises the Munich Snowflake UG and runs the World of Data conference (Paulaner am Nockherberg, Jun 2026). Synabi is its spinoff. Strong co-host or sponsor candidate."
+    },
+    {
+      "id": "wemolo",
+      "name": "Wemolo (VMO)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Dagster",
+        "Metabase",
+        "GitLab",
+        "Python",
+        "Personio",
+        "Salesforce",
+        "PostgreSQL"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.munich-datageeks.de/talk-from-chaos-to-control-automating-bi-tools-with-pydantic-and-python/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "patricia-goldberg",
+          "name": "Patricia Goldberg",
+          "pronouns": null,
+          "title": "Data and Analytics Engineer",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/patricia-goldberg"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich Datageeks - February Edition 2026",
+              "title": "From Chaos to Control: Automating BI Tools with Pydantic and Python",
+              "date": "2026-02",
+              "url": "https://www.munich-datageeks.de/talk-from-chaos-to-control-automating-bi-tools-with-pydantic-and-python/",
+              "content_id": "munich-datageeks-february-from-chaos-to-control-automating-bi-tool",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Three automated governance solutions for a shared Metabase instance: HR-driven permission sync from Personio via Dagster, syncing dbt YAML descriptions into Metabase, and auto-repairing saved questions after schema renames.",
+              "topics": [
+                "data governance",
+                "business intelligence",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": "dbt YAML as the single source of truth for BI documentation and metadata: syncing dbt docs to Metabase and surviving renames across 13,000 saved questions",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/patricia-goldberg",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.munich-datageeks.de/talk-from-chaos-to-control-automating-bi-tools-with-pydantic-and-python/",
+              "note": "talk: From Chaos to Control: Automating BI Tools with Pydantic and Python"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "dbt YAML as the single source of truth for BI documentation and metadata: syncing dbt docs to Metabase and surviving renames across 13,000 saved questions",
+          "past_chapter_talks": [],
+          "notes": "Strongest Munich dbt practitioner lead found. Talk at Munich Datageeks Feb 2026 (recorded, YouTube). Stack: Personio/Postgres/Salesforce -> Python + Dagster -> BigQuery -> dbt -> Metabase, docs in GitLab. One-analyst-for-250-employees setting makes it a relatable story. LinkedIn link appears verbatim on the Datageeks speaker bio. The write-up names the employer as both VMO and Wemolo; confirm which name to use."
+        }
+      ],
+      "notes": "Munich startup with about 250 employees. All data models are in dbt, and dbt YAML docs are synced to Metabase."
+    },
+    {
+      "id": "inovex",
+      "name": "inovex",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://github.com/inovex/blog-dbt-mimesis",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.inovex.de/en/about-us/technology-partners/dbt/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "dbt technology partner. Its blog post 'Data Pipeline Testing with Mimesis and dbt' has a companion repo; author and date not checked. Munich office not verified here."
+    },
+    {
+      "id": "daiichi-sankyo",
+      "name": "Daiichi Sankyo",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/de-de/munich-dbt-meetup/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "evgenii-prusov",
+          "name": "Evgenii Prusov",
+          "pronouns": null,
+          "title": "Daiichi Sankyo",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale",
+              "date": "2025-07-15",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "content_id": "munich-dbt-meetup-munich--building-a-federated-ai-augmented-data-p",
+              "co_authors": [
+                "Dianyu Yang"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "data mesh",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "note": "talk: Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-07-15",
+              "talk_title": "Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale",
+              "topics": [
+                "data mesh",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "dianyu-yang",
+          "name": "Dianyu Yang",
+          "pronouns": null,
+          "title": "Daiichi Sankyo",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale",
+              "date": "2025-07-15",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "content_id": "munich-dbt-meetup-munich--building-a-federated-ai-augmented-data-p",
+              "co_authors": [
+                "Evgenii Prusov"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "data mesh",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "note": "talk: Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-07-15",
+              "talk_title": "Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale",
+              "topics": [
+                "data mesh",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Hosted the Munich dbt Meetup on 15 Jul 2025, per search snippet. It is the chapter's own past host; check whether it would host again."
+    },
+    {
+      "id": "4flow",
+      "name": "4flow",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (d/f/m)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-d-f-m-at-4flow-4429547467",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "4flow",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "pipeline deployment with tools like dbt and Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "adesso-se",
+      "name": "adesso SE",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733034962",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733038541",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4203246035",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4247159086",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402143045",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402133645",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "agoda",
+      "name": "Agoda",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior / Staff Data Engineer (BI) – CEG Team",
+          "url": "https://www.linkedin.com/jobs/view/senior-staff-data-engineer-bi-%E2%80%93-ceg-team-at-agoda-4455265142",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Agoda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration frameworks (e.g., Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "autoscout24",
+      "name": "AutoScout24",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Sales Analyst (f/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-sales-analyst-f-m-d-at-autoscout24-4465779954",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AutoScout24",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "AWS, Snowflake, Databricks, dbt, QuickSight",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "codecentric-ag",
+      "name": "codecentric AG",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Software Developer und Consultant mit Schwerpunkt Data (w/d/m)",
+          "url": "https://www.linkedin.com/jobs/view/software-developer-und-consultant-mit-schwerpunkt-data-w-d-m-at-codecentric-ag-4453090259",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "codecentric AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Pipelines (z. B. AWS Glue, dbt oder Databricks)",
+          "job_poster": null,
+          "posted_date": "2026-08-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "eon-deutschland",
+      "name": "E.ON Deutschland",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "(Senior) Customer Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-customer-data-engineer-m-w-d-at-e-on-deutschland-4458876983",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "E.ON Deutschland",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Business-Logiken setzt du mithilfe von dbt und Snowflake SQL um",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "eraneos",
+      "name": "Eraneos",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/senior-analytics-engineer-all-genders-at-eraneos-4446205992",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Eraneos",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Datentransformationsprozesse mit dbt und etablierst Best Practices",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ey",
+      "name": "EY",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Berater Snowflake Data Engineer - AI & Data (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/berater-snowflake-data-engineer-ai-data-w-m-d-at-ey-4440155259",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "EY",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Kafka, NiFi, DBT, Matillion, Palantir",
+          "job_poster": null,
+          "posted_date": "2026-09-22",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "holidu",
+      "name": "Holidu",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Redshift",
+        "Athena/Presto",
+        "Spark",
+        "Firehose"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://opportunities.northzone.com/companies/holidu/jobs/43667757-senior-analytics-engineer-marketing-technology-all-genders",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/@holidu",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Munich travel-tech company hiring a Senior Analytics Engineer. The dbt/Airflow/Redshift stack comes from a search summary of its job ads. The tech blog (Medium) has no data or dbt posts in 2025–26; recent posts are on infra/Elasticsearch. No named data authors found."
+    },
+    {
+      "id": "infomotion-gmbh",
+      "name": "INFOMOTION GmbH",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake Senior Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-senior-data-engineer-m-w-d-at-infomotion-gmbh-4465032254",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "INFOMOTION GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "integrierst dbt und arbeitest Cloud-nativ",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "jobrad-deutschland",
+      "name": "JobRad Deutschland",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Snowflake Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-snowflake-data-engineer-m-w-d-at-jobrad%C2%AE-deutschland-4446508846",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "JobRad Deutschland",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Erfahrung mit Tools wie dbt, Apache Airflow oder Dagster",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Snowflake Data Engineer (m/w/d) - Loop",
+          "url": "https://www.linkedin.com/jobs/view/senior-snowflake-data-engineer-m-w-d-at-jobrad%C2%AE-loop-4437684949",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "JobRad Deutschland",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Erfahrung mit Tools wie dbt, Apache Airflow oder Dagster",
+          "job_poster": null,
+          "posted_date": "2026-07-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "kartenliebe-gmbh",
+      "name": "Kartenliebe GmbH",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-m-w-d-at-kartenliebe-gmbh-4453367476",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Kartenliebe GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "GCP, BigQuery, dbt, SQLMesh und Airbyte",
+          "job_poster": null,
+          "posted_date": "2026-08-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "munich-snowflake-user-group",
+      "name": "Munich Snowflake User Group (MSUG)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Organised by b.telligent and synvert; 303 meetup.com members. Has already run a joint 'Snowflake & dbt' evening. Venues: Synabi, synvert, Paulaner (World of Data)."
+    },
+    {
+      "id": "myposter-gmbh",
+      "name": "myposter GmbH",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/analytics-engineer-m-w-d-at-myposter-gmbh-4466072514",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "myposter GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Du begeisterst Dich für dbt, BigQuery",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "octopus-energy",
+      "name": "Octopus Energy",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer Mid-Level (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-mid-level-m-w-d-at-octopus-energy-4471199307",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Octopus Energy",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Datenmodellierung mit dbt sowie Orchestrierung",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "personio",
+      "name": "Personio",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake or BigQuery (per search summary)"
+      ],
+      "job_postings": [
+        {
+          "title": "Head of - Product & Engineering Analytics (d/f/m)",
+          "url": "https://www.linkedin.com/jobs/view/head-of-product-engineering-analytics-d-f-m-at-personio-4453468163",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Personio",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL, Python/R, dbt or similar",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://builtin.com/job/analytics-engineer-dfm/3763511",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/inside-personio/all?topic=engineering",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Analytics Engineer job ads exist. The Inside Personio Medium engineering tab rendered empty to fetch, so no named authors were found. | Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "skalar-digitale-steuerberatung",
+      "name": "Skalar – Digitale Steuerberatung",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-w-m-d-at-skalar-%E2%80%93-digitale-steuerberatung-4462542372",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Skalar – Digitale Steuerberatung",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake/BigQuery, dbt, Airflow/Dagster",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "synabi-business-solutions-gmbh",
+      "name": "Synabi Business Solutions GmbH",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt",
+        "D-QUANTUM"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://synabi.com/en/events/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "b.telligent spinoff (financial-industry software). Offices at Oskar-Schlemmer-Str. 13, 80807 München host both the dbt meetup and MSUG (Feb 2025, Aug 2026). Its events page returned empty to fetch."
+    },
+    {
+      "id": "trade-republic",
+      "name": "Trade Republic",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://jobs.thrivecap.com/companies/trade-republic/jobs/33534786-senior-staff-analytics-engineer-data-foundations-f-d-m",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "Berlin HQ. Senior/Staff Analytics Engineer (Data Foundations) ad mentions Snowflake + dbt. Munich presence not confirmed."
+    },
+    {
+      "id": "verlag-chbeck",
+      "name": "Verlag C.H.Beck",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "BI Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/bi-data-engineer-m-w-d-at-verlag-c-h-beck-gmbh-co-kg-4466392925",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Verlag C.H.Beck",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Kenntnisse in Spark, dbt und Medallion-Architekturen",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "woodmark-consulting",
+      "name": "Woodmark Consulting",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-analytics-engineer-m-w-d-at-woodmark-consulting-4419553173",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Woodmark Consulting",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Data Vault 2.0 mittels nativem SQL, dbt Core oder Python",
+          "job_poster": null,
+          "posted_date": "2026-05-26",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "x1f",
+      "name": "x1F",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Consultant Data Engineering & Architecture (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-consultant-data-engineering-architecture-m-w-d-at-x1f-4402524579",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "x1F",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Data Platforms auf Basis von Spark, dbt oder SQL",
+          "job_poster": null,
+          "posted_date": "2026-09-13",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "finn-gmbh",
+      "name": "FINN GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lucas-cupido",
+          "name": "Lucas Cupido",
+          "pronouns": null,
+          "title": "FINN GmbH",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (in-person) (Munich dbt Meetup)",
+              "title": "Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns",
+              "date": "2023-10-10",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+              "content_id": "munich-dbt-meetup-in-pers-scaling-up-messing-up-navigating-dbt-dat",
+              "co_authors": [
+                "Jorrit Posor"
+              ],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "developer workflow",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+              "note": "talk: Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-10",
+              "talk_title": "Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns",
+              "topics": [
+                "developer workflow",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "jorrit-posor",
+          "name": "Jorrit Posor",
+          "pronouns": null,
+          "title": "FINN GmbH",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (in-person) (Munich dbt Meetup)",
+              "title": "Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns",
+              "date": "2023-10-10",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+              "content_id": "munich-dbt-meetup-in-pers-scaling-up-messing-up-navigating-dbt-dat",
+              "co_authors": [
+                "Lucas Cupido"
+              ],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "developer workflow",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+              "note": "talk: Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-10",
+              "talk_title": "Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns",
+              "topics": [
+                "developer workflow",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "siemens-ag",
+      "name": "Siemens AG",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Snowflake semantic views",
+        "Cortex Analyst"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hanna-mykula",
+          "name": "Hanna Mykula",
+          "pronouns": null,
+          "title": null,
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hannamykula/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich Snowflake User Group (MSUG) - Spring Incoming with Siemens and Synvert",
+              "title": "AI-Ready at Siemens: Scaling Data and People on Snowflake",
+              "date": "2026-04-16",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/313614650/",
+              "content_id": "munich-snowflake-user-gro-ai-ready-at-siemens-scaling-data-and-peo",
+              "co_authors": [
+                "Fiona Cambeis"
+              ],
+              "mentions_dbt": false,
+              "description": "How Siemens builds an AI-ready data foundation on Snowflake with semantic views for business clarity, user-based access controls, and a people-centred enablement framework.",
+              "topics": [
+                "semantic layer",
+                "data governance",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": "Semantic views vs. the dbt Semantic Layer at enterprise scale; enabling non-engineers to build AI use cases on governed data",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/hannamykula/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/313614650/",
+              "note": "talk: AI-Ready at Siemens: Scaling Data and People on Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Semantic views vs. the dbt Semantic Layer at enterprise scale; enabling non-engineers to build AI use cases on governed data",
+          "past_chapter_talks": [],
+          "notes": "Co-presented Siemens' 'AI-ready' Snowflake data foundation, covering semantic views, user-based access control and an enablement programme for staff. Semantic layer and governance angle fits well, but dbt is not mentioned. City assumed from the Munich event, not confirmed."
+        },
+        {
+          "id": "fiona-cambeis",
+          "name": "Fiona Cambeis",
+          "pronouns": null,
+          "title": null,
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/fiona-cambeis-b604a5178/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich Snowflake User Group (MSUG) - Spring Incoming with Siemens and Synvert",
+              "title": "AI-Ready at Siemens: Scaling Data and People on Snowflake",
+              "date": "2026-04-16",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/313614650/",
+              "content_id": "munich-snowflake-user-gro-ai-ready-at-siemens-scaling-data-and-peo",
+              "co_authors": [
+                "Hanna Mykula"
+              ],
+              "mentions_dbt": false,
+              "description": "Joint talk on semantic views, access control and enablement for AI use cases on Snowflake at Siemens.",
+              "topics": [
+                "semantic layer",
+                "data governance",
+                "team & org design"
+              ],
+              "suggested_talk_angle": "People-centric enablement: scaling self-serve analytics and AI across a global enterprise",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/fiona-cambeis-b604a5178/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/313614650/",
+              "note": "talk: AI-Ready at Siemens: Scaling Data and People on Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "People-centric enablement: scaling self-serve analytics and AI across a global enterprise",
+          "past_chapter_talks": [],
+          "notes": "Co-speaker with Hanna Mykula on Siemens' AI-ready Snowflake foundation. Could be approached as a pair. dbt is not mentioned."
+        }
+      ],
+      "notes": "Public talk on an AI-ready Snowflake foundation with semantic views and enablement at MSUG in Apr 2026. No dbt evidence found."
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jan-sommerfeld",
+          "name": "Jan Sommerfeld",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jansommerfeld/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "MSUG: WOD meets Snowflake Summit",
+              "title": "Snowflake Summit: DCM Projects",
+              "date": "2026-06-11",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/314753503/",
+              "content_id": "msug-wod-meets-snowflake--snowflake-summit-dcm-projects",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Deep dive on Snowflake Database Change Management: declarative, version-controlled management of databases, schemas, roles and grants in YAML, with CI/CD integration.",
+              "topics": [
+                "orchestration & ci/cd",
+                "developer workflow",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/jansommerfeld/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/314753503/",
+              "note": "talk: Snowflake Summit: DCM Projects"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker. The DCM Projects talk (declarative YAML, CI/CD, role patterns) sits close to dbt developer workflows, but it is a vendor talk, so tier 3."
+        },
+        {
+          "id": "jens-englert",
+          "name": "Jens Englert",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jens-englert-77996b136"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "MSUG: WOD meets Snowflake Summit",
+              "title": "Snowflake Summit: New Feature Updates",
+              "date": "2026-06-11",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/314753503/",
+              "content_id": "msug-wod-meets-snowflake--snowflake-summit-new-feature-updates",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Breakdown of new Snowflake Summit capabilities, including AI functions and platform enhancements.",
+              "topics": [
+                "dbt product updates",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/jens-englert-77996b136",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/314753503/",
+              "note": "talk: Snowflake Summit: New Feature Updates"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vendor speaker giving a Snowflake Summit feature recap."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "bayerischer-rundfunk",
+      "name": "Bayerischer Rundfunk (BR Data / BR Recherche)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "julia-barthel",
+          "name": "Julia Barthel",
+          "pronouns": null,
+          "title": "Data and Investigative Journalist",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "WiDS Munich 2025",
+              "title": "WiDS Munich 2025 speaker",
+              "date": "2025-10-21",
+              "url": "https://sites.google.com/view/widsmunich/past-events/wids-2025/speakers-2025",
+              "content_id": "wids-munich-2025-wids-munich-2025-speaker",
+              "co_authors": [
+                "Polina Galkin"
+              ],
+              "mentions_dbt": false,
+              "description": "Listed WiDS Munich 2025 speaker; combines data-driven research with cross-media reporting.",
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://sites.google.com/view/widsmunich/past-events/wids-2025/speakers-2025",
+              "note": "talk: WiDS Munich 2025 speaker"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "WiDS Munich 2025 speaker working in data journalism. BR hosted WiDS 2025 and is a possible venue contact. Off-topic for dbt."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "bergzeit",
+      "name": "Bergzeit",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christopher-gutknecht",
+          "name": "Christopher Gutknecht",
+          "pronouns": null,
+          "title": "Bergzeit",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Like a dentist - How Bergzeit manages +2000 dbt data tests on imperfect data",
+              "date": "2025-07-15",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "content_id": "munich-dbt-meetup-munich--like-a-dentist-how-bergzeit-manages-2000",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "note": "talk: Like a dentist - How Bergzeit manages +2000 dbt data tests on imperfect data"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-07-15",
+              "talk_title": "Like a dentist - How Bergzeit manages +2000 dbt data tests on imperfect data",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": true,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "stephan-durry",
+          "name": "Stephan Durry",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Introducing the dbt Fusion Engine",
+              "date": "2025-07-15",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "content_id": "munich-dbt-meetup-munich--introducing-the-dbt-fusion-engine",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt product features",
+                "dbt product updates"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "note": "talk: Introducing the dbt Fusion Engine"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-07-15",
+              "talk_title": "Introducing the dbt Fusion Engine",
+              "topics": [
+                "dbt product features",
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "finn",
+      "name": "FINN",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "giacomo-coletto",
+          "name": "Giacomo Coletto",
+          "pronouns": null,
+          "title": "FINN",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Startup to ScaleUp Lessons from FINN's Data Journey",
+              "date": "2026-02-19",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/312785951/",
+              "content_id": "munich-dbt-meetup-munich--startup-to-scaleup-lessons-from-finn-s-d",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/312785951/",
+              "note": "talk: Startup to ScaleUp Lessons from FINN's Data Journey"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-02-19",
+              "talk_title": "Startup to ScaleUp Lessons from FINN's Data Journey",
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "frontify",
+      "name": "Frontify",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michal-lapinski",
+          "name": "Michal Lapinski",
+          "pronouns": null,
+          "title": "Data Infrastructure Lead, Frontify",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Our continuously evolving data infrastructure",
+              "date": "2023-04-17",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/292276168/",
+              "content_id": "munich-dbt-meetup-munich--our-continuously-evolving-data-infrastru",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/292276168/",
+              "note": "talk: Our continuously evolving data infrastructure"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-04-17",
+              "talk_title": "Our continuously evolving data infrastructure",
+              "topics": [
+                "modern data stack",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "hochschule-munchen",
+      "name": "Hochschule München (Munich University of Applied Sciences)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "stephanie-thiemichen",
+          "name": "Stephanie Thiemichen",
+          "pronouns": null,
+          "title": "Professor for Data Engineering; Secretary, Munich Datageeks e.V.",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/stephanie-thiemichen-467a08128/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Munich Datageeks e.V.",
+              "title": "Organizing team - Secretary",
+              "date": "2026",
+              "url": "https://www.munich-datageeks.de/",
+              "content_id": "munich-datageeks-e-v-organizing-team-secretary",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed on the Munich Datageeks board as Secretary and Professor for Data Engineering at Hochschule München.",
+              "topics": [
+                "community",
+                "data engineering",
+                "career development"
+              ],
+              "suggested_talk_angle": "Teaching analytics engineering: what graduates should know about dbt",
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/stephanie-thiemichen-467a08128/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.munich-datageeks.de/",
+              "note": "organiser: Organizing team - Secretary"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Teaching analytics engineering: what graduates should know about dbt",
+          "past_chapter_talks": [],
+          "notes": "Connector. Board member of Munich Datageeks, the largest local data meetup, which records talks and hosts monthly. As a data engineering professor she could give a teaching or curriculum perspective, or route students and speakers. No dbt content found."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "idexq",
+      "name": "IDEX.Q",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michael-strau",
+          "name": "Michael Strauß",
+          "pronouns": null,
+          "title": "IDEX.Q",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (Munich dbt Meetup)",
+              "title": "Leverage dbt docs for Genie AI/BI",
+              "date": "2025-07-15",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "content_id": "munich-dbt-meetup-munich--leverage-dbt-docs-for-genie-ai-bi",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt fundamentals",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+              "note": "talk: Leverage dbt docs for Genie AI/BI"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-07-15",
+              "talk_title": "Leverage dbt docs for Genie AI/BI",
+              "topics": [
+                "dbt fundamentals",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "in516ht",
+      "name": "In516ht",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "maja-ferle",
+          "name": "Maja Ferle",
+          "pronouns": null,
+          "title": "Senior consultant; Snowflake Data Superhero",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake & dbt User Group Meeting in Munich",
+              "title": "Using the Snowflake Cortex Search Service to Interact with Your Documents",
+              "date": "2025-02-20",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "content_id": "snowflake-dbt-user-group--using-the-snowflake-cortex-search-servic",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Demo of building a RAG solution over PDFs with Snowflake Cortex LLM functions and Cortex Search.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Munich dbt & Snowflake Meetup (in-person) (Munich dbt Meetup)",
+              "title": "Using the Snowflake Cortex Search Service to Interact with Your Documents",
+              "date": "2025-02-20",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/306007168/",
+              "content_id": "munich-dbt-snowflake-meet-using-the-snowflake-cortex-search-servic",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "note": "talk: Using the Snowflake Cortex Search Service to Interact with Your Documents"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-02-20",
+              "talk_title": "Using the Snowflake Cortex Search Service to Interact with Your Documents",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ]
+            }
+          ],
+          "notes": "Spoke at the Munich Snowflake & dbt evening on a Cortex Search RAG demo. Not local, as far as can be seen. The talk was about AI on documents, not dbt."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "helene-fuchs",
+          "name": "Helene Fuchs",
+          "pronouns": null,
+          "title": "Organizer, Munich Snowflake Data Cloud Meetup Group",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Munich Snowflake Data Cloud Meetup Group",
+              "title": "Organizer",
+              "date": "2026",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/",
+              "content_id": "munich-snowflake-data-clo-organizer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed organiser of the 303-member Munich Snowflake meetup group.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/",
+              "note": "organiser: Organizer"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Listed as the lead organiser on the MSUG meetup.com page (Pro account). Employer not shown."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "lmu-munich",
+      "name": "LMU Munich (Social Data Science and AI Lab)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "frauke-kreuter",
+          "name": "Frauke Kreuter",
+          "pronouns": null,
+          "title": "Chair of Social Data Science and AI Lab",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Data Science (WiDS) Munich",
+              "title": "WiDS Munich 2025 conference (organiser)",
+              "date": "2025-10-21",
+              "url": "https://mcml.ai/events/2025-10-21-women-in-data-science-conference/",
+              "content_id": "women-in-data-science-wid-wids-munich-2025-conference-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Named organiser of WiDS Munich 2025, held at Bayerischer Rundfunk with LMU, TUM, BR, Pruna AI and Sixt.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://mcml.ai/events/2025-10-21-women-in-data-science-conference/",
+              "note": "organiser: WiDS Munich 2025 conference (organiser)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Leads the WiDS Munich organising team; WiDS 2026 is on 11 Dec 2026. Academic data science, off-topic for dbt, but the gateway to the WiDS community and its mailing list."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "microsoft-fabric",
+      "name": "Microsoft Fabric",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "pradeep-srikakolapu",
+          "name": "Pradeep Srikakolapu",
+          "pronouns": null,
+          "title": "Senior Program Manager, Microsoft Fabric",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (in-person) (Munich dbt Meetup)",
+              "title": "Microsoft Fabric and dbt-fabric, dbt-fabricspark and dbt-synapse adapter status",
+              "date": "2024-04-11",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/299937901/",
+              "content_id": "munich-dbt-meetup-in-pers-microsoft-fabric-and-dbt-fabric-dbt-fabr",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "tools & ecosystem",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/299937901/",
+              "note": "talk: Microsoft Fabric and dbt-fabric, dbt-fabricspark and dbt-synapse adapter status"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-11",
+              "talk_title": "Microsoft Fabric and dbt-fabric, dbt-fabricspark and dbt-synapse adapter status",
+              "topics": [
+                "tools & ecosystem",
+                "data warehouse & platforms"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "project-a-ventures",
+      "name": "Project A Ventures",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tim-hiebenthal",
+          "name": "Tim Hiebenthal",
+          "pronouns": null,
+          "title": "Project A Ventures",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake & dbt User Group Meeting in Munich",
+              "title": "How to mitigate pitfalls in a Data Warehouse",
+              "date": "2025-02-20",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "content_id": "snowflake-dbt-user-group--how-to-mitigate-pitfalls-in-a-data-wareh",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Best practices collected across portfolio companies to avoid inconsistent metrics and slow response times, and to build an adaptable DWH that builds trust with stakeholders.",
+              "topics": [
+                "dbt best practices",
+                "data modeling",
+                "semantic layer"
+              ],
+              "suggested_talk_angle": "Metric consistency patterns across many startups' dbt/DWH setups",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Munich dbt & Snowflake Meetup (in-person) (Munich dbt Meetup)",
+              "title": "Common pitfalls when building a data warehouse",
+              "date": "2025-02-20",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/306007168/",
+              "content_id": "munich-dbt-snowflake-meet-common-pitfalls-when-building-a-data-war",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "note": "talk: How to mitigate pitfalls in a Data Warehouse"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Metric consistency patterns across many startups' dbt/DWH setups",
+          "past_chapter_talks": [
+            {
+              "date": "2025-02-20",
+              "talk_title": "Common pitfalls when building a data warehouse",
+              "topics": [
+                "modern data stack",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": "Spoke at the Munich Snowflake & dbt evening on DWH best practices (inconsistent metrics, slow responses). Project A is Berlin-based, so he may not be local. Talk is from Feb 2025, 1.5+ years old."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "sap",
+      "name": "SAP",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "polina-galkin",
+          "name": "Polina Galkin",
+          "pronouns": null,
+          "title": "Senior Data Scientist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "WiDS Munich 2025",
+              "title": "WiDS Munich 2025 speaker",
+              "date": "2025-10-21",
+              "url": "https://sites.google.com/view/widsmunich/past-events/wids-2025/speakers-2025",
+              "content_id": "wids-munich-2025-wids-munich-2025-speaker",
+              "co_authors": [
+                "Julia Barthel"
+              ],
+              "mentions_dbt": false,
+              "description": "Listed WiDS Munich 2025 speaker; bio covers explainable AI to simplify AI-driven decision-making.",
+              "topics": [
+                "genai & llm",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://sites.google.com/view/widsmunich/past-events/wids-2025/speakers-2025",
+              "note": "talk: WiDS Munich 2025 speaker"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "WiDS Munich 2025 speaker working on explainable AI and responsible ML; also on the CorrelAid ethics committee. Peripheral to dbt; possible 'AI for analytics' angle."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "sixt-se",
+      "name": "SIXT SE",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "iulia-pasov",
+          "name": "Iulia Pasov",
+          "pronouns": null,
+          "title": "Engineering Manager, Data Science",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Data Science (WiDS) Munich",
+              "title": "WiDS Munich 2026 organising team",
+              "date": "2026",
+              "url": "https://widsmunich.de/team/",
+              "content_id": "women-in-data-science-wid-wids-munich-2026-organising-team",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed on the WiDS Munich 2026 volunteer team as Engineering Manager for Data Science at SIXT SE.",
+              "topics": [
+                "community",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://widsmunich.de/team/",
+              "note": "organiser: WiDS Munich 2026 organising team"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Industry member of the WiDS Munich 2026 organising team, and Sixt is a WiDS partner. Useful route to Sixt's data org and possible hosting. Her own focus is data science and AI services, not dbt."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "sundeck",
+      "name": "Sundeck",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ryan-murray",
+          "name": "Ryan Murray",
+          "pronouns": null,
+          "title": "Cofounder and Engineer, Sundeck",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Munich dbt Meetup (in-person) (Munich dbt Meetup)",
+              "title": "Snowflake emulator: Local dbt development against snowflake",
+              "date": "2024-04-11",
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/299937901/",
+              "content_id": "munich-dbt-meetup-in-pers-snowflake-emulator-local-dbt-development",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data warehouse & platforms",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/munich-dbt-meetup/events/299937901/",
+              "note": "talk: Snowflake emulator: Local dbt development against snowflake"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-11",
+              "talk_title": "Snowflake emulator: Local dbt development against snowflake",
+              "topics": [
+                "data warehouse & platforms",
+                "developer workflow"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "synvert",
+      "name": "synvert (synvert Data Insights)",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "manuel-ifland",
+          "name": "Manuel Ifland",
+          "pronouns": null,
+          "title": "Principal Consultant Modern DWH",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/manuel-ifland-5724b182/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "MSUG - Spring Incoming with Siemens and Synvert",
+              "title": "Snowflake BUILD London Recap",
+              "date": "2026-04-16",
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/313614650/",
+              "content_id": "msug-spring-incoming-with-snowflake-build-london-recap",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Recap of the new features announced at Snowflake BUILD London and where they give quick wins in existing setups.",
+              "topics": [
+                "data warehouse & platforms",
+                "industry trends"
+              ],
+              "suggested_talk_angle": "What's new in the warehouse layer that changes how dbt projects should be built",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Snowflake User Groups Munich",
+              "title": "Organizer, Snowflake & dbt User Group Meeting in Munich",
+              "date": "2025-02-20",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+              "content_id": "snowflake-user-groups-mun-organizer-snowflake-dbt-user-group-meeti",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Listed as an organiser of the joint Snowflake/dbt evening.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/manuel-ifland-5724b182/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/events/313614650/",
+              "note": "talk: Snowflake BUILD London Recap"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "What's new in the warehouse layer that changes how dbt projects should be built",
+          "past_chapter_talks": [],
+          "notes": "Connector and speaker. Co-organises the Munich Snowflake User Group; synvert hosted its April 2026 event at Gotzinger Str. 19. Modern-DWH consultant who could speak on platform or feature updates. No dbt content found."
+        }
+      ],
+      "notes": "Munich office at Gotzinger Str. 19 hosted MSUG in Apr 2026. Manuel Ifland (Principal Consultant Modern DWH) co-organises. Possible venue."
+    },
+    {
+      "id": "technische-hochschule-ingolstadt",
+      "name": "Technische Hochschule Ingolstadt",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "torsten-schon",
+          "name": "Torsten Schön",
+          "pronouns": null,
+          "title": "Professor; 1st Chair, Munich Datageeks e.V.",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://de.linkedin.com/in/torsten-sch%C3%B6n"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Munich Datageeks e.V.",
+              "title": "Organizing team - 1st Chair",
+              "date": "2026",
+              "url": "https://www.munich-datageeks.de/",
+              "content_id": "munich-datageeks-e-v-organizing-team-1st-chair",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "First chair of Munich Datageeks, which runs monthly data and AI meetups with recorded talks.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://de.linkedin.com/in/torsten-sch%C3%B6n",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.munich-datageeks.de/",
+              "note": "organiser: Organizing team - 1st Chair"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector for a possible Datageeks co-host or cross-promotion. His own work is computer vision and AI, not dbt."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "virtual7-gmbh",
+      "name": "virtual7 GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christian-kaul",
+          "name": "Christian Kaul",
+          "pronouns": null,
+          "title": "Data modeler, writer; organiser of Data Modeling Meetup Munich (DM3)",
+          "city": "Munich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christian-kaul/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Modeling Meetup Munich (DM3)",
+              "title": "Organizer, DM3",
+              "date": "2026-02",
+              "url": "https://www.meetup.com/data-modeling-dm3/",
+              "content_id": "data-modeling-meetup-muni-organizer-dm3",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Organises a long-running Munich data modeling meetup focused on data vault, transitional and fact-based modeling.",
+              "topics": [
+                "data modeling",
+                "community"
+              ],
+              "suggested_talk_angle": "Data modeling patterns (Data Vault, anchor modeling) in a dbt world; joint DM3 x dbt Munich event",
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/christian-kaul/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/data-modeling-dm3/",
+              "note": "organiser: Organizer, DM3"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Data modeling patterns (Data Vault, anchor modeling) in a dbt world; joint DM3 x dbt Munich event",
+          "past_chapter_talks": [],
+          "notes": "Connector. Runs DM3 (2,117 members, 66 past events; recent events online with international speakers such as Lars Rönnbäck, John Giles and Remco Broekmans). Has chaired the Knowledge Gap data modeling conference. Could speak himself on modeling (e.g. Data Vault or modeling in dbt) or co-promote a joint modeling-themed dbt evening."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "data-modeling-meetup-munich",
+      "name": "Data Modeling Meetup Munich (DM3)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Data Vault"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/data-modeling-dm3/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Run by Christian Kaul; 2,117 members. Recent events are online with international speakers, so few local speaker leads."
+    },
+    {
+      "id": "munich-database-meetup",
+      "name": "Munich Database Meetup",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://munichdatabases.xyz/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Co-run with TUMuchData; 1,250+ members, 70–100 attendees per event. Focus is database internals and systems. Possible cross-promotion for platform or performance talks."
+    },
+    {
+      "id": "munich-datageeks-ev",
+      "name": "Munich Datageeks e.V.",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.munich-datageeks.de/talk-from-chaos-to-control-automating-bi-tools-with-pydantic-and-python/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.munich-datageeks.de/tag/talks/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.munich-datageeks.de/tag/talks/page/2/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.munich-datageeks.de/tag/talks/page/3/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Largest general data/AI meetup in Munich; talks are recorded, summarised and posted on YouTube and SpeakerDeck. Mostly AI/ML topics; one dbt-relevant talk in the last year. Good cross-promotion partner."
+    },
+    {
+      "id": "scalable-capital",
+      "name": "Scalable Capital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Munich HQ with an active Data Platform team (Team Lead Data Platform ad on builtin). No dbt or blog evidence found within budget."
+    },
+    {
+      "id": "women-in-data-science-munich",
+      "name": "Women in Data Science (WiDS) Munich",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Munich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://widsmunich.de/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://widsmunich.de/team/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://sites.google.com/view/widsmunich/past-events/wids-2025/speakers-2025",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Annual conference organised by LMU SODA, TUM/MDSI, Sixt and Pruna AI (2026 edition on 11 Dec 2026). Speakers are mostly academic or ML, with little analytics engineering. Partners include Sixt and Lidl."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/munich-dbt-meetup/events/?type=past",
+    "past_meetups_derived_from": "enriched/munich-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Munich Datageeks talks (pages 1-3)",
+        "url": "https://www.munich-datageeks.de/tag/talks/",
+        "yielded": true,
+        "note": "Found the Patricia Goldberg dbt/Metabase governance talk (Feb 2026); the rest is AI/ML."
+      },
+      {
+        "name": "Snowflake UG Munich - Snowflake & dbt meeting Feb 2025",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/",
+        "yielded": true,
+        "note": "Speakers Tim Hiebenthal and Maja Ferle; organisers Mathias Höreth and Manuel Ifland; held at Synabi."
+      },
+      {
+        "name": "Munich Snowflake Data Cloud Meetup Group",
+        "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/",
+        "yielded": true,
+        "note": "Apr 2026 Siemens talk on semantic views; Jun 2026 Summit recap; Aug 2026 event at Synabi."
+      },
+      {
+        "name": "Munich dbt Meetup past events",
+        "url": "https://www.meetup.com/munich-dbt-meetup/events/?type=past",
+        "yielded": false,
+        "note": "Client-rendered page, so the fetch returned no events. The browser pane tab cap was reached (other agents), so the gql2 query could not be run."
+      },
+      {
+        "name": "Data Modeling Meetup Munich (DM3)",
+        "url": "https://www.meetup.com/data-modeling-dm3/",
+        "yielded": true,
+        "note": "Organiser Christian Kaul; recent speakers are international and online."
+      },
+      {
+        "name": "Data Engineering Munich meetup",
+        "url": "https://www.meetup.com/data-engineering/",
+        "yielded": false,
+        "note": "No upcoming or visible past events; organiser 'Alec' (datasqill)."
+      },
+      {
+        "name": "Munich WiMLDS meetup",
+        "url": "https://www.meetup.com/munich-women-in-machine-learning-and-data-science/",
+        "yielded": false,
+        "note": "Dormant since 2021."
+      },
+      {
+        "name": "PyLadies Munich meetup",
+        "url": "https://www.meetup.com/pyladies-munich/",
+        "yielded": false,
+        "note": "Group slug not found on meetup.com; it is a PyCon DE community partner."
+      },
+      {
+        "name": "WiDS Munich site, team and 2025 speakers",
+        "url": "https://widsmunich.de/",
+        "yielded": true,
+        "note": "Organisers and speakers found, mostly academic or ML (tier 3)."
+      },
+      {
+        "name": "MCML WiDS 2025 event page",
+        "url": "https://mcml.ai/events/2025-10-21-women-in-data-science-conference/",
+        "yielded": true,
+        "note": "Organisers listed."
+      },
+      {
+        "name": "TDWI München conference programme",
+        "url": "https://www.tdwi-konferenz.de/de/programm/konferenzprogramm",
+        "yielded": false,
+        "note": "Grepped for dbt, Semantic and Data Vault: modeling and lakehouse talks, but no dbt talks by Munich speakers identified."
+      },
+      {
+        "name": "b.telligent dbt partner page",
+        "url": "https://www.btelligent.com/en/partner/dbt",
+        "yielded": true,
+        "note": "Olaf Bowe and Thomas Lindner named; Preferred Partner; Munich HQ."
+      },
+      {
+        "name": "Holidu Tech Blog (Medium)",
+        "url": "https://medium.com/@holidu",
+        "yielded": false,
+        "note": "No data or dbt posts recently."
+      },
+      {
+        "name": "Inside Personio (Medium) engineering",
+        "url": "https://medium.com/inside-personio/all?topic=engineering",
+        "yielded": false,
+        "note": "Rendered empty to fetch."
+      },
+      {
+        "name": "Synabi events page",
+        "url": "https://synabi.com/en/events/",
+        "yielded": false,
+        "note": "Returned empty to fetch."
+      },
+      {
+        "name": "Munich Database Meetup",
+        "url": "https://munichdatabases.xyz/",
+        "yielded": false,
+        "note": "Systems/DB-internals speakers; not dbt."
+      },
+      {
+        "name": "Coalesce 2025 / dbt Summit 2026 speaker searches",
+        "url": "https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers",
+        "yielded": false,
+        "note": "Searches found no Munich-employer speakers. The speaker page is JS-rendered and was not fetched."
+      },
+      {
+        "name": "LinkedIn Jobs guest API (keywords=dbt, Munich-area)",
+        "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
+        "yielded": true,
+        "note": "24 ads mention dbt"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Munich dbt Meetup",
+      "date": "2023-04-17",
+      "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/292276168/",
+      "organisers": [],
+      "attendees": 50,
+      "talks": [
+        {
+          "speaker": "Olaf Bowe",
+          "company": "Head of Competence Center Visual Data Discovery, b.telligent",
+          "title": "Talking Bout My (Code) Generation",
+          "topics": [
+            "developer workflow",
+            "project structure"
+          ]
+        },
+        {
+          "speaker": "Michal Lapinski",
+          "company": "Data Infrastructure Lead, Frontify",
+          "title": "Our continuously evolving data infrastructure",
+          "topics": [
+            "modern data stack",
+            "dbt best practices"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Munich dbt Meetup (in-person)",
+      "date": "2023-10-10",
+      "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/296246321/",
+      "organisers": [],
+      "attendees": 38,
+      "talks": [
+        {
+          "speaker": "Lucas Cupido, Jorrit Posor",
+          "company": "FINN GmbH",
+          "title": "Scaling Up, Messing Up? Navigating dbt Data Pipeline Anti-patterns",
+          "topics": [
+            "developer workflow",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Johannes Becker",
+          "company": "Senior Consultant, b.telligent",
+          "title": "If you have a run-operation, everything looks like a {{nail()}}",
+          "topics": [
+            "developer workflow",
+            "dbt best practices"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Munich dbt Meetup (in-person)",
+      "date": "2024-04-11",
+      "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/299937901/",
+      "organisers": [],
+      "attendees": 50,
+      "talks": [
+        {
+          "speaker": "Pradeep Srikakolapu",
+          "company": "Senior Program Manager, Microsoft Fabric",
+          "title": "Microsoft Fabric and dbt-fabric, dbt-fabricspark and dbt-synapse adapter status",
+          "topics": [
+            "tools & ecosystem",
+            "data warehouse & platforms"
+          ]
+        },
+        {
+          "speaker": "Ryan Murray",
+          "company": "Cofounder and Engineer, Sundeck",
+          "title": "Snowflake emulator: Local dbt development against snowflake",
+          "topics": [
+            "data warehouse & platforms",
+            "developer workflow"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Munich dbt & Snowflake Meetup (in-person)",
+      "date": "2025-02-20",
+      "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/306007168/",
+      "organisers": [],
+      "attendees": 42,
+      "talks": [
+        {
+          "speaker": "Tim Hiebenthal",
+          "company": "Project A Ventures",
+          "title": "Common pitfalls when building a data warehouse",
+          "topics": [
+            "modern data stack",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Maja Ferle",
+          "company": "Snowflake Data Superhero, In516ht",
+          "title": "Using the Snowflake Cortex Search Service to Interact with Your Documents",
+          "topics": [
+            "genai & llm",
+            "data warehouse & platforms"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Munich dbt Meetup",
+      "date": "2025-07-15",
+      "venue": "Daiichi Sankyo, Zielstattstraße 48, Munich",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/308060144/",
+      "organisers": [],
+      "attendees": 65,
+      "talks": [
+        {
+          "speaker": "Stephan Durry",
+          "company": "dbt Labs",
+          "title": "Introducing the dbt Fusion Engine",
+          "topics": [
+            "dbt product features",
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Evgenii Prusov, Dianyu Yang",
+          "company": "Daiichi Sankyo",
+          "title": "Building a federated, AI-augmented Data platform that balances autonomy and standardization at scale",
+          "topics": [
+            "data mesh",
+            "genai & llm"
+          ]
+        },
+        {
+          "speaker": "Michael Strauß",
+          "company": "IDEX.Q",
+          "title": "Leverage dbt docs for Genie AI/BI",
+          "topics": [
+            "dbt fundamentals",
+            "genai & llm"
+          ]
+        },
+        {
+          "speaker": "Christopher Gutknecht",
+          "company": "Bergzeit",
+          "title": "Like a dentist - How Bergzeit manages +2000 dbt data tests on imperfect data",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Munich dbt Meetup (in-person)",
+      "date": "2025-11-11",
+      "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/311835969/",
+      "organisers": [],
+      "attendees": null,
+      "talks": []
+    },
+    {
+      "name": "Munich dbt Meetup",
+      "date": "2026-02-19",
+      "venue": "Synabi Business Solutions GmbH, Oskar-Schlemmer-Straße 13, München",
+      "url": "https://www.meetup.com/munich-dbt-meetup/events/312785951/",
+      "organisers": [],
+      "attendees": 50,
+      "talks": [
+        {
+          "speaker": null,
+          "company": "dbt Labs",
+          "title": "What's new with dbt?",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Christian Eberhardt",
+          "company": "btelligent",
+          "title": "How dbt saved the day on a toxic join issue",
+          "topics": [
+            "developer workflow",
+            "data modeling"
+          ]
+        },
+        {
+          "speaker": "Giacomo Coletto",
+          "company": "FINN",
+          "title": "Startup to ScaleUp Lessons from FINN's Data Journey",
+          "topics": [
+            "performance & scale",
+            "team & org design"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Munich dbt Meetup (meetup.com)",
+      "url": "https://www.meetup.com/munich-dbt-meetup/",
+      "note": "This chapter"
+    },
+    {
+      "name": "Munich Datageeks talks (pages 1-3)",
+      "url": "https://www.munich-datageeks.de/tag/talks/",
+      "note": "Found the Patricia Goldberg dbt/Metabase governance talk (Feb 2026); the rest is AI/ML."
+    },
+    {
+      "name": "Munich Snowflake Data Cloud Meetup Group",
+      "url": "https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/",
+      "note": "Apr 2026 Siemens talk on semantic views; Jun 2026 Summit recap; Aug 2026 event at Synabi."
+    },
+    {
+      "name": "Data Modeling Meetup Munich (DM3)",
+      "url": "https://www.meetup.com/data-modeling-dm3/",
+      "note": "Organiser Christian Kaul; recent speakers are international and online."
+    },
+    {
+      "name": "WiDS Munich site, team and 2025 speakers",
+      "url": "https://widsmunich.de/",
+      "note": "Organisers and speakers found, mostly academic or ML (tier 3)."
+    },
+    {
+      "name": "MCML WiDS 2025 event page",
+      "url": "https://mcml.ai/events/2025-10-21-women-in-data-science-conference/",
+      "note": "Organisers listed."
+    }
+  ]
+}

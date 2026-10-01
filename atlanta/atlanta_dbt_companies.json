@@ -1,0 +1,4359 @@
+{
+  "metadata": {
+    "title": "Atlanta dbt companies and people for the Atlanta dbt Meetup",
+    "generated_at": "2026-09-24",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Atlanta companies using dbt, and people who could speak at or attend the Atlanta dbt Meetup.",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Atlanta (Atlanta dbt Meetup)",
+    "method": [
+      "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/atlanta-dbt-meetup-group.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
+      "Lesson: Atlanta's live data community is on the Bevy platforms (Snowflake and Tableau user groups) and TAG societies, not Meetup. Bevy event pages list speakers and organisers with employers and can be fetched directly.",
+      "Lesson: The Medium RSS feed (medium.com/feed/<publication>) gives author names and full text for company tech blogs in one fetch, which is cheaper than searching.",
+      "Lesson: Women-in-data communities in Atlanta (WiMLDS, Women in Big Data, Women Who Code) are dormant or gone. The budget is better spent on the Georgia Tech, Georgia State or TAG DEI society calendars."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
+      "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
+      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+    ],
+    "counts": {
+      "companies": 56,
+      "people": 36,
+      "job_postings": 35,
+      "companies_with_job_postings": 31,
+      "speaker_evidence_items": 41,
+      "unique_content_items": 32,
+      "people_with_linkedin": 5,
+      "people_who_spoke_at_this_chapter": 17,
+      "internal_vinted": 0,
+      "level": {
+        "working": 24,
+        "leadership": 12
+      },
+      "speaker_potential": {
+        "high": 21,
+        "medium": 15
+      },
+      "attendee_potential": {
+        "high": 3,
+        "low": 1,
+        "medium": 32
+      },
+      "priority_tier": {
+        "connector": 8,
+        "3": 5,
+        "2": 19,
+        "1": 4
+      },
+      "watchlist_companies": 16,
+      "past_meetups": 8,
+      "lead_type": {
+        "proven_speaker": 25,
+        "emerging_voice": 5,
+        "featured": 6
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "other": 2,
+        "chapter_meetup_history": 17,
+        "conference_or_meetup_agenda": 31,
+        "company_blog_scan": 6,
+        "newsletter_or_blog": 5
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 8,
+      "dbt migration & adoption": 8,
+      "industry trends": 6,
+      "business intelligence": 6,
+      "data warehouse & platforms": 5,
+      "data governance": 5,
+      "genai & llm": 4,
+      "team & org design": 3,
+      "dbt product features": 3,
+      "data engineering": 3,
+      "domain-specific use cases": 3,
+      "modern data stack": 3,
+      "performance & scale": 3,
+      "dbt product updates": 3,
+      "dbt best practices": 2,
+      "data modeling": 2,
+      "data quality & testing": 2,
+      "tools & ecosystem": 2,
+      "career development": 2,
+      "orchestration & ci/cd": 1,
+      "developer workflow": 1,
+      "data mesh": 1,
+      "analytics engineering": 1,
+      "semantic layer": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "aimpoint-digital",
+      "name": "Aimpoint Digital",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks",
+        "Sigma",
+        "Alteryx"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer 2026- US",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-engineer-2026-us-at-aimpoint-digital-4451457337",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Aimpoint Digital",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, Databricks, dbt, Fivetran",
+          "job_poster": null,
+          "posted_date": "2026-08-10",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.aimpointdigital.com/partners/dbt-labs",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.aimpointdigital.com/blog/how-dbt-agents-fit-into-the-analytics-engineering-lifecycle",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.aimpointdigital.com/blog/guide-passing-dbt-analytics-engineering-certification",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.aimpointdigital.com/blog",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "brent-brewington",
+          "name": "Brent Brewington",
+          "pronouns": null,
+          "title": "Principal Data Engineering Consultant (per 2023 chapter listing)",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "other",
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Atlanta dbt Meetup",
+              "title": "Co-organiser / host (Coalesce 2024 watch party)",
+              "date": "2024-10-30",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/",
+              "content_id": "atlanta-dbt-meetup-co-organiser-host-coalesce-2024-watch-pa",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Hosted the chapter's Coalesce 2024 watch party at Aimpoint Digital, Sandy Springs.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Using dbt to drive DataOps on a Data Science balanced team",
+              "date": "2023-03-29",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/291536809/",
+              "content_id": "atlanta-dbt-meetup-in-per-using-dbt-to-drive-dataops-on-a-data-sci",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt best practices",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Ugly Sweaters, Elegant Code: A Holiday Special on DataOps with dbt",
+              "date": "2023-12-12",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/297424518/",
+              "content_id": "atlanta-dbt-meetup-in-per-ugly-sweaters-elegant-code-a-holiday-spe",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt best practices",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/",
+              "note": "organiser: Co-organiser / host (Coalesce 2024 watch party)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-29",
+              "talk_title": "Using dbt to drive DataOps on a Data Science balanced team",
+              "topics": [
+                "dbt best practices",
+                "team & org design"
+              ]
+            },
+            {
+              "date": "2023-12-12",
+              "talk_title": "Ugly Sweaters, Elegant Code: A Holiday Special on DataOps with dbt",
+              "topics": [
+                "dbt best practices",
+                "orchestration & ci/cd"
+              ]
+            }
+          ],
+          "notes": "Connector: long-time chapter co-organiser (2023–2024). Spoke in 2023, formerly at Home Depot, then Aimpoint Digital. Aimpoint's office at 7000 Central Pkwy, Sandy Springs is the chapter's usual venue. Keeps a public GitHub wiki on data engineering (bbrewington). Listed for context, not as a new speaker."
+        },
+        {
+          "id": "francisco-moya",
+          "name": "Francisco Moya",
+          "pronouns": null,
+          "title": "Lead Analytics Consultant",
+          "city": "Medellín",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Aimpoint Digital blog",
+              "title": "How dbt Agents Fit Into the Analytics Engineering Lifecycle",
+              "date": "2026-07-27",
+              "url": "https://www.aimpointdigital.com/blog/how-dbt-agents-fit-into-the-analytics-engineering-lifecycle",
+              "content_id": "aimpoint-digital-blog-how-dbt-agents-fit-into-the-analytics-en",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Hands-on evaluation of the dbt Analyst and Developer agents, dbt Wizard, Agent Skills and the remote MCP server, including rough edges.",
+              "topics": [
+                "genai & llm",
+                "dbt product features",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": "dbt Wizard in practice: what worked and what didn't",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.aimpointdigital.com/blog/how-dbt-agents-fit-into-the-analytics-engineering-lifecycle",
+              "note": "article: How dbt Agents Fit Into the Analytics Engineering Lifecycle"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "dbt Wizard in practice: what worked and what didn't",
+          "past_chapter_talks": [],
+          "notes": "Co-authored (with Vishaal Venkatesh) a hands-on July 2026 review of dbt Agents and dbt Wizard on the blog of the Sandy Springs host company. Based in Medellín, so treat as remote or partner content. The review is good material to steer an Atlanta-based Aimpoint colleague towards a talk."
+        }
+      ],
+      "notes": "Host company for the chapter at 7000 Central Pkwy, Sandy Springs (HQ). dbt Labs Innovation Partner of the Year. Hiring dbt Analytics Engineer and Senior Analytics Engineer roles. The consultancy is remote-first, so many bloggers are not in Atlanta. | Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ncr-voyix",
+      "name": "NCR Voyix",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "kun-zhu",
+          "name": "Kun Zhu",
+          "pronouns": null,
+          "title": "VP of Data and AI / Chief Data Scientist, NCR Voyix",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Global Circuit Series: Atlanta (Atlanta dbt Meetup)",
+              "title": "How dbt is Transforming our Data Modeling Processes on our Digital Transformation Journey",
+              "date": "2025-06-18",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+              "content_id": "dbt-global-circuit-series-how-dbt-is-transforming-our-data-modelin",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data modeling",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+              "note": "talk: How dbt is Transforming our Data Modeling Processes on our Digital Transformation Journey"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-18",
+              "talk_title": "How dbt is Transforming our Data Modeling Processes on our Digital Transformation Journey",
+              "topics": [
+                "data modeling",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Hosted the Jun 2025 dbt Global Circuit event at its HQ (864 Spring St NW), where VP Data & AI Kun Zhu spoke. A proven venue in Midtown."
+    },
+    {
+      "id": "cox-automotive-cox-enterprises",
+      "name": "Cox Automotive / Cox Enterprises",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.getdbt.com/resources/coalesce-on-demand/coalesce-2024-how-cox-automotive-turbocharged-data-engineering-with-elt",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://jobs.coxenterprises.com/en/jobs/r202675426/analytics-engineer/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "Coalesce 2024 talk on moving from Alteryx to dbt (the same speakers gave it at the chapter in Jun 2024). Has an open Analytics Engineer role at 6305 Peachtree Dunwoody Rd. Cox Enterprises HQ hosts the Atlanta Tableau User Group and is a candidate venue."
+    },
+    {
+      "id": "chickfila",
+      "name": "Chick-fil-A",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt Cloud",
+        "Databricks",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Lead Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/sr-lead-data-engineer-at-chick-fil-a-corporate-support-center-4454400593",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Chick-fil-A",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "understanding Databricks, DBT, and cloud compute performance",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Sr. Lead Data Engineer, Field Insights & Technology",
+          "url": "https://www.linkedin.com/jobs/view/sr-lead-data-engineer-field-insights-technology-at-chick-fil-a-corporate-support-center-4456289869",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Chick-fil-A",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Has some experience with DBT and/or other ETL/data transformation",
+          "job_poster": null,
+          "posted_date": "2026-09-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.databricks.com/blog/simplified-analytics-engineering-databricks-and-dbt-labs",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/chick-fil-atech",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "aaron-reese",
+          "name": "Aaron Reese",
+          "pronouns": null,
+          "title": "Enterprise Architect",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "chapter_meetup_history",
+            "newsletter_or_blog",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "chick-fil-atech (Medium)",
+              "title": "Caring for our Data: A Journey to Enhanced Performance, Scalability, and Governance",
+              "date": "2025-07-18",
+              "url": "https://medium.com/chick-fil-atech/caring-for-our-data-a-journey-to-enhanced-performance-scalability-and-governance-2e4cd779ad0d",
+              "content_id": "chick-fil-atech-medium-caring-for-our-data-a-journey-to-enhance",
+              "co_authors": [
+                "Elizabeth Williams"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-written with Elizabeth Williams. Covers Chick-fil-A's move off slow ETL towards a scalable analytics architecture that balances decentralised data product teams with governance.",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance",
+                "data mesh"
+              ],
+              "suggested_talk_angle": "Two years on: governed self-service with dbt + Databricks across Chick-fil-A's decentralised data producers",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup (chapter, Mar 2023)",
+              "title": "Modernizing Data Engineering at CFA",
+              "date": "2023-03-29",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/",
+              "content_id": "atlanta-dbt-meetup-chapte-modernizing-data-engineering-at-cfa",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Earlier talk at this chapter on how Chick-fil-A used dbt to modernise its data engineering.",
+              "topics": [
+                "dbt migration & adoption",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Modernizing Data Engineering at CFA",
+              "date": "2023-03-29",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/291536809/",
+              "content_id": "atlanta-dbt-meetup-in-per-modernizing-data-engineering-at-cfa",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/chick-fil-atech/caring-for-our-data-a-journey-to-enhanced-performance-scalability-and-governance-2e4cd779ad0d",
+              "note": "article: Caring for our Data: A Journey to Enhanced Performance, Scalability, and Governance"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Two years on: governed self-service with dbt + Databricks across Chick-fil-A's decentralised data producers",
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-29",
+              "talk_title": "Modernizing Data Engineering at CFA",
+              "topics": [
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": "Spoke at the chapter in Mar 2023 ('Modernizing Data Engineering at CFA'). Has new content since: co-wrote a Jul 2025 Chick-fil-A tech blog post on moving the analytics platform towards governed self-service. Chick-fil-A is a named Databricks + dbt Cloud customer. Also listed as a Databricks Data+AI Summit speaker (the speaker page now redirects)."
+        },
+        {
+          "id": "elizabeth-williams",
+          "name": "Elizabeth Williams",
+          "pronouns": null,
+          "title": null,
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan",
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "chick-fil-atech (Medium)",
+              "title": "Caring for our Data: A Journey to Enhanced Performance, Scalability, and Governance",
+              "date": "2025-07-18",
+              "url": "https://medium.com/chick-fil-atech/caring-for-our-data-a-journey-to-enhanced-performance-scalability-and-governance-2e4cd779ad0d",
+              "content_id": "chick-fil-atech-medium-caring-for-our-data-a-journey-to-enhance",
+              "co_authors": [
+                "Aaron Reese"
+              ],
+              "mentions_dbt": false,
+              "description": "Post on Chick-fil-A's analytics infrastructure modernisation and its balance of governance and self-service.",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance"
+              ],
+              "suggested_talk_angle": "Letting data producers and consumers trust each other in a decentralised organisation",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/chick-fil-atech/caring-for-our-data-a-journey-to-enhanced-performance-scalability-and-governance-2e4cd779ad0d",
+              "note": "article: Caring for our Data: A Journey to Enhanced Performance, Scalability, and Governance"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Letting data producers and consumers trust each other in a decentralised organisation",
+          "past_chapter_talks": [],
+          "notes": "Co-author with Aaron Reese of the 2025 Chick-fil-A analytics platform and governance post (Medium handle cfa.elizabethwilliams). Role not stated. A possible co-speaker with Aaron."
+        },
+        {
+          "id": "caleb-lampert",
+          "name": "Caleb Lampert",
+          "pronouns": null,
+          "title": null,
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan",
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "chick-fil-atech (Medium)",
+              "title": "Data Asset Certification: How Soup Can Inspire Us to Steward Our Data Better",
+              "date": "2025-09-11",
+              "url": "https://medium.com/chick-fil-atech/data-asset-certification-how-soup-can-inspire-us-to-steward-our-data-better-4d1812b0b128",
+              "content_id": "chick-fil-atech-medium-data-asset-certification-how-soup-can-in",
+              "co_authors": [
+                "Pat Pickren"
+              ],
+              "mentions_dbt": false,
+              "description": "Uses the analogy of a grocery store to argue for certification standards so that consumers can find and trust good data products.",
+              "topics": [
+                "data governance",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": "Data certification at Chick-fil-A: what makes a dataset 'certified' and how it is enforced in code",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/chick-fil-atech/data-asset-certification-how-soup-can-inspire-us-to-steward-our-data-better-4d1812b0b128",
+              "note": "article: Data Asset Certification: How Soup Can Inspire Us to Steward Our Data Better"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Data certification at Chick-fil-A: what makes a dataset 'certified' and how it is enforced in code",
+          "past_chapter_talks": [],
+          "notes": "Co-author of the Chick-fil-A post on certifying data assets (data as a product, standards, trust). The topic fits dbt contracts, tests and exposures well, but the post does not mention dbt."
+        },
+        {
+          "id": "pat-pickren",
+          "name": "Pat Pickren",
+          "pronouns": null,
+          "title": null,
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan",
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "chick-fil-atech (Medium)",
+              "title": "Data Asset Certification: How Soup Can Inspire Us to Steward Our Data Better",
+              "date": "2025-09-11",
+              "url": "https://medium.com/chick-fil-atech/data-asset-certification-how-soup-can-inspire-us-to-steward-our-data-better-4d1812b0b128",
+              "content_id": "chick-fil-atech-medium-data-asset-certification-how-soup-can-in",
+              "co_authors": [
+                "Caleb Lampert"
+              ],
+              "mentions_dbt": false,
+              "description": "Post on data-product certification standards at Chick-fil-A.",
+              "topics": [
+                "data governance",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": "Co-present data certification with Caleb Lampert",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/chick-fil-atech/data-asset-certification-how-soup-can-inspire-us-to-steward-our-data-better-4d1812b0b128",
+              "note": "article: Data Asset Certification: How Soup Can Inspire Us to Steward Our Data Better"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Co-present data certification with Caleb Lampert",
+          "past_chapter_talks": [],
+          "notes": "Co-author with Caleb Lampert of the Chick-fil-A data certification post."
+        },
+        {
+          "id": "luke-carter",
+          "name": "Luke Carter",
+          "pronouns": null,
+          "title": null,
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan",
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "chick-fil-atech (Medium)",
+              "title": "An Inside Look at Prioritization in Chick-fil-A's Forecast Modeling Space",
+              "date": "2025-01-13",
+              "url": "https://medium.com/chick-fil-atech/an-inside-look-at-prioritization-in-chick-fil-as-forecast-modeling-space-6fbe1fdf8970",
+              "content_id": "chick-fil-atech-medium-an-inside-look-at-prioritization-in-chic",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Product prioritisation for forecast-modelling products.",
+              "topics": [
+                "team & org design",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/chick-fil-atech/an-inside-look-at-prioritization-in-chick-fil-as-forecast-modeling-space-6fbe1fdf8970",
+              "note": "article: An Inside Look at Prioritization in Chick-fil-A's Forecast Modeling Space"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Wrote about prioritisation in Chick-fil-A's forecast-modelling product space. Peripheral: product management, not analytics engineering."
+        }
+      ],
+      "notes": "Named Databricks + dbt Cloud customer. The 2025 tech blog has data governance and certification posts. Aaron Reese spoke at the chapter in 2023. | Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "cox-automotive",
+      "name": "Cox Automotive",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (Finance Technology)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-finance-technology-at-cox-automotive-inc-4465837582",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Cox Automotive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT workflows using Snowflake, AWS, dbt, and/or Informatica",
+          "job_poster": null,
+          "posted_date": "2026-09-21",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mahtab-rahman",
+          "name": "Mahtab Rahman",
+          "pronouns": null,
+          "title": "Sr. Director of Architecture, Cox Automotive",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Scalable data and analytics architecture at Cox Automotive",
+              "date": "2023-10-05",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/295320476/",
+              "content_id": "atlanta-dbt-meetup-in-per-scalable-data-and-analytics-architecture",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/295320476/",
+              "note": "talk: Scalable data and analytics architecture at Cox Automotive"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-05",
+              "talk_title": "Scalable data and analytics architecture at Cox Automotive",
+              "topics": [
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "somnath-chateerjee",
+          "name": "Somnath Chateerjee",
+          "pronouns": null,
+          "title": "Data Engineering & BI, Cox Automotive",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT",
+              "date": "2024-06-18",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+              "content_id": "atlanta-dbt-meetup-in-per-shifting-gears-how-cox-automotive-turboc",
+              "co_authors": [
+                "Brett Darcy"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "dbt migration & adoption",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+              "note": "talk: Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-18",
+              "talk_title": "Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT",
+              "topics": [
+                "dbt migration & adoption",
+                "data engineering"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "brett-darcy",
+          "name": "Brett Darcy",
+          "pronouns": null,
+          "title": "Data Engineering & BI, Cox Automotive",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT",
+              "date": "2024-06-18",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+              "content_id": "atlanta-dbt-meetup-in-per-shifting-gears-how-cox-automotive-turboc",
+              "co_authors": [
+                "Somnath Chateerjee"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "dbt migration & adoption",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+              "note": "talk: Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-18",
+              "talk_title": "Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT",
+              "topics": [
+                "dbt migration & adoption",
+                "data engineering"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "agoda",
+      "name": "Agoda",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior / Staff Data Engineer (BI) – CEG Team",
+          "url": "https://www.linkedin.com/jobs/view/senior-staff-data-engineer-bi-%E2%80%93-ceg-team-at-agoda-4455265144",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Agoda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration frameworks (e.g., Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "att",
+      "name": "AT&T",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Advanced Analytics",
+          "url": "https://www.linkedin.com/jobs/view/lead-advanced-analytics-at-at-t-4463050904",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AT&T",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Databricks, Snowflake, Airflow, dbt, Spark",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "captech",
+      "name": "CapTech",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/data-analyst-at-captech-4455774747",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CapTech",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Additional Technologies: dbt, Spark, FiveTran, Databricks",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "cnn",
+      "name": "CNN",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Data Architect, CNN Data Analytics, Science & Insights",
+          "url": "https://www.linkedin.com/jobs/view/staff-data-architect-cnn-data-analytics-science-insights-at-cnn-4327234926",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CNN",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "reliability across Snowflake and dbt workflows",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "credigy",
+      "name": "Credigy",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Production Support Engineer",
+          "url": "https://www.linkedin.com/jobs/view/production-support-engineer-at-credigy-4453994239",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Credigy",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with Informatica, dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "diversitech-corporation",
+      "name": "DiversiTech Corporation",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-diversitech-corporation-4432104461",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "DiversiTech Corporation",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Apache Spark, Airflow, dbt, or similar",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "fanduel",
+      "name": "FanDuel",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-fanduel-4441533585",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "FanDuel",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools like Spark, dbt or similar frameworks",
+          "job_poster": null,
+          "posted_date": "2026-09-05",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-fanduel-4466926225",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "FanDuel",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Databricks, Airflow, dbt, Spark, or Kafka",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "fis",
+      "name": "FIS",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Business Intelligence & Data Analysis, AWS, BI",
+          "url": "https://www.linkedin.com/jobs/view/business-intelligence-data-analysis-aws-bi-at-fis-4466552253",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "FIS",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "maintain data pipelines using dbt, Airflow, and AWS services",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "foxit",
+      "name": "Foxit",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer-Marketing Technology",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-marketing-technology-at-foxit-4427162819",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Foxit",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT pipelines using Databricks, dbt, Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-06",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "grant-thornton",
+      "name": "Grant Thornton (US)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Associate Director, Data & Analytics",
+          "url": "https://www.linkedin.com/jobs/view/associate-director-data-analytics-at-grant-thornton-us-4466201252",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Grant Thornton (US)",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Azure Data Factory, Databricks, dbt, Informatica",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "greensky",
+      "name": "GreenSky",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Director Business Intelligence",
+          "url": "https://www.linkedin.com/jobs/view/director-business-intelligence-at-greensky%C2%AE-4460025422",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "GreenSky",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern data stack enhancements (e.g., dbt for transformation)",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "greystar",
+      "name": "Greystar",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/analytics-engineer-at-greystar-4452720972",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Greystar",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL, Python, dbt or similar transformation frameworks",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "hd-supply-the-home-depot",
+      "name": "HD Supply / The Home Depot",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "Megha Panda (HD Supply) spoke at the chapter in 2025, and Brent Brewington spoke as a Home Depot data scientist in 2023. No 2025–26 public Home Depot dbt content was found."
+    },
+    {
+      "id": "incident-iq",
+      "name": "Incident IQ",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-incident-iq-4459561629",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Incident IQ",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT pipelines using tools like dbt, Apache Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "massive",
+      "name": "Massive",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer II, Product Engineering",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-ii-product-engineering-at-massive-4456582199",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Massive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt, SQLMesh, or similar transformation tools",
+          "job_poster": null,
+          "posted_date": "2026-08-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "navanta",
+      "name": "Navanta",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-navanta-4461182196",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Navanta",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "per-bank isolation, dbt models, and a query engine",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "onetrust",
+      "name": "OneTrust",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Manager, Data Engineering",
+          "url": "https://www.linkedin.com/jobs/view/senior-manager-data-engineering-at-onetrust-4459061499",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "OneTrust",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SCDs in Snowflake/Databricks using dbt/airflow/elt tools",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "pyramid-consulting-inc",
+      "name": "Pyramid Consulting, Inc",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior BI Developer",
+          "url": "https://www.linkedin.com/jobs/view/junior-bi-developer-at-pyramid-consulting-inc-4471127792",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Pyramid Consulting, Inc",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Data Factory, Informatica, dbt, SSIS",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "safeguard-products-international",
+      "name": "Safe-Guard Products International",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-safe-guard-products-international-4451954112",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Safe-Guard Products International",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Apache Airflow, DBT, Snowflake, AWS Glue",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "scp-health",
+      "name": "SCP Health",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Director, Data Product and Enablement",
+          "url": "https://www.linkedin.com/jobs/view/senior-director-data-product-and-enablement-at-scp-health-4449862876",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "SCP Health",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "infrastructure (e.g., Snowflake, AWS, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "slalom",
+      "name": "Slalom",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - East Region",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-east-region-at-slalom-4459422094",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Slalom",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Spark, Kafka, Airflow, dbt, Dagster",
+          "job_poster": null,
+          "posted_date": "2026-08-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "sovos",
+      "name": "Sovos",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-sovos-4423038068",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Sovos",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data chain, built on Snowflake and dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "stord",
+      "name": "Stord",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Director of Decision Science",
+          "url": "https://www.linkedin.com/jobs/view/director-of-decision-science-at-stord-4431549345",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Stord",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern data stack (GCP, BigQuery, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "talon-hiring-solutions",
+      "name": "Talon Hiring Solutions",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Scientist",
+          "url": "https://www.linkedin.com/jobs/view/data-scientist-at-talon-hiring-solutions-4471469856",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Talon Hiring Solutions",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "datasets within Snowflake and dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "tata-consultancy-services",
+      "name": "Tata Consultancy Services",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "BI / Data Architect",
+          "url": "https://www.linkedin.com/jobs/view/bi-data-architect-at-tata-consultancy-services-4458313576",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Tata Consultancy Services",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Iceberg, Spark, Flink, Kafka, dbt, Trino",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "thought-logic-consulting",
+      "name": "Thought Logic Consulting",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Managing Consultant, Data Engineer - Atlanta",
+          "url": "https://www.linkedin.com/jobs/view/managing-consultant-data-engineer-atlanta-at-thought-logic-consulting-4437691979",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Thought Logic Consulting",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools like Apache Airflow, dbt, or Palantir Foundry",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "trella-health",
+      "name": "Trella Health",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Vice President, Data Strategy",
+          "url": "https://www.linkedin.com/jobs/view/vice-president-data-strategy-at-trella-health-4417013660",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Trella Health",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT (dbt, Fivetran), orchestration (Airflow)",
+          "job_poster": null,
+          "posted_date": "2026-05-20",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "waystar",
+      "name": "Waystar",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-waystar-4455527483",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Waystar",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Create and maintain reusable dbt models that support enterprise reporting",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-waystar-4457305834",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Waystar",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Create and maintain reusable dbt models that support enterprise reporting",
+          "job_poster": null,
+          "posted_date": "2026-09-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Manager, Data Engineering",
+          "url": "https://www.linkedin.com/jobs/view/manager-data-engineering-at-waystar-4448378298",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Waystar",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "technical leadership across BigQuery, dbt, and ingestion frameworks",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "workday",
+      "name": "Workday",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal, Product Owner, Business Performance",
+          "url": "https://www.linkedin.com/jobs/view/principal-product-owner-business-performance-at-workday-4431536085",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Workday",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, dbt, Atlan, and Sigma stack",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Atlanta-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": true,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nate-nunta",
+          "name": "Nate Nunta",
+          "pronouns": null,
+          "title": "Product Manager, dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "dbt Product Roadmap",
+              "date": "2023-06-14",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+              "content_id": "atlanta-dbt-meetup-in-per-dbt-product-roadmap",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt product updates",
+                "dbt product features"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+              "note": "talk: dbt Product Roadmap"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-14",
+              "talk_title": "dbt Product Roadmap",
+              "topics": [
+                "dbt product updates",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "katherine-brock",
+          "name": "Katherine Brock",
+          "pronouns": null,
+          "title": "Senior Solutions Architect, dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Coalesce Recap",
+              "date": "2023-12-12",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/297424518/",
+              "content_id": "atlanta-dbt-meetup-in-per-coalesce-recap",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "dbt product updates",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/297424518/",
+              "note": "talk: Coalesce Recap"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-12-12",
+              "talk_title": "Coalesce Recap",
+              "topics": [
+                "dbt product updates",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "brandon-sweeney",
+          "name": "Brandon Sweeney",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup: Coalesce 2024 Watch Party (Atlanta dbt Meetup)",
+              "title": "Turning data to value - A dbt customer panel",
+              "date": "2024-10-30",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+              "content_id": "atlanta-dbt-meetup-coales-turning-data-to-value-a-dbt-customer-pan",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "business intelligence",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+              "note": "talk: Turning data to value - A dbt customer panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-30",
+              "talk_title": "Turning data to value - A dbt customer panel",
+              "topics": [
+                "business intelligence",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "jason-ganz",
+          "name": "Jason Ganz",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup: Coalesce 2024 Watch Party (Atlanta dbt Meetup)",
+              "title": "Once more up the stack - Generative AI, the ADLC and the coming era of analytics engineering",
+              "date": "2024-10-30",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+              "content_id": "atlanta-dbt-meetup-coales-once-more-up-the-stack-generative-ai-the",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "industry trends",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+              "note": "talk: Once more up the stack - Generative AI, the ADLC and the coming era of analytics engineering"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-30",
+              "talk_title": "Once more up the stack - Generative AI, the ADLC and the coming era of analytics engineering",
+              "topics": [
+                "modern data stack",
+                "industry trends",
+                "analytics engineering"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "erica-louie",
+          "name": "Erica Louie",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup: Coalesce 2024 Watch Party (Atlanta dbt Meetup)",
+              "title": "Late-stage transformations - Utilizing dbt Semantic Layer metrics",
+              "date": "2024-10-30",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+              "content_id": "atlanta-dbt-meetup-coales-late-stage-transformations-utilizing-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "semantic layer",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+              "note": "talk: Late-stage transformations - Utilizing dbt Semantic Layer metrics"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-30",
+              "talk_title": "Late-stage transformations - Utilizing dbt Semantic Layer metrics",
+              "topics": [
+                "semantic layer",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "cole-fraser",
+          "name": "Cole Fraser",
+          "pronouns": null,
+          "title": "Solutions Architect, dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Global Circuit Series: Atlanta (Atlanta dbt Meetup)",
+              "title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+              "date": "2025-06-18",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+              "content_id": "dbt-global-circuit-series-for-builders-by-builders-the-latest-tool",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt product updates",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+              "note": "talk: For Builders, by Builders: The Latest Tools from dbt Labs"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-18",
+              "talk_title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+              "topics": [
+                "dbt product updates",
+                "tools & ecosystem"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "matt-yates",
+          "name": "Matt Yates",
+          "pronouns": null,
+          "title": "Sr Director, Data and AI",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Atlanta Tableau User Group",
+              "title": "Future of BI in an AI-driven world (panel)",
+              "date": "2026-02-24",
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "content_id": "atlanta-tableau-user-grou-future-of-bi-in-an-ai-driven-world-panel",
+              "co_authors": [
+                "Mark Jackson",
+                "Beverly Wright"
+              ],
+              "mentions_dbt": false,
+              "description": "Peer panel on BI and AI.",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "note": "panel: Future of BI in an AI-driven world (panel)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Atlanta Tableau User Group panellist. Employer not listed, though the event was held at Cox Enterprises HQ. Needs verification."
+        },
+        {
+          "id": "jeremy-jacobson",
+          "name": "Jeremy Jacobson",
+          "pronouns": null,
+          "title": "PyData Atlanta organiser",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Atlanta",
+              "title": "Organiser",
+              "date": "2026",
+              "url": "https://www.meetup.com/pydata-atlanta/",
+              "content_id": "pydata-atlanta-organiser",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Named organiser of PyData Atlanta. Recent events are low-key data happy hours (Jul and Aug 2026).",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-atlanta/",
+              "note": "organiser: Organiser"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector: PyData Atlanta organiser, with Amanda Hanson and Rob Clewley named in the group's code of conduct (3,838 members). The group now runs monthly 'Low-Key Data Happy Hours' that are cross-posted with another data meetup, which fits the format of dbt Atlanta's Jul 2026 lowkey social. Mailchimp is a past PyData host."
+        },
+        {
+          "id": "zoe-yim",
+          "name": "Zoe Yim",
+          "pronouns": null,
+          "title": "Atlanta dbt Meetup host",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "other",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Atlanta dbt Meetup",
+              "title": "Atlanta dbt Lowkey Meetup: Data, Drinks & Community",
+              "date": "2026-07-21",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/315472808/",
+              "content_id": "atlanta-dbt-meetup-atlanta-dbt-lowkey-meetup-data-drinks-co",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Hosted a networking-only social with 9 attendees.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/315472808/",
+              "note": "organiser: Atlanta dbt Lowkey Meetup: Data, Drinks & Community"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector: current chapter host. Ran the Jul 2026 lowkey social at Monday Night Garage, with co-organiser 'Alana L'. Earlier organisers were Mark Shepherd, Alaisha Alexander and Brian Scally."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "analytic-vizion",
+      "name": "Analytic Vizion",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anna-foard",
+          "name": "Anna Foard",
+          "pronouns": null,
+          "title": "Tableau User Group Leader (Ambassador)",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Atlanta Tableau User Group",
+              "title": "Organiser",
+              "date": "2026-02-24",
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "content_id": "atlanta-tableau-user-grou-organiser",
+              "co_authors": [
+                "Jennifer Lisborg"
+              ],
+              "mentions_dbt": null,
+              "description": "Listed organiser of the Atlanta Tableau User Group.",
+              "topics": [
+                "community",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "note": "organiser: Organiser"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector: co-leads the Atlanta Tableau User Group (running since 2009, meets at Cox Enterprises HQ). A possible partner for a joint BI + dbt semantic layer event."
+        },
+        {
+          "id": "jennifer-lisborg",
+          "name": "Jennifer Lisborg",
+          "pronouns": null,
+          "title": "Tableau User Group Leader",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Atlanta Tableau User Group",
+              "title": "Organiser",
+              "date": "2026-02-24",
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "content_id": "atlanta-tableau-user-grou-organiser",
+              "co_authors": [
+                "Anna Foard"
+              ],
+              "mentions_dbt": null,
+              "description": "Listed organiser of the Atlanta Tableau User Group.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "note": "organiser: Organiser"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector: co-leads the Atlanta Tableau User Group."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "apex-systems",
+      "name": "Apex Systems",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andy-brown",
+          "name": "Andy Brown",
+          "pronouns": null,
+          "title": "Managing Consultant / Snowflake Data Architect",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/a-brown/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Groups Atlanta",
+              "title": "Chapter organiser",
+              "date": "2026",
+              "url": "https://usergroups.snowflake.com/atlanta/",
+              "content_id": "snowflake-user-groups-atl-chapter-organiser",
+              "co_authors": [
+                "Danny Bryant"
+              ],
+              "mentions_dbt": null,
+              "description": "Listed as an organiser of the Atlanta Snowflake user group (1,328 members).",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake User Groups Atlanta",
+              "title": "Deep-dive on Snowflake AIM (Andy Brown's 'what's new in Snowflake' wrap-up)",
+              "date": "2026-09-22",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-atlanta-presents-deep-dive-on-snowflake-aim/",
+              "content_id": "snowflake-user-groups-atl-deep-dive-on-snowflake-aim-andy-brown-s",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Gave a wrap-up of Snowflake news at the September 2026 meetup at Improving, Alpharetta.",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": "Joint dbt x Snowflake Atlanta meetup: Cortex / AI features meet dbt semantic models",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/a-brown/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/atlanta/",
+              "note": "organiser: Chapter organiser"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Joint dbt x Snowflake Atlanta meetup: Cortex / AI features meet dbt semantic models",
+          "past_chapter_talks": [],
+          "notes": "Connector. Co-organises the Snowflake Atlanta User Group (with Danny Bryant of Snowflake and Michael Jain) and speaks there regularly (Cortex Code demo Feb 2026, 'what's new' wrap-up Sep 2026). Works at a consultancy, so any talk should be practitioner-framed. A good co-host contact."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "dagster",
+      "name": "Dagster",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tim-castillo",
+          "name": "Tim Castillo",
+          "pronouns": null,
+          "title": "Developer Advocate, Dagster",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Using Your Usage: Tips for Optimizing for Cloud Spend",
+              "date": "2023-06-14",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+              "content_id": "atlanta-dbt-meetup-in-per-using-your-usage-tips-for-optimizing-for",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+              "note": "talk: Using Your Usage: Tips for Optimizing for Cloud Spend"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-14",
+              "talk_title": "Using Your Usage: Tips for Optimizing for Cloud Spend",
+              "topics": [
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "delta-air-lines",
+      "name": "Delta Air Lines",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "amin-lalani",
+          "name": "Amin Lalani",
+          "pronouns": null,
+          "title": "Leader of Airport Digital Products & Experiences",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/amin-lalani-440252a/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "TAG Data Science & AI Society",
+              "title": "2026 Predictions for Data Science & AI",
+              "date": "2026-01-21",
+              "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+              "content_id": "tag-data-science-ai-socie-2026-predictions-for-data-science-ai",
+              "co_authors": [
+                "Rama Ryali",
+                "Kelly Moncrief"
+              ],
+              "mentions_dbt": false,
+              "description": "Panel on data science and AI trends.",
+              "topics": [
+                "industry trends",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/amin-lalani-440252a/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+              "note": "panel: 2026 Predictions for Data Science & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "TAG '2026 Predictions' panellist. Works on digital products rather than data. Could be a route into Delta's data teams."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "hd-supply",
+      "name": "HD Supply",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "megha-panda",
+          "name": "Megha Panda",
+          "pronouns": null,
+          "title": "Data and Analytics Leader, HD Supply",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Global Circuit Series: Atlanta (Atlanta dbt Meetup)",
+              "title": "How adoption of dbt enabled HD Supply to improve velocity of data products",
+              "date": "2025-06-18",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+              "content_id": "dbt-global-circuit-series-how-adoption-of-dbt-enabled-hd-supply-to",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+              "note": "talk: How adoption of dbt enabled HD Supply to improve velocity of data products"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-18",
+              "talk_title": "How adoption of dbt enabled HD Supply to improve velocity of data products",
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "improving",
+      "name": "Improving (Alpharetta)",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "preston-mesarvey",
+          "name": "Preston Mesarvey",
+          "pronouns": null,
+          "title": "Technical Director - Data Services",
+          "city": "Alpharetta",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Snowflake User Groups Atlanta",
+              "title": "Deep-dive on Snowflake AIM (host)",
+              "date": "2026-09-22",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-atlanta-presents-deep-dive-on-snowflake-aim/",
+              "content_id": "snowflake-user-groups-atl-deep-dive-on-snowflake-aim-host",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Listed as the event host at Improving, Alpharetta.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-atlanta-presents-deep-dive-on-snowflake-aim/",
+              "note": "host: Deep-dive on Snowflake AIM (host)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Host contact at Improving (11675 Rainwater Dr, Alpharetta), which hosts the monthly Snowflake Atlanta meetups. A possible alternative venue in the north metro."
+        }
+      ],
+      "notes": "Venue for the Snowflake Atlanta meetups at 11675 Rainwater Dr, Alpharetta. Host contact is Preston Mesarvey."
+    },
+    {
+      "id": "institute-for-insight-georgia-state-university",
+      "name": "Institute for Insight, Georgia State University",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "beverly-wright",
+          "name": "Beverly Wright",
+          "pronouns": null,
+          "title": "Executive in Residence",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Atlanta Tableau User Group",
+              "title": "Future of BI in an AI-driven world (panel)",
+              "date": "2026-02-24",
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "content_id": "atlanta-tableau-user-grou-future-of-bi-in-an-ai-driven-world-panel",
+              "co_authors": [
+                "Mark Jackson",
+                "Matt Yates"
+              ],
+              "mentions_dbt": false,
+              "description": "Peer panel on BI and AI upskilling.",
+              "topics": [
+                "business intelligence",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "note": "panel: Future of BI in an AI-driven world (panel)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Atlanta Tableau User Group panellist (Feb 2026). Academic / industry link. Possible connector to Georgia State analytics students."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "johnson-controls",
+      "name": "Johnson Controls",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "prabhuraj-soliah",
+          "name": "Prabhuraj Soliah",
+          "pronouns": null,
+          "title": "Senior Data Product/Engineering Manager",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/prabhurajsoliah/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake User Groups Atlanta",
+              "title": "AI & Snowflake: Innovating Together",
+              "date": "2026-02-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-atlanta-presents-ai-amp-snowflake-innovating-together/",
+              "content_id": "snowflake-user-groups-atl-ai-snowflake-innovating-together",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on how AI agents drive enterprise use cases at Johnson Controls, including lead generation and data analysis.",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": "What data foundations AI agents needed at Johnson Controls (semantic layer, governed models)",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/prabhurajsoliah/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-atlanta-presents-ai-amp-snowflake-innovating-together/",
+              "note": "talk: AI & Snowflake: Innovating Together"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "What data foundations AI agents needed at Johnson Controls (semantic layer, governed models)",
+          "past_chapter_talks": [],
+          "notes": "Spoke at the Snowflake Atlanta User Group in Feb 2026 on AI agents for enterprise lead generation and data analysis. A practitioner, not a vendor. His dbt use is unverified. The LinkedIn URL comes from the event's speaker listing."
+        }
+      ],
+      "notes": "Prabhuraj Soliah presented Snowflake and AI-agent use cases at the Atlanta Snowflake user group."
+    },
+    {
+      "id": "mckesson",
+      "name": "McKesson",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rama-ryali",
+          "name": "Rama Ryali",
+          "pronouns": null,
+          "title": "Head - Data platform, Compliance, & Operations",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/rama-ryali/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "TAG Data Science & AI Society",
+              "title": "2026 Predictions for Data Science & AI",
+              "date": "2026-01-21",
+              "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+              "content_id": "tag-data-science-ai-socie-2026-predictions-for-data-science-ai",
+              "co_authors": [
+                "Kelly Moncrief",
+                "Amin Lalani"
+              ],
+              "mentions_dbt": false,
+              "description": "Panel on emerging trends in data science and AI, held at Serendipity Labs, Buckhead.",
+              "topics": [
+                "industry trends",
+                "data warehouse & platforms",
+                "data governance"
+              ],
+              "suggested_talk_angle": "Running a compliant data platform in regulated healthcare distribution",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/rama-ryali/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+              "note": "panel: 2026 Predictions for Data Science & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Running a compliant data platform in regulated healthcare distribution",
+          "past_chapter_talks": [],
+          "notes": "Panellist at TAG Data Science & AI Society's '2026 Predictions' event (Buckhead). Leads a data platform. Whether they are based in Atlanta and use dbt is unverified."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "piedmont",
+      "name": "Piedmont",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mark-jackson",
+          "name": "Mark Jackson",
+          "pronouns": null,
+          "title": "Chief Data Officer",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Atlanta Tableau User Group",
+              "title": "Future of BI in an AI-driven world (panel)",
+              "date": "2026-02-24",
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "content_id": "atlanta-tableau-user-grou-future-of-bi-in-an-ai-driven-world-panel",
+              "co_authors": [
+                "Beverly Wright",
+                "Matt Yates"
+              ],
+              "mentions_dbt": false,
+              "description": "Peer panel on how BI is changing with AI and the upskilling analysts need.",
+              "topics": [
+                "business intelligence",
+                "genai & llm",
+                "career development"
+              ],
+              "suggested_talk_angle": "A Chief Data Officer's view on semantic layers and trusted metrics for AI-era BI in healthcare",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+              "note": "panel: Future of BI in an AI-driven world (panel)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "A Chief Data Officer's view on semantic layers and trusted metrics for AI-era BI in healthcare",
+          "past_chapter_talks": [],
+          "notes": "Panellist at the Atlanta Tableau User Group meeting at Cox Enterprises HQ (Feb 2026) on the future of BI in an AI-driven world. Chief Data Officer at the Atlanta health system Piedmont."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "prizepicks",
+      "name": "PrizePicks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "grant-cloud",
+          "name": "Grant Cloud",
+          "pronouns": null,
+          "title": "Senior Director of Data Strategy, PrizePicks",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Data strategy at PrizePicks",
+              "date": "2023-10-05",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/295320476/",
+              "content_id": "atlanta-dbt-meetup-in-per-data-strategy-at-prizepicks",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/295320476/",
+              "note": "talk: Data strategy at PrizePicks"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-05",
+              "talk_title": "Data strategy at PrizePicks",
+              "topics": [
+                "modern data stack",
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "salesloft",
+      "name": "Salesloft",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mike-sandt",
+          "name": "Mike Sandt",
+          "pronouns": null,
+          "title": "Head of Data & Analytics, Salesloft",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "Data Modernization - Not Just a Technical Problem",
+              "date": "2023-06-14",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+              "content_id": "atlanta-dbt-meetup-in-per-data-modernization-not-just-a-technical",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+              "note": "talk: Data Modernization - Not Just a Technical Problem"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-14",
+              "talk_title": "Data Modernization - Not Just a Technical Problem",
+              "topics": [
+                "team & org design",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "danny-bryant",
+          "name": "Danny Bryant",
+          "pronouns": null,
+          "title": "Principal Solutions Architect",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Groups Atlanta",
+              "title": "Chapter organiser",
+              "date": "2026",
+              "url": "https://usergroups.snowflake.com/atlanta/",
+              "content_id": "snowflake-user-groups-atl-chapter-organiser",
+              "co_authors": [
+                "Andy Brown"
+              ],
+              "mentions_dbt": null,
+              "description": "Listed organiser of the Atlanta Snowflake user group.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/atlanta/",
+              "note": "organiser: Chapter organiser"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector: organiser of the Snowflake Atlanta User Group. Works for a vendor, so treat as a co-host contact rather than a speaker."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "southern-company",
+      "name": "Southern Company",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kelly-moncrief",
+          "name": "Kelly Moncrief",
+          "pronouns": null,
+          "title": "Head of AI Technology CoE",
+          "city": "Atlanta",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kelly-moncrief/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "TAG Data Science & AI Society",
+              "title": "2026 Predictions for Data Science & AI",
+              "date": "2026-01-21",
+              "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+              "content_id": "tag-data-science-ai-socie-2026-predictions-for-data-science-ai",
+              "co_authors": [
+                "Rama Ryali",
+                "Amin Lalani"
+              ],
+              "mentions_dbt": false,
+              "description": "Panel on data science and AI trends.",
+              "topics": [
+                "genai & llm",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/kelly-moncrief/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+              "note": "panel: 2026 Predictions for Data Science & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "TAG '2026 Predictions' panellist. Focus is AI, not analytics engineering. Southern Company is Atlanta-headquartered."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "wbd",
+      "name": "WBD",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "zach-lancaster",
+          "name": "Zach Lancaster",
+          "pronouns": null,
+          "title": "WBD",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Atlanta dbt Meetup [In Person] (Atlanta dbt Meetup)",
+              "title": "From Core to Cloud",
+              "date": "2024-06-18",
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+              "content_id": "atlanta-dbt-meetup-in-per-from-core-to-cloud",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "dbt migration & adoption",
+                "dbt product features"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+              "note": "talk: From Core to Cloud"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-18",
+              "talk_title": "From Core to Cloud",
+              "topics": [
+                "dbt migration & adoption",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "atlanta-tableau-user-group",
+      "name": "Atlanta Tableau User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Tableau"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Running since 2009 and led by Anna Foard and Jennifer Lisborg (Analytic Vizion). The Feb 2026 BI and AI panel at Cox Enterprises HQ drew 117 RSVPs."
+    },
+    {
+      "id": "data-science-atl",
+      "name": "Data Science ATL (DataSciConnect)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "4,810 members. Mostly vendor webinars now. Runs the COLLIDE Data + AI conference on 1 Oct 2026 at Sandy Springs PAC. Organiser is Amelia Mink."
+    },
+    {
+      "id": "pydata-atlanta",
+      "name": "PyData Atlanta",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "3,838 members. Now runs monthly low-key data happy hours that are cross-posted with another data meetup. Past hosts include Mailchimp and General Assembly."
+    },
+    {
+      "id": "snowflake-user-groups-atlanta",
+      "name": "Snowflake User Groups Atlanta",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Matillion",
+        "Sigma"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://usergroups.snowflake.com/atlanta/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "1,328 members, meets monthly at Improving, Alpharetta. Organisers are Danny Bryant, Andy Brown and Michael Jain. Sponsors are Matillion, Blue Cloud and Sigma. The strongest candidate for a co-hosted event."
+    },
+    {
+      "id": "tag-data-science-ai-society",
+      "name": "TAG Data Science & AI Society",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Atlanta"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "The Technology Association of Georgia society. Runs panels at Serendipity Labs, Buckhead. TAG also has a separate Data Governance society (DataPalooza)."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/atlanta-dbt-meetup-group/events/?type=past",
+    "past_meetups_derived_from": "enriched/atlanta-dbt-meetup-group.json",
+    "checked": [
+      {
+        "name": "Local enriched chapter file",
+        "url": "file:enriched/atlanta-dbt-meetup-group.json",
+        "yielded": true,
+        "note": "8 events and past speakers/organisers. The venue at 7000 Central Pkwy is Aimpoint Digital."
+      },
+      {
+        "name": "Meetup past events (Atlanta dbt)",
+        "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/?type=past",
+        "yielded": false,
+        "note": "Plain fetch renders an empty list. The browser was unavailable because the tab cap was reached, so the gql2 query could not be run."
+      },
+      {
+        "name": "Coalesce 2025 speakers",
+        "url": "https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers",
+        "yielded": false,
+        "note": "JS-rendered page, fetch returned empty. Searches found no Atlanta-employer sessions at Coalesce 2025 or dbt Summit 2026."
+      },
+      {
+        "name": "Chick-fil-A tech blog RSS",
+        "url": "https://medium.com/feed/chick-fil-atech",
+        "yielded": true,
+        "note": "10 recent posts. Two are data governance/platform posts from 2025, and none mention dbt."
+      },
+      {
+        "name": "Aimpoint Digital blog",
+        "url": "https://www.aimpointdigital.com/blog",
+        "yielded": true,
+        "note": "July 2026 post on dbt Agents. The authors are not in Atlanta."
+      },
+      {
+        "name": "Snowflake User Groups Atlanta",
+        "url": "https://usergroups.snowflake.com/atlanta/",
+        "yielded": true,
+        "note": "Organisers, the Improving venue, and 2026 speakers."
+      },
+      {
+        "name": "Atlanta Tableau User Group Feb 2026",
+        "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+        "yielded": true,
+        "note": "BI + AI panel at Cox Enterprises HQ."
+      },
+      {
+        "name": "TAG Data Science & AI Society",
+        "url": "https://members.tagonline.org/calendar/Details/tag-s-data-science-ai-society-presents-2026-predictions-for-data-science-ai-1611623?sourceTypeId=Hub",
+        "yielded": true,
+        "note": "Jan 2026 panel with Delta, McKesson, Macy's and Southern Company."
+      },
+      {
+        "name": "PyData Atlanta",
+        "url": "https://www.meetup.com/pydata-atlanta/",
+        "yielded": true,
+        "note": "Organisers, and the happy-hour format now in use."
+      },
+      {
+        "name": "Data Science ATL",
+        "url": "https://www.meetup.com/data-science-atl/",
+        "yielded": false,
+        "note": "Mostly vendor webinars. Noted the COLLIDE conference in Sandy Springs."
+      },
+      {
+        "name": "Atlanta WiMLDS",
+        "url": "https://www.meetup.com/atlanta-wimlds/",
+        "yielded": false,
+        "note": "Dormant, with no upcoming events and no speakers listed."
+      },
+      {
+        "name": "Women in Big Data Atlanta",
+        "url": "https://www.meetup.com/women-in-big-data-atlanta-chapter/",
+        "yielded": false,
+        "note": "Meetup group not found."
+      },
+      {
+        "name": "Women in Data / WiDS Atlanta / R-Ladies / PyLadies Atlanta search",
+        "url": "https://www.womenindata.org/",
+        "yielded": false,
+        "note": "No Atlanta chapter events with speakers were found. Women Who Code closed in 2024."
+      },
+      {
+        "name": "Databricks DAIS speaker page (Aaron Reese)",
+        "url": "https://databricks.com/dataaisummit/speaker/aaron-reese",
+        "yielded": false,
+        "note": "Redirects to the DAIS homepage."
+      },
+      {
+        "name": "LinkedIn Jobs guest API (keywords=dbt, Atlanta-area)",
+        "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
+        "yielded": true,
+        "note": "35 ads mention dbt"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Atlanta dbt Meetup [In Person]",
+      "date": "2023-03-29",
+      "venue": "7000 Central Pkwy, Sandy Springs, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/291536809/",
+      "organisers": [],
+      "attendees": 73,
+      "talks": [
+        {
+          "speaker": "Brent Brewington",
+          "company": "Data Scientist, Home Depot",
+          "title": "Using dbt to drive DataOps on a Data Science balanced team",
+          "topics": [
+            "dbt best practices",
+            "team & org design"
+          ]
+        },
+        {
+          "speaker": "Aaron Reese",
+          "company": "Enterprise Architect, Chick-fil-A",
+          "title": "Modernizing Data Engineering at CFA",
+          "topics": [
+            "dbt migration & adoption"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Atlanta dbt Meetup [In Person]",
+      "date": "2023-06-14",
+      "venue": "7000 Central Pkwy, Sandy Springs, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/293119936/",
+      "organisers": [],
+      "attendees": 43,
+      "talks": [
+        {
+          "speaker": "Tim Castillo",
+          "company": "Developer Advocate, Dagster",
+          "title": "Using Your Usage: Tips for Optimizing for Cloud Spend",
+          "topics": [
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Nate Nunta",
+          "company": "Product Manager, dbt Labs",
+          "title": "dbt Product Roadmap",
+          "topics": [
+            "dbt product updates",
+            "dbt product features"
+          ]
+        },
+        {
+          "speaker": "Mike Sandt",
+          "company": "Head of Data & Analytics, Salesloft",
+          "title": "Data Modernization - Not Just a Technical Problem",
+          "topics": [
+            "team & org design",
+            "dbt migration & adoption"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Atlanta dbt Meetup [In Person]",
+      "date": "2023-10-05",
+      "venue": "7000 Central Pkwy, Sandy Springs, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/295320476/",
+      "organisers": [],
+      "attendees": 68,
+      "talks": [
+        {
+          "speaker": "Mahtab Rahman",
+          "company": "Sr. Director of Architecture, Cox Automotive",
+          "title": "Scalable data and analytics architecture at Cox Automotive",
+          "topics": [
+            "modern data stack",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Grant Cloud",
+          "company": "Senior Director of Data Strategy, PrizePicks",
+          "title": "Data strategy at PrizePicks",
+          "topics": [
+            "modern data stack",
+            "business intelligence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Atlanta dbt Meetup [In Person]",
+      "date": "2023-12-12",
+      "venue": "Mutation Brewing Company, 5825 Roswell Rd NE, Sandy Springs, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/297424518/",
+      "organisers": [],
+      "attendees": 52,
+      "talks": [
+        {
+          "speaker": "Katherine Brock",
+          "company": "Senior Solutions Architect, dbt Labs",
+          "title": "Coalesce Recap",
+          "topics": [
+            "dbt product updates",
+            "industry trends"
+          ]
+        },
+        {
+          "speaker": "Brent Brewington",
+          "company": "Principal Data Engineering Consultant, Aimpoint Digital",
+          "title": "Ugly Sweaters, Elegant Code: A Holiday Special on DataOps with dbt",
+          "topics": [
+            "dbt best practices",
+            "orchestration & ci/cd"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Atlanta dbt Meetup [In Person]",
+      "date": "2024-06-18",
+      "venue": "7000 Central Pkwy, Sandy Springs, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/301224012/",
+      "organisers": [],
+      "attendees": 55,
+      "talks": [
+        {
+          "speaker": "Somnath Chateerjee & Brett Darcy",
+          "company": "Data Engineering & BI, Cox Automotive",
+          "title": "Shifting Gears: How Cox Automotive Turbocharged Data Engineering with ELT",
+          "topics": [
+            "dbt migration & adoption",
+            "data engineering"
+          ]
+        },
+        {
+          "speaker": "Zach Lancaster",
+          "company": "WBD",
+          "title": "From Core to Cloud",
+          "topics": [
+            "dbt migration & adoption",
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Atlanta dbt Meetup: Coalesce 2024 Watch Party",
+      "date": "2024-10-30",
+      "venue": "7000 Central Pkwy, Sandy Springs, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/304150508/",
+      "organisers": [],
+      "attendees": 15,
+      "talks": [
+        {
+          "speaker": "Brandon Sweeney",
+          "company": "dbt Labs",
+          "title": "Turning data to value - A dbt customer panel",
+          "topics": [
+            "business intelligence",
+            "industry trends"
+          ]
+        },
+        {
+          "speaker": "Jason Ganz",
+          "company": "dbt Labs",
+          "title": "Once more up the stack - Generative AI, the ADLC and the coming era of analytics engineering",
+          "topics": [
+            "modern data stack",
+            "industry trends",
+            "analytics engineering"
+          ]
+        },
+        {
+          "speaker": "Erica Louie",
+          "company": "dbt Labs",
+          "title": "Late-stage transformations - Utilizing dbt Semantic Layer metrics",
+          "topics": [
+            "semantic layer",
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dbt Global Circuit Series: Atlanta",
+      "date": "2025-06-18",
+      "venue": "NCR Voyix - Global Headquarters, 864 Spring St NW, Atlanta, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/307908198/",
+      "organisers": [],
+      "attendees": 34,
+      "talks": [
+        {
+          "speaker": "Kun Zhu",
+          "company": "VP of Data and AI / Chief Data Scientist, NCR Voyix",
+          "title": "How dbt is Transforming our Data Modeling Processes on our Digital Transformation Journey",
+          "topics": [
+            "data modeling",
+            "dbt migration & adoption"
+          ]
+        },
+        {
+          "speaker": "Cole Fraser",
+          "company": "Solutions Architect, dbt Labs",
+          "title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+          "topics": [
+            "dbt product updates",
+            "tools & ecosystem"
+          ]
+        },
+        {
+          "speaker": "Megha Panda",
+          "company": "Data and Analytics Leader, HD Supply",
+          "title": "How adoption of dbt enabled HD Supply to improve velocity of data products",
+          "topics": [
+            "dbt migration & adoption",
+            "performance & scale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Atlanta dbt Lowkey Meetup [In Person] : Data, Drinks & Community",
+      "date": "2026-07-21",
+      "venue": "Monday Night Garage, Atlanta, GA",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/events/315472808/",
+      "organisers": [],
+      "attendees": 9,
+      "talks": []
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Atlanta dbt Meetup (meetup.com)",
+      "url": "https://www.meetup.com/atlanta-dbt-meetup-group/",
+      "note": "This chapter"
+    },
+    {
+      "name": "Snowflake User Groups Atlanta",
+      "url": "https://usergroups.snowflake.com/atlanta/",
+      "note": "Organisers, the Improving venue, and 2026 speakers."
+    },
+    {
+      "name": "Atlanta Tableau User Group Feb 2026",
+      "url": "https://usergroups.tableau.com/events/details/tableau-atlanta-tableau-user-group-presents-atlanta-tableau-user-group-meeting-02242026/",
+      "note": "BI + AI panel at Cox Enterprises HQ."
+    }
+  ]
+}

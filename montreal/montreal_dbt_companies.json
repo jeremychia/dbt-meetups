@@ -1,0 +1,4083 @@
+{
+  "metadata": {
+    "title": "Montreal dbt companies and people for the Montreal dbt Meetup",
+    "generated_at": "2026-09-24",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Montreal companies using dbt, and people who could speak at or attend the Montreal dbt Meetup.",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Montreal (Montreal dbt Meetup)",
+    "method": [
+      "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/montreal-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
+      "Lesson: In Montreal the Snowflake user group (Bevy pages, bilingual agendas) is a better speaker source than the dormant dbt chapter. Fetch its event pages directly.",
+      "Lesson: The shared browser tab is used concurrently by other agents. Run navigate and fetch in one browser_batch and query gql2 by urlname so the results don't depend on which page the tab is showing.",
+      "Lesson: Montreal speakers often appear under a vendor/startup (Maxa) with stale LinkedIn titles. Record the employer as unclear rather than guessing."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
+      "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
+      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+    ],
+    "counts": {
+      "companies": 44,
+      "people": 35,
+      "job_postings": 40,
+      "companies_with_job_postings": 18,
+      "speaker_evidence_items": 41,
+      "unique_content_items": 32,
+      "people_with_linkedin": 3,
+      "people_who_spoke_at_this_chapter": 16,
+      "internal_vinted": 0,
+      "level": {
+        "leadership": 14,
+        "working": 21
+      },
+      "speaker_potential": {
+        "high": 22,
+        "medium": 13
+      },
+      "attendee_potential": {
+        "high": 7,
+        "medium": 28
+      },
+      "priority_tier": {
+        "1": 2,
+        "connector": 7,
+        "2": 21,
+        "3": 5
+      },
+      "watchlist_companies": 15,
+      "past_meetups": 6,
+      "lead_type": {
+        "proven_speaker": 30,
+        "emerging_voice": 2,
+        "featured": 3
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 30,
+        "company_blog_scan": 4,
+        "linkedin_search": 1,
+        "chapter_meetup_history": 16,
+        "women_in_data_community": 3,
+        "newsletter_or_blog": 1,
+        "podcast": 1
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "genai & llm": 10,
+      "community": 9,
+      "team & org design": 8,
+      "data warehouse & platforms": 7,
+      "analytics engineering": 6,
+      "data quality & testing": 6,
+      "semantic layer": 3,
+      "performance & scale": 3,
+      "dbt product features": 2,
+      "data modeling": 2,
+      "dbt fundamentals": 2,
+      "data governance": 2,
+      "modern data stack": 2,
+      "data engineering": 2,
+      "tools & ecosystem": 2,
+      "developer workflow": 1,
+      "dbt best practices": 1,
+      "domain-specific use cases": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "maxa",
+      "name": "Maxa",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Cortex"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://maxa.ai/blog/introducing-maxa-autopilot-agentic-way-build-maintain-data-pipelines",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://maxa.ai/blog/how-spec-driven-development-maximizes-dbt-wizard",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/montreal-dbt-meetup/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://maxa.ai/blog",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "eliott-pourrat",
+          "name": "Eliott Pourrat",
+          "pronouns": null,
+          "title": "Lead / Senior Analytics Engineer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Advanced Data Engineering Masterclass - Montreal",
+              "title": "dbt on Snowflake (native dbt integration)",
+              "date": "2025-09-10",
+              "url": "https://www.getdbt.com/events",
+              "content_id": "snowflake-advanced-data-e-dbt-on-snowflake-native-dbt-integration",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Half-day Snowflake masterclass at W Montreal. The listed speakers covered how teams can use Snowflake's new native dbt integration.",
+              "topics": [
+                "dbt product features",
+                "data warehouse & platforms",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": "Lessons from running dbt Projects natively on Snowflake: what changed vs dbt Cloud/Core",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/events",
+              "note": "talk: dbt on Snowflake (native dbt integration)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Lessons from running dbt Projects natively on Snowflake: what changed vs dbt Cloud/Core",
+          "past_chapter_talks": [],
+          "notes": "Maxa is the Aug 2026 chapter relaunch host/co-organiser. Presented dbt-on-Snowflake content at Snowflake's Advanced Data Engineering Masterclass in Montreal (W Montreal, 2025-09-10). A search snippet also credits a 'Snowflake / dbt: Tips and tricks' talk. The LinkedIn search title still shows Lightspeed (an older role?), so the URL is left null."
+        },
+        {
+          "id": "joao-vitor-de-camargo",
+          "name": "João Vitor de Camargo",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Maxa blog",
+              "title": "How Spec-Driven Development Maximizes dbt Wizard",
+              "date": "2026-09-11",
+              "url": "https://maxa.ai/blog/how-spec-driven-development-maximizes-dbt-wizard",
+              "content_id": "maxa-blog-how-spec-driven-development-maximizes-db",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Argues that specs make agent-generated dbt work checkable for correctness in agentic data engineering.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": "Spec-driven development for dbt projects in the age of coding agents",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://maxa.ai/blog/how-spec-driven-development-maximizes-dbt-wizard",
+              "note": "article: How Spec-Driven Development Maximizes dbt Wizard"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Spec-driven development for dbt projects in the age of coding agents",
+          "past_chapter_talks": [],
+          "notes": "Writes on the Maxa blog about spec-driven development and dbt agents. The city is taken from Maxa's Montreal HQ; the person's own location is not verified."
+        },
+        {
+          "id": "priyaanka-arora",
+          "name": "Priyaanka Arora",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan",
+            "linkedin_search"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Maxa blog",
+              "title": "Why business context should come before building semantic layers",
+              "date": "2026-09-03",
+              "url": "https://maxa.ai/blog/why-business-context-before-building-semantic-layers",
+              "content_id": "maxa-blog-why-business-context-should-come-before",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Argues that semantic layers need resolved business context and well-modelled data before AI agents can build governed models.",
+              "topics": [
+                "semantic layer",
+                "data modeling",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": "Business context before semantic layers: prerequisites for AI-ready dbt models",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "post",
+              "event": "Maxa blog",
+              "title": "Join us in Montreal: Your data stack is going agentic",
+              "date": "2026-06-26",
+              "url": "https://maxa.ai/blog/montreal-your-data-stack-is-going-agentic",
+              "content_id": "maxa-blog-join-us-in-montreal-your-data-stack-is-g",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Announcement of the Maxa-hosted Montreal Data Developer Meetup panel (2026-07-16) on agentic AI and dbt transformation workflows.",
+              "topics": [
+                "community",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://maxa.ai/blog/why-business-context-before-building-semantic-layers",
+              "note": "article: Why business context should come before building semantic layers"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Business context before semantic layers: prerequisites for AI-ready dbt models",
+          "past_chapter_talks": [],
+          "notes": "Maxa blog author on semantic layers. Also wrote the post announcing Maxa's July 2026 Montreal Data Developer Meetup, so a possible connector. The city is taken from the company; the person's location is not verified."
+        },
+        {
+          "id": "quentin-tabourin",
+          "name": "Quentin Tabourin",
+          "pronouns": null,
+          "title": "Senior Data Analyst",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/quentin-tabourin"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Montreal User Group",
+              "title": "Chapter Leader; host of Summit in 60 Special Edition",
+              "date": "2026-06-17",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-summit-in-60-special-edition-snowflake-montreal-user-group/",
+              "content_id": "snowflake-montreal-user-g-chapter-leader-host-of-summit-in-60-spec",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-organises and hosts Snowflake Montreal user group events.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/quentin-tabourin",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-summit-in-60-special-edition-snowflake-montreal-user-group/",
+              "note": "organiser: Chapter Leader; host of Summit in 60 Special Edition"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector - Snowflake Montreal User Group Chapter Leader at Maxa, the company co-organising the relaunched dbt chapter."
+        }
+      ],
+      "notes": "Montreal HQ at 1 Place Ville-Marie. Venue and co-organiser of the 2026-08-06 chapter relaunch. Product generates dbt pipelines (Autopilot). Hosted the Montreal Data Developer Meetup (2026-07-16, about 215 attendees on Luma) and the Snowflake Summit in 60 (2026-06). Staff co-lead the Snowflake Montreal UG. Vendor-ish, so balance with practitioners."
+    },
+    {
+      "id": "montreal-analytics",
+      "name": "Montreal Analytics (a Datatonic company)",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Fivetran",
+        "Snowflake",
+        "BigQuery",
+        "Looker"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://hub.getdbt.com/Montreal-Analytics/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "cyril-marques",
+          "name": "Cyril Marques",
+          "pronouns": null,
+          "title": "CEO",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Montréal dbt Meetup",
+              "title": "Welcome remarks / organiser (2021-2023)",
+              "date": "2023-03-22",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/",
+              "content_id": "montreal-dbt-meetup-welcome-remarks-organiser-2021-2023",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Montreal Analytics organised the chapter's 2021-2023 events.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Matthieu Di Mercurio",
+                "Jean-Nicholas Hould",
+                "Sarah Corboliou"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/",
+              "note": "organiser: Welcome remarks / organiser (2021-2023)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": "connector - founded the chapter (2021-2023 organiser via Montreal Analytics, a dbt partner). No recent content found. The LinkedIn result shows him at Datatonic."
+        },
+        {
+          "id": "jacob-frackson",
+          "name": "Jacob Frackson",
+          "pronouns": null,
+          "title": "Senior Analytics Consultant, Montreal Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Hiring & Onboarding Best Practices",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-hiring-onboarding-best-practices",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Hiring & Onboarding Best Practices"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Hiring & Onboarding Best Practices",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "jeremie-pineau",
+          "name": "Jeremie Pineau",
+          "pronouns": null,
+          "title": "Senior Data Consultant, Montreal Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Building sustainable dbt project documentation",
+              "date": "2022-09-08",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+              "content_id": "montreal-dbt-meetup-in-pe-building-sustainable-dbt-project-documen",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt fundamentals",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+              "note": "talk: Building sustainable dbt project documentation"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-08",
+              "talk_title": "Building sustainable dbt project documentation",
+              "topics": [
+                "dbt fundamentals",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "hassan-al-rabea-2",
+          "name": "Hassan Al-Rabea",
+          "pronouns": null,
+          "title": "Lead Data Consultant, Montreal Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Enhancing Your Testing Strategy",
+              "date": "2023-03-22",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+              "content_id": "montreal-dbt-meetup-in-pe-enhancing-your-testing-strategy",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+              "note": "talk: Enhancing Your Testing Strategy"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-22",
+              "talk_title": "Enhancing Your Testing Strategy",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "dbt partner that publishes dbt packages. Organised the chapter 2021-2023. Acquired by Datatonic in March 2023. No recent Montreal-authored content found."
+    },
+    {
+      "id": "koho-financial",
+      "name": "KOHO Financial",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "AWS Bedrock",
+        "Claude Code"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.getdbt.com/dbt-summit/speakers/celia-bru",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "celia-bru",
+          "name": "Célia Bru",
+          "pronouns": null,
+          "title": "Senior Director Data & Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Summit 2026",
+              "title": "Before the agents: what self-serve analytics actually needs",
+              "date": "2026-09",
+              "url": "https://www.getdbt.com/dbt-summit/agenda/before-the-agents-what-self-serve-analytics-actually-needs",
+              "content_id": "dbt-summit-2026-before-the-agents-what-self-serve-analyt",
+              "co_authors": [
+                "Gabriel Gambacorta"
+              ],
+              "mentions_dbt": true,
+              "description": "Breakout with Gabriel Gambacorta on the foundations KOHO built on its dbt platform before rolling out agentic self-serve analytics.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "semantic layer"
+              ],
+              "suggested_talk_angle": "Local reprise of the dbt Summit talk (in French or English)",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/dbt-summit/agenda/before-the-agents-what-self-serve-analytics-actually-needs",
+              "note": "talk: Before the agents: what self-serve analytics actually needs"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Local reprise of the dbt Summit talk (in French or English)",
+          "past_chapter_talks": [],
+          "notes": "dbt Summit 2026 speaker. KOHO is Toronto-HQ, but a KOHO analyst (Audrey Leduc) spoke at the Oct 2024 Montreal chapter, so KOHO may have Montreal staff. Check her location. Very strong dbt content."
+        },
+        {
+          "id": "gabriel-gambacorta",
+          "name": "Gabriel Gambacorta",
+          "pronouns": null,
+          "title": "Product Manager, AI/ML Engineering",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Summit 2026",
+              "title": "Before the agents: what self-serve analytics actually needs",
+              "date": "2026-09",
+              "url": "https://www.getdbt.com/dbt-summit/speakers/gabriel-gambacorta",
+              "content_id": "dbt-summit-2026-before-the-agents-what-self-serve-analyt",
+              "co_authors": [
+                "Célia Bru"
+              ],
+              "mentions_dbt": true,
+              "description": "Covers evaluation and ground truth for agentic self-serve analytics tools.",
+              "topics": [
+                "genai & llm",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/dbt-summit/speakers/gabriel-gambacorta",
+              "note": "talk: Before the agents: what self-serve analytics actually needs"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Co-speaker with Célia Bru at dbt Summit 2026. Location not verified."
+        },
+        {
+          "id": "audrey-leduc",
+          "name": "Audrey Leduc",
+          "pronouns": null,
+          "title": "KOHO Financial",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montreal dbt Meetup (Montreal dbt Meetup)",
+              "title": "(untitled)",
+              "date": "2024-10-03",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/303409442/",
+              "content_id": "montreal-dbt-meetup-montr-untitled",
+              "co_authors": [
+                "Daniel Paes"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/303409442/",
+              "note": "talk: (untitled)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-03",
+              "talk_title": null,
+              "topics": [
+                "analytics engineering"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Toronto HQ. Three speakers at dbt Summit 2026. A KOHO speaker presented at the Montreal chapter in Oct 2024, so there may be Montreal staff."
+    },
+    {
+      "id": "potloc",
+      "name": "Potloc",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Meltano",
+        "Airflow",
+        "BigQuery",
+        "Elementary"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://dev.to/potloc",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.potloc.com/en/resources/blog",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Montreal HQ has hosted data labs. The dbt evidence is from 2023."
+    },
+    {
+      "id": "alayacare",
+      "name": "AlayaCare",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Data Developer",
+          "url": "https://www.linkedin.com/jobs/view/staff-data-developer-at-alayacare-4382754341",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AlayaCare",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong skills in DBT, SQL, Python, Snowflake, Iceberg",
+          "job_poster": null,
+          "posted_date": "2026-05-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        },
+        {
+          "title": "Développeur·euse principal·e en données",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur%C2%B7euse-principal%C2%B7e-en-donn%C3%A9es-at-alayacare-4382751455",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AlayaCare",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Solide maîtrise de DBT, SQL, Python, Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-05-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "elisabeth-mercier",
+          "name": "Elisabeth Mercier",
+          "pronouns": null,
+          "title": "Data Developer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Winter 2026",
+              "title": "Practical Strategies for Multi-Tenant Data on Snowflake",
+              "date": "2026-01-22",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "content_id": "snowflake-montreal-user-g-practical-strategies-for-multi-tenant-da",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Practical approaches to handling multi-tenant data in Snowflake.",
+              "topics": [
+                "data modeling",
+                "data warehouse & platforms",
+                "data governance"
+              ],
+              "suggested_talk_angle": "Multi-tenant modelling patterns in dbt (per-tenant schemas vs row-level)",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "note": "talk: Practical Strategies for Multi-Tenant Data on Snowflake"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Multi-tenant modelling patterns in dbt (per-tenant schemas vs row-level)",
+          "past_chapter_talks": [],
+          "notes": "Montreal health-tech practitioner. The multi-tenant modelling topic fits dbt audiences well."
+        }
+      ],
+      "notes": "Montreal health-tech. Gave a multi-tenant Snowflake talk in 2026. | Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "autodesk",
+      "name": "Autodesk",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-analyst-at-autodesk-4469677684",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT tools (Airflow, dbt, Snowflake)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "iulia-marin",
+          "name": "Iulia Marin",
+          "pronouns": null,
+          "title": "Autodesk",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (Online) (Montreal dbt Meetup)",
+              "title": "Building & Implementing a Data Metric Framework at Autodesk",
+              "date": "2021-10-29",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "content_id": "montreal-dbt-meetup-onlin-building-implementing-a-data-metric-fram",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "semantic layer"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "note": "talk: Building & Implementing a Data Metric Framework at Autodesk"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-29",
+              "talk_title": "Building & Implementing a Data Metric Framework at Autodesk",
+              "topics": [
+                "semantic layer"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "infostrux",
+      "name": "Infostrux",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt",
+        "Hex"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.infostrux.com/events",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "nasko-grozdanov",
+          "name": "Nasko Grozdanov",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "DataOps Canada (Montreal meetup)",
+              "title": "Realm of Possibilities with DBT",
+              "date": null,
+              "url": "https://youtu.be/sdCkIMqG-LI",
+              "content_id": "dataops-canada-montreal-m-realm-of-possibilities-with-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Introduction to dbt, covering DevOps, data-as-code and data science use.",
+              "topics": [
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://youtu.be/sdCkIMqG-LI",
+              "note": "talk: Realm of Possibilities with DBT"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Gave an intro-to-dbt talk at a Montreal DataOps Canada meetup (date unknown, probably before 2024). Partner-side."
+        }
+      ],
+      "notes": "Snowflake Elite partner. Ran Montreal hands-on labs (including one at Potloc HQ) and an F1 data happy hour. Employs Stéphane Burwash."
+    },
+    {
+      "id": "solution-bi-canada",
+      "name": "Solution BI Canada",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/montreal-dbt-meetup/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "daniel-paes",
+          "name": "Daniel Paes",
+          "pronouns": null,
+          "title": "Principal Director Data and Analytics",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup",
+              "title": "Presentation 2 (title not listed)",
+              "date": "2024-10-03",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/",
+              "content_id": "montreal-dbt-meetup-presentation-2-title-not-listed",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Chapter meetup hosted at Solution BI, 4200 boul. Saint-Laurent.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Montreal dbt Meetup (Montreal dbt Meetup)",
+              "title": "(untitled)",
+              "date": "2024-10-03",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/303409442/",
+              "content_id": "montreal-dbt-meetup-montr-untitled",
+              "co_authors": [
+                "Audrey Leduc"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/",
+              "note": "talk: Presentation 2 (title not listed)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-03",
+              "talk_title": null,
+              "topics": [
+                "analytics engineering"
+              ]
+            }
+          ],
+          "notes": "connector - Solution BI co-organises the chapter (Oct 2024 organiser and venue; Aug 2026 co-organiser with Maxa). He spoke at the Oct 2024 chapter meetup, so he is a past speaker. Partner-side."
+        }
+      ],
+      "notes": "4200 boul. Saint-Laurent. Organised and hosted the Oct 2024 chapter meetup and co-organises the 2026 relaunch."
+    },
+    {
+      "id": "aduna-global",
+      "name": "Aduna Global",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-aduna-global-4459028318",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Aduna Global",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration tooling (Airflow or Dagster; dbt)",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        },
+        {
+          "title": "Senior Data Engineer / Ingénieur(e) de données senior",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-ing%C3%A9nieur-e-de-donn%C3%A9es-senior-at-aduna-global-4465651453",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Aduna Global",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration tooling (Airflow or Dagster; dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "agoda",
+      "name": "Agoda",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior / Staff Data Engineer (BI) – CEG Team",
+          "url": "https://www.linkedin.com/jobs/view/senior-staff-data-engineer-bi-%E2%80%93-ceg-team-at-agoda-4455273113",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Agoda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration frameworks (e.g., Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "appdirect",
+      "name": "AppDirect",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (AppHelp)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-apphelp-by-appdirect-4450385065",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AppDirect",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "models and pipelines on Snowflake + dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-appdirect-4445734578",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AppDirect",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "models and pipelines on Snowflake + dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        },
+        {
+          "title": "Ingénieur(e) de données (AppHelp)",
+          "url": "https://www.linkedin.com/jobs/view/ing%C3%A9nieur-e-de-donn%C3%A9es-at-apphelp-by-appdirect-4459740102",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AppDirect",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "pipelines réutilisables sur Snowflake + dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-30",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Ingénieur(e) de données",
+          "url": "https://www.linkedin.com/jobs/view/ing%C3%A9nieur-e-de-donn%C3%A9es-at-appdirect-4445739504",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AppDirect",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "pipelines réutilisables sur Snowflake + dbt",
+          "job_poster": null,
+          "posted_date": "2026-07-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "astek",
+      "name": "Astek",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Développeur Data & Cloud Sénior",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur-data-cloud-s%C3%A9nior-at-astek-4465791601",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Astek",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Connaissances de DBT, Kafka, Airflow, Dagster ou Spark",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer Cloud AWS",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-cloud-aws-at-astek-4463894028",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Astek",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake · Jenkins · CI/CD · DBT · Kafka",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "behaviour-interactive",
+      "name": "Behaviour Interactive",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Developer (FR/EN)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-developer-d%C3%A9veloppeur%C2%B7euse-de-donn%C3%A9es-s%C3%A9nior%C2%B7e-at-behaviour-interactive-4441287438",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Behaviour Interactive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "advanced SQL and Data Build Tools (dbt) on Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-07-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Developer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-developer-at-behaviour-interactive-4441228227",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Behaviour Interactive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "advanced SQL and Data Build Tools (dbt) on Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Analyst – Dead by Daylight",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-analyst-%E2%80%93-dead-by-daylight-at-behaviour-interactive-4468656986",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Behaviour Interactive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation tools such as Snowflake and DBT",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Analyst - Dead by Daylight (FR/EN)",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-analyst-dead-by-daylight-analyste-de-donn%C3%A9es-principal%C2%B7e-dead-by-daylight-at-behaviour-interactive-4468828915",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Behaviour Interactive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation tools such as Snowflake and DBT",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Analyste de données Principal·e – Dead by Daylight",
+          "url": "https://www.linkedin.com/jobs/view/analyste-de-donn%C3%A9es-principal%C2%B7e-%E2%80%93-dead-by-daylight-at-behaviour-interactive-4468611048",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Behaviour Interactive",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake et DBT, avec AWS considéré comme un atout",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "data-sciences",
+      "name": "Data Sciences",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Ingénieur Analytique / Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/ing%C3%A9nieur-analytique-analytics-engineer-at-data-sciences-4464127470",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Data Sciences",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "expérience confirmée avec dbt (modèles, tests, macros) en production",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "dialogue",
+      "name": "Dialogue",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Developer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-developer-at-dialogue-4461910914",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Dialogue",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "statement of work reporting using dbt and Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Développeur(se) de données principal(e)",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur-se-de-donn%C3%A9es-principal-e-at-dialogue-4461925220",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Dialogue",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "devis d'exécution à l'aide de dbt et de Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "flinks",
+      "name": "Flinks",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer / Ingénieur(e) de données senior",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-ing%C3%A9nieur-e-de-donn%C3%A9es-senior-at-flinks-4463353279",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Flinks",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "BigQuery warehouse, dbt transformation layers, Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "kake",
+      "name": "Kake",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (Analyst/Scientist) - Remote",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-analyst-scientist-remote-at-kake-4449864089",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Kake",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration tools such as Airflow, dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "kpmg-canada",
+      "name": "KPMG Canada",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Conseiller(ère) principal(e), Données, Analytique et Automatisation",
+          "url": "https://www.linkedin.com/jobs/view/conseiller-%C3%A8re-conseiller-%C3%A8re-principal-e-donn%C3%A9es-analytique-et-automatisation-ing%C3%A9nierie-de-donn%C3%A9es-bi-at-kpmg-canada-4413788382",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "KPMG Canada",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration de données (par exemple, Apache Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Directeur(trice), Données, Analytique et Automatisation",
+          "url": "https://www.linkedin.com/jobs/view/directeur-trice-donn%C3%A9es-analytique-et-automatisation-ing%C3%A9nierie-de-donn%C3%A9es-solution-d-intelligence-d-affaires-at-kpmg-canada-4336784500",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "KPMG Canada",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration de pipelines (p. ex. Airflow, dbt, Luigi)",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "lightspeed-commerce",
+      "name": "Lightspeed Commerce",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-analytics-engineer-at-lightspeed-commerce-4459566513",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Lightspeed Commerce",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proven Dataform or dbt expertise in production",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Ingénieur Analytics Senior",
+          "url": "https://www.linkedin.com/jobs/view/ing%C3%A9nieur-analytics-senior-at-lightspeed-commerce-4459553767",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Lightspeed Commerce",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "expertise éprouvée avec Dataform ou dbt en production",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "LinkedIn search titles link Eliott Pourrat and Nicolas Lelièvre to Lightspeed, possibly as a former employer. No public dbt content. | Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "maintainx",
+      "name": "MaintainX",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Developer",
+          "url": "https://www.linkedin.com/jobs/view/senior-analytics-developer-at-maintainx-4434166721",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "MaintainX",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestrating pipelines using dbt and data lakehouse technologies",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Développeur(se) senior en analytique",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur-se-senior-en-analytique-at-maintainx-4434147072",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "MaintainX",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration de pipelines à l'aide de dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Staff Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/staff-data-engineer-at-maintainx-4461303534",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "MaintainX",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong Python and dbt skills",
+          "job_poster": null,
+          "posted_date": "2026-09-02",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "slalom",
+      "name": "Slalom",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Program Delivery Lead - Data Solution Owner (Canada)",
+          "url": "https://www.linkedin.com/jobs/view/data-program-delivery-lead-data-solution-owner-canada-at-slalom-4457639487",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Slalom",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, dbt, Databricks, DataOps, and data mesh",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "toboggan-labs",
+      "name": "Toboggan Labs",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Software Developer (Data Infrastructure & ETL)",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur%C2%B7se-logiciel-senior-infrastructure-de-donn%C3%A9es-etl-senior-software-developer-data-infrastructure-etl-at-toboggan-labs-4405261588",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Toboggan Labs",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "outils de données comme dbt, Airflow",
+          "job_poster": null,
+          "posted_date": "2026-03-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Senior Software Developer (Data Infrastructure & ETL)",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur%C2%B7se-logiciel-senior-infrastructure-de-donn%C3%A9es-etl-senior-software-developer-data-infrastructure-etl-at-toboggan-labs-4414264768",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Toboggan Labs",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "outils de données comme dbt, Airflow",
+          "job_poster": null,
+          "posted_date": "2026-05-13",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ts-imagine",
+      "name": "TS Imagine",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Developer",
+          "url": "https://www.linkedin.com/jobs/view/analytics-developer-at-ts-imagine-4457645297",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation frameworks such as dbt. Semantic modeling experience",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Analytics & AI Developer",
+          "url": "https://www.linkedin.com/jobs/view/analytics-ai-developer-at-ts-imagine-4467593799",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation frameworks such as dbt. Semantic modeling experience",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Semantic Modeler",
+          "url": "https://www.linkedin.com/jobs/view/semantic-modeler-at-ts-imagine-4457661047",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation frameworks such as dbt. Semantic modeling experience",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "AI Solutions Developer",
+          "url": "https://www.linkedin.com/jobs/view/ai-solutions-developer-at-ts-imagine-4462964697",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation frameworks such as dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Développeur(-euse) analytique",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur-euse-analytique-at-ts-imagine-4458997018",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "outils de transformation tels que dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Développeur(-euse) de solutions IA",
+          "url": "https://www.linkedin.com/jobs/view/d%C3%A9veloppeur-euse-de-solutions-ia-at-ts-imagine-4458986513",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "outils de transformation tels que dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Spécialiste en modélisation sémantique",
+          "url": "https://www.linkedin.com/jobs/view/sp%C3%A9cialiste-en-mod%C3%A9lisation-s%C3%A9mantique-at-ts-imagine-4458980600",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "TS Imagine",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "outils de transformation tels que dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "valpay",
+      "name": "ValPay",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer / Ingénieur(e) de données principal(e)",
+          "url": "https://www.linkedin.com/jobs/view/ing%C3%A9nieur-e-de-donn%C3%A9es-principal-e-senior-data-engineer-at-valpay-4469207618",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "ValPay",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dimensional models, dbt transformations, and the semantic layer",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Montreal-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "snowflake-montreal-user-group",
+      "name": "Snowflake Montreal User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://usergroups.snowflake.com/montreal/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "About 1,779 members, with quarterly events at Sid Lee (1 Place Ville Marie). Talks are bilingual. Leaders are Lamia Goeffon and Quentin Tabourin. Best co-host candidate."
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michell-payano",
+          "name": "Michell Payano",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Montréal x Montréal Python MP121",
+              "title": "Talk (title not listed)",
+              "date": "2026-03-19",
+              "url": "https://www.meetup.com/pyladiesmtl/events/313667946/",
+              "content_id": "pyladies-montreal-x-montr-talk-title-not-listed",
+              "co_authors": [
+                "Stefania Pecore"
+              ],
+              "mentions_dbt": null,
+              "description": "One of two technical talks at a bilingual, streamed event hosted at NAD.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladiesmtl/events/313667946/",
+              "note": "talk: Talk (title not listed)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Speaker at the PyLadies Montréal x Montréal Python International Women's Day edition. Talk topic is not listed. Check whether it relates to data or analytics."
+        },
+        {
+          "id": "stefania-pecore",
+          "name": "Stefania Pecore",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Montréal x Montréal Python MP121",
+              "title": "Talk (title not listed)",
+              "date": "2026-03-19",
+              "url": "https://www.meetup.com/pyladiesmtl/events/313667946/",
+              "content_id": "pyladies-montreal-x-montr-talk-title-not-listed",
+              "co_authors": [
+                "Michell Payano"
+              ],
+              "mentions_dbt": null,
+              "description": "One of two technical talks at the event.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladiesmtl/events/313667946/",
+              "note": "talk: Talk (title not listed)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Speaker at the same PyLadies Montréal x Montréal Python event. Topic unknown."
+        },
+        {
+          "id": "jl-marechaux",
+          "name": "JL Marechaux",
+          "pronouns": null,
+          "title": "WiDS Montreal Event Ambassador",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Montreal",
+              "title": "Event Ambassador",
+              "date": "2024-10-23",
+              "url": "https://www.widsworldwide.org/events/event/wids-montreal/",
+              "content_id": "wids-montreal-event-ambassador",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Ambassador for the one-day WiDS Montreal conference at Google Montreal.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-montreal/",
+              "note": "organiser: Event Ambassador"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector - WiDS Montreal ambassador (Oct 2024 conference at Google Montreal). No 2025/2026 WiDS Montreal edition found."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "montreal-analytics-dialogue-breathe-life-unito",
+      "name": "Montreal Analytics; Dialogue; Breathe Life; Unito",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "matthieu-di-mercurio",
+          "name": "Matthieu Di Mercurio",
+          "pronouns": null,
+          "title": "Montreal Analytics; Dialogue; Breathe Life; Unito",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Cyril Marques",
+                "Jean-Nicholas Hould",
+                "Sarah Corboliou"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "jean-nicholas-hould",
+          "name": "Jean-Nicholas Hould",
+          "pronouns": null,
+          "title": "Montreal Analytics; Dialogue; Breathe Life; Unito",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Cyril Marques",
+                "Matthieu Di Mercurio",
+                "Sarah Corboliou"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "sarah-corboliou",
+          "name": "Sarah Corboliou",
+          "pronouns": null,
+          "title": "Montreal Analytics; Dialogue; Breathe Life; Unito",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Finding, training and upskilling Analytics Engineers panel",
+              "date": "2022-04-28",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "content_id": "montreal-dbt-meetup-in-pe-finding-training-and-upskilling-analytic",
+              "co_authors": [
+                "Cyril Marques",
+                "Matthieu Di Mercurio",
+                "Jean-Nicholas Hould"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+              "note": "talk: Finding, training and upskilling Analytics Engineers panel"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-04-28",
+              "talk_title": "Finding, training and upskilling Analytics Engineers panel",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "altitude-sports",
+      "name": "Altitude Sports",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "benoit-reid",
+          "name": "Benoit Reid",
+          "pronouns": null,
+          "title": "Director of Data and Analytics",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Summer 2025",
+              "title": "From Cowboys to Sheriffs: Badge up, Scale Hard in the Data Wild West",
+              "date": "2025-06-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "content_id": "snowflake-montreal-user-g-from-cowboys-to-sheriffs-badge-up-scale",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on data governance and scaling a data platform (French title: Gouvernance des données et passage à l'échelle).",
+              "topics": [
+                "data governance",
+                "performance & scale",
+                "team & org design"
+              ],
+              "suggested_talk_angle": "Governance guardrails for a scaling retail data team, and where dbt tests/contracts fit",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "note": "talk: From Cowboys to Sheriffs: Badge up, Scale Hard in the Data Wild West"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Governance guardrails for a scaling retail data team, and where dbt tests/contracts fit",
+          "past_chapter_talks": [],
+          "notes": "Montreal retail data leader who talked about data governance and scaling. Altitude Sports' dbt use is not confirmed."
+        },
+        {
+          "id": "sophie-courtemanche-martel",
+          "name": "Sophie Courtemanche-Martel",
+          "pronouns": null,
+          "title": "Analytical Developer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Snowflake Montreal User Group",
+              "title": "Event host (Summer 2025, Winter 2026)",
+              "date": "2026-01-22",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "content_id": "snowflake-montreal-user-g-event-host-summer-2025-winter-2026",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as an event host.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "note": "host: Event host (Summer 2025, Winter 2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector - listed as a host of Snowflake Montreal UG events (2025-2026). Could be a practitioner speaker; no talk of her own found."
+        }
+      ],
+      "notes": "Montreal retailer. Its data director gave a governance talk. Staff host Snowflake UG events."
+    },
+    {
+      "id": "gopuff",
+      "name": "Gopuff",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hassan-al-rabea",
+          "name": "Hassan Al Rabea",
+          "pronouns": null,
+          "title": "Gopuff",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (Online) (Montreal dbt Meetup)",
+              "title": "Panel: Scaling dbt - from startup to scale up",
+              "date": "2021-10-29",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "content_id": "montreal-dbt-meetup-onlin-panel-scaling-dbt-from-startup-to-scale",
+              "co_authors": [
+                "Michael Angelo"
+              ],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "note": "talk: Panel: Scaling dbt - from startup to scale up"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-29",
+              "talk_title": "Panel: Scaling dbt - from startup to scale up",
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "michael-angelo",
+          "name": "Michael Angelo",
+          "pronouns": null,
+          "title": "Gopuff",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (Online) (Montreal dbt Meetup)",
+              "title": "Panel: Scaling dbt - from startup to scale up",
+              "date": "2021-10-29",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "content_id": "montreal-dbt-meetup-onlin-panel-scaling-dbt-from-startup-to-scale",
+              "co_authors": [
+                "Hassan Al Rabea"
+              ],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+              "note": "talk: Panel: Scaling dbt - from startup to scale up"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-29",
+              "talk_title": "Panel: Scaling dbt - from startup to scale up",
+              "topics": [
+                "performance & scale",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "veronica-beard",
+      "name": "Veronica Beard",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "maxime-lagresle",
+          "name": "Maxime Lagresle",
+          "pronouns": null,
+          "title": "Head of Data; Senior Data Scientist, Veronica Beard",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs",
+              "date": "2022-09-08",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+              "content_id": "montreal-dbt-meetup-in-pe-building-an-optimization-model-to-recomm",
+              "co_authors": [
+                "Kristi Gourlay"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+              "note": "talk: Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-08",
+              "talk_title": "Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs",
+              "topics": [
+                "modern data stack",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "kristi-gourlay",
+          "name": "Kristi Gourlay",
+          "pronouns": null,
+          "title": "Head of Data; Senior Data Scientist, Veronica Beard",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs",
+              "date": "2022-09-08",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+              "content_id": "montreal-dbt-meetup-in-pe-building-an-optimization-model-to-recomm",
+              "co_authors": [
+                "Maxime Lagresle"
+              ],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "modern data stack",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+              "note": "talk: Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-08",
+              "talk_title": "Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs",
+              "topics": [
+                "modern data stack",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "browns-shoes",
+      "name": "Browns Shoes",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lamia-goeffon",
+          "name": "Lamia Goeffon",
+          "pronouns": null,
+          "title": "Data Platform Manager",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lamia-goeffon/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Summer 2025",
+              "title": "The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake",
+              "date": "2025-06-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "content_id": "snowflake-montreal-user-g-the-cool-the-corny-and-the-cortex-workin",
+              "co_authors": [
+                "Daniel Indig"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented with Daniel Indig (Maxa AI) on working with Slack data and Cortex in Snowflake.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Snowflake Montreal User Group",
+              "title": "Chapter Leader",
+              "date": "2026",
+              "url": "https://usergroups.snowflake.com/montreal/",
+              "content_id": "snowflake-montreal-user-g-chapter-leader",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Co-leads the chapter (about 1,779 members), which meets quarterly at Sid Lee, Place Ville Marie.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/lamia-goeffon/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "note": "talk: The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector - Chapter Leader of the Snowflake Montreal User Group. Was an Analytics Developer at Maxa AI in June 2025 and is listed at Browns Shoes in June 2026. Strong co-hosting partner."
+        }
+      ],
+      "notes": "Employer of Lamia Goeffon (Data Platform Manager)."
+    },
+    {
+      "id": "datafold",
+      "name": "Datafold",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "will-sweet",
+          "name": "Will Sweet",
+          "pronouns": null,
+          "title": "Head of Product Experience, Datafold",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Iterative testing with dbt & data-diff",
+              "date": "2023-03-22",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+              "content_id": "montreal-dbt-meetup-in-pe-iterative-testing-with-dbt-data-diff",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data quality & testing",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+              "note": "talk: Iterative testing with dbt & data-diff"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-22",
+              "talk_title": "Iterative testing with dbt & data-diff",
+              "topics": [
+                "data quality & testing",
+                "data engineering"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "grics",
+      "name": "GRICS",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "guillaume-trottier",
+          "name": "Guillaume Trottier",
+          "pronouns": null,
+          "title": "VP, Digital Intelligence and Open Ecosystems",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Spring 2026",
+              "title": "GRICS journey on Snowflake",
+              "date": "2026-04-16",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-printemps-spring-2026-postgres-special-edition/",
+              "content_id": "snowflake-montreal-user-g-grics-journey-on-snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Presented GRICS' adoption journey on Snowflake.",
+              "topics": [
+                "data warehouse & platforms",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-printemps-spring-2026-postgres-special-edition/",
+              "note": "talk: GRICS journey on Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Quebec education-sector IT organisation. Talked about its platform journey. Executive-level, and dbt use is unknown."
+        }
+      ],
+      "notes": "Quebec education-sector IT organisation that spoke about its Snowflake adoption."
+    },
+    {
+      "id": "infostrux-solutions",
+      "name": "Infostrux Solutions",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "stephane-burwash",
+          "name": "Stéphane Burwash",
+          "pronouns": null,
+          "title": "Lead Data Ops Engineer, Potloc",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/st%C3%A9phane-burwash/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "chapter_meetup_history",
+            "company_blog_scan",
+            "podcast",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Potloc on DEV Community",
+              "title": "Data Analytics at Potloc I: Making data integrity your priority with Elementary & Meltano",
+              "date": "2023-01-06",
+              "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
+              "content_id": "potloc-on-dev-community-data-analytics-at-potloc-i-making-data-i",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Describes Potloc's Meltano, dbt, Airflow and BigQuery stack and how Elementary was used for dbt test results and anomaly detection.",
+              "topics": [
+                "data quality & testing",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": "Three years on: what stuck from the Elementary rollout",
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "podcast",
+              "event": "YouTube podcast S1E3",
+              "title": "Building trusted analytics at Potloc with Stéphane Burwash",
+              "date": null,
+              "url": "https://www.youtube.com/watch?v=nsLPa0kl5_o",
+              "content_id": "youtube-podcast-s1e3-building-trusted-analytics-at-potloc-wit",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Podcast episode on building trusted analytics at Potloc.",
+              "topics": [
+                "data quality & testing",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "talk",
+              "event": "Montréal dbt Meetup (in-person) (Montreal dbt Meetup)",
+              "title": "Turn your tests into action points with dbt & elementary",
+              "date": "2023-03-22",
+              "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+              "content_id": "montreal-dbt-meetup-in-pe-turn-your-tests-into-action-points-with",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/st%C3%A9phane-burwash/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://dev.to/potloc/data-analytics-at-potloc-i-making-data-integrity-your-priority-with-elementary-meltano-1ob",
+              "note": "article: Data Analytics at Potloc I: Making data integrity your priority with Elementary & Meltano"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Three years on: what stuck from the Elementary rollout",
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-22",
+              "talk_title": "Turn your tests into action points with dbt & elementary",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": "Past chapter speaker (2023, while at Potloc), so only worth inviting with new content. Now at Infostrux (Snowflake/dbt consultancy). Wrote Potloc's dbt + Elementary data-integrity post and built the Meltano-Elementary integration. No 2024-2026 item found."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "maxa-ai",
+      "name": "Maxa AI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-indig",
+          "name": "Daniel Indig",
+          "pronouns": null,
+          "title": "Analytics Developer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Summer 2025",
+              "title": "The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake",
+              "date": "2025-06-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "content_id": "snowflake-montreal-user-g-the-cool-the-corny-and-the-cortex-workin",
+              "co_authors": [
+                "Lamia Goeffon"
+              ],
+              "mentions_dbt": false,
+              "description": "Co-presented a talk on analysing Slack data with Snowflake Cortex.",
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-ete-summer-2025/",
+              "note": "talk: The Cool, the Corny and the Cortex: Working with Slack Data on Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Maxa analytics developer (as of 2025)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "maxa-or-lightspeed-commerce",
+      "name": "Maxa or Lightspeed Commerce (unclear)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nicolas-lelievre",
+          "name": "Nicolas Lelièvre",
+          "pronouns": null,
+          "title": null,
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Advanced Data Engineering Masterclass - Montreal",
+              "title": "dbt on Snowflake",
+              "date": "2025-09-10",
+              "url": "https://www.getdbt.com/events",
+              "content_id": "snowflake-advanced-data-e-dbt-on-snowflake",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Listed speaker at the Montreal masterclass session on Snowflake's native dbt integration.",
+              "topics": [
+                "dbt product features",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/events",
+              "note": "talk: dbt on Snowflake"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Co-speaker with Eliott Pourrat at the Snowflake Advanced DE Masterclass Montreal (2025-09-10). A search summary credited him to Maxa, but a LinkedIn result title says Lightspeed Commerce. Check the employer before contacting."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sebastien-notebaert",
+          "name": "Sébastien Notebaert",
+          "pronouns": null,
+          "title": "Senior Solution Engineer",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Winter 2026",
+              "title": "Intro to Cortex Code",
+              "date": "2026-01-22",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "content_id": "snowflake-montreal-user-g-intro-to-cortex-code",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vendor introduction to Snowflake Cortex Code.",
+              "topics": [
+                "genai & llm",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "note": "talk: Intro to Cortex Code"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vendor. Speaks regularly at Snowflake Montreal UG (Summit highlights 2025, Cortex Code 2026). Useful for a vendor slot or co-hosting."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "workleap",
+      "name": "Workleap",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alexandre-lepage",
+          "name": "Alexandre Lepage",
+          "pronouns": null,
+          "title": "Director of Data Engineering",
+          "city": "Montreal",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Montreal User Group - Winter 2026",
+              "title": "Snowflake: At Blizzard at Workleap (Snowflake : un blizzard chez Workleap)",
+              "date": "2026-01-22",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "content_id": "snowflake-montreal-user-g-snowflake-at-blizzard-at-workleap-snowfl",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Workleap's data engineering director on the company's Snowflake platform.",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": "Workleap's data platform: transformation layer and modelling choices",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2026/",
+              "note": "talk: Snowflake: At Blizzard at Workleap (Snowflake : un blizzard chez Workleap)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Workleap's data platform: transformation layer and modelling choices",
+          "past_chapter_talks": [],
+          "notes": "Workleap (formerly GSoft) runs on Snowflake. No dbt evidence found. Strong local employer lead."
+        }
+      ],
+      "notes": "Its Director of Data Engineering spoke at Snowflake Montreal UG in Jan 2026. No engineering blog posts on dbt found."
+    },
+    {
+      "id": "montreal-artificial-intelligence-and-data-engineering",
+      "name": "Montreal Artificial Intelligence and Data Engineering (meetup)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/montreal-data-engineering/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Recent events (2026) are SR&ED tax-credit workshops. Off-topic."
+    },
+    {
+      "id": "montreal-women-in-machine-learning-and-data-science",
+      "name": "Montreal Women in Machine Learning and Data Science",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/montreal-women-in-machine-learning-and-data-science/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "No events since mid-2024 (looks inactive)."
+    },
+    {
+      "id": "pyladies-montreal",
+      "name": "PyLadies Montréal",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/pyladiesmtl/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Co-runs events with Montréal Python (IWD edition 2026-03-19 at NAD; picnic 2026-05). Partner for women-in-data outreach."
+    },
+    {
+      "id": "rladies-montreal",
+      "name": "R-Ladies Montréal",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "R",
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Runs workshops (e.g. Python in R). No speakers were extracted."
+    },
+    {
+      "id": "ssense",
+      "name": "SSENSE",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/ssense-tech",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "The SSENSE-TECH Medium blog has data-platform and data-product posts (e.g. by 'Gontchi'). None mentioning dbt was found in the search snippet. Not scanned in depth."
+    },
+    {
+      "id": "wids-montreal",
+      "name": "WiDS Montreal",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Montreal"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.widsworldwide.org/events/event/wids-montreal/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Last edition found was 2024-10-23 at Google Montreal."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/montreal-dbt-meetup/events/?type=past",
+    "past_meetups_derived_from": "enriched/montreal-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Montréal dbt Meetup past events (meetup gql2)",
+        "url": "https://www.meetup.com/montreal-dbt-meetup/",
+        "yielded": true,
+        "note": "681 members. 2021-2023 events were organised by Montreal Analytics (venues Unito and Dialogue). Oct 2024 was at Solution BI (speakers Audrey Leduc / KOHO and Daniel Paes). The 2026-08-06 relaunch was a networking 5 à 7 at Maxa, organised by Maxa & Solution BI, with no talks. The Aug 2026 venue was Maxa, not Unito."
+      },
+      {
+        "name": "dbt Summit 2026 speakers",
+        "url": "https://www.getdbt.com/dbt-summit/speakers",
+        "yielded": true,
+        "note": "No Montreal-HQ employers. KOHO (Canada) speakers are the nearest match."
+      },
+      {
+        "name": "Coalesce 2025 speakers",
+        "url": "https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers",
+        "yielded": false,
+        "note": "The search did not surface Montreal speakers, and the page was not fetched."
+      },
+      {
+        "name": "Snowflake Montreal User Group events",
+        "url": "https://usergroups.snowflake.com/montreal/",
+        "yielded": true,
+        "note": "Richest local source: agendas from Jun 2025, Jan 2026, Apr 2026 and Jun 2026."
+      },
+      {
+        "name": "Maxa blog",
+        "url": "https://maxa.ai/blog",
+        "yielded": true,
+        "note": "Named authors writing on dbt, semantic layers and agents. Event posts."
+      },
+      {
+        "name": "Luma - Data Developer Meetup MTL (Maxa)",
+        "url": "https://luma.com/7yr2a677",
+        "yielded": false,
+        "note": "Panelists not listed. 215 attendees."
+      },
+      {
+        "name": "Infostrux events",
+        "url": "https://www.infostrux.com/events",
+        "yielded": true,
+        "note": "Montreal labs and the Nasko Grozdanov dbt talk."
+      },
+      {
+        "name": "Potloc DEV blog",
+        "url": "https://dev.to/potloc",
+        "yielded": true,
+        "note": "2023 dbt/Elementary post."
+      },
+      {
+        "name": "SSENSE-TECH Medium",
+        "url": "https://medium.com/ssense-tech",
+        "yielded": false,
+        "note": "Search snippet only. No dbt post found."
+      },
+      {
+        "name": "PyLadies Montréal meetup",
+        "url": "https://www.meetup.com/pyladiesmtl/",
+        "yielded": true,
+        "note": "Two named speakers, topics unknown."
+      },
+      {
+        "name": "Montreal Women in ML & DS meetup",
+        "url": "https://www.meetup.com/montreal-women-in-machine-learning-and-data-science/",
+        "yielded": false,
+        "note": "No events since June 2024."
+      },
+      {
+        "name": "WiDS Montreal",
+        "url": "https://www.widsworldwide.org/events/event/wids-montreal/",
+        "yielded": true,
+        "note": "2024 edition. Ambassador only."
+      },
+      {
+        "name": "Montreal AI & Data Engineering meetup",
+        "url": "https://www.meetup.com/montreal-data-engineering/",
+        "yielded": false,
+        "note": "Off-topic SR&ED workshops."
+      },
+      {
+        "name": "Workleap/Hopper/Lightspeed/Coveo engineering blogs",
+        "url": null,
+        "yielded": false,
+        "note": "A combined search found no dbt posts. Blogs were not fetched individually because of the search budget."
+      },
+      {
+        "name": "LinkedIn Jobs guest API (keywords=dbt, Montreal-area)",
+        "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
+        "yielded": true,
+        "note": "40 ads mention dbt"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Montréal dbt Meetup (Online)",
+      "date": "2021-10-29",
+      "venue": "Online",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/events/281228327/",
+      "organisers": [],
+      "attendees": 29,
+      "talks": [
+        {
+          "speaker": "Iulia Marin",
+          "company": "Autodesk",
+          "title": "Building & Implementing a Data Metric Framework at Autodesk",
+          "topics": [
+            "semantic layer"
+          ]
+        },
+        {
+          "speaker": "Hassan Al Rabea, Michael Angelo",
+          "company": "Gopuff",
+          "title": "Panel: Scaling dbt - from startup to scale up",
+          "topics": [
+            "performance & scale",
+            "team & org design"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Montréal dbt Meetup (in-person)",
+      "date": "2022-04-28",
+      "venue": "Unito, 1265 Rue Berri 7th floor, Montreal, QC",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/events/285120485/",
+      "organisers": [],
+      "attendees": 40,
+      "talks": [
+        {
+          "speaker": "Jacob Frackson",
+          "company": "Senior Analytics Consultant, Montreal Analytics",
+          "title": "Hiring & Onboarding Best Practices",
+          "topics": [
+            "team & org design"
+          ]
+        },
+        {
+          "speaker": "Cyril Marques, Matthieu Di Mercurio, Jean-Nicholas Hould, Sarah Corboliou",
+          "company": "Montreal Analytics; Dialogue; Breathe Life; Unito",
+          "title": "Finding, training and upskilling Analytics Engineers panel",
+          "topics": [
+            "team & org design"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Montréal dbt Meetup (in-person)",
+      "date": "2022-09-08",
+      "venue": "Dialogue, 455 Rue Sainte-Hélène Suite 200, Montréal, QC",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/events/287570729/",
+      "organisers": [],
+      "attendees": 72,
+      "talks": [
+        {
+          "speaker": "Jeremie Pineau",
+          "company": "Senior Data Consultant, Montreal Analytics",
+          "title": "Building sustainable dbt project documentation",
+          "topics": [
+            "dbt fundamentals",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Maxime Lagresle, Kristi Gourlay",
+          "company": "Head of Data; Senior Data Scientist, Veronica Beard",
+          "title": "Building an Optimization Model to Recommend New Store Locations leveraging Modern Data Stack & Open-Source APIs",
+          "topics": [
+            "modern data stack",
+            "genai & llm"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Montréal dbt Meetup (in-person)",
+      "date": "2023-03-22",
+      "venue": "Dialogue, 455 Rue Sainte-Hélène Suite 200, Montréal, QC",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/events/291595000/",
+      "organisers": [],
+      "attendees": 63,
+      "talks": [
+        {
+          "speaker": "Stéphane Burwash",
+          "company": "Lead Data Ops Engineer, Potloc",
+          "title": "Turn your tests into action points with dbt & elementary",
+          "topics": [
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Will Sweet",
+          "company": "Head of Product Experience, Datafold",
+          "title": "Iterative testing with dbt & data-diff",
+          "topics": [
+            "data quality & testing",
+            "data engineering"
+          ]
+        },
+        {
+          "speaker": "Hassan Al-Rabea",
+          "company": "Lead Data Consultant, Montreal Analytics",
+          "title": "Enhancing Your Testing Strategy",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Montreal dbt Meetup",
+      "date": "2024-10-03",
+      "venue": "Solution BI Canada, 4200 Boul. Saint-Laurent Suite 425, Montréal, QC",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/events/303409442/",
+      "organisers": [],
+      "attendees": 76,
+      "talks": [
+        {
+          "speaker": "Audrey Leduc",
+          "company": "KOHO Financial",
+          "title": null,
+          "topics": [
+            "analytics engineering"
+          ]
+        },
+        {
+          "speaker": "Daniel Paes",
+          "company": "Solution BI",
+          "title": null,
+          "topics": [
+            "analytics engineering"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Montréal dbt Meetup - Chapter re-launch: 5 à 7 & Networking",
+      "date": "2026-08-06",
+      "venue": "Maxa, 1 Place Ville Marie, Montréal, QC",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/events/315694937/",
+      "organisers": [],
+      "attendees": 70,
+      "talks": []
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Montreal dbt Meetup (meetup.com)",
+      "url": "https://www.meetup.com/montreal-dbt-meetup/",
+      "note": "This chapter"
+    },
+    {
+      "name": "dbt Summit 2026 speakers",
+      "url": "https://www.getdbt.com/dbt-summit/speakers",
+      "note": "No Montreal-HQ employers. KOHO (Canada) speakers are the nearest match."
+    },
+    {
+      "name": "Snowflake Montreal User Group events",
+      "url": "https://usergroups.snowflake.com/montreal/",
+      "note": "Richest local source: agendas from Jun 2025, Jan 2026, Apr 2026 and Jun 2026."
+    },
+    {
+      "name": "PyLadies Montréal meetup",
+      "url": "https://www.meetup.com/pyladiesmtl/",
+      "note": "Two named speakers, topics unknown."
+    },
+    {
+      "name": "WiDS Montreal",
+      "url": "https://www.widsworldwide.org/events/event/wids-montreal/",
+      "note": "2024 edition. Ambassador only."
+    }
+  ]
+}

@@ -1,0 +1,4797 @@
+{
+  "metadata": {
+    "title": "Toronto dbt companies and people for the Toronto dbt Meetup",
+    "generated_at": "2026-09-24",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Toronto companies using dbt, and people who could speak at or attend the Toronto dbt Meetup.",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Toronto (Toronto dbt Meetup)",
+    "method": [
+      "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/toronto-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
+      "Lesson: For mid-sized chapters, the local Snowflake and Databricks user groups (Bevy pages at usergroups.snowflake.com / usergroups.databricks.com) give the best 2025-26 local speaker lists and organisers, and they fetch cleanly with web_fetch.",
+      "Lesson: Dormant or rebranded 'Modern Data Stack' meetups (TMDS here) hold the city's historic dbt speaker pool. Pull them with Meetup gql2 and re-verify current roles.",
+      "Lesson: Matching Toronto employer names against the dbt Summit speaker page's text quickly finds local conference speakers. Coalesce 2025's Cvent pages need a browser."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
+      "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
+      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+    ],
+    "counts": {
+      "companies": 84,
+      "people": 31,
+      "job_postings": 70,
+      "companies_with_job_postings": 52,
+      "speaker_evidence_items": 33,
+      "unique_content_items": 30,
+      "people_with_linkedin": 1,
+      "people_who_spoke_at_this_chapter": 4,
+      "internal_vinted": 0,
+      "level": {
+        "working": 19,
+        "leadership": 12
+      },
+      "speaker_potential": {
+        "medium": 22,
+        "high": 9
+      },
+      "attendee_potential": {
+        "medium": 25,
+        "high": 6
+      },
+      "priority_tier": {
+        "2": 11,
+        "1": 2,
+        "connector": 8,
+        "3": 10
+      },
+      "watchlist_companies": 17,
+      "past_meetups": 4,
+      "lead_type": {
+        "proven_speaker": 24,
+        "emerging_voice": 1,
+        "featured": 6
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 29,
+        "chapter_meetup_history": 4,
+        "newsletter_or_blog": 1,
+        "company_blog_scan": 1,
+        "women_in_data_community": 2
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 8,
+      "genai & llm": 7,
+      "data governance": 5,
+      "data warehouse & platforms": 5,
+      "data engineering": 4,
+      "analytics engineering": 4,
+      "data modeling": 3,
+      "team & org design": 3,
+      "data quality & testing": 3,
+      "tools & ecosystem": 3,
+      "dbt best practices": 2,
+      "business intelligence": 2,
+      "semantic layer": 2,
+      "career development": 2,
+      "domain-specific use cases": 1,
+      "dbt migration & adoption": 1,
+      "performance & scale": 1,
+      "dbt product updates": 1,
+      "project structure": 1,
+      "data mesh": 1,
+      "dbt fundamentals": 1,
+      "orchestration & ci/cd": 1,
+      "modern data stack": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "wealthsimple",
+      "name": "Wealthsimple",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQLMesh",
+        "Snowflake",
+        "DataHub",
+        "Preset",
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://careers.portageinvest.com/companies/wealthsimple/jobs/46911200-senior-software-developer-data-platform",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/toronto-dbt-meetup/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://engineering.wealthsimple.com/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "shuixi-li",
+          "name": "Shuixi Li",
+          "pronouns": null,
+          "title": "Senior Software Engineer",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, Spring 2025 (OneEleven)",
+              "title": "Accelerating Time to Insight: The Business Case for Snowflake Cortex and DataHub",
+              "date": "2025-05-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "content_id": "snowflake-toronto-user-gr-accelerating-time-to-insight-the-busines",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "User-group talk on using Snowflake Cortex together with the DataHub catalog at Wealthsimple.",
+              "topics": [
+                "data governance",
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": "DataHub and dbt metadata: how Wealthsimple makes dbt models discoverable to AI and to analysts",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "note": "talk: Accelerating Time to Insight: The Business Case for Snowflake Cortex and DataHub"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "DataHub and dbt metadata: how Wealthsimple makes dbt models discoverable to AI and to analysts",
+          "past_chapter_talks": [],
+          "notes": "Wealthsimple data platform. The platform team's job ads list Snowflake, DataHub, Preset, dbt and SQLMesh. Not a past Toronto dbt speaker (Wealthsimple's Nicole Kim and Jessie Lamontagne already spoke in Aug 2026)."
+        },
+        {
+          "id": "nicole-kim",
+          "name": "Nicole Kim",
+          "pronouns": null,
+          "title": "Wealthsimple",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto dbt Meetup, August Edition! (Toronto dbt Meetup)",
+              "title": "Powering Wealthsimple incentive pipeline with dbt",
+              "date": "2026-08-19",
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+              "content_id": "toronto-dbt-meetup-august-powering-wealthsimple-incentive-pipeline",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data engineering",
+                "analytics engineering",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+              "note": "talk: Powering Wealthsimple incentive pipeline with dbt"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-08-19",
+              "talk_title": "Powering Wealthsimple incentive pipeline with dbt",
+              "topics": [
+                "data engineering",
+                "analytics engineering",
+                "domain-specific use cases"
+              ]
+            }
+          ],
+          "notes": ""
+        },
+        {
+          "id": "jessie-lamontagne",
+          "name": "Jessie Lamontagne",
+          "pronouns": null,
+          "title": "Wealthsimple",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto dbt Meetup, August Edition! (Toronto dbt Meetup)",
+              "title": "Building a SCD2 reporting hierarchy with recursion",
+              "date": "2026-08-19",
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+              "content_id": "toronto-dbt-meetup-august-building-a-scd2-reporting-hierarchy-with",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+              "note": "talk: Building a SCD2 reporting hierarchy with recursion"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-08-19",
+              "talk_title": "Building a SCD2 reporting hierarchy with recursion",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Two chapter speakers in Aug 2026 (Nicole Kim, Jessie Lamontagne). Hosted TMDS in Sept 2023 at 80 Spadina. The engineering blog search found no named dbt posts."
+    },
+    {
+      "id": "koho-financial",
+      "name": "KOHO Financial",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "AWS Bedrock",
+        "Claude Code"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.getdbt.com/dbt-summit/speakers/celia-bru",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "celia-bru",
+          "name": "Célia Bru",
+          "pronouns": null,
+          "title": "Senior Director Data & Analytics",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://ca.linkedin.com/in/celia-bru-data"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Summit 2026 (Las Vegas)",
+              "title": "Before the agents: what self-serve analytics actually needs",
+              "date": "2026-09",
+              "url": "https://www.getdbt.com/dbt-summit/speakers/celia-bru",
+              "content_id": "dbt-summit-2026-las-vegas-before-the-agents-what-self-serve-analyt",
+              "co_authors": [
+                "Gabriel Gambacorta"
+              ],
+              "mentions_dbt": true,
+              "description": "Breakout session co-presented with Gabriel Gambacorta. It covers the data foundations and culture KOHO needed before rolling out AI-driven self-serve analytics.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "team & org design"
+              ],
+              "suggested_talk_angle": "Local encore of the dbt Summit talk: the dbt foundations KOHO built before putting AI agents in front of business users",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://ca.linkedin.com/in/celia-bru-data",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.getdbt.com/dbt-summit/speakers/celia-bru",
+              "note": "talk: Before the agents: what self-serve analytics actually needs"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Local encore of the dbt Summit talk: the dbt foundations KOHO built before putting AI agents in front of business users",
+          "past_chapter_talks": [],
+          "notes": "dbt Summit 2026 speaker. Leads a 20-person data org (analytics, analytics engineering, data science) at a Toronto-HQ challenger bank; bio says KOHO built 'one of the most mature dbt-based analytical platforms in Canadian fintech' and adopted Claude Code on AWS Bedrock. City inferred from KOHO HQ (Toronto); verify. Strongest local lead; could also unlock KOHO as a venue host."
+        },
+        {
+          "id": "gabriel-gambacorta",
+          "name": "Gabriel Gambacorta",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Summit 2026 (Las Vegas)",
+              "title": "Before the agents: what self-serve analytics actually needs",
+              "date": "2026-09",
+              "url": "https://www.getdbt.com/dbt-summit/speakers/celia-bru",
+              "content_id": "dbt-summit-2026-las-vegas-before-the-agents-what-self-serve-analyt",
+              "co_authors": [
+                "Célia Bru"
+              ],
+              "mentions_dbt": true,
+              "description": "Co-presenter of KOHO's breakout on building self-serve analytics foundations before AI agents.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": "Hands-on walkthrough of KOHO's dbt project and how self-serve analytics is built on it",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/dbt-summit/speakers/celia-bru",
+              "note": "talk: Before the agents: what self-serve analytics actually needs"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Hands-on walkthrough of KOHO's dbt project and how self-serve analytics is built on it",
+          "past_chapter_talks": [],
+          "notes": "Co-speaker with Célia Bru at dbt Summit 2026. Role not captured and Toronto location assumed from KOHO HQ; verify both."
+        }
+      ],
+      "notes": "Toronto-HQ challenger bank. dbt Summit 2026 speakers. Candidate speaker and venue."
+    },
+    {
+      "id": "secoda",
+      "name": "Secoda",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.secoda.co/blog/implementing-data-contracts-with-dbt",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.secoda.co/blog/harnessing-data-quality-and-automated-testing-in-dbt-projects",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.secoda.co/authors/lindsay-murphy",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "lindsay-murphy",
+          "name": "Lindsay Murphy",
+          "pronouns": null,
+          "title": "Head of Data",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "Secoda blog",
+              "title": "Implementing Data Contracts with dbt and across the MDS",
+              "date": null,
+              "url": "https://www.secoda.co/blog/implementing-data-contracts-with-dbt",
+              "content_id": "secoda-blog-implementing-data-contracts-with-dbt-and",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Article and webinar with Chad Sanderson on implementing data contracts with dbt.",
+              "topics": [
+                "data quality & testing",
+                "data governance",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": "Data contracts and cost containment for dbt teams",
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "organiser",
+              "event": "Toronto Modern Data Stack Meetup",
+              "title": "Co-organiser / speaker (Coalesce recap, Cost Containment talk)",
+              "date": "2023-11-16",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-co-organiser-speaker-coalesce-recap-cost",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Spoke at several TMDS meetups, including a Nov 2023 talk on data-team cost containment at Wave.",
+              "topics": [
+                "community",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.secoda.co/blog/implementing-data-contracts-with-dbt",
+              "note": "article: Implementing Data Contracts with dbt and across the MDS"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "Data contracts and cost containment for dbt teams",
+          "past_chapter_talks": [],
+          "notes": "Long-time Toronto dbt community figure: co-ran Toronto Modern Data Stack 2022-23 and taught dbt on Uplimit. Writes on the Secoda blog about dbt data contracts and testing. Dates of recent posts not verified. Works at a vendor, so pitch a practitioner angle. Also a connector."
+        }
+      ],
+      "notes": "Toronto-based data catalog vendor. Co-sponsored TMDS in 2023."
+    },
+    {
+      "id": "shopify",
+      "name": "Shopify",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "BigQuery/GCS"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://shopify.engineering/build-production-grade-workflow-sql-modelling",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.dataengineeringpodcast.com/shopify-data-warehouse-with-dbt-episode-171/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://shopify.engineering/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "daniel-cole",
+          "name": "Daniel Cole",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Modern Data Stack, October 2022 (Snowflake office)",
+              "title": "Two years later: lessons and reflections from running dbt at Shopify",
+              "date": "2022-10-27",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-two-years-later-lessons-and-reflections",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Retrospective on running dbt at Shopify.",
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": "dbt at Shopify in 2026",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "note": "talk: Two years later: lessons and reflections from running dbt at Shopify"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "dbt at Shopify in 2026",
+          "past_chapter_talks": [],
+          "notes": "Historic lead from 2022. Co-presented 'lessons from running dbt at Shopify' with Michelle Ark. Verify whether still at Shopify."
+        }
+      ],
+      "notes": "dbt content on the blog is 2020-era. No 2024-2026 dbt posts found; the 2025-26 posts are ML/search."
+    },
+    {
+      "id": "toronto-modern-data-stack",
+      "name": "Toronto Modern Data Stack (now 'Toronto Enterprise AI')",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Dagster"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/toronto-modern-data/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "Was Toronto's de facto dbt community in 2022-2024 (hosts: Snowflake, Wealthsimple, Wave, Super, Financeit, OneEleven). The group was rebranded to AICamp-style AI events in 2025. Its past-speaker list is a good pool to re-engage."
+    },
+    {
+      "id": "answerlayer",
+      "name": "AnswerLayer",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "OSI",
+        "semantic layer"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/toronto-dbt-meetup/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "josh-harris",
+          "name": "Josh Harris",
+          "pronouns": null,
+          "title": "Founder, AnswerLayer",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Meetup, Toronto Tech Week 2026 Edition! (Toronto dbt Meetup)",
+              "title": "Open Semantic Interchange (OSI v1.0) and What It Means for dbt Users",
+              "date": "2026-05-29",
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
+              "content_id": "dbt-meetup-toronto-tech-w-open-semantic-interchange-osi-v1-0-and-w",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "semantic layer",
+                "dbt product updates"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
+              "note": "talk: Open Semantic Interchange (OSI v1.0) and What It Means for dbt Users"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-05-29",
+              "talk_title": "Open Semantic Interchange (OSI v1.0) and What It Means for dbt Users",
+              "topics": [
+                "semantic layer",
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Founder Josh Harris is a past chapter speaker (May 2026)."
+    },
+    {
+      "id": "artemis",
+      "name": "Artemis",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "josh-gray",
+          "name": "Josh Gray",
+          "pronouns": null,
+          "title": "CEO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Modern Data Stack, December 2024 (Centre for Social Innovation)",
+              "title": "Building an AI analytics engineer, data observability, incident management",
+              "date": "2024-12-06",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-building-an-ai-analytics-engineer-data-o",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Vendor talk at the TMDS holiday meetup.",
+              "topics": [
+                "genai & llm",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "note": "talk: Building an AI analytics engineer, data observability, incident management"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vendor pitch about an 'AI analytics engineer'. Artemis sponsored the TMDS 2024 holiday party. Tier 3 because this is a vendor talk."
+        }
+      ],
+      "notes": "Vendor of an 'AI analytics engineer'. Sponsored TMDS Dec 2024."
+    },
+    {
+      "id": "financeit",
+      "name": "Financeit",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-financeit-4450246983",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Financeit",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build and maintain dbt models across staging, mart, and metrics layers",
+          "job_poster": null,
+          "posted_date": "2026-08-06",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "darek-deszczynski",
+          "name": "Darek Deszczynski",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Modern Data Stack, June 2023 (Financeit)",
+              "title": "Back to the future: fragile nature of recursion in the modern data stack",
+              "date": "2023-06-15",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-back-to-the-future-fragile-nature-of-rec",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Talk on recursive SQL in the modern data stack.",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "note": "talk: Back to the future: fragile nature of recursion in the modern data stack"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Historic lead from 2023. Financeit hosted TMDS. Verify."
+        }
+      ],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "propel-holdings",
+      "name": "Propel Holdings",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/sr-data-engineer-at-propel-holdings-4459612878",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Propel Holdings",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with dbt, Airflow, Dagster",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chris-kimberley",
+          "name": "Chris Kimberley",
+          "pronouns": null,
+          "title": "Director, Database Engineering",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, September 2025 (OneEleven)",
+              "title": "Snowflake Openflow and general database replication",
+              "date": "2025-09-23",
+              "url": "https://www.meetup.com/meetup-group-tgobncev/",
+              "content_id": "snowflake-toronto-user-gr-snowflake-openflow-and-general-database",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on Openflow and database replication into Snowflake.",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/meetup-group-tgobncev/",
+              "note": "talk: Snowflake Openflow and general database replication"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Talk on ingestion and replication. Peripheral to dbt."
+        }
+      ],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "tekrek",
+      "name": "TekRek",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Databricks",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.databricks.com/toronto-databricks-user-group/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "daniel-thomassin",
+          "name": "Daniel Thomassin",
+          "pronouns": null,
+          "title": "Co-Founder",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Toronto Databricks User Group",
+              "title": "Partner Panel",
+              "date": "2026-07-23",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "content_id": "toronto-databricks-user-g-partner-panel",
+              "co_authors": [
+                "Muneeb Master"
+              ],
+              "mentions_dbt": null,
+              "description": "Partner panel panelist.",
+              "topics": [
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "note": "panel: Partner Panel"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Co-founder of a partner consultancy. TekRek is a local sponsor and partner of the Databricks Toronto UG alongside dbt Labs. Possible co-sponsor; any talk would be a partner pitch."
+        }
+      ],
+      "notes": "Local sponsor and partner of the Databricks Toronto UG alongside dbt Labs, Sigma and Hightouch. Possible co-sponsor."
+    },
+    {
+      "id": "wave-financial",
+      "name": "Wave Financial",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "diana-borovik",
+          "name": "Diana Borovik",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Modern Data Stack, November 2023 (Wave Financial)",
+              "title": "Wave Stack: Data Transformation Layer",
+              "date": "2023-11-16",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-wave-stack-data-transformation-layer",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Talk on Wave's data transformation layer at its own office.",
+              "topics": [
+                "analytics engineering",
+                "project structure"
+              ],
+              "suggested_talk_angle": "Where Wave's transformation layer is today",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "note": "talk: Wave Stack: Data Transformation Layer"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Where Wave's transformation layer is today",
+          "past_chapter_talks": [],
+          "notes": "Historic lead from 2023, outside the 2024-2026 window. Spoke on Wave's transformation layer. Verify current role and any recent content."
+        }
+      ],
+      "notes": "Hosted TMDS in Nov 2023 with a transformation-layer talk."
+    },
+    {
+      "id": "agoda",
+      "name": "Agoda",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior / Staff Data Engineer (BI) – CEG Team",
+          "url": "https://www.linkedin.com/jobs/view/senior-staff-data-engineer-bi-%E2%80%93-ceg-team-at-agoda-4455277074",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Agoda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration frameworks (e.g., Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "akkodis",
+      "name": "Akkodis",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-at-akkodis-4469445790",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Akkodis",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "solutions in Snowflake/Matillion/dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "autodesk",
+      "name": "Autodesk",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data Engineer, User Success",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-engineer-user-success-at-autodesk-4469681604",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "semantic layer tools (dbt, metrics stores)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Engineer, User Success",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-engineer-user-success-at-autodesk-4469691227",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "semantic layer tools (dbt, metrics stores)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-analyst-at-autodesk-4469687436",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT tools (Airflow, dbt, Snowflake)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-analyst-at-autodesk-4469671961",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT tools (Airflow, dbt, Snowflake)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Engineer, User Success (Agentic Experiences)",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-engineer-user-success-agentic-experiences-at-autodesk-4469685517",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "semantic layer tools (dbt, metrics stores)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Principal Data Engineer, User Success (Agentic Experiences)",
+          "url": "https://www.linkedin.com/jobs/view/principal-data-engineer-user-success-agentic-experiences-at-autodesk-4469672899",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Autodesk",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "semantic layer tools (dbt, metrics stores)",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "aviva-canada",
+      "name": "Aviva Canada",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - AWS, Snowflake, DBT",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-aws-snowflake-dbt-at-aviva-canada-4464820076",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Aviva Canada",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "using Python and DBT",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "bayview-asset-management-llc",
+      "name": "Bayview Asset Management, LLC",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-bayview-asset-management-llc-4411575661",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Bayview Asset Management, LLC",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Dagster, dbt, or similar platforms",
+          "job_poster": null,
+          "posted_date": "2026-05-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Data Engineer, Mortgage Servicing",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-mortgage-servicing-at-bayview-asset-management-llc-4411570757",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Bayview Asset Management, LLC",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Dagster, dbt, or similar platforms",
+          "job_poster": null,
+          "posted_date": "2026-05-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-engineer-at-bayview-asset-management-llc-4411564834",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Bayview Asset Management, LLC",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Dagster, dbt, or similar platforms",
+          "job_poster": null,
+          "posted_date": "2026-05-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "big-viking-games",
+      "name": "Big Viking Games",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Head of Data Science & Analytics",
+          "url": "https://www.linkedin.com/jobs/view/head-of-data-science-analytics-at-big-viking-games-4431777030",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Big Viking Games",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with dbt, data modeling, data governance",
+          "job_poster": null,
+          "posted_date": "2026-06-22",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "cgi",
+      "name": "CGI",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Platform Engineering Specialist",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-platform-engineering-specialist-at-cgi-4453041564",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CGI",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "using Apache Airflow or dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ci-financial",
+      "name": "CI Financial",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-ci-financial-4462033606",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CI Financial",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "solid experience with dbt, including model design and testing",
+          "job_poster": null,
+          "posted_date": "2026-09-01",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Manager, Data Operations",
+          "url": "https://www.linkedin.com/jobs/view/manager-data-operations-at-ci-financial-4462897871",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CI Financial",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, DBT, Openflow, AWS Services, Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "clio",
+      "name": "Clio",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Modeller (12 Month Contract)",
+          "url": "https://www.linkedin.com/jobs/view/data-modeller-12-month-contract-at-clio-4466150565",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Clio",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "reusable data models using dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "clutch",
+      "name": "Clutch",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-analyst-at-clutch-4467787761",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Clutch",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "pipelines using tools like dbt, Airflow, and Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "coforge",
+      "name": "Coforge",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/sr-data-engineer-at-coforge-4460054747",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Coforge",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Skills: Snowflake, DBT, Python/Java, SQL",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "commonsku",
+      "name": "commonsku",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/staff-data-engineer-at-commonsku-4471165842",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "commonsku",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Fivetran, transformed with dbt, and visualized inside Metabase",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "costar-group",
+      "name": "CoStar Group",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Zonda - Toronto, ON",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-zonda-toronto-on-at-costar-group-4469207177",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CoStar Group",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL, Python, dbt, Airflow, Glue, PostgreSQL, and Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Platform Engineer - Zonda - Toronto, ON",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-platform-engineer-zonda-toronto-on-at-costar-group-4469195543",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "CoStar Group",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Apache Airflow, dbt, AWS Glue",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "direct-it-recruiting-inc",
+      "name": "Direct IT Recruiting Inc.",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Azure Data Migration Engineer (1882)",
+          "url": "https://www.linkedin.com/jobs/view/azure-data-migration-engineer-1882-at-direct-it-recruiting-inc-4460047315",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Direct IT Recruiting Inc.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with DBT and SSIS is a nice-to-have",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        },
+        {
+          "title": "Full Stack Engineer (1685)",
+          "url": "https://www.linkedin.com/jobs/view/full-stack-engineer-1685-%24100-hr-at-direct-it-recruiting-inc-4461955115",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Direct IT Recruiting Inc.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Astronomer, DBT, OneTick",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "docebo",
+      "name": "Docebo",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer I",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-i-at-docebo-4466544261",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Docebo",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformations using tools like dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ebay",
+      "name": "eBay",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer Manager - Depop",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-manager-depop-at-ebay-4454692727",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "eBay",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Flink, Spark, Databricks, Airflow, dbt, and AWS",
+          "job_poster": null,
+          "posted_date": "2026-09-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ecobee",
+      "name": "ecobee",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/staff-analytics-engineer-at-ecobee-4384702079",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "ecobee",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "layers of the lakehouse using dbt; dbt best practices across project structure",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "enterprise-solutions-inc",
+      "name": "Enterprise Solutions Inc.",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Snowflake & DBT Cloud",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-snowflake-dbt-cloud-at-enterprise-solutions-inc-4467135376",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Enterprise Solutions Inc.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, dbt Core, Cloud, and AWS",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "facilityos",
+      "name": "FacilityOS",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-facilityos-4439898304",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "FacilityOS",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern data stack tools (e.g., dbt, Airflow, Snowflake, BigQuery)",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "felix",
+      "name": "Felix",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Data Analyst",
+          "url": "https://www.linkedin.com/jobs/view/sr-data-analyst-at-felix-4448703271",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Felix",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "development and maintenance of dbt data models",
+          "job_poster": null,
+          "posted_date": "2026-08-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "generac",
+      "name": "Generac",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Staff Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/staff-analytics-engineer-at-generac-4385445138",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Generac",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "layers of the lakehouse using dbt; dbt best practices",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "hellofresh",
+      "name": "HelloFresh",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior BI Analyst, Reporting & BI",
+          "url": "https://www.linkedin.com/jobs/view/senior-bi-analyst-reporting-bi-m-f-x-at-hellofresh-4470638768",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "HelloFresh",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT pipelines using dbt, Databricks, Spark SQL, and Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-22",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Senior Product Analyst, Consumer Analytics",
+          "url": "https://www.linkedin.com/jobs/view/senior-product-analyst-consumer-analytics-f-m-x-at-hellofresh-4445207332",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "HelloFresh",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with dbt, Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-06",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "homebase",
+      "name": "Homebase",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Director, Data & AI (Hybrid)",
+          "url": "https://www.linkedin.com/jobs/view/director-data-ai-hybrid-at-homebase-4452616111",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Homebase",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Databricks, Unity Catalog, Airflow, dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "kake",
+      "name": "Kake",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (Analyst/Scientist) - Remote",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-analyst-scientist-remote-at-kake-4449853194",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Kake",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration tools such as Airflow, dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "lakeview-loan-servicing-llc",
+      "name": "Lakeview Loan Servicing, LLC.",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-lakeview-loan-servicing-llc-4412402859",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Lakeview Loan Servicing, LLC.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Dagster, dbt, or similar platforms",
+          "job_poster": null,
+          "posted_date": "2026-05-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-engineer-at-lakeview-loan-servicing-llc-4412415585",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Lakeview Loan Servicing, LLC.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Dagster, dbt, or similar platforms",
+          "job_poster": null,
+          "posted_date": "2026-05-13",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Data Engineer, Mortgage Servicing",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-mortgage-servicing-at-lakeview-loan-servicing-llc-4412405861",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Lakeview Loan Servicing, LLC.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Dagster, dbt, or similar platforms",
+          "job_poster": null,
+          "posted_date": "2026-05-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "loblaw-digital",
+      "name": "Loblaw Digital",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Manager, BI and Analytics Engineering",
+          "url": "https://www.linkedin.com/jobs/view/senior-manager-bi-and-analytics-engineering-at-loblaw-digital-4467937447",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Loblaw Digital",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "BigQuery, Snowflake, dbt or similar",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "lyft",
+      "name": "Lyft",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Software Engineer, Data - Mapping",
+          "url": "https://www.linkedin.com/jobs/view/senior-software-engineer-data-mapping-at-lyft-4459004405",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Lyft",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools like dbt, Great Expectations, or Monte Carlo",
+          "job_poster": null,
+          "posted_date": "2026-09-16",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "maintainx",
+      "name": "MaintainX",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Developer",
+          "url": "https://www.linkedin.com/jobs/view/senior-analytics-developer-at-maintainx-4462339171",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "MaintainX",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestrating pipelines using dbt and data lakehouse technologies",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "mckesson",
+      "name": "McKesson",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead, Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-engineer-at-mckesson-4408586883",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "McKesson",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Apache Airflow, dbt, Alation",
+          "job_poster": null,
+          "posted_date": "2026-09-06",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "millennium-software-and-staffing-inc",
+      "name": "Millennium Software and Staffing Inc",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Modeler",
+          "url": "https://www.linkedin.com/jobs/view/data-modeler-at-millennium-software-and-staffing-inc-4467543803",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Millennium Software and Staffing Inc",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience in Snowflake and dbt (Must Have)",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Modeler",
+          "url": "https://www.linkedin.com/jobs/view/data-modeler-at-millennium-software-and-staffing-inc-4463559503",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Millennium Software and Staffing Inc",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Strong Snowflake + DBT (Must have)",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-millennium-software-and-staffing-inc-4463880277",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Millennium Software and Staffing Inc",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "experience in Snowflake, DBT, Python",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "movable-ink",
+      "name": "Movable Ink",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-movable-ink-4466129095",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Movable Ink",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern ELT Tools (e.g. dbt, Airbyte, Flink)",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Analytics Engineer Toronto (Remote)",
+          "url": "https://www.linkedin.com/jobs/view/analytics-engineer-toronto-remote-at-movable-ink-4467897912",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Movable Ink",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "you'll work in dbt to build from our established silver layer",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "pacific-smoke-international-inc",
+      "name": "Pacific Smoke International Inc.",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-pacific-smoke-international-inc-4418996181",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Pacific Smoke International Inc.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern orchestration tools (e.g., dbt)",
+          "job_poster": null,
+          "posted_date": "2026-05-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        },
+        {
+          "title": "Data and Analytics Lead",
+          "url": "https://www.linkedin.com/jobs/view/data-and-analytics-lead-at-pacific-smoke-international-inc-4418489332",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Pacific Smoke International Inc.",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT/ETL tools (e.g., dbt, Fivetran)",
+          "job_poster": null,
+          "posted_date": "2026-04-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "passage",
+      "name": "Passage",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-analytics-engineer-at-passage-4448486767",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Passage",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Model the business in dbt on BigQuery. Own a ~100-model project",
+          "job_poster": null,
+          "posted_date": "2026-08-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "princeton-it-services-inc",
+      "name": "Princeton IT Services, Inc",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-princeton-it-services-inc-4441234547",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Princeton IT Services, Inc",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools such as dbt, Fivetran, Matillion, Airbyte",
+          "job_poster": null,
+          "posted_date": "2026-07-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "propel",
+      "name": "Propel",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - Snowflake - Full Time",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-snowflake-full-time-at-propel-4470952702",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Propel",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation logic using dbt or similar frameworks",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ravl",
+      "name": "RAVL",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-ravl-4428105187",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "RAVL",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools like Spark, Airflow, dbt, or similar",
+          "job_poster": null,
+          "posted_date": "2026-06-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "rbc",
+      "name": "RBC",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer, GFT",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-engineer-gft-at-rbc-4454031945",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "RBC",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Data Build Tool (DBT), Databricks, Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "relay",
+      "name": "Relay",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-relay-4371718099",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Relay",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build and maintain robust dbt models in Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "scotiabank",
+      "name": "Scotiabank",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Director, BI & Reporting, Global Marketing Analytics",
+          "url": "https://www.linkedin.com/jobs/view/director-bi-reporting-global-marketing-analytics-at-scotiabank-4465161094",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Scotiabank",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "reporting workflows (e.g., Airflow/dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "sienna-senior-living",
+      "name": "Sienna Senior Living",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Vice President, Data, Analytics & AI",
+          "url": "https://www.linkedin.com/jobs/view/vice-president-data-analytics-ai-at-sienna-senior-living-4467599804",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Sienna Senior Living",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "experience using SQL, python, and DBT",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "slalom",
+      "name": "Slalom",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Program Delivery Lead - Data Solution Owner (Canada)",
+          "url": "https://www.linkedin.com/jobs/view/data-program-delivery-lead-data-solution-owner-canada-at-slalom-4457619769",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Slalom",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, dbt, Databricks, DataOps, and data mesh",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "spaulding-ridge",
+      "name": "Spaulding Ridge",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Solutions Architect",
+          "url": "https://www.linkedin.com/jobs/view/data-solutions-architect-at-spaulding-ridge-4456257932",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Spaulding Ridge",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, dbt, Fivetran, Boomi",
+          "job_poster": null,
+          "posted_date": "2026-09-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "spectrum-health-care",
+      "name": "Spectrum Health Care (SHC)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-at-spectrum-health-care-shc-4458779824",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Spectrum Health Care (SHC)",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Informatica, MuleSoft, dbt, Python",
+          "job_poster": null,
+          "posted_date": "2026-08-25",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "tactable",
+      "name": "Tactable",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-at-tactable-4465554856",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Tactable",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration tools (e.g., Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "thomson-reuters",
+      "name": "Thomson Reuters",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-engineer-at-thomson-reuters-4418506246",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Thomson Reuters",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "tools such as DBT, Snowflake, Claude.AI, SQL, Power BI",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "thumbtack",
+      "name": "Thumbtack",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Manager, Data Engineering",
+          "url": "https://www.linkedin.com/jobs/view/manager-data-engineering-at-thumbtack-4470634407",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Thumbtack",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "BigQuery, dbt, Airflow, and MetricFlow",
+          "job_poster": null,
+          "posted_date": "2026-09-22",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "toptal",
+      "name": "Toptal",
+      "type": "other",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/data-analytics-engineer-at-toptal-4470967474",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Toptal",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern transformation framework (dbt, Dataform, SQLMesh)",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://www.linkedin.com/jobs/view/senior-analytics-engineer-at-toptal-4463646051",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Toptal",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data transformation pipelines with dbt and Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "RECRUITER. Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "toronto-databricks-user-group",
+      "name": "Toronto Databricks User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.databricks.com/toronto-databricks-user-group/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "328 members, 200+ RSVPs per event. dbt Labs is already a local sponsor. Next event 2026-10-23."
+    },
+    {
+      "id": "venterra-realty",
+      "name": "Venterra Realty",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Developer, Data Engineering",
+          "url": "https://www.linkedin.com/jobs/view/senior-developer-data-engineering-at-venterra-realty-4466565090",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Venterra Realty",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "AWS, Python, Airflow, DBT and Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "zoominfo",
+      "name": "ZoomInfo",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer III",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-iii-at-zoominfo-4469332425",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "ZoomInfo",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Modeling: dbt for transformation and semantic layer",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "zynga",
+      "name": "Zynga",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Director, Data Platform",
+          "url": "https://www.linkedin.com/jobs/view/senior-director-data-platform-at-zynga-4461510975",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Zynga",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration and transformation (Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-22",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toronto-area LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "archetype-consulting-inc",
+      "name": "Archetype Consulting Inc.",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "augusto-rosa",
+          "name": "Augusto Rosa",
+          "pronouns": null,
+          "title": "Head of Data, Cloud & Security Architecture; Snowflake Data Superhero",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Toronto User Group",
+              "title": "Organiser / host",
+              "date": "2026",
+              "url": "https://usergroups.snowflake.com/toronto/",
+              "content_id": "snowflake-toronto-user-gr-organiser-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed organiser and host of the chapter's 2025-2026 events.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, Spring 2025",
+              "title": "New features on Snowflake that you probably missed",
+              "date": "2025-05-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "content_id": "snowflake-toronto-user-gr-new-features-on-snowflake-that-you-proba",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Round-up of Snowflake features.",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/toronto/",
+              "note": "organiser: Organiser / host"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Organiser and host of the Snowflake Toronto User Group (1,697 members, meets at OneEleven and Snowflake's office at 16 York St). Strong candidate for a Snowflake x dbt co-hosted night. Works at a consultancy."
+        }
+      ],
+      "notes": "Augusto Rosa (Snowflake Data Superhero), organiser of the Snowflake Toronto UG."
+    },
+    {
+      "id": "snowflake-toronto-user-group",
+      "name": "Snowflake Toronto User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://usergroups.snowflake.com/toronto/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "1,697 members. Meets roughly every 1-2 months at OneEleven or Snowflake's office (16 York St, 32nd floor). Best co-host candidate."
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "francis-b-silva",
+          "name": "Francis B. Silva",
+          "pronouns": null,
+          "title": "Data leader; Board Member, Masters of Management Analytics & AI, Queen's University",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, November 2025 (OneEleven)",
+              "title": "Data Products",
+              "date": "2025-11-18",
+              "url": "https://www.meetup.com/meetup-group-tgobncev/",
+              "content_id": "snowflake-toronto-user-gr-data-products",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "User-group talk on data products.",
+              "topics": [
+                "data mesh",
+                "data governance"
+              ],
+              "suggested_talk_angle": "Data products and contracts with dbt",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/meetup-group-tgobncev/",
+              "note": "talk: Data Products"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Data products and contracts with dbt",
+          "past_chapter_talks": [],
+          "notes": "Talked about data products. Current employer not captured."
+        },
+        {
+          "id": "eddy-zulkifly",
+          "name": "Eddy Zulkifly",
+          "pronouns": null,
+          "title": "Toronto dbt Meetup organiser",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Toronto dbt Meetup #1 (New Stadium)",
+              "title": "Organizer; talk 'dbt's Collective Magic'",
+              "date": "2025-11-25",
+              "url": "https://www.meetup.com/toronto-dbt-meetup/",
+              "content_id": "toronto-dbt-meetup-1-new--organizer-talk-dbt-s-collective-magic",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Named organiser of the November 2025 chapter meetup.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/",
+              "note": "organiser: Organizer; talk 'dbt's Collective Magic'"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Chapter organiser. Also spoke at the chapter ('dbt's Collective Magic', Nov 2025). Skip as a speaker lead; contact to coordinate."
+        },
+        {
+          "id": "teghan-nightengale",
+          "name": "Teghan Nightengale",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Modern Data Stack, July 2023 (AWS)",
+              "title": "Is Activity Schema the future of data modelling?",
+              "date": "2023-07-13",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-is-activity-schema-the-future-of-data-mo",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Talk on the Activity Schema modelling approach.",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": "Activity Schema vs dimensional models in dbt, three years on",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "note": "talk: Is Activity Schema the future of data modelling?"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Activity Schema vs dimensional models in dbt, three years on",
+          "past_chapter_talks": [],
+          "notes": "Historic lead from 2023 on a data-modelling talk. Verify current employer and recent content."
+        },
+        {
+          "id": "john-miner",
+          "name": "John Miner",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Data Professionals Community (virtual)",
+              "title": "Introduction to the data build tool (dbt)",
+              "date": "2026-02-18",
+              "url": "https://torontodpc.ca/",
+              "content_id": "toronto-data-professional-introduction-to-the-data-build-tool-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Online introductory dbt session, seen in a search snippet.",
+              "topics": [
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://torontodpc.ca/",
+              "note": "talk: Introduction to the data build tool (dbt)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Virtual intro-to-dbt session for the Toronto Data Professionals Community. Location unverified, likely not local."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "dataiku",
+      "name": "Dataiku",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jacqueline-kuo",
+          "name": "Jacqueline Kuo",
+          "pronouns": null,
+          "title": "Solutions Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Toronto @ Dataiku",
+              "title": "Event Ambassador",
+              "date": "2024-10-22",
+              "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
+              "content_id": "wids-toronto-dataiku-event-ambassador",
+              "co_authors": [
+                "Amanda Milberg"
+              ],
+              "mentions_dbt": false,
+              "description": "Ambassador for a WiDS career panel held before Dataiku's Everyday AI Summit Toronto.",
+              "topics": [
+                "community",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
+              "note": "organiser: Event Ambassador"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. WiDS Toronto @ Dataiku event ambassador (Oct 2024). Location not confirmed. Vendor."
+        },
+        {
+          "id": "amanda-milberg",
+          "name": "Amanda Milberg",
+          "pronouns": null,
+          "title": "Data Scientist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Toronto @ Dataiku",
+              "title": "Event Ambassador",
+              "date": "2024-10-22",
+              "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
+              "content_id": "wids-toronto-dataiku-event-ambassador",
+              "co_authors": [
+                "Jacqueline Kuo"
+              ],
+              "mentions_dbt": false,
+              "description": "Ambassador for a WiDS career panel in Toronto.",
+              "topics": [
+                "community",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
+              "note": "organiser: Event Ambassador"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. WiDS Toronto @ Dataiku event ambassador (Oct 2024). Location not confirmed. Vendor."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "cbc",
+      "name": "CBC",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nataliya-portman",
+          "name": "Nataliya Portman",
+          "pronouns": null,
+          "title": "Senior Data Scientist",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Databricks User Group",
+              "title": "Keynote: CBC",
+              "date": "2026-07-23",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "content_id": "toronto-databricks-user-g-keynote-cbc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "CBC customer keynote on its Lakehouse.",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "note": "talk: Keynote: CBC"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "CBC keynote at the Databricks UG. The talk is data-science oriented. CBC's Glenn Gould Studio is a large venue."
+        }
+      ],
+      "notes": "Hosts the Databricks UG at Glenn Gould Studio, 250 Front St W, a large venue."
+    },
+    {
+      "id": "cineplex",
+      "name": "Cineplex",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "aditya-singh",
+          "name": "Aditya Singh",
+          "pronouns": null,
+          "title": "Data & AI Platform Leader",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Toronto Databricks User Group (Glenn Gould Studio, CBC)",
+              "title": "Cineplex presentation (Lakehouse readiness)",
+              "date": "2026-07-23",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "content_id": "toronto-databricks-user-g-cineplex-presentation-lakehouse-readines",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Customer talk on getting Cineplex's Lakehouse ready for new Databricks features.",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": "Joint dbt + Databricks night: Cineplex platform story",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "note": "talk: Cineplex presentation (Lakehouse readiness)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Joint dbt + Databricks night: Cineplex platform story",
+          "past_chapter_talks": [],
+          "notes": "Platform leader at a Toronto-HQ company that runs Databricks. dbt use not confirmed."
+        }
+      ],
+      "notes": "Databricks UG speaker, Jul 2026."
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kevin-poulton",
+          "name": "Kevin Poulton",
+          "pronouns": null,
+          "title": "Manager, Field Engineering",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Toronto Databricks User Group",
+              "title": "Organiser",
+              "date": "2026",
+              "url": "https://usergroups.databricks.com/toronto-databricks-user-group/",
+              "content_id": "toronto-databricks-user-g-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed organiser.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/toronto-databricks-user-group/",
+              "note": "organiser: Organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Lead of the organiser team for the Toronto Databricks User Group (328 members; next event 2026-10-23 at CBC Glenn Gould Studio)."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": true,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "muneeb-master",
+          "name": "Muneeb Master",
+          "pronouns": null,
+          "title": "Solutions Architect",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Toronto Databricks User Group",
+              "title": "Partner Panel",
+              "date": "2026-07-23",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "content_id": "toronto-databricks-user-g-partner-panel",
+              "co_authors": [
+                "Daniel Thomassin"
+              ],
+              "mentions_dbt": true,
+              "description": "Partner panel with TekRek and Hightouch.",
+              "topics": [
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/",
+              "note": "panel: Partner Panel"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "dbt Labs employee on a Toronto partner panel. Internal connector, not a community speaker lead. dbt Labs is also a local sponsor of the Databricks Toronto UG."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "kwwhat",
+      "name": "kWwhat",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daria-sukhareva",
+          "name": "Daria Sukhareva",
+          "pronouns": null,
+          "title": "Creator, kWwhat",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Meetup, Toronto Tech Week 2026 Edition! (Toronto dbt Meetup)",
+              "title": "Grounding ChatBI with Dimensional Models, Semantic Models, and Rules",
+              "date": "2026-05-29",
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
+              "content_id": "dbt-meetup-toronto-tech-w-grounding-chatbi-with-dimensional-models",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "genai & llm",
+                "semantic layer"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
+              "note": "talk: Grounding ChatBI with Dimensional Models, Semantic Models, and Rules"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-05-29",
+              "talk_title": "Grounding ChatBI with Dimensional Models, Semantic Models, and Rules",
+              "topics": [
+                "genai & llm",
+                "semantic layer"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "mejuri",
+      "name": "Mejuri",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Dagster"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gabriela-henriques",
+          "name": "Gabriela Henriques",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Toronto Modern Data Stack, October 2024 (Dagster x Georgian)",
+              "title": "Panel discussion",
+              "date": "2024-10-21",
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "content_id": "toronto-modern-data-stack-panel-discussion",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Panel with Christian Minich (Dagster) and Nahim Nasser (Georgian) at a Dagster-sponsored meetup.",
+              "topics": [
+                "orchestration & ci/cd",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": "dbt + Dagster in a DTC retail data stack",
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/toronto-modern-data/",
+              "note": "panel: Panel discussion"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt + Dagster in a DTC retail data stack",
+          "past_chapter_talks": [],
+          "notes": "Practitioner on an orchestration panel alongside Dagster and Georgian. Role not captured; verify whether still at Mejuri."
+        }
+      ],
+      "notes": "Practitioner on the Oct 2024 Dagster panel."
+    },
+    {
+      "id": "mhs-analytics-inc",
+      "name": "MHS Analytics Inc.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michael-olafusi",
+          "name": "Michael Olafusi",
+          "pronouns": null,
+          "title": "Founder; Power BI Developer & Data Engineer; Microsoft MVP",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Engineers in Toronto (Meetup)",
+              "title": "Organiser; talks on LangChain agents and local LLMs",
+              "date": "2025-06-09",
+              "url": "https://www.meetup.com/data-engineers-in-toronto/",
+              "content_id": "data-engineers-in-toronto-organiser-talks-on-langchain-agents-and",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Organises and regularly presents at the group's online sessions.",
+              "topics": [
+                "community",
+                "genai & llm",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-engineers-in-toronto/",
+              "note": "organiser: Organiser; talks on LangChain agents and local LLMs"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector. Organiser of 'Data Engineers in Toronto' (online, twice monthly, mostly Microsoft Fabric/SQL Server). Could cross-promote the chapter; off-stack for dbt."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "moneris",
+      "name": "Moneris",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andrew-hall",
+          "name": "Andrew Hall",
+          "pronouns": null,
+          "title": "VP Data Science and Data Management",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, Spring 2025",
+              "title": "Positioning Data for the GenAI Future: Strategy, Structure, and Snowflake",
+              "date": "2025-05-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "content_id": "snowflake-toronto-user-gr-positioning-data-for-the-genai-future-st",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on data strategy and structure to prepare for GenAI.",
+              "topics": [
+                "genai & llm",
+                "data governance",
+                "team & org design"
+              ],
+              "suggested_talk_angle": "Leadership panel: making enterprise data AI-ready",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "note": "talk: Positioning Data for the GenAI Future: Strategy, Structure, and Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Leadership panel: making enterprise data AI-ready",
+          "past_chapter_talks": [],
+          "notes": "Senior data leader at a Toronto payments company. Talk on data strategy for GenAI."
+        }
+      ],
+      "notes": "VP Data spoke at the Snowflake UG in 2025."
+    },
+    {
+      "id": "polar-labs",
+      "name": "Polar Labs",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ryan-ovas",
+          "name": "Ryan Ovas",
+          "pronouns": null,
+          "title": "Founder and Tech Lead; Lead Organizer, Snowflake Toronto User Group",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Toronto User Group",
+              "title": "Lead Organizer",
+              "date": "2026-04-21",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-april-2026-event/",
+              "content_id": "snowflake-toronto-user-gr-lead-organizer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as host of the April 2026 event.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-april-2026-event/",
+              "note": "organiser: Lead Organizer"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Connector and co-host candidate. Lead organiser of the Snowflake Toronto User Group."
+        }
+      ],
+      "notes": "Ryan Ovas (Snowflake UG lead organiser)."
+    },
+    {
+      "id": "supercom",
+      "name": "Super.com",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chris-boden",
+          "name": "Chris Boden",
+          "pronouns": null,
+          "title": null,
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, April 2026 (OneEleven)",
+              "title": "Customer data protection strategy at Super (Snowflake dynamic masking)",
+              "date": "2026-04-21",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-april-2026-event/",
+              "content_id": "snowflake-toronto-user-gr-customer-data-protection-strategy-at-sup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "How Super.com built its customer-data protection strategy, including Snowflake dynamic masking.",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": "Masking and PII policies managed through dbt (meta, grants, masking policies)",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-april-2026-event/",
+              "note": "talk: Customer data protection strategy at Super (Snowflake dynamic masking)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Masking and PII policies managed through dbt (meta, grants, masking policies)",
+          "past_chapter_talks": [],
+          "notes": "Talk on governance and data protection. Super.com hosted Toronto Modern Data Stack in 2023, so it is a possible venue."
+        }
+      ],
+      "notes": "Apr 2026 Snowflake UG speaker. Hosted TMDS in 2023 (260 Queen St W)."
+    },
+    {
+      "id": "viafoura",
+      "name": "Viafoura",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "shamil-kashmeri",
+          "name": "Shamil Kashmeri",
+          "pronouns": null,
+          "title": "Director of Engineering",
+          "city": "Toronto",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Toronto User Group, Spring 2025",
+              "title": "The Road to Extracting Value from High-Grade Data",
+              "date": "2025-05-12",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "content_id": "snowflake-toronto-user-gr-the-road-to-extracting-value-from-high-g",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Talk on extracting value from high-quality data.",
+              "topics": [
+                "data quality & testing",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-meetup-spring-2025/",
+              "note": "talk: The Road to Extracting Value from High-Grade Data"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Data-value talk at a Snowflake user group. dbt use unknown."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "data-engineers-in-toronto",
+      "name": "Data Engineers in Toronto",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Microsoft Fabric",
+        "Power BI",
+        "SQL Server"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Online-only, twice monthly. Microsoft-centric."
+    },
+    {
+      "id": "faire",
+      "name": "Faire",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://craft.faire.com/all?topic=engineering",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "The Craft (Medium) listing did not render. No dbt posts found."
+    },
+    {
+      "id": "new-stadium",
+      "name": "New Stadium",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Chapter venue for Nov 2025 (83 Walnut Ave)."
+    },
+    {
+      "id": "oneeleven",
+      "name": "OneEleven",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Venue at 325 Front St W, 4th floor. Used by the chapter (May 2026), the Snowflake UG (regularly) and TMDS (2023)."
+    },
+    {
+      "id": "rootly",
+      "name": "Rootly",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Chapter venue for Aug 2026 (366 Adelaide St W #601)."
+    },
+    {
+      "id": "toronto-apache-airflow-meetup",
+      "name": "Toronto Apache Airflow Meetup",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Only relays Astronomer virtual town halls. No local speakers."
+    },
+    {
+      "id": "women-in-big-data-toronto",
+      "name": "Women in Big Data Toronto",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Toronto"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.womeninbigdata.org/event/women-in-big-data-toronto-lead-with-data/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Mar 2025 'Lead with Data' panel; speakers never published. No past events in the Meetup group."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/toronto-dbt-meetup/events/?type=past",
+    "past_meetups_derived_from": "enriched/toronto-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Toronto dbt Meetup past events (Meetup gql2)",
+        "url": "https://www.meetup.com/toronto-dbt-meetup/",
+        "yielded": true,
+        "note": "4 events: 2025-09-17 social (Village by the Grange); 2025-11-25 (New Stadium; Eddy Zulkifly + 'Michelle' on MetricFlow/dbt-core OSS); 2026-05-29 Toronto Tech Week (OneEleven; Josh Harris/AnswerLayer on OSI, Daria Sukhareva/kWwhat on ChatBI); 2026-08-19 (Rootly; Nicole Kim + Jessie Lamontagne, Wealthsimple). All excluded as chapter speakers."
+      },
+      {
+        "name": "dbt Summit 2026 speakers",
+        "url": "https://www.getdbt.com/dbt-summit/speakers",
+        "yielded": true,
+        "note": "Matching on Toronto employer names found only KOHO (Célia Bru, Gabriel Gambacorta)."
+      },
+      {
+        "name": "Coalesce 2025 speakers (Cvent)",
+        "url": "https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers",
+        "yielded": false,
+        "note": "Page is JS-rendered, so web_fetch returned it empty. The browser pane was not allowed on coalesce.getdbt.com."
+      },
+      {
+        "name": "Toronto Modern Data Stack (Meetup gql2)",
+        "url": "https://www.meetup.com/toronto-modern-data/",
+        "yielded": true,
+        "note": "2022-2024 speaker pool. The group rebranded to Toronto Enterprise AI."
+      },
+      {
+        "name": "Snowflake Toronto User Group (Bevy + Meetup)",
+        "url": "https://usergroups.snowflake.com/toronto/",
+        "yielded": true,
+        "note": "2025-2026 speakers and organisers."
+      },
+      {
+        "name": "Toronto Databricks User Group",
+        "url": "https://usergroups.databricks.com/toronto-databricks-user-group/",
+        "yielded": true,
+        "note": "Jul 2026 speakers; dbt Labs listed as local sponsor."
+      },
+      {
+        "name": "Data Engineers in Toronto (Meetup gql2)",
+        "url": "https://www.meetup.com/data-engineers-in-toronto/",
+        "yielded": true,
+        "note": "Microsoft/Fabric-centric online talks. Organiser only."
+      },
+      {
+        "name": "PyData Toronto / PyLadies Toronto / R-Ladies Toronto / Toronto Women's Data Group / Women in Big Data Toronto (Meetup gql2)",
+        "url": "https://www.meetup.com/pydata-toronto/",
+        "yielded": false,
+        "note": "No local speaker events since mid-2024 (PyData only relays global confs; R-Ladies had one social)."
+      },
+      {
+        "name": "WiDS Toronto @ Dataiku",
+        "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
+        "yielded": true,
+        "note": "Only ambassadors named; panelists not listed."
+      },
+      {
+        "name": "Shopify Engineering blog",
+        "url": "https://shopify.engineering/",
+        "yielded": false,
+        "note": "dbt posts are 2020-era. No recent named dbt/AE authors."
+      },
+      {
+        "name": "Wealthsimple Engineering blog",
+        "url": "https://engineering.wealthsimple.com/",
+        "yielded": false,
+        "note": "No dbt posts surfaced."
+      },
+      {
+        "name": "Faire The Craft",
+        "url": "https://craft.faire.com/all?topic=engineering",
+        "yielded": false,
+        "note": "Medium listing did not render."
+      },
+      {
+        "name": "Toronto Data Professionals Community",
+        "url": "https://torontodpc.ca/",
+        "yielded": false,
+        "note": "Site returned empty. A search snippet showed a Feb 2026 virtual intro-to-dbt session."
+      },
+      {
+        "name": "Big Data & Analytics Summit Canada",
+        "url": "https://bigdatasummitcanada.com/all-speakers/",
+        "yielded": false,
+        "note": "Not fetched (budget). The search result had no dbt-specific speakers."
+      },
+      {
+        "name": "LinkedIn Jobs guest API (keywords=dbt, Toronto-area)",
+        "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
+        "yielded": true,
+        "note": "70 ads mention dbt"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Analytics After Hours: Eat, Drink, Socialize",
+      "date": "2025-09-17",
+      "venue": "Village by the Grange Food Court, 105 McCaul Street, Toronto, ON",
+      "url": "https://www.meetup.com/toronto-dbt-meetup/events/304473218/",
+      "organisers": [],
+      "attendees": 26,
+      "talks": []
+    },
+    {
+      "name": "Toronto dbt Meetup #1",
+      "date": "2025-11-25",
+      "venue": "New Stadium, 83 Walnut Avenue, Toronto, ON",
+      "url": "https://www.meetup.com/toronto-dbt-meetup/events/311733887/",
+      "organisers": [],
+      "attendees": 41,
+      "talks": [
+        {
+          "speaker": "Eddy",
+          "company": "Eddy Zulkifly",
+          "title": "dbt's Collective Magic",
+          "topics": [
+            "community",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Michelle",
+          "company": null,
+          "title": "Metricflow + dbt-core OSS: Past, Present, Future",
+          "topics": [
+            "semantic layer",
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dbt Meetup, Toronto Tech Week 2026 Edition!",
+      "date": "2026-05-29",
+      "venue": "OneEleven, 325 Front Street W, Suite 4, Toronto, ON",
+      "url": "https://www.meetup.com/toronto-dbt-meetup/events/314869362/",
+      "organisers": [],
+      "attendees": 85,
+      "talks": [
+        {
+          "speaker": "Josh Harris",
+          "company": "Founder, AnswerLayer",
+          "title": "Open Semantic Interchange (OSI v1.0) and What It Means for dbt Users",
+          "topics": [
+            "semantic layer",
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Daria Sukhareva",
+          "company": "Creator, kWwhat",
+          "title": "Grounding ChatBI with Dimensional Models, Semantic Models, and Rules",
+          "topics": [
+            "genai & llm",
+            "semantic layer"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Toronto dbt Meetup, August Edition!",
+      "date": "2026-08-19",
+      "venue": "Rootly, Toronto",
+      "url": "https://www.meetup.com/toronto-dbt-meetup/events/315920697/",
+      "organisers": [],
+      "attendees": 79,
+      "talks": [
+        {
+          "speaker": "Nicole Kim",
+          "company": "Wealthsimple",
+          "title": "Powering Wealthsimple incentive pipeline with dbt",
+          "topics": [
+            "data engineering",
+            "analytics engineering",
+            "domain-specific use cases"
+          ]
+        },
+        {
+          "speaker": "Jessie Lamontagne",
+          "company": "Wealthsimple",
+          "title": "Building a SCD2 reporting hierarchy with recursion",
+          "topics": [
+            "data modeling",
+            "dbt best practices"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Toronto dbt Meetup (meetup.com)",
+      "url": "https://www.meetup.com/toronto-dbt-meetup/",
+      "note": "This chapter"
+    },
+    {
+      "name": "dbt Summit 2026 speakers",
+      "url": "https://www.getdbt.com/dbt-summit/speakers",
+      "note": "Matching on Toronto employer names found only KOHO (Célia Bru, Gabriel Gambacorta)."
+    },
+    {
+      "name": "Toronto Modern Data Stack (Meetup gql2)",
+      "url": "https://www.meetup.com/toronto-modern-data/",
+      "note": "2022-2024 speaker pool. The group rebranded to Toronto Enterprise AI."
+    },
+    {
+      "name": "Snowflake Toronto User Group (Bevy + Meetup)",
+      "url": "https://usergroups.snowflake.com/toronto/",
+      "note": "2025-2026 speakers and organisers."
+    },
+    {
+      "name": "Toronto Databricks User Group",
+      "url": "https://usergroups.databricks.com/toronto-databricks-user-group/",
+      "note": "Jul 2026 speakers; dbt Labs listed as local sponsor."
+    },
+    {
+      "name": "Data Engineers in Toronto (Meetup gql2)",
+      "url": "https://www.meetup.com/data-engineers-in-toronto/",
+      "note": "Microsoft/Fabric-centric online talks. Organiser only."
+    },
+    {
+      "name": "WiDS Toronto @ Dataiku",
+      "url": "https://www.widsworldwide.org/events/event/wids-toronto-dataiku/",
+      "note": "Only ambassadors named; panelists not listed."
+    }
+  ]
+}

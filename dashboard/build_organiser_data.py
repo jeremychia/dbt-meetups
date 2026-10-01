@@ -25,6 +25,16 @@ CHAPTERS = {
     "lithuania": {"label": "Vilnius", "goal": "attendees"},
     "kuala_lumpur": {"label": "Kuala Lumpur", "goal": "speakers"},
     "paris": {"label": "Paris", "goal": "speakers"},
+    "seattle": {"label": "Seattle", "goal": "speakers"},
+    "sydney": {"label": "Sydney", "goal": "speakers"},
+    "boston": {"label": "Boston", "goal": "speakers"},
+    "melbourne": {"label": "Melbourne", "goal": "speakers"},
+    "stockholm": {"label": "Stockholm", "goal": "speakers"},
+    "munich": {"label": "Munich", "goal": "speakers"},
+    "dusseldorf": {"label": "Düsseldorf", "goal": "speakers"},
+    "montreal": {"label": "Montreal", "goal": "speakers"},
+    "atlanta": {"label": "Atlanta", "goal": "speakers"},
+    "toronto": {"label": "Toronto", "goal": "speakers"},
 }
 
 TIER_ORDER = {"1": 0, "2": 1, "backup": 2, "3": 3, "connector": 4, "organiser": 5}

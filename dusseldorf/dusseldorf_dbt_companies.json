@@ -1,0 +1,3454 @@
+{
+  "metadata": {
+    "title": "Düsseldorf dbt companies and people for the Düsseldorf dbt Meetup",
+    "generated_at": "2026-09-24",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Düsseldorf companies using dbt, and people who could speak at or attend the Düsseldorf dbt Meetup.",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Düsseldorf (Rhein-Ruhr dbt Meetup)",
+    "method": [
+      "v1 (2026-09-24): one budgeted research sub-agent (~18 web searches: dbt Summit/Coalesce/World Tour agendas filtered to local employers, company blogs, local data meetups and user groups, women-in-data communities sourced through their own events) plus a logged-out LinkedIn Jobs scan (keywords=dbt, up to 150 ads checked for the whole word 'dbt'). Past chapter speakers added from enriched/rhein-ruhr-dbt-meetup.json. Same merge and scoring rules as berlin_planning/SEARCH_METHOD.md §1 Step 6 (strict tier 1: local or unknown location + a dbt item from 2024 onwards; emerging voices raised).",
+      "Lesson: web_fetch of meetup.com event pages returns full agendas (with speakers' LinkedIn links) even when the browser is unavailable. Go straight to /events/<id>/ URLs listed on the group page.",
+      "Lesson: In Rhein-Ruhr the data-platform speaker pool sits mainly in the Databricks user group (Deichmann, Handelsblatt, BarmeniaGothaer, FIEGE), not in dbt content. Big corporates (METRO, Henkel, Vodafone, REWE) publish nothing on dbt.",
+      "Lesson: Women-in-data groups in NRW now mostly run discussion-format evenings without named speakers. Recap blog posts on womeninbigdata.org name speakers more reliably than the Meetup pages do."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public pages/snippets and are often inferred from the employer's HQ — verify before outreach.",
+      "Only public professional information is recorded; no personal contact details. Pronouns only when self-stated.",
+      "LinkedIn profiles were not searched in this run (linkedin_confidence 'not_searched' unless a URL appeared on an event page)."
+    ],
+    "counts": {
+      "companies": 49,
+      "people": 23,
+      "job_postings": 49,
+      "companies_with_job_postings": 24,
+      "speaker_evidence_items": 25,
+      "unique_content_items": 23,
+      "people_with_linkedin": 7,
+      "people_who_spoke_at_this_chapter": 5,
+      "internal_vinted": 0,
+      "level": {
+        "working": 20,
+        "leadership": 3
+      },
+      "speaker_potential": {
+        "high": 5,
+        "medium": 18
+      },
+      "attendee_potential": {
+        "high": 2,
+        "medium": 21
+      },
+      "priority_tier": {
+        "1": 1,
+        "connector": 8,
+        "2": 9,
+        "3": 5
+      },
+      "watchlist_companies": 17,
+      "past_meetups": 2,
+      "lead_type": {
+        "proven_speaker": 16,
+        "featured": 6,
+        "emerging_voice": 1
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 17,
+        "chapter_meetup_history": 5,
+        "company_blog_scan": 2,
+        "women_in_data_community": 5
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 8,
+      "data engineering": 5,
+      "data quality & testing": 3,
+      "team & org design": 3,
+      "data warehouse & platforms": 3,
+      "genai & llm": 3,
+      "dbt best practices": 2,
+      "business intelligence": 2,
+      "project structure": 2,
+      "developer workflow": 2,
+      "domain-specific use cases": 2,
+      "data governance": 2,
+      "dbt migration & adoption": 1,
+      "dbt product updates": 1,
+      "data modeling": 1,
+      "tools & ecosystem": 1,
+      "orchestration & ci/cd": 1,
+      "performance & scale": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "taod-consulting",
+      "name": "taod Consulting",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks",
+        "Microsoft Fabric",
+        "Power BI",
+        "Tableau",
+        "Looker"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.taod.de/tech-beratung/dbt-labs",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://taod.de/events",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.taod.de/pressemitteilungen/data-ai-after-hours",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "sonke-maibach",
+          "name": "Sönke Maibach",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Rhein-Ruhr dbt Meetup (Köln dbt Meetup at taod)",
+              "title": "Lessons on migrating legacy stack to dbt reliably and cheaply",
+              "date": "2025-05-15",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "content_id": "rhein-ruhr-dbt-meetup-kol-lessons-on-migrating-legacy-stack-to-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Talk on moving a legacy transformation stack onto dbt at low cost and risk.",
+              "topics": [
+                "dbt migration & adoption",
+                "dbt best practices",
+                "data engineering"
+              ],
+              "suggested_talk_angle": "Follow-up: a year after the migration, what held up and what didn't",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "note": "talk: Lessons on migrating legacy stack to dbt reliably and cheaply"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "Follow-up: a year after the migration, what held up and what didn't",
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-15",
+              "talk_title": "Lessons on migrating legacy stack to dbt reliably and cheaply",
+              "topics": [
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": "Local dbt practitioner at the main Rhein-Ruhr dbt consultancy. Spoke at the chapter's May 2025 event."
+        },
+        {
+          "id": "sarah-hennig",
+          "name": "Sarah Hennig",
+          "pronouns": null,
+          "title": null,
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Rhein-Ruhr dbt Meetup (Köln dbt Meetup at taod)",
+              "title": "Köln dbt Meetup",
+              "date": "2025-05-15",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "content_id": "rhein-ruhr-dbt-meetup-kol-koln-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Named organiser for taod, which hosted the event at its Cologne-Ehrenfeld office. 29 attendees.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "note": "organiser: Köln dbt Meetup"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector. Listed as organiser of the May 2025 chapter event at taod. The first person to ask about a third event."
+        },
+        {
+          "id": "benedikt-stienen",
+          "name": "Benedikt Stienen",
+          "pronouns": null,
+          "title": "CEO",
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "taod press release",
+              "title": "Data & AI After Hours in Köln",
+              "date": "2026-04-14",
+              "url": "https://www.taod.de/pressemitteilungen/data-ai-after-hours",
+              "content_id": "taod-press-release-data-ai-after-hours-in-koln",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Press release for a free data and AI networking evening, quoting the CEO.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.taod.de/pressemitteilungen/data-ai-after-hours",
+              "note": "host: Data & AI After Hours in Köln"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector. taod runs a regular Cologne event programme: Data Lounge & Learn, BI & BBQ (8 Sep 2026) and Data & AI After Hours (11 Jun 2026, at Microsoft Köln)."
+        }
+      ],
+      "notes": "Cologne HQ (Oskar-Jäger-Str. 173). Describes itself as a long-standing German dbt Labs partner. Hosted the May 2025 chapter event and runs its own Cologne event series, including at Microsoft Köln. Most obvious repeat co-host."
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": true,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "stephan-durry",
+          "name": "Stephan Durry",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/sdurry/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Rhein-Ruhr dbt Meetup",
+              "title": "Cologne dbt Meetup (co-organiser) + talk 'Sleep better with data testing'",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "content_id": "rhein-ruhr-dbt-meetup-cologne-dbt-meetup-co-organiser-talk-sle",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Co-organised the first Cologne event with adesso and gave a talk on data testing.",
+              "topics": [
+                "data quality & testing",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Rhein-Ruhr dbt Meetup (Köln dbt Meetup at taod)",
+              "title": "What's new at dbt Labs",
+              "date": "2025-05-15",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "content_id": "rhein-ruhr-dbt-meetup-kol-what-s-new-at-dbt-labs",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Product update slot at the second chapter event, which he co-hosted.",
+              "topics": [
+                "dbt product updates"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Cologne dbt Meetup (Düsseldorf dbt Meetup)",
+              "title": "Sleep better with data testing",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "content_id": "cologne-dbt-meetup-dussel-sleep-better-with-data-testing",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": null,
+              "topics": [
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/sdurry/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "organiser: Cologne dbt Meetup (co-organiser) + talk 'Sleep better with data testing'"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-05",
+              "talk_title": "Sleep better with data testing",
+              "topics": [
+                "data quality & testing"
+              ]
+            },
+            {
+              "date": "2025-05-15",
+              "talk_title": "What's new at dbt Labs",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": "connector. dbt Labs co-organiser of both Rhein-Ruhr chapter events and a speaker at both. Vendor staff, so best used as an organiser rather than a headline speaker. Home city not confirmed."
+        },
+        {
+          "id": "hicham-babahmed",
+          "name": "Hicham Babahmed",
+          "pronouns": null,
+          "title": "Partner Solutions Architect (previously Data Engineer Consultant at adesso)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hichambabahmed/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Rhein-Ruhr dbt Meetup (Cologne dbt Meetup at adesso)",
+              "title": "Cologne dbt Meetup",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "content_id": "rhein-ruhr-dbt-meetup-col-cologne-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Named co-organiser for adesso SE, which hosted the first Cologne event. 22 attendees.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/hichambabahmed/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "organiser: Cologne dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector. Co-organised the Dec 2024 event while at adesso Cologne. Search results say he moved to dbt Labs around Aug 2025 and has since posted about events in French, so he may no longer cover the Rhein-Ruhr region. Worth asking for a warm intro back to adesso."
+        }
+      ],
+      "notes": "Co-organiser of the chapter (Stephan Durry)."
+    },
+    {
+      "id": "schuttflix",
+      "name": "Schüttflix",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Fivetran",
+        "Snowflake",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.fivetran.com/case-studies/schuttflix-a-construction-marketplace-uses-fivetran-as-its-digital-building-block",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "alex-rupp",
+          "name": "Alex Rupp",
+          "pronouns": null,
+          "title": "VP Data & BI, Schüttflix",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Köln dbt Meetup (Düsseldorf dbt Meetup)",
+              "title": "Pairing dbt and Slack Bots - for data-driven communication",
+              "date": "2025-05-15",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "content_id": "koln-dbt-meetup-dusseldor-pairing-dbt-and-slack-bots-for-data-driv",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+              "note": "talk: Pairing dbt and Slack Bots - for data-driven communication"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-15",
+              "talk_title": "Pairing dbt and Slack Bots - for data-driven communication",
+              "topics": [
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": ""
+        }
+      ],
+      "notes": "Gütersloh, outside Rhein-Ruhr. Still, its data lead spoke at the Cologne chapter."
+    },
+    {
+      "id": "xebia",
+      "name": "Xebia",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "padraic-slattery",
+          "name": "Pádraic Slattery",
+          "pronouns": null,
+          "title": "Xebia",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/padraicslattery/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Rhein-Ruhr dbt Meetup (Cologne dbt Meetup at adesso)",
+              "title": "Maintaining your conventions amid the chaos of dbt",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "content_id": "rhein-ruhr-dbt-meetup-col-maintaining-your-conventions-amid-the-ch",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Talk on enforcing project conventions in growing dbt projects.",
+              "topics": [
+                "project structure",
+                "dbt best practices",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/padraicslattery/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "talk: Maintaining your conventions amid the chaos of dbt"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-05",
+              "talk_title": "Maintaining your conventions amid the chaos of dbt",
+              "topics": [
+                "dbt best practices",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": "Strong dbt speaker, probably based in the Netherlands rather than NRW. Useful as a visiting speaker, not as local supply."
+        }
+      ],
+      "notes": "Supplied a visiting speaker (Pádraic Slattery)."
+    },
+    {
+      "id": "btelligent",
+      "name": "b.telligent",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.btelligent.com/en/partner/dbt",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.btelligent.com/en/training/basics-of-dbt",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "dbt partner offering dbt training. A Düsseldorf office was not confirmed in this pass."
+    },
+    {
+      "id": "deepl",
+      "name": "DeepL",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://app.welcometothejungle.com/jobs/iw21DdbJ",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "mareike-heller",
+          "name": "Mareike Heller",
+          "pronouns": null,
+          "title": null,
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mareike-heller/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW x Thoughtworks (Cologne)",
+              "title": "Value lineage makes the difference (DeepL performance marketing measurement)",
+              "date": "2025-05",
+              "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+              "content_id": "women-in-big-data-nrw-x-t-value-lineage-makes-the-difference-deepl",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Described DeepL's step-by-step approach to performance-marketing measurement, from getting stakeholders on board early to data modelling.",
+              "topics": [
+                "data modeling",
+                "domain-specific use cases",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": "Modelling marketing attribution and lead quality in the warehouse",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/mareike-heller/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+              "note": "talk: Value lineage makes the difference (DeepL performance marketing measurement)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Modelling marketing attribution and lead quality in the warehouse",
+          "past_chapter_talks": [],
+          "notes": "DeepL is headquartered in Cologne, and its Analytics Engineer job ad asks for dbt. Her talk stressed data modelling for marketing measurement. Search snippets mention a first-party data layer on BigQuery. Whether she uses dbt is not confirmed."
+        }
+      ],
+      "notes": "Cologne HQ. Its Analytics Engineer job ad asks for dbt and Airflow. Strong candidate for both host and speakers. Local speaker found: Mareike Heller."
+    },
+    {
+      "id": "adesso-se",
+      "name": "adesso SE",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733034982",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733036818",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733037602",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733040272",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733040309",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-architect-all-genders-at-adesso-se-3733747195",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Integration von Drittanbieter-Tools (dbt, Talend, Matillion)",
+          "job_poster": null,
+          "posted_date": "2026-09-20",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4203243372",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4203244347",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4247153962",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4247154942",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4247155913",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-20",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Snowflake Data Engineer (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/snowflake-data-engineer-all-genders-at-adesso-se-4247157738",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "z.B. Fivetran, dbt, Airflow, Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402134312",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402125965",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402126967",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402131787",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-19",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402125966",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "dbt Architect (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/dbt-architect-all-genders-at-adesso-se-4402126966",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "adesso SE",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "wiederverwendbare Datenprodukte mit dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-17",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+          "note": "dbt evidence"
+        },
+        {
+          "type": "other",
+          "url": "https://www.partnerbase.com/adesso/fishtown-analytics",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [],
+      "notes": "Cologne office at Agrippinawerft 26 hosted the Dec 2024 chapter event. Its internal organiser (Hicham Babahmed) has since moved to dbt Labs, so the adesso relationship may need rebuilding. | Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "agoda",
+      "name": "Agoda",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior / Staff Data Engineer (BI) – CEG Team",
+          "url": "https://www.linkedin.com/jobs/view/senior-staff-data-engineer-bi-%E2%80%93-ceg-team-at-agoda-4455278030",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Agoda",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "orchestration frameworks (e.g., Airflow, dbt)",
+          "job_poster": null,
+          "posted_date": "2026-09-07",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "avs-verkehrssicherung-gmbh",
+      "name": "AVS Verkehrssicherung GmbH",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/junior-data-engineer-m-w-d-at-avs-verkehrssicherung-gmbh-4463031924",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AVS Verkehrssicherung GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Datenplattform auf Basis von Snowflake, dbt und Microsoft Azure",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "axa",
+      "name": "AXA",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "(Senior) Data Engineer im Fachbereich (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-im-fachbereich-m-w-d-at-axa-4459171413",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "AXA",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, AWS und dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-26",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "codecentric-ag",
+      "name": "codecentric AG",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Software Developer und Consultant mit Schwerpunkt Data (w/d/m)",
+          "url": "https://www.linkedin.com/jobs/view/software-developer-und-consultant-mit-schwerpunkt-data-w-d-m-at-codecentric-ag-4453089278",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "codecentric AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Pipelines (z. B. AWS Glue, dbt oder Databricks)",
+          "job_poster": null,
+          "posted_date": "2026-08-12",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "cognitive-group",
+      "name": "Cognitive Group",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer – Snowflake & Cloud (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-%E2%80%93-snowflake-cloud-m-w-d-at-cognitive-group-part-of-the-focus-cloud-group-4469466132",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Cognitive Group",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Tools wie dbt, Fivetran, Airflow oder Matillion",
+          "job_poster": null,
+          "posted_date": "2026-09-23",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "deutsche-glasfaser-unternehmensgruppe",
+      "name": "Deutsche Glasfaser Unternehmensgruppe",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer Business Intelligence (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-business-intelligence-w-m-d-at-deutsche-glasfaser-unternehmensgruppe-4450322224",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Deutsche Glasfaser Unternehmensgruppe",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Azure, Snowflake, dbt und Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer Business Intelligence (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-business-intelligence-w-m-d-at-deutsche-glasfaser-unternehmensgruppe-4450313370",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Deutsche Glasfaser Unternehmensgruppe",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Azure, Snowflake, dbt und Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "douglas",
+      "name": "Douglas",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (f/m/x)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-f-m-x-at-douglas-4460390986",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Douglas",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "hands-on experience with DBT in production environments",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer (w/m/x)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-w-m-x-at-douglas-4460500153",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Douglas",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "praktische Erfahrung mit DBT in produktiven Umgebungen",
+          "job_poster": null,
+          "posted_date": "2026-08-28",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "eon-deutschland",
+      "name": "E.ON Deutschland",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "(Senior) Customer Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-customer-data-engineer-m-w-d-at-e-on-deutschland-4458891878",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "E.ON Deutschland",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Business-Logiken mithilfe von dbt und Snowflake SQL",
+          "job_poster": null,
+          "posted_date": "2026-08-31",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "ey",
+      "name": "EY",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Berater Snowflake Data Engineer - AI & Data (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/berater-snowflake-data-engineer-ai-data-w-m-d-at-ey-4440149655",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "EY",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Kafka, NiFi, DBT, Matillion, Palantir",
+          "job_poster": null,
+          "posted_date": "2026-09-22",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "eyelevel-consulting-gmbh",
+      "name": "eye-level consulting GmbH",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer – Snowflake, Databricks (all genders)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-%E2%80%93-snowflake-databricks-all-genders-at-eye-level-consulting-gmbh-4471436223",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "eye-level consulting GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL, dbt, ETL-/ELT-Prozesse, Datenmodellierung",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "founderful",
+      "name": "Founderful",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Remote Engineering Manager (Algorithms Team) (m/f/d)",
+          "url": "https://www.linkedin.com/jobs/view/remote-engineering-manager-algorithms-team-m-f-d-at-founderful-4469388391",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Founderful",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data stack around Snowflake, dbt and Dagster",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "intersnack-it-kg",
+      "name": "Intersnack IT KG",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "AI Engineer - Analytics & End-User Insights",
+          "url": "https://www.linkedin.com/jobs/view/ai-engineer-analytics-end-user-insights-at-intersnack-it-kg-4406744102",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Intersnack IT KG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "transformation language (e.g., Python, dbt) for data modelling",
+          "job_poster": null,
+          "posted_date": "2026-09-03",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "inverto-a-bcg-company",
+      "name": "Inverto / A BCG Company",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Business Intelligence Developer (f/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-business-intelligence-developer-f-m-d-at-inverto-a-bcg-company-4468006503",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Inverto / A BCG Company",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "warehouse based on Snowflake and dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-18",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "isr-information-products-ag",
+      "name": "ISR Information Products AG",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Consultant Data Warehouse ETL Entwicklung (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/consultant-data-warehouse-etl-entwicklung-m-w-d-at-isr-information-products-ag-4049099554",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "ISR Information Products AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "AWS, Azure, Microsoft PowerBI, dbt und Snowflake",
+          "job_poster": null,
+          "posted_date": "2024-10-15",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "metycle",
+      "name": "Metycle",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst (m/f/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-analyst-m-f-d-at-metycle-4464631194",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Metycle",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "metrics, and data lineage using dbt Docs",
+          "job_poster": null,
+          "posted_date": "2026-09-08",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "redcare-pharmacy",
+      "name": "Redcare Pharmacy",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Analyst (m/f/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-analyst-m-f-d-at-redcare-pharmacy-4439236373",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Redcare Pharmacy",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Databricks DBT SQL Power BI Microsoft Fabric",
+          "job_poster": null,
+          "posted_date": "2026-09-09",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Staff Data Analyst (m/f/d)",
+          "url": "https://www.linkedin.com/jobs/view/staff-data-analyst-m-f-d-at-redcare-pharmacy-4444127103",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Redcare Pharmacy",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "scalable data models using dbt, SQL, Databricks",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Marketplace Data Analyst (m/f/d)",
+          "url": "https://www.linkedin.com/jobs/view/marketplace-data-analyst-m-f-d-at-redcare-pharmacy-4469389749",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Redcare Pharmacy",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Power BI and Databricks, alongside DBT",
+          "job_poster": null,
+          "posted_date": "2026-09-24",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Senior Data Engineer (m/f/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-m-f-d-at-redcare-pharmacy-4454635523",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Redcare Pharmacy",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Azure Data Platform, DBT, Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-11",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "rewe-group",
+      "name": "REWE Group",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Product Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-product-engineer-m-w-d-at-rewe-group-4389704967",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "REWE Group",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, Kafka, dbt und Terraform",
+          "job_poster": null,
+          "posted_date": "2026-09-10",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "scalefree",
+      "name": "Scalefree",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Consultant (m/f/d) - dbt Engineer",
+          "url": "https://www.linkedin.com/jobs/view/consultant-m-f-d-dbt-engineer-at-scalefree-4459920729",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Scalefree",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modern data platforms and dbt-driven solutions",
+          "job_poster": null,
+          "posted_date": "2026-09-02",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "skopos",
+      "name": "SKOPOS",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data & Analytics Engineer (m/w/d) - Client Projects",
+          "url": "https://www.linkedin.com/jobs/view/lead-data-analytics-engineer-m-w-d-client-projects-at-skopos-4433955028",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "SKOPOS",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Datentransformationen (dbt)",
+          "job_poster": null,
+          "posted_date": "2026-07-06",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "taod-consulting-gmbh",
+      "name": "taod Consulting GmbH",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (w/m/d)",
+          "url": "https://www.linkedin.com/jobs/view/data-engineer-w-m-d-at-taod-consulting-gmbh-4462155346",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "taod Consulting GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, Databricks, Fabric & dbt",
+          "job_poster": null,
+          "posted_date": "2026-09-02",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "thermengruppe-josef-wund",
+      "name": "Thermengruppe Josef Wund",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-m-w-d-at-thermengruppe-josef-wund-4432777902",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Thermengruppe Josef Wund",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, Modellierung mit dbt und Amazon QuickSight",
+          "job_poster": null,
+          "posted_date": "2026-07-02",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "trianel-gmbh",
+      "name": "Trianel GmbH",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "(Senior) Data Architect / Data Engineer (m/w/d)",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-architect-data-engineer-m-w-d-at-trianel-gmbh-4399291846",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "Trianel GmbH",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "gute Kenntnisse in SQL, Python, dbt sowie Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-09-06",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "viadee-unternehmensberatung-ag",
+      "name": "viadee Unternehmensberatung AG",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Warehouse & BI Entwickler:in im Consulting",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-warehouse-bi-entwickler-in-im-consulting-at-viadee-unternehmensberatung-ag-4314625197",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "viadee Unternehmensberatung AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT-Werkzeugen (z.B. dbt, SAS, Talend, Informatica)",
+          "job_poster": null,
+          "posted_date": "2025-10-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Senior Data Warehouse & BI Entwickler:in im Consulting",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-warehouse-bi-entwickler-in-im-consulting-at-viadee-unternehmensberatung-ag-4314621348",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "viadee Unternehmensberatung AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT-Werkzeugen (z.B. dbt, SAS, Talend, Informatica)",
+          "job_poster": null,
+          "posted_date": "2025-10-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Senior Data Engineer im Consulting",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-im-consulting-at-viadee-unternehmensberatung-ag-4314629172",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "viadee Unternehmensberatung AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT-Werkzeugen (z.B. dbt, SAS, Talend, Informatica)",
+          "job_poster": null,
+          "posted_date": "2025-10-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        },
+        {
+          "title": "Senior Data Engineer im Consulting",
+          "url": "https://www.linkedin.com/jobs/view/senior-data-engineer-im-consulting-at-viadee-unternehmensberatung-ag-4314616532",
+          "source": "LinkedIn Jobs",
+          "linkedin_company_name": "viadee Unternehmensberatung AG",
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ELT-Werkzeugen (z.B. dbt, SAS, Talend, Informatica)",
+          "job_poster": null,
+          "posted_date": "2025-10-14",
+          "last_seen": "2026-09-24",
+          "job_family": null,
+          "work_mode": "Remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Düsseldorf/Rhein-Ruhr LinkedIn job ad(s) mentioning dbt (scan 2026-09-24)"
+    },
+    {
+      "id": "barmeniagothaer",
+      "name": "BarmeniaGothaer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks",
+        "Unity Catalog",
+        "Terraform",
+        "GitLab"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "florian-schulz",
+          "name": "Florian Schulz",
+          "pronouns": null,
+          "title": "Cloud Engineer, Data Analytics Platform",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (Infomotion Köln)",
+              "title": "Data and Freedom: Providing Teams with the Data They Need and the Tools They Love",
+              "date": "2025-07-03",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "content_id": "databricks-user-group-rhe-data-and-freedom-providing-teams-with-th",
+              "co_authors": [
+                "Carsten Düllmann"
+              ],
+              "mentions_dbt": false,
+              "description": "Moving from one central workspace to a self-service platform with Unity Catalog, GitOps and Terraform.",
+              "topics": [
+                "data governance",
+                "team & org design",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "note": "talk: Data and Freedom: Providing Teams with the Data They Need and the Tools They Love"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Insurer based in Wuppertal and Cologne. Gave a joint talk with Carsten Düllmann on self-service platforms and governance."
+        },
+        {
+          "id": "carsten-dullmann",
+          "name": "Carsten Düllmann",
+          "pronouns": null,
+          "title": "Cloud Engineer, Data Analytics Platform",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (Infomotion Köln)",
+              "title": "Data and Freedom: Providing Teams with the Data They Need and the Tools They Love",
+              "date": "2025-07-03",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "content_id": "databricks-user-group-rhe-data-and-freedom-providing-teams-with-th",
+              "co_authors": [
+                "Florian Schulz"
+              ],
+              "mentions_dbt": false,
+              "description": "Self-service data platform design, covering team responsibilities and a 'data shopping' process.",
+              "topics": [
+                "data governance",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "note": "talk: Data and Freedom: Providing Teams with the Data They Need and the Tools They Love"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Co-speaker with Florian Schulz."
+        }
+      ],
+      "notes": "Insurer based in Wuppertal and Cologne. Talk was on platform self-service and governance."
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "inna-zykova",
+          "name": "Inna Zykova",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/innazykova/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in Big Data NRW x Thoughtworks (Cologne)",
+              "title": "Building AI agents with low/no-code tools",
+              "date": "2025-05",
+              "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+              "content_id": "women-in-big-data-nrw-x-t-building-ai-agents-with-low-no-code-tool",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Step-by-step walkthrough of building AI agents with low/no-code tools.",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/innazykova/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+              "note": "talk: Building AI agents with low/no-code tools"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Talk was about AI agents, not analytics engineering. Employer not stated."
+        },
+        {
+          "id": "liisel-jessop",
+          "name": "Liisel Jessop",
+          "pronouns": null,
+          "title": "Organiser, Women in Big Data NRW",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data NRW (Meetup)",
+              "title": "Group organiser",
+              "date": "2026",
+              "url": "https://www.meetup.com/women-in-big-data-dusseldorf/",
+              "content_id": "women-in-big-data-nrw-mee-group-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as organiser of the regional WiBD chapter (formerly WiBD Düsseldorf).",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-dusseldorf/",
+              "note": "organiser: Group organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector. Lead organiser listed for WiBD NRW (1,150 members). Other organisers visible only by first name (Antje, super organiser; Ann-Katrin, event host). The group runs small 'Data Date' evenings in Düsseldorf (8-17 attendees in 2025-26) and would suit a joint event."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "oraylis",
+      "name": "ORAYLIS",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks",
+        "Azure",
+        "Power BI"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christoph-epping",
+          "name": "Christoph Epping",
+          "pronouns": null,
+          "title": "Senior Consultant - IoT",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (ORAYLIS)",
+              "title": "Data in Motion: How igus enhances Real-Time Insights with Custom State Management",
+              "date": "2025-03-20",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "content_id": "databricks-user-group-rhe-data-in-motion-how-igus-enhances-real-ti",
+              "co_authors": [
+                "Julian Krüger"
+              ],
+              "mentions_dbt": false,
+              "description": "IoT streaming into Databricks with Spark Structured Streaming and Power BI.",
+              "topics": [
+                "data engineering",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "note": "talk: Data in Motion: How igus enhances Real-Time Insights with Custom State Management"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "ORAYLIS is a consultancy in Meerbusch, next to Düsseldorf. The talk was a client case on streaming, not dbt."
+        },
+        {
+          "id": "julian-kruger",
+          "name": "Julian Krüger",
+          "pronouns": null,
+          "title": "Senior Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (ORAYLIS)",
+              "title": "Data in Motion: How igus enhances Real-Time Insights with Custom State Management",
+              "date": "2025-03-20",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "content_id": "databricks-user-group-rhe-data-in-motion-how-igus-enhances-real-ti",
+              "co_authors": [
+                "Christoph Epping"
+              ],
+              "mentions_dbt": false,
+              "description": "Client case on real-time IoT analytics for igus.",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "note": "talk: Data in Motion: How igus enhances Real-Time Insights with Custom State Management"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Co-speaker with Christoph Epping."
+        }
+      ],
+      "notes": "Meerbusch, bordering Düsseldorf. Hosted the Databricks user group in Mar 2025."
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sebastian-grunwald",
+          "name": "Sebastian Grünwald",
+          "pronouns": null,
+          "title": "Solutions Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (ORAYLIS)",
+              "title": "Introducing Databricks Apps",
+              "date": "2025-03-20",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "content_id": "databricks-user-group-rhe-introducing-databricks-apps",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vendor introduction to Databricks Apps.",
+              "topics": [
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/305714282/",
+              "note": "talk: Introducing Databricks Apps"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Vendor talk."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "deichmann-se",
+      "name": "Deichmann SE",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bartholomaus-rademacher",
+          "name": "Bartholomäus Rademacher",
+          "pronouns": null,
+          "title": "Senior Platform Architect",
+          "city": "Essen",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (Accenture Essen Innovation Hub)",
+              "title": "Data Project Templates at Deichmann",
+              "date": "2025-12-11",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/312184352/",
+              "content_id": "databricks-user-group-rhe-data-project-templates-at-deichmann",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Walkthrough of Deichmann's dsproject template framework for standardising Databricks data projects.",
+              "topics": [
+                "project structure",
+                "developer workflow",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": "Templated project scaffolding: lessons that carry over to dbt projects",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/312184352/",
+              "note": "talk: Data Project Templates at Deichmann"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Templated project scaffolding: lessons that carry over to dbt projects",
+          "past_chapter_talks": [],
+          "notes": "Large Essen retailer running a Databricks platform. Talk was about project templates and infrastructure-as-code. No dbt signal yet."
+        }
+      ],
+      "notes": "Essen. Platform-engineering speaker at the Databricks user group."
+    },
+    {
+      "id": "dish-digital-solutions",
+      "name": "DISH Digital Solutions (METRO)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+          "note": "dbt evidence"
+        }
+      ],
+      "people": [
+        {
+          "id": "ramon-marrero",
+          "name": "Ramon Marrero",
+          "pronouns": null,
+          "title": "DISH Digital Solutions",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ramon-marrero-almonte/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Rhein-Ruhr dbt Meetup (Cologne dbt Meetup at adesso)",
+              "title": "The Critical Role of Data Quality in Building Agentic RAG Systems",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "content_id": "rhein-ruhr-dbt-meetup-col-the-critical-role-of-data-quality-in-bui",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Talk on why data quality underpins agentic retrieval-augmented generation systems.",
+              "topics": [
+                "data quality & testing",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": "Testing the data that feeds LLM agents, using dbt tests and contracts",
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/ramon-marrero-almonte/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+              "note": "talk: The Critical Role of Data Quality in Building Agentic RAG Systems"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Testing the data that feeds LLM agents, using dbt tests and contracts",
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-05",
+              "talk_title": "The Critical Role of Data Quality in Building Agentic RAG Systems",
+              "topics": [
+                "data quality & testing",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": "DISH Digital Solutions is METRO's hospitality-tech arm, based in Düsseldorf. His city is inferred from the employer and still needs checking. The LinkedIn link is taken word for word from the meetup agenda."
+        }
+      ],
+      "notes": "Düsseldorf. Only signal is Ramon Marrero's data-quality talk at the chapter."
+    },
+    {
+      "id": "fiege-logistik",
+      "name": "FIEGE Logistik",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "simon-schroder",
+          "name": "Simon Schröder",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (Accenture Essen Innovation Hub)",
+              "title": "Orchestration with Jobs & Pipeline in FIEGE's multi-Workspace Architecture",
+              "date": "2025-12-11",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/312184352/",
+              "content_id": "databricks-user-group-rhe-orchestration-with-jobs-pipeline-in-fieg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Replacing a custom orchestrator with Databricks Jobs & Pipelines.",
+              "topics": [
+                "orchestration & ci/cd",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/312184352/",
+              "note": "talk: Orchestration with Jobs & Pipeline in FIEGE's multi-Workspace Architecture"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "FIEGE is headquartered in Greven (Münsterland), outside Rhein-Ruhr, but he spoke in Essen. His topic is orchestration."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "handelsblatt-media-group",
+      "name": "Handelsblatt Media Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks",
+        "Azure"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christopher-pfister",
+          "name": "Christopher Pfister",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Rhein-Ruhr (Infomotion Köln)",
+              "title": "No more clusters: Advantages and challenges faced migrating workloads to serverless compute",
+              "date": "2025-07-03",
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "content_id": "databricks-user-group-rhe-no-more-clusters-advantages-and-challeng",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Migration of all Databricks workloads to serverless: price/performance testing, private networking and ANSI SQL changes.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/events/308282279/",
+              "note": "talk: No more clusters: Advantages and challenges faced migrating workloads to serverless compute"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Handelsblatt is headquartered in Düsseldorf; his own city is inferred from that. Talk was on Databricks serverless performance and cost."
+        }
+      ],
+      "notes": "Düsseldorf. Data engineer spoke at the Databricks user group."
+    },
+    {
+      "id": "pymc-labs",
+      "name": "PyMC Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "thomas-wiecki",
+          "name": "Thomas Wiecki",
+          "pronouns": null,
+          "title": "Organiser, Düsseldorf Data Science Meetup",
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Düsseldorf Data Science Meetup",
+              "title": "Group organiser",
+              "date": "2024",
+              "url": "https://www.meetup.com/dusseldorf-data-science-meetup/",
+              "content_id": "dusseldorf-data-science-m-group-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Lead organiser of a Düsseldorf data science and Python meetup.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/dusseldorf-data-science-meetup/",
+              "note": "organiser: Group organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector. The group has 3,465 members, but the last visible event was Jan 2024. trivago, sipgate and StepStone have hosted it. A dormant but large audience to reach."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "rewe-digital",
+      "name": "REWE digital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Google Cloud"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "henrike-alfeis",
+          "name": "Henrike Alfeis",
+          "pronouns": null,
+          "title": "Innovation & AI Hub Lead",
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Women in AI Cologne Meetup #3 (at REWE digital)",
+              "title": "The AI Reality Check - Wie geht KI-Transformation?",
+              "date": "2025-06-24",
+              "url": "https://www.ki.nrw/women-in-ai-cologne-meetup-3/",
+              "content_id": "women-in-ai-cologne-meetu-the-ai-reality-check-wie-geht-ki-transfo",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Insights into the REWE Group GenAI community and AI ambassador programme.",
+              "topics": [
+                "genai & llm",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.ki.nrw/women-in-ai-cologne-meetup-3/",
+              "note": "talk: The AI Reality Check - Wie geht KI-Transformation?"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Talk was on AI adoption and culture change, not analytics. REWE digital hosted the event at its Cologne Kupferwerk office, a possible venue."
+        }
+      ],
+      "notes": "Cologne (Kupferwerk). Hosted Women in AI Cologne in Jun 2025. No dbt evidence found."
+    },
+    {
+      "id": "thoughtworks",
+      "name": "Thoughtworks (Cologne)",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniela-jakel",
+          "name": "Daniela Jäkel",
+          "pronouns": null,
+          "title": null,
+          "city": "Cologne",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/daniela-j%C3%A4kel-384403191/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Women in Big Data NRW x Thoughtworks (Cologne)",
+              "title": "Event host",
+              "date": "2025-05",
+              "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+              "content_id": "women-in-big-data-nrw-x-t-event-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Thanked as host of the WiBD NRW evening at Thoughtworks.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/daniela-j%C3%A4kel-384403191/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+              "note": "host: Event host"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector. Co-hosted the WiBD NRW event at the Thoughtworks Cologne office, a possible venue. Co-host Eylem B. (Thoughtworks) is named only by initial."
+        }
+      ],
+      "notes": "Hosted WiBD NRW in May 2025."
+    },
+    {
+      "id": "trivago",
+      "name": "trivago",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Kafka",
+        "Google Cloud",
+        "Great Expectations"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://tech.trivago.com/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://tech.trivago.com/categories/data-analytics",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [
+        {
+          "id": "aasma-jabin",
+          "name": "Aasma Jabin",
+          "pronouns": null,
+          "title": null,
+          "city": "Düsseldorf",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": "trivago tech blog",
+              "title": "Agents, Randomness, and Receipts: Notes from trivago's QA Meetup",
+              "date": "2026-08-12",
+              "url": "https://tech.trivago.com/post/2026-08-12-agents-randomness-and-receipts-notes-from-trivagos-qa-meetup",
+              "content_id": "trivago-tech-blog-agents-randomness-and-receipts-notes-fro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Recap of an external QA meetup hosted at trivago's Düsseldorf campus.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://tech.trivago.com/post/2026-08-12-agents-randomness-and-receipts-notes-from-trivagos-qa-meetup",
+              "note": "article: Agents, Randomness, and Receipts: Notes from trivago's QA Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "connector (venue). Wrote up trivago's July 2026 QA Meetup at its Düsseldorf campus (~90 attendees), which shows trivago still hosts external meetups. The trivago tech blog has no dbt posts; its last data post was on Great Expectations in 2023."
+        }
+      ],
+      "notes": "No dbt content on the tech blog. Hosts external meetups at its Düsseldorf campus (QA Meetup, ~90 people, Jul 2026) and has hosted the Düsseldorf Data Science Meetup. Good venue option for Düsseldorf itself."
+    },
+    {
+      "id": "accenture-intions",
+      "name": "Accenture / intions (Essen Innovation Hub)",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Zollverein, Essen. Hosted the Databricks user group in Dec 2025. A possible Ruhr-side venue."
+    },
+    {
+      "id": "data-natives-dusseldorf-koln",
+      "name": "Data Natives Düsseldorf & Köln",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/big-data-dusseldorf-koln/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "2,354 members, but no local events since 2022-23. Effectively dead."
+    },
+    {
+      "id": "databricks-user-group-rheinruhr",
+      "name": "Databricks User Group Rhein-Ruhr",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "103 members. Four events Jan-Dec 2025 moving between Cologne, Meerbusch and Essen, with 9-15 RSVPs each on Meetup (real sign-ups go through Databricks' own events site). The closest peer to the dbt chapter, and it shows the region's speaker pool is mostly Databricks-centric."
+    },
+    {
+      "id": "dusseldorf-data-science-meetup",
+      "name": "Düsseldorf Data Science Meetup",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/dusseldorf-data-science-meetup/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "3,465 members but dormant since Jan 2024."
+    },
+    {
+      "id": "infomotion",
+      "name": "Infomotion",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Cologne office (Augustinerstr. 10) hosted the Databricks user group in Jul 2025."
+    },
+    {
+      "id": "women-in-ai-cologne",
+      "name": "Women in AI Cologne",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.ki.nrw/women-in-ai-cologne-meetup-3/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "Founded 2024. Meetup #3 took place at REWE digital in Jun 2025. Focus is AI transformation."
+    },
+    {
+      "id": "women-in-big-data-nrw",
+      "name": "Women in Big Data NRW",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Düsseldorf"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.meetup.com/women-in-big-data-dusseldorf/",
+          "note": "Engineering/data blog scanned 2026-09-24"
+        }
+      ],
+      "people": [],
+      "notes": "1,150 members, Düsseldorf-based. Its 2025-26 events are small café 'Data Dates' (6-17 attendees) plus occasional company-hosted talks. Good partner for a co-branded evening."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/?type=past",
+    "past_meetups_derived_from": "enriched/rhein-ruhr-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Rhein-Ruhr dbt Meetup group page",
+        "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/",
+        "yielded": true,
+        "note": "111 members, 4.7 rating. 2 in-person events: Dec 5 2024 at adesso (22 attendees) and May 15 2025 at taod (29 attendees), plus a network AMA. Nothing since May 2025. Note: the brief had the venue order reversed; adesso hosted first and taod most recently."
+      },
+      {
+        "name": "Rhein-Ruhr dbt Meetup event 307198615",
+        "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+        "yielded": true,
+        "note": "Full agenda and organiser names."
+      },
+      {
+        "name": "Rhein-Ruhr dbt Meetup event 304543797",
+        "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+        "yielded": true,
+        "note": "Full agenda with speakers' LinkedIn links."
+      },
+      {
+        "name": "Built-in browser (meetup.com gql2)",
+        "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/?type=past",
+        "yielded": false,
+        "note": "Browser tab cap reached (other agents' tabs), so no tab could be opened. Used web_fetch of group and event pages instead, which rendered agendas fine."
+      },
+      {
+        "name": "trivago tech blog",
+        "url": "https://tech.trivago.com/",
+        "yielded": true,
+        "note": "No dbt posts. Category pages render empty. Useful only as a venue signal."
+      },
+      {
+        "name": "Databricks User Group Rhein-Ruhr",
+        "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/",
+        "yielded": true,
+        "note": "3 event pages fetched with full agendas."
+      },
+      {
+        "name": "Düsseldorf Data Science Meetup",
+        "url": "https://www.meetup.com/dusseldorf-data-science-meetup/",
+        "yielded": true,
+        "note": "Dormant since Jan 2024."
+      },
+      {
+        "name": "Women in Big Data NRW",
+        "url": "https://www.meetup.com/women-in-big-data-dusseldorf/",
+        "yielded": true,
+        "note": "Recent events are discussion-format, without named speakers."
+      },
+      {
+        "name": "WiBD NRW x Thoughtworks recap",
+        "url": "https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/",
+        "yielded": true,
+        "note": "Two speakers and two hosts named."
+      },
+      {
+        "name": "Women in AI Cologne #3 (KI.NRW)",
+        "url": "https://www.ki.nrw/women-in-ai-cologne-meetup-3/",
+        "yielded": true,
+        "note": "One speaker. AI-transformation topic."
+      },
+      {
+        "name": "taod events + press",
+        "url": "https://taod.de/events",
+        "yielded": true,
+        "note": "taod's own event series and venues."
+      },
+      {
+        "name": "Snowflake User Group Köln (meetup)",
+        "url": "https://www.meetup.com/snowflake-user-group-koln/",
+        "yielded": false,
+        "note": "Group not found (deleted)."
+      },
+      {
+        "name": "PyData Cologne-Bonn (meetup)",
+        "url": "https://www.meetup.com/pydata-cologne-bonn/",
+        "yielded": false,
+        "note": "Group not found."
+      },
+      {
+        "name": "Data Natives Düsseldorf & Köln",
+        "url": "https://www.meetup.com/big-data-dusseldorf-koln/",
+        "yielded": false,
+        "note": "Inactive locally."
+      },
+      {
+        "name": "WebSearch: Coalesce/dbt Summit NRW employer speakers",
+        "url": "https://sessionize.com/coalesce-2024/",
+        "yielded": false,
+        "note": "No NRW-employer speakers surfaced in 2 searches."
+      },
+      {
+        "name": "WebSearch: REWE/METRO/Henkel/Vodafone dbt blogs",
+        "url": "https://www.rewe-digital.com/en",
+        "yielded": false,
+        "note": "No public dbt content from the big NRW corporates."
+      },
+      {
+        "name": "LinkedIn Jobs guest API (keywords=dbt, Düsseldorf/Rhein-Ruhr)",
+        "url": "https://www.linkedin.com/jobs/search?keywords=dbt",
+        "yielded": true,
+        "note": "49 ads mention dbt"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Cologne dbt Meetup",
+      "date": "2024-12-05",
+      "venue": "adesso SE, Agrippinawerft 26, Köln",
+      "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+      "organisers": [],
+      "attendees": 22,
+      "talks": [
+        {
+          "speaker": "Ramon Marrero",
+          "company": "DISH Digital Solutions",
+          "title": "The Critical Role of Data Quality in Building Agentic RAG Systems",
+          "topics": [
+            "data quality & testing",
+            "genai & llm"
+          ]
+        },
+        {
+          "speaker": "Stephan Durry",
+          "company": "dbt Labs",
+          "title": "Sleep better with data testing",
+          "topics": [
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Pádraic Slattery",
+          "company": "Xebia",
+          "title": "Maintaining your conventions amid the chaos of dbt",
+          "topics": [
+            "dbt best practices",
+            "data governance"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Köln dbt Meetup",
+      "date": "2025-05-15",
+      "venue": "taod Consulting GmbH, Oskar-Jäger-Str. 173, K4, Cologne",
+      "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+      "organisers": [],
+      "attendees": 30,
+      "talks": [
+        {
+          "speaker": "Stephan Durry",
+          "company": "dbt Labs",
+          "title": "What's new at dbt Labs",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Sönke Maibach",
+          "company": "Data Engineer, taod",
+          "title": "Lessons on migrating legacy stack to dbt reliably and cheaply",
+          "topics": [
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Alex Rupp",
+          "company": "VP Data & BI, Schüttflix",
+          "title": "Pairing dbt and Slack Bots - for data-driven communication",
+          "topics": [
+            "business intelligence"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Düsseldorf dbt Meetup (meetup.com)",
+      "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/",
+      "note": "This chapter"
+    },
+    {
+      "name": "Rhein-Ruhr dbt Meetup event 307198615",
+      "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/",
+      "note": "Full agenda and organiser names."
+    },
+    {
+      "name": "Rhein-Ruhr dbt Meetup event 304543797",
+      "url": "https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/",
+      "note": "Full agenda with speakers' LinkedIn links."
+    },
+    {
+      "name": "Databricks User Group Rhein-Ruhr",
+      "url": "https://www.meetup.com/databricks-user-group-rhein-ruhr/",
+      "note": "3 event pages fetched with full agendas."
+    },
+    {
+      "name": "Düsseldorf Data Science Meetup",
+      "url": "https://www.meetup.com/dusseldorf-data-science-meetup/",
+      "note": "Dormant since Jan 2024."
+    },
+    {
+      "name": "Women in Big Data NRW",
+      "url": "https://www.meetup.com/women-in-big-data-dusseldorf/",
+      "note": "Recent events are discussion-format, without named speakers."
+    },
+    {
+      "name": "Women in AI Cologne #3 (KI.NRW)",
+      "url": "https://www.ki.nrw/women-in-ai-cologne-meetup-3/",
+      "note": "One speaker. AI-transformation topic."
+    }
+  ]
+}
