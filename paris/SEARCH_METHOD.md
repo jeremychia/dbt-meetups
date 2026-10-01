@@ -3,7 +3,7 @@
 This file goes with `paris_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and gives a prompt for re-running and extending the search.
 
 - **First built:** 2026-09-24
-- **Dataset version:** 1 (shared schema version 3)
+- **Dataset version:** 2 (shared schema version 3)
 - **Goal:** find people in Paris / Île-de-France who post or speak about dbt and data topics, and who could **speak at** (or attend) the Paris dbt Meetup. Also find the Paris companies that use dbt.
 - **Sister datasets:** `../berlin_planning/berlin_dbt_companies.json`, `../baltics/lithuania_dbt_companies.json` and `../kuala_lumpur/kuala_lumpur_dbt_companies.json`.
   - All four follow the shared schema in `../berlin_planning/SEARCH_METHOD.md` §3, and the validator there (Appendix A) checks all of them.
@@ -193,3 +193,4 @@ companies and dbt roles, people who have moved, and topic trends.
 | Date | Version | Change |
 |---|---|---|
 | 2026-09-24 | 1 | First search, with 5 parallel sub-agents covering large companies, partners/vendors/media, meetups and conferences, job ads, and women-in-data communities, plus chapter history. 238 companies (94 on the watchlist), 186 people, 147 dbt job ads at 109 companies, 207 unique content items. Split: 137 proven speakers, 26 emerging voices, 8 featured, 16 with no public content. Tiers: 37 tier 1, 86 tier 2, 54 tier 3, 9 connectors. 17 people had already spoken at the Paris dbt Meetup. The LinkedIn pass is incomplete because the web-search limit was reached; 38 people have LinkedIn URLs. |
+| 2026-09-24 | 2 | Rebuilt with the same merge rules; adds 3 job ads the v1 build had dropped (150 in total), otherwise unchanged. Backup: `paris_dbt_companies.v1.json`. |

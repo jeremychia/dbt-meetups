@@ -4,13 +4,14 @@
     "generated_at": "2026-09-24",
     "prepared_for": "Jeremy Chia (dbt meetups — Paris)",
     "purpose": "Find Paris companies using dbt, and people who could speak at or attend the Paris dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 3,
     "region": "Paris (Paris dbt Meetup)",
     "method": [
       "v1 (2026-09-24): replicated the Berlin method (berlin_planning/SEARCH_METHOD.md) for Paris with 5 parallel sub-agents: (1) large Paris companies' blogs, Medium feeds and case studies; (2) Paris dbt partners/consultancies, data vendors and French data newsletters (DataGen, blef.fr); (3) other Paris data meetups and conferences (Forward Data Conference, Paris Airflow/DuckDB meetups, Paris Data Ladies); (4) dbt job ads (LinkedIn Jobs guest search, 250 ads checked for the whole word 'dbt'; Lever/Greenhouse/Ashby/WTTJ via web search); (5) women-in-data communities (Paris Data Ladies, PyLadies Paris, R-Ladies Paris, WiMLDS Paris, Women in Big Data Paris).",
       "Past Paris dbt Meetup speakers (enriched/paris-dbt-meetup.json) added as proven speakers; people merged by first+last name with accents removed.",
-      "Topics: 1-3 per item from TOPIC_VOCABULARY (pipeline/enrich.py). Tier 1 kept only for Paris-based (or unknown) people with dbt-relevant evidence from 2024 onwards; emerging voices raised per the shared rule."
+      "Topics: 1-3 per item from TOPIC_VOCABULARY (pipeline/enrich.py). Tier 1 kept only for Paris-based (or unknown) people with dbt-relevant evidence from 2024 onwards; emerging voices raised per the shared rule.",
+      "Built by planning/build.py from planning/raw/paris/ (1 run(s), 7 file(s)) + planning/overrides/paris.json."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -56,8 +57,8 @@
     "counts": {
       "companies": 238,
       "people": 186,
-      "job_postings": 147,
-      "companies_with_job_postings": 109,
+      "job_postings": 150,
+      "companies_with_job_postings": 111,
       "speaker_evidence_items": 246,
       "unique_content_items": 206,
       "people_with_linkedin": 38,
@@ -73,13 +74,13 @@
         "low": 16
       },
       "attendee_potential": {
-        "high": 55,
-        "medium": 129,
+        "high": 44,
+        "medium": 140,
         "low": 2
       },
       "priority_tier": {
-        "1": 37,
-        "2": 86,
+        "1": 38,
+        "2": 85,
         "3": 54,
         "connector": 9
       },
@@ -93,15 +94,17 @@
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
-        "podcast": 18,
-        "company_blog_scan": 33,
+        "podcast": 24,
+        "newsletter_or_blog": 21,
+        "company_blog_scan": 35,
         "women_in_data_community": 31,
-        "conference_or_meetup_agenda": 81,
+        "case_study": 3,
+        "conference_or_meetup_agenda": 99,
+        "github": 2,
+        "linkedin_search": 4,
         "chapter_meetup_history": 17,
-        "newsletter_or_blog": 5,
         "other": 2,
-        "job_ad_company_search": 16,
-        "case_study": 2
+        "job_ad_company_search": 16
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -184,7 +187,21 @@
         "Coalesce Catalog",
         "Dust"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer - BigQuery (x/f/m)",
+          "url": "https://builtin.com/job/senior-analytics-engineer-gcp-x-f-m/7805085",
+          "source": "builtin.com (search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "developing and maintaining data marts in BigQuery using SQL/Jinja and DBT",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-24",
+          "job_family": "Analytics Engineering",
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "other",
@@ -199,12 +216,12 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/doctolib (feeds tagged data, dbt)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "Coalesce case study",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -227,7 +244,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "podcast"
+            "podcast",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -292,11 +310,15 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/romain-fays",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://shows.acast.com/data-gen/episodes/154-doctolib-lancer-une-equipe-analytics-engineering",
               "note": "podcast: Doctolib : Adopter une approche Analytics Engineering et Self-Service"
+            },
+            {
+              "url": "https://datageneration.substack.com/p/les-2-chantiers-du-head-of-analytics",
+              "note": "interview: Doctolib : Les 2 chantiers du Head of Analytics Engineering"
             }
           ],
           "confidence": "High",
@@ -325,7 +347,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -371,11 +394,15 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/jason-vazelle/",
-              "note": "LinkedIn match (medium): Result title 'Jason Nathaniel Vazelle - Doctolib | LinkedIn'; search summary: BI/analytics engineer, 3+ years, has since moved on from Doctolib; current role: BI/analytics engineer (search summary says possibly no longer at Doctolib; not verified)"
+              "note": "LinkedIn match (medium): Result title 'Jason Nathaniel Vazelle - Doctolib | LinkedIn'; search summary: BI/analytics engineer, 3+ years, has since moved on from Doctolib"
             },
             {
               "url": "https://medium.com/doctolib/analytics-at-scale-the-frameworks-behind-monitoring-100-features-1-2-1012d3c0bbd3",
               "note": "article: Analytics at scale: the frameworks behind monitoring 100+ features (1/2)"
+            },
+            {
+              "url": "https://medium.com/doctolib/analytics-at-scale-the-frameworks-behind-monitoring-100-features-2-2-212119e60a9c",
+              "note": "article: Analytics at scale: the frameworks behind monitoring 100+ features (2/2)"
             }
           ],
           "confidence": "Medium",
@@ -405,7 +432,9 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "company_blog_scan",
-            "women_in_data_community"
+            "women_in_data_community",
+            "newsletter_or_blog",
+            "case_study"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -486,11 +515,23 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/diana-carrondo/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://medium.com/doctolib/changing-our-data-catalog-why-healthtech-company-doctolib-decided-it-was-time-for-an-overhaul-20e452b5991a",
               "note": "article: Changing our Data Catalog: Why healthtech company Doctolib decided it was time for an overhaul (1/6)"
+            },
+            {
+              "url": "https://medium.com/doctolib/changing-our-data-catalog-28-weeks-later-of-product-mode-6-6-61f81d9c15aa",
+              "note": "article: Changing our Data Catalog: 28 weeks later of product mode (6/6)"
+            },
+            {
+              "url": "https://coalesce.io/customer-stories/doctolib-builds-healthier-data-culture-with-better-data-catalog/",
+              "note": "case_study: Doctolib Builds a Healthier Data Culture With a Better Data Catalog"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/events/302422774/",
+              "note": "talk: How can data teams serve a bold AI vision?"
             }
           ],
           "confidence": "High",
@@ -519,7 +560,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -547,7 +589,7 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/alexandre-guitton-44375210a",
-              "note": "LinkedIn match (high): Result title 'Alexandre Guitton - Doctolib'; snippet mentions building Doctolib's data platform for data modeling and ML use cases; current role: Data platform, Doctolib"
+              "note": "LinkedIn match (high): Result title 'Alexandre Guitton - Doctolib'; snippet mentions building Doctolib's data platform for data modeling and ML use cases"
             },
             {
               "url": "https://medium.com/doctolib/building-a-unified-healthcare-data-platform-architecture-2bed2aaaf437",
@@ -606,10 +648,6 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/our-path-to-implement-a-product-approach-to-data-at-doctolib",
               "note": "talk: Our path to implement a product approach to data (at Doctolib)"
-            },
-            {
-              "url": null,
-              "note": "LinkedIn not confirmed: Candidate: fr.linkedin.com/in/arthur-delpierre-coudert-0b85a7298, title 'Arthur Delpierre Coudert - Paris, Île-de-France, France'. Name and city match, but no company or role in the snippet, so not accepted"
             }
           ],
           "confidence": "High",
@@ -722,7 +760,7 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/lucille-fargeau-79a43ba9",
-              "note": "LinkedIn match (high): Result title 'Lucille FARGEAU - Doctolib | LinkedIn'; snippet: Senior Analytics Engineer at Doctolib; current role: Senior Analytics Engineer, Doctolib"
+              "note": "LinkedIn match (high): Result title 'Lucille FARGEAU - Doctolib | LinkedIn'; snippet: Senior Analytics Engineer at Doctolib"
             },
             {
               "url": "https://www.meetup.com/paris-dataladies/events/302422774/",
@@ -783,10 +821,6 @@
             {
               "url": "https://www.meetup.com/paris-dataladies/events/297044252/",
               "note": "talk: DataOps at Doctolib, roll out of one of our Data Tools"
-            },
-            {
-              "url": null,
-              "note": "LinkedIn not confirmed: Candidate: linkedin.com/in/chloe-carayon940099/, title 'Chloé Carayon - Alstom | LinkedIn'. Snippet mentions connections at Doctolib and a Data Ops Engineer opening, but the headline company is Alstom. Link to Doctolib is unclear, so not accepted"
             }
           ],
           "confidence": "Medium",
@@ -843,10 +877,6 @@
             {
               "url": "https://www.meetup.com/paris-dataladies/events/297044252/",
               "note": "talk: DataOps at Doctolib, roll out of one of our Data Tools"
-            },
-            {
-              "url": null,
-              "note": "LinkedIn not confirmed: Only hit: dz.linkedin.com/in/ouamar-khalida-518641146 (Algeria), with no company or role. Other sources (meetup posts) confirm she is a DataOps Engineer at Doctolib, but no LinkedIn profile matched"
             }
           ],
           "confidence": "Medium",
@@ -966,6 +996,14 @@
             {
               "url": "https://blog.ippon.fr/2024/05/07/tdd-avec-dbt/",
               "note": "article: TDD avec dbt"
+            },
+            {
+              "url": "https://blog.ippon.fr/2023/11/13/passer-de-dbt-cloud-a-vscode-cest-facile/",
+              "note": "article: Passer de dbt Cloud à VSCode, c'est facile"
+            },
+            {
+              "url": "https://blog.ippon.fr/2022/01/07/testez-votre-code-sql-avec-dbt/",
+              "note": "article: Testez votre code SQL avec dbt"
             }
           ],
           "confidence": "High",
@@ -1038,6 +1076,10 @@
             {
               "url": "https://blog.ippon.fr/2024/05/06/dbt-comment-tester-ses-macros/",
               "note": "article: dbt : Comment tester ses macros"
+            },
+            {
+              "url": "https://blog.ippon.fr/2023/04/05/travailler-avec-dbt-core/",
+              "note": "article: Travailler avec dbt Core : du développement à la production"
             }
           ],
           "confidence": "High",
@@ -1173,7 +1215,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "github"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -1334,7 +1377,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "women_in_data_community"
+            "women_in_data_community",
+            "linkedin_search"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -1381,6 +1425,10 @@
             {
               "url": "https://www.meetup.com/paris-dataladies/events/314833657/",
               "note": "talk: La couche sémantique : le chaînon indispensable du self-service data agentique"
+            },
+            {
+              "url": "https://theorg.com/org/ippon-technologies/org-chart/juliette-chabbal",
+              "note": "post: Juliette Chabbal - Consultante Data Engineer @ Bpifrance at Ippon Technologies"
             }
           ],
           "confidence": "High",
@@ -1433,7 +1481,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/blablacar (feed tagged dbt)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -1456,7 +1504,8 @@
           "sourced_via": [
             "company_blog_scan",
             "conference_or_meetup_agenda",
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -1512,7 +1561,7 @@
                 "Antoine Lefebvre"
               ],
               "mentions_dbt": true,
-              "description": "A look beyond the basics at Blablacar's dbt tooling ecosystem.",
+              "description": null,
               "topics": [
                 "dbt best practices",
                 "modern data stack"
@@ -1527,6 +1576,14 @@
             {
               "url": "https://medium.com/blablacar/scaling-success-dbt-at-blablacar-545dd9e9844a",
               "note": "article: Scaling Success: dbt at BlaBlaCar"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/speakers/tushar-bhasin",
+              "note": "talk: (untitled)"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/307160865/",
+              "note": "talk: Beyond the Basics: Our dbt Tooling Ecosystem"
             }
           ],
           "confidence": "High",
@@ -1565,7 +1622,9 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "company_blog_scan",
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "newsletter_or_blog",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -1617,7 +1676,7 @@
                 "Tushar Bhasin"
               ],
               "mentions_dbt": true,
-              "description": "A look beyond the basics at Blablacar's dbt tooling ecosystem.",
+              "description": null,
               "topics": [
                 "dbt best practices",
                 "modern data stack"
@@ -1631,11 +1690,19 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/lefebvreantoine",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://medium.com/blablacar/scaling-success-the-dbt-ecosystem-at-blablacar-c214c4b8f0cb",
               "note": "article: Scaling Success: The dbt Ecosystem at BlaBlaCar"
+            },
+            {
+              "url": "https://medium.com/blablacar/data-pipelines-architecture-at-blablacar-3ca43403cb39",
+              "note": "article: Data Pipelines Architecture at BlaBlaCar"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/307160865/",
+              "note": "talk: Beyond the Basics: Our dbt Tooling Ecosystem"
             }
           ],
           "confidence": "High",
@@ -1673,7 +1740,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -1701,7 +1769,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/thomas-pocreau-23707959/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://medium.com/blablacar/why-we-built-blablacar-data-copilot-shifting-data-analysis-left-b4cc246faf52",
@@ -1781,6 +1849,10 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/closing-the-loop-alerting-your-stakeholders-on-data-quality",
               "note": "talk: Closing the Loop: Alerting your Stakeholders on Data Quality"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/re-building-an-ai-ready-data-universe",
+              "note": "talk: (Re)Building an AI-Ready data universe"
             }
           ],
           "confidence": "High",
@@ -1876,10 +1948,18 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/solinanatalia/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/closing-the-loop-alerting-your-stakeholders-on-data-quality",
+              "note": "talk: Closing the Loop: Alerting your Stakeholders on Data Quality"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/i-replaced-myself-with-ai",
+              "note": "talk: I replaced myself with AI"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/natalia-solina",
               "note": "talk: Closing the Loop: Alerting your Stakeholders on Data Quality"
             }
           ],
@@ -2037,7 +2117,7 @@
         {
           "type": "blog_scanned",
           "url": "https://blog.malt.engineering/ (feed tagged dbt)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -2060,7 +2140,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -2088,7 +2169,7 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/thierry-sall%C3%A9-7413051b",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://blog.malt.engineering/dbt-migration-at-malt-2bb754b3304e",
@@ -2172,10 +2253,14 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/jeannienatasha/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/building-a-robust-data-platform-on-the-road-to-self-service-analytics",
+              "note": "talk: Building a Robust Data Platform on the Road to Self-Service Analytics"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/jeannie-natasha",
               "note": "talk: Building a Robust Data Platform on the Road to Self-Service Analytics"
             }
           ],
@@ -2273,10 +2358,18 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/ana%C3%AFs-ghelfi-50382397/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/building-a-robust-data-platform-on-the-road-to-self-service-analytics",
+              "note": "talk: Building a Robust Data Platform on the Road to Self-Service Analytics"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/events/302422774/",
+              "note": "talk: Malt's journey in building an Internal Generative AI product for Efficiency"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/anais-ghelfi",
               "note": "talk: Building a Robust Data Platform on the Road to Self-Service Analytics"
             }
           ],
@@ -2494,12 +2587,12 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/qonto-way (feed tagged data)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "DataGen newsletter",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -2527,7 +2620,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "newsletter_or_blog"
+            "newsletter_or_blog",
+            "podcast"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -2555,7 +2649,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/alice-fresko-861710a8/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://datageneration.substack.com/p/qonto-adopter-une-approche-analytics",
@@ -2588,7 +2682,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "newsletter_or_blog"
+            "newsletter_or_blog",
+            "podcast"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -2616,7 +2711,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/j%C3%A9r%C3%A9mie-jakubowicz-8b1277133/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://datageneration.substack.com/p/qonto-les-5-chantiers-du-vp-data",
@@ -2647,7 +2742,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -2702,7 +2798,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": false,
           "speaker_evidence": [
@@ -2747,6 +2844,10 @@
             {
               "url": "https://medium.com/qonto-way/building-dashboards-like-a-product-lessons-from-design-growth-and-product-management-17b90113a39b",
               "note": "article: Building dashboards like a product: Lessons from Design, Growth, and Product Management"
+            },
+            {
+              "url": "https://medium.com/qonto-way/customer-segmentation-isnt-an-analytics-problem-it-s-an-adoption-problem-9b10c4c0ac4d",
+              "note": "article: Customer segmentation isn't an analytics problem — it's an adoption problem."
             }
           ],
           "confidence": "Medium",
@@ -2896,7 +2997,7 @@
         {
           "type": "blog_scanned",
           "url": "DataGen newsletter",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -2948,7 +3049,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/colinmatthieu/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://datageneration.substack.com/p/back-market-construire-un-data-model",
@@ -2981,7 +3082,8 @@
           },
           "lead_type": "featured",
           "sourced_via": [
-            "podcast"
+            "podcast",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -3007,7 +3109,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/caroline-mestre/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://datageneration.substack.com/p/back-market-construire-un-data-model",
@@ -3216,7 +3318,7 @@
         {
           "type": "blog_scanned",
           "url": "https://engineering.contentsquare.com/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -3427,7 +3529,7 @@
         {
           "type": "blog_scanned",
           "url": "https://infinitelambda.com/blog/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -3559,7 +3661,7 @@
               "content_id": "paris-dbt-meetup-2-paris--comment-les-packages-dbt-peuvent-booster",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "How dbt packages can boost your project.",
+              "description": null,
               "topics": [
                 "dbt best practices",
                 "developer workflow"
@@ -3574,6 +3676,14 @@
             {
               "url": "https://infinitelambda.com/migrating-informatica-to-dbt-meetup/",
               "note": "talk: Migrating 250+ Informatica workflows to dbt"
+            },
+            {
+              "url": "https://infinitelambda.com/pouvoir-modern-data-stack-paris/",
+              "note": "talk: Le pouvoir de la modern data stack"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/290891650/",
+              "note": "talk: Comment les packages dbt peuvent booster votre projet"
             }
           ],
           "confidence": "High",
@@ -3704,7 +3814,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "other"
+            "other",
+            "github"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -3758,7 +3869,8 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "other",
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "company_blog_scan"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -3822,6 +3934,14 @@
             {
               "url": "https://www.maddyness.com/2025/06/25/des-anciens-de-sorare-et-dalgolia-lancent-une-startup-pour-repenser-le-data-stack-des-entreprises-a-laide-de-lia/",
               "note": "article: Des anciens de Sorare et d'Algolia lancent une startup pour repenser le «data stack» des entreprises à l'aide de l'IA"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/duckdb-dbt-and-the-death-of-pipeline-glue",
+              "note": "talk: DuckDB, dbt, and the Death of Pipeline Glue"
+            },
+            {
+              "url": "https://duckdb.org/events/2026/09/24/duckdb-paris-meetup/",
+              "note": "talk: DuckDB, dbt, Death of Pipeline"
             }
           ],
           "confidence": "Low",
@@ -4087,7 +4207,8 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "podcast",
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -4119,7 +4240,7 @@
               "content_id": "paris-dbt-meetup-3-paris--dbt-new-features",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "An overview of new dbt features.",
+              "description": null,
               "topics": [
                 "dbt product updates"
               ],
@@ -4136,7 +4257,7 @@
               "content_id": "paris-dbt-meetup-avec-jer-product-analytics-at-dbt-labs",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "How the dbt Labs product team uses dbt to analyze feature adoption and identify the main challenges users face, with concrete examples for both dbt Core and dbt Cloud users.",
+              "description": null,
               "topics": [
                 "business intelligence",
                 "dbt product features"
@@ -4154,7 +4275,7 @@
               "content_id": "dbt-global-circuit-series-for-builders-by-builders-the-latest-tool",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "Jeremy Cohen presents the latest dbt features and news, and lets attendees play with new functionality.",
+              "description": null,
               "topics": [
                 "dbt product updates"
               ],
@@ -4167,16 +4288,28 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/jeremytcohen/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://shows.acast.com/data-gen/episodes/179-dbt-le-standard-pour-transformer-les-donnees",
               "note": "podcast: #179 - dbt : L'outil le plus adopté ?"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/296837705/",
+              "note": "talk: dbt new features"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/305178433/",
+              "note": "talk: Product Analytics at dbt Labs"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/307856079/",
+              "note": "talk: For Builders, by Builders: The Latest Tools from dbt Labs"
             }
           ],
           "confidence": "Medium",
           "internal_vinted": false,
-          "priority_tier": 2,
+          "priority_tier": 1,
           "suggested_talk_angle": "dbt roadmap update from the product team (in French)",
           "past_chapter_talks": [
             {
@@ -4254,7 +4387,7 @@
               "content_id": "paris-dbt-meetup-5-paris--retour-sur-dbt-coalesce",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "A recap of the dbt Coalesce conference, covering highlights and news.",
+              "description": null,
               "topics": [
                 "dbt product updates"
               ],
@@ -4267,11 +4400,15 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/anouarhnini/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://www.youtube.com/watch?v=FaIl7xDlNvY",
               "note": "talk: Coalesce Updates with Anouar Hnini, dbt Labs"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dbt-meetup/events/303480853/",
+              "note": "talk: Retour sur dbt Coalesce"
             }
           ],
           "confidence": "Medium",
@@ -4332,7 +4469,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.modeo.ai/articles",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -4400,6 +4537,10 @@
             {
               "url": "https://shows.acast.com/data-gen/episodes/245-masterclass-mettre-en-place-dbt-avec-matthieu-rousseau-d",
               "note": "podcast: #245 - Masterclass | Mettre en place dbt avec Matthieu Rousseau, CEO & Data Engineer chez Modeo"
+            },
+            {
+              "url": "https://shows.acast.com/data-gen/episodes/143-masterclass-tout-comprendre-sur-le-dataops-avec-matthieu",
+              "note": "podcast: #143 - Masterclass | Tout comprendre sur le DataOps avec Matthieu Rousseau"
             }
           ],
           "confidence": "High",
@@ -4496,7 +4637,7 @@
         {
           "type": "blog_scanned",
           "url": "https://getnao.io/blog/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -4518,7 +4659,10 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "newsletter_or_blog",
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "podcast",
+            "linkedin_search",
+            "company_blog_scan"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -4617,6 +4761,22 @@
             {
               "url": "https://shows.acast.com/data-gen/episodes/186-on-compare-dbt-sqlmesh-avec-christophe-blefari-aka-blef",
               "note": "podcast: #186 - On compare dbt & SQLMesh avec Christophe Blefari (aka Blef)"
+            },
+            {
+              "url": "https://www.blef.fr/talks/",
+              "note": "post: Talks"
+            },
+            {
+              "url": "https://duckdb.org/events/2026/09/24/duckdb-paris-meetup/",
+              "note": "talk: Why DuckDB Is the Missing Piece of Your Agentic Setup"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/we-have-been-automated-what-to-do-in-2026",
+              "note": "talk: We have been automated, what to do in 2026?"
+            },
+            {
+              "url": "https://www.blef.fr/data-news-dbt-coalesce-2025",
+              "note": "article: Data News — dbt Coalesce 2025"
             }
           ],
           "confidence": "High",
@@ -4635,7 +4795,8 @@
           "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
-            "https://www.linkedin.com/in/claire-gouze-aa324289/"
+            "https://www.linkedin.com/in/claire-gouze-aa324289/",
+            "https://www.linkedin.com/in/claire-gouze/"
           ],
           "has_linkedin": true,
           "linkedin_confidence": "high",
@@ -4709,12 +4870,24 @@
           "attendee_signal": null,
           "evidence": [
             {
+              "url": "https://www.linkedin.com/in/claire-gouze/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
               "url": "https://www.linkedin.com/in/claire-gouze-aa324289/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://roundup.getdbt.com/p/the-context-engineering-playbook",
               "note": "podcast: The context engineering playbook (Claire Gouze)"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/context-engineering-for-analytics-agents-that-actually-work",
+              "note": "talk: Context engineering for analytics agents that actually work"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/claire-gouze",
+              "note": "talk: Speaker (talk TBA)"
             }
           ],
           "confidence": "High",
@@ -4758,7 +4931,7 @@
         {
           "type": "blog_scanned",
           "url": "DataGen newsletter",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -4768,7 +4941,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/swile-engineering",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -4963,7 +5136,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/accor-digital-and-tech (feed tagged dbt)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -5000,7 +5173,8 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "company_blog_scan",
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -5085,6 +5259,18 @@
             {
               "url": "https://medium.com/accor-digital-and-tech/the-dbt-airflow-effect-enhanced-data-deployments-at-accor-356e85299887",
               "note": "article: The dbt + Airflow Effect: Enhanced Data Deployments at Accor"
+            },
+            {
+              "url": "https://medium.com/@mezzour.ismail07/deploying-airflow-at-accor-for-80-data-engineers-scientists-our-lessons-learned-with-9de40d944cd1",
+              "note": "article: Deploying Airflow at ACCOR for 80+ Data Engineers & Scientists — our lessons learned with Astronomer"
+            },
+            {
+              "url": "https://www.meetup.com/paris-apache-airflow-meetup/events/314074646/",
+              "note": "talk: Comment on a unifié l'orchestration data pour 80+ engineers"
+            },
+            {
+              "url": "https://www.meetup.com/paris-apache-airflow-meetup/events/316581712/",
+              "note": "talk: From Self-Service to Scale: How We Empowered Analytics Engineers Without Growing the Platform Team"
             }
           ],
           "confidence": "High",
@@ -5232,7 +5418,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/alan (feed tagged data)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -5258,7 +5444,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": false,
           "speaker_evidence": [
@@ -5355,7 +5542,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/artefact-engineering-and-data-science",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -5386,7 +5573,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -5450,17 +5638,17 @@
         {
           "type": "blog_scanned",
           "url": "https://datageneration.substack.com/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "https://shows.acast.com/data-gen",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "https://datageneration.substack.com/archive",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -5470,7 +5658,7 @@
         {
           "type": "blog_scanned",
           "url": "https://shows.acast.com/data-gen/episodes",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -5493,7 +5681,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "podcast"
+            "podcast",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -5557,11 +5746,19 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/robin-conquet-3a510292/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://datageneration.substack.com/",
               "note": "host: DataGen | Robin Conquet | Substack"
+            },
+            {
+              "url": "https://shows.acast.com/data-gen",
+              "note": "host: DataGen"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/whats-next-after-data-ai",
+              "note": "panel: What's Next After Data & AI?"
             }
           ],
           "confidence": "High",
@@ -5733,7 +5930,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.devoteam.com/expert-view/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -6292,7 +6489,7 @@
         {
           "type": "blog_scanned",
           "url": "Infinite Lambda webinar page",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -6313,7 +6510,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "case_study"
+            "case_study",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -6600,7 +6798,7 @@
         {
           "type": "blog_scanned",
           "url": "DataGen podcast",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -6651,7 +6849,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/bastien-caun%C3%A8gre-72574a131/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://open.spotify.com/episode/73Nun5EFYgiNFQvmXdQe4o",
@@ -6901,7 +7099,7 @@
         {
           "type": "blog_scanned",
           "url": "Monte Carlo case study (search summary)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -7469,12 +7667,12 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/decathlondigital (feed tagged dbt: empty)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "DataGen newsletter",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -7773,7 +7971,7 @@
       "notes": "1 dbt job ad(s) in Paris/IDF: Data Engineer Senior."
     },
     {
-      "id": "globee-shopper-house",
+      "id": "globe-groupe-shopper-house",
       "name": "GLOBE GROUPE SHOPPER HOUSE",
       "type": "employer",
       "watchlist": false,
@@ -8343,7 +8541,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -10327,11 +10525,23 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/hugo-palmer-data-science/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://datageneration.substack.com/p/decathlon-leur-nouvelle-strategie",
               "note": "podcast: Decathlon : Leur nouvelle stratégie Analytics"
+            },
+            {
+              "url": "https://shows.acast.com/data-gen/episodes/220-decathlon-leur-nouvelle-strategie-analytics",
+              "note": "podcast: #219 - Decathlon : Leur nouvelle stratégie Analytics"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/empowering-a-large-scale-analytics-organization-with-an-analytics-center-of-excellence",
+              "note": "talk: Empowering a large scale analytics organization with an Analytics Center of Excellence"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/de-la-couche-gold-au-knowledge-graph-federe-le-cheminement-de-decathlon",
+              "note": "talk: From the Gold layer to a federated knowledge graph: Decathlon's journey"
             }
           ],
           "confidence": "Medium",
@@ -10416,7 +10626,9 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "company_blog_scan",
-            "women_in_data_community"
+            "women_in_data_community",
+            "newsletter_or_blog",
+            "linkedin_search"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -10478,11 +10690,19 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/sophie-ly-2a8095110/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://medium.com/decathlondigital/can-you-trust-your-data-cebca9e13a52",
               "note": "article: Can You Trust Your Data? Uncovering the Fog with Data Lineage"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/events/301538466/",
+              "note": "talk: Data Lineage at Decathlon"
+            },
+            {
+              "url": "https://www.linkedin.com/posts/sophie-ly-2a8095110_can-you-trust-your-data-activity-7361758054263967744-hvTs",
+              "note": "article: Can you trust your data? (data lineage)"
             }
           ],
           "confidence": "Low",
@@ -10615,6 +10835,10 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/une-stack-legere-pour-suivre-la-standardisation-de-lanalytics-a-lechelle-dbt-duckdb-observable-framework",
               "note": "talk: Une stack légère pour suivre la standardisation de l'Analytics à l'échelle : dbt + duckdb + Observable Framework"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/de-la-couche-gold-au-knowledge-graph-federe-le-cheminement-de-decathlon",
+              "note": "talk: From the Gold layer to a federated knowledge graph: Decathlon's journey"
             }
           ],
           "confidence": "Medium",
@@ -10683,19 +10907,20 @@
           "name": "Martin Lang",
           "pronouns": null,
           "title": "Decathlon",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -10710,7 +10935,7 @@
                 "Simon Auger"
               ],
               "mentions_dbt": true,
-              "description": "Accelerating dbt Cloud adoption at Decathlon.",
+              "description": null,
               "topics": [
                 "dbt product features"
               ],
@@ -10739,26 +10964,27 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         },
         {
           "id": "simon-auger",
           "name": "Simon Auger",
           "pronouns": null,
           "title": "Decathlon",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -10773,7 +10999,7 @@
                 "Martin Lang"
               ],
               "mentions_dbt": true,
-              "description": "Accelerating dbt Cloud adoption at Decathlon.",
+              "description": null,
               "topics": [
                 "dbt product features"
               ],
@@ -10802,7 +11028,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": "Added from DataGen scan; HQ Lille area. | Staff AEs speak regularly; dbt link via Benjamin Joyen-Conseil's 2024 talk (employer inferred). | Data lineage (Sophie Ly), core data products (Gaëlle Seret, ex-Decathlon), and Staff AEs at FWDC 2025."
@@ -10837,7 +11063,7 @@
         {
           "type": "blog_scanned",
           "url": "DataGen podcast episodes #142, #184, #211, #255",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -10905,6 +11131,10 @@
             {
               "url": "https://shows.acast.com/data-gen/episodes/255-brevo-mettre-en-place-une-business-intelligence-orientee",
               "note": "podcast: Brevo : Mettre en place une Business Intelligence orientée Self-Service avec Omni"
+            },
+            {
+              "url": "https://shows.acast.com/data-gen/episodes/184-brevo-mettre-en-place-de-lembedded-analytics-dans-le-pro",
+              "note": "podcast: Brevo : Mettre en place de l'embedded analytics dans le Produit"
             }
           ],
           "confidence": "High",
@@ -11047,7 +11277,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/gorgias-engineering/building-a-context-layer-from-the-ground-up-d6f72713915a",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -11073,7 +11303,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "podcast"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -11123,6 +11354,10 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/how-to-build-a-context-factory-for-analytical-agents",
               "note": "talk: How to build a context factory for analytical agents"
+            },
+            {
+              "url": "https://datageneration.substack.com/p/gorgias-creer-le-context-layer-de",
+              "note": "podcast: Gorgias : Créer sa couche de contexte pour l'agent AI Analytics"
             }
           ],
           "confidence": "High",
@@ -11203,10 +11438,14 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/emma-wagner-627978196/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/how-to-build-a-context-factory-for-analytical-agents",
+              "note": "talk: How to build a context factory for analytical agents"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/emma-wagner",
               "note": "talk: How to build a context factory for analytical agents"
             }
           ],
@@ -11289,9 +11528,24 @@
       "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
+        "dbt",
         "dbt (job ads)"
       ],
-      "job_postings": [],
+      "job_postings": [
+        {
+          "title": "Lead Analytics Engineer",
+          "url": "https://www.mirakl.com/careers/5411599004",
+          "source": "mirakl.com (search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": null,
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-24",
+          "job_family": "Analytics Engineering",
+          "work_mode": null
+        }
+      ],
       "other_evidence": [
         {
           "type": "other",
@@ -11301,7 +11555,7 @@
         {
           "type": "blog_scanned",
           "url": "https://mirakl.tech/subpage/tech (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -11515,12 +11769,12 @@
         {
           "type": "blog_scanned",
           "url": "https://data-ai.theodo.com/blog-technique",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "https://www.theodo.com/en-fr/blog",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -11569,10 +11823,6 @@
             {
               "url": "https://www.theodo.com/blog/dbt-kubernetes-the-perfect-duo-for-your-data-pipelines",
               "note": "article: DBT & Kubernetes: the perfect duo for your data pipelines"
-            },
-            {
-              "url": null,
-              "note": "LinkedIn not confirmed: Candidate fr.linkedin.com/in/erwanbenkara returned, but the result title was only 'LinkedIn: Log In or Sign Up', so the company/role could not be confirmed"
             }
           ],
           "confidence": "Medium",
@@ -11628,7 +11878,7 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/lucie-martin-fr",
-              "note": "LinkedIn match (high): Title: 'Lucie Martin - Theodo Data & AI (ex-SICARA)'; current role: Theodo Data & AI (ex-SICARA)"
+              "note": "LinkedIn match (high): Title: 'Lucie Martin - Theodo Data & AI (ex-SICARA)'"
             },
             {
               "url": "https://data-ai.theodo.com/blog-technique/data-quality-how-to-have-reliable-data-with-sifflet",
@@ -11723,7 +11973,7 @@
         {
           "type": "blog_scanned",
           "url": "DataGen podcast",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -11774,7 +12024,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/marguerite-vial-288a5a83/",
-              "note": "LinkedIn match (high): Title: 'Marguerite Vial - Datadog | LinkedIn'; search summary calls her the former Analytics Engineering Manager at Datadog (DataGen podcast); current role: Datadog per title; summary says former Analytics Engineering Manager, so she may have moved"
+              "note": "LinkedIn match (high): Title: 'Marguerite Vial - Datadog | LinkedIn'; search summary calls her the former Analytics Engineering Manager at Datadog (DataGen podcast)"
             },
             {
               "url": "https://shows.acast.com/data-gen/episodes/216-datadog-adopter-une-approche-analytics-engineering-et-se",
@@ -11833,10 +12083,6 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/from-analytics-to-ai-evolving-a-data-platform-to-power-machine-learning-at-scale",
               "note": "talk: From Analytics to AI: Evolving a Data Platform to Power Machine Learning at Scale"
-            },
-            {
-              "url": null,
-              "note": "LinkedIn not confirmed: Candidate fr.linkedin.com/in/jmsaponaro titled 'Jean-Mathieu Saponaro - France' (spelled differently, no company or role shown), so not accepted"
             }
           ],
           "confidence": "High",
@@ -11881,7 +12127,7 @@
         {
           "type": "blog_scanned",
           "url": "https://kestra.io/blogs",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -11947,6 +12193,10 @@
             {
               "url": "https://luma.com/b3ng9yzj",
               "note": "talk: L'orchestration des pipelines data – Kestra"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/whats-next-after-sql",
+              "note": "talk: Et après SQL ?"
             }
           ],
           "confidence": "Medium",
@@ -12002,7 +12252,7 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/martin-pierre-roset",
-              "note": "LinkedIn match (high): Title: 'Martin-Pierre Roset - Lead Marketing & Growth @Kestra'; current role: Lead Marketing & Growth @Kestra"
+              "note": "LinkedIn match (high): Title: 'Martin-Pierre Roset - Lead Marketing & Growth @Kestra'"
             },
             {
               "url": "https://kestra.io/blogs/2024-04-02-dbt-kestra",
@@ -12041,7 +12291,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/stuart-engineering (feed tagged dbt: empty)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -12050,19 +12300,20 @@
           "name": "Adrianna Henc",
           "pronouns": null,
           "title": "Data PM - Data Tools, Stuart",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "low",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -12075,7 +12326,7 @@
               "content_id": "paris-dbt-meetup-2-paris--dbt-as-a-product",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "Treating dbt as a product within Stuart's data organization.",
+              "description": null,
               "topics": [
                 "dbt best practices",
                 "team & org design"
@@ -12090,10 +12341,6 @@
             {
               "url": "https://www.meetup.com/paris-dbt-meetup/events/290891650/",
               "note": "talk: dbt as a product"
-            },
-            {
-              "url": null,
-              "note": "LinkedIn not confirmed: Only a match was pl.linkedin.com/in/adrianna-henc-320187131 titled 'Fullstack Developer / QA Automation', with no Stuart or data role, so not accepted"
             }
           ],
           "confidence": "High",
@@ -12110,15 +12357,15 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         },
         {
           "id": "gustavo-frigo",
           "name": "Gustavo Frigo",
           "pronouns": null,
           "title": "Data Engineering Lead, Stuart",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [
             "https://fr.linkedin.com/in/gustavofrigo"
@@ -12127,11 +12374,12 @@
           "linkedin_confidence": "medium",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -12144,7 +12392,7 @@
               "content_id": "paris-dbt-meetup-2-paris--tags-scheduling-dbt-in-airflow-made-easy",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "How Stuart uses tags to make scheduling dbt in Airflow easy.",
+              "description": null,
               "topics": [
                 "orchestration & ci/cd"
               ],
@@ -12157,7 +12405,7 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/gustavofrigo",
-              "note": "LinkedIn match (medium): Title: 'Gustavo Frigo - Data Engineering Manager' on fr.linkedin.com. The data role matches but Stuart is not shown, and other people with this name are in Brazil; current role: Data Engineering Manager"
+              "note": "LinkedIn match (medium): Title: 'Gustavo Frigo - Data Engineering Manager' on fr.linkedin.com. The data role matches but Stuart is not shown, and other people with this name are in Brazil"
             },
             {
               "url": "https://www.meetup.com/paris-dbt-meetup/events/290891650/",
@@ -12177,7 +12425,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": "Older dbt migration post by Gustavo Frigo, not read. The BI team may be based outside Paris."
@@ -12396,7 +12644,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.castordoc.com/blog-category/data-tooling",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -12491,7 +12739,7 @@
         {
           "type": "blog_scanned",
           "url": "https://converteo.com/blog/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -12542,7 +12790,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/pierre-pilleyre-33a615250/",
-              "note": "LinkedIn match (high): Title: 'Pierre Pilleyre - Paris, Île-de-France, France'; search summary says Analytics Engineer at Converteo (DataBird testimonial); current role: Analytics Engineer, Converteo"
+              "note": "LinkedIn match (high): Title: 'Pierre Pilleyre - Paris, Île-de-France, France'; search summary says Analytics Engineer at Converteo (DataBird testimonial)"
             },
             {
               "url": "https://converteo.com/blog/thefilter-essor-medium-code/",
@@ -12672,7 +12920,7 @@
         {
           "type": "blog_scanned",
           "url": "https://keyrus.com/fr/actualites",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -12698,7 +12946,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "linkedin_search"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -12742,6 +12991,10 @@
             {
               "url": "https://keyrus.com/fr/fr/insights/partenariat-keyrus-dbt-labs-transformation-data",
               "note": "post: Partenariat mondial Keyrus & dbt Labs pour la data transformation"
+            },
+            {
+              "url": "https://blog.ippon.fr/2020/10/23/decouvrez-dbt/",
+              "note": "article: Découvrez DBT"
             }
           ],
           "confidence": "Medium",
@@ -12778,7 +13031,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.siffletdata.com/blog",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -12865,12 +13118,12 @@
         {
           "type": "blog_scanned",
           "url": "Fivetran case study (search summary)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "Amplitude webinar recap",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -13018,14 +13271,27 @@
       "local_presence": "confirmed",
       "dbt_signal": "medium",
       "stack_signals": [
+        "dbt",
         "Snowflake",
         "Airflow",
         "Tableau",
         "Coalesce Catalog",
-        "dbt (job ad)",
-        "dbt"
+        "dbt (job ad)"
       ],
       "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://jobs.avp.vc/companies/vestiaire-collective/jobs/40442883-analytics-engineer",
+          "source": "AVP job board (search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Airflow, Snowflake, and DBT",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-09-24",
+          "job_family": "Analytics Engineering",
+          "work_mode": null
+        },
         {
           "title": "Senior/Staff Machine Learning Engineer",
           "url": "https://jobs.lever.co/vestiairecollective/6bf15ddc-4fe9-4738-875b-98cce21d6715",
@@ -13049,7 +13315,7 @@
         {
           "type": "blog_scanned",
           "url": "Coalesce case study",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "other",
@@ -13177,7 +13443,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.blef.fr/blog/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -13212,7 +13478,7 @@
         {
           "type": "blog_scanned",
           "url": "https://blent.ai/thematique/data-engineering",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -13582,7 +13848,7 @@
         {
           "type": "blog_scanned",
           "url": "https://engineering.pigment.com/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -14078,6 +14344,93 @@
           "notes": "Freelance analyst; product analytics data quality."
         },
         {
+          "id": "claire-genoux",
+          "name": "Claire Genoux",
+          "pronouns": null,
+          "title": "Head of Data & AI Governance",
+          "city": "Paris",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/cgenoux/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Forward Data Conference 2025",
+              "title": "(untitled)",
+              "date": "2025",
+              "url": "https://forward-data-conference.com/en/program/speakers/claire-genoux",
+              "content_id": "forward-data-conference-2-untitled",
+              "co_authors": [
+                "Tushar Bhasin",
+                "Thibault Ambard",
+                "Edouard Flouriot",
+                "Florent Piétot"
+              ],
+              "mentions_dbt": null,
+              "description": "Speaker page for FWDC 2025.",
+              "topics": [
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            },
+            {
+              "type": "talk",
+              "event": "Forward Data Conference 2025",
+              "title": "Governance that pays back: rethinking value in data strategy (workshop)",
+              "date": "2025",
+              "url": "https://forward-data-conference.com/program/speakers/claire-genoux",
+              "content_id": "forward-data-conference-2-governance-that-pays-back-rethinking-val",
+              "co_authors": [
+                "Gaëlle Seret"
+              ],
+              "mentions_dbt": null,
+              "description": "Workshop on treating governance as a value lever.",
+              "topics": [
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/cgenoux/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/speakers/claire-genoux",
+              "note": "talk: (untitled)"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/claire-genoux",
+              "note": "talk: Governance that pays back: rethinking value in data strategy (workshop)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "FWDC 2025 speaker; company and talk not shown on listing. Verify. | FWDC 2025 governance workshop with Gaëlle Seret (her bio uses 'elle'). City not stated."
+        },
+        {
           "id": "willis-nana",
           "name": "Willis Nana",
           "pronouns": null,
@@ -14402,19 +14755,20 @@
           "name": "Othmane Benbella",
           "pronouns": null,
           "title": null,
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -14427,7 +14781,7 @@
               "content_id": "paris-dbt-meetup-7-paris--dbt-mcp-server-bringing-structured-data",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "A demo of the dbt MCP Server, bringing structured data to AI workflows and agents.",
+              "description": null,
               "topics": [
                 "genai & llm",
                 "dbt product updates"
@@ -14458,274 +14812,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
-        }
-      ],
-      "notes": ""
-    },
-    {
-      "id": "freelance",
-      "name": "Freelance (Back Market mission)",
-      "type": "employer",
-      "watchlist": true,
-      "excluded_from_outreach": false,
-      "cities": [],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
-      "people": [
-        {
-          "id": "elodie-sanchez",
-          "name": "Élodie Sanchez",
-          "pronouns": null,
-          "title": "Analytics Engineer (freelance)",
-          "city": "Paris",
-          "based_in_region": true,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
-          "meetup_fit": {
-            "speaker_potential": "medium",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "podcast"
-          ],
-          "mentions_dbt": null,
-          "speaker_evidence": [
-            {
-              "type": "podcast",
-              "event": "DataGen podcast",
-              "title": "Ex-Data Analyst, elle est devenue Analytics Engineer en freelance chez Back Market",
-              "date": "2025-10",
-              "url": "https://www.youtube.com/watch?v=GPTQoBOsih0",
-              "content_id": "datagen-podcast-ex-data-analyst-elle-est-devenue-analyti",
-              "co_authors": [],
-              "mentions_dbt": null,
-              "description": "Move from data analyst to freelance analytics engineer, and her current AE missions at Back Market.",
-              "topics": [
-                "career development",
-                "analytics engineering"
-              ],
-              "suggested_talk_angle": "Analyst to freelance AE: what the job actually looks like",
-              "url_precision": "direct",
-              "confidence": "medium"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.youtube.com/watch?v=GPTQoBOsih0",
-              "note": "podcast: Ex-Data Analyst, elle est devenue Analytics Engineer en freelance chez Back Market"
-            }
-          ],
-          "confidence": "Medium",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": "Analyst to freelance AE: what the job actually looks like",
-          "past_chapter_talks": [],
-          "notes": "Ex Data Analyst at Lydia and Betclic, now freelance AE at Back Market. Career-path angle."
-        },
-        {
-          "id": "adil-soundardjee",
-          "name": "Adil Soundardjee",
-          "pronouns": null,
-          "title": "Analytics Engineer (freelance)",
-          "city": "Paris",
-          "based_in_region": true,
-          "level": "working",
-          "linkedin_urls": [],
-          "has_linkedin": false,
-          "linkedin_confidence": "not_searched",
-          "meetup_fit": {
-            "speaker_potential": "medium",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "podcast"
-          ],
-          "mentions_dbt": null,
-          "speaker_evidence": [
-            {
-              "type": "podcast",
-              "event": "DataGen podcast",
-              "title": "#217 - Ex-Data Analyst, il est devenu Analytics Engineer en freelance chez Lacoste",
-              "date": "2025",
-              "url": "https://datageneration.substack.com/p/ex-data-analyst-il-est-devenu-analytics",
-              "content_id": "datagen-podcast-217-ex-data-analyst-il-est-devenu-analyt",
-              "co_authors": [],
-              "mentions_dbt": null,
-              "description": "Career move from Paris 2024 Olympics data analyst to AE freelancer at Lacoste.",
-              "topics": [
-                "career development",
-                "analytics engineering"
-              ],
-              "suggested_talk_angle": "Modelling data for Paris 2024, then Lacoste",
-              "url_precision": "direct",
-              "confidence": "medium"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://datageneration.substack.com/p/ex-data-analyst-il-est-devenu-analytics",
-              "note": "podcast: #217 - Ex-Data Analyst, il est devenu Analytics Engineer en freelance chez Lacoste"
-            }
-          ],
-          "confidence": "Medium",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": "Modelling data for Paris 2024, then Lacoste",
-          "past_chapter_talks": [],
-          "notes": "Ex Data Analyst at the Paris 2024 Olympics organising committee, now freelance AE at Lacoste."
-        },
-        {
-          "id": "claire-genoux",
-          "name": "Claire Genoux",
-          "pronouns": null,
-          "title": "Head of Data & AI Governance",
-          "city": "Paris",
-          "based_in_region": true,
-          "level": "leadership",
-          "linkedin_urls": [
-            "https://www.linkedin.com/in/cgenoux/"
-          ],
-          "has_linkedin": true,
-          "linkedin_confidence": "high",
-          "meetup_fit": {
-            "speaker_potential": "high",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": null,
-          "speaker_evidence": [
-            {
-              "type": "talk",
-              "event": "Forward Data Conference 2025",
-              "title": "(untitled)",
-              "date": "2025",
-              "url": "https://forward-data-conference.com/en/program/speakers/claire-genoux",
-              "content_id": "forward-data-conference-2-untitled",
-              "co_authors": [
-                "Tushar Bhasin",
-                "Thibault Ambard",
-                "Edouard Flouriot",
-                "Florent Piétot"
-              ],
-              "mentions_dbt": null,
-              "description": "Speaker page for FWDC 2025.",
-              "topics": [
-                "data governance"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "overview_page",
-              "confidence": "low"
-            },
-            {
-              "type": "talk",
-              "event": "Forward Data Conference 2025",
-              "title": "Governance that pays back: rethinking value in data strategy (workshop)",
-              "date": "2025",
-              "url": "https://forward-data-conference.com/program/speakers/claire-genoux",
-              "content_id": "forward-data-conference-2-governance-that-pays-back-rethinking-val",
-              "co_authors": [
-                "Gaëlle Seret"
-              ],
-              "mentions_dbt": null,
-              "description": "Workshop on treating governance as a value lever.",
-              "topics": [
-                "data governance"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.linkedin.com/in/cgenoux/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
-            },
-            {
-              "url": "https://forward-data-conference.com/en/program/speakers/claire-genoux",
-              "note": "talk: (untitled)"
-            }
-          ],
-          "confidence": "Low",
-          "internal_vinted": false,
-          "priority_tier": 2,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [],
-          "notes": "FWDC 2025 speaker; company and talk not shown on listing. Verify. | FWDC 2025 governance workshop with Gaëlle Seret (her bio uses 'elle'). City not stated."
-        },
-        {
-          "id": "christelle-marfaing",
-          "name": "Christelle Marfaing",
-          "pronouns": null,
-          "title": "Fractional CDO",
-          "city": "Paris",
-          "based_in_region": true,
-          "level": "leadership",
-          "linkedin_urls": [
-            "https://www.linkedin.com/in/christelle-marfaing-85bba569/"
-          ],
-          "has_linkedin": true,
-          "linkedin_confidence": "high",
-          "meetup_fit": {
-            "speaker_potential": "medium",
-            "attendee_potential": "medium"
-          },
-          "lead_type": "proven_speaker",
-          "sourced_via": [
-            "conference_or_meetup_agenda"
-          ],
-          "mentions_dbt": null,
-          "speaker_evidence": [
-            {
-              "type": "talk",
-              "event": "Forward Data Conference 2025",
-              "title": "Entre FOMO, obsolescence et paralysie stratégique : comment construire des produits data à l'ère des GenAI ?",
-              "date": "2025",
-              "url": "https://forward-data-conference.com/program/speakers/christelle-marfaing-2025",
-              "content_id": "forward-data-conference-2-entre-fomo-obsolescence-et-paralysie-str",
-              "co_authors": [],
-              "mentions_dbt": null,
-              "description": "Talk on data product strategy in the GenAI era; she also ran a 2024 workshop on data career management.",
-              "topics": [
-                "team & org design",
-                "career development"
-              ],
-              "suggested_talk_angle": null,
-              "url_precision": "direct",
-              "confidence": "high"
-            }
-          ],
-          "attendee_signal": null,
-          "evidence": [
-            {
-              "url": "https://www.linkedin.com/in/christelle-marfaing-85bba569/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
-            },
-            {
-              "url": "https://forward-data-conference.com/program/speakers/christelle-marfaing-2025",
-              "note": "talk: Entre FOMO, obsolescence et paralysie stratégique : comment construire des produits data à l'ère des GenAI ?"
-            }
-          ],
-          "confidence": "Medium",
-          "internal_vinted": false,
-          "priority_tier": 3,
-          "suggested_talk_angle": null,
-          "past_chapter_talks": [],
-          "notes": "Strategy and career content at FWDC 2024 and 2025 (her bio uses 'elle')."
+          "notes": ""
         }
       ],
       "notes": ""
@@ -14762,7 +14849,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/leboncoin-tech-blog (feed tagged dbt: empty)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -14783,7 +14870,8 @@
           },
           "lead_type": "emerging_voice",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -14840,7 +14928,8 @@
           "lead_type": "proven_speaker",
           "sourced_via": [
             "company_blog_scan",
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "newsletter_or_blog"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -14887,6 +14976,10 @@
             {
               "url": "https://medium.com/leboncoin-tech-blog/how-a-poc-became-a-production-ready-hudi-data-lakehouse-through-close-team-collaboration-c7f33eb746a8",
               "note": "article: How a POC became a production-ready Hudi data lakehouse through close team collaboration"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/how-to-create-a-gdpr-compliant-iceberg-lakehouse",
+              "note": "talk: How to create a GDPR-compliant Iceberg Lakehouse"
             }
           ],
           "confidence": "Low",
@@ -15021,11 +15114,15 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/celine-to-3aa01377/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/vers-le-self-serve-analytics-un-an-de-transformation-data-chez-leboncoin",
               "note": "talk: Towards self-serve analytics: a year of data transformation at leboncoin"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/celine-to",
+              "note": "talk: Vers le self-serve analytics : un an de transformation data chez leboncoin"
             }
           ],
           "confidence": "High",
@@ -15057,7 +15154,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -15120,19 +15217,20 @@
           "name": "David Ngouéranga",
           "pronouns": null,
           "title": "Carrefour",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -15147,7 +15245,7 @@
                 "Hussein Ballouk"
               ],
               "mentions_dbt": true,
-              "description": "How Carrefour uses dbt with Airflow to make sense of 8 billion transactions.",
+              "description": null,
               "topics": [
                 "orchestration & ci/cd"
               ],
@@ -15176,26 +15274,27 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         },
         {
           "id": "hussein-ballouk",
           "name": "Hussein Ballouk",
           "pronouns": null,
           "title": "Carrefour",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -15210,7 +15309,7 @@
                 "David Ngouéranga"
               ],
               "mentions_dbt": true,
-              "description": "How Carrefour uses dbt with Airflow to make sense of 8 billion transactions.",
+              "description": null,
               "topics": [
                 "orchestration & ci/cd"
               ],
@@ -15239,10 +15338,194 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": "Only GenAI strategy content (DataGen #233) was found."
+    },
+    {
+      "id": "freelance",
+      "name": "Freelance (Back Market mission)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "elodie-sanchez",
+          "name": "Élodie Sanchez",
+          "pronouns": null,
+          "title": "Analytics Engineer (freelance)",
+          "city": "Paris",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "podcast"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "podcast",
+              "event": "DataGen podcast",
+              "title": "Ex-Data Analyst, elle est devenue Analytics Engineer en freelance chez Back Market",
+              "date": "2025-10",
+              "url": "https://www.youtube.com/watch?v=GPTQoBOsih0",
+              "content_id": "datagen-podcast-ex-data-analyst-elle-est-devenue-analyti",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Move from data analyst to freelance analytics engineer, and her current AE missions at Back Market.",
+              "topics": [
+                "career development",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": "Analyst to freelance AE: what the job actually looks like",
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.youtube.com/watch?v=GPTQoBOsih0",
+              "note": "podcast: Ex-Data Analyst, elle est devenue Analytics Engineer en freelance chez Back Market"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Analyst to freelance AE: what the job actually looks like",
+          "past_chapter_talks": [],
+          "notes": "Ex Data Analyst at Lydia and Betclic, now freelance AE at Back Market. Career-path angle."
+        },
+        {
+          "id": "adil-soundardjee",
+          "name": "Adil Soundardjee",
+          "pronouns": null,
+          "title": "Analytics Engineer (freelance)",
+          "city": "Paris",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "podcast"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "podcast",
+              "event": "DataGen podcast",
+              "title": "#217 - Ex-Data Analyst, il est devenu Analytics Engineer en freelance chez Lacoste",
+              "date": "2025",
+              "url": "https://datageneration.substack.com/p/ex-data-analyst-il-est-devenu-analytics",
+              "content_id": "datagen-podcast-217-ex-data-analyst-il-est-devenu-analyt",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Career move from Paris 2024 Olympics data analyst to AE freelancer at Lacoste.",
+              "topics": [
+                "career development",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": "Modelling data for Paris 2024, then Lacoste",
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://datageneration.substack.com/p/ex-data-analyst-il-est-devenu-analytics",
+              "note": "podcast: #217 - Ex-Data Analyst, il est devenu Analytics Engineer en freelance chez Lacoste"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Modelling data for Paris 2024, then Lacoste",
+          "past_chapter_talks": [],
+          "notes": "Ex Data Analyst at the Paris 2024 Olympics organising committee, now freelance AE at Lacoste."
+        },
+        {
+          "id": "christelle-marfaing",
+          "name": "Christelle Marfaing",
+          "pronouns": null,
+          "title": "Fractional CDO",
+          "city": "Paris",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christelle-marfaing-85bba569/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Forward Data Conference 2025",
+              "title": "Entre FOMO, obsolescence et paralysie stratégique : comment construire des produits data à l'ère des GenAI ?",
+              "date": "2025",
+              "url": "https://forward-data-conference.com/program/speakers/christelle-marfaing-2025",
+              "content_id": "forward-data-conference-2-entre-fomo-obsolescence-et-paralysie-str",
+              "co_authors": [],
+              "mentions_dbt": null,
+              "description": "Talk on data product strategy in the GenAI era; she also ran a 2024 workshop on data career management.",
+              "topics": [
+                "team & org design",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/christelle-marfaing-85bba569/",
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/christelle-marfaing-2025",
+              "note": "talk: Entre FOMO, obsolescence et paralysie stratégique : comment construire des produits data à l'ère des GenAI ?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "Strategy and career content at FWDC 2024 and 2025 (her bio uses 'elle')."
+        }
+      ],
+      "notes": ""
     },
     {
       "id": "aramis",
@@ -15278,7 +15561,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "women_in_data_community"
+            "women_in_data_community",
+            "podcast"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -15327,6 +15611,10 @@
             {
               "url": "https://www.meetup.com/paris-dataladies/events/303936902/",
               "note": "talk: Modern Data Stack : Le levier pour scaler une plateforme à l'international"
+            },
+            {
+              "url": "https://www.youtube.com/watch?v=WTSZbiQHxB4",
+              "note": "podcast: La transition vers une Modern Data Stack chez Aramis"
             }
           ],
           "confidence": "Medium",
@@ -15385,7 +15673,7 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/yasmine-touzene-507979161/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://www.meetup.com/paris-dataladies/events/303936902/",
@@ -15765,11 +16053,19 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/marie-laure-lecompt-202a4027/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/de-la-modern-data-platform-a-la-culture-produit-comment-dailymotion-a-mis-la-donnee-au-centre-du-jeu",
               "note": "talk: From the modern data platform to product culture: How Dailymotion put data at the center of the game"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/ai-agentic-platform-dailymotion",
+              "note": "talk: Building an AI agentic platform to empower marketers & advertisers"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/marie-laure-lecompt",
+              "note": "talk: De la modern data platform à la culture produit : Comment Dailymotion a mis la donnée au centre du jeu"
             }
           ],
           "confidence": "High",
@@ -15854,7 +16150,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -15918,19 +16214,20 @@
           "name": "Loic Chesneau",
           "pronouns": null,
           "title": "Getaround (ex-Drivy)",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -15943,7 +16240,7 @@
               "content_id": "paris-dbt-meetup-4-paris--gestion-des-donnees-sensibles-via-dbt",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "Managing sensitive data through dbt at Getaround.",
+              "description": null,
               "topics": [
                 "data governance",
                 "data quality & testing"
@@ -15974,7 +16271,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": "No dbt content was found."
@@ -16195,19 +16492,20 @@
           "name": "Léon Stefani",
           "pronouns": null,
           "title": "Brigad",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -16220,7 +16518,7 @@
               "content_id": "paris-dbt-meetup-6-paris--dynamic-environments-with-dbt-slim-ci",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "How Brigad builds dynamic environments using dbt's Slim CI.",
+              "description": null,
               "topics": [
                 "orchestration & ci/cd"
               ],
@@ -16249,7 +16547,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": ""
@@ -16354,11 +16652,19 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/gaelle-seret-pm/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/data-product-managers-fancy-title-or-backbone-of-a-user-centric-data-strategy",
               "note": "talk: Back to the future, forward to the past: how the lessons of yesterday shape the data PM role to move forward"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/events/302422774/",
+              "note": "talk: Strengthen Your Core: How a Robust Core Data Product Foundation Fuels Analytics and AI Capabilities"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/gaelle-seret",
+              "note": "talk: Governance that pays back: rethinking value in data strategy (workshop)"
             }
           ],
           "confidence": "Medium",
@@ -16388,7 +16694,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -16679,19 +16985,20 @@
           "name": "Bilel Mosbah",
           "pronouns": null,
           "title": "ex-Galeries Lafayette",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -16704,7 +17011,7 @@
               "content_id": "paris-dbt-meetup-8-paris--deployer-dbt-docs-sur-gitlab-pages-une-d",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "How to deploy dbt docs on GitLab Pages to keep living documentation available to the whole team.",
+              "description": null,
               "topics": [
                 "dbt best practices",
                 "data governance"
@@ -16735,7 +17042,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": ""
@@ -16888,6 +17195,10 @@
             {
               "url": "https://www.meetup.com/paris-women-in-machine-learning-data-science/events/312881698/",
               "note": "organiser: Event host (#56 and WiMLDS x MLOps Paris)"
+            },
+            {
+              "url": "https://www.meetup.com/paris-women-in-machine-learning-data-science/events/300095961/",
+              "note": "talk: Time series anomaly detection and data imputation in energy field"
             }
           ],
           "confidence": "Medium",
@@ -16991,7 +17302,7 @@
         {
           "type": "blog_scanned",
           "url": "https://engineering.hivebrite.io/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -17063,10 +17374,14 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/ioana-creux-tocmag/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/building-differentiation-with-ai-powered-data-products",
+              "note": "panel: Building differentiation with AI-powered data products - Panel Omni"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/ioana-creux-tocmag",
               "note": "panel: Building differentiation with AI-powered data products - Panel Omni"
             }
           ],
@@ -17170,8 +17485,8 @@
           "name": "Kim Nguyen",
           "pronouns": null,
           "title": "Lead Analytics Engineer, Lalilo",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "leadership",
           "linkedin_urls": [],
           "has_linkedin": false,
@@ -17182,7 +17497,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -17195,7 +17511,7 @@
               "content_id": "paris-dbt-meetup-8-paris--break-the-silos-flat-cross-skills-teams",
               "co_authors": [],
               "mentions_dbt": null,
-              "description": "How flat, cross-skills teams can maximize data impact by breaking down organizational silos.",
+              "description": null,
               "topics": [
                 "team & org design"
               ],
@@ -17224,7 +17540,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": ""
@@ -17342,11 +17658,19 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/charlotteledoux",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/le-futur-de-la-data-gouvernance-a-l-ere-des-agents-ia",
               "note": "talk: The future of data governance in the age of AI agents"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/",
+              "note": "organiser: Organiser"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/speakers/charlotte-ledoux/",
+              "note": "talk: Speaker"
             }
           ],
           "confidence": "High",
@@ -17437,6 +17761,10 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/the-next-data-stack-has-no-ui-building-end-to-end-analytics-with-agents",
               "note": "talk: The Next Data Stack Has No UI: Building End-to-End Analytics with Agents and Ducks"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/from-postgres-to-a-minimalist-lakehouse-the-next-step-with-ducklake",
+              "note": "talk: From Postgres to a Minimalist Lakehouse: The Next Step with DuckLake"
             }
           ],
           "confidence": "Medium",
@@ -17481,7 +17809,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "company_blog_scan"
+            "company_blog_scan",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -17525,11 +17854,15 @@
           "evidence": [
             {
               "url": "https://fr.linkedin.com/in/mahdikarabiben",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://www.siffletdata.com/blog/dbt-at-enterprise-scale-a-sifflet-powered-approach",
               "note": "article: Scaling dbt at Enterprise Level: A Sifflet-Powered Approach"
+            },
+            {
+              "url": "https://luma.com/b3ng9yzj",
+              "note": "talk: Observabilité des pipelines"
             }
           ],
           "confidence": "Medium",
@@ -17917,6 +18250,10 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/l-analyse-qui-construit-la-plateforme-dites-adieu-au-ticketing-2-0",
               "note": "talk: Analytics that builds the platform: say goodbye to Ticketing 2.0 with agents in the git repo"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/bigfunctions-decuple-votre-bigquery",
+              "note": "talk: Unlock new SQL capabilities with BigFunctions !"
             }
           ],
           "confidence": "High",
@@ -18017,7 +18354,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/payfit (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -18026,19 +18363,20 @@
           "name": "Olivier Détriché",
           "pronouns": null,
           "title": "Payfit",
-          "city": "Paris",
-          "based_in_region": true,
+          "city": null,
+          "based_in_region": null,
           "level": "working",
           "linkedin_urls": [],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "meetup_fit": {
             "speaker_potential": "high",
-            "attendee_potential": "high"
+            "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": true,
           "speaker_evidence": [
@@ -18051,7 +18389,7 @@
               "content_id": "paris-dbt-meetup-4-paris--la-naissance-d-un-modele-dbt-chez-payfit",
               "co_authors": [],
               "mentions_dbt": true,
-              "description": "The birth of a dbt model at Payfit.",
+              "description": null,
               "topics": [
                 "data modeling"
               ],
@@ -18080,7 +18418,7 @@
               ]
             }
           ],
-          "notes": "Past Paris dbt Meetup speaker."
+          "notes": ""
         }
       ],
       "notes": "No dbt content was found."
@@ -18122,7 +18460,8 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "conference_or_meetup_agenda"
+            "conference_or_meetup_agenda",
+            "podcast"
           ],
           "mentions_dbt": null,
           "speaker_evidence": [
@@ -18207,11 +18546,23 @@
           "evidence": [
             {
               "url": "https://www.linkedin.com/in/julietteduizabo/",
-              "note": "LinkedIn URL from a speaker page or search result matching name + company/role"
+              "note": "LinkedIn URL from a page or search result matching name + company/role"
             },
             {
               "url": "https://forward-data-conference.com/en/program/talks/how-we-use-agents-to-10x-our-data-team",
               "note": "talk: How we use agents to 10x our data team"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/how-ai-is-changing-standard-for-bi-making-data-accessible-actionable",
+              "note": "talk: How AI is changing the standard for BI: Making data accessible, actionable, aligned"
+            },
+            {
+              "url": "https://shows.acast.com/data-gen/episodes/redif-top-5-photoroom-deployer-une-strategie-genai-pour-lana",
+              "note": "podcast: Photoroom : Déployer une stratégie GenAI pour l'analytics et x15 sa vitesse de delivery"
+            },
+            {
+              "url": "https://forward-data-conference.com/program/speakers/juliette-duizabo",
+              "note": "talk: How AI is changing the standard for BI: Making data accessible, actionable, aligned"
             }
           ],
           "confidence": "High",
@@ -18381,7 +18732,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [
@@ -18447,6 +18798,10 @@
             {
               "url": "https://www.meetup.com/paris-dataladies/events/314833657/",
               "note": "organiser: Organiser (e.g. 'Alice et Mélanie pour Paris Data Ladies')"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/events/307999960/",
+              "note": "talk: Déployer à l'échelle un chatbot avec de l'IA Générative : Le cas du bot SNCF Connect"
             }
           ],
           "confidence": "High",
@@ -18608,6 +18963,10 @@
             {
               "url": "https://www.meetup.com/paris-dataladies/events/314833657/",
               "note": "talk: Modéliser un commun numérique : ce que l'IA change aux choix de data architecture"
+            },
+            {
+              "url": "https://www.meetup.com/paris-dataladies/events/313308992/",
+              "note": "organiser: Co-host of PDL #58"
             }
           ],
           "confidence": "High",
@@ -18703,6 +19062,10 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/data-quality-at-scale-building-a-robust-framework-for-complex-data",
               "note": "talk: Data Quality at Scale: Building a Robust Framework for Complex data Models"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/exploiter-la-puissance-de-duckdb-un-an-de-production-avec-des-dizaines-de-to-de-donnees",
+              "note": "talk: Exploiter la puissance de DuckDB : Un an de production avec des dizaines de To de données"
             }
           ],
           "confidence": "High",
@@ -18975,6 +19338,14 @@
             {
               "url": "https://forward-data-conference.com/en/program/talks/the-agent-os-a-harness-to-survive-a-100m-to-400m-year",
               "note": "talk: The Agent OS: a harness to survive a $100M to $400M year"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/building-differentiation-with-ai-powered-data-products",
+              "note": "panel: Building differentiation with AI-powered data products - Panel Omni"
+            },
+            {
+              "url": "https://forward-data-conference.com/en/program/talks/analytics-for-all-creating-a-self-service-culture-in-a-scaling-organization",
+              "note": "talk: Analytics for All: Creating a Self-Service Culture in a Scaling Organization"
             }
           ],
           "confidence": "High",
@@ -19292,7 +19663,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19318,7 +19689,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19341,7 +19712,7 @@
         {
           "type": "blog_scanned",
           "url": "https://airbyte.com/blog-authors/michel-tricot",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19366,7 +19737,7 @@
         {
           "type": "blog_scanned",
           "url": "Amplitude case study (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19389,7 +19760,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.aquiladata.fr/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19412,7 +19783,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19435,7 +19806,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19458,7 +19829,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19481,7 +19852,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.clever-cloud.com/blog/tag/data/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19536,7 +19907,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.datagalaxy.com/en/category/events/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19559,7 +19930,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.dataiku.com/blog/tech-blog",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19582,7 +19953,7 @@
         {
           "type": "blog_scanned",
           "url": "https://deezer.io/ (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19622,7 +19993,7 @@
         {
           "type": "blog_scanned",
           "url": "https://ekimetrics.github.io/blog/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19679,7 +20050,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19753,7 +20124,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19791,7 +20162,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19823,7 +20194,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19848,7 +20219,7 @@
         {
           "type": "blog_scanned",
           "url": "jobs.lydia-app.com (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19871,7 +20242,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/manomano-tech (feed tagged dbt: empty)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19934,7 +20305,7 @@
         {
           "type": "blog_scanned",
           "url": "https://blog.octo.com/tag/data",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19972,7 +20343,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.meetup.com/paris-dataladies/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -19995,7 +20366,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.meetup.com/paris-women-in-machine-learning-data-science/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20025,7 +20396,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/pennylane-engineering (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20048,12 +20419,12 @@
         {
           "type": "blog_scanned",
           "url": "https://engineering.pigment.com/ (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         },
         {
           "type": "blog_scanned",
           "url": "https://medium.com/yousign-engineering-product (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20091,7 +20462,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.meetup.com/pyladiesparis/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20114,7 +20485,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.meetup.com/rladies-paris/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20156,7 +20527,7 @@
         {
           "type": "blog_scanned",
           "url": "Tasmane case study (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20179,7 +20550,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.toucantoco.com/en/tech-blog",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20202,7 +20573,7 @@
         {
           "type": "blog_scanned",
           "url": "search only",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20227,7 +20598,7 @@
         {
           "type": "blog_scanned",
           "url": "https://medium.com/wttj-tech (search only)",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20265,7 +20636,7 @@
         {
           "type": "blog_scanned",
           "url": "https://www.meetup.com/women-in-big-data-paris-meetup-group/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20305,7 +20676,7 @@
         {
           "type": "blog_scanned",
           "url": "https://zenika.com/",
-          "note": "Engineering/data blog scanned 2026-09-24"
+          "note": "Engineering/data blog scanned"
         }
       ],
       "people": [],
@@ -20313,9 +20684,6 @@
     }
   ],
   "sources": {
-    "paris_dbt_meetup_past_events": "https://www.meetup.com/paris-dbt-meetup/events/?type=past",
-    "past_meetups_derived_from": "enriched/paris-dbt-meetup.json",
-    "linkedin_jobs_search": "https://www.linkedin.com/jobs/search?keywords=dbt&location=Paris%2C%20%C3%8Ele-de-France%2C%20France",
     "checked": [
       {
         "name": "Medium RSS feeds (publication/tagged/<tag>)",
@@ -20564,6 +20932,60 @@
         "note": "Browser access to meetup.com was declined, so the /gql2 past-events query could not be used. Server-rendered group home pages (4 latest past events) and event pages were read via WebFetch instead."
       },
       {
+        "name": "LinkedIn Jobs guest API (keywords=dbt, Paris, Île-de-France)",
+        "url": "https://www.linkedin.com/jobs/search?keywords=dbt&location=Paris%2C%20%C3%8Ele-de-France%2C%20France",
+        "yielded": true,
+        "note": "Paged 300 listings (start=0..290). Fetched the first 250 descriptions about 2-3 s apart with no HTTP 429s. 120 contained \\bdbt\\b."
+      },
+      {
+        "name": "Welcome to the Jungle job search",
+        "url": "https://www.welcometothejungle.com/fr/jobs?query=dbt&refinementList%5Boffices.country_code%5D%5B%5D=FR&aroundQuery=Paris",
+        "yielded": false,
+        "note": "The search URL now opens a login / \"matching\" marketing page with no results. WTTJ ads were found through site: web searches instead."
+      },
+      {
+        "name": "Web search: \"dbt\" \"analytics engineer\" Paris",
+        "url": "https://fr.indeed.com/q-analytics-engineer-dbt-emplois.html",
+        "yielded": false,
+        "note": "Only Indeed/Glassdoor aggregate pages and salary blogs came back, with no direct ads."
+      },
+      {
+        "name": "Web search: site:welcometothejungle.com dbt Paris (DE + AE queries)",
+        "url": "https://www.welcometothejungle.com/fr/companies/dashlane/jobs/analytics-engineer_paris_b7zkyuds",
+        "yielded": true,
+        "note": "11 Paris ads whose search snippet mentions dbt."
+      },
+      {
+        "name": "Web search: site:jobs.lever.co dbt Paris",
+        "url": "https://jobs.lever.co/",
+        "yielded": true,
+        "note": "Odaseva, Mistral AI, SFEIR, Vestiaire Collective, Bigblue, Pigment, Equativ, Pretto."
+      },
+      {
+        "name": "Web search: site:job-boards.greenhouse.io dbt Paris",
+        "url": "https://job-boards.greenhouse.io/",
+        "yielded": true,
+        "note": "Aircall, Xebia France, Dashlane."
+      },
+      {
+        "name": "Web search: site:jobs.ashbyhq.com dbt Paris",
+        "url": "https://jobs.ashbyhq.com/",
+        "yielded": true,
+        "note": "Zefir, Joko, BeReal, Voodoo."
+      },
+      {
+        "name": "Web search: site:apply.workable.com dbt Paris",
+        "url": "https://apply.workable.com/",
+        "yielded": false,
+        "note": "Only generic company boards came back, with no dbt ads."
+      },
+      {
+        "name": "Web search: site:jobs.smartrecruiters.com dbt Paris",
+        "url": "https://jobs.smartrecruiters.com/AccorCorpo/744000124376311-tech-lead-data-analytics-snowflake-dbt-tableau-f-h-x",
+        "yielded": true,
+        "note": "Accor Tech Lead Data (also on LinkedIn)."
+      },
+      {
         "name": "Paris Data Ladies (Meetup, gql2 past events)",
         "url": "https://www.meetup.com/paris-dataladies/",
         "yielded": true,
@@ -20634,62 +21056,10 @@
         "url": null,
         "yielded": false,
         "note": "Not scanned (time-boxed); mostly career or ML focus. Femmes@numérique came up only as Charlotte Ledoux's membership."
-      },
-      {
-        "name": "LinkedIn Jobs guest API (keywords=dbt, Paris, Île-de-France)",
-        "url": "https://www.linkedin.com/jobs/search?keywords=dbt&location=Paris%2C%20%C3%8Ele-de-France%2C%20France",
-        "yielded": true,
-        "note": "Paged 300 listings (start=0..290). Fetched the first 250 descriptions about 2-3 s apart with no HTTP 429s. 120 contained \\bdbt\\b."
-      },
-      {
-        "name": "Welcome to the Jungle job search",
-        "url": "https://www.welcometothejungle.com/fr/jobs?query=dbt&refinementList%5Boffices.country_code%5D%5B%5D=FR&aroundQuery=Paris",
-        "yielded": false,
-        "note": "The search URL now opens a login / \"matching\" marketing page with no results. WTTJ ads were found through site: web searches instead."
-      },
-      {
-        "name": "Web search: \"dbt\" \"analytics engineer\" Paris",
-        "url": "https://fr.indeed.com/q-analytics-engineer-dbt-emplois.html",
-        "yielded": false,
-        "note": "Only Indeed/Glassdoor aggregate pages and salary blogs came back, with no direct ads."
-      },
-      {
-        "name": "Web search: site:welcometothejungle.com dbt Paris (DE + AE queries)",
-        "url": "https://www.welcometothejungle.com/fr/companies/dashlane/jobs/analytics-engineer_paris_b7zkyuds",
-        "yielded": true,
-        "note": "11 Paris ads whose search snippet mentions dbt."
-      },
-      {
-        "name": "Web search: site:jobs.lever.co dbt Paris",
-        "url": "https://jobs.lever.co/",
-        "yielded": true,
-        "note": "Odaseva, Mistral AI, SFEIR, Vestiaire Collective, Bigblue, Pigment, Equativ, Pretto."
-      },
-      {
-        "name": "Web search: site:job-boards.greenhouse.io dbt Paris",
-        "url": "https://job-boards.greenhouse.io/",
-        "yielded": true,
-        "note": "Aircall, Xebia France, Dashlane."
-      },
-      {
-        "name": "Web search: site:jobs.ashbyhq.com dbt Paris",
-        "url": "https://jobs.ashbyhq.com/",
-        "yielded": true,
-        "note": "Zefir, Joko, BeReal, Voodoo."
-      },
-      {
-        "name": "Web search: site:apply.workable.com dbt Paris",
-        "url": "https://apply.workable.com/",
-        "yielded": false,
-        "note": "Only generic company boards came back, with no dbt ads."
-      },
-      {
-        "name": "Web search: site:jobs.smartrecruiters.com dbt Paris",
-        "url": "https://jobs.smartrecruiters.com/AccorCorpo/744000124376311-tech-lead-data-analytics-snowflake-dbt-tableau-f-h-x",
-        "yielded": true,
-        "note": "Accor Tech Lead Data (also on LinkedIn)."
       }
-    ]
+    ],
+    "chapter_past_events": "https://www.meetup.com/paris-dbt-meetup/events/?type=past",
+    "past_meetups_derived_from": "enriched/paris-dbt-meetup.json"
   },
   "past_meetups": [
     {
@@ -20955,11 +21325,6 @@
   ],
   "community_channels": [
     {
-      "name": "Paris dbt Meetup (meetup.com)",
-      "url": "https://www.meetup.com/paris-dbt-meetup/",
-      "note": "This chapter; mostly hosted at Deskeo"
-    },
-    {
       "name": "DataGen newsletter (Substack)",
       "url": "https://datageneration.substack.com/",
       "note": "French. Detailed interviews with Back Market, Qonto, Swile, Decathlon and Doctolib that name the stack."
@@ -20968,6 +21333,11 @@
       "name": "DataGen podcast (Acast/Spotify)",
       "url": "https://shows.acast.com/data-gen",
       "note": "Episode descriptions name guests and roles. The pages are very large."
+    },
+    {
+      "name": "Sifflet blog / Luma",
+      "url": "https://luma.com/b3ng9yzj",
+      "note": "House of Data meetup."
     },
     {
       "name": "Forward Data Conference 2026 talks and speakers",
@@ -21005,14 +21375,14 @@
       "note": "Qonto SRE and Brevo talks; peripheral."
     },
     {
+      "name": "Snowflake User Group Paris",
+      "url": "https://usergroups.snowflake.com/paris/",
+      "note": "Mostly vendor/partner-led (Cortex Code, BUILD). June 2025 Station F and June 2026 Stellantis events checked."
+    },
+    {
       "name": "DataGen podcast (Acast)",
       "url": "https://shows.acast.com/data-gen/episodes",
       "note": "Recent episodes checked; Gorgias context layer (#281), Photoroom, Qover dbt episode. Episode #269 (AE at Pierre Fabre) guest name not found."
-    },
-    {
-      "name": "blef.fr Data News",
-      "url": "https://www.blef.fr/data-news-dbt-coalesce-2025",
-      "note": "Coalesce 2025 recap; no Paris Coalesce speakers named."
     },
     {
       "name": "Paris WiMLDS (Meetup)",
