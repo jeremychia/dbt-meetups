@@ -1,10 +1,10 @@
-# London dbt search: method, lessons and replication prompt
+# London: city notes
 
-This file goes with `london_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to London. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-10-01
-- **Goal:** find people in Greater London who could **speak at** (or attend) the [London dbt Meetup](https://www.meetup.com/london-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [London dbt Meetup](https://www.meetup.com/london-dbt-meetup/), data in `london_dbt_companies.json`
 - **Region:** Greater London. Commuter towns are local for this chapter, so Oxford and Brighton count too.
+- **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -17,90 +17,127 @@ This file goes with `london_dbt_companies.json`. It explains how the dataset was
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 104 |
 | Spoke at this chapter before | 33 |
-| Based in the region | 94 |
-| Based elsewhere | 5 |
-| Location unknown | 21 |
-| With a LinkedIn profile | 3 |
+| Based in the region | 97 |
+| Based elsewhere | 6 |
+| Location unknown | 17 |
+| With a LinkedIn profile | 8 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 22 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in London
 
-One research run covered London. It used 26 web searches before the session limit stopped it, then about 40 direct page fetches.
+### Meetups and conferences
 
-### Step 1: Other London meetups
-
-- **What was checked:** past events of London data meetups, read through Meetup's `gql2` endpoint with a plain `curl` request. Sorting by date, newest first, gave full line-ups without a browser.
 - **[London Analytics Engineering Meetup](https://www.meetup.com/london-analytics-engineering-meetup/events/?type=past):** 27 events from 2022 to 2026. Every event lists speakers with their employer and talk title. This was the richest London source. The recruiter Cognify runs it.
 - **[Data Engineers London](https://www.meetup.com/data-engineers-london/events/?type=past):** 15 events since 2023. Some are joint events with the [London Snowflake User Group](https://usergroups.snowflake.com/london/), which gave its organisers and one 2024 line-up.
 - **Older events:** a 2022 analytics engineering meetup by [Burns Sheehan](https://www.burnssheehan.co.uk/events/data-meetup-analytics-engineering-the-life-cycle/s107469/), hosted at Dojo.
-- **No yield:** [PyLadies London](https://www.meetup.com/pyladieslondon/), Data Science Festival and GDG Cloud London had no dbt talks from 2024 onwards with full speaker names. The [PyData London 2025 call for papers](https://cfp.pydata.org/london2025/speaker/) had no dbt or analytics engineering talks.
+- **[dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers):** individual speaker pages found through search gave the Virgin Media O2 talk.
 
-### Step 2: Company and consultancy blogs
+### Company and consultancy blogs
 
-- **[The Information Lab](https://www.theinformationlab.co.uk/sitemap-0.xml):** 15 dbt posts with named authors. Its sitemap lists every post. Each post's page-data file gives the author, job title and date. The Information Lab hosts the chapter.
+- **[The Information Lab](https://www.theinformationlab.co.uk/sitemap-0.xml):** 15 dbt posts with named authors. Its sitemap lists every post, and each post's page-data file gives the author, job title and date. The Information Lab hosts the chapter.
 - **Monzo:** the [Data @ Monzo Medium feed](https://medium.com/feed/data-monzo) had 8 posts, 2 about dbt. The [Monzo blog's data topic](https://monzo.com/blog/topic/data) had a 2026 data mesh post with three authors.
 - **Wise:** the [Wise Engineering feed](https://medium.com/feed/wise-engineering) had a tech stack post that names dbt.
-- **No dbt posts:** the [Gousto](https://medium.com/feed/gousto-engineering-techbrunch) and [Deliveroo](https://deliveroo.engineering/feed.xml) blogs.
-- **Blocked:** Medium returned HTTP 429 (too many requests) after two feeds. Bumble, Just Eat, Skyscanner, Starling, Octopus Energy and ASOS were not scanned.
-- **Not confirmed in London:** the [Infinite Lambda blog](https://infinitelambda.com/wp-json/wp/v2/posts?search=dbt) has dbt posts, but its authors could not be placed in London. The [dbt developer blog authors page](https://docs.getdbt.com/blog/authors) had no confirmed London community authors.
 
-### Step 3: Conferences
-
-- **[dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers):** the list is rendered by JavaScript, so a fetch returns nothing. Individual speaker pages found through search gave the Virgin Media O2 talk.
-- **[Coalesce on the Road London 2025](https://www.getdbt.com/events/roadshow/coalesce-on-the-road-london):** the page returned 404.
-
-### Step 4: Women-in-data communities
-
-This step finds speakers through women-focused groups' own events. It never records or guesses anyone's gender.
+### Women-in-data communities
 
 - **[Data + Women London](https://usergroups.tableau.com/data-women-london/):** the best source. It is a Tableau user group. Its 2024 and 2025 event pages list speakers with employers, including a dbt talk and a hands-on dbt lab in June 2025.
 - **Panels at other meetups:** the Allies of Women in Data panels at the London Analytics Engineering Meetup, and the Data Engineers London International Women's Day panel.
-- **No yield:** the [Women in Data UK meet-ups archive](https://womenindata.co.uk/category/meet-ups/) stops in 2020.
 - **Result:** 34 people are tagged `women_in_data_community`.
 
-### Step 5: Job ads
+### Job ads
 
-- **What was found:** 3 ads at 2 companies, Infinite Lambda and Octopus Energy, from Built In London and a green-jobs board.
-- **Weak evidence:** none of the 3 search snippets showed the word dbt. So `dbt_mentioned_in_text` is null for all three.
+- **Built In London and a green-jobs board:** 3 ads at 2 companies, Infinite Lambda and Octopus Energy. None of the 3 search snippets showed the word dbt, so `dbt_mentioned_in_text` is null for all three.
 
-### Step 6: Chapter history
+### Chapter history and locations
 
-- **Source:** every named speaker in [`../enriched/london-dbt-meetup.json`](../enriched/london-dbt-meetup.json) was added as a person. That file holds 22 meetups, from 2019-04-04 to 2026-05-27.
-- **Result:** 33 people in the file have spoken at the chapter. Four people found by the research were already past speakers with newer talks: Gordon Curzon, Holly Foster, Pablo Fernandez and Ash Sultan.
+- **Chapter history:** every named speaker in [`../enriched/london-dbt-meetup.json`](../enriched/london-dbt-meetup.json) was added as a person. That file holds 22 meetups, from 2019-04-04 to 2026-05-27. 33 people in the file have spoken at the chapter. Four people found by the research were already past speakers with newer talks: Gordon Curzon, Holly Foster, Pablo Fernandez and Ash Sultan.
+- **GitHub profiles:** the company field ties a profile to the person, and the location field places them. Most of the 13 people placed from public pages came from GitHub. Four more came from recent in-person talks at an employer with a London office.
+- **LinkedIn search results:** 12 people searched and 3 placed, all in London: [Gordon Curzon](https://www.linkedin.com/in/gordon-curzon-714a1713/), [Pearl Prakash](https://www.linkedin.com/in/pearl-prakash/) and [Christelle Xu](https://www.linkedin.com/in/christellexu/).
 
-### Step 7: Location pass and LinkedIn pass
+## 2. What didn't work here
 
-The location rules are in [`../research/README.md`](../research/README.md). In short, a location needs the person's own profile, or a recent in-person local talk plus a local office.
+- **Web search:** the session limit stopped the first run after 26 searches. About 40 direct page fetches covered the rest.
+- **Medium:** HTTP 429 (too many requests) after two feeds. The Bumble, Just Eat, Skyscanner, Starling, Octopus Energy and ASOS blogs were not scanned.
+- **No dbt posts:** the [Gousto](https://medium.com/feed/gousto-engineering-techbrunch) and [Deliveroo](https://deliveroo.engineering/feed.xml) blogs.
+- **[Infinite Lambda blog](https://infinitelambda.com/wp-json/wp/v2/posts?search=dbt):** it has dbt posts, but its authors could not be placed in London.
+- **[dbt developer blog authors page](https://docs.getdbt.com/blog/authors):** no confirmed London community authors.
+- **[dbt Summit 2026 speaker list](https://www.getdbt.com/dbt-summit/speakers):** rendered by JavaScript, so a fetch returns nothing.
+- **[Coalesce on the Road London 2025](https://www.getdbt.com/events/roadshow/coalesce-on-the-road-london):** the page returned 404.
+- **[PyLadies London](https://www.meetup.com/pyladieslondon/), Data Science Festival and GDG Cloud London:** no dbt talks from 2024 onwards with full speaker names.
+- **[PyData London 2025 call for papers](https://cfp.pydata.org/london2025/speaker/):** no dbt or analytics engineering talks. The PyData London schedule is rendered by JavaScript.
+- **[Women in Data UK meet-ups archive](https://womenindata.co.uk/category/meet-ups/):** it stops in 2020.
 
-- **Location pass (page fetches):** 13 people placed, 9 in the region and 4 elsewhere. Most came from GitHub profiles that name the person's company. Four came from recent in-person talks at an employer with a London office.
-- **LinkedIn pass (search results only):** 12 people searched and 3 placed, all in London: [Gordon Curzon](https://www.linkedin.com/in/gordon-curzon-714a1713/), [Pearl Prakash](https://www.linkedin.com/in/pearl-prakash/) and [Christelle Xu](https://www.linkedin.com/in/christellexu/).
-- **Still unknown:** 21 people.
+## 3. Companies looked at
 
-## 2. What we learnt
+- **The host dominates:** 11 people work at The Information Lab, including the organiser Ed Hayter. 6 of the 11 first-time speakers work there too. Plan one speaker per company per event.
+- **Proven speakers outnumber first-time speakers:** London has 11 first-time speakers against 104 proven speakers.
+- **Cognify:** the recruiter runs the London Analytics Engineering Meetup, the richest source of London talks.
 
-- **Sources that worked:**
-  - **Meetup `gql2`:** it answers a plain `curl` request with `groupByUrlname`, and `sort:DESC` returns the newest events first.
-  - **London Analytics Engineering Meetup:** every event names speakers, employers and talk titles.
-  - **The Information Lab site:** its sitemap and page-data files give author, job title and date for every post.
-  - **Data + Women London event pages:** they list speakers with employers.
-  - **GitHub profiles:** the company field ties a profile to the person, and the location field places them.
-- **Sources that didn't:**
-  - **Medium:** HTTP 429 after two feeds, so most London company blogs are unread.
-  - **Web search:** the session limit stopped the run after 26 searches.
-  - **JavaScript pages:** the dbt Summit speaker list and the PyData London schedule return nothing to a fetch.
-  - **Women in Data UK:** no meetups listed after 2020.
-- **Watch out for:**
-  - **Few first-time speakers:** a first-time speaker (an "emerging voice") is someone who publishes about dbt but has no talk on record. London has 11, against 104 proven speakers. 6 of the 11 work at The Information Lab.
-  - **The host dominates:** 11 people work at The Information Lab, including the organiser Ed Hayter. Plan one speaker per company per event.
-  - **Stale employers:** talks from 2022 and 2023 give the employer at the time. Andrea Salvati, Naomi Johnson, Katie Hindson, Danny Jones, Madalina Ghita and Andrew Jones may have moved.
-  - **Missing talk titles:** several 2026 London Analytics Engineering Meetup listings name speakers but no title.
-  - **Possible duplicate:** Jean Dupuis may be the "Jean D." who gave a later dbt Fusion talk.
+<!-- companies:start -->
+73 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-## 3. Key leads
+<details><summary><b>Strong dbt use</b> (38)</summary>
 
-A tier is a priority level. Tier 1 means a person in London (or not known to be elsewhere) with a dbt item from 2024 onwards, or a first-time speaker with a post from 2024 onwards.
+Biztory, Cleo, Comcast (local presence not confirmed), Crisp (local presence not confirmed), Datatonic, dbt Labs, Depop (local presence not confirmed), Dojo (local presence not confirmed), Euno (local presence not confirmed), Farfetch (local presence not confirmed), Fishtown Analytics (local presence not confirmed), Freelance consultant (local presence not confirmed), Fresha, GoCardless, Growth Street (local presence not confirmed), Infinite Lambda, Lawhive (local presence not confirmed), Lightdash, Lyst, Moneybox (local presence not confirmed), Monzo, Paradime (local presence not confirmed), Rittman Analytics (local presence not confirmed), RVU (local presence not confirmed), Sahaj Software, Sainsbury's, SELECT (local presence not confirmed), Simply Business (local presence not confirmed), Snowflake (local presence not confirmed), Spectacles CI (local presence not confirmed), SYNQ, Tails.com (local presence not confirmed), Talan (local presence not confirmed), Tesco, The Information Lab, Virgin Media O2, VTS (local presence not confirmed), Wise
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (10)</summary>
+
+Checkout.com, Cognify, Compare the Market (local presence not confirmed), Count, Data Engineers London, Gelato (local presence not confirmed), Not On The High Street (local presence not confirmed), Starling Bank (local presence not confirmed), Taptap Send (local presence not confirmed), Voy (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (24)</summary>
+
+Astrato Analytics, Baringa, Beauty Pie (local presence not confirmed), Co-op, Day1Data (local presence not confirmed), Deliveroo, Entain (local presence not confirmed), Global (local presence not confirmed), Gousto, HP Inc (local presence not confirmed), IAG (local presence not confirmed), John Lewis Partnership, Kubrick, Lloyds Banking Group, Medik8 (local presence not confirmed), Octopus Energy, Reward (local presence not confirmed), Secret Escapes (local presence not confirmed), Spark Foundry (local presence not confirmed), Spotify, Tem (local presence not confirmed), TXOdds (local presence not confirmed), Tyme Technologies (local presence not confirmed), Venatus (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (1)</summary>
+
+QuantumBlack (McKinsey) (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (5)</summary>
+
+- https://deliveroo.engineering/feed.xml
+- https://medium.com/feed/data-monzo
+- https://medium.com/feed/gousto-engineering-techbrunch
+- https://medium.com/feed/wise-engineering
+- https://www.theinformationlab.co.uk/sitemap-0.xml
+
+</details>
+
+<details><summary><b>Other sources checked</b> (19)</summary>
+
+- [London Analytics Engineering Meetup (gql2)](https://www.meetup.com/london-analytics-engineering-meetup/events/?type=past)
+- [Data Engineers London (gql2)](https://www.meetup.com/data-engineers-london/events/?type=past)
+- [The Information Lab blog sitemap](https://www.theinformationlab.co.uk/sitemap-0.xml)
+- [Data + Women London (Tableau User Group)](https://usergroups.tableau.com/data-women-london/)
+- [Data @ Monzo Medium feed](https://medium.com/feed/data-monzo)
+- [Monzo blog data topic](https://monzo.com/blog/topic/data)
+- [Wise Engineering Medium feed](https://medium.com/feed/wise-engineering)
+- [Gousto Medium feed](https://medium.com/feed/gousto-engineering-techbrunch) (nothing useful)
+- [Deliveroo engineering feed](https://deliveroo.engineering/feed.xml) (nothing useful)
+- [Other Medium feeds (Bumble, Just Eat, Skyscanner, Starling, Octopus, ASOS and more)](https://medium.com/feed/bumble-tech) (nothing useful)
+- [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
+- [Coalesce on the Road London 2025](https://www.getdbt.com/events/roadshow/coalesce-on-the-road-london) (nothing useful)
+- [London Snowflake User Group](https://usergroups.snowflake.com/london/)
+- [PyData London 2025 CfP](https://cfp.pydata.org/london2025/speaker/) (nothing useful)
+- [PyLadies London, Data Science Festival, GDG Cloud London (gql2)](https://www.meetup.com/pyladieslondon/) (nothing useful)
+- [Women in Data UK meet-ups](https://womenindata.co.uk/category/meet-ups/) (nothing useful)
+- [dbt developer blog authors](https://docs.getdbt.com/blog/authors) (nothing useful)
+- [Infinite Lambda blog API](https://infinitelambda.com/wp-json/wp/v2/posts?search=dbt) (nothing useful)
+- [Burns Sheehan data meetup](https://www.burnssheehan.co.uk/events/data-meetup-analytics-engineering-the-life-cycle/s107469/)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers:**
   - **Antonia Badarau, Irina Mugford and Massimo Frangiamore (Monzo):** co-wrote ["A meshy approach to Data"](https://monzo.com/blog/a-meshy-approach-to-data) (2026-04). It covers a dbt project of 12,000+ models used by 100+ teams.
@@ -113,51 +150,33 @@ A tier is a priority level. Tier 1 means a person in London (or not known to be 
   - **Carmen Mardiros (Sahaj Software):** [practical AI for data engineering](https://www.meetup.com/data-engineers-london/events/313209661/), including dbt with Claude Code, Data Engineers London, 2026-02.
   - **Katie Wiedmann and Priscila Fischer (GoCardless):** ["Monolithic to Mesh - dbt at GoCardless"](https://www.meetup.com/london-analytics-engineering-meetup/events/300711591/), 2024-06.
   - **Toby Henley Smith (Moneybox) and Rakhee Modha-Lobo (Starling Bank):** both spoke at the [London Analytics Engineering Meetup in 2026-02](https://www.meetup.com/london-analytics-engineering-meetup/events/312843994/).
-- **Connectors:** community organisers who can introduce people.
+- **Connectors:**
   - **Anna Aleshko and Luke Ashe-Browne:** organisers of [Data Engineers London](https://www.meetup.com/data-engineers-london/).
   - **Piers Batchelor and Tony Burton:** leads of the [London Snowflake User Group](https://usergroups.snowflake.com/london/).
   - **Kerine Taylor, Hannah Bartholomew and Lydia Wren:** leaders of [Data + Women London](https://usergroups.tableau.com/data-women-london/).
   - **Cognify:** runs the [London Analytics Engineering Meetup](https://www.meetup.com/london-analytics-engineering-meetup/) and the [Stacked Pathways](https://cognifysearch.com/stackedpathways/) mentoring scheme. Its organisers are not named on the listings.
 
-## 4. Before outreach
+## 5. Before outreach
 
-- [ ] **Check unknown locations.** 21 people have no known location. They include Melissa Simpson, Konrad Maliszewski, Sarah Levy and Lucy Kendrick.
+- [ ] **Check unknown locations.** 17 people have no known location. They include Melissa Simpson, Konrad Maliszewski, Richard Persaud, Lucy Kendrick and Sarah Levy, whose LinkedIn result was too vague to place.
 - [ ] **Check tier-1 people raised by the rule.** Milon James (Wise) is tier 1, but dbt is one line in a tech stack post.
 - [ ] **dbt Labs staff are labelled.** Kshitij Aranke and Richard Persaud are tier 1 and work there. They can speak, but check the line-up has practitioners first.
-- [ ] **Check current employers.** 2022 and 2023 talks may show an old employer.
+- [ ] **Check current employers.** Talks from 2022 and 2023 give the employer at the time. Andrea Salvati, Naomi Johnson, Katie Hindson, Danny Jones, Madalina Ghita and Andrew Jones may have moved.
+- [ ] **Check a possible duplicate.** Jean Dupuis may be the "Jean D." who gave a later dbt Fusion talk.
+- [ ] **Fill missing talk titles.** Several 2026 London Analytics Engineering Meetup listings name speakers but no title.
 - [ ] **Check who is already booked.** Compare leads with the chapter's upcoming events.
 
-## 5. Next run
+## 6. Next run
 
-- **Retry Medium first.** Read the Bumble, Just Eat, Skyscanner, Starling, Octopus Energy and ASOS blogs for emerging voices. Space the requests out.
-- **Finish LinkedIn.** 108 people are still `not_searched`. Start with the 21 unknown locations.
-- **Add job ads.** Only 3 were found. Try `site:` searches on Lever, Greenhouse and Ashby with "dbt London".
-- **Read more blogs:** Infinite Lambda authors, Datatonic, and dbt Labs case studies of London companies.
-- **Check the dbt Summit 2026 speaker pages** through the getdbt.com sitemap for more London employers.
-- **Look beyond The Information Lab** for emerging voices, so the line-up does not depend on the host.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of London companies that use dbt, and people who could speak at or
-attend the London dbt Meetup. The file is london/london_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Region: Greater London; commuter towns such as
-Oxford and Brighton count as local.
-Read london/SEARCH_METHOD.md first, then research/README.md, research/raw-format.md,
-research/location-task.md and research/linkedin-task.md.
-
-Budget about 25 web searches. Try these first:
-1. Medium feeds of Bumble, Just Eat, Skyscanner, Starling, Octopus Energy and ASOS (space requests out).
-2. New events of the London Analytics Engineering Meetup, Data Engineers London and
-   Data + Women London, through Meetup gql2 with curl.
-3. New posts on The Information Lab and Monzo blogs; dbt Summit speaker pages from the getdbt.com sitemap.
-4. Job ads: site: searches on Lever, Greenhouse and Ashby for dbt London.
-
-Rules: never fetch LinkedIn pages, use only search results. Public professional information only;
-never record or guess gender; pronouns only when self-stated. Skip past chapter speakers; the
-assembler adds them. Assemble with research/assemble.py --base, run research/validate.py (must
-print ok), then add a change-log row below.
-````
+- **Sources to try first:**
+  - **Medium:** the Bumble, Just Eat, Skyscanner, Starling, Octopus Energy and ASOS blogs, for first-time speakers. Space the requests out.
+  - **Meetups:** new events of the London Analytics Engineering Meetup, Data Engineers London and Data + Women London.
+  - **Blogs:** new posts on The Information Lab and Monzo blogs, Infinite Lambda authors, Datatonic, and dbt Labs case studies of London companies.
+  - **dbt Summit 2026 speaker pages:** through the getdbt.com sitemap, for more London employers.
+  - **Job ads:** only 3 were found. Try `site:` searches on Lever, Greenhouse and Ashby with "dbt London".
+  - **Beyond the host:** look past The Information Lab for first-time speakers, so the line-up does not depend on the host.
+- **People to locate:** 17 people have no known location, and 96 are still `not_searched` on LinkedIn. Start with the unknown locations.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `london/london_dbt_companies.json`, the London dbt Meetup, `../enriched/london-dbt-meetup.json` and the region Greater London, with Oxford and Brighton counted as local.
 
 ## Change log
 

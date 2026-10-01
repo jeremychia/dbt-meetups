@@ -1,10 +1,10 @@
-# Tokyo dbt search: method, lessons and replication prompt
+# Tokyo: city notes
 
-This file goes with `tokyo_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Tokyo. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-10-01
-- **Goal:** find people in Greater Tokyo who could **speak at** (or attend) the [Tokyo dbt Meetup](https://www.meetup.com/tokyo-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [Tokyo dbt Meetup](https://www.meetup.com/tokyo-dbt-meetup/), data in `tokyo_dbt_companies.json`
 - **Region:** Greater Tokyo. That includes Saitama and Chiba, so a GitHub location of Kawagoe or Saitama counts. Kyoto, Okinawa and Fukushima do not.
+- **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -25,78 +25,157 @@ This file goes with `tokyo_dbt_companies.json`. It explains how the dataset was 
 | Past chapter meetups | 19 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Tokyo
 
 Most of the content is in Japanese. Titles are kept as written, with an English description.
 
-### Step 1: Zenn and Qiita
+### Writing platforms
 
-- **Zenn:** the JSON API ([`zenn.dev/api/articles?topicname=dbt&order=latest&page=N`](https://zenn.dev/api/articles?topicname=dbt&order=latest)) lists every dbt article with its author and company publication. About 800 of the newest and most-liked articles were read.
-- **Qiita:** the API ([`qiita.com/api/v2/items?query=tag:dbt`](https://qiita.com/api/v2/items?query=tag:dbt)) works without a token and shows the author's organisation. Posts since 2024-06 were read. It added CyberAgent, NTT DATA, ZOZO and DeNA authors.
-- **What was kept:** authors who wrote in a company publication from 2024 onwards. Their Zenn bios gave titles and self-stated roles, such as Snowflake Data Superhero.
-- **Yield:** about 110 company-publication articles since 2024-06. Most people in the file come from here.
+- **Zenn API:** the best single source, and most people in the file come from here. [`zenn.dev/api/articles?topicname=dbt&order=latest&page=N`](https://zenn.dev/api/articles?topicname=dbt&order=latest) lists each dbt article with its author and company publication, one call per page. About 800 of the newest and most-liked articles were read. Authors who wrote in a company publication from 2024 onwards were kept, from about 110 articles since 2024-06. Zenn bios gave titles and self-stated roles, such as Snowflake Data Superhero.
+- **Qiita API:** [`qiita.com/api/v2/items?query=tag:dbt`](https://qiita.com/api/v2/items?query=tag:dbt) works without a token and names the author's organisation. Posts since 2024-06 were read. It added CyberAgent, NTT DATA, ZOZO and DeNA authors.
 
-### Step 2: Company tech blogs
+### Company tech blogs
 
-- **Hatena blogs:** Hatena-based company blogs answer `/search?q=dbt` with plain HTML, so no web searches were needed.
-  - [Timee](https://tech.timee.co.jp/): data reliability team posts on dbt snapshots, unit tests and DuckDB checks.
-  - [LayerX](https://tech.layerx.co.jp/): two open-source dbt packages for Snowflake governance.
-  - [ZOZO](https://techblog.zozo.com/): dbt adoption on Cloud Composer.
-- **No dbt posts:** [SmartHR](https://tech.smarthr.jp/) and [Money Forward](https://moneyforward-dev.jp/). Money Forward's Zenn publication had one.
-- **Did not render:** the [Mercari engineering blog](https://engineering.mercari.com/blog/) search page.
+- **Hatena blog search:** Hatena-based company blogs answer `/search?q=dbt` with plain HTML, so no web searches were needed.
+- **[Timee](https://tech.timee.co.jp/):** data reliability team posts on dbt snapshots, unit tests and DuckDB checks.
+- **[LayerX](https://tech.layerx.co.jp/):** two open-source dbt packages for Snowflake governance.
+- **[ZOZO](https://techblog.zozo.com/):** dbt adoption on Cloud Composer.
+- **Money Forward on Zenn:** one dbt post on its Zenn publication.
 
-### Step 3: Conferences and other meetups
+### Conferences and the chapter
 
+- **Chapter history:** every named speaker from `../enriched/tokyo-dbt-meetup.json` was added, with the talk as evidence. That covers 19 events, from meetup #4 (2022-08-23) to meetup #21 (2026-07-29). The two hosts of meetup #21 are recorded as organisers. The writer of the chapter's [meetup reports on Zenn](https://zenn.dev/p/dbttokyo) is recorded as a connector.
+- **getdbt.com roadshow pages:** speaker names and companies sit as JSON in the raw HTML.
 - **[dbt World Tour Tokyo 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-tokyo)** (2026-10-20): Sony Bank and Mynavi have customer sessions, but the speakers are not named. Both are recorded as companies with no people.
-- **[Coalesce on the Road Tokyo 2025](https://www.getdbt.com/jp/coalesce-in-tokyo):** mostly dbt Labs speakers, and customer speakers are not named.
-- **[connpass](https://connpass.com/search/?q=dbt):** it returns HTTP 403 to plain fetches, so the Data Engineering Study line-ups were not read.
+- **[Coalesce on the Road Tokyo 2025](https://www.getdbt.com/jp/coalesce-in-tokyo):** mostly dbt Labs speakers. Customer speakers are not named.
 
-### Step 4: Women-in-data communities
+### Locations
 
-This step looks for speakers through women-focused groups' own events. It never labels or guesses anyone's gender.
+- **GitHub profiles:** a GitHub profile linked from a Zenn profile gives a stated city, at high confidence. Zenn and Qiita location fields were empty for every handle checked.
+- **Recent chapter talks:** an in-person talk at a Tokyo dbt Meetup since 2025, at an employer with a Tokyo office, gave medium confidence. Venues come from `past_meetups`.
+- **Company contact pages:** the [estie](https://www.estie.co.jp/company) and [Mitsumore](https://meetsmore.com/company) pages confirmed both Tokyo offices.
+- **LinkedIn search results:** placed 2 people in Greater Tokyo and 2 elsewhere (Naha and Seattle).
+- **Yield:** 22 people placed across both passes, and 24 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
-- **[Women Tech Terrace 2024](https://www.cyberagent.co.jp/way/list/detail/id=30486)** (CyberAgent): no data talks.
-- **[WiDS Tokyo @ IBM](https://www.widsworldwide.org/events/event/wids-tokyo-ibm-2/):** a 2024 event with no speakers listed.
-- **[PyLadies Tokyo](https://techplay.jp/event/924859):** TECH PLAY returned HTTP 403.
-- **Result:** no candidate came from this step.
+## 2. What didn't work here
 
-### Step 5: Chapter history
+- **[Zenn topic page](https://zenn.dev/topics/dbt):** renders nothing when fetched. Use the API instead.
+- **[connpass](https://connpass.com/search/?q=dbt):** returns HTTP 403 to plain fetches, so the Data Engineering Study line-ups and most Tokyo meetup line-ups were not read.
+- **[TECH PLAY](https://techplay.jp/event/924859):** returns HTTP 403, so the PyLadies Tokyo event was not read.
+- **[Mercari engineering blog](https://engineering.mercari.com/blog/):** the search page did not render.
+- **[SmartHR](https://tech.smarthr.jp/) and [Money Forward](https://moneyforward-dev.jp/) blogs:** no dbt posts.
+- **Japanese company sites:** most load by JavaScript, so no office address came back.
+- **Web search:** ran out after about 12 calls. No job ads were collected, and the Mercari, SmartHR and CyberAgent sweeps were only partly done.
+- **Women-in-data events:** [Women Tech Terrace 2024](https://www.cyberagent.co.jp/way/list/detail/id=30486) (CyberAgent) had no data talks. [WiDS Tokyo @ IBM](https://www.widsworldwide.org/events/event/wids-tokyo-ibm-2/) was a 2024 event with no speakers listed. No candidate came from this step.
 
-- **Past speakers:** every named speaker from `../enriched/tokyo-dbt-meetup.json` was added, with their talk as evidence. That covers 19 events, from meetup #4 (2022-08-23) to meetup #21 (2026-07-29).
-- **Organisers:** the two hosts of meetup #21 are recorded as organisers. The writer of the chapter's [meetup reports on Zenn](https://zenn.dev/p/dbttokyo) is recorded as a connector, meaning someone who can introduce people.
+## 3. Companies looked at
 
-### Step 6: Location pass and LinkedIn pass
+- **Finatext dominates:** its Zenn publication has 8 people in the file. Plan for one speaker per company per event.
+- **Chura Data is based in Okinawa:** its CTO is in Naha, but two of its writers have GitHub locations in Saitama.
+- **Customer speakers at dbt Labs events:** Sony Bank and Mynavi speak at dbt World Tour Tokyo on 2026-10-20.
 
-- **Location pass:** people were placed from public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
-  - GitHub profiles linked from a Zenn profile gave high-confidence locations.
-  - An in-person talk at a Tokyo dbt Meetup since 2025, at an employer with a Tokyo office, gave medium confidence. Venues come from `past_meetups`.
-  - The [estie](https://www.estie.co.jp/company) and [Mitsumore](https://meetsmore.com/company) contact pages confirmed their Tokyo offices.
-- **LinkedIn pass:** search results only, never a LinkedIn page. It placed 2 people in Greater Tokyo and 2 elsewhere (Naha and Seattle).
-- **Yield:** 22 people placed across both passes, and 24 still unknown.
+<!-- companies:start -->
+72 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-## 2. What we learnt
+<details><summary><b>Strong dbt use</b> (51)</summary>
 
-- **Sources that worked:**
-  - **The Zenn API** is the best single source. One call per page lists each dbt article with its author and company. The [topic page](https://zenn.dev/topics/dbt) itself renders nothing when fetched.
-  - **The Qiita API** needs no token and names the author's organisation.
-  - **Hatena blog search** returns plain HTML, which saves web searches.
-  - **GitHub profiles** linked from Zenn give a stated city. Zenn and Qiita location fields were empty for every handle checked.
-  - **The getdbt.com roadshow pages** carry speaker names and companies as JSON in the raw HTML.
-- **Sources that didn't:**
-  - **connpass and TECH PLAY** return HTTP 403, so most Tokyo meetup line-ups were not read.
-  - **Most Japanese company sites** load by JavaScript, so no office address came back.
-  - **Web search** ran out after about 12 calls. No job ads were collected, and the Mercari, SmartHR and CyberAgent sweeps were only partly done.
-- **Watch out for:**
-  - **Handles, not names.** Most authors publish under a handle. Names are recorded as written, with an ASCII id.
-  - **Names in Japanese script only.** The assembler strips names to ASCII before matching, so two names in Japanese script merge silently. Add a handle to each name, for example "山口歩夢 (gussan_a)".
-  - **Blog authors who are past speakers under another name.** These were left out to avoid duplicates: okiyuki is Motoyuki Oki, Yoshi-ken is Yoshiken, harry/gappy is Harry, sisisin is Shimenyan, t-hiroto is Hiroto Takahashi and ryosuke839 is Ryosuke Lin Yamamoto.
-  - **One name may be misspelt.** ZOZO's 栁澤 (@i_125) is Satoko Yanagisawa on Qiita. The chapter file has "Yoshiko Yanagisawa".
-  - **Chura Data is based in Okinawa.** Its CTO is in Naha, but two of its writers have GitHub locations in Saitama.
-  - **Finatext dominates.** Its Zenn publication has 8 people in the file. Plan for one speaker per company per event.
+10X Inc. (local presence not confirmed), Anthropic Japan G.K. (local presence not confirmed), Chura Data (local presence not confirmed), commmune Inc. (local presence not confirmed), CyberAgent, DATUM STUDIO, dbt Labs (local presence not confirmed), dbt Tokyo Crew, DMM.com, estie Inc. (local presence not confirmed), Fez, Finatext Holdings (Finatext / Nowcast), GA technologies, GENDA, GMO Pepabo, hokan, istyle, IVRy, JINS, Knowledge Work, Kurashiru (dely), LayerX, Macbee Planet, MeDiCU, Mitsumore Inc. (local presence not confirmed), Mizuho Research & Technologies (local presence not confirmed), Money Forward, Mynavi, newmo Inc. (local presence not confirmed), Nowcast Inc. (local presence not confirmed), NTT DATA, PIVOT, pixiv, primeNumber, RAKSUL, RAKUDEJI (local presence not confirmed), Rehab for JAPAN, Sansan, SIGNATE Inc. (local presence not confirmed), Snowflake Data Heroes (Japan), Sony Bank, stable Inc. (local presence not confirmed), Stanby, Supership, Timee, truestar, Ubie, VALUES, Works Human Intelligence, ZOZO, Zucks Ad Products Division (local presence not confirmed)
 
-## 3. Key leads
+</details>
 
-- **First-time speakers** (people who publish about dbt but have no talk on record):
+<details><summary><b>Some dbt signal</b> (20)</summary>
+
+Antway, Bandai Namco Nexus, COTEN, Cybozu, DeNA, Headwaters, INTAGE, KDDI Agile Development Center, Loglass, MBK Digital, PKSHA Technology, Quick Network (local presence not confirmed), READYFOR, Rec Technology Consulting (local presence not confirmed), Saison Technology, SimpleForm (local presence not confirmed), TRIBEAU, USEN ICT Solutions, Yappli, youthful days (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (1)</summary>
+
+mybest
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (53)</summary>
+
+- https://qiita.com/Himeka_Kawaguchi/items/8d2c28a8b41ce586f755
+- https://qiita.com/ReQ_HY/items/e1043eb0cb6e9313c86f
+- https://qiita.com/RyutoYoda/items/365b42d8d1b92e451d33
+- https://qiita.com/Toyo_m/items/3bbbff1ba96e8cac2222
+- https://qiita.com/ao_flower/items/3c69440b2c2916f01ba7
+- https://qiita.com/imaik_/items/5c20b8a629f189c2a0f4
+- https://qiita.com/kairi_sekiya/items/c987514ad741c4f23075
+- https://qiita.com/n-gondo123/items/b33baeb75f5559aefbe2
+- https://qiita.com/osshy/items/cd12cd5c32fae528da21
+- https://qiita.com/y_ishiguro/items/a8cf45a37f9593a08c4e
+- https://tech.layerx.co.jp/
+- https://tech.timee.co.jp/
+- https://techblog.zozo.com/
+- https://techblog.zozo.com/entry/dbt-adoption
+- https://zenn.dev/antway
+- https://zenn.dev/coten
+- https://zenn.dev/cybozu_data
+- https://zenn.dev/dataheroes
+- https://zenn.dev/dmmdata
+- https://zenn.dev/fez_tech
+- https://zenn.dev/gatechnologies
+- https://zenn.dev/hokan_blog
+- https://zenn.dev/intage_tech
+- https://zenn.dev/ivry
+- https://zenn.dev/jins
+- https://zenn.dev/loglass
+- https://zenn.dev/macbee_planet
+- https://zenn.dev/mbk_digital
+- https://zenn.dev/moneyforward
+- https://zenn.dev/p/churadata
+- https://zenn.dev/p/dataheroes
+- https://zenn.dev/p/datum_studio
+- https://zenn.dev/p/dbttokyo
+- https://zenn.dev/p/dely_jp
+- https://zenn.dev/p/finatext
+- https://zenn.dev/p/genda_jp
+- https://zenn.dev/p/headwaters
+- https://zenn.dev/p/medicu
+- https://zenn.dev/p/nttdata_tech
+- https://zenn.dev/p/truestar
+- https://zenn.dev/p/ubie_dev
+- https://zenn.dev/pepabo
+- https://zenn.dev/pivotmedia
+- https://zenn.dev/pixiv
+- https://zenn.dev/pksha
+- https://zenn.dev/primenumber
+- https://zenn.dev/qn_tech
+- https://zenn.dev/raksul_data
+- https://zenn.dev/readyfor_blog
+- https://zenn.dev/rehabforjapan
+- https://zenn.dev/tribeau
+- https://zenn.dev/usen_ict
+- https://zenn.dev/youthfuldays
+
+</details>
+
+<details><summary><b>Other sources checked</b> (14)</summary>
+
+- [Zenn dbt topic (API)](https://zenn.dev/topics/dbt)
+- [Qiita dbt tag (API)](https://qiita.com/tags/dbt)
+- [Timee tech blog](https://tech.timee.co.jp/)
+- [LayerX tech blog](https://tech.layerx.co.jp/)
+- [ZOZO tech blog](https://techblog.zozo.com/)
+- [SmartHR tech blog](https://tech.smarthr.jp/) (nothing useful)
+- [Money Forward developers blog](https://moneyforward-dev.jp/) (nothing useful)
+- [Mercari engineering blog](https://engineering.mercari.com/blog/) (nothing useful)
+- [dbt World Tour Tokyo 2026](https://www.getdbt.com/events/roadshow/dbt-world-tour-tokyo)
+- [Coalesce on the Road Tokyo 2025](https://www.getdbt.com/jp/coalesce-in-tokyo) (nothing useful)
+- [connpass (Data Engineering Study, dbt events)](https://connpass.com/search/?q=dbt) (nothing useful)
+- [Women Tech Terrace 2024 (CyberAgent)](https://www.cyberagent.co.jp/way/list/detail/id=30486) (nothing useful)
+- [WiDS Tokyo @ IBM](https://www.widsworldwide.org/events/event/wids-tokyo-ibm-2/) (nothing useful)
+- [PyLadies Tokyo](https://techplay.jp/event/924859) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
+
+- **First-time speakers:**
   - **Ryuichi Shimajiri (Finatext):** [automated dbt tag checks on Snowflake](https://zenn.dev/finatext/articles/snowflake-dbt-tag-validation) with dbt-elementary.
   - **rami (ramish8), Macbee Planet:** [rebuilt a platform on dbt and cut BigQuery scans by over 90%](https://zenn.dev/macbee_planet/articles/85c8ef4aeb063b).
   - **wxy_zzz (IVRy):** [marks certified data on Databricks with dbt tags](https://zenn.dev/ivry/articles/ivry-dbx-certification-status-with-dbt-20260901).
@@ -111,51 +190,36 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Shinya Takimoto and Kazuya Araki:** the [chapter's organisers](https://www.meetup.com/tokyo-dbt-meetup/events/315495411/) (dbt Tokyo Crew).
   - **Yuta YAMAMOTO:** writes the [chapter's meetup reports](https://zenn.dev/dbttokyo/articles/b73a3256f38228).
   - **しんや (shinyaa31), truestar:** has written over 600 event reports, including [one on meetup #15](https://zenn.dev/truestar/articles/6c3ebfebc4831a).
-  - **[Snowflake Data Heroes](https://zenn.dev/p/dataheroes):** the Japanese Snowflake community, with many dbt users. Ask them for introductions to balance the line-up.
+  - **[Snowflake Data Heroes](https://zenn.dev/p/dataheroes):** the Japanese Snowflake community, with many dbt users. Ask the community for introductions to balance the line-up.
 
-## 4. Before outreach
+## 5. Before outreach
 
-- **Check most "in region" calls.** Only 17 of the people marked in the region have a location note with evidence. The rest were placed in Tokyo from their employer's Tokyo head office during research.
-- **Check tier 1.** It holds 103 people because any first-time speaker with a post from 2024 onwards is raised to tier 1. 14 of them have no item that mentions dbt, for example bigmegaphone and chanyou. Sort by how recent and how deep the dbt work is.
-- **Confirm real names.** Most new people are recorded by their Zenn or Qiita handle.
-- **Check possible duplicates and misspellings:**
-  - **Yanagisawa:** confirm whether the past speaker is Satoko or Yoshiko.
-  - **Toshitei Ito** may be Toshitaka Ito, a dbt Labs solutions architect in Tokyo.
-  - **Company records:** several companies appear twice, once from research and once from the chapter history. Examples are Kurashiru (dely) and dely Inc., and Finatext Holdings (Finatext / Nowcast) and Nowcast Inc.
-- **Fix placeholder employers.** One company record is named "Inc.". "Anthropic Japan G.K." holds Tristan Handy, which comes from the talk text.
-- **dbt Labs staff are labelled.** Mark Wan, Andrew Escay and Elias DeFaria work there. Elias DeFaria is in Seattle. They can speak, but check the line-up has practitioners first.
-- **Check one weak location.** AZEGAMI Kazuya's Zenn bio suggests Sukagawa, Fukushima, but names no home city. The employer, youthful days, lists an office in Nagano. The location stays unknown.
-- **Check people already booked.** Sony Bank and Mynavi speak at dbt World Tour Tokyo on 2026-10-20.
+- [ ] **Check most "in region" calls:** only 17 of the people marked in the region have a location note with evidence. The rest were placed in Tokyo from the employer's Tokyo head office during research.
+- [ ] **Check tier 1:** it holds 103 people, because any first-time speaker with a post from 2024 onwards is raised to tier 1. 14 of these people have no item that mentions dbt, for example bigmegaphone and chanyou. Sort by how recent and how deep the dbt work is.
+- [ ] **Confirm real names:** most authors publish under a handle, and most new people are recorded by Zenn or Qiita handle. Names are recorded as written, with an ASCII id.
+- [ ] **Add a handle to names in Japanese script only:** the assembler strips names to ASCII before matching, so two names in Japanese script merge silently. Write each as, for example, "山口歩夢 (gussan_a)".
+- [ ] **Keep known aliases out:** these blog authors are past speakers under another name, so were left out to avoid duplicates. okiyuki is Motoyuki Oki, Yoshi-ken is Yoshiken, harry/gappy is Harry, sisisin is Shimenyan, t-hiroto is Hiroto Takahashi and ryosuke839 is Ryosuke Lin Yamamoto.
+- [ ] **Confirm Yanagisawa:** ZOZO's 栁澤 (@i_125) is Satoko Yanagisawa on Qiita. The chapter file has "Yoshiko Yanagisawa". Confirm which name the past speaker has.
+- [ ] **Check Toshitei Ito:** may be Toshitaka Ito, a dbt Labs solutions architect in Tokyo.
+- [ ] **Merge duplicate companies:** several appear twice, once from research and once from the chapter history. Examples are Kurashiru (dely) and dely Inc., and Finatext Holdings (Finatext / Nowcast) and Nowcast Inc.
+- [ ] **Fix placeholder employers:** one company record is named "Inc.". "Anthropic Japan G.K." holds Tristan Handy, which comes from the talk text.
+- [ ] **Balance dbt Labs staff:** Mark Wan, Andrew Escay and Elias DeFaria work there and are labelled. Elias DeFaria is in Seattle. All three can speak, but check the line-up has practitioners first.
+- [ ] **Check one weak location:** AZEGAMI Kazuya's Zenn bio suggests Sukagawa, Fukushima, but names no home city. The employer, youthful days, lists an office in Nagano. The location stays unknown.
+- [ ] **Check people already booked:** Sony Bank and Mynavi speak at dbt World Tour Tokyo on 2026-10-20.
 
-## 5. Next run
+## 6. Next run
 
-- **Job ads:** none were collected. Run the ATS searches (`site:jobs.lever.co`, `site:job-boards.greenhouse.io`, `site:jobs.ashbyhq.com` with dbt Tokyo) first.
-- **connpass line-ups:** try the browser for Data Engineering Study and other dbt events.
-- **Blog sweeps:** finish Mercari, SmartHR and CyberAgent.
-- **Women-in-data:** try other groups' own events, and ask the chapter hosts and Snowflake Data Heroes for introductions.
-- **People still without a location:** 24, mostly past chapter speakers from 2022 to 2024. detaneeee, ReQ_HY and fujidev were searched on LinkedIn with no match. Search LinkedIn for the past speakers not yet searched, such as Hiroki Ishitada and Junya Morita.
-- **Manual add:** Motoyuki Oki's LinkedIn result shows a data engineer at the Digital Agency in Tokyo. It failed the matching rule only because the employer is recorded as independent.
-- **dbt World Tour Tokyo 2026:** after 2026-10-20, add the Sony Bank and Mynavi speakers if the recordings name them.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of Greater Tokyo companies that use dbt, and people who could
-speak at or attend the Tokyo dbt Meetup. The file is tokyo/tokyo_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Read tokyo/SEARCH_METHOD.md first, then
-research/README.md, research/raw-format.md, research/location-task.md and
-research/linkedin-task.md. Keep the shared schema (berlin_planning/SEARCH_METHOD.md §3).
-
-Try first: job ads (Lever, Greenhouse and Ashby site: searches for dbt Tokyo), connpass
-line-ups through the browser, new Zenn articles (zenn.dev/api/articles?topicname=dbt&order=latest)
-and Qiita posts (qiita.com/api/v2/items?query=tag:dbt) since metadata.generated_at, and the
-Mercari, SmartHR and CyberAgent blogs. Add a handle to any name written only in Japanese script.
-
-Rules: never fetch LinkedIn pages, only use search results; public professional information
-only; never guess gender, and record pronouns only when self-stated. Assemble with
-research/assemble.py --base, place people with research/apply_locations.py, then run
-research/validate.py and add a change-log row below.
-````
+- **Sources to try first:**
+  - **Job ads:** none were collected. Run the ATS searches (`site:jobs.lever.co`, `site:job-boards.greenhouse.io`, `site:jobs.ashbyhq.com` with dbt Tokyo) first.
+  - **connpass line-ups:** try the browser for Data Engineering Study and other dbt events.
+  - **Zenn and Qiita:** read new articles from both APIs since `metadata.generated_at`.
+  - **Blog sweeps:** finish Mercari, SmartHR and CyberAgent.
+  - **Women-in-data:** try other groups' own events, and ask the chapter hosts and Snowflake Data Heroes for introductions.
+  - **dbt World Tour Tokyo 2026:** after 2026-10-20, add the Sony Bank and Mynavi speakers if the recordings name them.
+- **People to locate:**
+  - **Past speakers:** 24 people are still unknown, mostly past chapter speakers from 2022 to 2024. detaneeee, ReQ_HY and fujidev were searched on LinkedIn with no match. Search LinkedIn for the past speakers not yet searched, such as Hiroki Ishitada and Junya Morita.
+  - **Motoyuki Oki:** add by hand. The LinkedIn result shows a data engineer at the Digital Agency in Tokyo. It failed the matching rule only because the employer is recorded as independent.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `tokyo/tokyo_dbt_companies.json`, the Tokyo dbt Meetup, `../enriched/tokyo-dbt-meetup.json` and Greater Tokyo. Add: "Search in Japanese. Add a handle to any name written only in Japanese script."
 
 ## Change log
 

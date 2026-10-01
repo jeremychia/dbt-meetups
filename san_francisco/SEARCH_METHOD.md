@@ -1,10 +1,10 @@
-# San Francisco dbt search: method, lessons and replication prompt
+# San Francisco: city notes
 
-This file goes with `san_francisco_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to San Francisco. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-10-01
-- **Goal:** find people in the SF Bay Area who could **speak at** (or attend) the [San Francisco dbt Meetup](https://www.meetup.com/san-francisco-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [San Francisco dbt Meetup](https://www.meetup.com/san-francisco-dbt-meetup/), data in `san_francisco_dbt_companies.json`
 - **Region:** the nine SF Bay Area counties. San Francisco, the Peninsula (San Mateo, Menlo Park, Portola Valley) and the South Bay (Sunnyvale) count. Commuter towns are local for this chapter, so Santa Cruz counts too. San Diego and Irvine do not.
+- **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -17,83 +17,127 @@ This file goes with `san_francisco_dbt_companies.json`. It explains how the data
 | First-time speakers (publish, no talk yet) | 10 |
 | Proven speakers | 51 |
 | Spoke at this chapter before | 36 |
-| Based in the region | 40 |
-| Based elsewhere | 10 |
-| Location unknown | 26 |
-| With a LinkedIn profile | 7 |
+| Based in the region | 49 |
+| Based elsewhere | 13 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in San Francisco
 
-The first build had about 20 web searches before the shared session limit ran out. The rest came from about 50 page fetches and the GitHub API. Scoring follows [`../berlin_planning/SEARCH_METHOD.md`](../berlin_planning/SEARCH_METHOD.md) §1 Step 6.
+The first build had about 20 web searches before the shared session limit ran out. The rest came from about 50 page fetches and the GitHub API. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
 
-### Step 1: Chapter history
+### Chapter history and conferences
 
-- **What was added:** every named speaker in `../enriched/san-francisco-dbt-meetup.json`, with their talk.
-- **Range:** 13 meetups, from 2019-06-12 to 2026-08-26.
-- **Yield:** 36 people who have spoken at the chapter. One of them, Dori Wilson, was merged with a newer record at Chime.
-
-### Step 2: dbt conference agendas
-
-- **[dbt Summit 2026 sessions by role](https://www.getdbt.com/blog/dbt-summit-2026-sessions-by-role):** the best page. It names speakers and companies at Zipline, Sigma, LangChain, DoorDash and Okta on one page.
-- **[dbt Summit 2026 keynotes](https://www.getdbt.com/blog/dbt-summit-2026-keynotes-product-sessions):** dbt Labs staff only.
+- **Past chapter speakers:** every named speaker in `../enriched/san-francisco-dbt-meetup.json`, with the talk. 13 meetups, from 2019-06-12 to 2026-08-26, gave 36 people who have spoken at the chapter. One of them, Dori Wilson, was merged with a newer record at Chime.
+- **[dbt Summit 2026 sessions by role](https://www.getdbt.com/blog/dbt-summit-2026-sessions-by-role):** the best page, and the cheapest way to find Bay Area talks. It names speakers and companies at Zipline, Sigma, LangChain, DoorDash and Okta on one page.
 - **[Coalesce 2025 sessions overview](https://www.getdbt.com/blog/what-to-expect-from-sessions-at-coalesce-2025):** Okta and Cribl sessions, but most speakers are not named.
-- **Session pages:** the individual dbt Summit and Coalesce session pages returned 404.
 
-### Step 3: Vendor customer stories and blogs
+### Vendor customer stories and blogs
 
-- **[Hex customer stories](https://hex.tech/customers/):** Chime, LangChain, Figma, Notion and Modern Treasury. Each names Bay Area analytics staff and states their stack.
+- **[Hex customer stories](https://hex.tech/customers/):** Chime, LangChain, Figma, Notion and Modern Treasury. Each names Bay Area analytics staff and states the stack. Hex and Omni stories are the cheapest route to practitioners.
 - **[Omni blog and case studies](https://omni.co/blog):** Cribl and Handshake, plus posts by Omni staff.
-- **[Monte Carlo case studies](https://montecarlo.ai/case-studies/):** PagerDuty and Credit Karma. Neither mentions dbt.
 - **[dbt Developer Blog authors](https://docs.getdbt.com/blog/authors):** authors at Mainspring Energy, Merit, Census, Mode and Fivetran. Most posts are from 2022–23.
 
-### Step 4: Women-in-data communities
+### Women-in-data communities
 
-People were taken only from each community's own events. Nobody's gender is recorded.
+People were taken only from each community's own events.
 
 - **[Snowflake Women in Data Bay Area](https://www.snowflake.com/event/women-in-data-bay-area-20260128) (January 2026):** 5 speakers, from DoorDash, Ross Stores, CrowdStrike, Engage3 and Snowflake.
 - **[Hightouch Women in Data SF](https://hightouch.com/events/women-in-data-meetup) (February 2023):** 1 keynote speaker.
 - **[WiDS Berkeley](https://wids.berkeley.edu/speakers):** WiDS means Women in Data Science. The page shows the 2023 line-up, including an analytics engineering leader at Meta.
-- **[Women in Big Data Bay Area](https://www.meetup.com/women-in-big-data-bay-area/):** the group no longer exists.
 
-### Step 5: Other local meetups and company blogs
+### Meetups, GitHub and job ads
 
 - **[Snowflake Bay Area User Group](https://usergroups.snowflake.com/san-francisco/):** lists its 2 leaders, but not its event speakers.
-- **[MotherDuck SF meetups](https://motherduck.com/events/motherduck-duckdb-july-meetup-2026.md):** DuckDB and agent talks, with no dbt speakers.
-- **[AI Council Bay Area](https://www.aicouncil.com/bay-2025):** Data Council was renamed, and the page lists no speakers.
-- **Company Medium feeds:** [Gusto](https://medium.com/feed/gusto-engineering) and Faire had no dbt posts. [Airbnb](https://medium.com/feed/airbnb-engineering), Lyft and Instacart returned HTTP 429 (too many requests).
-
-### Step 6: GitHub and job ads
-
-- **[GitHub user search](https://github.com/search?q=dbt+location%3A%22San+Francisco%22&type=users)** for "dbt" in the bio and a San Francisco location: mostly job-seeker portfolios. Two people were kept.
+- **[GitHub user search](https://github.com/search?q=dbt+location%3A%22San+Francisco%22&type=users):** "dbt" in the bio and a San Francisco location. Mostly job-seeker portfolios. Two people were kept.
 - **Job ads:** only 3, found through web search, at World, Perplexity and Slash. No LinkedIn Jobs scan was run.
 
-### Step 7: Location and LinkedIn passes (2026-10-01)
+### Locations
 
-- **Page fetches:** 18 people placed, 12 in the region and 6 outside.
-  - The Meetup `gql2` endpoint gave the profile city of each event's hosts and RSVPs.
-  - GitHub profiles gave the rest.
-- **LinkedIn search results:** 7 people placed, 4 in the region and 3 outside. No LinkedIn page was opened.
-- **Still unknown:** 26 people. One more, Karen Hsieh, is placed from the same person's record in the Taipei file.
+- **Location pass (2026-10-01):** page fetches placed 18 people, 12 in the region and 6 outside. The Meetup `gql2` endpoint gave the profile city of each event's hosts and RSVPs, and placed most past chapter speakers. The member must be the RSVP or host of the event where the talk was given. GitHub profiles gave the rest.
+- **LinkedIn pass (2026-10-01):** LinkedIn search results placed 7 people, 4 in the region and 3 outside. No LinkedIn page was opened.
+- **Other city files:** Karen Hsieh is placed from the same person's record in the Taipei file.
 
-## 2. What we learnt
+## 2. What didn't work here
 
-- **Sources that worked:**
-  - **The dbt Summit "sessions by role" post** names speakers and companies on one page. It is the cheapest way to find Bay Area talks.
-  - **Hex and Omni customer stories** name analytics engineers at San Francisco companies and state their stack. They are the cheapest route to practitioners.
-  - **Meetup `gql2` RSVPs** placed most past chapter speakers. The member must be the RSVP or host of the event they spoke at.
-- **Sources that didn't:**
-  - **Medium feeds** for Airbnb, Lyft and Instacart returned HTTP 429, so Bay Area company tech blogs are still unscanned.
-  - **dbt Summit and Coalesce session pages** returned 404. So did the getdbt.com case studies and the Datafold and Lightdash customer pages.
-  - **GitHub user search** finds mostly job-seeker portfolios. Only a few are usable speaker leads.
-- **Watch out for:**
-  - **Vendors dominate the Bay Area.** Hex, Omni, Sigma, Fivetran and dbt Labs staff publish the most. Treat them below practitioners at non-vendor companies.
-  - **Fivetran and dbt Labs have merged.** Fivetran staff are labelled like dbt Labs staff, so Toby Mao and Donny Flynn are labelled. Census staff are not labelled, so Boris Jabes is not. Dave Fowler already sits under dbt Labs.
-  - **Featured people:** a featured person is quoted or profiled in someone else's content, but has no talk or post of their own. Many San Francisco leads are featured, so ask them for a first talk rather than a repeat.
+- **[dbt Summit 2026 keynotes](https://www.getdbt.com/blog/dbt-summit-2026-keynotes-product-sessions):** dbt Labs staff only.
+- **Session and customer pages:** the individual dbt Summit and Coalesce session pages returned 404. So did the getdbt.com case studies and the Datafold and Lightdash customer pages.
+- **[Monte Carlo case studies](https://montecarlo.ai/case-studies/):** PagerDuty and Credit Karma. Neither mentions dbt.
+- **[Women in Big Data Bay Area](https://www.meetup.com/women-in-big-data-bay-area/):** the group no longer exists.
+- **[MotherDuck SF meetups](https://motherduck.com/events/motherduck-duckdb-july-meetup-2026.md):** DuckDB and agent talks, with no dbt speakers.
+- **[AI Council Bay Area](https://www.aicouncil.com/bay-2025):** Data Council was renamed, and the page lists no speakers.
+- **Company Medium feeds:** [Gusto](https://medium.com/feed/gusto-engineering) and Faire had no dbt posts. [Airbnb](https://medium.com/feed/airbnb-engineering), Lyft and Instacart returned HTTP 429 (too many requests), so Bay Area company tech blogs are still unscanned.
+- **GitHub user search:** finds mostly job-seeker portfolios. Only a few are usable speaker leads.
 
-## 3. Key leads
+## 3. Companies looked at
+
+- **Vendors dominate the Bay Area.** Hex, Omni, Sigma, Fivetran and dbt Labs staff publish the most. Rank vendor staff below practitioners at non-vendor companies.
+- **Fivetran and dbt Labs have merged.** Toby Mao and Donny Flynn are labelled as Fivetran staff. Census staff are not labelled, so Boris Jabes is not. Dave Fowler already sits under dbt Labs.
+- **Many leads are featured** in someone else's content, with no talk or post of their own. Ask these people for a first talk rather than a repeat.
+
+<!-- companies:start -->
+60 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Strong dbt use</b> (37)</summary>
+
+Absolunet.com (local presence not confirmed), Altimate AI (local presence not confirmed), Census (local presence not confirmed), Chime, City & County of San Francisco (local presence not confirmed), Cribl, Datafold (local presence not confirmed), dbt Labs, Decodable (local presence not confirmed), DocuSign, DoorDash, Envoy (local presence not confirmed), Fastly (local presence not confirmed), Figma, Fishtown Analytics (local presence not confirmed), Fivetran, Grove Collaborative (local presence not confirmed), Hex, Instacart, Kaelio (local presence not confirmed), Landed (local presence not confirmed), LangChain, Mainspring Energy, Merit (local presence not confirmed), Metabase (local presence not confirmed), Nimbus Intelligence (local presence not confirmed), Okta, Omni, Sigma Computing, Stealth (local presence not confirmed), Tempo (local presence not confirmed), Whatnot (local presence not confirmed), World, Yerdle Recommerce (local presence not confirmed), Zing (local presence not confirmed), Zipline, Zoox (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (8)</summary>
+
+Hightouch, Mode, Monte Carlo, MotherDuck, Perplexity, Slash, Snowflake, Spinwheel (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (14)</summary>
+
+Big Time Data (local presence not confirmed), Credit Karma, CrowdStrike (local presence not confirmed), DatologyAI (local presence not confirmed), Engage3 (local presence not confirmed), Handshake, Mercor, Meta, Modern Treasury, Notion, PagerDuty, Reddit, Ross Stores, Spaulding Ridge (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (1)</summary>
+
+WiDS Berkeley
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (4)</summary>
+
+- https://hex.tech/blog/
+- https://hex.tech/customers/
+- https://montecarlo.ai/case-studies/
+- https://omni.co/blog
+
+</details>
+
+<details><summary><b>Other sources checked</b> (17)</summary>
+
+- [dbt Summit 2026 sessions by role](https://www.getdbt.com/blog/dbt-summit-2026-sessions-by-role)
+- [dbt Summit 2026 keynotes and product sessions](https://www.getdbt.com/blog/dbt-summit-2026-keynotes-product-sessions) (nothing useful)
+- [Coalesce 2025 sessions overview](https://www.getdbt.com/blog/what-to-expect-from-sessions-at-coalesce-2025)
+- [Hex customer stories](https://hex.tech/customers/)
+- [Omni blog and case studies](https://omni.co/blog)
+- [Monte Carlo case studies](https://montecarlo.ai/case-studies/)
+- [dbt Developer Blog authors](https://docs.getdbt.com/blog/authors)
+- [Snowflake Women in Data Bay Area (Jan 2026)](https://www.snowflake.com/event/women-in-data-bay-area-20260128)
+- [Hightouch Women in Data SF (Feb 2023)](https://hightouch.com/events/women-in-data-meetup)
+- [WiDS Berkeley speakers](https://wids.berkeley.edu/speakers)
+- [Snowflake Bay Area User Group](https://usergroups.snowflake.com/san-francisco/)
+- [MotherDuck SF meetups](https://motherduck.com/events/motherduck-duckdb-july-meetup-2026.md) (nothing useful)
+- [Gusto and Faire Medium feeds](https://medium.com/feed/gusto-engineering) (nothing useful)
+- [Airbnb, Lyft, Instacart Medium feeds](https://medium.com/feed/airbnb-engineering) (nothing useful)
+- [Data Council / AI Council Bay Area 2025](https://www.aicouncil.com/bay-2025) (nothing useful)
+- [Women in Big Data Bay Area meetup](https://www.meetup.com/women-in-big-data-bay-area/) (nothing useful)
+- [GitHub user search (dbt in bio, SF)](https://github.com/search?q=dbt+location%3A%22San+Francisco%22&type=users)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers** (practitioners with dbt material and no talk on record):
   - **Priya Gupta**, Head of Data, Cribl. Quoted at length on dbt docs as the single source of truth for AI analytics: [Omni case study](https://omni.co/blog/case-study-cribl).
@@ -111,45 +155,27 @@ People were taken only from each community's own events. Nobody's gender is reco
   - **Divya Koppolu** and **John Miller** run the [Snowflake Bay Area User Group](https://usergroups.snowflake.com/san-francisco/), which has about 8,700 members.
   - **Karen Hsieh** organised the 2025-04, 2025-10 and 2026-06 chapter meetups: [chapter page](https://www.meetup.com/san-francisco-dbt-meetup/).
 
-## 4. Before outreach
+## 5. Before outreach
 
-- [ ] **Check the tier-1 people raised by the rule.** An emerging voice is someone who publishes about dbt but has no talk on record. The rule raises any emerging voice with a post from 2024 onwards to tier 1. That includes 5 vendor bloggers: Katie Bauer, Rachel Herrera and Izzy Miller (Hex), and Jamie Davidson and Colin Zima (Omni). Deepanshu Girsa is tier 1 on one personal repo.
+- [ ] **Check the tier-1 people raised by the rule.** The rule raises 5 vendor bloggers to tier 1: Katie Bauer, Rachel Herrera and Izzy Miller (Hex), and Jamie Davidson and Colin Zima (Omni). Deepanshu Girsa is tier 1 on one personal repo.
 - [ ] **Skip or re-rank tier-1 people outside the region.** Lexi Galantino is in San Diego, Pooja Crahen in New York and Emily Hawkins in Boston. Hamzah Chaudhary is in London and Juan Manuel Perafan in Norwalk.
 - [ ] **Confirm the 26 unknown locations.** They include Matt Senick, Logan Cochran and Harsha Reddy. Harsha Reddy has two possible LinkedIn matches, in Fremont and Santa Clara.
 - [ ] **Check the weak location calls.** Jason Lally, Boris Jabes, Raul Maldonado and Pradnesh Patil were placed by a name match to a chapter member only.
 - [ ] **Resolve conflicting profiles.** Karen Hsieh's Meetup accounts say Taipei. Gleb Mezhanskiy's Meetup profile says San Francisco but GitHub says New York.
 - [ ] **Confirm current employers.** The Chime story lists Dori Wilson at Chime, not Recce. Several dbt Developer Blog authors' roles date from 2022–23.
-- [ ] **dbt Labs and Fivetran staff are labelled.** Dave Fowler, Ani Venkateshwaran, Paige Berry, Lauren Benezra and Julia Schottenstein work at dbt Labs, and Toby Mao and Donny Flynn at Fivetran. They can speak, but check the line-up has practitioners first.
+- [ ] **Check the line-up has practitioners first.** Dave Fowler, Ani Venkateshwaran, Paige Berry, Lauren Benezra and Julia Schottenstein work at dbt Labs, and Toby Mao and Donny Flynn at Fivetran. All are labelled.
 
-## 5. Next run
+## 6. Next run
 
-- **Run the LinkedIn pass first.** 53 tier-1 and tier-2 people are still `not_searched`.
-- **Run a LinkedIn Jobs guest scan.** The file has only 3 job ads, all from web search.
-- **Use the dbt Summit speaker pages** (`getdbt.com/dbt-summit/speakers/<slug>`), which give session titles. They worked for Boston and Seattle.
-- **Retry the Medium feeds** for Airbnb, Lyft and Instacart. Find the author of Instacart's "Adopting dbt" post.
-- **Search for named speakers** at DocuSign, Figma and Instacart, which have a dbt talk but no named speaker.
-- **Find GitHub logins** for the unknown-location people at Hex, Omni, LangChain, DoorDash, Zipline, Sigma and Okta.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of SF Bay Area companies that use dbt, and people who could speak at
-or attend the San Francisco dbt Meetup. The file is san_francisco/san_francisco_dbt_companies.json
-in /Users/jeremychia/Documents/Github/dbt-meetups. Read san_francisco/SEARCH_METHOD.md, then
-research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
-The region is the nine SF Bay Area counties, and commuter towns such as Santa Cruz count as local.
-
-Budget about 25 web searches. Try these first:
-1. LinkedIn search results for tier 1-2 people with linkedin_confidence "not_searched".
-2. A LinkedIn Jobs guest scan (keywords=dbt, San Francisco Bay Area); keep ads with the whole word dbt.
-3. dbt Summit speaker pages (getdbt.com/dbt-summit/speakers/<slug>) for Bay Area employers.
-4. Hex, Omni and Sigma customer stories published since metadata.generated_at.
-5. Medium feeds for Airbnb, Lyft and Instacart (medium.com/feed/<publication>).
-
-Rules: never fetch LinkedIn pages; use only search results. Public professional information only;
-never guess gender, and record pronouns only when self-stated. Assemble with research/assemble.py
---base, run research/validate.py (must print ok), and add a change-log row below.
-````
+- **Sources to try first:**
+  - **LinkedIn pass:** 53 tier-1 and tier-2 people are still `not_searched`.
+  - **LinkedIn Jobs guest scan** (keywords=dbt, San Francisco Bay Area), keeping ads with the whole word dbt. The file has only 3 job ads, all from web search.
+  - **dbt Summit speaker pages** (`getdbt.com/dbt-summit/speakers/<slug>`) for Bay Area employers. These give session titles, and worked for Boston and Seattle.
+  - **Customer stories:** Hex, Omni and Sigma stories published since `metadata.generated_at`.
+  - **Medium feeds:** retry Airbnb, Lyft and Instacart (`medium.com/feed/<publication>`). Find the author of Instacart's "Adopting dbt" post.
+  - **Named speakers:** search for the speakers at DocuSign, Figma and Instacart, which have a dbt talk but no named speaker.
+- **People to locate:** the 26 unknown locations. Find GitHub logins for the unknown-location people at Hex, Omni, LangChain, DoorDash, Zipline, Sigma and Okta.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `san_francisco/san_francisco_dbt_companies.json`, the chapter `san-francisco-dbt-meetup`, `../enriched/san-francisco-dbt-meetup.json` and the region "the nine SF Bay Area counties, with commuter towns such as Santa Cruz". Budget about 25 web searches.
 
 ## Change log
 

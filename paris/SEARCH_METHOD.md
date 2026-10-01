@@ -1,194 +1,288 @@
-# Paris dbt search: method, lessons and replication prompt
+# Paris: city notes
 
-This file goes with `paris_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and gives a prompt for re-running and extending the search.
+This file holds what is specific to Paris. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
+- **Chapter:** [Paris dbt Meetup](https://www.meetup.com/paris-dbt-meetup/), data in `paris_dbt_companies.json`
+- **Region:** Paris and Île-de-France.
 - **First built:** 2026-09-24
-- **Dataset version:** 2 (shared schema version 3)
-- **Goal:** find people in Paris / Île-de-France who post or speak about dbt and data topics, and who could **speak at** (or attend) the Paris dbt Meetup. Also find the Paris companies that use dbt.
-- **Sister datasets:** `../berlin_planning/berlin_dbt_companies.json`, `../baltics/lithuania_dbt_companies.json` and `../kuala_lumpur/kuala_lumpur_dbt_companies.json`.
-  - All four follow the shared schema in `../berlin_planning/SEARCH_METHOD.md` §3, and the validator there (Appendix A) checks all of them.
-  - The shared scoring rules (`lead_type`, `priority_tier`, `meetup_fit`, `watchlist`, the pronoun rule, the line-up balance check) are in that file's §1 Steps 4 and 6. They apply here unchanged unless noted below.
+- **Language:** much of the content is in French. French posts and talks are recorded as they are, with an English description.
+- **Approach:** public content (blogs, podcasts, conferences and other meetups' line-ups), a job-ad scan, and every past Paris dbt Meetup speaker.
 
-Paris combines the Berlin and Lithuania approaches:
+<!-- at-a-glance:start -->
+**At a glance** (version 3, 2026-10-01)
 
-- **Public content, as in Berlin.** Blogs, podcasts, conferences and other meetups' line-ups.
-- **Job ads, as in Lithuania.** A logged-out LinkedIn Jobs scan, checking each ad's full text.
-- **Our own chapter history.** Every past Paris dbt Meetup speaker is included.
+| | Count |
+|---|---|
+| Companies | 238 |
+| People | 186 |
+| Tier 1 leads | 34 |
+| First-time speakers (publish, no talk yet) | 26 |
+| Proven speakers | 136 |
+| Spoke at this chapter before | 17 |
+| Based in the region | 162 |
+| Based elsewhere | 9 |
+| Location unknown | 15 |
+| With a LinkedIn profile | 46 |
+| Job ads mentioning dbt | 150 |
+| Past chapter meetups | 10 |
+<!-- at-a-glance:end -->
 
-Much of the content is in French. French posts and talks are recorded as they are, with an English description.
+## 1. Where to look in Paris
 
----
+### Media and conferences
 
-## 1. How the search was done
+- **DataGen newsletter and podcast:** [datageneration.substack.com](https://datageneration.substack.com), by Robin Conquet. This was the richest single source of named Paris dbt and analytics engineering practitioners: Doctolib, Qonto, Back Market, Ornikar, Decathlon, Swile, Modeo and more.
+- **Forward Data Conference:** [forward-data-conference.com](https://forward-data-conference.com) (2024–2026). Its static speaker pages give each speaker's role and a full abstract, about 120 speakers across three editions. It was the best source of talk-level leads.
+- **Both together:** DataGen and Forward Data Conference name most of the Paris practitioners who speak publicly about dbt.
+- **blef.fr Data News:** the newsletter by Christophe Blefari.
+- **Other meetups:** the Paris Apache Airflow meetup, DuckDB Paris, ClickHouse Paris (hosted by Qonto) and Paris Data Ladies.
 
-Five sub-agents ran in parallel, following one output format: people, companies, jobs, sources checked and lessons. Each wrote a JSON file. One builder script then merged the files and applied the shared schema.
+### Company and consultancy blogs
 
-### Step 1: Large Paris companies (blogs, case studies, talks)
-
-- **Companies scanned (2026-09):** Doctolib, BlaBlaCar, Qonto, Back Market, ManoMano, Alan, Swile, Deezer, Criteo, Contentsquare, leboncoin, Mirakl, Vestiaire Collective, PayFit, Pennylane, Ledger, Spendesk, Malt, Lydia/Sumeria, Aircall, Getaround, Brigad, Stuart, Lalilo, Brevo, Decathlon Digital, Carrefour, L'Oréal, LVMH/Sephora, TotalEnergies, SNCF Connect, Galeries Lafayette, Macif, Ornikar, Accor and others.
-- **What was checked for each:** its tech blog, or its Medium feed (`medium.com/feed/<publication>`, or `/tagged/dbt`), dbt Labs and cloud-vendor case studies, and conference talks.
-
-### Step 2: dbt partners, vendors and French data media
-
-- **Consultancies:**
-  - Ippon Technologies (the best source: 12 dbt posts with named authors)
-  - Modeo, Artefact, Theodo, OCTO, Converteo, Devoteam, Infinite Lambda Paris, Zenika, Ekimetrics
+- **Ippon Technologies:** the best consultancy source, with 12 dbt posts with named authors. The French blog is full of hands-on dbt posts by consultants: TDD with unit tests, testing macros, GitHub Actions deploys, and Kimball + Data Vault with dbt. The authors are good first-time speakers, but many are not confirmed as being in Paris.
+- **Other consultancies:** Modeo, Artefact, Theodo, OCTO, Converteo, Devoteam, Infinite Lambda Paris, Zenika and Ekimetrics.
 - **Vendors:** nao Labs, Kestra, Sifflet, CastorDoc, DataGalaxy, Dataiku, Altertable and others.
-- **dbt Labs' Paris-related staff:** they are labelled in the cockpit, as are Fivetran staff. `excluded_from_outreach` is now true only for internal records (Vinted).
-- **French data media:**
-  - The **DataGen** newsletter and podcast by Robin Conquet (`datageneration.substack.com`). This was the richest single source of named Paris dbt and analytics engineering practitioners: Doctolib, Qonto, Back Market, Ornikar, Decathlon, Swile, Modeo and more.
-  - **blef.fr Data News**, by Christophe Blefari.
+- **Large Paris companies (2026-09):** Doctolib, BlaBlaCar, Qonto, Back Market, ManoMano, Alan, Swile, Deezer, Criteo, Contentsquare, leboncoin, Mirakl, Vestiaire Collective, PayFit, Pennylane, Ledger, Spendesk, Malt, Lydia/Sumeria, Aircall, Getaround, Brigad, Stuart, Lalilo, Brevo, Decathlon Digital, Carrefour, L'Oréal, LVMH/Sephora, TotalEnergies, SNCF Connect, Galeries Lafayette, Macif, Ornikar, Accor and others. For each, the search checked its tech blog or Medium feed (`medium.com/feed/<publication>`, or `/tagged/dbt`), dbt Labs and cloud-vendor case studies, and conference talks.
 
-### Step 3: Other Paris meetups and conferences
+### Women-in-data communities
 
-- **Forward Data Conference** (`forward-data-conference.com`, 2024–2026). Its static speaker pages give each speaker's role and a full abstract, about 120 speakers across three editions. It was the best source of talk-level leads.
-- **Meetups:** Paris Apache Airflow meetup, DuckDB Paris, ClickHouse Paris (hosted by Qonto) and Paris Data Ladies.
-- **Low yield:** Modern Data Stack France, Snowflake and Databricks user groups (mostly vendor-led or online) and PyData Paris (scientific Python). The Paris Data Engineers group no longer exists.
+- **Paris Data Ladies:** [meetup.com/paris-data-ladies](https://www.meetup.com/paris-data-ladies/) was the only strong source: 22 events since 2023, each with 3–4 data speakers. Its meetup.com group data also lists organisers and event hosts, who are recorded as `connector`.
 
-### Step 4: Job ads
+### Job ads
 
-1. **LinkedIn Jobs, logged out:** search `keywords=dbt&location=Paris, Île-de-France`. From the browser page:
-   - list the ads with in-page `fetch()` on `/jobs-guest/jobs/api/seeMoreJobPostings/search?...&start=N`;
-   - fetch each ad from `/jobs-guest/jobs/api/jobPosting/<id>`;
-   - keep the ads whose text contains the whole word `dbt`.
+- **LinkedIn Jobs, logged out:** search `keywords=dbt&location=Paris, Île-de-France`. From the browser page, list the ads with in-page `fetch()` on `/jobs-guest/jobs/api/seeMoreJobPostings/search?...&start=N`, fetch each ad from `/jobs-guest/jobs/api/jobPosting/<id>`, and keep the ads whose text contains the whole word `dbt`. The script is in the [Baltic city notes](../baltics/SEARCH_METHOD.md#job-ads). On 2026-09-24, 300 ads were listed and 250 checked, and 120 mentioned dbt. The run stopped at a 250-ad cap, so 50 were left unchecked.
+- **ATS search:** `site:jobs.lever.co`, `site:job-boards.greenhouse.io` and `site:jobs.ashbyhq.com` with dbt Paris. These added 27 ads from in-house tech companies that LinkedIn's ranking missed (Mistral AI, Pigment, BeReal, Aircall). Their `dbt_snippet` is the search engine's summary, marked "[search summary]".
+- **Welcome to the Jungle:** use `site:welcometothejungle.com` searches, because search URLs on the site now go to a login page.
 
-   The script is in `../baltics/SEARCH_METHOD.md`, Appendix A. On 2026-09-24, 300 ads were listed and 250 checked; 120 mentioned dbt. The run stopped at a 250-ad cap, so 50 were left unchecked.
-2. **ATS search:** `site:jobs.lever.co`, `site:job-boards.greenhouse.io` and `site:jobs.ashbyhq.com` with dbt Paris. These added 27 ads from in-house tech companies that LinkedIn's ranking missed (Mistral AI, Pigment, BeReal, Aircall). Their `dbt_snippet` is the search engine's summary, marked "[search summary]".
-3. **Welcome to the Jungle** now sends search URLs to a login page. Use `site:welcometothejungle.com` searches instead.
-4. **Consultancies dominate** Paris dbt hiring: SKIILS, Devoteam, JAKALA, Talan, CGI, Capgemini and others. For speaker sourcing, filter `type == "employer"`.
-   - Employers with several dbt ads: Dashlane, Accor, Leetchi, Joko, Implicity, Leonar and Axway.
-   - Employers with one ad include Alan, Shine, Skello, Alma, pass Culture, Aircall and BeReal.
+### Chapter history
 
-### Step 5: Women-in-data communities
+- **Past speakers:** every named speaker in `../enriched/paris-dbt-meetup.json` (10 events, Sept 2022 to Sept 2025) was added as a person, with their talk as `speaker_evidence`. They are tier 2 unless other evidence puts them in tier 1, and `sourced_via` includes `chapter_meetup_history`.
+- **First names only:** speakers listed by first name only (e.g. "Nolwenn, Taha") were skipped.
+- **No recent events:** as of 2026-09-24 the chapter had no events after Paris dbt meetup #8 (2025-09-30).
 
-This step follows the Berlin rule: find women by looking in women-focused groups, and never label or guess anyone's gender.
+## 2. What didn't work here
 
-- **Paris Data Ladies** (`meetup.com/paris-data-ladies`) was the only strong source: 22 events since 2023, each with 3–4 data speakers.
-  - Its meetup.com group data also lists organisers and event hosts, who are recorded as `connector`.
-- **Weak or empty sources:**
-  - Paris WiMLDS is almost all ML.
-  - PyLadies Paris (`pyladiesparis`) and R-Ladies Paris are mostly Python, ML and R content; only their organisers were kept.
-  - Women in Big Data Paris had no named data speakers.
-  - WiDS Paris has had no events since 2023.
-  - Duchess France, Women Techmakers and Ladies of Code Paris had nothing data-related.
-- **Not scanned yet:** Social Builder, Femmes@numérique, Girls in Tech, Women in AI France, Data For Good and Les Pionnières.
-- **Note on the sub-agent's picks:** it also picked some Forward Data Conference speakers using wording in their conference bios. Those people are tagged `sourced_via: conference_or_meetup_agenda`, not `women_in_data_community`, and the dataset records no gender for anyone. Next time, tell the sub-agent to take speakers only from the community's own events.
+- **Low-yield meetups:** Modern Data Stack France, the Snowflake and Databricks user groups (mostly vendor-led or online) and PyData Paris (scientific Python).
+- **Paris Data Engineers:** the group no longer exists.
+- **Welcome to the Jungle search URLs:** they go to a login page.
+- **Paris WiMLDS:** almost all ML.
+- **PyLadies Paris (`pyladiesparis`) and R-Ladies Paris:** mostly Python, ML and R content. Only their organisers were kept.
+- **Women in Big Data Paris:** no named data speakers.
+- **WiDS Paris:** no events since 2023.
+- **Duchess France, Women Techmakers and Ladies of Code Paris:** nothing data-related.
+- **Speakers picked from conference bios:** some Forward Data Conference speakers were picked using wording in their conference bios. Those people are tagged `sourced_via: conference_or_meetup_agenda`, not `women_in_data_community`, and the dataset records no gender for anyone. Take women-in-data speakers only from the community's own events.
 
-### Step 6: Chapter history
+## 3. Companies looked at
 
-- Every named speaker in `../enriched/paris-dbt-meetup.json` (10 events, Sept 2022 to Sept 2025) was added as a person, with their talk as `speaker_evidence`.
-- They are tier 2 unless other evidence puts them in tier 1, and `sourced_via` includes `chapter_meetup_history`.
-- Speakers listed by first name only (e.g. "Nolwenn, Taha") were skipped.
-- As of 2026-09-24 the chapter had no events after Paris dbt meetup #8 (2025-09-30).
+- **Consultancies dominate Paris dbt hiring:** SKIILS, Devoteam, JAKALA, Talan, CGI, Capgemini and others. For speaker sourcing, filter `type == "employer"`.
+- **Employers with several dbt ads:** Dashlane, Accor, Leetchi, Joko, Implicity, Leonar and Axway. Employers with one ad include Alan, Shine, Skello, Alma, pass Culture, Aircall and BeReal.
+- **A different stack:** leboncoin uses the Coalesce transformation tool, not dbt.
+- **Labelled staff:** dbt Labs' Paris-related staff and Fivetran staff are labelled in the cockpit. `excluded_from_outreach` is true only for internal records (Vinted).
 
-### Step 7: Merge, score and LinkedIn
+<!-- companies:start -->
+237 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-- **Merging:** people were matched on first and last name with accents removed, and companies on normalised name with a small alias map (e.g. Decathlon Digital → Decathlon, Ippon → Ippon Technologies). Records with a first name only or a placeholder name were dropped.
-- **Tier 1 is stricter than in Berlin.** The sub-agents proposed 52 tier-1 people, so tier 1 was kept only for:
-  - people in Paris (or not known to be elsewhere) with an item from 2024 onwards that mentions dbt; and
-  - emerging voices, under the shared rule.
+<details><summary><b>Strong dbt use</b> (105)</summary>
 
-  Everyone else in the proposed tier 1 moved to tier 2. The result is 37 tier-1 people.
-- **LinkedIn:** only 14 of the 105 tier-1/2 people without a profile were searched, because the session hit its web-search limit (200). The rest are `not_searched`. Finish this first on the next run.
-- **Pronouns:** none were found that people had stated themselves, so all are `null`.
+1G-LINK, Accor, Actinvision, Aircall, Alan, Alma, ALTEN, Altertable, Artefact, Aubay, Back Market, BeReal, Bigblue, BlaBlaCar, Capgemini Invent, Caprikorn, Cartelis, CGI, Contentsquare, Cozi, Dashlane, DataGen (Robin Conquet), Dataworks, Davidson consulting, dbt Labs, Decathlon / Decathlon Digital, DEODIS, Devoteam, Doctolib, DPD France, Ekwateur, Elax Energie, EY, Fitness Park, Free2move, FullEnrich, GazelTech, GLOBE GROUPE SHOPPER HOUSE, Groupe EOLEN, Havas Media France, ICADE, Implicity, In Tandem, Infinite Lambda, INFOGENE, Innoha, Innova Solutions, Ippon Technologies, JAKALA, Jems Group, Joko, Kaino, Key Performance Consulting (KPC), Kiiro, Ledger, Leetchi, Lenstra, Leonar, Luxurynsight, M13h, Macif (local presence not confirmed), Malt, Manutan Group, Mediaperformances, MeltOne Advisory, Modeo, mym, nao Labs, Neosoft, NEXTON, Odaseva, Onepoint, Optimize matter, Ornikar, Orus, Oventi, pass Culture, PREREQUIS, Pretto, Pyl.Tech, QOLIBRIS, Qonto, Qover (local presence not confirmed), Sancare, SEVETYS, Shift Technology, Shine, Sia, Skello, SKIILS, Smartpoint, Smile, STORM GROUP, Swile, Talan, The Information Lab, Trade Republic, TRIMANE, Valtech, VISEO, WeeFin, WHIZE, Yuri & Neil, Zefir, Édifice
 
----
+</details>
 
-## 2. What we learnt
+<details><summary><b>Some dbt signal</b> (37)</summary>
 
-- **DataGen and Forward Data Conference are Paris's Data Berlin.** Between them they name most of the Paris practitioners who speak publicly about dbt.
-- **Ippon's French blog** is full of hands-on dbt posts by consultants: TDD with unit tests, testing macros, GitHub Actions deploys, and Kimball + Data Vault with dbt. Their authors are good emerging voices, but many are not confirmed as being in Paris.
-- **The web-search limit (about 200 per session) is the main constraint.** Five research agents used almost all of it. Next time, run the LinkedIn pass in a separate session, or give each agent a search budget.
-- **Browser tabs clash when agents run in parallel.** Each agent should open its own tab (`tabs_create`) rather than using the default one.
-- **meetup.com:** when browser access isn't granted, fetching group home pages and event pages directly still works. The `/gql2` past-events query needs the browser.
-- **Watch out for:**
-  - Anouar Hnini is probably in Ireland and may have left dbt Labs.
-  - Jason Vazelle (Doctolib) may have moved abroad.
-  - leboncoin uses the Coalesce transformation tool, not dbt.
-  - Benjamin Joyen and Benjamin Joyen-Conseil (Decathlon) may be one person.
-  - William Horel / Horrel: the spelling varies.
+Agoda, Axway, blef.fr (Data News), Blent.ai (local presence not confirmed), Brevo, BROTHER FRANCE, Capgemini, CastorDoc (Coalesce), Catalina Marketing France, Converteo, Datadog (Paris), Decathlon, Emeria, Equativ, eXalt Value, Gorgias, Kestra, Keyrus, Kolecto, Lacoste, LineUP7, Mirakl, Mistral AI, Pigment, Quickscale AI, Riot, SFEIR, Sifflet, Spendesk, Stuart (local presence not confirmed), Tellent, Theodo Data & AI (ex-Sicara), Vestiaire Collective, Vibe.co, Voodoo, Xebia France, Yield Studio & Advisory
 
-### Key findings (2026-09)
+</details>
 
-- **Strong dbt speaker leads (tier 1):**
-  - Tushar Bhasin and Antoine Lefebvre (BlaBlaCar): dbt Core on Airflow at 4,000 tables
-  - Thierry Sallé (Malt): migrating to dbt on BigQuery, having rejected SQLMesh
-  - Ismail Mezzour (Accor): dbt, Airflow and Cosmos for 80+ engineers
-  - Charles André (Qonto): many domain-owned dbt repos, data contracts, an AI on-call agent
-  - Romain Fays (Doctolib), Matthieu Colin (Back Market) and Bastien Caunègre (Ornikar): analytics engineering set-ups described on DataGen
-  - Hugo Palmer and Benjamin Joyen-Conseil (Decathlon)
-  - Emma Wagner (Gorgias): a context layer for analytics agents
-  - The Infinite Lambda team behind the Macif migration from Informatica to dbt
-- **Emerging voices (write, but no talk yet):**
-  - Doctolib: Jason Nathaniel V, Alexandre Guitton
-  - Ippon: Jeremy Nadal, Grégoire Naud, Nicolas Hong, Paul Colinmaire, Mathis Le Gall
-  - Contentsquare: Corentin Flacher, Pierre Munhoz, Thales Loiola Ravelli
-  - Qonto: Maxime Damery, Timothée Dehouck
-  - Others: Sebastien de Larquier (Alan), Matthieu Willot (Modeo), Martin-Pierre Roset (Kestra)
+<details><summary><b>Not verified</b> (95)</summary>
+
+AB Tasty, Agicap / Libeo, Air France-KLM, Airbyte (local presence not confirmed), Ankorstore, Aquila Data Enabler, Aramis Group, BearingPoint, Believe, BNP Paribas / AXA / Société Générale, Brigad (local presence not confirmed), Brigad / Side, Carbonfact, Carrefour, Clean Data Architecture, Clever Cloud, Count (local presence not confirmed), Criteo, Dailymotion, Data Value Consulting (local presence not confirmed), DataGalaxy, Dataiku, Deezer, Dust, Département du Gard (local presence not confirmed), Ekimetrics, ENGIE, Eurazeo, Evaneos, ex-Galeries Lafayette (local presence not confirmed), Fifty-five, Freelance (Back Market mission) (local presence not confirmed), Galeries Lafayette, Getaround, GitGuardian, GRDF (at time of talk) (local presence not confirmed), Groupe La Poste, Hightouch (local presence not confirmed), Hivebrite, Hubvisor (local presence not confirmed), Hugging Face, Hymaïa, Jolimoi, L'Oréal, Lalilo (local presence not confirmed), leboncoin (Adevinta), Lightdash (local presence not confirmed), Luko / Leocare / Lalilo, LVMH / Sephora, Lydia / Sumeria, Maketools, ManoMano, Metabase (local presence not confirmed), Mooncard, MotherDuck (local presence not confirmed), Neo4j (ex-Sifflet) (local presence not confirmed), Nibble (local presence not confirmed), Nissan United AMIEO (local presence not confirmed), Numberly (1000mercis Group), OCTO Technology (Accenture), Omni (local presence not confirmed), Open Value, Optic 2000, Owkin (at time of 2024 talk) (local presence not confirmed), Paris Data Ladies, Paris Women in Machine Learning & Data Science, PayFit, Pennylane, Photoroom, Pigment / Yousign / Payplug, Positive Thinking Company (local presence not confirmed), PyLadies Paris, R-Ladies Paris, Scaleway, Selfr (local presence not confirmed), Sicara, SNCF Connect & Tech, Snowflake (local presence not confirmed), Social Good Accelerator, Sopht, Sorare, Stellantis, Supabase (local presence not confirmed), Taktile (local presence not confirmed), TotalEnergies, TotalEnergies Renewables, Toucan, Ubisoft / Dailymotion / Le Monde / Radio France, Van Cleef & Arpels, Veesion, Welcome to the Jungle, Weld (local presence not confirmed), Women in Big Data Paris, Ynsect, Zenika
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (66)</summary>
+
+- Amplitude case study (search only)
+- Amplitude webinar recap
+- Coalesce case study
+- DataGen newsletter
+- DataGen podcast
+- DataGen podcast episodes #142, #184, #211, #255
+- Fivetran case study (search summary)
+- Infinite Lambda webinar page
+- Monte Carlo case study (search summary)
+- Tasmane case study (search only)
+- https://airbyte.com/blog-authors/michel-tricot
+- https://blent.ai/thematique/data-engineering
+- https://blog.malt.engineering/ (feed tagged dbt)
+- https://blog.octo.com/tag/data
+- https://converteo.com/blog/
+- https://data-ai.theodo.com/blog-technique
+- https://datageneration.substack.com/
+- https://datageneration.substack.com/archive
+- https://deezer.io/ (search only)
+- https://ekimetrics.github.io/blog/
+- https://engineering.contentsquare.com/
+- https://engineering.hivebrite.io/
+- https://engineering.pigment.com/
+- https://engineering.pigment.com/ (search only)
+- https://getnao.io/blog/
+- https://infinitelambda.com/blog/
+- https://kestra.io/blogs
+- https://keyrus.com/fr/actualites
+- https://medium.com/accor-digital-and-tech (feed tagged dbt)
+- https://medium.com/alan (feed tagged data)
+- https://medium.com/artefact-engineering-and-data-science
+- https://medium.com/blablacar (feed tagged dbt)
+- https://medium.com/decathlondigital (feed tagged dbt: empty)
+- https://medium.com/doctolib (feeds tagged data, dbt)
+- https://medium.com/gorgias-engineering/building-a-context-layer-from-the-ground-up-d6f72713915a
+- https://medium.com/leboncoin-tech-blog (feed tagged dbt: empty)
+- https://medium.com/manomano-tech (feed tagged dbt: empty)
+- https://medium.com/payfit (search only)
+- https://medium.com/pennylane-engineering (search only)
+- https://medium.com/qonto-way (feed tagged data)
+- https://medium.com/stuart-engineering (feed tagged dbt: empty)
+- https://medium.com/swile-engineering
+- https://medium.com/wttj-tech (search only)
+- https://medium.com/yousign-engineering-product (search only)
+- https://mirakl.tech/subpage/tech (search only)
+- https://shows.acast.com/data-gen
+- https://shows.acast.com/data-gen/episodes
+- https://www.aquiladata.fr/
+- https://www.blef.fr/blog/
+- https://www.castordoc.com/blog-category/data-tooling
+- https://www.clever-cloud.com/blog/tag/data/
+- https://www.datagalaxy.com/en/category/events/
+- https://www.dataiku.com/blog/tech-blog
+- https://www.devoteam.com/expert-view/
+- https://www.meetup.com/paris-dataladies/
+- https://www.meetup.com/paris-women-in-machine-learning-data-science/
+- https://www.meetup.com/pyladiesparis/
+- https://www.meetup.com/rladies-paris/
+- https://www.meetup.com/women-in-big-data-paris-meetup-group/
+- https://www.modeo.ai/articles
+- https://www.siffletdata.com/blog
+- https://www.theodo.com/en-fr/blog
+- https://www.toucantoco.com/en/tech-blog
+- https://zenika.com/
+- jobs.lydia-app.com (search only)
+- search only
+
+</details>
+
+<details><summary><b>Other sources checked</b> (61)</summary>
+
+- [Medium RSS feeds (publication/tagged/<tag>)](https://medium.com/feed/<publication>/tagged/dbt)
+- [DataGen newsletter (Substack)](https://datageneration.substack.com/)
+- [DataGen podcast (Acast/Spotify)](https://shows.acast.com/data-gen)
+- [Contentsquare Engineering Blog](https://engineering.contentsquare.com/)
+- [Coalesce (CastorDoc) customer stories](https://coalesce.io/customer-stories/)
+- [Infinite Lambda / dbt Labs webinar](https://infinitelambda.com/business-events/modernisation-et-migration-data-webinar-macif/)
+- [Forward Data Conference site](https://www.forward-data-conference.com/) (nothing useful)
+- [Medium publication web pages](https://medium.com/alan/tagged/data-engineering) (nothing useful)
+- [getdbt.com case studies](https://www.getdbt.com/case-studies) (nothing useful)
+- [Blog Ippon dbt tag](https://blog.ippon.fr/tag/dbt/)
+- [Modeo blog](https://www.modeo.ai/articles)
+- [Theodo blog](https://www.theodo.com/en-fr/blog)
+- [Artefact Medium](https://medium.com/artefact-engineering-and-data-science)
+- [Converteo blog](https://converteo.com/blog/)
+- [Infinite Lambda events](https://infinitelambda.com/migrating-informatica-to-dbt-meetup/)
+- [DataGen podcast (Acast) / substack](https://shows.acast.com/data-gen)
+- [blef.fr talks](https://www.blef.fr/talks/) (nothing useful)
+- [Kestra blog](https://kestra.io/blogs)
+- [Sifflet blog / Luma](https://luma.com/b3ng9yzj)
+- [Devoteam expert view](https://www.devoteam.com/expert-view/data-documentation-approach-for-your-snowflake-and-dbt-stack/) (nothing useful)
+- [OCTO Talks](https://blog.octo.com/) (nothing useful)
+- [Hivebrite / Pigment engineering blogs](https://engineering.pigment.com/) (nothing useful)
+- [Paris dbt Meetup (meetup.com)](https://www.meetup.com/paris-dbt-meetup/) (nothing useful)
+- [Forward Data Conference 2026 talks and speakers](https://forward-data-conference.com/en/program/talks/2026)
+- [Forward Data Conference 2025 talks and speakers](https://forward-data-conference.com/en/program/talks/2025)
+- [Forward Data Conference 2024 talks and speakers](https://forward-data-conference.com/en/program/talks/2024)
+- [Paris Apache Airflow Meetup](https://www.meetup.com/paris-apache-airflow-meetup/)
+- [Paris Data Ladies](https://www.meetup.com/paris-dataladies/)
+- [DuckDB Paris Meetup (duckdb.org / Luma)](https://duckdb.org/events/2026/09/24/duckdb-paris-meetup/)
+- [ClickHouse Meetup Paris (Luma, hosted by Qonto)](https://luma.com/phsg70v9)
+- [Snowflake User Group Paris](https://usergroups.snowflake.com/paris/)
+- [Modern Data Stack France (meetup.com)](https://www.meetup.com/modern-data-stack-france/) (nothing useful)
+- [Databricks France Meetup](https://www.meetup.com/databricks-france-meetup/) (nothing useful)
+- [Paris Data Engineers (meetup.com)](https://www.meetup.com/paris-data-engineers/) (nothing useful)
+- [PyData Paris 2025 (pretalx schedule)](https://pretalx.com/pydata-paris-2025/talk/) (nothing useful)
+- [DataGen podcast (Acast)](https://shows.acast.com/data-gen/episodes)
+- [blef.fr Data News](https://www.blef.fr/data-news-dbt-coalesce-2025)
+- [Paris Data and AI Product Management meetup (Luma)](https://luma.com/paris-dpm-meetup) (nothing useful)
+- [Big Data & AI Paris](https://www.bigdataparis.com/en-gb.html) (nothing useful)
+- [Coalesce / dbt Summit speakers from Paris](https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers) (nothing useful)
+- [meetup.com via browser pane](https://www.meetup.com/) (nothing useful)
+- [LinkedIn Jobs guest API (keywords=dbt, Paris, Île-de-France)](https://www.linkedin.com/jobs/search?keywords=dbt&location=Paris%2C%20%C3%8Ele-de-France%2C%20France)
+- [Welcome to the Jungle job search](https://www.welcometothejungle.com/fr/jobs?query=dbt&refinementList%5Boffices.country_code%5D%5B%5D=FR&aroundQuery=Paris) (nothing useful)
+- [Web search: "dbt" "analytics engineer" Paris](https://fr.indeed.com/q-analytics-engineer-dbt-emplois.html) (nothing useful)
+- [Web search: site:welcometothejungle.com dbt Paris (DE + AE queries)](https://www.welcometothejungle.com/fr/companies/dashlane/jobs/analytics-engineer_paris_b7zkyuds)
+- [Web search: site:jobs.lever.co dbt Paris](https://jobs.lever.co/)
+- [Web search: site:job-boards.greenhouse.io dbt Paris](https://job-boards.greenhouse.io/)
+- [Web search: site:jobs.ashbyhq.com dbt Paris](https://jobs.ashbyhq.com/)
+- [Web search: site:apply.workable.com dbt Paris](https://apply.workable.com/) (nothing useful)
+- [Web search: site:jobs.smartrecruiters.com dbt Paris](https://jobs.smartrecruiters.com/AccorCorpo/744000124376311-tech-lead-data-analytics-snowflake-dbt-tableau-f-h-x)
+- [Paris Data Ladies (Meetup, gql2 past events)](https://www.meetup.com/paris-dataladies/)
+- [Paris WiMLDS (Meetup)](https://www.meetup.com/paris-women-in-machine-learning-data-science/)
+- [PyLadies Paris (Meetup urlname 'pyladiesparis')](https://www.meetup.com/pyladiesparis/) (nothing useful)
+- [R-Ladies Paris (Meetup)](https://www.meetup.com/rladies-paris/) (nothing useful)
+- [Women in Big Data Paris (Meetup)](https://www.meetup.com/women-in-big-data-paris-meetup-group/) (nothing useful)
+- [WiDS Paris (Meetup)](https://www.meetup.com/women-in-data-science-wids-paris/) (nothing useful)
+- [Duchess France](https://www.duchess-france.fr/) (nothing useful)
+- [Women Techmakers Paris / Ladies of Code Paris](https://luma.com/joisxg95) (nothing useful)
+- [Data For Good](https://www.meetup.com/fr-fr/data-for-good-fr/) (nothing useful)
+- [Forward Data Conference speakers 2024-2026](https://forward-data-conference.com/program/speakers/)
+- [Coalesce speakers from Paris](https://sessionize.com/coalesce-2024/) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
+
+Tier 1 is stricter here than the central rule. The first build proposed 52 tier-1 people, so tier 1 was kept only for people in Paris (or not known to be elsewhere) with an item from 2024 onwards that mentions dbt, and for first-time speakers under the shared rule. Everyone else moved to tier 2, which left 37 tier-1 people in the first build. The most common topics are `genai & llm`, data governance, team & org design and analytics engineering.
+
+- **First-time speakers** (people who write but have no talk yet):
+  - **Doctolib:** Jason Nathaniel V and Alexandre Guitton.
+  - **Ippon:** Jeremy Nadal, Grégoire Naud, Nicolas Hong, Paul Colinmaire and Mathis Le Gall.
+  - **Contentsquare:** Corentin Flacher, Pierre Munhoz and Thales Loiola Ravelli.
+  - **Qonto:** Maxime Damery and Timothée Dehouck.
+  - **Others:** Sebastien de Larquier (Alan), Matthieu Willot (Modeo) and Martin-Pierre Roset (Kestra).
+- **Anchor speakers** (strong tier-1 dbt speakers):
+  - **Tushar Bhasin and Antoine Lefebvre (BlaBlaCar):** dbt Core on Airflow at 4,000 tables.
+  - **Thierry Sallé (Malt):** migrating to dbt on BigQuery, having rejected SQLMesh.
+  - **Ismail Mezzour (Accor):** dbt, Airflow and Cosmos for 80+ engineers.
+  - **Charles André (Qonto):** many domain-owned dbt repos, data contracts and an AI on-call agent.
+  - **Romain Fays (Doctolib), Matthieu Colin (Back Market) and Bastien Caunègre (Ornikar):** analytics engineering set-ups described on DataGen.
+  - **Hugo Palmer and Benjamin Joyen-Conseil (Decathlon).**
+  - **Emma Wagner (Gorgias):** a context layer for analytics agents.
+  - **Infinite Lambda:** the team behind the Macif migration from Informatica to dbt.
 - **Women-in-data community leads:**
-  - Juliette Chabbal (Ippon): semantic layer
-  - Lucille Fargeau (Doctolib)
-  - Anaïs Ghelfi (Malt)
-  - Sarah Richard and Yasmine Touzene (Aramis Group)
-  - Sophie Ly (Decathlon)
-  - Kateryna Kolodnytska (Nissan)
-  - Organiser and connector: Charlotte Ledoux (Paris Data Ladies)
-- **Most common topics:** `genai & llm`, data governance, team & org design and analytics engineering.
+  - **Juliette Chabbal (Ippon):** semantic layer.
+  - **Others:** Lucille Fargeau (Doctolib), Anaïs Ghelfi (Malt), Sarah Richard and Yasmine Touzene (Aramis Group), Sophie Ly (Decathlon) and Kateryna Kolodnytska (Nissan).
+- **Connectors:**
+  - **Charlotte Ledoux:** organiser of Paris Data Ladies.
 
----
+## 5. Before outreach
 
-## 3. Schema
+- [ ] **Check Anouar Hnini.** Anouar Hnini is probably in Ireland and may have left dbt Labs.
+- [ ] **Check Jason Vazelle (Doctolib).** Jason Vazelle may have moved abroad.
+- [ ] **Check a possible duplicate.** Benjamin Joyen and Benjamin Joyen-Conseil (Decathlon) may be one person.
+- [ ] **Check a spelling.** William Horel's surname also appears as Horrel.
+- [ ] **Confirm Ippon authors are in Paris.** Jeremy Nadal and Mathis Le Gall are placed in Bordeaux, and Nicolas Hong near Nantes.
+- [ ] **dbt Labs and Fivetran staff are labelled.** They can speak, but check the line-up has practitioners first.
+- [ ] **Pronouns:** none were found that people had stated themselves, so all are `null`.
 
-See `../berlin_planning/SEARCH_METHOD.md` §3, shared schema v3. Paris-specific values:
+## 6. Next run
 
-- `metadata.region` is "Paris (Paris dbt Meetup)".
-- `sources.checked` lists every source the sub-agents checked, with a `yielded` flag.
-- `past_meetups` is copied from `../enriched/paris-dbt-meetup.json`.
-- Person `content_id`s have the form `<event-slug>-<title-slug>`.
-
-## 4. How to update the dataset
-
-Follow `../berlin_planning/SEARCH_METHOD.md` §4, using `paris_dbt_companies.v<N>.json` for backups and `../enriched/paris-dbt-meetup.json` for `past_meetups` and `past_chapter_talks`.
-
-- **Location and LinkedIn passes:** fill unknown locations with the location pass and the LinkedIn pass in [`../research/README.md`](../research/README.md) (steps 3 and 4).
-
-## 5. Replication prompt
-
-````
-You are updating my dataset of Paris companies that use dbt, and people who could speak at or
-attend the Paris dbt Meetup. The dataset is paris_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups/paris. Read paris/SEARCH_METHOD.md first, then
-../berlin_planning/SEARCH_METHOD.md for the shared scoring rules, schema (§3), merge rules (§4)
-and validator (Appendix A). Keep the schema identical to the other regional files.
-
-The session has about 200 web searches in total, so budget them:
-~40 per research sub-agent, ~40 for LinkedIn.
-
-Tasks, in priority order:
-1. LINKEDIN: find LinkedIn URLs for tier 1-2 people with linkedin_confidence "not_searched"
-   (site:linkedin.com/in "<name>" <company>). Only accept exact name + company/role matches.
-2. NEW CONTENT since metadata.generated_at: new DataGen episodes/posts, the latest Forward Data
-   Conference programme, new Paris dbt Meetup / Paris Data Ladies / Paris Airflow / DuckDB Paris
-   events, and new posts on the blogs in sources.checked (Medium: use medium.com/feed/<publication>).
-3. JOB ADS: re-run the LinkedIn Jobs guest scan (keywords=dbt, location Paris, Île-de-France),
-   keep ads whose text contains the whole word "dbt"; set last_seen on ads seen again; plus
-   Lever/Greenhouse/Ashby site: searches.
-4. WOMEN-IN-DATA: new Paris Data Ladies events, and the groups not yet scanned
-   (Social Builder, Femmes@numérique, Girls in Tech, Women in AI France, Data For Good). Take
-   speakers only from the community's own events; never infer gender.
-5. CLASSIFY AND SCORE: 1-3 topics per item from TOPIC_VOCABULARY; lead_type; priority_tier
-   (tier 1 = Paris or unknown location + a dbt item from 2024 onwards, or an emerging voice per the
-   shared rule); meetup_fit; watchlist; past_chapter_talks.
-
-Rules: public professional information only; never guess LinkedIn URLs; record pronouns only when
-self-stated. Back up the old file as paris_dbt_companies.v<N>.json, run the validator, bump the
-version and add a change-log entry below.
-
-When finished, tell me briefly what's new: new speakers (with a link to their work), new
-companies and dbt roles, people who have moved, and topic trends.
-````
-
----
+- **Sources to try first:**
+  - **LinkedIn pass:** 127 people are still `not_searched`. In the first build only 14 of the 105 tier-1/2 people without a profile were searched before the web-search limit. Finish this first, in its own session.
+  - **New content since `metadata.generated_at`:** new DataGen episodes and posts, the latest Forward Data Conference programme, new Paris dbt Meetup, Paris Data Ladies, Paris Airflow and DuckDB Paris events, and new posts on the blogs in `sources.checked`.
+  - **Job ads:** re-run the LinkedIn Jobs guest scan and the Lever, Greenhouse and Ashby searches, including the 50 ads left over by the cap.
+  - **Women-in-data groups not yet scanned:** Social Builder, Femmes@numérique, Girls in Tech, Women in AI France, Data For Good and Les Pionnières.
+- **People to locate:** 15 people have no known location, including Willis Nana, whose LinkedIn result had nothing tying it to the recorded talk. The 4 tier-1 leads among them are Grégoire Naud, Paul Colinmaire, Thales Loiola Ravelli and Martin-Pierre Roset.
+- **Data conventions:** `metadata.region` is "Paris (Paris dbt Meetup)". `sources.checked` lists every source checked, with a `yielded` flag. `past_meetups` is copied from `../enriched/paris-dbt-meetup.json`. Person `content_id`s have the form `<event-slug>-<title-slug>`.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `paris/paris_dbt_companies.json`, the Paris dbt Meetup, `../enriched/paris-dbt-meetup.json` and the region Paris / Île-de-France. Add: "Content is often in French, so search in French too and record French titles as they are, with an English description. Tier 1 = Paris or unknown location plus a dbt item from 2024 onwards, or a first-time speaker under the shared rule. Back up the old file as `paris_dbt_companies.v<N>.json`."
 
 ## Change log
 

@@ -1,10 +1,10 @@
-# Seattle dbt search: method, lessons and replication prompt
+# Seattle: city notes
 
-This file goes with `seattle_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Seattle. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-09-24
-- **Goal:** find people in the Seattle metro who could **speak at** (or attend) the [Seattle dbt Meetup](https://www.meetup.com/seattle-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [Seattle dbt Meetup](https://www.meetup.com/seattle-dbt-meetup/), data in `seattle_dbt_companies.json`
 - **Region:** the Seattle metro. Seattle, Bellevue, Redmond, Bothell and Mercer Island count. Commuter towns are local for this chapter, so Olympia and Mount Vernon count too.
+- **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -25,83 +25,163 @@ This file goes with `seattle_dbt_companies.json`. It explains how the dataset wa
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Seattle
 
-The first build covered conferences, other local meetups, women-in-data communities, company blogs and job ads. Scoring follows [`../berlin_planning/SEARCH_METHOD.md`](../berlin_planning/SEARCH_METHOD.md) §1 Step 6.
+The first build covered conferences, other local meetups, women-in-data communities, company blogs and job ads. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
 
-### Step 1: Chapter history
+### Chapter history and conferences
 
-- **What was added:** every named speaker in `../enriched/seattle-dbt-meetup.json`, with their talk.
-- **Range:** 7 meetups, from 2023-04-27 to 2026-05-07.
-- **Yield:** 16 people who have spoken at the chapter.
+- **Past chapter speakers:** every named speaker in `../enriched/seattle-dbt-meetup.json`, with the talk. 7 meetups, from 2023-04-27 to 2026-05-07, gave 16 people who have spoken at the chapter.
+- **[dbt Summit 2026 speakers directory](https://www.getdbt.com/dbt-summit/speakers):** the best source. It is static HTML with every speaker and company, so filtering by Seattle employers is cheap. Speaker pages give session titles but not cities.
+- **[Airflow Summit 2025](https://airflowsummit.org/sessions/2025/):** held in Seattle. Several talks cover dbt, semantic layers and data quality, but most speakers are not from Seattle.
+- **[PyData Seattle 2025](https://cfp.pydata.org/seattle2025/speaker/):** full speaker bios, but few analytics engineering talks. The [organisers page](https://pydata.org/seattle2025/organizers) names the PyLadies and WiMLDS leads.
 
-### Step 2: Conferences
+### Local meetups and user groups
 
-- **[dbt Summit 2026 speakers directory](https://www.getdbt.com/dbt-summit/speakers):** the best source. It is static HTML with every speaker and company. Speaker pages give session titles but not cities.
-- **[Airflow Summit 2025](https://airflowsummit.org/sessions/2025/):** it was held in Seattle. Several talks cover dbt, semantic layers and data quality, but most speakers are not from Seattle.
-- **[PyData Seattle 2025](https://cfp.pydata.org/seattle2025/speaker/):** full speaker bios, but few analytics engineering talks. Its [organisers page](https://pydata.org/seattle2025/organizers) names the PyLadies and WiMLDS leads.
-
-### Step 3: Other local meetups
-
-- **[Seattle Data, AI & Security](https://www.seattledataai.org/speakers):** a large speaker roster with LinkedIn links. It has no talk titles or dates, and most speakers are from Microsoft, executive or security roles.
+- **[Seattle Data, AI & Security](https://www.seattledataai.org/speakers):** a large speaker roster with LinkedIn links. Most speakers are from Microsoft, executive or security roles.
 - **[Data Engineer Things Seattle](https://www.dataengineerthings.org/team):** the Seattle lead, plus speakers taken from search summaries of its Meetup event pages. The group is moving to Luma.
-- **[Seattle Tableau User Group](https://usergroups.tableau.com/seattle-tableau-user-group/) (SeaTUG):** its pages on the Bevy event platform are fully readable, with speakers, hosts and LinkedIn links.
-- **[Snowflake User Groups Seattle](https://usergroups.snowflake.com/seattle-2/):** organiser and host names. Most events are virtual partner talks.
+- **[Seattle Tableau User Group](https://usergroups.tableau.com/seattle-tableau-user-group/) (SeaTUG):** the pages on the Bevy event platform are fully readable, with speakers, hosts and LinkedIn links.
+- **[Snowflake User Groups Seattle](https://usergroups.snowflake.com/seattle-2/):** organiser and host names, with LinkedIn links on the Bevy pages. Most events are virtual partner talks.
 - **[MotherDuck events](https://motherduck.com/events/past/):** confirmed a MotherDuck Seattle office that hosts events, and a dbt talk at one of them.
-- **Not opened:** the [Seattle Data Meetup Group](https://www.meetup.com/seattle-data-engineering-meetup-group/events/?type=past) (last event November 2023) and [seattle-daml](https://www.meetup.com/seattle-daml/).
 
-### Step 4: Women-in-data communities
+### Women-in-data communities
 
-People were taken only from each community's own events. Nobody's gender is recorded.
+People were taken only from each community's own events.
 
-- **[WiDS Puget Sound 2026](https://www.widspugetsound.org/2026-conference):** WiDS means Women in Data Science. The richest source, with speakers, panellists and organisers. The page needs a browser, because it renders empty for a plain fetch.
+- **[WiDS Puget Sound 2026](https://www.widspugetsound.org/2026-conference):** WiDS means Women in Data Science. The richest women-in-data source, with speakers, panellists and organisers. It names data engineers and analytics leaders at Expedia, Amazon, Pfizer and JumpCloud. The page needs a browser, because it renders empty for a plain fetch.
 - **[WiDS Puget Sound 2025 recap](https://www.widsworldwide.org/get-inspired/blog/celebrating-connection-and-innovation-the-2025-wids-puget-sound-conference/):** names only, with no employers.
 - **[R-Ladies Seattle](https://r-consortium.org/posts/diving-into-r-with-isabella-velasquez-perspectives-from-r-ladies-seattle/):** one co-organiser, from an interview.
-- **Weak or empty:** the [PyLadies Seattle site](https://seattle.pyladies.com/) lists placeholder organisers. No Seattle chapter of Data + Women was found.
-- **Not checked in depth:** Women Who Code Seattle, Ada Developers Academy and [Women in Analytics](https://www.womeninanalytics.com/speakers-bureau).
 
-### Step 5: Company blogs and news
+### Company blogs, news and job ads
 
 - **[dbt Developer Blog](https://docs.getdbt.com/blog/authors/nate-sooter):** a 2022 post on founding Smartsheet's analytics engineering team.
 - **[GeekWire](https://www.geekwire.com/2025/seattle-startup-gable-lands-20m-to-coordinate-data-changes-between-teams/):** good for confirming a startup is in Seattle (SDF Labs, Gable).
-- **Medium feeds:** [Zillow Tech Hub](https://medium.com/feed/zillow-tech-hub) has had no posts since February 2021. [Expedia Group Tech](https://medium.com/feed/expedia-group-tech) is active but has no dbt posts. Redfin and Remitly returned nothing.
-- **Grouped web searches** for Seattle consumer brands (Starbucks, REI, Alaska Airlines, Zillow and others) returned only generic dbt content.
-
-### Step 6: Job ads
-
 - **[LinkedIn Jobs](https://www.linkedin.com/jobs/search?keywords=dbt&location=Seattle%2C%20Washington%2C%20United%20States), logged out:** 250 ads listed and checked, and 48 mention the whole word "dbt".
-- **ATS searches:** an ATS is an applicant tracking system that hosts a company's job ads. `site:` searches on [Lever](https://jobs.lever.co), [Greenhouse](https://job-boards.greenhouse.io) and [Ashby](https://jobs.ashbyhq.com) added 17 more. Examples are Rover, AllTrails, Anthropic, Gusto, Plaid and Thumbtack.
-- **Eastside:** no Bellevue, Redmond or Kirkland ads were confirmed, because the location filter was not applied.
+- **Applicant tracking systems:** `site:` searches on [Lever](https://jobs.lever.co), [Greenhouse](https://job-boards.greenhouse.io) and [Ashby](https://jobs.ashbyhq.com) added 17 more ads. Examples are Rover, AllTrails, Anthropic, Gusto, Plaid and Thumbtack.
 
-### Step 7: Location and LinkedIn passes (2026-10-01)
+### Locations
 
-- **Page fetches:** 18 people placed, 16 in the region and 2 outside.
-  - The Meetup `gql2` endpoint gave the profile city of each chapter event's hosts and RSVPs.
-  - GitHub profiles, speaker bios and recent in-person talks at an employer with a Seattle office gave the rest.
-- **LinkedIn search results:** 5 people placed, 1 in the region and 4 outside. No LinkedIn page was opened.
-- **Still unknown:** 12 people.
+- **Location pass (2026-10-01):** page fetches placed 18 people, 16 in the region and 2 outside. The Meetup `gql2` endpoint gave the profile city of each chapter event's hosts and RSVPs, and placed most past chapter speakers. GitHub profiles, speaker bios and recent in-person talks at an employer with a Seattle office gave the rest.
+- **LinkedIn pass (2026-10-01):** LinkedIn search results placed 5 people, 1 in the region and 4 outside. No LinkedIn page was opened.
 
-## 2. What we learnt
+## 2. What didn't work here
 
-- **Sources that worked:**
-  - **The dbt Summit speakers directory** lists every speaker and company in static HTML. Filtering by Seattle employers is cheap.
-  - **WiDS Puget Sound** is the strongest women-in-data source. It names data engineers and analytics leaders at Expedia, Amazon, Pfizer and JumpCloud.
-  - **Bevy pages** (Tableau and Snowflake user groups) name speakers, hosts and organisers, with LinkedIn links.
-  - **Meetup `gql2` RSVPs** placed most past chapter speakers.
-- **Sources that didn't:**
-  - **Seattle company blogs** publish almost nothing about dbt. Zillow's is dormant, and Redfin's and Remitly's feeds were empty.
-  - **Seattle Data, AI & Security** gives names but no talk titles or dates, so its speakers are hard to rank.
-  - **meetup.com pages** were not opened in the first build, so the chapter's own organisers were not captured.
-- **Watch out for:**
-  - **Tier 1 is small.** Only 2 people meet the strict rule: a local or unknown location plus a dbt item from 2024 onwards. Most strong leads sit in tier 2.
-  - **Locations from a head office.** Many first-build cities come from the employer's Seattle or Bellevue head office, not from the person. Priya Tanwar, Nadine Bruxel and Nate Sooter are examples.
-  - **dbt Labs has a Seattle team**, from its purchase of SDF Labs. Its staff are labelled in the cockpit. They can speak, but check the line-up has practitioners first.
-  - **The "Seattle Data Guy" has moved.** Ben Rogojan is now in Denver, according to a podcast title.
+- **Seattle Data, AI & Security:** gives names but no talk titles or dates, so its speakers are hard to rank.
+- **meetup.com pages:** not opened in the first build, so the chapter's own organisers were not captured. The [Seattle Data Meetup Group](https://www.meetup.com/seattle-data-engineering-meetup-group/events/?type=past) (last event November 2023) and [seattle-daml](https://www.meetup.com/seattle-daml/) were not opened either.
+- **[PyLadies Seattle site](https://seattle.pyladies.com/):** lists placeholder organisers.
+- **Data + Women:** no Seattle chapter was found.
+- **Women-in-data groups not checked in depth:** Women Who Code Seattle, Ada Developers Academy and [Women in Analytics](https://www.womeninanalytics.com/speakers-bureau).
+- **Seattle company blogs:** publish almost nothing about dbt. [Zillow Tech Hub](https://medium.com/feed/zillow-tech-hub) has had no posts since February 2021. [Expedia Group Tech](https://medium.com/feed/expedia-group-tech) is active but has no dbt posts. Redfin and Remitly returned nothing.
+- **Grouped web searches** for Seattle consumer brands (Starbucks, REI, Alaska Airlines, Zillow and others) returned only generic dbt content.
+- **Eastside job ads:** no Bellevue, Redmond or Kirkland ads were confirmed, because the location filter was not applied.
 
-## 3. Key leads
+## 3. Companies looked at
+
+- **dbt Labs has a Seattle team**, from the purchase of SDF Labs. The staff are labelled.
+- **Locations from a head office.** Many first-build cities come from the employer's Seattle or Bellevue head office, not from the person. Priya Tanwar, Nadine Bruxel and Nate Sooter are examples.
+- **Tier 1 is small.** Only 2 people meet the strict rule, so most strong leads sit in tier 2.
+
+<!-- companies:start -->
+108 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Strong dbt use</b> (24)</summary>
+
+AllTrails, Anthropic, Axon, Cambia Health Solutions, dbt Labs (Seattle / ex-SDF Labs), DigitalOcean, DocuSign, Gusto, Haus, Headway, IT Labs, Microsoft, MotherDuck, Nordstrom, Okta (Auth0) (local presence not confirmed), Redfin, Rover.com, Russell Investments, Seattle dbt Meetup, Smartsheet, Snowflake, WEX, Weyerhaeuser, Wizards of the Coast
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (32)</summary>
+
+Agoda, Amazon / AWS, Aritzia, Brex, Databricks, DoorDash, Expedia Group, Gable, Golden Analytics, Hasbro, Haus Analytics, Jobgether, Mercury, Metropolis, Otter, phData (local presence not confirmed), Plaid, QXO, RentSpree, Seattle Storm, Slalom, SmithRx, SoFi, Storable, Superhuman, Tableau / Salesforce, TechWish, Thumbtack, Valorem Reply, Weights & Biases, Whatnot, Zillow
+
+</details>
+
+<details><summary><b>Not verified</b> (52)</summary>
+
+Adobe (local presence not confirmed), AgentSync (local presence not confirmed), Alaska Airlines, Amazon (local presence not confirmed), Amazon Web Services (local presence not confirmed), AMD (local presence not confirmed), Amperity, Analytic Endeavors (local presence not confirmed), Astronomer (local presence not confirmed), Babylist (local presence not confirmed), BECU, Confluent (local presence not confirmed), Consultant (local presence not confirmed), Convoy (local presence not confirmed), Data Engineer Things Seattle, Data Literacy (local presence not confirmed), Disney (local presence not confirmed), Diversity in Data Science (local presence not confirmed), Genesis Computing (local presence not confirmed), Google Cloud (local presence not confirmed), JumpCloud (local presence not confirmed), LanceDB (local presence not confirmed), LaunchDarkly (local presence not confirmed), Lincoln Financial (local presence not confirmed), Monaghan Medical Corporation (local presence not confirmed), Netflix (local presence not confirmed), Northwell Health (local presence not confirmed), OfferUp, Onehouse (local presence not confirmed), Outreach, Perceptive Analytics (local presence not confirmed), Pfizer (local presence not confirmed), Porch, Push.ai (local presence not confirmed), PyData Seattle, QBiz, Inc. (local presence not confirmed), Rad Power Bikes (local presence not confirmed), REI, Remitly, Rover, Seattle Data Guy (local presence not confirmed), Seattle Data, AI & Security, Seattle Tableau User Group (SeaTUG), Skagit Valley College (local presence not confirmed), Snowflake User Groups Seattle, Starbucks, T-Mobile, Textio, Unify Consulting, University of Washington iSchool (local presence not confirmed), WiDS Puget Sound / Diversity in Data Science, Zulily (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (21)</summary>
+
+- https://amperity.github.io/
+- https://cfp.pydata.org/seattle2025/speaker/
+- https://docs.getdbt.com/blog
+- https://docs.getdbt.com/blog/authors/nate-sooter
+- https://medium.com/feed/expedia-group-tech
+- https://medium.com/feed/redfin-engineering
+- https://medium.com/feed/remitly-engineering
+- https://medium.com/feed/zillow-tech-hub
+- https://motherduck.com/events/
+- https://motherduck.com/events/past/
+- https://pydata.org/seattle2025/organizers
+- https://usergroups.snowflake.com/seattle-2/
+- https://www.dataengineerthings.org/team
+- https://www.getdbt.com/dbt-summit/speakers
+- https://www.meetup.com/seattle-data-engineering-meetup-group/events/?type=past
+- https://www.runtime.news/how-t-mobile-uses-snowflake-and-databricks/
+- https://www.seattledataai.org/events/
+- https://www.seattledataai.org/speakers
+- https://www.widspugetsound.org/2026-conference
+- https://www.widsworldwide.org/get-inspired/blog/celebrating-connection-and-innovation-the-2025-wids-puget-sound-conference/
+- https://www.zillow.com/tech/feed/
+
+</details>
+
+<details><summary><b>Other sources checked</b> (44)</summary>
+
+- [Seattle dbt Meetup (meetup.com)](https://www.meetup.com/seattle-dbt-meetup/) (nothing useful)
+- [Data Engineer Things Seattle](https://www.dataengineerthings.org/team)
+- [Seattle Data, AI & Security speakers page](https://www.seattledataai.org/speakers)
+- [Seattle Data, AI & Security events](https://www.seattledataai.org/events/) (nothing useful)
+- [PyData Seattle 2025 speakers (pretalx)](https://cfp.pydata.org/seattle2025/speaker/)
+- [PyData Seattle 2025 organizers](https://pydata.org/seattle2025/organizers)
+- [Snowflake User Groups Seattle](https://usergroups.snowflake.com/events/details/snowflake-seattle-presents-wed-mar-12-seattle-user-group-meetup-hands-on-lab-community-app-build/)
+- [Seattle Tableau User Group](https://usergroups.tableau.com/seattle-tableau-user-group/)
+- [WiDS Puget Sound 2026 conference](https://www.widspugetsound.org/2026-conference)
+- [WiDS Puget Sound 2025 recap (WiDS Worldwide blog)](https://www.widsworldwide.org/get-inspired/blog/celebrating-connection-and-innovation-the-2025-wids-puget-sound-conference/)
+- [WiDS Puget Sound 2025 Luma page](https://luma.com/widsps2025) (nothing useful)
+- [PyLadies Seattle site](https://seattle.pyladies.com/) (nothing useful)
+- [R-Ladies Seattle (R Consortium interview)](https://r-consortium.org/posts/diving-into-r-with-isabella-velasquez-perspectives-from-r-ladies-seattle/)
+- [Airflow Summit 2025 sessions (held in Seattle)](https://airflowsummit.org/sessions/2025/)
+- [Ben Rogojan / Seattle Data Guy](https://airflowsummit.org/speakers/ben-rogojan/)
+- [seattle-daml meetup](https://www.meetup.com/seattle-daml/) (nothing useful)
+- [Databricks user group Seattle](https://usergroups.databricks.com/events/) (nothing useful)
+- [Seattle Apache Airflow meetup](https://airflow.apache.org/meetups/) (nothing useful)
+- [Data + Women Seattle (Tableau)](https://usergroups.tableau.com/chapters/) (nothing useful)
+- [Seattle WiMLDS (meetup.com)](https://www.meetup.com/seattle-women-in-machine-learning-and-data-science/) (nothing useful)
+- [Women Who Code Seattle archive / Ada Developers Academy / Women in Analytics](https://www.womeninanalytics.com/speakers-bureau) (nothing useful)
+- [Zillow Tech Hub RSS (Medium)](https://medium.com/feed/zillow-tech-hub) (nothing useful)
+- [Zillow tech feed](https://www.zillow.com/tech/feed/) (nothing useful)
+- [Expedia Group Tech RSS](https://medium.com/feed/expedia-group-tech) (nothing useful)
+- [Redfin Engineering RSS](https://medium.com/feed/redfin-engineering) (nothing useful)
+- [Remitly Engineering RSS](https://medium.com/feed/remitly-engineering) (nothing useful)
+- [dbt Summit 2026 speakers directory](https://www.getdbt.com/dbt-summit/speakers)
+- [PyData Seattle 2025 schedule (pretalx JSON)](https://cfp.pydata.org/seattle2025/schedule/export/schedule.json) (nothing useful)
+- [Snowflake User Groups Seattle](https://usergroups.snowflake.com/seattle-2/)
+- [Seattle Data Meetup Group (Onehouse) past events](https://www.meetup.com/seattle-data-engineering-meetup-group/events/?type=past) (nothing useful)
+- [Data Engineer Things Seattle, Jul 2025 event](https://www.meetup.com/data-engineer-things-seattle-meetup/events/308773412/) (nothing useful)
+- [Airflow Summit 2025 sessions (held in Seattle)](https://airflowsummit.org/sessions/2025/) (nothing useful)
+- [MotherDuck events (upcoming + past)](https://motherduck.com/events/past/)
+- [dbt Developer Blog author page (Nate Sooter)](https://docs.getdbt.com/blog/authors/nate-sooter)
+- [GeekWire (SDF Labs, Gable)](https://www.geekwire.com/2025/seattle-startup-gable-lands-20m-to-coordinate-data-changes-between-teams/)
+- [Runtime newsletter (T-Mobile)](https://www.runtime.news/how-t-mobile-uses-snowflake-and-databricks/) (nothing useful)
+- [LinkedIn Jobs guest API](https://www.linkedin.com/jobs/search?keywords=dbt&location=Seattle%2C%20Washington%2C%20United%20States) (nothing useful)
+- [WebSearch site:jobs.lever.co dbt Seattle](https://jobs.lever.co)
+- [WebSearch site:job-boards.greenhouse.io dbt Seattle](https://job-boards.greenhouse.io)
+- [WebSearch site:jobs.ashbyhq.com dbt Seattle](https://jobs.ashbyhq.com)
+- [WebSearch analytics engineer dbt Seattle](https://www.builtinseattle.com/jobs/data-analytics/data-engineering) (nothing useful)
+- [WebSearch site:jobs.lever.co analytics engineer dbt Bellevue/Redmond/Kirkland](https://jobs.lever.co) (nothing useful)
+- [WebSearch site:job-boards.greenhouse.io analytics engineer dbt Seattle, WA](https://job-boards.greenhouse.io)
+- [LinkedIn Jobs guest API (keywords=dbt, Seattle WA)](https://www.linkedin.com/jobs/search?keywords=dbt&location=Seattle%2C%20Washington%2C%20United%20States)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers at this chapter:**
-  - **Nate Sooter**, Smartsheet. Wrote about founding Smartsheet's first analytics engineering team (2022): [dbt Developer Blog](https://docs.getdbt.com/blog/founding-an-analytics-engineering-team-smartsheet). This is an emerging voice: someone who publishes about dbt but has no talk on record.
+  - **Nate Sooter**, Smartsheet. Wrote about founding Smartsheet's first analytics engineering team (2022): [dbt Developer Blog](https://docs.getdbt.com/blog/founding-an-analytics-engineering-team-smartsheet). Publishes about dbt, with no talk on record.
   - **Maggie Stark**, Staff Data Engineer, Astronomer, based in Seattle. Airflow Summit 2025 talk on data quality, contracts, and soft versus hard failures: [session](https://airflowsummit.org/sessions/2025/orchestrating-data-quality-quality-data-brought-to-you-by-airflow/).
   - **Catherine Nelson**, author of *Software Engineering for Data Scientists*. Talks at PyData Seattle and WiDS Puget Sound on moving from notebooks to production code: [WiDS Puget Sound 2026](https://www.widspugetsound.org/2026-conference).
   - **Stephanie Chen**, product analytics leader, Expedia Group. WiDS Puget Sound 2026 talk on agentic AI at Expedia: [conference page](https://www.widspugetsound.org/2026-conference).
@@ -117,44 +197,26 @@ People were taken only from each community's own events. Nobody's gender is reco
   - **Karrie Cardiff** and **Russell Spangler** co-lead SeaTUG: [group page](https://usergroups.tableau.com/seattle-tableau-user-group/).
   - **Angela Harney** hosts the Snowflake user group labs at Snowflake's Bellevue office: [event](https://usergroups.snowflake.com/events/details/snowflake-seattle-presents-wed-mar-12-seattle-user-group-meetup-hands-on-lab-community-app-build/).
 
-## 4. Before outreach
+## 5. Before outreach
 
-- [ ] **Confirm locations taken from a head office.** Priya Tanwar, Nadine Bruxel, Nate Sooter and Vikas Ranjan are placed by their employer's office only.
+- [ ] **Confirm locations taken from a head office.** Priya Tanwar, Nadine Bruxel, Nate Sooter and Vikas Ranjan are placed by the employer's office only.
 - [ ] **Confirm the 12 unknown locations.** Brandyn Lee (AgentSync) and Irina Virnik (JumpCloud) are very likely in Seattle, from truncated LinkedIn results. Andres Astorga Espriella may be in Mexico City and at Qbiz rather than independent.
 - [ ] **Check the weak location calls.** Wendy Grus and Mira Winkel were placed by a name match to a chapter member only.
-- [ ] **Skip or re-rank people outside the region.** Pooja Crahen is in New York, Ben Rogojan in Denver, Mitesh Mangaonkar in Austin and Britton Stamper in San Francisco. Bernardo Dionisi is in Durham, North Carolina, Ivan Perez Avellaneda in Plattsburgh and Dipankar Mazumdar in Canada.
+- [ ] **Skip or re-rank people outside the region.** Pooja Crahen is in New York, Ben Rogojan in Denver, Mitesh Mangaonkar in Austin and Britton Stamper in San Francisco. Bernardo Dionisi is in Durham, North Carolina, Ivan Perez Avellaneda in Plattsburgh and Dipankar Mazumdar in Canada. Ben Rogojan, the "Seattle Data Guy", has moved to Denver, according to a podcast title.
 - [ ] **Confirm current roles** for people whose evidence is old: Nate Sooter (2022), Deepak Konidena (Zillow, before 2024) and Vikas Ranjan (T-Mobile, 2023).
-- [ ] **dbt Labs staff are labelled.** Elias DeFaria, Lukas Schulte, William Weld, Alexander Bogdanowicz and Wolfram Shulte work there. They can speak, but check the line-up has practitioners first.
+- [ ] **Check the line-up has practitioners first.** Elias DeFaria, Lukas Schulte, William Weld, Alexander Bogdanowicz and Wolfram Shulte work at dbt Labs and are labelled.
 
-## 5. Next run
+## 6. Next run
 
-- **Run the LinkedIn pass first.** 24 tier-1 and tier-2 people are still `not_searched`.
-- **Pull the chapter's organisers** and the Seattle WiMLDS and PyLadies events through the Meetup `gql2` endpoint.
-- **Scan the women-in-data groups not yet checked:** Women Who Code Seattle, Ada Developers Academy and Women in Analytics.
-- **Search the Eastside for job ads** (Bellevue, Redmond, Kirkland), with a working location filter.
-- **Look for first-time speakers** through GitHub user search (`dbt location:Seattle`). It was the best source of emerging voices in Atlanta, and Seattle has only 2.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of Seattle-metro companies that use dbt, and people who could speak
-at or attend the Seattle dbt Meetup. The file is seattle/seattle_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Read seattle/SEARCH_METHOD.md, then
-research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
-The region is the Seattle metro (Seattle, Bellevue, Redmond and nearby). Commuter towns such as
-Olympia and Mount Vernon count as local.
-
-Budget about 25 web searches. Try these first:
-1. LinkedIn search results for tier 1-2 people with linkedin_confidence "not_searched".
-2. Meetup gql2 for the chapter's organisers, Seattle WiMLDS and PyLadies Seattle events.
-3. GitHub user search (dbt location:Seattle) for first-time speakers with public dbt work.
-4. New WiDS Puget Sound, SeaTUG and Snowflake Seattle events since metadata.generated_at.
-5. A LinkedIn Jobs guest scan re-run, plus Lever/Greenhouse/Ashby site: searches for the Eastside.
-
-Rules: never fetch LinkedIn pages; use only search results. Public professional information only;
-never guess gender, and record pronouns only when self-stated. Assemble with research/assemble.py
---base, run research/validate.py (must print ok), and add a change-log row below.
-````
+- **Sources to try first:**
+  - **LinkedIn pass:** 24 tier-1 and tier-2 people are still `not_searched`.
+  - **Meetup `gql2`:** pull the chapter's organisers, and the Seattle WiMLDS and PyLadies Seattle events.
+  - **GitHub user search** (`dbt location:Seattle`) for first-time speakers with public dbt work. It was the best source of first-time speakers in Atlanta, and Seattle has only 2.
+  - **New events:** WiDS Puget Sound, SeaTUG and Snowflake Seattle events since `metadata.generated_at`.
+  - **Women-in-data groups not yet checked:** Women Who Code Seattle, Ada Developers Academy and Women in Analytics.
+  - **Eastside job ads** (Bellevue, Redmond, Kirkland): re-run the LinkedIn Jobs guest scan with a working location filter, plus Lever, Greenhouse and Ashby `site:` searches.
+- **People to locate:** the 12 unknown locations in section 5, starting with Brandyn Lee and Irina Virnik.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `seattle/seattle_dbt_companies.json`, the chapter `seattle-dbt-meetup`, `../enriched/seattle-dbt-meetup.json` and the region "the Seattle metro (Seattle, Bellevue, Redmond and nearby), with commuter towns such as Olympia and Mount Vernon". Budget about 25 web searches.
 
 ## Change log
 

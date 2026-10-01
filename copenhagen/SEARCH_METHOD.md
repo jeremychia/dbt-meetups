@@ -1,10 +1,10 @@
-# Copenhagen dbt search: method, lessons and replication prompt
+# Copenhagen: city notes
 
-This file goes with `copenhagen_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Copenhagen. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-10-01
-- **Goal:** find people in Denmark who could **speak at** (or attend) the [Copenhagen dbt Meetup](https://www.meetup.com/copenhagen-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [Copenhagen dbt Meetup](https://www.meetup.com/copenhagen-dbt-meetup/), data in `copenhagen_dbt_companies.json`
 - **Region:** the Copenhagen metro area, including Ballerup and Hørsholm. Commuter towns are local for this chapter, so Aarhus counts too. The rest of Denmark counts as outside.
+- **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -25,82 +25,122 @@ This file goes with `copenhagen_dbt_companies.json`. It explains how the dataset
 | Past chapter meetups | 11 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Copenhagen
 
-Web search ran out after about 15 calls. Most of the search used page fetches, the Meetup data endpoint and the GitHub user search.
+### Meetups
 
-### Step 1: Other Danish meetups
-
-- **Meetup's `gql2` endpoint:** queried with `curl`, it returned every past event for 14 Danish data groups. Its `eventSearch` query also found the chapter's next event, which is not yet in the chapter history.
+- **Meetup data for 14 Danish data groups:** every past event was pulled. The `eventSearch` query also found the chapter's next event, which is not yet in the chapter history.
 - **[Copenhagen Data Engineering](https://www.meetup.com/copenhagen-data-engineering/):** 6 events from 2025-03 to 2026-05, with 17 speakers. Its event pages name every speaker with an employer. It was the best source of Danish speakers.
 - **[Databricks User Group Denmark](https://www.meetup.com/databricks-user-group-denmark/):** the same detail, and one dbt talk (Vipps MobilePay, 2025-09).
-- **[Snowflake User Group Denmark](https://usergroups.snowflake.com/denmark/):** its event pages list speakers and organisers.
+- **[Snowflake User Group Denmark](https://usergroups.snowflake.com/denmark/):** its event pages are rendered on the server, so a fetch returns the speakers and organisers.
 - **[PyData Copenhagen](https://www.meetup.com/pydata-copenhagen/):** mostly machine learning and LLM talks.
-- **No yield:** the [Fabric & Power BI User Group Denmark](https://www.meetup.com/denmark-powerbi-user-group/) has mostly online speakers from other countries. [Analytics Pioneers Copenhagen](https://www.meetup.com/analytics-pioneers-copenhagen/) runs online trainings by a German agency.
 
-### Step 2: GitHub user search
+### GitHub
 
-- **Method:** a [GitHub user search](https://github.com/search?q=location%3ACopenhagen+dbt&type=users) for Copenhagen or Denmark in the bio or location. Then each profile's repositories were checked for dbt in the name. About 130 profiles were scanned.
-- **Yield:** 11 people. It found the only real first-time speakers, including an open-source dbt docs tool on PyPI.
-- **Learning repositories:** a "dbt-learn" or "dbt-training" repo is not published content. Those people are recorded with no public content.
+- **[GitHub user search](https://github.com/search?q=location%3ACopenhagen+dbt&type=users):** Copenhagen or Denmark in the bio or location, then each profile's repositories checked for dbt in the name. About 130 profiles were scanned and 11 people found. It found the only real first-time speakers, including an open-source dbt docs tool on PyPI.
 
-### Step 3: Vendor stories and newsletters
+### Vendor stories and newsletters
 
 - **[SYNQ customer stories](https://www.synq.io/customers):** the [Lunar](https://www.synq.io/customers/lunar) case (about 1,500 dbt models) and Better Collective.
 - **[Mikkel Dengsøe's Substack](https://mikkeldengsoe.substack.com/archive):** posts from 2025 on dbt with AI.
-- **Blocked:** every Medium feed returned HTTP 429 (too many requests), including Pleo, Lunar, Trustpilot and Too Good To Go. No company-blog authors were found.
-- **No dbt content:** the [Intellishore insights](https://intellishore.dk/insights/) and the [LEAP website](https://leap-consulting.dk/).
 
-### Step 4: Women-in-data communities
+### Women-in-data communities
 
-This step looks for speakers through women-focused groups' own events. It never labels or guesses anyone's gender.
+- **[TechWomen Cph](https://www.meetup.com/techwomen-cph/):** panels with data leaders, and a 2026-09 masterclass with Women in Data & Analytics. The topics are mostly AI and careers. 8 people came from this group.
 
-- **[TechWomen Cph](https://www.meetup.com/techwomen-cph/):** panels with data leaders, and a 2026-09 masterclass with Women in Data & Analytics. The topics are mostly AI and careers.
-- **Dormant:** [R-Ladies Copenhagen](https://www.meetup.com/rladies-copenhagen/) and [Copenhagen Women in Machine Learning & Data Science](https://www.meetup.com/copenhagen-women-in-machine-learning-and-data-science/) have had no events since 2019.
-- **Result:** 8 people came from this step.
-
-### Step 5: Job ads and LinkedIn search
+### Job ads
 
 - **[Jobindex search for dbt](https://www.jobindex.dk/jobsoegning?q=dbt):** 12 ads. The results embed a JSON list of ads, but each ad links off-site. Only [Dagrofa's ad](https://www.jobindex.dk/vis-job/r14003203) visibly says dbt.
 - **[TheirStack](https://theirstack.com/en/technology/dbt/dk):** it shows 10 of the 116 Danish companies it lists as using dbt.
-- **[thehub.io](https://thehub.io/jobs?search=dbt):** it loads results in the browser, so a fetch saw only 3 ads from outside Denmark.
 - **LinkedIn search results:** 6 people came from posts about dbt work or dbt hiring.
 
-### Step 6: Chapter history
+### Chapter history and locations
 
-- **Past speakers:** every named speaker in `../enriched/copenhagen-dbt-meetup.json` was added, with their talk as evidence. That covers 11 events, from 2023-02-22 to 2026-09-16.
-- **Result:** 32 people in the file have spoken at the chapter.
+- **Chapter history:** every named speaker in `../enriched/copenhagen-dbt-meetup.json` was added, with their talk as evidence. That covers 11 events, from 2023-02-22 to 2026-09-16. 32 people in the file have spoken at the chapter.
 - **Next event:** [vol. 11](https://www.meetup.com/copenhagen-dbt-meetup/events/316677743/) on 2026-10-21. Its three speakers are in the file as leads, with a note saying they are booked.
+- **In-person chapter talks:** an in-person talk or host role at a chapter event since 2024-10, at an employer with a Copenhagen office, gave 9 medium-confidence calls.
+- **Sessionize:** a Sessionize page placed Kshitij Aranke in London.
+- **Meetup member profiles:** profiles tied to a person placed Johan Baltzar in Stockholm and Ernesto Ongaro in Dublin. Each member had joined, by RSVP, the Stockholm dbt meetup where that person spoke.
+- **LinkedIn search results:** 10 people searched and 2 placed, Petr Janda in Copenhagen and Stephen O'Kennedy in Dublin.
+- **Other city files:** Erica Louie, Hicham Babahmed and Benoit Perigaud are placed from the same person's record in another city's file.
 
-### Step 7: Location pass and LinkedIn pass
+## 2. What didn't work here
 
-- **Location pass:** people were placed from public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
-  - An in-person talk or host role at a chapter event since 2024-10, at an employer with a Copenhagen office, gave 9 medium-confidence calls.
-  - A Sessionize page placed Kshitij Aranke in London.
-  - Meetup member profiles tied to a person placed Johan Baltzar in Stockholm and Ernesto Ongaro in Dublin. Each member had joined, by RSVP, the Stockholm dbt meetup where that person spoke.
-  - Together they placed 12 people: 9 in Copenhagen and 3 elsewhere.
-- **LinkedIn pass:** search results only, never a LinkedIn page. 10 people were searched and 2 placed: Petr Janda in Copenhagen and Stephen O'Kennedy in Dublin.
-- **Yield:** 14 people placed across both passes. 3 more (Erica Louie, Hicham Babahmed and Benoit Perigaud) are placed from the same person's record in another city's file. 12 are still unknown.
+- **Web search:** ran out after about 15 calls. Page fetches, the Meetup data and the GitHub user search covered the rest.
+- **Medium feeds:** HTTP 429 (too many requests) from the start, including Pleo, Lunar, Trustpilot and Too Good To Go. No company-blog authors were found.
+- **[Intellishore insights](https://intellishore.dk/insights/) and the [LEAP website](https://leap-consulting.dk/):** no dbt content.
+- **[Fabric & Power BI User Group Denmark](https://www.meetup.com/denmark-powerbi-user-group/):** mostly online speakers from other countries.
+- **[Analytics Pioneers Copenhagen](https://www.meetup.com/analytics-pioneers-copenhagen/):** online trainings by a German agency.
+- **[R-Ladies Copenhagen](https://www.meetup.com/rladies-copenhagen/) and [Copenhagen Women in Machine Learning & Data Science](https://www.meetup.com/copenhagen-women-in-machine-learning-and-data-science/):** no events since 2019.
+- **[thehub.io](https://thehub.io/jobs?search=dbt):** it loads results in the browser, so a fetch saw only 3 ads from outside Denmark.
+- **Jobindex ads:** they link off-site, so the dbt wording was visible for one ad only.
+- **[dbt Summit speakers page](https://www.getdbt.com/dbt-summit/speakers):** it now shows only the 2027 waitlist.
+- **GitHub learning repositories:** a "dbt-learn" or "dbt-training" repo is not published content. Those people are recorded with no public content.
 
-## 2. What we learnt
+## 3. Companies looked at
 
-- **Sources that worked:**
-  - **Meetup's `gql2` endpoint** returns every past event for a group. `eventSearch` also finds upcoming chapter events.
-  - **Copenhagen Data Engineering and Databricks User Group Denmark** name every speaker with an employer.
-  - **The GitHub user search** found the first-time speakers that blogs could not.
-  - **Snowflake User Group Denmark** pages are rendered on the server, so a fetch returns the speakers.
-- **Sources that didn't:**
-  - **Medium feeds** returned HTTP 429 from the start. Danish company engineering blogs were not reachable.
-  - **The [dbt Summit speakers page](https://www.getdbt.com/dbt-summit/speakers)** now shows only the 2027 waitlist.
-  - **Jobindex ads** link off-site, so the dbt wording was visible for one ad only.
-- **Watch out for:**
-  - **Few first-time speakers.** Most Danish leads are proven speakers from Databricks, Snowflake and data engineering meetups, where dbt rarely appears in titles.
-  - **Aarhus counts as local.** Several speakers at Databricks and Snowflake user group events work in Aarhus. Commuter towns are local for this chapter, so they are marked in the region.
-  - **dbt Labs staff are labelled.** Seven past chapter speakers work at dbt Labs. They can speak, but check the line-up has practitioners first.
+- **LEAP organises and hosts the chapter.** LEAP also co-organises the Snowflake User Group Denmark.
+- **Proven speakers outnumber first-time speakers.** Most Danish leads are proven speakers from Databricks, Snowflake and data engineering meetups, where dbt rarely appears in titles.
+- **Aarhus employers count as local.** Several speakers at Databricks and Snowflake user group events work in Aarhus, so they are marked in the region.
+- **dbt Labs staff are labelled.** Seven past chapter speakers work at dbt Labs.
 
-## 3. Key leads
+<!-- companies:start -->
+72 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-- **First-time speakers** (people who publish about dbt but have no talk on record):
+<details><summary><b>Strong dbt use</b> (27)</summary>
+
+Ageras (local presence not confirmed), Better Collective, Dagrofa, dbt Labs (local presence not confirmed), DUOS, group.one, Intellishore (local presence not confirmed), Keepit (local presence not confirmed), LEAP, LEGO Group, LEO Pharma (local presence not confirmed), Lunar, Lundbeck, Mrs Wordsmith (local presence not confirmed), Novo Holdings, Omni (local presence not confirmed), Pas Normal Studios, Pleo, Qarma (local presence not confirmed), Steep (local presence not confirmed), SYNQ, TDC Net (local presence not confirmed), TooGoodToGo, VELUX, Veo Technologies, Vipps MobilePay, ZeroNorth (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (22)</summary>
+
+7N, Ascendis Pharma, BESTSELLER, Coelacanth Company (local presence not confirmed), DK Company (local presence not confirmed), Flatpay, Genmab, GoWish, Hamamatsu Photonics, HelloFresh (local presence not confirmed), Heyra, Inspari, Knowit (local presence not confirmed), Quiver, ROCKWOOL Group, Santander Nordics (local presence not confirmed), Saxo Bank, Scania Danmark (local presence not confirmed), Snowflake, Spirii, Trustpilot, Udviklings- og Forenklingsstyrelsen (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (21)</summary>
+
+3Shape, ADAMATICS (local presence not confirmed), Alipes (local presence not confirmed), cloud2 (local presence not confirmed), COWI, Devoteam, DSV, Electricity Maps, Everllence (local presence not confirmed), Implement Consulting Group, Maersk, Milestone Systems (local presence not confirmed), Nordea, Nordea Asset Management, Norlys, SimCorp, Sparekassen Sjælland (local presence not confirmed), Topsøe, twoday, Unity, Ørsted
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+Copenhagen Data Engineering, TechWomen Cph
+
+</details>
+
+<details><summary><b>Other sources checked</b> (21)</summary>
+
+- Local chapter history (enriched/copenhagen-dbt-meetup.json): `enriched/copenhagen-dbt-meetup.json`
+- [Copenhagen dbt Meetup vol. 11 (upcoming)](https://www.meetup.com/copenhagen-dbt-meetup/events/316677743/)
+- [Copenhagen Data Engineering (meetup.com)](https://www.meetup.com/copenhagen-data-engineering/)
+- [Databricks User Group Denmark](https://www.meetup.com/databricks-user-group-denmark/)
+- [Snowflake User Group Denmark](https://usergroups.snowflake.com/denmark/)
+- [PyData Copenhagen](https://www.meetup.com/pydata-copenhagen/)
+- [TechWomen Cph](https://www.meetup.com/techwomen-cph/)
+- [R-Ladies Copenhagen](https://www.meetup.com/rladies-copenhagen/) (nothing useful)
+- [Copenhagen Women in Machine Learning & Data Science](https://www.meetup.com/copenhagen-women-in-machine-learning-and-data-science/) (nothing useful)
+- [Fabric & Power BI User Group Denmark](https://www.meetup.com/denmark-powerbi-user-group/) (nothing useful)
+- [Analytics Pioneers Copenhagen](https://www.meetup.com/analytics-pioneers-copenhagen/) (nothing useful)
+- [SYNQ customer stories](https://www.synq.io/customers)
+- [Mikkel Dengsøe Substack](https://mikkeldengsoe.substack.com/archive)
+- [Jobindex search 'dbt'](https://www.jobindex.dk/jobsoegning?q=dbt)
+- [TheirStack companies using dbt in Denmark](https://theirstack.com/en/technology/dbt/dk)
+- [GitHub user search (dbt / analytics engineer, Denmark)](https://github.com/search?q=location%3ACopenhagen+dbt&type=users)
+- [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers) (nothing useful)
+- [Medium publication feeds (Pleo, Lunar, Trustpilot, Too Good To Go and others)](https://medium.com/feed/pleo) (nothing useful)
+- [thehub.io dbt search](https://thehub.io/jobs?search=dbt) (nothing useful)
+- [Intellishore insights](https://intellishore.dk/insights/) (nothing useful)
+- [LEAP website](https://leap-consulting.dk/) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
+
+- **First-time speakers:**
   - **Alin Preda (group.one):** [docbt](https://github.com/aleenprd/docbt), an open-source tool on PyPI that writes dbt model documentation. Also a [dbt project on Bilka To Go data](https://github.com/aleenprd/bilka2go-dbt).
   - **Måns Strömer (Quiver):** [an end-to-end dbt and Metabase project](https://github.com/Mansstromer/lundahoj-analytics) on live bike-rental data.
   - **Jasper Alblas (Sparekassen Sjælland):** a [data engineering for beginners series](https://www.jalblas.com/blog/category/data-engineering/) and a [dbt tutorial](https://github.com/JAlblas/dbt-tutorial).
@@ -111,58 +151,39 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Kilian Tscherny (Heyra):** [agentic data engineering](https://www.meetup.com/copenhagen-data-engineering/events/314765565/). A past chapter speaker with new evidence.
   - **Frederik Juhl Pedersen (Veo Technologies):** [a dbt Data Vault that scales with AI](https://www.meetup.com/copenhagen-dbt-meetup/events/313402013/), at chapter vol. 9.
 - **Connectors:**
-  - **Martin Birk Andreasen (LEAP):** co-organises the [Snowflake User Group Denmark](https://usergroups.snowflake.com/denmark/). LEAP also organises and hosts the chapter.
+  - **Martin Birk Andreasen (LEAP):** co-organises the [Snowflake User Group Denmark](https://usergroups.snowflake.com/denmark/).
   - **Kathrine Sofie Rasmussen (LEAP):** part of the chapter's organising team.
   - **Rune Bendix Wittchen (Devoteam) and Sukru Gursoy (Snowflake):** lead the Snowflake User Group Denmark.
   - **Dilovan Celik:** organiser of [Copenhagen Data Engineering](https://www.meetup.com/copenhagen-data-engineering/), with 1,483 members.
   - **Anders Bogsnes (Nordea Asset Management):** organiser of [PyData Copenhagen](https://www.meetup.com/pydata-copenhagen/).
   - **Farzad Bonabi (twoday):** runs the Databricks User Group Denmark meetups hosted at twoday.
 
-## 4. Before outreach
+## 5. Before outreach
 
-- **Check the "Denmark" calls.** 4 people marked in the region give only "Denmark" as their city.
-- **Check most "in region" calls.** Only 10 of the 71 people marked in the region have a location note with evidence. The rest were placed from an event city or an employer's office during research.
-- **Don't invite the vol. 11 speakers for that event.** Rasmus Rottwitt, Ernesto Ongaro and Hicham Babahmed speak on 2026-10-21.
-- **dbt Labs staff are labelled.** Benoit Perigaud, Nina Anderson and Rachel Ryan are tier 1 and work there. They can speak, but check the line-up has practitioners first.
-- **Check people who have moved:**
+- [ ] **Check the "Denmark" calls.** 4 people marked in the region give only "Denmark" as their city.
+- [ ] **Check most "in region" calls.** Only 10 of the 71 people marked in the region have a location note with evidence. The rest were placed from an event city or an employer's office during research.
+- [ ] **Don't invite the vol. 11 speakers for that event.** Rasmus Rottwitt, Ernesto Ongaro and Hicham Babahmed speak on 2026-10-21.
+- [ ] **dbt Labs staff are labelled.** Benoit Perigaud, Nina Anderson and Rachel Ryan are tier 1 and work there. They can speak, but check the line-up has practitioners first.
+- [ ] **Check people who have moved:**
   - Kilian Tscherny spoke at vol. 6 for Skatteguiden and now leads data engineering at Heyra.
   - Henrik Varmer is now Head of Data Engineering at VELUX.
   - Stephen O'Kennedy's search result names Kinertic, not ZeroNorth.
   - Van Bui has a second GitHub account that names Ageras.
-- **Treat Jobindex ads as medium.** Only Dagrofa's ad visibly says dbt.
-- **Check one weak location.** Martha Scheffler is tier 1. Qarma's Danish office is in Aarhus, which counts as local, but Martha Scheffler's own location is unconfirmed.
+- [ ] **Treat Jobindex ads as medium.** Only Dagrofa's ad visibly says dbt.
+- [ ] **Check one weak location.** Martha Scheffler is tier 1. Qarma's Danish office is in Aarhus, which counts as local, but Martha Scheffler's own location is unconfirmed.
 
-## 5. Next run
+## 6. Next run
 
-- **People still without a location:** 15, mostly chapter speakers and dbt Labs staff.
-- **Company blogs:** retry the Pleo, Lunar, Trustpilot and Too Good To Go feeds before the Medium rate limit starts.
-- **LinkedIn URLs:** the Snowflake User Group Denmark pages link many profiles. Find those people through search results instead.
-- **Job ads:** open the Jobindex ads to read the dbt wording. Try thehub.io in a browser.
-- **Women-in-data:** ask TechWomen Cph for introductions to data and analytics engineering speakers.
-- **Chapter history:** after 2026-10-21, refresh the chapter history so vol. 11 is included.
-- **dbt Slack:** check the [#local-denmark](https://slack.getdbt.com/) channel by hand.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of Danish companies that use dbt, and people who could speak
-at or attend the Copenhagen dbt Meetup. The file is copenhagen/copenhagen_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Read copenhagen/SEARCH_METHOD.md first, then
-research/README.md, research/raw-format.md, research/location-task.md and
-research/linkedin-task.md. Keep the shared schema (berlin_planning/SEARCH_METHOD.md §3).
-The region is the Copenhagen metro area; Aarhus counts as local, since commuter towns are
-local for this chapter.
-
-Try first: new events since metadata.generated_at from Copenhagen Data Engineering,
-Databricks User Group Denmark, Snowflake User Group Denmark and TechWomen Cph (Meetup gql2),
-the GitHub user search for dbt repos, the Pleo, Lunar and Trustpilot Medium feeds, and the
-Jobindex ads opened one by one. Then LinkedIn searches for people still without a location.
-
-Rules: never fetch LinkedIn pages, and take LinkedIn URLs only from search results;
-public professional information only; never guess gender, and record pronouns only when
-self-stated. Assemble with research/assemble.py --base, place people with
-research/apply_locations.py, then run research/validate.py and add a change-log row below.
-````
+- **Sources to try first:**
+  - **Meetups:** new events from Copenhagen Data Engineering, Databricks User Group Denmark, Snowflake User Group Denmark and TechWomen Cph.
+  - **GitHub:** re-run the user search for dbt repos.
+  - **Company blogs:** retry the Pleo, Lunar, Trustpilot and Too Good To Go feeds before the Medium rate limit starts.
+  - **Job ads:** open the Jobindex ads one by one to read the dbt wording. Try thehub.io in a browser.
+  - **Women-in-data:** ask TechWomen Cph for introductions to data and analytics engineering speakers.
+  - **Chapter history:** after 2026-10-21, refresh the chapter history so vol. 11 is included.
+  - **dbt Slack:** check the [#local-denmark](https://slack.getdbt.com/) channel by hand.
+- **People to locate:** 12 people have no known location, mostly chapter speakers and dbt Labs staff. The Snowflake User Group Denmark pages link many LinkedIn profiles, so find those people through search results.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `copenhagen/copenhagen_dbt_companies.json`, the Copenhagen dbt Meetup, `../enriched/copenhagen-dbt-meetup.json` and the region the Copenhagen metro area, with Aarhus counted as local.
 
 ## Change log
 

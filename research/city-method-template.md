@@ -1,48 +1,44 @@
-# <City> dbt search: method, lessons and replication prompt
+# <City>: city notes
 
-This file goes with `<city>_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to <City>. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
+- **Chapter:** [<chapter name>](<meetup url>), data in `<city>_dbt_companies.json`
+- **Region:** <what counts as local, including commuter towns within about an hour>
 - **First built:** <date>
-- **Goal:** find people in <region> who could **speak at** (or attend) the <chapter name>, and the local companies that use dbt.
-- **Region:** <what counts as in region, e.g. "Greater London" or "the Netherlands">
 
 <!-- at-a-glance:start -->
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in <City>
 
-One `### Step N: <source group>` per source group the run used, in the order they mattered. For each, say what was checked and what it yielded, in 2–5 bullets. Typical groups:
+One bold-labelled bullet per source that yielded people or companies, best first, each with its link and what it gave. Group under `### ` subheadings only when there are more than about 8 sources (for example "Meetups and conferences", "Company blogs", "Women-in-data communities", "Job ads", "Locations").
 
-- chapter history (past speakers, added by the assembler)
-- other local meetups and conferences
-- company and consultancy blogs
-- women-in-data communities, sourced through their own events
-- job ads
-- location pass (page fetches) and LinkedIn pass
+## 2. What didn't work here
 
-## 2. What we learnt
+One bullet per source that failed or gave nothing, with the link and the reason. City-specific only: the cross-city lessons are in the central method.
 
-- **Sources that worked:** bullets, each naming the source and why it worked.
-- **Sources that didn't:** bullets, each naming the source and what went wrong.
-- **Watch out for:** city-specific traps (a consultancy that dominates, stale titles, a placeholder employer, duplicates).
+## 3. Companies looked at
 
-## 3. Key leads
+1–4 bullets on what stands out: who hosts the chapter, which companies or consultancies dominate the leads, which large employers use a different stack. The full list below is generated from the data.
+
+<!-- companies:start -->
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers:** the 3–5 strongest, each with name, employer, what they wrote and a link.
 - **Anchor speakers:** 2–4 proven speakers for a line-up.
 - **Connectors:** community organisers who can introduce people.
 
-## 4. Before outreach
+## 5. Before outreach
 
-Bullets: what the organiser must check (unverified locations, tier-1 people raised by the rule, possible duplicates, people already booked).
+Checkboxes for what the organiser must check in this city: unconfirmed locations, tier-1 people raised by the rule, possible duplicates, people already booked, labelled dbt Labs or Fivetran staff.
 
-## 5. Next run
+## 6. Next run
 
-Bullets: sources not yet searched, people still without a location, and what to try first.
-
-## 6. Replication prompt
-
-A fenced prompt, about 15 lines, that a new session can paste to extend this city. It names the file, the region, the briefs in `../research/`, the sources to try first, and the rules (no LinkedIn page fetches, only search results; professional information only; validate before finishing).
+- **Sources to try first:** bullets, city-specific.
+- **People to locate:** who is still unknown and where to look.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with this city's file, chapter, enriched file and region, plus any city-specific line (for example "search in Japanese").
 
 ## Change log
 

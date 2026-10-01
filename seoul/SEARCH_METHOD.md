@@ -1,10 +1,10 @@
-# Seoul dbt search: method, lessons and replication prompt
+# Seoul: city notes
 
-This file goes with `seoul_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Seoul. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-10-01
-- **Goal:** find people in the Seoul Capital Area who could **speak at** (or attend) the [Seoul dbt Meetup](https://www.meetup.com/seoul-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [Seoul dbt Meetup](https://www.meetup.com/seoul-dbt-meetup/), data in `seoul_dbt_companies.json`
 - **Region:** the Seoul Capital Area. That is Seoul, Incheon and Gyeonggi, so Bucheon and Seongnam (Pangyo) count. Sejong does not.
+- **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -25,75 +25,115 @@ This file goes with `seoul_dbt_companies.json`. It explains how the dataset was 
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Seoul
 
-Web search ran out after 15 calls, in English and Korean. The rest of the run used direct fetches and open APIs only. Korean names are romanised family name first, unless the person shows their own spelling.
+Search in English and Korean. Korean names are romanised family name first, unless the person shows a preferred spelling.
 
-### Step 1: Other local meetups and user groups
+### Meetups and user groups
 
-- **[Apache Airflow Korea User Group](https://www.meetup.com/korea-apache-airflow-user-group/):** 6 meetups, read through Meetup's `gql2` endpoint, the [forum](https://discourse.airflow-kr.org/) and the [YouTube channel](https://www.youtube.com/@Airflow-users-Korea). It gave one dbt talk and one semantic layer talk, plus many Airflow speakers.
+- **[Apache Airflow Korea User Group](https://www.meetup.com/korea-apache-airflow-user-group/):** Seoul's dbt-related talks happen here and at Flakers, not at dbt-only events. 6 meetups were read through Meetup's `gql2` endpoint, the [forum](https://discourse.airflow-kr.org/) and the [YouTube channel](https://www.youtube.com/@Airflow-users-Korea). It gave one dbt talk and one semantic layer talk, plus many Airflow speakers.
 - **[Snowflake Korea User Group (Flakers)](https://usergroups.snowflake.com/seoul/):** 5 meetups from 2023 to 2024, read through the Snowflake user-group API. It gave a Snowflake + dbt + Airflow session.
 - **[AWSKRUG](https://www.meetup.com/awskrug/):** 600 events scanned, with few data warehouse talks.
-- **Empty:** the [Databricks Korea User Group](https://usergroups.databricks.com/databricks-korea-user-group-krug/) lists no events. [Snowflake World Tour Seoul 2026](https://www.snowflake.com/events/snowflake-world-tour-seoul/) names no speakers. The [dbt Summit agenda](https://www.getdbt.com/dbt-summit/agenda) and dbt Champions pages show no Korean companies.
+- **[PyLadies Seoul](https://www.meetup.com/seoul-pyladies-meetup/):** 39 events. The talks are Python and data analysis, not dbt. 2 speakers are tagged from it.
+- **Chapter history:** every named speaker from `../enriched/seoul-dbt-meetup.json` was added. That covers 12 events, from meetup #0 (2023-08-24) to meetup #10 (2026-09-17). Every past Seoul dbt event was held in person, mostly in Gangnam.
 
-### Step 2: Job ads
+### Job ads
 
-- **[wanted.co.kr](https://www.wanted.co.kr/search?query=dbt):** its open search API (`api/chaos/search/v1/position`) and job detail API (`api/v4/jobs/<id>`) need no login.
-- **Queries:** dbt, analytics engineer, data engineer, Snowflake and BigQuery.
-- **Yield:** 284 ads read, and 28 ads at 24 companies that mention the word dbt are in the file. Examples are Toss Income, Hyperconnect, Buzzvil, Next Securities and AITRICS.
-- **No posting dates:** the fields read do not include one. All ads are recorded as seen on 2026-10-01.
+- **[wanted.co.kr](https://www.wanted.co.kr/search?query=dbt):** the fastest way to find Seoul dbt employers. The open search API (`api/chaos/search/v1/position`) and job detail API (`api/v4/jobs/<id>`) need no login. The queries were dbt, analytics engineer, data engineer, Snowflake and BigQuery. 284 ads were read, and 28 ads at 24 companies that mention the word dbt are in the file. Examples are Toss Income, Hyperconnect, Buzzvil, Next Securities and AITRICS.
 
-### Step 3: Blogs and open source
+### Blogs and open source
 
-- **[velog dbt tag](https://velog.io/tags/dbt):** 18 posts. The page is server-rendered and lists author handles and dates. Most posts are study notes with no employer.
-- **Tech blog feeds:** about 30 were read.
-  - [Toss tech blog](https://toss.tech/): a Toss Securities post confirms its batch pipelines run on dbt.
-  - [SOCAR tech blog](https://tech.socar.kr/data/2022/07/25/analytics-engineering-with-dbt): a 2022 dbt post by a past chapter speaker.
-  - [Woowahan](https://techblog.woowahan.com/), Kakao, Hyperconnect, Buzzvil, Banksalad, Kakaobank, Devsisters, Inflab and Ohouse: no dbt posts.
-  - [Karrot (Daangn)](https://medium.com/daangn) and most other Korean blogs on Medium were blocked (HTTP 403 and 429).
+- **[velog dbt tag](https://velog.io/tags/dbt):** 18 posts. The page is server-rendered and lists author handles and dates. The velog profile API gives bios and GitHub links. Most posts are study notes with no employer.
+- **[Toss tech blog](https://toss.tech/):** a Toss Securities post confirms its batch pipelines run on dbt.
+- **[SOCAR tech blog](https://tech.socar.kr/data/2022/07/25/analytics-engineering-with-dbt):** a 2022 dbt post by a past chapter speaker.
 - **GitHub user search** (location Seoul or Korea): one strong open-source lead, and several profiles with no public content.
 
-### Step 4: Women-in-data communities
+### Locations
 
-This step looks for speakers through women-focused groups' own events. It never labels or guesses anyone's gender.
+- **Meetup `gql2`:** returns each event's hosts and RSVPs with the profile city, along with past events and venues, in one call. A host or an RSVP to the event where the person spoke gave high confidence.
+- **velog and GitHub:** the velog profile API gave bios and GitHub links. GitHub HTML profile pages still show the location after the API's rate limit.
+- **Recent chapter talks:** an in-person talk in the last 2 years at an employer with a Seoul office gave medium confidence.
+- **LinkedIn search results:** placed 1 person, Jean-Christophe Gnansounou (Cartier, Seoul). A tied profile came back for only 1 of the 11 people searched.
+- **Yield:** 15 people placed across both passes, and 12 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
-- **[PyLadies Seoul](https://www.meetup.com/seoul-pyladies-meetup/):** 39 events. Its talks are Python and data analysis, not dbt. 2 speakers are tagged from it.
-- **Not found:** Women Who Code, R-Ladies and WiMLDS have no Seoul groups on Meetup.
+## 2. What didn't work here
 
-### Step 5: Chapter history
+- **Web search:** ran out after 15 calls, in English and Korean. The rest of the run used direct fetches and open APIs only.
+- **[Databricks Korea User Group](https://usergroups.databricks.com/databricks-korea-user-group-krug/):** lists no events.
+- **[Snowflake World Tour Seoul 2026](https://www.snowflake.com/events/snowflake-world-tour-seoul/):** names no speakers.
+- **[dbt Summit agenda](https://www.getdbt.com/dbt-summit/agenda) and dbt Champions pages:** show no Korean companies.
+- **wanted.co.kr posting dates:** the fields read do not include one. All ads are recorded as seen on 2026-10-01.
+- **Tech blog feeds without dbt posts:** about 30 feeds were read. [Woowahan](https://techblog.woowahan.com/), Kakao, Hyperconnect, Buzzvil, Banksalad, Kakaobank, Devsisters, Inflab and Ohouse had none.
+- **Medium:** [Karrot (Daangn)](https://medium.com/daangn) and most other Korean blogs on Medium were blocked (HTTP 403 and 429). The authors of the Karrot and other company dbt posts could not be confirmed.
+- **Women-in-data groups:** Women Who Code, R-Ladies and WiMLDS have no Seoul groups on Meetup.
 
-- **Past speakers and hosts:** every named speaker from `../enriched/seoul-dbt-meetup.json` was added. That covers 12 events, from meetup #0 (2023-08-24) to meetup #10 (2026-09-17).
-- **All in person:** every past Seoul dbt event was held in person, mostly in Gangnam.
+## 3. Companies looked at
 
-### Step 6: Location pass and LinkedIn pass
+- **No employer found:** 21 people sit under "Independent / no company". Many are Airflow Korea speakers.
+- **Confirmed dbt users:** Toss Securities runs its batch pipelines on dbt, and the job ads add 24 companies that name dbt.
 
-- **Location pass:** people were placed from public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
-  - Meetup's `gql2` endpoint returns each event's hosts and RSVPs with their profile city. A host or an RSVP to the event where the person spoke gave high confidence.
-  - The velog profile API gave bios and GitHub links. GitHub HTML profile pages still show the location after the API's rate limit.
-  - An in-person talk in the last 2 years at an employer with a Seoul office gave medium confidence.
-- **LinkedIn pass:** search results only, never a LinkedIn page. It placed 1 person, Jean-Christophe Gnansounou (Cartier, Seoul).
-- **Yield:** 15 people placed across both passes, and 12 still unknown.
+<!-- companies:start -->
+57 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-## 2. What we learnt
+<details><summary><b>Strong dbt use</b> (27)</summary>
 
-- **Sources that worked:**
-  - **Airflow Korea and Flakers.** Seoul's dbt-related talks happen at these two user groups, not at dbt-only events.
-  - **wanted.co.kr's open APIs.** They are the fastest way to find Seoul dbt employers.
-  - **Meetup `gql2`.** It gave past events, venues, hosts and RSVPs with profile cities in one call.
-  - **velog.** The tag page and profile API give handles, dates, bios and GitHub links.
-- **Sources that didn't:**
-  - **Medium** blocked fetches, so the authors of the Karrot and other company dbt posts could not be confirmed.
-  - **Snowflake and dbt Labs event pages** name no Korean speakers.
-  - **LinkedIn** found a tied profile for only 1 of the 11 people searched.
-- **Watch out for:**
-  - **Romanised names.** Most new names come from Korean listings. Check the spelling with each person.
-  - **"Independent / no company".** 21 people sit here because no employer was found. Many are Airflow Korea speakers.
-  - **One multi-speaker talk.** Meetup #2 had four speakers on one talk. Their titles came through as one string: "dbt Labs; Snowflake; Pinnu Analytics; DataMarketingKorea".
-  - **Organisers' Meetup cities are stale.** Joshua Kim's profile says Toronto, and Kyung-jun Lee's says Sejong. Both organise in-person events in Seoul.
+AB180, Ajeong Networks, Boosters, Buzzvil, Cartier (local presence not confirmed), Databricks (local presence not confirmed), DataMarketingKorea (local presence not confirmed), dbt Community Korea (local presence not confirmed), dbt Labs (local presence not confirmed), Fivetran (local presence not confirmed), Gear Second, Hyperconnect, Imagoworks, IoTrust (local presence not confirmed), Karrot (Daangn Market), Konny by Erin, National Vision Inc. (local presence not confirmed), NFTBank (local presence not confirmed), Pinnu Analytics (local presence not confirmed), Snowflake (local presence not confirmed), Snowflake Korea, SOCAR (local presence not confirmed), Toss Income, Toss Securities, Willog, Wrtn Technologies (local presence not confirmed), Zigbang (local presence not confirmed)
 
-## 3. Key leads
+</details>
 
-- **First-time speakers** (people who publish about dbt but have no talk on record):
+<details><summary><b>Some dbt signal</b> (12)</summary>
+
+Apache Airflow Korea User Group, Cubig, Deloitte Korea, F&L Corporation, Fairsquare Lab, Healingpaper (Gangnam Unni), Hwahae Global, Macaron Factory, Medit, Megazone Cloud, Snowflake Korea User Group (Flakers), Woongjin Thinkbig
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (6)</summary>
+
+AITRICS, Asta, iShopCare, Next Securities, Seers Technology, Wished
+
+</details>
+
+<details><summary><b>Not verified</b> (9)</summary>
+
+ABLY, Bucketplace (Ohouse), Dataknows, Datarize, DK BMC, Loplat, Nexon Korea, NSUSLAB, The Pinkfong Company
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (3)</summary>
+
+AWSKRUG data group, Channel Corp, PyLadies Seoul
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (1)</summary>
+
+- https://medium.com/daangn
+
+</details>
+
+<details><summary><b>Other sources checked</b> (14)</summary>
+
+- [wanted.co.kr search and job APIs](https://www.wanted.co.kr/search?query=dbt)
+- [Apache Airflow Korea User Group (Meetup, forum, YouTube)](https://www.meetup.com/korea-apache-airflow-user-group/)
+- [Snowflake Korea User Group (Flakers)](https://usergroups.snowflake.com/seoul/)
+- [PyLadies Seoul](https://www.meetup.com/seoul-pyladies-meetup/)
+- [AWSKRUG data group](https://www.meetup.com/awskrug/)
+- [velog dbt tag](https://velog.io/tags/dbt)
+- [Toss tech blog](https://toss.tech/)
+- [SOCAR tech blog](https://tech.socar.kr/data/2022/07/25/analytics-engineering-with-dbt)
+- [Karrot (Daangn) Medium](https://medium.com/daangn) (nothing useful)
+- [Databricks Korea User Group (KRUG)](https://usergroups.databricks.com/databricks-korea-user-group-krug/) (nothing useful)
+- [Woowahan, Kakao, Hyperconnect, Buzzvil, Banksalad, Kakaobank, Devsisters, Inflab, Ohouse feeds](https://techblog.woowahan.com/) (nothing useful)
+- [Snowflake World Tour Seoul 2026](https://www.snowflake.com/events/snowflake-world-tour-seoul/) (nothing useful)
+- [dbt Summit agenda and dbt Champions pages](https://www.getdbt.com/dbt-summit/agenda) (nothing useful)
+- [Women Who Code, R-Ladies, WiMLDS Seoul](https://www.meetup.com/) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
+
+- **First-time speakers:**
   - **Byungsu Kang (Toss Securities):** leads the realtime data team. A [post on lineage](https://toss.tech/article/toss-securities-visualize-lineage) says the batch pipelines all run on dbt.
   - **PresentJay (AB180):** built [dbt-plan](https://github.com/PresentJay/dbt-plan), which flags breaking schema changes before `dbt run`. The real name is not shown.
   - **Moon Ju-eun:** wrote [Establishing DBT standards](https://velog.io/@juliy9812/Establishing-DBT-standards) and a post on dbt model performance. No employer is stated.
@@ -104,54 +144,40 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Chris Song:** Snowflake + dbt + Airflow sessions at [Flakers](https://usergroups.snowflake.com/seoul/) in 2023 and a [2024 startup meetup](https://discourse.airflow-kr.org/t/49).
   - **Seongyun Byeon (Kyle School):** ex-SOCAR director of data and Google Cloud expert, with [dbt + BigQuery posts](https://zzsza.github.io/data-engineering/2025/01/30/dbt-with-bigquery/) in 2025.
   - **Riven Lee (Wrtn):** [spoke at meetup #9](https://www.meetup.com/seoul-dbt-meetup/events/315240680/) on migrating from dbt Core to dbt Fusion.
-- **Connectors** (people who can introduce others):
+- **Connectors:**
   - **Chapter hosts:** Herick Jee and Abi Adebayo hosted [meetups #0 to #7](https://www.meetup.com/seoul-dbt-meetup/events/312130999/). Thomas Kim (Fivetran) and Hangyeol Seo co-host [the recent ones](https://www.meetup.com/seoul-dbt-meetup/events/316380348/).
   - **Yeonguk Choo:** organises [Airflow Korea](https://www.meetup.com/korea-apache-airflow-user-group/) and is an Apache Airflow committer. The group already lets the chapter post meetups on its forum.
   - **Soo Lee and Jihwan Hyun:** lead the [Snowflake Korea User Group](https://usergroups.snowflake.com/seoul/).
   - **Seongyun Byeon:** ran 글또, a developer writing group of 639 members.
-  - **[PyLadies Seoul](https://www.meetup.com/seoul-pyladies-meetup/):** ran a 2025 workshop that helped women submit their first talks. Ask the organisers for introductions.
+  - **[PyLadies Seoul](https://www.meetup.com/seoul-pyladies-meetup/):** ran a 2025 workshop that helped women submit first talks. Ask the organisers for introductions.
 
-## 4. Before outreach
+## 5. Before outreach
 
-- **Check most "in region" calls.** Only 13 of the people marked in the region have a location note with evidence. The rest were placed in Seoul from their listing during research.
-- **Merge one duplicate.** Joshua Kim appears twice, as `joshua-kim` and `joshua-kim-jinsuk-kim` (IoTrust), with the same three chapter talks.
-- **Check possible duplicates:**
-  - **Jihwan Hyun:** the dbt Project on Snowflake talk lists only "지환" of the dbt Seoul community.
-  - **Kyung-jun Lee:** "이경준", who spoke at the 4th Airflow Korea meetup, may be the same person, so was not added again.
-  - **Chris Song:** probably the same person as 송호연, formerly VP at NFTBank.
-- **Check two organisers' locations.** Joshua Kim and Kyung-jun Lee stay unknown because their Meetup cities conflict with their Seoul roles.
-- **Check tier 1.** Jung Won-hyung is a job seeker who writes about dbt. The tier rule put this lead in tier 1, but a lightning talk fits better.
-- **dbt Labs staff are labelled.** Benoit Perigaud works there and is in Madrid. Thomas Kim works at Fivetran, so is labelled too. They can speak, but check the line-up has practitioners first.
-- **Check speakers based elsewhere.** Zoe Yim spoke at meetup #9 but is in Atlanta.
+- [ ] **Check most "in region" calls:** only 13 of the people marked in the region have a location note with evidence. The rest were placed in Seoul from the listing during research.
+- [ ] **Check romanised names:** most new names come from Korean listings. Check the spelling with each person.
+- [ ] **Merge one duplicate:** Joshua Kim appears twice, as `joshua-kim` and `joshua-kim-jinsuk-kim` (IoTrust), with the same three chapter talks.
+- [ ] **Check Jihwan Hyun:** the dbt Project on Snowflake talk lists only "지환" of the dbt Seoul community.
+- [ ] **Check Kyung-jun Lee:** "이경준", who spoke at the 4th Airflow Korea meetup, may be the same person, so was not added again.
+- [ ] **Check Chris Song:** probably the same person as 송호연, formerly VP at NFTBank.
+- [ ] **Split one multi-speaker talk:** meetup #2 had four speakers on one talk. The titles came through as one string: "dbt Labs; Snowflake; Pinnu Analytics; DataMarketingKorea".
+- [ ] **Check two organisers' locations:** Joshua Kim's Meetup profile says Toronto, and Kyung-jun Lee's says Sejong. Both organise in-person events in Seoul, so both stay unknown.
+- [ ] **Check tier 1:** Jung Won-hyung is a job seeker who writes about dbt. The tier rule put Jung Won-hyung in tier 1, but a lightning talk fits better.
+- [ ] **Balance dbt Labs and Fivetran staff:** Benoit Perigaud works at dbt Labs and is in Madrid. Thomas Kim works at Fivetran, so is labelled too. Both can speak, but check the line-up has practitioners first.
+- [ ] **Check speakers based elsewhere:** Zoe Yim spoke at meetup #9 but is in Atlanta.
 
-## 5. Next run
+## 6. Next run
 
-- **LinkedIn:** search the past speakers still unknown and not yet searched: Louis Lee and Wynn Park.
-- **Blogs on Medium:** try the browser, or the publication's RSS feed, for Karrot, IoTrust, Musinsa and Yogiyo.
-- **GitHub locations:** check the accounts linked from Seokjin Han's and zuckerfrei's velog bios.
-- **Job ads:** re-run the wanted.co.kr queries, and add the Lever, Greenhouse and Ashby `site:` searches.
-- **Women-in-data:** ask PyLadies Seoul about speakers from its first-talk workshop.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of Seoul Capital Area companies that use dbt, and people who could
-speak at or attend the Seoul dbt Meetup. The file is seoul/seoul_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Read seoul/SEARCH_METHOD.md first, then
-research/README.md, research/raw-format.md, research/location-task.md and
-research/linkedin-task.md. Keep the shared schema (berlin_planning/SEARCH_METHOD.md §3).
-
-Try first: new Airflow Korea and Snowflake Korea (Flakers) events through Meetup gql2 and
-discourse.airflow-kr.org/search.json; new Seoul dbt Meetup events; the wanted.co.kr search API
-(api/chaos/search/v1/position) for ads that contain the whole word "dbt"; the velog dbt tag;
-and Korean company blogs on Medium through the browser. Romanise Korean names family name
-first unless the person shows their own spelling, and give each an ASCII id.
-
-Rules: never fetch LinkedIn pages, only use search results; public professional information
-only; never guess gender, and record pronouns only when self-stated. Assemble with
-research/assemble.py --base, place people with research/apply_locations.py, then run
-research/validate.py and add a change-log row below.
-````
+- **Sources to try first:**
+  - **Airflow Korea and Flakers:** new events through Meetup `gql2` and `discourse.airflow-kr.org/search.json`.
+  - **The chapter:** new Seoul dbt Meetup events.
+  - **Job ads:** re-run the wanted.co.kr queries, keeping ads that contain the whole word "dbt". Add the Lever, Greenhouse and Ashby `site:` searches.
+  - **velog:** new posts on the dbt tag.
+  - **Blogs on Medium:** try the browser, or the publication's RSS feed, for Karrot, IoTrust, Musinsa and Yogiyo.
+  - **Women-in-data:** ask PyLadies Seoul about speakers from its first-talk workshop.
+- **People to locate:**
+  - **LinkedIn:** search the past speakers still unknown and not yet searched: Louis Lee and Wynn Park.
+  - **GitHub:** check the accounts linked from Seokjin Han's and zuckerfrei's velog bios.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `seoul/seoul_dbt_companies.json`, the Seoul dbt Meetup, `../enriched/seoul-dbt-meetup.json` and the Seoul Capital Area. Add: "Search in English and Korean. Romanise Korean names family name first unless the person shows a preferred spelling, and give each an ASCII id."
 
 ## Change log
 

@@ -1,10 +1,10 @@
-# Singapore dbt search: method, lessons and replication prompt
+# Singapore: city notes
 
-This file goes with `singapore_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Singapore. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-10-01
-- **Goal:** find people in Singapore who could **speak at** (or attend) the [Singapore dbt Meetup](https://www.meetup.com/singapore-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [Singapore dbt Meetup](https://www.meetup.com/singapore-dbt-meetup/), data in `singapore_dbt_companies.json`
 - **Region:** Singapore. Kuala Lumpur, Ho Chi Minh City and Sydney do not count.
+- **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
 **At a glance** (version 1, 2026-10-01)
@@ -25,76 +25,125 @@ This file goes with `singapore_dbt_companies.json`. It explains how the dataset 
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Singapore
 
-Web search ran out after about 12 calls. The rest of the run used direct fetches of pages, plus the GitHub and DEV APIs.
+### Meetups and conferences
 
-### Step 1: Other local meetups and conferences
-
-- **[GovTech STACK [Data] meetups](https://www.developer.tech.gov.sg/communities/events/stack-meetups/):** 8 monthly events from 2025-11 to 2026-09, with 25 named speakers. Each page lists every speaker with title and agency. It is the richest source of Singapore data speakers, but no talk mentions dbt.
+- **[GovTech STACK [Data] meetups](https://www.developer.tech.gov.sg/communities/events/stack-meetups/):** the richest source of Singapore data speakers. 8 monthly events from 2025-11 to 2026-09 gave 25 named speakers. Each page lists every speaker with title and agency. No talk mentions dbt.
 - **[Snowflake User Group Singapore](https://usergroups.snowflake.com/singapore/):** 4 events. It gave Grab and Infinite Lambda speakers and the group's organisers.
-- **[DataScience SG](https://www.meetup.com/datascience-sg-singapore/):** 7 events in 2025 and 2026, mostly on AI. Meetup group pages give past events through their `__NEXT_DATA__` block.
-- **[Singapore Data & AI Engineering Meetup](https://www.meetup.com/singapore-data-ai-engineering-meetup/):** AI and Ray talks, with no dbt.
+- **[DataScience SG](https://www.meetup.com/datascience-sg-singapore/):** 7 events in 2025 and 2026, mostly on AI. Meetup group pages give past events through the `__NEXT_DATA__` block.
 - **[PyCon Singapore 2026](https://pycon.sg/speakers.html):** few data talks. It gave some Grab machine learning engineers.
-- **dbt Labs events:** none of the 227 dbt Summit and case-study pages in the [getdbt.com sitemap](https://www.getdbt.com/sitemap-0.xml) names a Singapore company. The dbt World Tour stops in Sydney, Melbourne, Auckland and Tokyo, but not Singapore.
+- **[PyLadies Singapore](https://pyladies.sg):** the team and the PyCon Singapore 2025 track. 3 people are tagged from it and from Women Devs SG.
+- **Chapter history:** every named speaker from `../enriched/singapore-dbt-meetup.json` was added. That covers 16 events, from 2022-07-07 to 2026-09-23. The research added new evidence for 2 past speakers, Michael Han and Cliff Chew.
 
-### Step 2: Company and vendor blogs
+### Blogs and authors
 
+- **[Infinite Lambda case studies](https://infinitelambda.com/case-studies/):** name dbt users that no job ad shows. Mandai Wildlife Group and Keppel use dbt. Only Mandai has a job ad, and its text does not name dbt.
 - **[Grab tech blog](https://engineering.grab.com/feed.xml):** the data mesh series and a post on AI in analytics. No post mentions dbt.
-- **Medium publications:** foodpanda data, ShopBack, Traveloka, Ninja Van, GovTech's data science division, Carousell and Airwallex. They were read through [rss2json](https://api.rss2json.com/), because Medium returns HTTP 429. No post mentions dbt.
-- **[Infinite Lambda case studies](https://infinitelambda.com/case-studies/):** Mandai Wildlife Group and Keppel use dbt. Only Mandai has a job ad, and its text does not name dbt.
 - **[Holistics blog](https://www.holistics.io/blog/):** posts on analytics as code.
 - **[DEV dbt tags](https://dev.to/t/dbt):** 231 authors checked, and 1 is in Singapore.
 - **[GitHub user search](https://github.com/search?q=dbt+location%3ASingapore&type=users):** mostly students. One weak lead was kept.
 
-### Step 3: Job ads
+### Job ads
 
-- **[freehire.me](https://freehire.me/jobs?countries=sg&skills=dbt):** plain-fetchable. 4 of its 10 pages were read, 80 ads in all. Direct employers include Endowus, Grasshopper, Secretlab, Traveloka, OCBC and LTA. About half the ads are from recruiters with unnamed clients.
+- **[freehire.me](https://freehire.me/jobs?countries=sg&skills=dbt):** the one job board that fetches without a login. 4 of its 10 pages were read, 80 ads in all. Direct employers include Endowus, Grasshopper, Secretlab, Traveloka, OCBC and LTA. About half the ads are from recruiters with unnamed clients.
 - **[TheirStack](https://theirstack.com/en/technology/dbt/sg):** the top 10 of 137 companies that use dbt are visible without a login.
-- **[Indeed Singapore](https://sg.indeed.com/q-dbt-jobs.html):** HTTP 403.
 - **Yield:** 21 job ads at 19 companies.
 
-### Step 4: Women-in-data communities
+### Locations
 
-This step looks for speakers through women-focused groups' own events. It never labels or guesses anyone's gender.
+- **Meetup `gql2`:** gave every past chapter event with hosts, RSVPs and member cities. An RSVP to the event where the person spoke gave high confidence.
+- **Recent chapter talks:** an in-person chapter talk in the last 2 years, at an employer with a Singapore office, gave medium confidence.
+- **LinkedIn search results:** 15 people were searched. It placed 5 in Singapore and 1 in Sydney. 3 LinkedIn URLs were carried over from the Kuala Lumpur file.
+- **Yield:** 17 people placed across both passes, and 14 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
 
-- **[PyLadies Singapore](https://pyladies.sg):** its team and its PyCon Singapore 2025 track. 3 people are tagged from it and from Women Devs SG.
-- **Thin pool:** no Singapore women-in-data group was found with dbt talks.
+## 2. What didn't work here
 
-### Step 5: Chapter history
+- **Web search:** ran out after about 12 calls. The rest of the run used direct fetches of pages, plus the GitHub and DEV APIs.
+- **[Singapore Data & AI Engineering Meetup](https://www.meetup.com/singapore-data-ai-engineering-meetup/):** AI and Ray talks, with no dbt.
+- **dbt Labs events:** none of the 227 dbt Summit and case-study pages in the [getdbt.com sitemap](https://www.getdbt.com/sitemap-0.xml) names a Singapore company. The dbt World Tour stops in Sydney, Melbourne, Auckland and Tokyo, but not Singapore.
+- **Medium publications:** foodpanda data, ShopBack, Traveloka, Ninja Van, GovTech's data science division, Carousell and Airwallex had no post that mentions dbt. Medium returns HTTP 429, so they were read through [rss2json](https://api.rss2json.com/). rss2json worked for about 6 publications, then rate-limited too.
+- **[Indeed Singapore](https://sg.indeed.com/q-dbt-jobs.html):** HTTP 403.
+- **JavaScript-rendered pages:** the [Luma DataScience SG calendar](https://luma.com/datascienceSG) and the [Databricks User Group Singapore](https://community.databricks.com/t5/singapore/databricks-user-group-singapore-meetup/m-p/124414) page came back empty.
+- **GitHub API:** rate-limited, and code search hit its limit.
+- **Grab and Holistics author pages:** list posts only, with no location.
+- **Women-in-data groups:** no Singapore women-in-data group was found with dbt talks.
 
-- **Past speakers:** every named speaker from `../enriched/singapore-dbt-meetup.json` was added. That covers 16 events, from 2022-07-07 to 2026-09-23.
-- **New evidence for 2 past speakers:** Michael Han and Cliff Chew.
+## 3. Companies looked at
 
-### Step 6: Location pass and LinkedIn pass
+- **Almost no public dbt content:** most Singapore leads are data engineers who spoke about pipelines, data mesh or semantic layers. GovTech's Data Practice, Singapore Customs and Grab show strong data teams but no public dbt use.
+- **Recruiters:** about half the job ads have unnamed clients. For speaker sourcing, filter on `type == "employer"`.
+- **Infinite Lambda:** a consultancy whose clients Mandai and Keppel use dbt. Michael Han of Infinite Lambda can introduce a client speaker.
+- **Overlap with Kuala Lumpur:** Feng Cheng and Chang Boon Heng appear in both datasets.
 
-- **Location pass:** people were placed from public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
-  - Meetup's `gql2` endpoint gave every past chapter event with its hosts, RSVPs and member cities. An RSVP to the event where the person spoke gave high confidence.
-  - An in-person chapter talk in the last 2 years, at an employer with a Singapore office, gave medium confidence.
-  - Grab and Holistics author pages list posts only, with no location.
-- **LinkedIn pass:** search results only, never a LinkedIn page. 15 people were searched. It placed 5 in Singapore and 1 in Sydney.
-- **Yield:** 17 people placed across both passes, and 14 still unknown.
+<!-- companies:start -->
+55 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-## 2. What we learnt
+<details><summary><b>Strong dbt use</b> (20)</summary>
 
-- **Sources that worked:**
-  - **GovTech STACK pages** list every public-sector data speaker with title and agency.
-  - **freehire.me** is the one job board that fetches without a login.
-  - **Infinite Lambda case studies** name dbt users that no job ad shows.
-  - **Meetup `gql2`** gave hosts and RSVPs with member cities for every chapter event.
-- **Sources that didn't:**
-  - **Medium feeds** return HTTP 429. rss2json worked for about 6 publications, then rate-limited too.
-  - **JavaScript-rendered pages** came back empty: the [Luma DataScience SG calendar](https://luma.com/datascienceSG) and the [Databricks User Group Singapore](https://community.databricks.com/t5/singapore/databricks-user-group-singapore-meetup/m-p/124414) page.
-  - **The GitHub API** was rate-limited, and code search hit its limit.
-- **Watch out for:**
-  - **Almost no Singapore lead has public dbt content.** Most are data engineers who spoke about pipelines, data mesh or semantic layers. Ask each one whether they use dbt.
-  - **Recruiters.** About half the job ads have unnamed clients. For speaker sourcing, filter on `type == "employer"`.
-  - **Overlap with Kuala Lumpur.** Feng Cheng and Chang Boon Heng appear in both datasets. 3 LinkedIn URLs were carried over from the Kuala Lumpur file.
-  - **Approximate titles.** Several Grab, foodpanda and data.gov.sg titles come from bylines without roles.
+almapay (local presence not confirmed), CFGI Singapore, dbt Labs, Endowus, foodpanda, Grasshopper, Infinite Lambda, Keppel, Lightdash (local presence not confirmed), Mandai Wildlife Group, Meta (local presence not confirmed), Secretlab, ShopBack, Snowflake, Snowplow (local presence not confirmed), Spenmo (local presence not confirmed), Teleport (local presence not confirmed), Toggl (local presence not confirmed), Traveloka, Vinted (local presence not confirmed)
 
-## 3. Key leads
+</details>
 
-- **First-time speakers** (people who publish but have no talk on record):
+<details><summary><b>Some dbt signal</b> (17)</summary>
+
+BAH Partners, Dyson (local presence not confirmed), GovTech Singapore (Government Technology Agency), Holistics Software (local presence not confirmed), HTX (Home Team Science & Technology Agency), Intrepid Asia (local presence not confirmed), Klook (local presence not confirmed), Kopi Recruit, Land Transport Authority (LTA), Momcozy (local presence not confirmed), OCBC, Paradex (local presence not confirmed), PathSource Consulting, Razer, Sciente International, SensorFlow (local presence not confirmed), Straive (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (16)</summary>
+
+Airwallex, Amazon Web Services (AWS), Carousell, ClickHouse (local presence not confirmed), Grab, Health Promotion Board (HPB), Infocomm Media Development Authority (IMDA), Microsoft, Ninja Van, Open Government Products (OGP) / data.gov.sg, Redis, Singapore Customs, Tata Consultancy Services (TCS), Tech in Asia, Temasek, Urban Redevelopment Authority (URA)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+DataScience SG, PyLadies Singapore
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (9)</summary>
+
+- https://engineering.grab.com/feed.xml
+- https://medium.com/airwallex-engineering
+- https://medium.com/carousell-insider
+- https://medium.com/dsaid-govtech
+- https://medium.com/foodpanda-data
+- https://medium.com/ninjavan-tech
+- https://medium.com/shopback-tech-blog
+- https://medium.com/traveloka-engineering
+- https://www.holistics.io/blog/
+
+</details>
+
+<details><summary><b>Other sources checked</b> (18)</summary>
+
+- [GovTech STACK [Data] meetups](https://www.developer.tech.gov.sg/communities/events/stack-meetups/)
+- [Snowflake User Group Singapore](https://usergroups.snowflake.com/singapore/)
+- [freehire.me dbt jobs, Singapore](https://freehire.me/jobs?countries=sg&skills=dbt)
+- [TheirStack dbt in Singapore](https://theirstack.com/en/technology/dbt/sg)
+- [Indeed Singapore](https://sg.indeed.com/q-dbt-jobs.html) (nothing useful)
+- [DataScience SG meetup](https://www.meetup.com/datascience-sg-singapore/)
+- [Singapore Data & AI Engineering Meetup](https://www.meetup.com/singapore-data-ai-engineering-meetup/)
+- [PyCon Singapore 2026](https://pycon.sg/speakers.html)
+- [PyLadies Singapore](https://pyladies.sg)
+- [Grab tech blog](https://engineering.grab.com/feed.xml)
+- [Medium feeds (foodpanda-data, shopback-tech-blog, traveloka-engineering, ninjavan-tech, dsaid-govtech, carousell-insider, airwallex-engineering)](https://medium.com/foodpanda-data)
+- [getdbt.com summit agenda and case-study pages](https://www.getdbt.com/sitemap-0.xml) (nothing useful)
+- [Infinite Lambda case studies](https://infinitelambda.com/case-studies/)
+- [Holistics blog](https://www.holistics.io/blog/)
+- [DEV Community dbt tags](https://dev.to/t/dbt)
+- [GitHub users in Singapore mentioning dbt](https://github.com/search?q=dbt+location%3ASingapore&type=users) (nothing useful)
+- [Databricks User Group Singapore](https://community.databricks.com/t5/singapore/databricks-user-group-singapore-meetup/m-p/124414) (nothing useful)
+- [Luma DataScience SG calendar](https://luma.com/datascienceSG) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
+
+- **First-time speakers:**
   - **Maanas Prabhakar (Grab):** wrote [how AI is transforming analytics at Grab](https://engineering.grab.com/how-ai-is-transforming-analytics), on certified metrics and context for AI agents.
   - **Harvey Li (Grab):** co-wrote [Data Mesh at Grab, part III](https://engineering.grab.com/data-mesh-at-grab-part-three), on data contracts and automated data quality checks.
   - **Huy Nguyen (Holistics):** co-founder, wrote [4 levels of analytics as code](https://www.holistics.io/blog/4-levels-of-analytics-as-code/). A LinkedIn result places Huy Nguyen in Singapore.
@@ -105,54 +154,37 @@ This step looks for speakers through women-focused groups' own events. It never 
   - **Michael Han (Infinite Lambda):** four chapter talks, and a [2024 Snowflake user group talk on ML pipelines in dbt](https://usergroups.snowflake.com/events/details/snowflake-singapore-presents-snowflake-community-meetup-singapore-18-july-2024/). Ask Michael Han for a Mandai client speaker.
   - **Clarence San and Hao Ran Lee (foodpanda):** [spoke at the 2025-10 meetup](https://www.meetup.com/singapore-dbt-meetup/events/311046549/) on dbt model versions and row deletions in incremental models.
   - **Cliff Chew (Tech in Asia):** [spoke at the 2026-07 meetup](https://www.meetup.com/singapore-dbt-meetup/events/315295343/) and at [DataScience SG](https://www.meetup.com/datascience-sg-singapore/events/311983867/).
-- **Connectors** (people who can introduce others):
+- **Connectors:**
   - **Jing Yu Lim (Spenmo):** hosts [every chapter event](https://www.meetup.com/singapore-dbt-meetup/events/316411854/) and has given 3 talks.
   - **Yap Ghim Eng (GovTech):** hosts the [STACK data meetups](https://www.developer.tech.gov.sg/communities/events/stack-meetups/), the route to public-sector speakers and a venue.
   - **Suteja Kanuri, Yun Fei Choo (Snowflake) and Piyush Gupta (Temasek):** organise the [Snowflake User Group Singapore](https://usergroups.snowflake.com/singapore/), a natural co-host.
   - **Koo Ping Shung:** co-founded [DataScience SG](https://luma.com/datascienceSG).
   - **Hwee Shan Tay:** co-chairs [PyLadies Singapore](https://pyladies.sg). Ask the co-chairs to share the call for speakers.
 
-## 4. Before outreach
+## 5. Before outreach
 
-- **Check most "in region" calls.** Only 13 of the people marked in Singapore have a location note with evidence. The rest were placed from their employer or event during research.
-- **Check tier 1.** The first-time speaker rule raised the Grab and Holistics authors to tier 1, but their posts don't mention dbt. Treat them as speakers on a data topic.
-- **Check two name-only matches.** Chin Hwee Ong and Umesh Ramakrishnan are placed at medium from Meetup RSVPs that match on name only.
-- **Check one LinkedIn match.** Feng Cheng's result shows the name surname first, "Cheng Feng - Grab".
-- **Check Michael Han's title.** The 2026-09 meetup lists "General Manager", and GovTech lists "Head of APAC, Infinite Lambda".
-- **dbt Labs staff are labelled.** Mark Wan and Sin Ta Poon work there. They can speak, but check the line-up has practitioners first. Mark Wan's location is unknown, and LinkedIn found no matching profile, so check whether Mark Wan is still at dbt Labs.
-- **Skip the backup.** The backup speaker is a Vinted colleague based in Berlin.
-- **Check speakers based elsewhere.** Nas Radev and Hamzah Chaudhary are in London, Thanh Dinh Khac in Ho Chi Minh City, and Josh Beemster in Sydney.
+- [ ] **Check most "in region" calls:** only 13 of the people marked in Singapore have a location note with evidence. The rest were placed from the employer or event during research.
+- [ ] **Ask about dbt use:** most leads have no public dbt content. Ask each one whether the team uses dbt.
+- [ ] **Check tier 1:** the first-time speaker rule raised the Grab and Holistics authors to tier 1, but the posts don't mention dbt. Treat these authors as speakers on a data topic.
+- [ ] **Check approximate titles:** several Grab, foodpanda and data.gov.sg titles come from bylines without roles.
+- [ ] **Check two name-only matches:** Chin Hwee Ong and Umesh Ramakrishnan are placed at medium from Meetup RSVPs that match on name only.
+- [ ] **Check one LinkedIn match:** Feng Cheng's result shows the name surname first, "Cheng Feng - Grab".
+- [ ] **Check Michael Han's title:** the 2026-09 meetup lists "General Manager", and GovTech lists "Head of APAC, Infinite Lambda".
+- [ ] **Balance dbt Labs staff:** Mark Wan and Sin Ta Poon work there and are labelled. Both can speak, but check the line-up has practitioners first. Mark Wan's location is unknown, and LinkedIn found no matching profile, so check whether Mark Wan is still at dbt Labs.
+- [ ] **Skip the backup:** the backup speaker is a Vinted colleague based in Berlin.
+- [ ] **Check speakers based elsewhere:** Nas Radev and Hamzah Chaudhary are in London, Thanh Dinh Khac in Ho Chi Minh City, and Josh Beemster in Sydney.
 
-## 5. Next run
+## 6. Next run
 
-- **Conference agendas:** the Coalesce and dbt Summit speaker lists, and the Snowflake and Databricks World Tour Singapore agendas, were not covered.
-- **Job ads:** read the remaining 6 freehire.me pages, and add the Lever, Greenhouse and Ashby `site:` searches.
-- **People still without a location:** 14. Most are past chapter speakers from 2023 and 2024.
-  - LinkedIn found no profile with a matching title for Aezo Teo, Houren Chen, Shuguang Xiang, Adam Bagaskarta and Jia Ler Chew. Try their Grab or ShopBack author pages.
-  - Auxten Wang gave 2 in-person Singapore talks in 2026. Confirm whether ClickHouse has a Singapore office.
-- **Ask about dbt use:** GovTech's Data Practice, Singapore Customs and Grab show strong data teams but no public dbt use.
-- **Women-in-data:** ask PyLadies Singapore and Women Devs SG for speakers on data topics.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of Singapore companies that use dbt, and people who could speak
-at or attend the Singapore dbt Meetup. The file is singapore/singapore_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Read singapore/SEARCH_METHOD.md first, then
-research/README.md, research/raw-format.md, research/location-task.md and
-research/linkedin-task.md. Keep the shared schema (berlin_planning/SEARCH_METHOD.md §3).
-
-Try first: new GovTech STACK [Data] meetups, new Singapore dbt Meetup and Snowflake User Group
-Singapore events (Meetup gql2), the Coalesce and dbt Summit speaker lists, the Snowflake and
-Databricks World Tour Singapore agendas, and freehire.me/jobs?countries=sg&skills=dbt (keep
-ads that contain the whole word "dbt"; tag recruiters as type "recruiter"). Ask whether each
-data speaker uses dbt before raising them to tier 1.
-
-Rules: never fetch LinkedIn pages, only use search results; public professional information
-only; never guess gender, and record pronouns only when self-stated. Assemble with
-research/assemble.py --base, place people with research/apply_locations.py, then run
-research/validate.py and add a change-log row below.
-````
+- **Sources to try first:**
+  - **The chapter and STACK:** new GovTech STACK [Data] meetups, and new Singapore dbt Meetup and Snowflake User Group Singapore events through Meetup `gql2`.
+  - **Conference agendas:** the Coalesce and dbt Summit speaker lists, and the Snowflake and Databricks World Tour Singapore agendas, were not covered.
+  - **Job ads:** read the remaining 6 freehire.me pages, keeping ads that contain the whole word "dbt". Add the Lever, Greenhouse and Ashby `site:` searches.
+  - **Women-in-data:** ask PyLadies Singapore and Women Devs SG for speakers on data topics.
+- **People to locate:**
+  - **Past speakers:** 14 people are still unknown, mostly past chapter speakers from 2023 and 2024. LinkedIn found no profile with a matching title for Aezo Teo, Houren Chen, Shuguang Xiang, Adam Bagaskarta and Jia Ler Chew. Try the Grab or ShopBack author pages.
+  - **Auxten Wang:** gave 2 in-person Singapore talks in 2026. Confirm whether ClickHouse has a Singapore office.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `singapore/singapore_dbt_companies.json`, the Singapore dbt Meetup, `../enriched/singapore-dbt-meetup.json` and Singapore. Add: "Tag recruiters as type "recruiter". Ask whether each data speaker uses dbt before raising that speaker to tier 1."
 
 ## Change log
 

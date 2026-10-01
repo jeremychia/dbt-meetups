@@ -38,7 +38,7 @@ for pid, f in patch.items():
     note = f"location ({f['confidence']}): {f.get('evidence') or 'see link'} {f['evidence_url']}"
     p["notes"] = " | ".join(x for x in [p["notes"], note] if x)
     p["evidence"].append({"url": f["evidence_url"], "note": note})
-    # attendee_potential follows SEARCH_METHOD.md §1 Step 6
+    # attendee_potential follows research/README.md §3
     p["meetup_fit"]["attendee_potential"] = "low" if not f["based_in_region"] else (
         "high" if p["mentions_dbt"] or c["dbt_signal"] == "strong" else "medium")
     applied += 1

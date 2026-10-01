@@ -18,7 +18,7 @@ for c in d["companies"]:
         p["city"] = None  # the city came with the reverted location
         p["notes"] = " | ".join(x for x in (p["notes"] or "").split(" | ") if not x.startswith("location (")) or None
         p["evidence"] = [e for e in p["evidence"] if not (e.get("note") or "").startswith("location (")]
-        p["meetup_fit"]["attendee_potential"] = "medium"  # in-region or unknown, per SEARCH_METHOD.md §1 Step 6
+        p["meetup_fit"]["attendee_potential"] = "medium"  # in-region or unknown, per research/README.md §3
         done.add(p["id"])
 allp = [p for c in d["companies"] for p in c["people"]]
 d["metadata"]["counts"]["attendee_potential"] = dict(Counter(p["meetup_fit"]["attendee_potential"] for p in allp))

@@ -1,10 +1,10 @@
-# Düsseldorf dbt search: method, lessons and replication prompt
+# Düsseldorf: city notes
 
-This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
+- **Chapter:** [Rhein-Ruhr dbt Meetup](https://www.meetup.com/rhein-ruhr-dbt-meetup/), data in `dusseldorf_dbt_companies.json`
+- **Region:** Düsseldorf, Cologne, Essen, Dortmund, Bonn and nearby towns. Commuter towns count as local, so Münster is in the region. Leipzig is outside.
 - **First built:** 2026-09-24
-- **Goal:** find people in the Rhein-Ruhr area who could **speak at** (or attend) the [Rhein-Ruhr dbt Meetup](https://www.meetup.com/rhein-ruhr-dbt-meetup/), and the local companies that use dbt.
-- **Region:** Düsseldorf, Cologne, Essen, Dortmund, Bonn and nearby towns. Commuter towns are local for this chapter, so Münster counts. Leipzig counts as outside.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -25,74 +25,146 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Düsseldorf
 
-### Step 1: Chapter history
+### Chapter history
 
-- **What was checked:** the two in-person chapter events, both in Cologne. The first was on 2024-12-05 at [adesso](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/). The second was on 2025-05-15 at [taod](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/).
-- **What it yielded:** 5 past speakers, added from `../enriched/rhein-ruhr-dbt-meetup.json`. The meetup.com event pages also gave full agendas and organiser names.
-- **Activity:** the chapter has had no events since May 2025.
+- **Chapter events:** the chapter has held two in-person events, both in Cologne. The first was on 2024-12-05 at [adesso](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/). The second was on 2025-05-15 at [taod](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/). They gave 5 past speakers, added from `../enriched/rhein-ruhr-dbt-meetup.json`. The meetup.com event pages also gave full agendas and organiser names. The chapter has had no events since May 2025.
 
-### Step 2: Other local meetups and conferences
+### Meetups and conferences
 
 - **Databricks User Group Rhein-Ruhr:** the [group](https://www.meetup.com/databricks-user-group-rhein-ruhr/) gave the most local data-platform speakers. They work at Deichmann, Handelsblatt, BarmeniaGothaer and FIEGE.
-- **Microsoft data community:** [Data Saturday Rheinland](https://datasaturdays.com/Event/20260711-datasaturday0084) (2025 and 2026) lists about 60 sessions. The [Data Platform Usergroup Rheinland](https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/) and [Datamonsters Ruhrgebiet](https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/) added more. Most talks are on the Microsoft stack, and many speakers come from outside the region.
+- **Microsoft data community:** [Data Saturday Rheinland](https://datasaturdays.com/Event/20260711-datasaturday0084) (2025 and 2026) lists about 60 sessions. Its Sessionize embeds give speaker names and taglines. The [Data Platform Usergroup Rheinland](https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/) and [Datamonsters Ruhrgebiet](https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/) added more. Most talks are on the Microsoft stack, and many speakers come from outside the region.
 - **Smaller meetups:** the [trivago Tech, Data & Product meetup](https://www.meetup.com/trivago-tech-data-product/) ran a data-platform evening in August 2025. [Engineering Kiosk Rhine-Ruhr](https://www.meetup.com/engineering-kiosk-rhine-ruhr/), [Data Analytics & AI Köln](https://www.meetup.com/data-analytics-ai-koeln/) and the [Power Platform & Fabric User Group Cologne](https://www.meetup.com/power-platform-ug-cologne/) each added a few speakers.
 - **Online trainings:** [Analytics Pioneers](https://www.meetup.com/analytics-pioneers-dusseldorf/) ran a dbt modelling course in May 2024. Its organisers are in Munich.
 - **Group search:** a meetup.com search around the Rhein-Ruhr centre listed about 120 local groups. The past events of 20 data groups were read.
 
-### Step 3: Company and consultancy blogs
+### Company blogs
 
-- **adesso:** the [blog feed](https://www.adesso.de/de/news/blog/blog-rss.xml) and each post's author box gave 9 emerging voices. An emerging voice is someone who publishes about data topics but has no talk on record. Only two adesso posts mention dbt.
+- **adesso:** the [blog feed](https://www.adesso.de/de/news/blog/blog-rss.xml) and each post's author box gave 9 emerging voices. The author boxes give name and role, but rarely the office. Only two adesso posts mention dbt.
 - **ORAYLIS:** the [blog feed](https://www.oraylis.de/feed) gave 6 emerging voices. The posts cover Microsoft Fabric and Databricks, not dbt.
 - **b.telligent:** the [blog](https://www.btelligent.com/en/blog) has one dbt post, from August 2026.
 - **GitHub:** a user search by NRW city found 3 people with their own dbt projects.
-- **No dbt content:** [trivago tech blog](https://tech.trivago.com/), [codecentric](https://www.codecentric.de/feed), [inovex](https://www.inovex.de/de/blog/?s=dbt), [areto](https://areto.de/blog/) and [datadice](https://www.datadice.io/en/blog/). The large NRW corporates (REWE, METRO, Henkel, Vodafone) publish nothing on dbt.
 
-### Step 4: Women-in-data communities
+### Women-in-data communities
 
 - **[Women in Big Data NRW](https://www.meetup.com/women-in-big-data-dusseldorf/):** recent events are discussions without named speakers. The [recap of its Thoughtworks evening](https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/) named two speakers and two hosts.
 - **[Women in AI Cologne #3](https://www.ki.nrw/women-in-ai-cologne-meetup-3/):** one speaker, on AI transformation.
-- **No data speakers:** PyCologne, PyData Dortmund, inovex Cologne, Female Dev Club and Women in Tech Köln.
-- **Rule:** speakers were taken only from the communities' own events. No one's gender is recorded or guessed.
 
-### Step 5: Job ads
+### Job ads
 
-- **LinkedIn Jobs, logged out:** a search for dbt around Düsseldorf and the Rhein-Ruhr area. Up to 150 ads were checked for the whole word "dbt". 49 ads at 24 companies mention it.
-- **Who is hiring:** adesso posted 18 of the 49 ads. viadee and Redcare Pharmacy posted 4 each.
+- **LinkedIn Jobs:** a search for dbt around Düsseldorf and the Rhein-Ruhr area. 49 ads at 24 companies mention dbt. adesso posted 18 of the 49 ads. viadee and Redcare Pharmacy posted 4 each.
 
-### Step 6: Location pass
+### Locations
 
-- **Method:** each person's base was looked up on public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
-- **Best source:** meetup.com RSVP and host lists. They give the profile city of the person who spoke at that event.
-- **Result:** 16 people were placed, 12 in the region and 4 elsewhere. Unknown locations fell from 51 to 35.
+- **meetup.com RSVP and host lists:** the best location source here. They give the profile city of the person who spoke at that event.
+- **LinkedIn search results:** the 15 tier-1 blog authors without a location were searched. Michael Peichl was placed in Leipzig, outside the region. Jonas Thiele was placed in Münster, which counts as local.
 
-### Step 7: LinkedIn pass
+## 2. What didn't work here
 
-- **Method:** one or two LinkedIn searches per person, using search results only. No LinkedIn page was opened.
-- **Who:** the 15 tier-1 blog authors without a location.
-- **Result:** 2 people were placed. Michael Peichl is in Leipzig, outside the region. Jonas Thiele is in Münster, which counts as local. 33 locations are still unknown.
+- **Web search:** NRW dbt queries mostly returned job ads.
+- **Medium and dev.to:** rate-limited, so no Medium or dev.to authors were scanned.
+- **Snowflake user groups:** there is no NRW chapter. The Köln Snowflake and PyData Cologne-Bonn groups no longer exist.
+- **Company blogs with no dbt content:** [trivago tech blog](https://tech.trivago.com/), [codecentric](https://www.codecentric.de/feed), [inovex](https://www.inovex.de/de/blog/?s=dbt), [areto](https://areto.de/blog/) and [datadice](https://www.datadice.io/en/blog/).
+- **Large corporates:** REWE, METRO, Henkel and Vodafone publish nothing on dbt.
+- **Women-in-data groups with no data speakers:** PyCologne, PyData Dortmund, inovex Cologne, Female Dev Club and Women in Tech Köln.
 
-## 2. What we learnt
+## 3. Companies looked at
 
-- **Sources that worked:**
-  - **meetup.com's `gql2` endpoint** answers plain `curl` requests. It gives past events with full speaker text, and RSVP lists with profile cities.
-  - **Sessionize embeds** on Data Saturday pages give speaker names and taglines.
-  - **adesso and ORAYLIS blog feeds** with author boxes were the best source of first-time speakers. They give name and role, but rarely the office.
-  - **meetup.com event pages** fetched directly return full agendas, even without a browser.
-- **Sources that didn't:**
-  - **Web search** mostly returned job ads for NRW dbt queries. The session's search limit was reached early.
-  - **Medium, dev.to and GitHub search** were rate-limited, so no Medium or dev.to authors were scanned.
-  - **Snowflake user groups** have no NRW chapter. The Köln Snowflake and PyData Cologne-Bonn groups no longer exist.
-  - **Big corporates** publish nothing on dbt.
-- **Watch out for:**
-  - **adesso dominates.** It has 9 of the 20 emerging voices and 18 of the 49 job ads. Plan one speaker per company per event.
-  - **Tier 1 is generous here.** 16 of the 22 tier-1 people have no item that mentions dbt. Most are adesso and ORAYLIS authors writing about Fabric, Databricks or Snowflake.
-  - **Consultancy authors rarely state an office.** That is why most tier-1 people have no known location.
-  - **Hicham Babahmed** is also spelled "Hisham". This organiser of the first event (then at adesso) now works at dbt Labs, with a Frankfurt profile.
-  - **Shared with the Munich file:** Mathias Heinze (b.telligent) and Benedikt Buchert (Analytics Pioneers) appear in both. The Munich file places Mathias Heinze in Munich, on a name match only.
+- **taod hosts the chapter's latest event.** taod hosted the May 2025 event at its Cologne office and runs its own Cologne event series. adesso hosted the first event.
+- **adesso dominates the leads.** It has 9 of the 20 emerging voices and 18 of the 49 job ads. Plan one speaker per company per event.
+- **Consultancy authors rarely state an office.** That is why most tier-1 people have no known location.
+- **Large NRW employers use a different stack.** REWE, METRO, Henkel and Vodafone show no public dbt use.
 
-## 3. Key leads
+<!-- companies:start -->
+63 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Strong dbt use</b> (5)</summary>
+
+b.telligent (local presence not confirmed), dbt Labs (local presence not confirmed), Schüttflix (local presence not confirmed), taod Consulting, Xebia (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (26)</summary>
+
+adesso SE, Agoda, Analytics Pioneers (local presence not confirmed), AVS Verkehrssicherung GmbH, AXA, codecentric AG, Cognitive Group, DeepL, Deutsche Glasfaser Unternehmensgruppe, Douglas, E.ON Deutschland, EY, eye-level consulting GmbH, Founderful, Intersnack IT KG, Inverto / A BCG Company, ISR Information Products AG, Metycle, Redcare Pharmacy, REWE Group, ruhr.agency, Scalefree, SKOPOS, Thermengruppe Josef Wund, Trianel GmbH, viadee Unternehmensberatung AG
+
+</details>
+
+<details><summary><b>Not verified</b> (27)</summary>
+
+Accenture / intions (Essen Innovation Hub), ALDI SÜD, BarmeniaGothaer, Borussia Mönchengladbach, Data Natives Düsseldorf & Köln (local presence not confirmed), Databricks (local presence not confirmed), Databricks User Group Rhein-Ruhr, Deichmann SE, DISH Digital Solutions (METRO), Düsseldorf Data Science Meetup, FIEGE Logistik (local presence not confirmed), GDS Business Intelligence GmbH (local presence not confirmed), Handelsblatt Media Group, Infomotion, noventum consulting (local presence not confirmed), oh22data AG (local presence not confirmed), oh22information services GmbH, ORAYLIS, PyMC Labs (local presence not confirmed), REWE digital, StepStone, SumUp (local presence not confirmed), teccle group (local presence not confirmed), Thoughtworks (Cologne), trivago, Women in AI Cologne, Women in Big Data NRW
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (5)</summary>
+
+Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgebiet / Niederrhein, Google (local presence not confirmed), Microsoft (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (12)</summary>
+
+- https://taod.de/events
+- https://tech.trivago.com/
+- https://tech.trivago.com/categories/data-analytics
+- https://www.adesso.de/de/news/blog/blog-rss.xml
+- https://www.btelligent.com/en/blog
+- https://www.ki.nrw/women-in-ai-cologne-meetup-3/
+- https://www.meetup.com/big-data-dusseldorf-koln/
+- https://www.meetup.com/databricks-user-group-rhein-ruhr/
+- https://www.meetup.com/dusseldorf-data-science-meetup/
+- https://www.meetup.com/women-in-big-data-dusseldorf/
+- https://www.oraylis.de/feed
+- https://www.taod.de/pressemitteilungen/data-ai-after-hours
+
+</details>
+
+<details><summary><b>Other sources checked</b> (38)</summary>
+
+- [Rhein-Ruhr dbt Meetup group page](https://www.meetup.com/rhein-ruhr-dbt-meetup/)
+- [Rhein-Ruhr dbt Meetup event 307198615](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/307198615/)
+- [Rhein-Ruhr dbt Meetup event 304543797](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/304543797/)
+- [Built-in browser (meetup.com gql2)](https://www.meetup.com/rhein-ruhr-dbt-meetup/events/?type=past) (nothing useful)
+- [trivago tech blog](https://tech.trivago.com/)
+- [Databricks User Group Rhein-Ruhr](https://www.meetup.com/databricks-user-group-rhein-ruhr/)
+- [Düsseldorf Data Science Meetup](https://www.meetup.com/dusseldorf-data-science-meetup/)
+- [Women in Big Data NRW](https://www.meetup.com/women-in-big-data-dusseldorf/)
+- [WiBD NRW x Thoughtworks recap](https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/)
+- [Women in AI Cologne #3 (KI.NRW)](https://www.ki.nrw/women-in-ai-cologne-meetup-3/)
+- [taod events + press](https://taod.de/events)
+- [Snowflake User Group Köln (meetup)](https://www.meetup.com/snowflake-user-group-koln/) (nothing useful)
+- [PyData Cologne-Bonn (meetup)](https://www.meetup.com/pydata-cologne-bonn/) (nothing useful)
+- [Data Natives Düsseldorf & Köln](https://www.meetup.com/big-data-dusseldorf-koln/) (nothing useful)
+- [WebSearch: Coalesce/dbt Summit NRW employer speakers](https://sessionize.com/coalesce-2024/) (nothing useful)
+- [WebSearch: REWE/METRO/Henkel/Vodafone dbt blogs](https://www.rewe-digital.com/en) (nothing useful)
+- [LinkedIn Jobs guest API (keywords=dbt, Düsseldorf/Rhein-Ruhr)](https://www.linkedin.com/jobs/search?keywords=dbt)
+- [meetup.com gql2 group search (lat 51.3, lon 6.9, radius 50)](https://www.meetup.com/gql2)
+- [trivago Tech, Data & Product meetup](https://www.meetup.com/trivago-tech-data-product/)
+- [Data Platform Usergroup Rheinland](https://www.meetup.com/pass-microsoft-data-platform-usergroup-rheinland/)
+- [Datamonsters Ruhrgebiet / Niederrhein](https://www.meetup.com/pass-germany-regional-group-ruhrgebiet/)
+- [Data Saturday Rheinland 2025 and 2026 (Sessionize)](https://datasaturdays.com/Event/20260711-datasaturday0084)
+- [Power Platform & Fabric User Group Cologne](https://www.meetup.com/power-platform-ug-cologne/)
+- [Engineering Kiosk Rhine-Ruhr](https://www.meetup.com/engineering-kiosk-rhine-ruhr/)
+- [Analytics Pioneers (Düsseldorf/Köln groups)](https://www.meetup.com/analytics-pioneers-dusseldorf/)
+- [Data Analytics & AI Köln (taod)](https://www.meetup.com/data-analytics-ai-koeln/)
+- [PyCologne, PyData Dortmund, inovex Cologne, Female Dev Club, Women in Tech Köln](https://www.meetup.com/pycologne/) (nothing useful)
+- [adesso blog RSS](https://www.adesso.de/de/news/blog/blog-rss.xml)
+- [ORAYLIS blog feed](https://www.oraylis.de/feed)
+- [b.telligent blog](https://www.btelligent.com/en/blog)
+- [codecentric feed and blog](https://www.codecentric.de/feed) (nothing useful)
+- [inovex blog search for dbt](https://www.inovex.de/de/blog/?s=dbt) (nothing useful)
+- [areto consulting blog (Cologne)](https://areto.de/blog/) (nothing useful)
+- [datadice blog](https://www.datadice.io/en/blog/) (nothing useful)
+- [GitHub user search (dbt / data engineer, NRW cities)](https://github.com/search?type=users)
+- [Medium feeds (datadice, StepStone) via WebFetch and rss2json](https://medium.com/feed/the-stepstone-group-tech-blog) (nothing useful)
+- [dev.to API tag=dbt](https://dev.to/api/articles?tag=dbt) (nothing useful)
+- [Snowflake user groups Germany](https://usergroups.snowflake.com/germany/) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers:**
   - **Mathias Heinze**, b.telligent: [Adding the E to dbt: extracting source systems with dbt Core and Snowflake](https://www.btelligent.com/en/blog/extracting-source-systems-dbt-core-snowflake) (August 2026). This is the only new lead writing directly about dbt. Location unknown.
@@ -113,48 +185,31 @@ This file goes with `dusseldorf_dbt_companies.json`. It explains how the dataset
   - **Oliver Engels**, oh22data: co-organiser of [Data Saturday Rheinland](https://datasaturdays.com/Event/20260711-datasaturday0084).
   - **Daniela Jäkel**, Thoughtworks Cologne: co-host of the [Women in Big Data NRW evening](https://www.womeninbigdata.org/women-in-big-data-nrw-x-thoughtworks-event/), and a venue route.
 
-## 4. Before outreach
+## 5. Before outreach
 
-- [ ] **Check tier-1 blog authors for dbt.** 16 of the 22 have never written about dbt.
+- [ ] **Check tier-1 blog authors for dbt.** 16 of the 22 tier-1 people have no item that mentions dbt. Most are adesso and ORAYLIS authors writing about Fabric, Databricks or Snowflake.
 - [ ] **Confirm each consultancy author's office.** None of the adesso, ORAYLIS or b.telligent author boxes states a city.
 - [ ] **Check the LinkedIn hints that had no profile link.** Search summaries put Lasse Jenzen, Insa Menzel, Nils Kux and Tobias Jasinski in Düsseldorf, but no profile carried the evidence.
-- [ ] **Check Inna Zykova.** A LinkedIn result from the Berlin search places this person in Düsseldorf. This file still records the location as unknown.
+- [ ] **Check Inna Zykova.** A LinkedIn result from the Berlin search places Inna Zykova in Düsseldorf. This file still records the location as unknown.
+- [ ] **Check the duplicates with the Munich file.** Mathias Heinze (b.telligent) and Benedikt Buchert (Analytics Pioneers) appear in both. The Munich file places Mathias Heinze in Munich, on a name match only.
+- [ ] **Match both spellings of Hicham Babahmed.** The name is also spelled "Hisham". Hicham Babahmed organised the first event while at adesso, and now works at dbt Labs, with a Frankfurt profile.
 - [ ] **Treat visiting speakers as visitors.** Pádraic Slattery is in Amsterdam, Stephan Durry in Berlin, and Sascha Dittmann and Hicham Babahmed in Frankfurt.
 - [ ] **dbt Labs staff are labelled.** Stephan Durry and Hicham Babahmed work there. They can speak, but check the line-up has practitioners first.
 
-## 5. Next run
+## 6. Next run
 
-- **People still without a location:** 33. All 15 LinkedIn targets have now been searched once or twice. Only Jonas Thiele, in Münster, was placed in the region. The 17 people below were never searched on LinkedIn:
-  - Tier 1: Siver Rajab (adesso).
-  - Tier 2: Alex Rupp, Anastasia Senitz, Hanna Schwab, Benedikt Buchert, Daniel Schmidt, Diana Ackermann, Jake Mongaya, Marco Nielinger, Mario Müller and Simon Schröder.
-  - Tier 3: Andreas Schiffer, Benjamin Kirsche, Christopher König, Frank Geisler, Moritz Bauer, Sebastian Grünwald and Stephan Dahlmann.
-  - Connector: Oliver Engels.
-- **Sources not yet searched:** Medium and dev.to authors, which were rate-limited. Try them from a fresh session.
-- **What to try first:** search Alex Rupp on LinkedIn, as a past chapter speaker. Then ask taod and adesso which of their authors work in the region.
-
-## 6. Replication prompt
-
-````
-You are extending the Rhein-Ruhr dbt dataset: dusseldorf/dusseldorf_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. The region is Düsseldorf, Cologne, Essen,
-Dortmund, Bonn and nearby towns; commuter towns such as Münster count as local.
-Read dusseldorf/SEARCH_METHOD.md first, then
-research/README.md and the briefs it links (raw-format.md, location-task.md, linkedin-task.md).
-
-Budget about 25 web searches. Most NRW dbt searches return job ads, so prefer direct fetches.
-
-1. New talks: past events of the Rhein-Ruhr dbt Meetup, Databricks User Group Rhein-Ruhr,
-   trivago Tech, Data & Product, Datamonsters Ruhrgebiet and Data Saturday Rheinland,
-   through the meetup.com gql2 endpoint and Sessionize embeds.
-2. New posts: the adesso, ORAYLIS and b.telligent blog feeds, with each author box.
-   Then Medium and dev.to, which were rate-limited last time.
-3. Women-in-data: new Women in Big Data NRW and Women in AI Cologne events. Take speakers
-   only from the community's own events.
-4. Locations: the 18 never-searched people listed in SEARCH_METHOD.md §5.
-Rules: never open LinkedIn pages, use only search results. Record professional information
-only, never gender, and pronouns only when self-stated. Assemble with research/assemble.py
---base, apply locations with research/apply_locations.py, and run research/validate.py.
-````
+- **Sources to try first:**
+  - **taod and adesso:** ask which of their authors work in the region.
+  - **Medium and dev.to authors:** never scanned, because both were rate-limited. Try them from a fresh session.
+  - **Community events:** new events of the Rhein-Ruhr dbt Meetup, Databricks User Group Rhein-Ruhr, trivago Tech, Data & Product, Datamonsters Ruhrgebiet, Data Saturday Rheinland, Women in Big Data NRW and Women in AI Cologne.
+  - **Blog feeds:** new posts on the adesso, ORAYLIS and b.telligent feeds, with each author box.
+- **People to locate:** 32 people have no known location. 13 tier-1 blog authors were searched on LinkedIn without a match. These 19 were never searched on LinkedIn:
+  - **Tier 1:** Siver Rajab (adesso).
+  - **Tier 2:** Alex Rupp, Anastasia Senitz, Hanna Schwab, Benedikt Buchert, Daniel Schmidt, Diana Ackermann, Jake Mongaya, Marco Nielinger, Mario Müller and Simon Schröder.
+  - **Tier 3:** Andreas Schiffer, Benjamin Kirsche, Christopher König, Frank Geisler, Moritz Bauer, Sebastian Grünwald and Stephan Dahlmann.
+  - **Connector:** Oliver Engels.
+  - **First to search:** Alex Rupp, as a past chapter speaker.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `dusseldorf/dusseldorf_dbt_companies.json`, the Rhein-Ruhr dbt Meetup, `../enriched/rhein-ruhr-dbt-meetup.json` and the region above. Add: "Most NRW dbt searches return job ads, so prefer direct fetches."
 
 ## Change log
 

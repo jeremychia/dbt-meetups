@@ -1,10 +1,10 @@
-# Munich dbt search: method, lessons and replication prompt
+# Munich: city notes
 
-This file goes with `munich_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Munich. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
+- **Chapter:** [Munich dbt Meetup](https://www.meetup.com/munich-dbt-meetup/), data in `munich_dbt_companies.json`
+- **Region:** the Munich metro area. Ingolstadt and Haar count as local. Karlsruhe, Ulm, Würzburg and Zürich are outside.
 - **First built:** 2026-09-24
-- **Goal:** find people in the Munich area who could **speak at** (or attend) the [Munich dbt Meetup](https://www.meetup.com/munich-dbt-meetup/), and the local companies that use dbt.
-- **Region:** the Munich metro area. Ingolstadt and Haar are counted in. Karlsruhe, Ulm, Würzburg and Zürich are outside.
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -25,75 +25,144 @@ This file goes with `munich_dbt_companies.json`. It explains how the dataset was
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Munich
 
-### Step 1: Chapter history
+### Chapter history
 
-- **What was checked:** 7 chapter events from April 2023 to February 2026. Most were held at [Synabi](https://synabi.com/en/events/) in Munich. One was at Daiichi Sankyo in July 2025.
-- **What it yielded:** 16 past speakers, added from `../enriched/munich-dbt-meetup.json`. The November 2025 event has no talks on record.
-- **What failed:** the [past events page](https://www.meetup.com/munich-dbt-meetup/events/?type=past) renders in the browser only, so a plain fetch returned nothing.
+- **Chapter events:** 7 events from April 2023 to February 2026. Most were held at [Synabi](https://synabi.com/en/events/) in Munich. One was at Daiichi Sankyo in July 2025. They gave 16 past speakers, added from `../enriched/munich-dbt-meetup.json`. The November 2025 event has no talks on record.
 
-### Step 2: Other local meetups and conferences
+### Meetups and conferences
 
-- **[Munich Snowflake User Group](https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/):** the richest dbt-adjacent source. It ran a joint [Snowflake & dbt evening](https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/) at Synabi in February 2025. The user group's own [event API](https://usergroups.snowflake.com/api/event/?chapter=143) lists all 10 of its events.
-- **[Munich Datageeks](https://www.munich-datageeks.de/tag/talks/):** its recorded talk write-ups gave the strongest dbt practitioner lead. Its [meetup.com events](https://www.meetup.com/munich-datageeks/events/?type=past) added data-engineering speakers from E.ON, Finanz Informatik, Lakekeeper, Firebolt and Aiven.
+- **[Munich Snowflake User Group](https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/):** the richest dbt-adjacent source, and where Munich's dbt activity sits. It ran a joint [Snowflake & dbt evening](https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/) at Synabi in February 2025. The user group's own [event API](https://usergroups.snowflake.com/api/event/?chapter=143) lists all 10 of its events. The API and the Bevy event pages list speakers and hosts without a browser.
+- **[Munich Datageeks](https://www.munich-datageeks.de/tag/talks/):** its write-ups name speakers and topics, and the talks are recorded. They gave the strongest dbt practitioner lead. Its [meetup.com events](https://www.meetup.com/munich-datageeks/events/?type=past) added data-engineering speakers from E.ON, Finanz Informatik, Lakekeeper, Firebolt and Aiven.
 - **Group search:** a meetup.com search around Munich listed about 60 data groups. The past events of 20 were read and searched for dbt.
 - **Smaller groups with a dbt talk:** [Kaggle Munich](https://www.meetup.com/kaggle-munich/events/?type=past) hosted a dbt talk in June 2024. [Analytics Pioneers Munich](https://www.meetup.com/analytics-pioneers-munich/events/?type=past) ran dbt trainings in 2022 and 2024.
-- **Low yield:** [Data Modeling Meetup Munich](https://www.meetup.com/data-modeling-dm3/) (speakers are international and online), [PyData Munich](https://www.meetup.com/pydata-munchen/events/?type=past) (GenAI only), the [TDWI conference programme](https://www.tdwi-konferenz.de/de/programm/konferenzprogramm), [PyCon DE](https://pretalx.com/pyconde-pydata-2026/schedule/) and the [Munich Database Meetup](https://munichdatabases.xyz/).
 
-### Step 3: Company and consultancy blogs
+### Company blogs
 
-- **b.telligent:** the [blog](https://www.btelligent.com/en/blog) names an author on every post. Its 211 posts gave 6 emerging voices. An emerging voice is someone who publishes about data topics but has no talk on record. Its [dbt partner page](https://www.btelligent.com/en/partner/dbt) names two contacts.
+- **b.telligent:** the [blog](https://www.btelligent.com/en/blog) names an author on every post. Its 211 posts gave 6 emerging voices. Its [dbt partner page](https://www.btelligent.com/en/partner/dbt) names two contacts.
 - **synvert:** the [blog](https://synvert.com/de-de/synvert-blog/) names the author above each title. Its 221 posts gave 5 emerging voices, including three dbt posts from May 2026.
 - **inovex and Woodmark:** the [inovex blog search](https://www.inovex.de/wp-json/wp/v2/posts?search=dbt) and the [Woodmark sitemap](https://www.woodmark.de/sitemap.xml) gave 4 more authors.
-- **GitHub:** a search of [dbt repositories](https://github.com/search?q=topic%3Adbt&type=repositories) with Munich or Bavaria owners found 7 people with public dbt projects.
-- **No dbt content:** the Medium feeds of Personio, Celonis, FlixBus, Sixt, BMW, Allianz and others were empty or inactive. [dev.to](https://dev.to/t/dbt) had 231 dbt authors, none in Munich.
+- **GitHub:** a search of [dbt repositories](https://github.com/search?q=topic%3Adbt&type=repositories) with Munich or Bavaria owners found 7 people with public dbt projects. It found practitioners at Databricks, ZEISS and OMMAX that no blog or agenda lists.
 
-### Step 4: Women-in-data communities
+### Women-in-data communities
 
 - **[WiDS Munich](https://widsmunich.de/):** its team and 2025 speakers are mostly academic or machine learning. They are useful as organiser contacts at Sixt, LMU and BR.
 - **[AWS Women's User Group Munich](https://www.meetup.com/aws-womens-user-group-munich/):** its founder at BMW gave a query-performance talk.
 - **[PyLadies Munich](https://www.meetup.com/pyladiesmunich/events/?type=past):** quarterly talk nights, mostly Python and machine learning.
-- **Dormant:** [Munich WiMLDS](https://www.meetup.com/munich-women-in-machine-learning-and-data-science/), with no events since 2021.
-- **Rule:** speakers were taken only from the communities' own events. No one's gender is recorded or guessed.
 
-### Step 5: Job ads
+### Job ads
 
-- **LinkedIn Jobs, logged out:** a search for dbt around Munich. Up to 150 ads were checked for the whole word "dbt". 24 ads at 18 companies mention it.
-- **Who is hiring:** adesso posted 6 ads and JobRad 2. Personio, AutoScout24, Octopus Energy and E.ON posted one each.
+- **LinkedIn Jobs:** a search for dbt around Munich. 24 ads at 18 companies mention dbt. adesso posted 6 ads and JobRad 2. Personio, AutoScout24, Octopus Energy and E.ON posted one each.
 
-### Step 6: Location pass
+### Locations
 
-- **Method:** each person's base was looked up on public pages, by the evidence rules in [`../research/README.md`](../research/README.md).
-- **Best sources:** meetup.com RSVP lists for the 10 Munich events, and company legal-notice and office pages.
-- **Result:** 18 people were placed, 10 in the region and 8 elsewhere. Unknown locations fell from 40 to 22.
+- **meetup.com RSVP lists:** the RSVP lists for the 10 Munich events were the best location source.
+- **Company legal-notice and office pages:** the second-best location source.
+- **LinkedIn search results:** the 14 tier-1 emerging voices without a location were searched, plus Jorrit Posor. Jorrit Posor was placed in Munich. Marvin Klossek, Simon Bachstein, Milan Wenske and Saskia Kutz were placed outside.
 
-### Step 7: LinkedIn pass
+## 2. What didn't work here
 
-- **Method:** one or two LinkedIn searches per person, using search results only. No LinkedIn page was opened.
-- **Who:** the 14 tier-1 emerging voices without a location, plus Jorrit Posor.
-- **Result:** 5 people were placed. Jorrit Posor is in Munich. Marvin Klossek, Simon Bachstein, Milan Wenske and Saskia Kutz are outside. 17 locations are still unknown.
+- **Chapter past events page:** the [past events page](https://www.meetup.com/munich-dbt-meetup/events/?type=past) renders in the browser only, so a plain fetch returned nothing.
+- **Company blogs:** they name almost no dbt authors. Check community recordings first.
+- **Medium feeds:** the feeds of Personio, Celonis, FlixBus, Sixt, BMW, Allianz and others were empty or inactive.
+- **dev.to:** the [dbt tag](https://dev.to/t/dbt) had 231 dbt authors, none in Munich.
+- **Low-yield meetups and conferences:** [Data Modeling Meetup Munich](https://www.meetup.com/data-modeling-dm3/) (speakers are international and online), [PyData Munich](https://www.meetup.com/pydata-munchen/events/?type=past) (GenAI only), the [TDWI conference programme](https://www.tdwi-konferenz.de/de/programm/konferenzprogramm), [PyCon DE](https://pretalx.com/pyconde-pydata-2026/schedule/) and the [Munich Database Meetup](https://munichdatabases.xyz/).
+- **Dormant women-in-data group:** [Munich WiMLDS](https://www.meetup.com/munich-women-in-machine-learning-and-data-science/) has had no events since 2021.
 
-## 2. What we learnt
+## 3. Companies looked at
 
-- **Sources that worked:**
-  - **The Snowflake user group** is where Munich's dbt activity sits. Its event API and Bevy pages list speakers and hosts without a browser.
-  - **Munich Datageeks write-ups** name speakers and topics, and the talks are recorded.
-  - **b.telligent and synvert blogs** name an author on every post. They were the best source of first-time speakers, though neither states an office.
-  - **GitHub search on dbt repositories** found practitioners at Databricks, ZEISS and OMMAX that no blog or agenda lists.
-  - **meetup.com's `gql2` endpoint** answers plain requests, so every data group's past line-ups could be pulled in one pass.
-- **Sources that didn't:**
-  - **Company blogs** name almost no dbt authors. Check community recordings first.
-  - **Medium feeds and dev.to** gave nothing local.
-  - **Web search** ran out after 9 searches in the extension run.
-- **Watch out for:**
-  - **One venue cluster dominates.** Synabi and b.telligent share a site and hosted most chapter events. b.telligent people make up a large share of the leads.
-  - **Tier 1 is generous here.** 9 of the 20 tier-1 people have no item that mentions dbt. Most are consultancy authors.
-  - **Name spellings:** Matthias Nohl is "Mathias Nohl" on the event listing.
-  - **Guessed details:** the mohrstade founders' titles come from the company name. Qing Ye's and Cassio Bolba's employers come from short GitHub fields ("IFX" and "HSE").
-  - **Shared with the Rhein-Ruhr file:** Mathias Heinze and Benedikt Buchert appear in both. This file places Mathias Heinze in Munich, on a name match only.
+- **One venue cluster dominates.** Synabi and b.telligent share a site and hosted most chapter events. b.telligent people make up a large share of the leads.
+- **Consultancy blogs give most first-time speakers.** b.telligent and synvert name an author on every post, but neither states an office.
 
-## 3. Key leads
+<!-- companies:start -->
+64 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Strong dbt use</b> (5)</summary>
+
+b.telligent, CELUS, Databricks (local presence not confirmed), inovex (local presence not confirmed), Wemolo (VMO)
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (26)</summary>
+
+4flow, adesso SE, Agoda, AutoScout24, Celonis, codecentric AG, Daiichi Sankyo, E.ON Deutschland, Eraneos, EY, Holidu, INFOMOTION GmbH, JobRad Deutschland, Kartenliebe GmbH, mohrstade, Munich Snowflake User Group (MSUG), myposter GmbH, Octopus Energy, Personio, Skalar – Digitale Steuerberatung, Synabi Business Solutions GmbH, Trade Republic (local presence not confirmed), Verlag C.H.Beck, Woodmark Consulting, x1F, ZEISS (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (32)</summary>
+
+Bayerischer Rundfunk (BR Data / BR Recherche) (local presence not confirmed), Bergzeit (local presence not confirmed), BMW Group, Data Modeling Meetup Munich (DM3), dbt Labs (local presence not confirmed), Finanz Informatik (local presence not confirmed), FINN (local presence not confirmed), Firebolt (local presence not confirmed), Frontify (local presence not confirmed), Hochschule München (Munich University of Applied Sciences) (local presence not confirmed), HSE (local presence not confirmed), IDEX.Q (local presence not confirmed), In516ht (local presence not confirmed), Infineon Technologies (local presence not confirmed), Lakekeeper (Vakamo) (local presence not confirmed), LMU Munich (Social Data Science and AI Lab) (local presence not confirmed), Microsoft Fabric (local presence not confirmed), Munich Database Meetup, Munich Datageeks e.V., OMMAX (local presence not confirmed), Project A Ventures (local presence not confirmed), SAP (local presence not confirmed), Scalable Capital, Siemens AG, SIXT SE (local presence not confirmed), Snowflake (local presence not confirmed), Sundeck (local presence not confirmed), SVA System Vertrieb Alexander (local presence not confirmed), synvert (synvert Data Insights), Technische Hochschule Ingolstadt (local presence not confirmed), virtual7 GmbH (local presence not confirmed), Women in Data Science (WiDS) Munich
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (1)</summary>
+
+Aiven (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (12)</summary>
+
+- https://medium.com/@holidu
+- https://medium.com/inside-personio/all?topic=engineering
+- https://munichdatabases.xyz/
+- https://sites.google.com/view/widsmunich/past-events/wids-2025/speakers-2025
+- https://synabi.com/en/events/
+- https://widsmunich.de/
+- https://widsmunich.de/team/
+- https://www.meetup.com/data-modeling-dm3/
+- https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/
+- https://www.munich-datageeks.de/tag/talks/
+- https://www.munich-datageeks.de/tag/talks/page/2/
+- https://www.munich-datageeks.de/tag/talks/page/3/
+
+</details>
+
+<details><summary><b>Other sources checked</b> (37)</summary>
+
+- [Munich Datageeks talks (pages 1-3)](https://www.munich-datageeks.de/tag/talks/)
+- [Snowflake UG Munich - Snowflake & dbt meeting Feb 2025](https://usergroups.snowflake.com/events/details/snowflake-munich-presents-snowflake-amp-dbt-user-group-meeting-in-munich/)
+- [Munich Snowflake Data Cloud Meetup Group](https://www.meetup.com/munich-snowflake-data-cloud-meetup-group/)
+- [Munich dbt Meetup past events](https://www.meetup.com/munich-dbt-meetup/events/?type=past) (nothing useful)
+- [Data Modeling Meetup Munich (DM3)](https://www.meetup.com/data-modeling-dm3/)
+- [Data Engineering Munich meetup](https://www.meetup.com/data-engineering/) (nothing useful)
+- [Munich WiMLDS meetup](https://www.meetup.com/munich-women-in-machine-learning-and-data-science/) (nothing useful)
+- [PyLadies Munich meetup](https://www.meetup.com/pyladies-munich/) (nothing useful)
+- [WiDS Munich site, team and 2025 speakers](https://widsmunich.de/)
+- [MCML WiDS 2025 event page](https://mcml.ai/events/2025-10-21-women-in-data-science-conference/)
+- [TDWI München conference programme](https://www.tdwi-konferenz.de/de/programm/konferenzprogramm) (nothing useful)
+- [b.telligent dbt partner page](https://www.btelligent.com/en/partner/dbt)
+- [Holidu Tech Blog (Medium)](https://medium.com/@holidu) (nothing useful)
+- [Inside Personio (Medium) engineering](https://medium.com/inside-personio/all?topic=engineering) (nothing useful)
+- [Synabi events page](https://synabi.com/en/events/) (nothing useful)
+- [Munich Database Meetup](https://munichdatabases.xyz/) (nothing useful)
+- [Coalesce 2025 / dbt Summit 2026 speaker searches](https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers) (nothing useful)
+- [LinkedIn Jobs guest API (keywords=dbt, Munich-area)](https://www.linkedin.com/jobs/search?keywords=dbt)
+- [Meetup gql2 groupSearch near Munich](https://www.meetup.com/gql2)
+- [Kaggle Munich past events](https://www.meetup.com/kaggle-munich/events/?type=past)
+- [Analytics Pioneers Munich past events](https://www.meetup.com/analytics-pioneers-munich/events/?type=past)
+- [Munich Datageeks meetup.com events 2024-2026 (full text)](https://www.meetup.com/munich-datageeks/events/?type=past)
+- [PyLadies Munich past events](https://www.meetup.com/pyladiesmunich/events/?type=past)
+- [AWS Women's User Group Munich](https://www.meetup.com/aws-womens-user-group-munich/)
+- [PyData Munich past events](https://www.meetup.com/pydata-munchen/events/?type=past) (nothing useful)
+- [Snowflake UG Munich, Bevy API (all 10 events)](https://usergroups.snowflake.com/api/event/?chapter=143)
+- [b.telligent blog (sitemap, 211 posts)](https://www.btelligent.com/en/blog)
+- [synvert blog (sitemap, 221 German posts)](https://synvert.com/de-de/synvert-blog/)
+- [inovex blog WordPress API search=dbt](https://www.inovex.de/wp-json/wp/v2/posts?search=dbt)
+- [Woodmark blog sitemap](https://www.woodmark.de/sitemap.xml)
+- [GitHub GraphQL: dbt repos with Munich/Bavaria owners](https://github.com/search?q=topic%3Adbt&type=repositories)
+- [dev.to dbt and analytics engineering authors](https://dev.to/t/dbt) (nothing useful)
+- [Medium feeds: inside-personio, celonis-engineering, others](https://medium.com/feed/celonis-engineering) (nothing useful)
+- [Data Engineering Munich (data-engineering-muc)](https://www.meetup.com/data-engineering-muc/) (nothing useful)
+- [Munich Open Source Data Infrastructure Meetup](https://www.meetup.com/munich-open-source-data-infrastructure-meetup/) (nothing useful)
+- [PyCon DE & PyData 2025/2026 schedules (pretalx export)](https://pretalx.com/pyconde-pydata-2026/schedule/) (nothing useful)
+- [dbt developer blog authors.yml](https://github.com/dbt-labs/docs.getdbt.com/blob/current/website/blog/authors.yml) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers:**
   - **Mathias Heinze**, b.telligent: [Adding the E to dbt: extracting source systems with dbt Core and Snowflake](https://www.btelligent.com/en/blog/extracting-source-systems-dbt-core-snowflake) (August 2026).
@@ -114,44 +183,29 @@ This file goes with `munich_dbt_companies.json`. It explains how the dataset was
   - **Marcus Stade** and **Patrick Mohr**, mohrstade: co-host [Analytics Pioneers Munich](https://www.meetup.com/analytics-pioneers-munich/).
   - **Meyyar Palaniappan**, BMW Group: founder of [AWS Women's User Group Munich](https://www.meetup.com/aws-womens-user-group-munich/).
 
-## 4. Before outreach
+## 5. Before outreach
 
-- [ ] **Check tier-1 consultancy authors for dbt.** 9 of the 20 have never written about dbt.
+- [ ] **Check tier-1 consultancy authors for dbt.** 9 of the 20 tier-1 people have no item that mentions dbt. Most are consultancy authors.
 - [ ] **Confirm each b.telligent, synvert, inovex and Woodmark author's office.** None of the author boxes states a city.
 - [ ] **Check the name-only matches.** Thomas Lindner and Mathias Heinze are placed in Munich from a Meetup profile with a matching name only.
+- [ ] **Check the duplicates with the Rhein-Ruhr file.** Mathias Heinze and Benedikt Buchert appear in both files.
+- [ ] **Match both spellings of Matthias Nohl.** The event listing spells the name "Mathias Nohl".
+- [ ] **Check guessed details.** The mohrstade founders' titles come from the company name. Qing Ye's and Cassio Bolba's employers come from short GitHub fields ("IFX" and "HSE").
 - [ ] **Decide on borderline locations.** Bergzeit's office is in Otterfing, about 25 km south of Munich. Athar Nawaz is in Ingolstadt, about 70 km away.
 - [ ] **Check stale roles.** Helena Steurer's and Stephanie Hubert's Bergzeit roles date from 2022. Jorrit Posor has left FINN.
 - [ ] **dbt Labs staff are labelled.** Stephan Durry works there. Stephan Durry can speak, but check the line-up has practitioners first.
 
-## 5. Next run
+## 6. Next run
 
-- **People still without a location:** 17.
-  - Searched once on LinkedIn, no match: Benita Zeug, John Held, Lennart Werner, Viola Oduola, Giuliano Gaub, Hiroshi Hamano, Almuth Hattwich, Niels Warnecke, Tobias Walter and Kimia Karamzadeh.
-  - Never searched on LinkedIn: Christopher Gutknecht, Michal Lapinski, Pradeep Srikakolapu, Tim Hiebenthal, Allan Mitchell, Geethu Uday and Polina Galkin.
-- **Speakers left out** because their event pages name no employer: Martin Worzalla, Jan Behnke and Aychin Gasimov (Snowflake user group, May 2025), Daniel Schmidt and Beatrix Stade (Analytics Pioneers), and Annalena Wiesheu and Miriam Deml (AWS Women's User Group).
-- **What to try first:** LinkedIn searches for the 7 people never searched there, starting with Christopher Gutknecht. Then read the November 2025 chapter event through `gql2`, since it has no talks on record.
-
-## 6. Replication prompt
-
-````
-You are extending the Munich dbt dataset: munich/munich_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. The region is the Munich metro area.
-Read munich/SEARCH_METHOD.md first, then research/README.md and the briefs it links
-(raw-format.md, location-task.md, linkedin-task.md).
-
-Budget about 25 web searches. Prefer direct fetches and APIs.
-
-1. New talks: the Munich dbt Meetup, Munich Snowflake User Group (its event API), Munich
-   Datageeks, Kaggle Munich and Analytics Pioneers, through the meetup.com gql2 endpoint.
-2. New posts: the b.telligent and synvert blogs (sitemaps plus author lines), inovex and
-   Woodmark. Then GitHub dbt repositories with Munich or Bavaria owners.
-3. Women-in-data: new WiDS Munich, AWS Women's User Group and PyLadies Munich events. Take
-   speakers only from the community's own events.
-4. Locations: the 7 never-searched people listed in SEARCH_METHOD.md §5.
-Rules: never open LinkedIn pages, use only search results. Record professional information
-only, never gender, and pronouns only when self-stated. Assemble with research/assemble.py
---base, apply locations with research/apply_locations.py, and run research/validate.py.
-````
+- **Sources to try first:**
+  - **November 2025 chapter event:** read it through meetup.com, since it has no talks on record.
+  - **Community events:** new events of the Munich dbt Meetup, Munich Snowflake User Group (through its event API), Munich Datageeks, Kaggle Munich, Analytics Pioneers, WiDS Munich, AWS Women's User Group and PyLadies Munich.
+  - **Blogs:** new posts on the b.telligent and synvert blogs (sitemaps plus author lines), inovex and Woodmark. Then GitHub dbt repositories with Munich or Bavaria owners.
+  - **Speakers left out:** their event pages name no employer. They are Martin Worzalla, Jan Behnke and Aychin Gasimov (Snowflake user group, May 2025), Daniel Schmidt and Beatrix Stade (Analytics Pioneers), and Annalena Wiesheu and Miriam Deml (AWS Women's User Group).
+- **People to locate:** 17 people have no known location.
+  - **Searched once on LinkedIn, no match:** Benita Zeug, John Held, Lennart Werner, Viola Oduola, Giuliano Gaub, Hiroshi Hamano, Almuth Hattwich, Niels Warnecke, Tobias Walter and Kimia Karamzadeh.
+  - **Never searched on LinkedIn:** Christopher Gutknecht, Michal Lapinski, Pradeep Srikakolapu, Tim Hiebenthal, Allan Mitchell, Geethu Uday and Polina Galkin. Start with Christopher Gutknecht.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `munich/munich_dbt_companies.json`, the Munich dbt Meetup, `../enriched/munich-dbt-meetup.json` and the region above. Add: "Use the Munich Snowflake User Group event API for its line-ups."
 
 ## Change log
 

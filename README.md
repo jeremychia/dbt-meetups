@@ -70,7 +70,7 @@ dashboard/build_organiser.sh
 
 ### Add a chapter
 
-1. Build the research with the method and scripts in [`research/`](research/README.md). The result is `<folder>/<region>_dbt_companies.json`, in the shared schema from [`berlin_planning/SEARCH_METHOD.md`](berlin_planning/SEARCH_METHOD.md) §3, plus a `SEARCH_METHOD.md` for the city.
+1. Build the research with the [central search method](research/README.md) and its scripts. The result is `<folder>/<region>_dbt_companies.json`, in the [shared schema](research/README.md#4-shared-schema-version-3), plus city notes in `<folder>/SEARCH_METHOD.md` from the [template](research/city-method-template.md).
 2. Add a line to `CHAPTERS` in `dashboard/build_organiser_data.py`, giving its label, goal (`speakers`, `attendees` or `both`) and area (`Europe`, `North America` or `Asia-Pacific`). The area decides where the city sits in the picker. Without a line, the chapter still loads, with goal `both` under `Other`.
 3. Run `dashboard/build_organiser.sh`.
 

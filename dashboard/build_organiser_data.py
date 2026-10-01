@@ -1,6 +1,6 @@
 """Builds organiser/organiser_data.json from every <region>_dbt_companies.json in the repo.
 
-The files follow the shared schema in berlin_planning/SEARCH_METHOD.md §3.
+The files follow the shared schema in research/README.md §4.
 """
 
 import glob
@@ -62,7 +62,7 @@ def vendor_label(company_name):
 
 TIER_ORDER = {"1": 0, "2": 1, "backup": 2, "3": 3, "connector": 4, "organiser": 5}
 # within a tier, emerging voices (publish, but no talk yet) come before proven speakers:
-# the meetup wants to give first-time speakers a chance. See SEARCH_METHOD.md "Outreach order".
+# the meetup wants to give first-time speakers a chance. See research/README.md §3, "Outreach order".
 LEAD_ORDER = {"emerging_voice": 0, "proven_speaker": 1, "featured": 2, "no_public_content": 3}
 LEAD_REASONS = {
     "emerging_voice": "first-time speaker: publishes, no talk yet",

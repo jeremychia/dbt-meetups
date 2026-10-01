@@ -1,4 +1,4 @@
-"""Checks that <region>_dbt_companies.json files follow the shared schema (berlin_planning/SEARCH_METHOD.md §3).
+"""Checks that <region>_dbt_companies.json files follow the shared schema (research/README.md §4).
 
 usage, from the repo root: python3 research/validate.py [<file> ...]
 """

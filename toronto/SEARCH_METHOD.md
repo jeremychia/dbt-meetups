@@ -1,10 +1,10 @@
-# Toronto dbt search: method, lessons and replication prompt
+# Toronto: city notes
 
-This file goes with `toronto_dbt_companies.json`. It explains how the dataset was built, what worked and what didn't, and how to extend it. The shared method and scripts are in [`../research/README.md`](../research/README.md).
+This file holds what is specific to Toronto. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
 
-- **First built:** 2026-09-24
-- **Goal:** find people in the Greater Toronto Area who could **speak at** (or attend) the [Toronto dbt Meetup](https://www.meetup.com/toronto-dbt-meetup/), and the local companies that use dbt.
+- **Chapter:** [Toronto dbt Meetup](https://www.meetup.com/toronto-dbt-meetup/), data in `toronto_dbt_companies.json`
 - **Region:** the Greater Toronto Area, including the Waterloo region.
+- **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
 **At a glance** (version 2, 2026-10-01)
@@ -25,91 +25,153 @@ This file goes with `toronto_dbt_companies.json`. It explains how the dataset wa
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
 
-## 1. How the search was done
+## 1. Where to look in Toronto
 
-Two research runs built the file. The first build (2026-09-24) used about 18 web searches and a job ad scan. The extension (2026-10-01) used about 20 web searches, then direct page fetches once the session limit was reached.
+Two research runs built the file. The first build (2026-09-24) used about 18 web searches and a job ad scan. The extension (2026-10-01) used about 20 web searches, then direct page fetches once the session limit was reached. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
 
-### Step 1: Local user groups and meetups
+### User groups and meetups
 
-- **[Snowflake Toronto User Group](https://usergroups.snowflake.com/toronto/):** the best source of 2025 and 2026 local speakers and organisers. Its Bevy pages fetch cleanly. The [Meetup copy of the group](https://www.meetup.com/snowflake-usergroup-toronto/) added 11 events, including 2026 expert tables.
+- **[Snowflake Toronto User Group](https://usergroups.snowflake.com/toronto/):** the best source of 2025 and 2026 local speakers and organisers. The Bevy pages fetch cleanly. The [Meetup copy of the group](https://www.meetup.com/snowflake-usergroup-toronto/) added 11 events, including 2026 expert tables.
 - **[Toronto Databricks User Group](https://usergroups.databricks.com/toronto-databricks-user-group/):** July 2026 speakers. dbt Labs is a local sponsor.
-- **[Toronto Modern Data Stack](https://www.meetup.com/toronto-modern-data/):** the city's 2022 to 2024 dbt speaker pool. The group is now dormant and has rebranded as Toronto Enterprise AI. Its speakers' roles need re-checking.
-- **Found through Meetup `gql2`:** 25 Toronto and Waterloo groups, listed in one `groupSearch` call by latitude and longitude. The ones that yielded were:
-  - [Toronto Apache Airflow Meetup](https://www.meetup.com/toronto-apache-airflow-meetup/): three speakers at an in-person event in May 2025.
-  - [Toronto Apache Kafka Ecosystem Meetup](https://www.meetup.com/toronto-kafka/): Geotab data platform talks in September 2026.
-  - [Toronto Data Engineering Meetup with ClickHouse](https://luma.com/8p8unbnw): 2026 speakers from FiveOneFour and Evidence.
-- **Organiser only:** [Data Engineers in Toronto](https://www.meetup.com/data-engineers-in-toronto/) runs online talks centred on Microsoft Fabric.
-- **No yield:** the [Toronto Data Professionals Community](https://www.meetup.com/toronto-data-professionals-meetup-group/) had one intro-to-dbt talk, by a speaker from outside the region. The [Waterloo Data Science and Data Engineering](https://www.meetup.com/waterloo-data-science/) group, ODSC, Analytics.Club and Toronto AI groups had no dbt or analytics engineering talks since 2024.
+- **[Toronto Modern Data Stack](https://www.meetup.com/toronto-modern-data/):** the city's 2022 to 2024 dbt speaker pool. The group is now dormant and has rebranded as Toronto Enterprise AI. Read it with Meetup `gql2`, and re-check the speakers' current roles.
+- **Meetup `gql2` with plain `curl`:** one `groupSearch` call by latitude and longitude listed 25 Toronto and Waterloo groups. The ones that yielded were:
+  - **[Toronto Apache Airflow Meetup](https://www.meetup.com/toronto-apache-airflow-meetup/):** three speakers at an in-person event in May 2025.
+  - **[Toronto Apache Kafka Ecosystem Meetup](https://www.meetup.com/toronto-kafka/):** Geotab data platform talks in September 2026.
+  - **[Toronto Data Engineering Meetup with ClickHouse](https://luma.com/8p8unbnw):** 2026 speakers from FiveOneFour and Evidence.
+- **[Data Engineers in Toronto](https://www.meetup.com/data-engineers-in-toronto/):** organiser only. The group runs online talks centred on Microsoft Fabric.
+- **Chapter history:** every named speaker in [`../enriched/toronto-dbt-meetup.json`](../enriched/toronto-dbt-meetup.json) was added as a person. That file holds 4 meetups, from 2025-09-17 to 2026-08-19. The first was a social with no talks. 4 people in the file have spoken at the chapter. A speaker listed by first name only, "Michelle" (November 2025), was skipped.
 
-### Step 2: Conferences
+### Conferences
 
 - **[dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers):** matching Toronto employer names against the page text found only KOHO, with Célia Bru and Gabriel Gambacorta.
 - **[Databricks Data + AI World Tour Toronto 2025](https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog):** customer speakers from CIBC, Manulife, Intact, Apotex and Canadian Tire, mostly senior leaders.
 - **[Generative AI Summit Toronto](https://world.aiacceleratorinstitute.com/location/toronto/speakers):** data leaders from Wealthsimple, RBC, TD and Interac, on AI topics.
-- **Not readable:** the [Coalesce 2025 speaker pages](https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers) and the [Snowflake World Tour Toronto 2026 speakers](https://www.snowflake.com/en/world-tour/toronto/speakers/) are rendered by JavaScript. The [Big Data & Analytics Summit Canada](https://bigdatasummitcanada.com/all-speakers/) was not fetched.
 
-### Step 3: Company blogs
+### Company blogs
 
-- **[Loblaw Digital on Medium](https://medium.com/loblaw-digital):** the best Toronto company blog for dbt authors. A post on generating dbt documentation with LLMs, and a Data as a Service series, name 7 authors. Medium blocks direct fetches, so the feeds were read through `api.rss2json.com`.
+- **[Loblaw Digital on Medium](https://medium.com/loblaw-digital):** the best Toronto company blog for dbt authors. A post on generating dbt documentation with LLMs, and a Data as a Service series, name 7 authors. Medium blocks direct fetches, so the feeds were read through `api.rss2json.com`, which returns a publication's last 10 posts with full text.
 - **[Shopify Data](https://medium.com/data-shopify):** dbt posts from 2020 only.
-- **No dbt posts:** the [Shopify Engineering](https://shopify.engineering/), [Wealthsimple Engineering](https://engineering.wealthsimple.com/) and [Faire](https://craft.faire.com/all?topic=engineering) blogs, and the latest 10 posts of the [Wealthsimple Medium feed](https://medium.com/wealthsimple).
-- **No yield:** [dev.to](https://dev.to/t/dbt) and GitHub user search by location gave job-seeker portfolios, not speakers. GitHub gave one person, Hubert Chan (Granum).
+- **GitHub user search:** one person, Hubert Chan (Granum).
 
-### Step 4: Women-in-data communities
+### Women-in-data communities
 
-This step finds speakers through women-focused groups' own events. It never records or guesses anyone's gender.
+Speakers come from women-focused groups' own events. Nobody's gender is recorded or guessed. 5 people are tagged `women_in_data_community`.
 
-- **[PyLadies Toronto](https://www.meetup.com/PyLadies-Toronto/):** its organiser is recorded as a connector. The group is back in person from April 2026, with a call for lightning talks.
-- **[AWS User Group Women in Tech Ontario](https://www.meetup.com/aws-women-in-tech-user-group-ontario/):** its organiser is recorded as a connector.
+- **[PyLadies Toronto](https://www.meetup.com/PyLadies-Toronto/):** the organiser is recorded as a connector. The group is back in person from April 2026, with a call for lightning talks.
+- **[AWS User Group Women in Tech Ontario](https://www.meetup.com/aws-women-in-tech-user-group-ontario/):** the organiser is recorded as a connector.
 - **[R-Ladies Toronto](https://www.meetup.com/R-Ladies-Toronto/):** one lightning-talk speaker.
 - **[WiDS Toronto @ Dataiku](https://www.widsworldwide.org/events/event/wids-toronto-dataiku/):** names event ambassadors only, not panellists.
-- **No yield:** [PyData Toronto](https://www.meetup.com/pydata-toronto/), Toronto Women's Data Group and Women in Big Data Toronto had no local speaker events since mid-2024.
-- **Result:** 5 people are tagged `women_in_data_community`.
 
-### Step 5: Job ads
+### Job ads and locations
 
-- **First build:** a logged-out scan of LinkedIn Jobs for "dbt" in the Toronto area. Up to 150 ads were checked for the whole word "dbt". 70 ads at 52 companies mention it.
-- **Current rule:** the shared method no longer allows fetching the LinkedIn Jobs API. Refresh the ads through job board `site:` searches instead.
-
-### Step 6: Chapter history
-
-- **Source:** every named speaker in [`../enriched/toronto-dbt-meetup.json`](../enriched/toronto-dbt-meetup.json) was added as a person. That file holds 4 meetups, from 2025-09-17 to 2026-08-19. The first was a social with no talks.
-- **Result:** 4 people in the file have spoken at the chapter. A speaker listed by first name only, "Michelle" (November 2025), was skipped.
-
-### Step 7: Location pass and LinkedIn pass
-
-The location rules are in [`../research/README.md`](../research/README.md). In short, a location needs the person's own profile, or a recent in-person local talk plus a local office.
-
-- **Location pass (page fetches):** 6 people placed, 4 in the region and 2 elsewhere.
-  - Daria Sukhareva: a Tableau Public profile linked from kwwhat.com.
-  - Archie Sarre Wood: a GitHub profile.
-  - Nicole Kim and Jessie Lamontagne: in-person chapter talks in August 2026, at a Toronto-based employer.
-  - Nicolas Joseph (Portland) and John Miner (Providence): their own GitHub and Sessionize profiles.
+- **LinkedIn Jobs (first build):** a logged-out scan for "dbt" in the Toronto area. Up to 150 ads were checked for the whole word "dbt". 70 ads at 52 companies mention it.
+- **Location pass (page fetches):** 6 people placed under the [central location rules](../research/README.md#6-location-rules), 4 in the region and 2 elsewhere.
+  - **Daria Sukhareva:** a Tableau Public profile linked from kwwhat.com.
+  - **Archie Sarre Wood:** a GitHub profile.
+  - **Nicole Kim and Jessie Lamontagne:** in-person chapter talks in August 2026, at a Toronto-based employer.
+  - **Nicolas Joseph (Portland) and John Miner (Providence):** each person's own GitHub and Sessionize profiles.
 - **LinkedIn pass (search results only):** 1 person searched. The result for Josh Harris gave Toronto, but it may describe the company rather than the person. The profile link is recorded and the location stays unknown.
-- **Still unknown:** 5 people.
 
-## 2. What we learnt
+## 2. What didn't work here
 
-- **Sources that worked:**
-  - **Snowflake and Databricks user group pages:** for a mid-sized chapter, they give the best 2025 and 2026 speaker lists and organisers.
-  - **Dormant meetups:** Toronto Modern Data Stack holds the city's older dbt speakers. Read it with Meetup `gql2` and re-check current roles.
-  - **Meetup `gql2`:** it works from plain `curl`, and `groupSearch` lists a city's data groups in one call.
-  - **`api.rss2json.com`:** it returns a Medium publication's last 10 posts with full text.
-- **Sources that didn't:**
-  - **Medium:** it blocks `curl` and direct fetches. rss2json rate-limits after about 10 new feeds.
-  - **dev.to and GitHub location search:** job-seeker portfolios, not worth the calls.
-  - **JavaScript pages:** Coalesce 2025 and Snowflake World Tour speaker lists.
-  - **Web search:** the session limit stopped the extension after about 20 searches.
-- **Watch out for:**
-  - **Leaders, not practitioners:** the Databricks World Tour and AI summit agendas give senior bank and insurer leaders. They suit panels better than technical talks, and most sit in tier 3.
-  - **Old posts:** the Loblaw Digital posts are from 2023, and the authors' titles were not stated. Check current roles.
-  - **Off-topic posts:** a first-time speaker (an "emerging voice") is someone who publishes about dbt but has no talk on record. Samara Xiang reached tier 1 by the rule, but the post is about machine learning experiments, not dbt.
-  - **People in two cities:** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
-  - **Vendor speakers:** Snowflake, Astronomer, FiveOneFour, Evidence and Artemis staff fill several slots. dbt Labs staff are labelled in the cockpit. Muneeb Master works there and can speak, but check the line-up has practitioners first.
+- **[Toronto Data Professionals Community](https://www.meetup.com/toronto-data-professionals-meetup-group/):** one intro-to-dbt talk, by a speaker from outside the region.
+- **Other local groups:** [Waterloo Data Science and Data Engineering](https://www.meetup.com/waterloo-data-science/), ODSC, Analytics.Club and Toronto AI groups had no dbt or analytics engineering talks since 2024.
+- **JavaScript pages:** the [Coalesce 2025 speaker pages](https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers) and the [Snowflake World Tour Toronto 2026 speakers](https://www.snowflake.com/en/world-tour/toronto/speakers/) are rendered by JavaScript.
+- **[Big Data & Analytics Summit Canada](https://bigdatasummitcanada.com/all-speakers/):** not fetched.
+- **Blogs with no dbt posts:** [Shopify Engineering](https://shopify.engineering/), [Wealthsimple Engineering](https://engineering.wealthsimple.com/), [Faire](https://craft.faire.com/all?topic=engineering), and the latest 10 posts of the [Wealthsimple Medium feed](https://medium.com/wealthsimple).
+- **Medium:** blocks `curl` and direct fetches. rss2json rate-limits after about 10 new feeds.
+- **[dev.to](https://dev.to/t/dbt) and GitHub location search:** job-seeker portfolios, not speakers, and not worth the calls.
+- **Women-in-data groups:** [PyData Toronto](https://www.meetup.com/pydata-toronto/), Toronto Women's Data Group and Women in Big Data Toronto had no local speaker events since mid-2024.
+- **Web search:** the session limit stopped the extension after about 20 searches.
 
-## 3. Key leads
+## 3. Companies looked at
 
-A tier is a priority level. Tier 1 means a person in the region (or not known to be elsewhere) with a dbt item from 2024 onwards, or a first-time speaker with a post from 2024 onwards. Toronto has only 4 tier-1 people.
+- **Leaders, not practitioners:** the Databricks World Tour and AI summit agendas give senior bank and insurer leaders. These suit panels better than technical talks, and most sit in tier 3.
+- **Loblaw Digital** supplied all 7 first-time speakers added in the extension. The posts are from 2023, and the authors' titles were not stated.
+- **Vendor speakers:** Snowflake, Astronomer, FiveOneFour, Evidence and Artemis staff fill several slots.
+- **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
+
+<!-- companies:start -->
+102 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Strong dbt use</b> (6)</summary>
+
+KOHO Financial, Secoda, SELECT, Shopify, Toronto Modern Data Stack (now 'Toronto Enterprise AI'), Wealthsimple
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (58)</summary>
+
+Agoda, Akkodis, AnswerLayer, Artemis (local presence not confirmed), Autodesk, Aviva Canada, Bayview Asset Management, LLC, Big Viking Games, CGI, CI Financial, Clio, Clutch, Coforge, commonsku, CoStar Group, Direct IT Recruiting Inc., Docebo, eBay, ecobee, Enterprise Solutions Inc., FacilityOS, Felix, Financeit, Generac, Granum (local presence not confirmed), HelloFresh, Homebase, Kake, Lakeview Loan Servicing, LLC., Loblaw Digital, Lyft, MaintainX, McKesson, Millennium Software and Staffing Inc, Movable Ink, Pacific Smoke International Inc., Passage, Princeton IT Services, Inc, Propel, Propel Holdings, RAVL, RBC, Relay, Scotiabank, Sienna Senior Living, Slalom, Spaulding Ridge, Spectrum Health Care (SHC), Tactable, TekRek, Thomson Reuters, Thumbtack, Toptal, Toronto Databricks User Group, Venterra Realty, Wave Financial, ZoomInfo, Zynga
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (2)</summary>
+
+Archetype Consulting Inc., Snowflake Toronto User Group
+
+</details>
+
+<details><summary><b>Not verified</b> (34)</summary>
+
+Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CBC, CIBC, Cineplex, Compass Data + AI (local presence not confirmed), Create Music Group (local presence not confirmed), Data Engineers in Toronto, Databricks (local presence not confirmed), Dataiku (local presence not confirmed), dbt Labs (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), FiveOneFour (local presence not confirmed), Geotab, Intact Financial Corporation, Interac, kWwhat (local presence not confirmed), Manulife, Mejuri, MHS Analytics Inc. (local presence not confirmed), Moneris, New Stadium, OneEleven, Polar Labs, Rootly, Sanofi, Snowflake, Super.com, TD Bank, Toronto Apache Airflow Meetup, Viafoura (local presence not confirmed), Women in Big Data Toronto
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+AWS User Group Women in Tech Ontario, PyLadies Toronto
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (7)</summary>
+
+- https://craft.faire.com/all?topic=engineering
+- https://engineering.wealthsimple.com/
+- https://medium.com/loblaw-digital
+- https://shopify.engineering/
+- https://usergroups.snowflake.com/toronto/
+- https://www.secoda.co/authors/lindsay-murphy
+- https://www.womeninbigdata.org/event/women-in-big-data-toronto-lead-with-data/
+
+</details>
+
+<details><summary><b>Other sources checked</b> (29)</summary>
+
+- [Toronto dbt Meetup past events (Meetup gql2)](https://www.meetup.com/toronto-dbt-meetup/)
+- [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
+- [Coalesce 2025 speakers (Cvent)](https://coalesce.getdbt.com/event/21662b38-2c17-4c10-9dd7-964fd652ab44/speakers) (nothing useful)
+- [Toronto Modern Data Stack (Meetup gql2)](https://www.meetup.com/toronto-modern-data/)
+- [Snowflake Toronto User Group (Bevy + Meetup)](https://usergroups.snowflake.com/toronto/)
+- [Toronto Databricks User Group](https://usergroups.databricks.com/toronto-databricks-user-group/)
+- [Data Engineers in Toronto (Meetup gql2)](https://www.meetup.com/data-engineers-in-toronto/)
+- [PyData Toronto / PyLadies Toronto / R-Ladies Toronto / Toronto Women's Data Group / Women in Big Data Toronto (Meetup gql2)](https://www.meetup.com/pydata-toronto/) (nothing useful)
+- [WiDS Toronto @ Dataiku](https://www.widsworldwide.org/events/event/wids-toronto-dataiku/)
+- [Shopify Engineering blog](https://shopify.engineering/) (nothing useful)
+- [Wealthsimple Engineering blog](https://engineering.wealthsimple.com/) (nothing useful)
+- [Faire The Craft](https://craft.faire.com/all?topic=engineering) (nothing useful)
+- [Toronto Data Professionals Community](https://torontodpc.ca/) (nothing useful)
+- [Big Data & Analytics Summit Canada](https://bigdatasummitcanada.com/all-speakers/) (nothing useful)
+- [LinkedIn Jobs guest API (keywords=dbt, Toronto-area)](https://www.linkedin.com/jobs/search?keywords=dbt)
+- [Toronto Snowflake User Group (Meetup gql2)](https://www.meetup.com/snowflake-usergroup-toronto/)
+- [Toronto Apache Airflow Meetup (Meetup gql2)](https://www.meetup.com/toronto-apache-airflow-meetup/)
+- [Toronto Apache Kafka Ecosystem Meetup (Meetup gql2)](https://www.meetup.com/toronto-kafka/)
+- [Toronto Data Engineering Meetup with ClickHouse (Luma)](https://luma.com/8p8unbnw)
+- [Databricks Data + AI World Tour Toronto 2025](https://dataaisummit.databricks.com/flow/db/wt25yyz/scheduler/page/catalog)
+- [Generative AI Summit Toronto speakers](https://world.aiacceleratorinstitute.com/location/toronto/speakers)
+- [Loblaw Digital Medium (rss2json)](https://medium.com/loblaw-digital)
+- [Shopify Data Medium and shopify.engineering atom feed](https://medium.com/data-shopify)
+- [Wealthsimple and Faire Medium feeds](https://medium.com/wealthsimple) (nothing useful)
+- [Toronto Data Professionals Community (Meetup gql2)](https://www.meetup.com/toronto-data-professionals-meetup-group/) (nothing useful)
+- [PyLadies / R-Ladies / AWS Women in Tech Ontario (Meetup gql2)](https://www.meetup.com/PyLadies-Toronto/)
+- [Waterloo Data Science and Data Engineering, Toronto Data Engineering and Cloud, ODSC, Analytics.Club, Toronto AI groups (Meetup gql2)](https://www.meetup.com/waterloo-data-science/) (nothing useful)
+- [Snowflake World Tour Toronto 2026 speakers](https://www.snowflake.com/en/world-tour/toronto/speakers/) (nothing useful)
+- [dev.to tag dbt / GitHub user search by location](https://dev.to/t/dbt) (nothing useful)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
 
 - **First-time speakers:**
   - **Joseph Jing (Loblaw Digital):** lead author of ["Leveraging LLMs to generate AI driven dbt documentation"](https://medium.com/loblaw-digital/leveraging-llms-to-generate-ai-driven-dbt-documentation-c4735faa6ca5) (2023-11).
@@ -121,7 +183,7 @@ A tier is a priority level. Tier 1 means a person in the region (or not known to
   - **Ian Whitestone (SELECT):** ["Proven methods for optimizing your dbt project"](https://c.select.dev/blog/proven-methods-for-optimizing-your-dbt-project-dbt-coalesce-2023), Coalesce 2023. Attended the Snowflake Toronto User Group in person in July 2026.
   - **Xiao Ma and Wenyang Liu (Geotab):** [data platform talks](https://www.meetup.com/toronto-kafka/events/316272838/) at the Toronto Kafka meetup, September 2026.
   - **Alvira Narshidani (Scotia Global Asset Management):** led a [BI and AI storytelling table](https://www.meetup.com/snowflake-usergroup-toronto/events/315505233/) at the Snowflake Toronto User Group, July 2026. One of few non-vendor practitioners on recent agendas.
-- **Connectors:** community organisers who can introduce people.
+- **Connectors:**
   - **Eddy Zulkifly:** [Toronto dbt Meetup](https://www.meetup.com/toronto-dbt-meetup/) organiser.
   - **Augusto Rosa (Archetype Consulting) and Ryan Ovas (Polar Labs):** organisers of the [Snowflake Toronto User Group](https://usergroups.snowflake.com/toronto/).
   - **Kevin Poulton (Databricks):** leads the [Toronto Databricks User Group](https://usergroups.databricks.com/toronto-databricks-user-group/) organiser team.
@@ -129,46 +191,28 @@ A tier is a priority level. Tier 1 means a person in the region (or not known to
   - **Vijayanirmala Gopal:** organiser of [AWS User Group Women in Tech Ontario](https://www.meetup.com/aws-women-in-tech-user-group-ontario/).
   - **Michael Olafusi (MHS Analytics):** organiser of [Data Engineers in Toronto](https://www.meetup.com/data-engineers-in-toronto/).
 
-## 4. Before outreach
+## 5. Before outreach
 
 - [ ] **Check "in region" calls.** 62 people are marked in the region, but only 4 of those calls come from the location pass. Most came from a local event or the employer's head office during research.
 - [ ] **Check unknown locations.** 5 people: Josh Harris, Josh Gray, Constance Martineau, Amanda Milberg and Jacqueline Kuo.
 - [ ] **Check Gabriel Gambacorta.** No title was captured, and Toronto is assumed from KOHO's head office.
-- [ ] **Check tier-1 people raised by the rule.** Samara Xiang writes about machine learning, not dbt.
+- [ ] **Check tier-1 people raised by the rule.** Toronto has only 4 tier-1 people. Samara Xiang reached tier 1 by the rule, but the post is about machine learning experiments, not dbt.
 - [ ] **Check current roles** for Loblaw Digital authors and Toronto Modern Data Stack speakers from 2022 and 2023.
 - [ ] **Coordinate with the Montreal chapter** on Célia Bru, Gabriel Gambacorta and Ian Whitestone.
 - [ ] **Check who is already booked.** Nicole Kim, Jessie Lamontagne, Josh Harris and Daria Sukhareva spoke in 2026.
+- [ ] **Check the line-up has practitioners first.** Muneeb Master works at dbt Labs and is labelled.
 
-## 5. Next run
+## 6. Next run
 
-- **Read the unread Medium feeds:** Ritual, Wattpad, KOHO, League, Super.com, Clio, Infostrux and the dbt tag feed. Use rss2json and space the calls out.
-- **Finish LinkedIn.** 66 people are still `not_searched`. Start with tier 1 and tier 2.
-- **Refresh job ads** with `site:` searches on Lever, Greenhouse and Ashby. The 70 ads date from 2026-09-24.
-- **Try the pages not read yet:** Coalesce 2025 speakers (needs a browser), Snowflake World Tour Toronto 2026, Day of Data Toronto 2026 and Big Data & Analytics Summit Canada.
-- **Ask the PyLadies Toronto organiser** about its April 2026 lightning-talk speakers.
-- **Look harder at Waterloo.** No Waterloo group had dbt talks, so try Waterloo company blogs.
-
-## 6. Replication prompt
-
-````
-You are extending my dataset of Toronto companies that use dbt, and people who could speak at or
-attend the Toronto dbt Meetup. The file is toronto/toronto_dbt_companies.json in
-/Users/jeremychia/Documents/Github/dbt-meetups. Region: the Greater Toronto Area, including the
-Waterloo region. Read toronto/SEARCH_METHOD.md first, then research/README.md,
-research/raw-format.md, research/location-task.md and research/linkedin-task.md.
-
-Budget about 25 web searches. Try these first:
-1. Medium feeds through api.rss2json.com: Ritual, Wattpad, KOHO, League, Super.com, Clio, Infostrux.
-2. New events of the Snowflake Toronto and Databricks Toronto user groups, and Toronto data
-   groups through Meetup gql2 groupSearch, with curl.
-3. Day of Data Toronto, Big Data & Analytics Summit Canada, and dbt Summit speaker pages.
-4. Job ads: site: searches on Lever, Greenhouse and Ashby for dbt Toronto.
-
-Rules: never fetch LinkedIn pages or the LinkedIn Jobs API, use only search results. Public
-professional information only; never record or guess gender; pronouns only when self-stated.
-Skip past chapter speakers; the assembler adds them. Assemble with research/assemble.py --base,
-run research/validate.py (must print ok), then add a change-log row below.
-````
+- **Sources to try first:**
+  - **Medium feeds:** Ritual, Wattpad, KOHO, League, Super.com, Clio, Infostrux and the dbt tag feed. Use rss2json and space the calls out.
+  - **User groups:** new events of the Snowflake Toronto and Databricks Toronto user groups, and Toronto data groups through Meetup `gql2` `groupSearch`, with `curl`.
+  - **Job ads:** refresh with `site:` searches on Lever, Greenhouse and Ashby for dbt Toronto. The 70 ads date from 2026-09-24.
+  - **Pages not read yet:** Coalesce 2025 speakers (needs a browser), Snowflake World Tour Toronto 2026, Day of Data Toronto 2026, Big Data & Analytics Summit Canada and dbt Summit speaker pages.
+  - **PyLadies Toronto:** ask the organiser about the April 2026 lightning-talk speakers.
+  - **Waterloo:** no Waterloo group had dbt talks, so try Waterloo company blogs.
+- **People to locate:** 66 people are still `not_searched` on LinkedIn. Start with tier 1 and tier 2, and the 5 unknown locations.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `toronto/toronto_dbt_companies.json`, the chapter `toronto-dbt-meetup`, `../enriched/toronto-dbt-meetup.json` and the region "the Greater Toronto Area, including the Waterloo region". Budget about 25 web searches.
 
 ## Change log
 
