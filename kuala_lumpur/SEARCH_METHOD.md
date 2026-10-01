@@ -7,19 +7,19 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 - **First built:** 2026-09-23
 
 <!-- at-a-glance:start -->
-**At a glance** (version 5, 2026-10-01)
+**At a glance** (version 6, 2026-10-01)
 
 | | Count |
 |---|---|
-| Companies | 89 |
-| People | 44 |
+| Companies | 94 |
+| People | 53 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 26 |
+| Proven speakers | 30 |
 | Spoke at this chapter before | 0 |
 | Based in the region | 37 |
 | Based elsewhere | 4 |
-| Location unknown | 3 |
+| Location unknown | 12 |
 | With a LinkedIn profile | 38 |
 | Job ads mentioning dbt | 50 |
 | Past chapter meetups | 0 |
@@ -56,9 +56,12 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 
 ### Women-in-data communities
 
-- **Highlight marker:** women in data to highlight are marked in `notes` with the prefix `HIGHLIGHT – woman in data`, not with a schema field. Tag a person only when a public source describes the person that way. Never infer it from a name.
-- **Marked so far:** Bee Teng Lim, Goh Pei Xuan and Katie Huang Xiemin (speakers), and Caroline Chong (sponsor).
-- **Leads for more:** [PyLadies KL](https://kl.pyladies.com), MMU TechGirls, and asking data leads at dbt companies to suggest people on their teams.
+- **How people are found:** speakers and organisers come from these communities' own events and are tagged `sourced_via: women_in_data_community`. Nobody's gender is recorded. Pronouns are recorded only when self-published, and none were.
+- **[PyLadies Kuala Lumpur](https://kl.pyladies.com):** launched in 2025, with a committee of 8. It co-ran the [PyLadies x PyData KL meetup](https://www.meetup.com/pydatakl/events/311302096/) on 30 October 2025. Hong Vin Koay of PyData KL hosted it. The meetup had two data talks: "The Danger of Missing Data" by Cheuk Ting Ho (JetBrains) and "Healthcare Data Analytics" by Kim-Ann Git. The about page gave 5 connectors: Daphne Choong (founder), Chong Siow Yen, Delyn Choong, Gamei Chin and Jenna Kassim (Software AG). The site reads with a plain fetch.
+- **Women Techmakers Ambassadors Kuala Lumpur:** they run International Women's Day and October events with [GDG Kuala Lumpur](https://gdg.community.dev/gdg-kuala-lumpur/) every year. The GDG events API lists every event, and each event page names speakers with employer and title. [IWD 2024](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-international-womens-day-iwd-kuala-lumpur-2024/) gave two speakers. Surabhi Pandey (Mindvalley) spoke on trust in data with Google Cloud. Christine Tee (Turing Enterprises) spoke on Gemini with BigQuery. IWD 2023, IWD 2025, Code Pink 2024 and Redefine Resilience 2025 had only AI and career talks. The event pages don't name the ambassadors.
+- **[R-Ladies Kuala Lumpur](https://www.meetup.com/rladies-kuala-lumpur/):** 69 members since 2020. It has never held an event.
+- **No local activity found:** Meetup's group search found no other women-in-data group near Kuala Lumpur. [WiDS](https://www.widsworldwide.org/) and [She Loves Data](https://www.shelovesdata.com/) list no Kuala Lumpur event. The [Girls in Tech Malaysia](https://girlsintech.org/malaysia/) site timed out. The Women in Tech Malaysia domain did not resolve.
+- **Also ask:** data leads at dbt companies to suggest people on their teams.
 
 ## 2. What didn't work here
 
@@ -80,10 +83,10 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **No Kuala Lumpur dbt meetup or Coalesce watch party has ever run.** The only dbt talk found was at Data Council KL in May 2020. Both general data communities, DCKL and the Snowflake User Group KL, have gone quiet. There is room for a new meetup, and both are natural co-hosts.
 - **Best venues and hosts:** MoneyLion (TRX), Xendit (KL Sentral), SEEK (Cap Square), Setel (Bangsar South) and AWS (Mid Valley). All have hosted DCKL or the Snowflake user group.
 - **Clearest dbt use:** Ryt Bank, GXBank, foodpanda KL, Funding Societies, Intrepid Asia, Star Media, TIME dotCom, Wilhelmsen, ROCKWOOL, Nitka (Johor) and onsemi. The most common topics are data warehouses and platforms, GenAI and LLMs, and data governance. Topics tagged with dbt itself are rare, which confirms the gap.
-- **Many large firms are on the watchlist.** 51 of the 89 companies are watchlisted, mostly large Malaysian firms checked without finding dbt. They are kept so they are not researched again. Grab, Shopee, Lazada and Xendit have their data teams mostly in Singapore, Indonesia or China.
+- **Many large firms are on the watchlist.** 55 of the 94 companies are watchlisted, mostly large Malaysian firms checked without finding dbt. They are kept so they are not researched again. Grab, Shopee, Lazada and Xendit have their data teams mostly in Singapore, Indonesia or China.
 
 <!-- companies:start -->
-87 companies and communities were looked at. A company is local when it has people or roles in the region.
+92 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (16)</summary>
 
@@ -103,15 +106,15 @@ Concentrix (KL), K3 Advisory Group (incl. Quantuma), Reap (KL), Rotate (KL), Sta
 
 </details>
 
-<details><summary><b>Not verified</b> (34)</summary>
+<details><summary><b>Not verified</b> (36)</summary>
 
-AirAsia / Capital A / airasia MOVE / Teleport / BigPay, Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), Fasset (KL), Fave, Fuku, iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), Petronas / Petronas Digital, RBC Shared Services Malaysia, Roche (KL), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), Touch 'n Go / TNG Digital, Wise (KL office)
+AirAsia / Capital A / airasia MOVE / Teleport / BigPay, Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), Fasset (KL), Fave, Fuku, iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), Petronas / Petronas Digital, RBC Shared Services Malaysia, Roche (KL), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), Wise (KL office)
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (10)</summary>
+<details><summary><b>Uses a different stack</b> (13)</summary>
 
-AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Experian Malaysia, Genting Malaysia, Grab (PJ/KL tech centre) (local presence not confirmed), Microsoft Fabric Community Malaysia, MR DIY International, PropertyGuru / iProperty (local presence not confirmed), SEEK / Jobstreet (KL tech hub)
+AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identified (local presence not confirmed), Experian Malaysia, Genting Malaysia, Grab (PJ/KL tech centre) (local presence not confirmed), JetBrains (local presence not confirmed), Microsoft Fabric Community Malaysia, MR DIY International, PropertyGuru / iProperty (local presence not confirmed), PyLadies Kuala Lumpur, SEEK / Jobstreet (KL tech hub)
 
 </details>
 
@@ -125,6 +128,26 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Experian Malaysia, 
 - https://medium.com/feed/shopback-tech-blog/tagged/dbt
 - https://medium.com/feed/xendit-engineering
 - https://www.aimpointdigital.com/partners/dbt-labs
+
+</details>
+
+<details><summary><b>Other sources checked</b> (15)</summary>
+
+- [Meetup gql2 groupSearch near Kuala Lumpur](https://www.meetup.com/gql2)
+- [R-Ladies Kuala Lumpur (Meetup gql2)](https://www.meetup.com/rladies-kuala-lumpur/) (nothing useful)
+- [PyData KL past events (Meetup gql2)](https://www.meetup.com/pydatakl/)
+- [PyLadies Kuala Lumpur site](https://kl.pyladies.com)
+- [GDG Kuala Lumpur events API](https://gdg.community.dev/api/event_slim/for_chapter/486/?status=Completed&page_size=100)
+- [Women Techmakers IWD Kuala Lumpur 2024](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-international-womens-day-iwd-kuala-lumpur-2024/)
+- [Women Techmakers IWD Kuala Lumpur 2023](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-international-womens-day-iwd-kuala-lumpur-2023/) (nothing useful)
+- [Women Techmakers IWD 2025: Redefine Possible](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-international-womens-day-iwd-2025-redefine-possible/) (nothing useful)
+- [Women Techmakers Code Pink 2024](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-code-pink-breast-cancer-awareness-month/) (nothing useful)
+- [Women Techmakers Redefine Resilience 2025](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-redefine-resilience/) (nothing useful)
+- [Girls in Tech Malaysia](https://girlsintech.org/malaysia/) (nothing useful)
+- [She Loves Data](https://www.shelovesdata.com/) (nothing useful)
+- [WiDS Worldwide site search](https://www.widsworldwide.org/wp-json/wp/v2/search?search=Malaysia) (nothing useful)
+- [Women in Tech Malaysia](https://womenintechmalaysia.com/) (nothing useful)
+- [Luma Kuala Lumpur discover](https://api.lu.ma/discover/get-paginated-events?discover_place_api_id=discplace-O15L1VZiYe0GYGm) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -164,6 +187,13 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Experian Malaysia, 
   - **Job ads:** LinkedIn Jobs with `location=Malaysia`, freehire.me and Indeed Malaysia. Exclude therapy "DBT" ads.
   - **Named data leads:** foodpanda KL, Funding Societies MY, Deriv, Intrepid Asia (a Head of Data role is open) and Star Media.
   - **After the first meetup:** add the group to `../pipeline/dbt-meetup-groups.json` and run `../pipeline/run_pipeline.sh`. Then fill `past_meetups` and `past_chapter_talks` from `../enriched/<kl-group>.json`.
+- **Women-in-data communities not yet reachable:**
+  - **MMU TechGirls:** no public event page was found.
+  - **Girls in Tech Malaysia:** the site timed out. Try it in a browser.
+  - **Women in Tech Malaysia and WiDS Kuala Lumpur:** no site or chapter event was found.
+  - **Women Techmakers Ambassadors KL:** ask GDG KL for the ambassadors' names, and for the speaker of "Data Science in Healthcare" at Code Pink 2024.
+  - **PyLadies KL on Instagram, Facebook and Peatix:** not read. Check them for events after PyCon MY 2025.
+- **People from the women-in-data pass:** the 9 people added have no LinkedIn search and no known location.
 - **People to locate:** 3 people have no known location: Ng Ser Jie (MoneyLion), Michael Rorig (Ikano Retail) and David Lexa (Xendit).
 - **LinkedIn profiles still missing:** Wei Jian, Syakeer Rahman, Ng Ser Jie and Michael Rorig. Try other name spellings, or ask Lee Boon Keong or DCKL for introductions.
 - **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `kuala_lumpur/kuala_lumpur_dbt_companies.json`, no chapter or enriched file yet, and the region above. Add: "There is no chapter yet, so look for co-organisers as well as speakers. Read Data Council KL event pages on Luma from inside a browser tab. Scan LinkedIn Jobs with location=Malaysia, plus freehire.me and Indeed Malaysia."
@@ -174,6 +204,7 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Experian Malaysia, 
 |---|---|---|
 | 2026-09-23 | 1 | First search. 89 companies (51 on the watchlist), 44 people, 50 job postings at 36 companies, 43 unique content items. 3 tier-1 leads (Lee Boon Keong, Au Yong Min Hao, Bee Teng Lim), 14 tier-2, 12 connectors. LinkedIn URLs for 26 people; 16 not searched after the session hit the 200-web-search cap. Chapter `kuala_lumpur` added to `dashboard/build_organiser_data.py`. |
 | 2026-09-23 | 2 | Moved to shared schema v2 (`lead_type`): 26 proven speakers, 8 emerging voices, 1 featured, 9 with no public content; tier 1 now 6. LinkedIn pass in a new session: 18 people searched, 14 URLs found (38 of 44 people now have one). Location fixes: Yun Fei Choo and Harvey Li are Singapore-based; Zi Qin Yeow is Malaysia-based; Wei Jian is in Penang; Syakeer Rahman is in Putrajaya. Backup of v1 at `kuala_lumpur_dbt_companies.v1.json`. |
-| 2026-09-23 | 3 | Marked 4 women in data to highlight in `notes` (prefix `HIGHLIGHT`): Bee Teng Lim, Goh Pei Xuan, Katie Huang Xiemin, Caroline Chong. No schema change. Organiser page rebuilt with the Kuala Lumpur chapter. |
+| 2026-09-23 | 3 | Added a `HIGHLIGHT` prefix in `notes` for some people (removed in version 6). No schema change. Organiser page rebuilt with the Kuala Lumpur chapter. |
 | 2026-09-23 | 4 | Shared schema v3 adds `pronouns` (self-stated only, never inferred; none recorded yet) and `sourced_via`, which is derived from evidence (e.g. `women_in_data_community` for the PyLadies x PyData KL speaker). The field list is in `../berlin_planning/SEARCH_METHOD.md` §3. For women-in-data sourcing and the line-up balance check, see that file's Step 2b and §1 Step 6. Backup: `kuala_lumpur_dbt_companies.v3.json`. |
 | 2026-10-01 | 5 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. An in-person talk at a Snowflake community meetup in Kuala Lumpur placed Chang Boon Heng. LinkedIn search results placed Izzudin Hafiz in Kuala Lumpur and Feng Cheng in Singapore. 3 people are still unknown. |
+| 2026-10-01 | 6 | Women-in-data pass. Removed the `HIGHLIGHT` notes. Checked PyLadies KL, Women Techmakers Ambassadors KL (through GDG KL), R-Ladies KL, WiDS, She Loves Data, Girls in Tech Malaysia and Women in Tech Malaysia. Added 9 people with `sourced_via: women_in_data_community`: 4 speakers (Cheuk Ting Ho, Kim-Ann Git, Surabhi Pandey, Christine Tee) and 5 PyLadies KL organisers as connectors. Added community channels for Women Techmakers KL and R-Ladies KL. |

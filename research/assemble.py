@@ -247,7 +247,8 @@ def main():
     base = json.load(open(base_path)) if base_path else None
 
     companies = merge(base["companies"] if base else [], raw.get("companies") or [])
-    past = past_meetups_from(raw["enriched_file"])
+    # a city with no chapter yet has no enriched file: keep whatever past meetups the base already has
+    past = past_meetups_from(raw["enriched_file"]) if raw.get("enriched_file") else (base or {}).get("past_meetups", [])
     add_chapter_speakers(companies, past, raw["chapter_name"], raw["city"])
     rescore(companies, past)
 
@@ -263,7 +264,7 @@ def main():
     ds = {
         "metadata": {
             "title": m.get("title") or f"{raw['city']} dbt companies and people for the {raw['chapter_name']}",
-            "generated_at": TODAY, "prepared_for": "Jeremy Chia (dbt meetups)",
+            "generated_at": TODAY, "prepared_for": m.get("prepared_for") or "Jeremy Chia (dbt meetups)",
             "purpose": m.get("purpose") or f"Find {raw['city']} companies using dbt, and people who could speak at or attend the {raw['chapter_name']}.",
             "version": (m.get("version") or 0) + 1, "schema_version": 3,
             "region": m.get("region") or f"{raw['city']} ({raw['chapter_name']})",
