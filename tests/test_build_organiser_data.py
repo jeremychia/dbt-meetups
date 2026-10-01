@@ -54,6 +54,15 @@ class BuildOrganiserOutputTests(unittest.TestCase):
         acme = next(c for c in self.testtown["companies"] if c["id"] == "acme")
         self.assertEqual(acme["people_count"], 3)
 
+    def test_vendor_staff_are_labelled_not_excluded(self):
+        self.assertEqual(bod.vendor_label("dbt Labs (APAC)"), "dbt Labs")
+        self.assertEqual(bod.vendor_label("Fishtown Analytics"), "dbt Labs")
+        self.assertEqual(bod.vendor_label("Fivetran / dbt Labs (merged 2026)"), "dbt Labs")
+        self.assertEqual(bod.vendor_label("Fivetran"), "Fivetran")
+        self.assertEqual(bod.vendor_label("dbt"), "dbt Labs")
+        self.assertIsNone(bod.vendor_label("dbt Tokyo Crew"))
+        self.assertIsNone(bod.vendor_label("Acme"))
+
     def test_tier_outranks_past_talk_for_speakers(self):
         self.assertLess(self.people["tia-tierone"]["speaker_rank"], self.people["ada-returning"]["speaker_rank"])
         self.assertEqual(self.people["ada-returning"]["speaker_rank"], 3)

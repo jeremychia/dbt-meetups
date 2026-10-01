@@ -88,7 +88,7 @@ def job(j, company_name):
 def company(c):
     out = {
         "id": c.get("id") or slug(c["name"]), "name": c["name"], "type": c.get("type", "employer"), "watchlist": None,
-        "excluded_from_outreach": bool(c.get("excluded_from_outreach")) or slug(c["name"]).startswith("dbt-labs"),
+        "excluded_from_outreach": bool(c.get("excluded_from_outreach")),
         "cities": c.get("cities") or [], "local_presence": c.get("local_presence", "not_confirmed"),
         "dbt_signal": c.get("dbt_signal", "weak"), "stack_signals": c.get("stack_signals") or [],
         "job_postings": [job(j, c["name"]) for j in c.get("job_postings") or []],

@@ -190,6 +190,7 @@
     </select>
     <label><input type="checkbox" id="in-region"> In region only</label>
     <label id="hide-vinted-label"><input type="checkbox" id="hide-vinted"> Hide Vinted colleagues</label>
+    <label id="hide-vendor-label"><input type="checkbox" id="hide-vendor"> Hide dbt Labs and Fivetran staff</label>
     <button class="btn" id="export">Export CSV</button>
   </div>
   <p class="view-note" id="view-note"></p>
@@ -219,7 +220,7 @@ const store = {
 let statuses = store.get('organiser-status', {});
 
 const state = {
-  chapter: null, view: null, search: '', topic: '', lead: '', status: '', inRegion: false, hideVinted: false,
+  chapter: null, view: null, search: '', topic: '', lead: '', status: '', inRegion: false, hideVinted: false, hideVendor: false,
 };
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -255,6 +256,7 @@ function alsoInChip(names) {
 function matchesPerson(p) {
   if (state.inRegion && p.based_in_region !== true) return false;
   if (state.hideVinted && p.internal_vinted) return false;
+  if (state.hideVendor && p.vendor_staff) return false;
   if (state.topic && !p.topics.includes(state.topic)) return false;
   if (state.lead && p.lead_type !== state.lead) return false;
   const st = statusOf('person', p.id);
@@ -314,7 +316,7 @@ function personRow(p) {
     <div class="row-head">
       <div class="rank">#${rank}</div>
       <div class="row-main">
-        <div class="row-title">${esc(p.name)}${p.internal_vinted ? ' <span class="chip">Vinted colleague</span>' : ''}</div>
+        <div class="row-title">${esc(p.name)}${p.internal_vinted ? ' <span class="chip">Vinted colleague</span>' : ''}${p.vendor_staff ? ` <span class="chip warn">${esc(p.vendor_staff)} staff</span>` : ''}</div>
         <div class="row-sub">${esc(p.title || '')}${p.title ? ' · ' : ''}${esc(p.company_name)}${p.company_excluded ? ' <span class="chip bad">not for outreach</span>' : ''}</div>
         <div class="chips">
           ${reasons.map(r => `<span class="chip${r.startsWith('first-time') ? ' good' : ''}">${esc(r)}</span>`).join('')}
@@ -352,6 +354,7 @@ function companyRow(c, i) {
           <span class="chip">${c.people_count} ${c.people_count === 1 ? 'person' : 'people'}</span>
           ${c.watchlist ? '<span class="chip warn">watchlist</span>' : ''}
           ${c.excluded_from_outreach ? '<span class="chip bad">not for outreach</span>' : ''}
+          ${c.vendor ? `<span class="chip warn">${esc(c.vendor)}</span>` : ''}
           ${alsoInChip(c.also_in)}
         </div>
         ${c.stack.length ? `<div class="row-sub" style="margin-top:6px">stack: ${esc(c.stack.join(', '))}</div>` : ''}
@@ -440,6 +443,7 @@ function render() {
   document.getElementById('topic-filter').classList.toggle('hidden', !peopleView);
   document.getElementById('lead-filter').classList.toggle('hidden', state.view !== 'speakers');
   document.getElementById('hide-vinted-label').classList.toggle('hidden', !peopleView);
+  document.getElementById('hide-vendor-label').classList.toggle('hidden', !peopleView);
   document.getElementById('view-note').textContent = VIEW_NOTES[state.view];
 
   const view = document.getElementById('view');
@@ -467,8 +471,8 @@ function exportCsv() {
     rows = ch.companies.filter(matchesCompany).map((c, i) => [i + 1, c.name, c.type, c.cities.join('; '), c.dbt_signal, c.local_presence, c.dbt_job_count, c.people_count, statusOf('company', c.id)]);
   } else {
     const rankKey = state.view === 'attendees' ? 'attendee_rank' : 'speaker_rank';
-    header = ['rank', 'name', 'title', 'company', 'city', 'in_region', 'tier', 'lead_type', 'speaker_potential', 'attendee_potential', 'talk_idea', 'linkedin', 'vinted_colleague', 'status'];
-    rows = visiblePeople().map(p => [p[rankKey], p.name, p.title, p.company_name, p.city, p.based_in_region, p.priority_tier, p.lead_type, p.speaker_potential, p.attendee_potential, p.talk_angle, p.linkedin, p.internal_vinted, statusOf('person', p.id)]);
+    header = ['rank', 'name', 'title', 'company', 'city', 'in_region', 'tier', 'lead_type', 'speaker_potential', 'attendee_potential', 'talk_idea', 'linkedin', 'vinted_colleague', 'vendor_staff', 'status'];
+    rows = visiblePeople().map(p => [p[rankKey], p.name, p.title, p.company_name, p.city, p.based_in_region, p.priority_tier, p.lead_type, p.speaker_potential, p.attendee_potential, p.talk_angle, p.linkedin, p.internal_vinted, p.vendor_staff || '', statusOf('person', p.id)]);
   }
   const csv = [header, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
   const a = document.createElement('a');
@@ -518,6 +522,7 @@ document.getElementById('lead-filter').addEventListener('change', e => { state.l
 document.getElementById('status-filter').addEventListener('change', e => { state.status = e.target.value; render(); });
 document.getElementById('in-region').addEventListener('change', e => { state.inRegion = e.target.checked; render(); });
 document.getElementById('hide-vinted').addEventListener('change', e => { state.hideVinted = e.target.checked; render(); });
+document.getElementById('hide-vendor').addEventListener('change', e => { state.hideVendor = e.target.checked; render(); });
 document.getElementById('export').addEventListener('click', exportCsv);
 window.addEventListener('hashchange', () => { readHash(); render(); });
 

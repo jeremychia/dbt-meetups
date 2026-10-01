@@ -6,6 +6,7 @@ The files follow the shared schema in berlin_planning/SEARCH_METHOD.md §3.
 import glob
 import json
 import os
+import re
 from collections import Counter, defaultdict
 
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -50,6 +51,14 @@ CHAPTERS = {
 AREA_ORDER = ["Europe", "North America", "Asia-Pacific", "Other"]
 # placeholder company ids that stand for "no employer", so they never link chapters
 PLACEHOLDER_COMPANY_IDS = {"independent"}
+
+# staff at dbt Labs (formerly Fishtown Analytics) and Fivetran are labelled, not excluded: they can speak, but organisers should know
+VENDOR_LABELS = [(re.compile(r"\bdbt labs\b|\bfishtown analytics\b|^dbt(\s*\(|$)", re.I), "dbt Labs"), (re.compile(r"\bfivetran\b", re.I), "Fivetran")]
+
+
+def vendor_label(company_name):
+    return next((label for pattern, label in VENDOR_LABELS if pattern.search(company_name or "")), None)
+
 
 TIER_ORDER = {"1": 0, "2": 1, "backup": 2, "3": 3, "connector": 4, "organiser": 5}
 # within a tier, emerging voices (publish, but no talk yet) come before proven speakers:
@@ -155,6 +164,7 @@ def shape_person(person, company, label):
         "company_name": company["name"],
         "company_dbt_signal": company["dbt_signal"],
         "company_excluded": company["excluded_from_outreach"],
+        "vendor_staff": vendor_label(company["name"]),
         "speaker_reasons": speaker_reasons,
         "attendee_reasons": attendee_reasons,
         "_dbt_items": dbt_items,
@@ -204,6 +214,7 @@ def shape_company(company, people_count):
         "dbt_signal": company["dbt_signal"],
         "watchlist": company["watchlist"],
         "excluded_from_outreach": company["excluded_from_outreach"],
+        "vendor": vendor_label(company["name"]),
         "stack": company["stack_signals"],
         "jobs": [
             {"title": j["title"], "url": j["url"], "posted_date": j["posted_date"], "last_seen": j["last_seen"]}
