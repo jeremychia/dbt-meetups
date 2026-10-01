@@ -35,6 +35,16 @@ CHAPTERS = {
     "montreal": {"label": "Montreal", "goal": "speakers", "area": "North America"},
     "atlanta": {"label": "Atlanta", "goal": "speakers", "area": "North America"},
     "toronto": {"label": "Toronto", "goal": "speakers", "area": "North America"},
+    "london": {"label": "London", "goal": "speakers", "area": "Europe"},
+    "amsterdam": {"label": "Amsterdam", "goal": "speakers", "area": "Europe"},
+    "copenhagen": {"label": "Copenhagen", "goal": "speakers", "area": "Europe"},
+    "belgium": {"label": "Belgium", "goal": "speakers", "area": "Europe"},
+    "new_york": {"label": "New York", "goal": "speakers", "area": "North America"},
+    "san_francisco": {"label": "San Francisco", "goal": "speakers", "area": "North America"},
+    "singapore": {"label": "Singapore", "goal": "speakers", "area": "Asia-Pacific"},
+    "tokyo": {"label": "Tokyo", "goal": "speakers", "area": "Asia-Pacific"},
+    "seoul": {"label": "Seoul", "goal": "speakers", "area": "Asia-Pacific"},
+    "taipei": {"label": "Taipei", "goal": "speakers", "area": "Asia-Pacific"},
 }
 
 AREA_ORDER = ["Europe", "North America", "Asia-Pacific", "Other"]

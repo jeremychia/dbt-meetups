@@ -50,7 +50,7 @@ pipeline/run_pipeline.sh
 
 ## Organiser cockpit
 
-A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), linked from the dashboard, for finding people to speak at or attend a chapter's next meetup. It combines every `<region>_dbt_companies.json` in the repo: Atlanta, Berlin, Boston, Düsseldorf, Kuala Lumpur, Melbourne, Montreal, Munich, Paris, Seattle, Stockholm, Sydney, Toronto and Vilnius. Cities are grouped by area at the top of the page, and the page reopens on the last city you viewed. Each chapter and view has its own link to share, such as `/organiser/#berlin/speakers`.
+A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), linked from the dashboard, for finding people to speak at or attend a chapter's next meetup. It combines every `<region>_dbt_companies.json` in the repo, 24 chapters in all. Europe: Amsterdam, Belgium, Berlin, Copenhagen, Düsseldorf, London, Munich, Paris, Stockholm and Vilnius. North America: Atlanta, Boston, Montreal, New York, San Francisco, Seattle and Toronto. Asia-Pacific: Kuala Lumpur, Melbourne, Seoul, Singapore, Sydney, Taipei and Tokyo. Cities are grouped by area at the top of the page, and the page reopens on the last city you viewed. Each chapter and view has its own link to share, such as `/organiser/#berlin/speakers`.
 
 - **Views.** Speakers, attendees and companies to invite, each ranked. A topic table shows which topics past talks never covered but current leads can.
 - **First-time speakers first.** Within each tier, the speaker list puts **emerging voices** (people who publish about dbt but have no talk on record) ahead of proven speakers, then everyone else. A filter shows just one group. A balanced line-up pairs one proven speaker with one or two first-time speakers.
@@ -69,7 +69,7 @@ dashboard/build_organiser.sh
 
 ### Add a chapter
 
-1. Save the research as `<folder>/<region>_dbt_companies.json`, in the shared schema from [`berlin_planning/SEARCH_METHOD.md`](berlin_planning/SEARCH_METHOD.md) §3.
+1. Build the research with the method and scripts in [`research/`](research/README.md). The result is `<folder>/<region>_dbt_companies.json`, in the shared schema from [`berlin_planning/SEARCH_METHOD.md`](berlin_planning/SEARCH_METHOD.md) §3, plus a `SEARCH_METHOD.md` for the city.
 2. Add a line to `CHAPTERS` in `dashboard/build_organiser_data.py`, giving its label, goal (`speakers`, `attendees` or `both`) and area (`Europe`, `North America` or `Asia-Pacific`). The area decides where the city sits in the picker. Without a line, the chapter still loads, with goal `both` under `Other`.
 3. Run `dashboard/build_organiser.sh`.
 

@@ -1,0 +1,5303 @@
+{
+  "metadata": {
+    "title": "Seoul dbt companies and people for the Seoul dbt Meetup",
+    "generated_at": "2026-10-01",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Seoul companies using dbt, and people who could speak at or attend the Seoul dbt Meetup.",
+    "version": 1,
+    "schema_version": 3,
+    "region": "Seoul (Seoul dbt Meetup)",
+    "method": [
+      "v1 (2026-10-01): one research sub-agent: 15 web searches (English and Korean, until the shared session search cap was hit), then direct fetches only: wanted.co.kr search API (dbt, analytics engineer, data engineer, Snowflake, BigQuery queries; 284 ads read, 29 mention the word dbt), Meetup gql2 past events for 8 Seoul data groups, the Snowflake and Databricks Bevy chapter APIs, the Airflow Korea forum and YouTube channel, velog's dbt tag, GitHub user search (location Seoul/Korea), ~30 Korean tech blog feeds.",
+      "Lesson: Seoul's dbt-adjacent talks happen at the Apache Airflow Korea and Snowflake Korea (Flakers) user groups; their Meetup gql2 events and the Airflow forum (discourse.airflow-kr.org/search.json) name speakers.",
+      "Lesson: wanted.co.kr has an open search API (api/chaos/search/v1/position) and a job detail API (api/v4/jobs/<id>); it is the fastest way to find Seoul dbt employers.",
+      "Lesson: most Korean company tech blogs are on Medium, which blocked fetches (403/429), so authors of the Karrot and other dbt posts could not be confirmed.",
+      "Lesson: velog's tag page (velog.io/tags/dbt) is server-rendered and lists author handles and dates, but most posts are study notes without an employer.",
+      "Lesson: GitHub user search with location:Seoul surfaced one strong open-source lead (dbt-plan by an AB180 engineer); the rest were profiles without public content.",
+      "v1 (2026-10-01): location pass. 15 people placed from public pages (Meetup hosts and RSVPs, GitHub, speaker bios, author boxes, recent in-person talks at a local-office employer) and LinkedIn search results (1 of them),, or from the same person's located record in another chapter's file, by the evidence rules in research/README.md. Each placed person has a 'location (high|medium)' note and evidence link. 11 people are still unknown."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see SEARCH_METHOD.md §3)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles, employers and cities come from public pages and listings; verify before outreach.",
+      "Korean names are romanised by the researcher in family-name-first order unless the person shows their own romanisation; check spelling with the person.",
+      "Many speakers from Airflow Korea and Snowflake Korea listings show no employer; they sit under 'Independent / no company' until verified.",
+      "Women-in-data sourcing is thin: PyLadies Seoul is the only active women-in-tech data community found, and its talks are Python and analysis rather than dbt.",
+      "Job ads were read on 2026-10-01; wanted.co.kr does not expose posting dates in the fields read.",
+      "LinkedIn: 1 of 59 people have a profile url, taken word for word from search results. 58 were never searched (linkedin_confidence 'not_searched'); the 2026-10-01 pass searched the best-ranked leads with no known location first."
+    ],
+    "counts": {
+      "companies": 59,
+      "people": 58,
+      "job_postings": 28,
+      "companies_with_job_postings": 24,
+      "speaker_evidence_items": 47,
+      "unique_content_items": 46,
+      "people_with_linkedin": 1,
+      "people_who_spoke_at_this_chapter": 20,
+      "internal_vinted": 0,
+      "level": {
+        "working": 46,
+        "leadership": 12
+      },
+      "speaker_potential": {
+        "high": 37,
+        "medium": 19,
+        "low": 2
+      },
+      "attendee_potential": {
+        "high": 21,
+        "medium": 35,
+        "low": 2
+      },
+      "priority_tier": {
+        "1": 20,
+        "2": 20,
+        "3": 15,
+        "connector": 3
+      },
+      "watchlist_companies": 24,
+      "past_meetups": 12,
+      "lead_type": {
+        "emerging_voice": 8,
+        "proven_speaker": 48,
+        "no_public_content": 2
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "company_blog_scan": 2,
+        "other": 4,
+        "chapter_meetup_history": 20,
+        "newsletter_or_blog": 6,
+        "conference_or_meetup_agenda": 24,
+        "women_in_data_community": 2
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "orchestration & ci/cd": 16,
+      "data warehouse & platforms": 15,
+      "dbt fundamentals": 5,
+      "community": 5,
+      "genai & llm": 5,
+      "data engineering": 4,
+      "performance & scale": 4,
+      "data modeling": 4,
+      "tools & ecosystem": 4,
+      "dbt best practices": 3,
+      "dbt migration & adoption": 2,
+      "career development": 2,
+      "project structure": 2,
+      "domain-specific use cases": 2,
+      "business intelligence": 2,
+      "data governance": 1,
+      "data quality & testing": 1,
+      "developer workflow": 1,
+      "dbt product features": 1,
+      "semantic layer": 1,
+      "modern data stack": 1,
+      "team & org design": 1,
+      "analytics engineering": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "toss-securities",
+      "name": "Toss Securities",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Kafka",
+        "MongoDB"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://toss.tech/article/toss-securities-visualize-lineage",
+          "note": "lineage article states batch pipelines are unified on dbt"
+        }
+      ],
+      "people": [
+        {
+          "id": "byungsu-kang",
+          "name": "Byungsu Kang",
+          "pronouns": null,
+          "title": "Realtime Data Team Leader",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "toss.tech",
+              "title": "토스증권의 수천 개 실시간 데이터 파이프라인 운영방법 #1: Visualize Lineage",
+              "date": "2025-08-11",
+              "url": "https://toss.tech/article/toss-securities-visualize-lineage",
+              "content_id": "tosstech-1-visualize-lineage",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "builds lineage across thousands of realtime pipelines and notes batch pipelines are unified on dbt",
+              "topics": [
+                "data governance",
+                "data engineering",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://toss.tech/article/toss-securities-visualize-lineage",
+              "note": "blog: 토스증권의 수천 개 실시간 데이터 파이프라인 운영방법 #1: Visualize Lineage"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "joining realtime and dbt batch lineage end to end at Toss Securities",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "Toss group (Viva Republica) securities arm; batch pipelines run on dbt per its 2025 tech blog."
+    },
+    {
+      "id": "toss-income",
+      "name": "Toss Income",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "semantic layer"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://www.wanted.co.kr/wd/376043",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "구축·운영해요. 제품과 조직 전반에서 동일한 정의와 지표를 사용할 수 있도록 데이터 모델, 지표 정의, 집계 로직을 설계하고 관리해요.  • dbt 기반 Semantic Layer를 설계·고도화해요. 데이터 모델, 지표 정의, 메타데이터를 체계적으로 관리하며 분석 생산성과 데이터 신뢰도를",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Toss group tax-refund service; Data Analytics Engineer ad asks to design a dbt-based semantic layer."
+    },
+    {
+      "id": "karrot-daangn-market",
+      "name": "Karrot (Daangn Market)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://medium.com/daangn/dbt%EC%99%80-airflow-%EB%8F%84%EC%9E%85%ED%95%98%EB%A9%B0-%EB%A7%88%EC%A3%BC%ED%95%9C-7%EA%B0%80%EC%A7%80-%EB%AC%B8%EC%A0%9C%EB%93%A4-61250a9904ab",
+          "note": "'7 problems we met adopting dbt and Airflow', data valuation team"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://medium.com/daangn",
+          "note": "Medium blocked full-text fetches (403/429); author known only from the search snippet"
+        }
+      ],
+      "people": [
+        {
+          "id": "henry-karrot",
+          "name": "Henry (Karrot data valuation team)",
+          "pronouns": null,
+          "title": "Data valuation team member",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "Karrot tech blog (Medium)",
+              "title": "DBT와 Airflow 도입하며 마주한 7가지 문제들",
+              "date": null,
+              "url": "https://medium.com/daangn/dbt%EC%99%80-airflow-%EB%8F%84%EC%9E%85%ED%95%98%EB%A9%B0-%EB%A7%88%EC%A3%BC%ED%95%9C-7%EA%B0%80%EC%A7%80-%EB%AC%B8%EC%A0%9C%EB%93%A4-61250a9904ab",
+              "content_id": "karrot-tech-blog-mediumdbt-airflow-7",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "seven problems met while adopting dbt and Airflow; base, dimension and fact layers and a dev environment for domain experts",
+              "topics": [
+                "dbt migration & adoption",
+                "orchestration & ci/cd",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://medium.com/daangn/dbt%EC%99%80-airflow-%EB%8F%84%EC%9E%85%ED%95%98%EB%A9%B0-%EB%A7%88%EC%A3%BC%ED%95%9C-7%EA%B0%80%EC%A7%80-%EB%AC%B8%EC%A0%9C%EB%93%A4-61250a9904ab",
+              "note": "blog: DBT와 Airflow 도입하며 마주한 7가지 문제들"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "lessons from rolling dbt and Airflow out to domain experts at Karrot",
+          "past_chapter_talks": [],
+          "notes": "only the first name 'Henry' appears in the search snippet; full name and publication date not verified because Medium blocked the fetch"
+        }
+      ],
+      "notes": "hosted the Apache Airflow Korea 6th meetup (2026-06-20)."
+    },
+    {
+      "id": "ab180",
+      "name": "AB180",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "presentjay",
+          "name": "PresentJay",
+          "pronouns": null,
+          "title": "Data platform / MLOps engineer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "oss",
+              "event": "GitHub",
+              "title": "dbt-plan",
+              "date": "2026-10",
+              "url": "https://github.com/PresentJay/dbt-plan",
+              "content_id": "githubdbtplan",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "static analysis of compiled SQL that flags dropped columns, broken downstream models and contract violations before dbt run, like terraform plan",
+              "topics": [
+                "data quality & testing",
+                "orchestration & ci/cd",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/PresentJay/dbt-plan",
+              "note": "oss: dbt-plan"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "dbt-plan: catching breaking schema changes before dbt run",
+          "past_chapter_talks": [],
+          "notes": "GitHub handle; profile lists AB180 and Seoul, real name not shown"
+        },
+        {
+          "id": "sanghoon-lee",
+          "name": "Sanghoon Lee",
+          "pronouns": null,
+          "title": "Backend Developer, AB180",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/311067596/",
+              "note": "location (medium): in-person talk at Seoul dbt Meetup #6 (2025-09-24, Gangnam); employer AB180 is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/311067596/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-24",
+              "talk_title": "Building a dbt Pipeline with Snowflake",
+              "topics": [
+                "data warehouse & platforms"
+              ]
+            }
+          ],
+          "notes": "location (medium): in-person talk at Seoul dbt Meetup #6 (2025-09-24, Gangnam); employer AB180 is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/311067596/"
+        }
+      ],
+      "notes": "Airbridge maker; a past chapter speaker (Sanghoon Lee) built a dbt pipeline on Snowflake here."
+    },
+    {
+      "id": "kyle-school",
+      "name": "Kyle School",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "seongyun-byeon",
+          "name": "Seongyun Byeon",
+          "pronouns": null,
+          "title": "Machine Learning Engineer, data educator and Google Cloud GDE (Data); ex-Director of Data at SOCAR",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "어쩐지 오늘은 (personal blog)",
+              "title": "dbt + BigQuery 데이터 모델링",
+              "date": "2025-01-30",
+              "url": "https://zzsza.github.io/data-engineering/2025/01/30/dbt-with-bigquery/",
+              "content_id": "personal-blogdbt-bigquery",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "dimension, fact and mart modelling with dbt on BigQuery, incremental models and tests",
+              "topics": [
+                "data modeling",
+                "dbt fundamentals",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "어쩐지 오늘은 (personal blog)",
+              "title": "dbt 사용법과 기본 개념",
+              "date": "2025-01-16",
+              "url": "https://zzsza.github.io/data-engineering/2025/01/16/dbt-core/",
+              "content_id": "personal-blogdbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "dbt core concepts for analysts moving to ELT",
+              "topics": [
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "various Korean conferences",
+              "title": "talks listed on his about page",
+              "date": null,
+              "url": "https://zzsza.github.io/about/",
+              "content_id": "various-korean-conferencestalks-listed-on-his-about-page",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "about page lists his public talk decks and seven years running the 글또 writing community",
+              "topics": [
+                "career development",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://zzsza.github.io/data-engineering/2025/01/30/dbt-with-bigquery/",
+              "note": "blog: dbt + BigQuery 데이터 모델링"
+            },
+            {
+              "url": "https://zzsza.github.io/data-engineering/2025/01/16/dbt-core/",
+              "note": "blog: dbt 사용법과 기본 개념"
+            },
+            {
+              "url": "https://zzsza.github.io/about/",
+              "note": "talk: talks listed on his about page"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "teaching dbt to analysts: what trips up first-time Korean dbt users",
+          "past_chapter_talks": [],
+          "notes": "ran the 639-member 글또 developer writing group, so also a connector to new writers"
+        }
+      ],
+      "notes": "data education and consulting business run by Seongyun Byeon."
+    },
+    {
+      "id": "bucketplace-ohouse",
+      "name": "Bucketplace (Ohouse)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "analytics engineering"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kyungmin-kwon",
+          "name": "Kyungmin Kwon",
+          "pronouns": null,
+          "title": "Data Analyst & Analytics Engineer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "analytics engineering at Ohouse (to verify)",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile only (kyungminkwon-dot); no dbt content found"
+        }
+      ],
+      "notes": "an Analytics Engineer lists Bucketplace on GitHub; dbt use not verified."
+    },
+    {
+      "id": "datarize",
+      "name": "Datarize",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "analytics engineering"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jaden-jeong-datarize",
+          "name": "Jaden Jeong",
+          "pronouns": null,
+          "title": "Data Analytics Engineer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "analytics engineering at a commerce-data startup (to verify)",
+          "past_chapter_talks": [],
+          "notes": "GitHub profile only (hyeonyeong93); his blog data-and-investment.xyz showed no dbt content"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "konny-by-erin",
+      "name": "Konny by Erin",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[재택근무] 데이터 엔지니어",
+          "url": "https://www.wanted.co.kr/wd/362467",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "축 및 운영을 경험해본 분 • 생소하고 다양한 데이터 소스에 대해 데이터 파이프라인 구축 방법을 신속히 결정하고 완수해본 경험이 풍부한 분 • dbt 등 ELT/데이터 변환 도구를 활용해 재사용 가능한 데이터 모델(Staging, Mart 등)을 설계·구축하고, 데이터 품질 테스트(dbt t",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "baby-carrier brand; ad asks for dbt-built staging and mart models and data quality tests"
+    },
+    {
+      "id": "healingpaper-gangnam-unni",
+      "name": "Healingpaper (Gangnam Unni)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[강남언니] Analytics Engineer",
+          "url": "https://www.wanted.co.kr/wd/312109",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "• 커피 타임 지원 • 사내 길드(동호회) 활동 지원 • Snowflake, BigQuery 등 클라우드 기반 DWH 운영 경험이 있는 분 • DBT, Airflow 등 워크플로우/모델링 도구 사용 경험이 있는 분 • 데이터 계약, SLA, MetricOps 등 데이터 품질 관리 프로세스를",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "also interviewed as a Snowflake startup customer (2024)"
+    },
+    {
+      "id": "willog",
+      "name": "Willog",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (Junior)",
+          "url": "https://www.wanted.co.kr/wd/380720",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "• Airflow: DAG를 직접 작성해 본 경험이 있고, 스케줄링·태스크 의존성·재실행의 기본 개념을 이해하고 있는 분 • dbt: model·ref·test의 기본 개념을 이해하고, SQL 기반 변환 레이어를 작성해 본 경험이 있는 분 • Snowflake: (또는 Bi",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        },
+        {
+          "title": "[인턴] Data Engineer",
+          "url": "https://www.wanted.co.kr/wd/386594",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "개념을 이해하고 있는 분 • 개인 프로젝트, 팀 프로젝트, 인턴, 부트캠프 등에서 데이터 파이프라인을 직접 만들어 본 분 • Airflow, dbt 등 구조를 이해하고 활용해 본 경험이 있는분 • 문제가 생기면 원인을 스스로 찾아 해결하는 분  ※ 실무 경력은 필수가 아닙니다. 직접 만든",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "junior and intern data engineer ads both name dbt model, ref and test"
+    },
+    {
+      "id": "ajeong-networks",
+      "name": "Ajeong Networks",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[아정당] 데이터 엔지니어 (서울)",
+          "url": "https://www.wanted.co.kr/wd/351339",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ernetes · Helm • 데이터 파이프라인: Airflow · Kafka · Debezium · Spark • 데이터 모델링: SQL · dbt • BI 도구: QuickSight, Metabase • 언어: Python · Shell Script • 모니터링: Grafana · Pro",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "stack lists SQL and dbt for data modelling"
+    },
+    {
+      "id": "gear-second",
+      "name": "Gear Second",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "데이터 엔지니어",
+          "url": "https://www.wanted.co.kr/wd/370786",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "데이터 파이프라인의 장애 원인을 파악하고 개선해본 경험이 있으신 분 • AWS 기반 클라우드 인프라를 구축하고 운영합니다. • Airflow, dbt 등을 활용해 배치 파이프라인을 개발하고 운영합니다. • 게임 클라이언트와 게임 서버에서 발생하는 실시간 데이터를 수집하고 처리합니다. • 분석",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "game company; batch pipelines with Airflow and dbt"
+    },
+    {
+      "id": "imagoworks",
+      "name": "Imagoworks",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Platform Engineer",
+          "url": "https://www.wanted.co.kr/wd/389535",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "자세와 자유로운 의견 제시로 팀과 함께 성과를 만들어가는 협업 마인드 주요 업무 GCP BigQuery 기반 데이터 웨어하우스 구축 및 운영 dbt 기반 데이터 모델링 및 Mart 계층 설계 AWS EKS 기반 Airflow 데이터 파이프라인 구축·운영 및 클라우드 인프라 아키텍처 설계·최",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "BigQuery warehouse with dbt-based mart layer"
+    },
+    {
+      "id": "medit",
+      "name": "Medit",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "DevOps Engineer",
+          "url": "https://www.wanted.co.kr/wd/380517",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "터링 및 로깅 시스템 구축 경험  6. RDS, DynamoDB, OpenSearch 등 관계형/비관계형 데이터베이스 운영 경험 7. Glue/DBT 기반의 Data ETL 및 DW/DL 개발 경험 1. AWS 기반 인프라의 구축, 운영 , 정책 수립 및 자동화 관리 2. 컨테이너 기반 서비",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "devops",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "DevOps ad names Glue/DBT ETL"
+    },
+    {
+      "id": "hyperconnect",
+      "name": "Hyperconnect",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data & Analytics Engineer",
+          "url": "https://www.wanted.co.kr/wd/367668",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "• 데이터 파이프라인 엔지니어링 실무 경험 — SQL + Python, Airflow/dbt 운영 • 데이터 웨어하우스 모델링·성능에 대한 이해 (Databricks / BigQuery 등) • 테스트·CI/CD·버전관리 등 SW 엔지",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Match Group company (Azar); Senior Data & Analytics Engineer runs Airflow/dbt"
+    },
+    {
+      "id": "wished",
+      "name": "Wished",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "데이터 엔지니어",
+          "url": "https://www.wanted.co.kr/wd/382307",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "년제 컴퓨터공학·AI·데이터 관련 전공 • IT 회사 또는 기술기업 개발 경력 2~5년  이런 경험이 있다면 더욱 좋습니다 • Airflow, dbt, Spark 등 데이터 처리 도구 활용 경험 • 데이터 모델링, 데이터마트 또는 대용량 데이터 처리 경험 • 사내 데이터 플랫폼 또는 데이터",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "deloitte-korea",
+      "name": "Deloitte Korea",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "26년 하반기 데이터 엔지니어",
+          "url": "https://www.wanted.co.kr/wd/386708",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "이터 플랫폼 구축 또는 운영 경험 • Snowflake, Databricks 기반 데이터 웨어하우스/레이크하우스 구축 경험 • Airflow, dbt, Kafka, Hadoop, Delta Lake 등 데이터 엔지니어링 도구 활용 경험 • 클라우드 마이그레이션, Data Modernizati",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "consultancy graduate data engineer intake"
+    },
+    {
+      "id": "fl-corporation",
+      "name": "F&L Corporation",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[경영지원] DX Part - AI 데이터 엔지니어",
+          "url": "https://www.wanted.co.kr/wd/388362",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "LLM 애플리케이션 개발 경험 (RAG, Agent, Tool Use) • 이커머스 또는 광고 데이터 처리 경험 • GCP BigQuery, dbt, Airflow 등 데이터 스택 활용 경험 • React 기반 프론트엔드 개발 가능자 • 기술 조직과 비기술 조직 양쪽과 소통 가능한 커뮤니케",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        },
+        {
+          "title": "[경영지원] DX Part - DX Leader",
+          "url": "https://www.wanted.co.kr/wd/386371",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "P(Model Context Protocol) 서버 개발 또는 연동 경험 • 이커머스 또는 광고 데이터 처리 경험 • GCP BigQuery, dbt, Airflow 등 데이터 스택 활용 경험 • 스타트업/성장기 조직에서 0에서 1을 만들어 본 경험",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "DX part AI data engineer and DX leader ads list BigQuery, dbt, Airflow"
+    },
+    {
+      "id": "buzzvil",
+      "name": "Buzzvil",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (5년 이상)",
+          "url": "https://www.wanted.co.kr/wd/388265",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "없는 분 • 3년 이상 Data Warehouse/Data Mart를 주도적으로 설계·구현·운영·확장해본 경험이 있으신 분 • Airflow, DBT 등을 활용해 데이터 파이프라인을 운영해보신 분 1. Agent의 설계 및 운영 • 전사 구성원이 사용하는 분석 Agent를 설계하고 운영합니다",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad-tech; Analytics Engineer ad asks for Airflow and dbt pipeline operation"
+    },
+    {
+      "id": "boosters",
+      "name": "Boosters",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Forward Deployed Engineer (FDE)",
+          "url": "https://www.wanted.co.kr/wd/382343",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Spring Boot, Spring Batch • Frontend: React, TypeScript • Data: MySQL(AWS RDS), dbt · Metabase · DataHub (로드맵: Airflow, Snowflake) • Infra: AWS, GCP • AI: Claude E",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "current stack lists dbt, Metabase and DataHub"
+    },
+    {
+      "id": "aitrics",
+      "name": "AITRICS",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.wanted.co.kr/wd/390016",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "에 대한 이해가 있으신 분 • 보건의료정보관리사 자격, 의료정보학 전공, 또는 병원 IT/의료 SI 근무 경험이 있으신 분 • Airflow, dbt, Spark 등 데이터 파이프라인 도구를 사용해 보신 분 • 의료 데이터 비식별화 및 관련 법·규제(개인정보보호법, 의료법, IRB) 대응 경",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Healthcare Data Engineer (계약직)",
+          "url": "https://www.wanted.co.kr/wd/380610",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "HL7 FHIR 등 데이터 교환 표준에 대한 이해 또는 학습 경험 • 대규모 데이터 처리 프레임워크 경험 (예: Spark, Airflow, dbt 등) • 클라우드 데이터 웨어하우스/레이크하우스 환경 운영 경험 (예: AWS, GCP, Azure, Databricks 등)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "medical AI; two data engineer ads list dbt as a plus"
+    },
+    {
+      "id": "woongjin-thinkbig",
+      "name": "Woongjin Thinkbig",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "데이터분석가(Data Analyst)",
+          "url": "https://www.wanted.co.kr/wd/372919",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "터 웨어하우스, 데이터마트 구축 또는 운영 경험 • 데이터 엔지니어링 역량 보유자 • ETL/ELT 파이프라인 이해     - Airflow, dbt, Spark, Databricks, BigQuery, Snowflake, Redshift, PostgreSQL 등 활용 경험     - Cla",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "education publisher; data analyst ad lists dbt among ETL/ELT tools"
+    },
+    {
+      "id": "macaron-factory",
+      "name": "Macaron Factory",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seongnam"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineering (5년 이상)",
+          "url": "https://www.wanted.co.kr/wd/378884",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "areer.greetinghr.com/ko/benefits • 사용자 세그멘테이션·타겟팅 체계나 피처 스토어를 만들어 본 경험이 있는 분 ﻿• dbt 등으로 변환 레이어와 테스트를 체계화한 경험이 있는 분 ﻿• CDC(Debezium, Flink CDC)와 Kafka 기반 스트리밍 파이프라인",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Pangyo (Seongnam); dbt for transformation layer and tests"
+    },
+    {
+      "id": "next-securities",
+      "name": "Next Securities",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://www.wanted.co.kr/wd/388908",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "화로 Semantic Layer / 데이터 카탈로그를 운영해보신 분 • DQ·SLA·컴플라이언스 기준을 정의하고 자동화한 경험이 있으신 분 • dbt 등 변환 프레임워크 또는 Great Expectations 등 품질 도구 활용 경험이 있으신 분 • AARRR 등 제품·그로스 지표 프레임워크",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer (Data Platform)",
+          "url": "https://www.wanted.co.kr/wd/388957",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "복구를 설계하고 운영해보신 분 • 멀티 클러스터·미러링·환경 복제 등 플랫폼 확장을 설계해보신 분 • 데이터 계약·리니지·카탈로그·품질 도구(dbt, OpenLineage, Great Expectations 등)를 플랫폼에 연동해보신 분 • 증권·은행·카드사 등 금융·규제 환경에서 데이터",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Data Analytics Engineer and Data Platform Engineer ads both name dbt"
+    },
+    {
+      "id": "ishopcare",
+      "name": "iShopCare",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[Data팀] Data Analyst (데이터 분석가)",
+          "url": "https://www.wanted.co.kr/wd/376885",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "명절 귀향비 지원 · 생일자 축하금 혜택 · 웰컴 키트 제공 · 워크샵 지원 · 야근 택시비 지원 · 최신 IT 기기 제공 · Airflow, dbt 등을 활용해 데이터 파이프라인이나 데이터 마트를 구축·운영해본 경험이 있는 분이면 더 좋아요. · AI를 데이터 분석이나 업무 자동화에 활용해",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "analytics",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "hwahae-global",
+      "name": "Hwahae Global",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.wanted.co.kr/wd/386930",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": ") 지원 • 아빠새 휴가 제공 (배우자 출산 휴가, 1개월 유급) •클라우드 인프라(AWS, GCP 등) 기반 데이터 플랫폼 구축·운영 경험 •dbt 등 데이터 변환/모델링 도구 활용 경험 •실시간 스트리밍 데이터 처리(Kafka 등) 경험 •커머스/플랫폼/모바일 앱 서비스의 대용량 데이터",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "beauty app Hwahae"
+    },
+    {
+      "id": "fairsquare-lab",
+      "name": "Fairsquare Lab",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[클로인트] 시니어 데이터 엔지니어 (Senior Data Engineer)",
+          "url": "https://www.wanted.co.kr/wd/380039",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "인덱싱·정규화 등) • 온프레미스 하둡 클러스터를 직접 운영·증설·튜닝해 본 경험 • Kafka 등을 활용한 스트리밍/준실시간 처리 경험 • dbt, 데이터 카탈로그, 데이터 품질 모니터링 도구 활용 경험 • ML 파이프라인(피처 스토어, 모델 학습/서빙 데이터) 구축 경험 • 데이터 거버",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "asta",
+      "name": "Asta",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "AI Backend / Data Platform Engineer",
+          "url": "https://www.wanted.co.kr/wd/382464",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Analytics 관련 개발 경험이 있는 분 • Meta Marketing API 또는 Instagram Graph API를 사용해본 분 • dbt 또는 Analytics Engineering 경험이 있는 분 • Multi-tenant SaaS Architecture를 설계하거나 운영해본",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "cubig",
+      "name": "Cubig",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seongnam"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Scientist",
+          "url": "https://www.wanted.co.kr/wd/375055",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "구조 분석 가능한 분  • Python 기반 데이터 처리, 변환, 검증 자동화 경험  • Pandas, PySpark, SQLAlchemy, dbt, Airflow 중 1개 이상 활용 경험  • 대용량 데이터 처리시 발생하는 성능, 정합성, 중복, schema drift 문제에 대한 이해",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data science",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "office in Seongnam (Naver 1784)"
+    },
+    {
+      "id": "seers-technology",
+      "name": "Seers Technology",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seongnam"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.wanted.co.kr/wd/379070",
+          "source": "wanted.co.kr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "a Model(OMOP CDM 등) 기반 표준화(ETL) 경험 • 데이터 검증 및 품질 관리 자동화 경험 (Great Expectations, dbt test 등) • Airflow, Dagster, Prefect 등 오케스트레이션 도구 운영 경험 • Apache Spark, Kubernet",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-01",
+          "job_family": "data engineering",
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "office in Seongnam"
+    },
+    {
+      "id": "snowflake-korea",
+      "name": "Snowflake Korea",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "soo-lee",
+          "name": "Soo Lee",
+          "pronouns": null,
+          "title": "Snowflake Evangelist, Snowflake Korea",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup",
+              "title": "Introduction to Snowflake Data Sharing and Data Monetization",
+              "date": "2024-02-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-3hoe/",
+              "content_id": "snowflake-korea-user-group-flakers-meetupintroduction-to-sno",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "host",
+              "event": "Snowflake Korea User Group (Flakers) meetup",
+              "title": "Flakers user group organiser",
+              "date": "2023-10-18",
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "content_id": "snowflake-korea-user-group-flakers-meetupflakers-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-3hoe/",
+              "note": "talk: Introduction to Snowflake Data Sharing and Data Monetization"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "note": "host: Flakers user group organiser"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "route to Snowflake customers in Seoul who run dbt",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "yoo-da-seul",
+          "name": "Yoo Da-seul",
+          "pronouns": null,
+          "title": "Engineer, Snowflake",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake x Airflow startup meetup",
+              "title": "Snowflake + Airflow + DBT 데이터 웨어하우스 깔끔하게 통합하기",
+              "date": "2024-08-21",
+              "url": "https://discourse.airflow-kr.org/t/49",
+              "content_id": "snowflake-x-airflow-startup-meetupsnowflake-airflow-dbt",
+              "co_authors": [
+                "Chris Song"
+              ],
+              "mentions_dbt": true,
+              "description": "co-session on joining Snowflake, Airflow and dbt into one warehouse",
+              "topics": [
+                "data warehouse & platforms",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://discourse.airflow-kr.org/t/49",
+              "note": "talk: Snowflake + Airflow + DBT 데이터 웨어하우스 깔끔하게 통합하기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Snowflake, Airflow and dbt together for startups",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 유다슬"
+        },
+        {
+          "id": "heo-jae-jin",
+          "name": "Heo Jae-jin",
+          "pronouns": null,
+          "title": "Solutions Engineer, Snowflake",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea user group online meetup #12",
+              "title": "Naver API를 활용한 Snowflake Intelligence",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "content_id": "snowflake-korea-user-group-online-meetup-12naver-api-snowfla",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "note": "talk: Naver API를 활용한 Snowflake Intelligence"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Snowflake Intelligence on Korean data sources",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 허재진"
+        },
+        {
+          "id": "dk-cho-dongkyu-cho",
+          "name": "DK Cho (Dong-kyu Cho)",
+          "pronouns": null,
+          "title": "CSP PDM, Snowflake Korea",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/314537602/",
+              "note": "location (medium): in-person talk at Seoul dbt Meetup #8 (2026-05-27), held at the Snowflake Korea office, 134 Teheran-ro, Gangnam-gu https://www.meetup.com/seoul-dbt-meetup/events/314537602/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-05-27",
+              "talk_title": "Three Keywords for Problem Solving: People + Solutions + Data",
+              "topics": [
+                "career development",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": "location (medium): in-person talk at Seoul dbt Meetup #8 (2026-05-27), held at the Snowflake Korea office, 134 Teheran-ro, Gangnam-gu https://www.meetup.com/seoul-dbt-meetup/events/314537602/"
+        }
+      ],
+      "notes": "runs the Snowflake Korea user group (Flakers) with community leads; co-hosted a 2024 Snowflake + Airflow + dbt startup meetup."
+    },
+    {
+      "id": "snowflake-korea-user-group-flakers",
+      "name": "Snowflake Korea User Group (Flakers)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_series",
+          "url": "https://usergroups.snowflake.com/seoul/",
+          "note": "5 in-person meetups 2023-10 to 2024-07, then online meetups; first meetup covered Snowflake + dbt + Airflow"
+        }
+      ],
+      "people": [
+        {
+          "id": "jihwan-hyun",
+          "name": "Jihwan Hyun",
+          "pronouns": null,
+          "title": "Chapter Lead, Snowflake Korea User Group",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea user group online meetup #12",
+              "title": "dbt Project on Snowflake",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "content_id": "snowflake-korea-user-group-online-meetup-12dbt-project-on-sn",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "listed as '지환, dbt Labs 서울 커뮤니티'",
+              "topics": [
+                "dbt product features",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake Korea user group online meetup #12",
+              "title": "기술 커뮤니티의 본질과 기여, 브랜딩에 관한 단상",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "content_id": "snowflake-korea-user-group-online-meetup-12",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Snowflake Korea User Group (Flakers) meetup",
+              "title": "Flakers chapter lead",
+              "date": "2023-10-18",
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "content_id": "snowflake-korea-user-group-flakers-meetupflakers-chapter-lea",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "note": "talk: dbt Project on Snowflake"
+            },
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "note": "talk: 기술 커뮤니티의 본질과 기여, 브랜딩에 관한 단상"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "note": "organiser: Flakers chapter lead"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "dbt projects running natively on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "the dbt talk lists only '지환' of the dbt Seoul community; likely the same person as chapter lead 현지환, verify"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chris-song",
+          "name": "Chris Song",
+          "pronouns": null,
+          "title": "former VP of AIOps, NFTBank",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #1",
+              "title": "Snowflake + DBT + Airflow",
+              "date": "2023-10-18",
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-1snowflake-dbt-air",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "first Flakers meetup session",
+              "topics": [
+                "data warehouse & platforms",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Snowflake x Airflow startup meetup",
+              "title": "Snowflake + Airflow + DBT 데이터 웨어하우스 깔끔하게 통합하기",
+              "date": "2024-08-21",
+              "url": "https://discourse.airflow-kr.org/t/49",
+              "content_id": "snowflake-x-airflow-startup-meetupsnowflake-airflow-dbt",
+              "co_authors": [
+                "Yoo Da-seul"
+              ],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data warehouse & platforms",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "note": "talk: Snowflake + DBT + Airflow"
+            },
+            {
+              "url": "https://discourse.airflow-kr.org/t/49",
+              "note": "talk: Snowflake + Airflow + DBT 데이터 웨어하우스 깔끔하게 통합하기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "a startup data warehouse on Snowflake, dbt and Airflow, two years on",
+          "past_chapter_talks": [],
+          "notes": "2024 listing names 송호연 (former NFTBank VP); assumed to be the same person as 'Chris Song, VP of AIOps @ NFTBank.ai' in 2023, verify; current employer not found"
+        },
+        {
+          "id": "tan-morgan-kim",
+          "name": "Tan Morgan Kim",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #2",
+              "title": "dbt 설계 원칙에 기반한 Airflow DAG 운영 방법론",
+              "date": "2025-02-13",
+              "url": "https://www.youtube.com/watch?v=P7ize0MLY8w",
+              "content_id": "apache-airflow-korea-user-group-meetup-2dbt-airflow-dag",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "running Airflow DAGs by dbt model design principles",
+              "topics": [
+                "orchestration & ci/cd",
+                "dbt best practices",
+                "project structure"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.youtube.com/watch?v=P7ize0MLY8w",
+              "note": "talk: dbt 설계 원칙에 기반한 Airflow DAG 운영 방법론"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "designing Airflow DAGs around dbt model principles",
+          "past_chapter_talks": [],
+          "notes": "listed as 김탄 / @tankim; full name from his Airflow Korea forum profile"
+        },
+        {
+          "id": "choi-ji-hyun",
+          "name": "Choi Ji-hyun",
+          "pronouns": null,
+          "title": "Data practitioner (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #3",
+              "title": "Apache Airflow를 활용한 Semantic Layer 구축 전략",
+              "date": "2025-06-21",
+              "url": "https://www.youtube.com/watch?v=iNjMh6Permg",
+              "content_id": "apache-airflow-korea-user-group-meetup-3apache-airflow-seman",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "semantic layer",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.youtube.com/watch?v=iNjMh6Permg",
+              "note": "talk: Apache Airflow를 활용한 Semantic Layer 구축 전략"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "building a semantic layer with Airflow, and where dbt fits",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 최지현"
+        },
+        {
+          "id": "kwon-sun-cheol",
+          "name": "Kwon Sun-cheol",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #4",
+              "title": "Airflow를 활용한 금융 데이터 마트 구축기",
+              "date": "2025-10-22",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/310886570/",
+              "content_id": "apache-airflow-korea-user-group-meetup-4airflow",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "data modeling",
+                "domain-specific use cases",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/310886570/",
+              "note": "talk: Airflow를 활용한 금융 데이터 마트 구축기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "building a financial data mart",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 권순철"
+        },
+        {
+          "id": "park-jo-eun",
+          "name": "Park Jo-eun",
+          "pronouns": null,
+          "title": "Instructor, Todaycode (오늘코드)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyLadies Seoul",
+              "title": "DuckDB 실전 활용: 바이브 코딩을 활용한 대규모 유튜브 데이터 수집부터 분석까지",
+              "date": "2025-10-16",
+              "url": "https://www.meetup.com/seoul-pyladies-meetup/events/311298327/",
+              "content_id": "pyladies-seoulduckdb",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "tools & ecosystem",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "PyLadies Seoul",
+              "title": "생성형AI와 프롬프트 어떻게 사용하고 있나요?",
+              "date": "2024-07-20",
+              "url": "https://www.meetup.com/seoul-pyladies-meetup/events/302079182/",
+              "content_id": "pyladies-seoulai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-pyladies-meetup/events/311298327/",
+              "note": "talk: DuckDB 실전 활용: 바이브 코딩을 활용한 대규모 유튜브 데이터 수집부터 분석까지"
+            },
+            {
+              "url": "https://www.meetup.com/seoul-pyladies-meetup/events/302079182/",
+              "note": "talk: 생성형AI와 프롬프트 어떻게 사용하고 있나요?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "SQL analytics with DuckDB for analysts",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 박조은; repeat PyLadies Seoul speaker"
+        },
+        {
+          "id": "baek-chan-hee",
+          "name": "Baek Chan-hee",
+          "pronouns": null,
+          "title": "Tutorial lead (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "PyLadies Seoul",
+              "title": "PyLadies Seoul Tutorial: Python으로 엑셀 데이터 다루기",
+              "date": "2024-06-29",
+              "url": "https://www.meetup.com/seoul-pyladies-meetup/events/301691593/",
+              "content_id": "pyladies-seoulpyladies-seoul-tutorial-python",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-pyladies-meetup/events/301691593/",
+              "note": "workshop: PyLadies Seoul Tutorial: Python으로 엑셀 데이터 다루기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "from spreadsheets to pandas for analysts",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 백찬희"
+        },
+        {
+          "id": "kang-woong-seok",
+          "name": "Kang Woong-seok",
+          "pronouns": null,
+          "title": "Data engineer, formerly at Kakao Style and Ridi",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "AWSKRUG data science group",
+              "title": "클라우드 데이터 플랫폼을 구성하는 최신 기술 알아보기",
+              "date": "2022-09-22",
+              "url": "https://www.meetup.com/awskrug/events/288320490/",
+              "content_id": "awskrug-data-science-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "data warehouse & platforms",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/awskrug/events/288320490/",
+              "note": "talk: 클라우드 데이터 플랫폼을 구성하는 최신 기술 알아보기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "choosing a cloud warehouse: BigQuery, Snowflake, Databricks, Iceberg",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 강웅석; current employer not found"
+        },
+        {
+          "id": "lee-ju-seon",
+          "name": "Lee Ju-seon",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #6",
+              "title": "DuckDB 소개 및 활용 (Airflow 적용 사례)",
+              "date": "2026-06-20",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/314453514/",
+              "content_id": "apache-airflow-korea-user-group-meetup-6duckdb-airflow",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "tools & ecosystem",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/314453514/",
+              "note": "talk: DuckDB 소개 및 활용 (Airflow 적용 사례)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "DuckDB inside Airflow pipelines",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 이주선"
+        },
+        {
+          "id": "kim-young-jun",
+          "name": "Kim Young-jun",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #6",
+              "title": "이제는 이사 갈 시간 (Airflow 3.x 업그레이드 경험 공유)",
+              "date": "2026-06-20",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/314453514/",
+              "content_id": "apache-airflow-korea-user-group-meetup-6-airflow-3x",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/314453514/",
+              "note": "talk: 이제는 이사 갈 시간 (Airflow 3.x 업그레이드 경험 공유)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "upgrading orchestration without breaking dbt runs",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 김영준"
+        },
+        {
+          "id": "lee-seong-hwan",
+          "name": "Lee Seong-hwan",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #5",
+              "title": "Airflow Multi-Tenancy PoC Report",
+              "date": "2026-02-26",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/312798089/",
+              "content_id": "apache-airflow-korea-user-group-meetup-5airflow-multitenancy",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "orchestration & ci/cd",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/312798089/",
+              "note": "talk: Airflow Multi-Tenancy PoC Report"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "one orchestrator for every team",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 이성환"
+        },
+        {
+          "id": "yang-kyung-mo",
+          "name": "Yang Kyung-mo",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #4",
+              "title": "MCP를 활용해서 Agentic하게 Airflow와 소통하기",
+              "date": "2025-10-22",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/310886570/",
+              "content_id": "apache-airflow-korea-user-group-meetup-4mcp-agentic-airflow",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "genai & llm",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/310886570/",
+              "note": "talk: MCP를 활용해서 Agentic하게 Airflow와 소통하기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "agents and MCP over the data stack",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 양경모"
+        },
+        {
+          "id": "lee-ji-ho",
+          "name": "Lee Ji-ho",
+          "pronouns": null,
+          "title": "PostgreSQL Korea user group",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea user group online meetup #12",
+              "title": "클라우드 데이터 플랫폼이 PostgreSQL에 주목하다",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "content_id": "snowflake-korea-user-group-online-meetup-12-postgresql",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #5",
+              "title": "아고 두야, 중대형 DAG 배포를 쉽게 하기",
+              "date": "2026-02-26",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/312798089/",
+              "content_id": "apache-airflow-korea-user-group-meetup-5-dag",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "note": "talk: 클라우드 데이터 플랫폼이 PostgreSQL에 주목하다"
+            },
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/312798089/",
+              "note": "talk: 아고 두야, 중대형 DAG 배포를 쉽게 하기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Postgres as an analytics target",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 이지호; the two talks may be by different people with the same name"
+        },
+        {
+          "id": "yu-hyun-a",
+          "name": "Yu Hyun-a",
+          "pronouns": null,
+          "title": "LangChain Korea community",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea user group online meetup #12",
+              "title": "LangChain X Snowflake: RAG와 AI생태계",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "content_id": "snowflake-korea-user-group-online-meetup-12langchain-x-snowf",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/311685761/",
+              "note": "talk: LangChain X Snowflake: RAG와 AI생태계"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "RAG over warehouse data",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 유현아"
+        },
+        {
+          "id": "moon-ju-eun",
+          "name": "Moon Ju-eun",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "velog",
+              "title": "Establishing DBT standards",
+              "date": "2025-10-24",
+              "url": "https://velog.io/@juliy9812/Establishing-DBT-standards",
+              "content_id": "velogestablishing-dbt-standards",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt best practices",
+                "project structure"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "velog",
+              "title": "dbt 모델 성능 향상",
+              "date": "2024-11-25",
+              "url": "https://velog.io/@juliy9812/dbt-%EB%AA%A8%EB%8D%B8-%EC%84%B1%EB%8A%A5-%ED%96%A5%EC%83%81",
+              "content_id": "velogdbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://velog.io/@juliy9812/Establishing-DBT-standards",
+              "note": "blog: Establishing DBT standards"
+            },
+            {
+              "url": "https://velog.io/@juliy9812/dbt-%EB%AA%A8%EB%8D%B8-%EC%84%B1%EB%8A%A5-%ED%96%A5%EC%83%81",
+              "note": "blog: dbt 모델 성능 향상"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "writing team dbt standards and speeding up slow models",
+          "past_chapter_talks": [],
+          "notes": "velog author juliy9812 (문주은); bio says Data Engineer, employer and city not stated"
+        },
+        {
+          "id": "seokjin-han",
+          "name": "Seokjin Han",
+          "pronouns": null,
+          "title": "Engineer (employer not found)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "velog",
+              "title": "DBT + PostgreSQL + Citus 에서는 기본 Incremental 전략이 비효율적이다",
+              "date": "2026-03-21",
+              "url": "https://velog.io/@hsjni0110/DBT-PostgreSQL-Citus-%EC%97%90%EC%84%9C%EB%8A%94-%EA%B8%B0%EB%B3%B8-Incremental-%EC%A0%84%EB%9E%B5%EC%9D%B4-%EB%B9%84%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B4%EB%8B%A4",
+              "content_id": "velogdbt-postgresql-citus-incremental",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "performance & scale",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://velog.io/@hsjni0110/DBT-PostgreSQL-Citus-%EC%97%90%EC%84%9C%EB%8A%94-%EA%B8%B0%EB%B3%B8-Incremental-%EC%A0%84%EB%9E%B5%EC%9D%B4-%EB%B9%84%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B4%EB%8B%A4",
+              "note": "blog: DBT + PostgreSQL + Citus 에서는 기본 Incremental 전략이 비효율적이다"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "why the default incremental strategy fails on Postgres + Citus",
+          "past_chapter_talks": [],
+          "notes": "velog author hsjni0110; employer and city not stated"
+        },
+        {
+          "id": "jaewon-lim",
+          "name": "Jaewon Lim",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": "Seoul, South Korea",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "velog",
+              "title": "[Snowflake] Snowflake + dbt (1)",
+              "date": "2025-03-07",
+              "url": "https://velog.io/@jaelim095/Snowflake-Snowflake-dbt-1-v7cb1f3s",
+              "content_id": "velogsnowflake-snowflake-dbt-1",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "data warehouse & platforms",
+                "dbt fundamentals"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://velog.io/@jaelim095/Snowflake-Snowflake-dbt-1-v7cb1f3s",
+              "note": "blog: [Snowflake] Snowflake + dbt (1)"
+            },
+            {
+              "url": "https://github.com/jaelim095",
+              "note": "location (high): github profile jaelim095 (linked from velog bio): location 'Seoul, South Korea'; meetup member jaelim095 also lists Seoul https://github.com/jaelim095"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "getting started with dbt on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "velog author jaelim095; employer and city not stated | location (high): github profile jaelim095 (linked from velog bio): location 'Seoul, South Korea'; meetup member jaelim095 also lists Seoul https://github.com/jaelim095"
+        },
+        {
+          "id": "zuckerfrei",
+          "name": "zuckerfrei",
+          "pronouns": null,
+          "title": "Data engineer (employer not found)",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "velog",
+              "title": "[dbt] incremental 과 full-refresh 는 실제로 어떤 SQL이 실행될까?",
+              "date": "2026-06-22",
+              "url": "https://velog.io/@zuckerfrei/dbt-incremental-%EA%B3%BC-full-refresh-%EB%8A%94-%EC%8B%A4%EC%A0%9C%EB%A1%9C-%EC%96%B4%EB%96%A4-SQL%EC%9D%B4-%EC%8B%A4%ED%96%89%EB%90%A0%EA%B9%8C",
+              "content_id": "velogdbt-incremental-fullrefresh-sql",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": null,
+              "topics": [
+                "dbt fundamentals",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://velog.io/@zuckerfrei/dbt-incremental-%EA%B3%BC-full-refresh-%EB%8A%94-%EC%8B%A4%EC%A0%9C%EB%A1%9C-%EC%96%B4%EB%96%A4-SQL%EC%9D%B4-%EC%8B%A4%ED%96%89%EB%90%A0%EA%B9%8C",
+              "note": "blog: [dbt] incremental 과 full-refresh 는 실제로 어떤 SQL이 실행될까?"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "what SQL incremental and full-refresh actually run",
+          "past_chapter_talks": [],
+          "notes": "velog handle only"
+        },
+        {
+          "id": "jung-won-hyung",
+          "name": "Jung Won-hyung",
+          "pronouns": null,
+          "title": "Aspiring Analytics Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "velog",
+              "title": "데이터 분석 프로젝트를 위한 dbt 모델링 입문기 2탄",
+              "date": "2026-07-14",
+              "url": "https://velog.io/@izssk215/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EC%9C%84%ED%95%9C-dbt-%EB%AA%A8%EB%8D%B8%EB%A7%81-%EC%9E%85%EB%AC%B8%EA%B8%B0-2%ED%83%84",
+              "content_id": "velog-dbt-2",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "two-part series modelling the thelook dataset with dbt Cloud on BigQuery",
+              "topics": [
+                "data modeling",
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://velog.io/@izssk215/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EC%9C%84%ED%95%9C-dbt-%EB%AA%A8%EB%8D%B8%EB%A7%81-%EC%9E%85%EB%AC%B8%EA%B8%B0-2%ED%83%84",
+              "note": "blog: 데이터 분석 프로젝트를 위한 dbt 모델링 입문기 2탄"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "a job seeker's first dbt project (lightning talk)",
+          "past_chapter_talks": [],
+          "notes": "velog author izssk215 (정원형); bio says AE job seeker; suits a lightning talk"
+        },
+        {
+          "id": "deepingsauce",
+          "name": "DeepingSauce",
+          "pronouns": null,
+          "title": "Inflearn dbt course instructor",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "Inflearn",
+              "title": "dbt, The New Standard of Data Analytics Engineering (Inflearn course)",
+              "date": "2025-05-19",
+              "url": "https://www.inflearn.com/course/dbt-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81",
+              "content_id": "inflearndbt-the-new-standard-of-data-analytics-engineering-i",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "paid Korean-language video course on dbt for warehouse pipelines",
+              "topics": [
+                "dbt fundamentals",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.inflearn.com/course/dbt-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81",
+              "note": "workshop: dbt, The New Standard of Data Analytics Engineering (Inflearn course)"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "teaching dbt in Korean: what learners struggle with",
+          "past_chapter_talks": [],
+          "notes": "Inflearn handle rightx2; real name and employer not shown"
+        },
+        {
+          "id": "herick-jee",
+          "name": "Herick Jee",
+          "pronouns": null,
+          "title": null,
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/311067596/",
+              "note": "location (high): meetup gql2: host of Seoul dbt Meetup #0-#6, member profile city Seoul https://www.meetup.com/seoul-dbt-meetup/events/311067596/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-24",
+              "talk_title": "Seoul dbt Meetup Community Updates",
+              "topics": [
+                "community"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: host of Seoul dbt Meetup #0-#6, member profile city Seoul https://www.meetup.com/seoul-dbt-meetup/events/311067596/"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "the-pinkfong-company",
+      "name": "The Pinkfong Company",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "han-ye-seong",
+          "name": "Han Ye-seong",
+          "pronouns": null,
+          "title": "Backend Developer / Software Engineer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #2",
+              "title": "Snowflake 전환기",
+              "date": "2023-12-13",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-2hoe/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-2snowflake",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "moving the company's data to Snowflake",
+              "topics": [
+                "data warehouse & platforms",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-2hoe/",
+              "note": "talk: Snowflake 전환기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "migrating a content company's data to Snowflake",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 한예성 (메타)"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "nexon-korea",
+      "name": "Nexon Korea",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lee-jae-myeon",
+          "name": "Lee Jae-myeon",
+          "pronouns": null,
+          "title": "Team Lead",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #2",
+              "title": "speaker at Snowflake Korea user group meetup #2",
+              "date": "2023-12-13",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-2hoe/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-2speaker-at-snowfl",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a speaker; talk title not shown",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-2hoe/",
+              "note": "talk: speaker at Snowflake Korea user group meetup #2"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "game data platform at Nexon",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 이재면"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "megazone-cloud",
+      "name": "Megazone Cloud",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "choi-kyung-jin",
+          "name": "Choi Kyung-jin",
+          "pronouns": null,
+          "title": "Team Lead",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #2",
+              "title": "What's New in AI at Snowflake?",
+              "date": "2023-12-13",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-2hoe/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-2whats-new-in-ai-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "genai & llm",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-2hoe/",
+              "note": "talk: What's New in AI at Snowflake?"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Snowflake AI features for dbt users",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 최경진"
+        },
+        {
+          "id": "sangwon-hwang",
+          "name": "Sangwon Hwang",
+          "pronouns": null,
+          "title": "Megazone Cloud",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/304791613/",
+              "note": "location (medium): in-person talk at Seoul dbt Meetup #5 (2024-12-18, Gangnam); employer Megazone Cloud is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/304791613/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-18",
+              "talk_title": "PoC Journey for an Automated CRM Pipeline Using dbt",
+              "topics": [
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": "location (medium): in-person talk at Seoul dbt Meetup #5 (2024-12-18, Gangnam); employer Megazone Cloud is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/304791613/"
+        }
+      ],
+      "notes": "cloud MSP; a past chapter speaker (Sangwon Hwang) ran a dbt CRM pipeline PoC here."
+    },
+    {
+      "id": "dataknows",
+      "name": "Dataknows",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kim-jae-gu",
+          "name": "Kim Jae-gu",
+          "pronouns": null,
+          "title": "CDO and Co-founder, Dataknows; head of Richgo AI real-estate lab",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #3",
+              "title": "스노우플레이크 데이터 쉐어링을 통한 올바른 BI 문화 만들기",
+              "date": "2024-02-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-3hoe/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-3-bi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "business intelligence",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-3hoe/",
+              "note": "talk: 스노우플레이크 데이터 쉐어링을 통한 올바른 BI 문화 만들기"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "building a BI culture on shared warehouse data",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 김재구"
+        }
+      ],
+      "notes": "Snowflake startup customer; CDO now leads Richgo's AI real-estate lab."
+    },
+    {
+      "id": "loplat",
+      "name": "Loplat",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "koo-ja-hyung",
+          "name": "Koo Ja-hyung",
+          "pronouns": null,
+          "title": "CEO",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #3",
+              "title": "Foot Traffic Data 기반 매장 방문자 분석",
+              "date": "2024-02-26",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-3hoe/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-3foot-traffic-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-seoul-presents-seunoupeulreikeu-koria-yujeogeurub-miseob-3hoe/",
+              "note": "talk: Foot Traffic Data 기반 매장 방문자 분석"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "foot-traffic data products",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 구자형"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "nsuslab",
+      "name": "NSUSLAB",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Fivetran"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jeff-bang",
+          "name": "Jeff Bang",
+          "pronouns": null,
+          "title": "Software Engineer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #1",
+              "title": "Snowflake + Fivetran",
+              "date": "2023-10-18",
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-1snowflake-fivetra",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "tools & ecosystem",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "note": "talk: Snowflake + Fivetran"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Fivetran into Snowflake for a small team",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "dk-bmc",
+      "name": "DK BMC",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Tableau"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kim-jae-hyun",
+          "name": "Kim Jae-hyun",
+          "pronouns": null,
+          "title": "Assistant Manager",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Korea User Group (Flakers) meetup #1",
+              "title": "Snowflake + Tableau",
+              "date": "2023-10-18",
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "content_id": "snowflake-korea-user-group-flakers-meetup-1snowflake-tableau",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/seoul/",
+              "note": "talk: Snowflake + Tableau"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "BI on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 김재현 대리"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ably",
+      "name": "ABLY",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Spark",
+        "Airflow"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "do-jeong-min",
+          "name": "Do Jeong-min",
+          "pronouns": null,
+          "title": "ML Engineer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "AWSKRUG data meetup x Apache Airflow Korea",
+              "title": "EMR on EKS (w/ Airflow)",
+              "date": "2026-09-18",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/316308551/",
+              "content_id": "awskrug-data-meetup-x-apache-airflow-koreaemr-on-eks-w-airfl",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "data engineering",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/316308551/",
+              "note": "talk: EMR on EKS (w/ Airflow)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "Spark on EKS next to a dbt stack",
+          "past_chapter_talks": [],
+          "notes": "name from the Korean listing 도정민"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "channel-corp",
+      "name": "Channel Corp",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://channel.io/kr/blog/articles/what-is-dbt-and-alternatives-9c652fe7",
+          "note": "2026-07 marketing explainer on dbt that pitches its own AI product as an alternative"
+        }
+      ],
+      "people": [],
+      "notes": "no evidence it uses dbt itself."
+    },
+    {
+      "id": "apache-airflow-korea-user-group",
+      "name": "Apache Airflow Korea User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Airflow",
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_series",
+          "url": "https://www.meetup.com/korea-apache-airflow-user-group/",
+          "note": "6 Seoul meetups 2024-2026, talks on YouTube @Airflow-users-Korea; forum discourse.airflow-kr.org; dbt talk at the 2nd meetup and an Airflow + dbt topic in its CFP"
+        }
+      ],
+      "people": [
+        {
+          "id": "yeonguk-choo",
+          "name": "Yeonguk Choo",
+          "pronouns": null,
+          "title": "Organiser, Apache Airflow Korea User Group; Apache Airflow committer",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Apache Airflow Korea User Group meetup #3",
+              "title": "대격변의 시대, Apache Airflow에 기여하기 위한 여정",
+              "date": "2025-06-21",
+              "url": "https://www.youtube.com/watch?v=9shlznVQcIA",
+              "content_id": "apache-airflow-korea-user-group-meetup-3-apache-airflow",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "community",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "AWSKRUG data meetup x Apache Airflow Korea",
+              "title": "Apache Airflow 3.x: 무엇이 달라졌고, 어디로 가고 있는가?",
+              "date": "2026-09-18",
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/316308551/",
+              "content_id": "awskrug-data-meetup-x-apache-airflow-koreaapache-airflow-3x",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Apache Airflow Korea User Group",
+              "title": "Airflow Korea forum and meetups",
+              "date": null,
+              "url": "https://discourse.airflow-kr.org/",
+              "content_id": "apache-airflow-korea-user-groupairflow-korea-forum-and-meetu",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": null,
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.youtube.com/watch?v=9shlznVQcIA",
+              "note": "talk: 대격변의 시대, Apache Airflow에 기여하기 위한 여정"
+            },
+            {
+              "url": "https://www.meetup.com/korea-apache-airflow-user-group/events/316308551/",
+              "note": "talk: Apache Airflow 3.x: 무엇이 달라졌고, 어디로 가고 있는가?"
+            },
+            {
+              "url": "https://discourse.airflow-kr.org/",
+              "note": "organiser: Airflow Korea forum and meetups"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "joint dbt + Airflow night with the Airflow Korea group",
+          "past_chapter_talks": [],
+          "notes": "name from his forum profile (추영욱)"
+        }
+      ],
+      "notes": "473 members; already lets the dbt Seoul organisers post meetups on its forum."
+    },
+    {
+      "id": "pyladies-seoul",
+      "name": "PyLadies Seoul",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_series",
+          "url": "https://www.meetup.com/seoul-pyladies-meetup/",
+          "note": "258 members; women-only data and Python workshops; ran a 2025 workshop to help women submit first conference talks"
+        }
+      ],
+      "people": [],
+      "notes": "best women-in-data route found in Seoul; organisers are not named publicly on the event pages."
+    },
+    {
+      "id": "awskrug-data-group",
+      "name": "AWSKRUG data group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "meetup_series",
+          "url": "https://www.meetup.com/awskrug/",
+          "note": "12,410 members; monthly data meetups in Gangnam; co-hosted with Airflow Korea in 2026-09"
+        }
+      ],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "socar",
+      "name": "SOCAR",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sangtae-humphrey-ahn",
+          "name": "Sangtae Humphrey Ahn",
+          "pronouns": null,
+          "title": "Data Engineer, Lead, SOCAR",
+          "city": "Seoul",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-16",
+              "talk_title": "Survive to Thrive: A Journey to the Next Level Data",
+              "topics": [
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "nftbank",
+      "name": "NFTBank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jensen-yap",
+          "name": "Jensen Yap",
+          "pronouns": null,
+          "title": "Data Tech Lead, NFTBank",
+          "city": "Yongsan-gu",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/296531118/",
+              "note": "location (high): meetup gql2: RSVP 'jensen yap' to Meetup #1 where he spoke, member profile city Yongsan-gu (Seoul) https://www.meetup.com/seoul-dbt-meetup/events/296531118/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-16",
+              "talk_title": "How dbt Saved My Data Engineering Startup Team",
+              "topics": [
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: RSVP 'jensen yap' to Meetup #1 where he spoke, member profile city Yongsan-gu (Seoul) https://www.meetup.com/seoul-dbt-meetup/events/296531118/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "iotrust",
+      "name": "IoTrust",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "joshua-kim-jinsuk-kim",
+          "name": "Joshua Kim (Jinsuk Kim)",
+          "pronouns": null,
+          "title": "IoTrust",
+          "city": "Seoul",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-07-24",
+              "talk_title": "Developing a Data Warehouse via dbt",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ]
+            },
+            {
+              "date": "2025-09-24",
+              "talk_title": "Seoul dbt Meetup Community Updates",
+              "topics": [
+                "community"
+              ]
+            },
+            {
+              "date": "2025-12-17",
+              "talk_title": "Custom BigQuery TVF Development Journey in dbt",
+              "topics": [
+                "data warehouse & platforms",
+                "developer workflow"
+              ]
+            }
+          ],
+          "notes": "merged duplicate record 'Joshua Kim' (joshua-kim)"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "wrtn-technologies",
+      "name": "Wrtn Technologies",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jaesung-ryu",
+          "name": "Jaesung Ryu",
+          "pronouns": null,
+          "title": "Wrtn Technologies",
+          "city": "Seoul",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-07-24",
+              "talk_title": "How to Reduce Costs in BigQuery Using dbt",
+              "topics": [
+                "data warehouse & platforms",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "kyungjun-lee",
+          "name": "Kyung-jun Lee",
+          "pronouns": null,
+          "title": "Analytics Engineer, Wrtn Technologies",
+          "city": "Seoul",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-05-27",
+              "talk_title": "dbt Materialization Essentials",
+              "topics": [
+                "dbt best practices",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "riven-lee",
+          "name": "Riven Lee",
+          "pronouns": null,
+          "title": "Analytics Engineer, Wrtn Technologies",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/315240680/",
+              "note": "location (medium): in-person talk at Seoul dbt Meetup #9 (2026-07-03, MARU360 Gangnam); employer Wrtn Technologies is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/315240680/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-07-03",
+              "talk_title": "dbt Core → dbt Fusion Migration Journey",
+              "topics": [
+                "dbt product features",
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": "location (medium): in-person talk at Seoul dbt Meetup #9 (2026-07-03, MARU360 Gangnam); employer Wrtn Technologies is Seoul-based https://www.meetup.com/seoul-dbt-meetup/events/315240680/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "cartier",
+      "name": "Cartier",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jeanchristophe-gnansounou",
+          "name": "Jean-Christophe Gnansounou",
+          "pronouns": null,
+          "title": "Cartier",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jeanchristopheg/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/jeanchristopheg/",
+              "note": "location (high): linkedin search result: Jean-Christophe GNANSOUNOU - Cartier, Seoul https://www.linkedin.com/in/jeanchristopheg/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-24",
+              "talk_title": "How to Improve Time to Market Leveraging Data Mesh Capabilities",
+              "topics": [
+                "data mesh",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": "location (high): linkedin search result: Jean-Christophe GNANSOUNOU - Cartier, Seoul https://www.linkedin.com/in/jeanchristopheg/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "zigbang",
+      "name": "Zigbang",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yeezy-yoon-yoon-dokyung",
+          "name": "Yeezy Yoon (Yoon Do-kyung)",
+          "pronouns": null,
+          "title": "Data Engineer, Zigbang",
+          "city": "Pucheon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/304791613/",
+              "note": "location (high): meetup gql2: RSVP 'yeezy' to Meetup #5 where he spoke, member profile city Pucheon (Bucheon, Gyeonggi) https://www.meetup.com/seoul-dbt-meetup/events/304791613/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-18",
+              "talk_title": "Exploring dbt with Dagster",
+              "topics": [
+                "orchestration & ci/cd",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: RSVP 'yeezy' to Meetup #5 where he spoke, member profile city Pucheon (Bucheon, Gyeonggi) https://www.meetup.com/seoul-dbt-meetup/events/304791613/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "fivetran",
+      "name": "Fivetran",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "thomas-kim",
+          "name": "Thomas Kim",
+          "pronouns": null,
+          "title": "Reseller Partner Development Manager, APAC & South Korea, Fivetran",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/316380348/",
+              "note": "location (high): meetup gql2: event host (co-organizer) of Seoul dbt Meetup #8-#10, member profile city Seoul https://www.meetup.com/seoul-dbt-meetup/events/316380348/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-12-17",
+              "talk_title": "Fivetran and dbt Labs are Uniting to Set the Standard for Open Data Infrastructure",
+              "topics": [
+                "dbt product updates"
+              ]
+            },
+            {
+              "date": "2026-07-03",
+              "talk_title": "Fivetran + dbt Labs = ODI (Open Data Infra)",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: event host (co-organizer) of Seoul dbt Meetup #8-#10, member profile city Seoul https://www.meetup.com/seoul-dbt-meetup/events/316380348/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sanghoon-han",
+          "name": "Sanghoon Han",
+          "pronouns": null,
+          "title": "Solution Architect, Databricks",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/316380348/",
+              "note": "location (medium): in-person talk at Seoul dbt Meetup #10 (2026-09-17), held at the Databricks Seoul office, 431 Teheran-ro https://www.meetup.com/seoul-dbt-meetup/events/316380348/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-09-17",
+              "talk_title": "dbt with Databricks",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ]
+            }
+          ],
+          "notes": "location (medium): in-person talk at Seoul dbt Meetup #10 (2026-09-17), held at the Databricks Seoul office, 431 Teheran-ro https://www.meetup.com/seoul-dbt-meetup/events/316380348/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-community-korea",
+      "name": "dbt Community Korea",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hangyeol-seo",
+          "name": "Hangyeol Seo",
+          "pronouns": null,
+          "title": "dbt Community Korea",
+          "city": "Incheon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/316380348/",
+              "note": "location (high): meetup gql2: host 'Seo Hangyeol' of Seoul dbt Meetup #10 where he spoke, member profile city Incheon https://www.meetup.com/seoul-dbt-meetup/events/316380348/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-09-17",
+              "talk_title": "dbt Summit Recap: Q3 Agenda",
+              "topics": [
+                "dbt product updates",
+                "community"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: host 'Seo Hangyeol' of Seoul dbt Meetup #10 where he spoke, member profile city Incheon https://www.meetup.com/seoul-dbt-meetup/events/316380348/"
+        }
+      ],
+      "notes": "employer of a past Seoul dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": true,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "benoit-perigaud",
+          "name": "Benoit Perigaud",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": "Madrid, Spain",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://github.com/b-per",
+              "note": "location (high): github profile b-per: 'dbt Labs', location 'Madrid, Spain' https://github.com/b-per"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-18",
+              "talk_title": "Demystifying the Modern Data Stack (Panel Q&A)",
+              "topics": [
+                "modern data stack",
+                "career development"
+              ]
+            }
+          ],
+          "notes": "location (high): github profile b-per: 'dbt Labs', location 'Madrid, Spain' https://github.com/b-per"
+        }
+      ],
+      "notes": "employer of a past Seoul chapter speaker"
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "louis-lee",
+          "name": "Louis Lee",
+          "pronouns": null,
+          "title": "Snowflake",
+          "city": "Seoul",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-18",
+              "talk_title": "Demystifying the Modern Data Stack (Panel Q&A)",
+              "topics": [
+                "modern data stack",
+                "career development"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Seoul chapter speaker"
+    },
+    {
+      "id": "pinnu-analytics",
+      "name": "Pinnu Analytics",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "abi-adebayo",
+          "name": "Abi Adebayo",
+          "pronouns": null,
+          "title": "Pinnu Analytics",
+          "city": "Seoul",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/312130999/",
+              "note": "location (high): meetup gql2: host 'Abimbola Adebayo' of Seoul dbt Meetup #0-#7, member profile city Seoul https://www.meetup.com/seoul-dbt-meetup/events/312130999/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-18",
+              "talk_title": "Demystifying the Modern Data Stack (Panel Q&A)",
+              "topics": [
+                "modern data stack",
+                "career development"
+              ]
+            },
+            {
+              "date": "2024-09-24",
+              "talk_title": "Getting Started with dbt: When & How",
+              "topics": [
+                "dbt best practices",
+                "dbt fundamentals"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: host 'Abimbola Adebayo' of Seoul dbt Meetup #0-#7, member profile city Seoul https://www.meetup.com/seoul-dbt-meetup/events/312130999/"
+        }
+      ],
+      "notes": "employer of a past Seoul chapter speaker"
+    },
+    {
+      "id": "datamarketingkorea",
+      "name": "DataMarketingKorea",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "wynn-park",
+          "name": "Wynn Park",
+          "pronouns": null,
+          "title": "DataMarketingKorea",
+          "city": "Seoul",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-18",
+              "talk_title": "Demystifying the Modern Data Stack (Panel Q&A)",
+              "topics": [
+                "modern data stack",
+                "career development"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Seoul chapter speaker"
+    },
+    {
+      "id": "national-vision-inc",
+      "name": "National Vision Inc.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Seoul"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "zoe-yim",
+          "name": "Zoe Yim",
+          "pronouns": null,
+          "title": "Senior Technical Business Analyst, National Vision Inc.; 2026 dbt Champion",
+          "city": "Atlanta",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/seoul-dbt-meetup/events/315240680/",
+              "note": "location (high): meetup gql2: RSVP 'Zoe Yim' to Meetup #9 where she spoke, member profile city Atlanta; employer National Vision is Atlanta-based https://www.meetup.com/seoul-dbt-meetup/events/315240680/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-07-03",
+              "talk_title": "Analyst to Analytics Engineer: Becoming a Builder, a dbt Champion, and a Better Beginner",
+              "topics": [
+                "career development",
+                "community"
+              ]
+            }
+          ],
+          "notes": "location (high): meetup gql2: RSVP 'Zoe Yim' to Meetup #9 where she spoke, member profile city Atlanta; employer National Vision is Atlanta-based https://www.meetup.com/seoul-dbt-meetup/events/315240680/"
+        }
+      ],
+      "notes": "employer of a past Seoul chapter speaker"
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/seoul-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/seoul-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "wanted.co.kr search and job APIs",
+        "url": "https://www.wanted.co.kr/search?query=dbt",
+        "yielded": true,
+        "note": "29 ads at 24 Seoul-area companies mention dbt"
+      },
+      {
+        "name": "Apache Airflow Korea User Group (Meetup, forum, YouTube)",
+        "url": "https://www.meetup.com/korea-apache-airflow-user-group/",
+        "yielded": true,
+        "note": "6 meetups; one dbt talk, one semantic layer talk"
+      },
+      {
+        "name": "Snowflake Korea User Group (Flakers)",
+        "url": "https://usergroups.snowflake.com/seoul/",
+        "yielded": true,
+        "note": "5 meetups 2023-2024; Snowflake + dbt + Airflow session"
+      },
+      {
+        "name": "PyLadies Seoul",
+        "url": "https://www.meetup.com/seoul-pyladies-meetup/",
+        "yielded": true,
+        "note": "39 events; data analysis talks, no dbt"
+      },
+      {
+        "name": "AWSKRUG data group",
+        "url": "https://www.meetup.com/awskrug/",
+        "yielded": true,
+        "note": "600 events scanned; few data warehouse talks"
+      },
+      {
+        "name": "velog dbt tag",
+        "url": "https://velog.io/tags/dbt",
+        "yielded": true,
+        "note": "18 posts, mostly unaffiliated study notes"
+      },
+      {
+        "name": "Toss tech blog",
+        "url": "https://toss.tech/",
+        "yielded": true,
+        "note": "Toss Securities lineage post confirms dbt"
+      },
+      {
+        "name": "SOCAR tech blog",
+        "url": "https://tech.socar.kr/data/2022/07/25/analytics-engineering-with-dbt",
+        "yielded": true,
+        "note": "2022 dbt post by Humphrey, already a chapter speaker"
+      },
+      {
+        "name": "Karrot (Daangn) Medium",
+        "url": "https://medium.com/daangn",
+        "yielded": false,
+        "note": "blocked by Medium (403/429)"
+      },
+      {
+        "name": "Databricks Korea User Group (KRUG)",
+        "url": "https://usergroups.databricks.com/databricks-korea-user-group-krug/",
+        "yielded": false,
+        "note": "no events listed"
+      },
+      {
+        "name": "Woowahan, Kakao, Hyperconnect, Buzzvil, Banksalad, Kakaobank, Devsisters, Inflab, Ohouse feeds",
+        "url": "https://techblog.woowahan.com/",
+        "yielded": false,
+        "note": "no dbt posts found"
+      },
+      {
+        "name": "Snowflake World Tour Seoul 2026",
+        "url": "https://www.snowflake.com/events/snowflake-world-tour-seoul/",
+        "yielded": false,
+        "note": "no speaker names on the page"
+      },
+      {
+        "name": "dbt Summit agenda and dbt Champions pages",
+        "url": "https://www.getdbt.com/dbt-summit/agenda",
+        "yielded": false,
+        "note": "no Korean companies found"
+      },
+      {
+        "name": "Women Who Code, R-Ladies, WiMLDS Seoul",
+        "url": "https://www.meetup.com/",
+        "yielded": false,
+        "note": "no such Meetup groups exist"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Seoul dbt Meetup #0 (in-person)",
+      "date": "2023-08-24",
+      "venue": "Allday Sound Bar, 34 Dosan-daero 11-gil, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/295337941/",
+      "organisers": [
+        "Abimbola Adebayo",
+        "Herick Jee"
+      ],
+      "attendees": 4,
+      "talks": []
+    },
+    {
+      "name": "Seoul dbt Meetup #1",
+      "date": "2023-11-16",
+      "venue": "Sebasi Demaco Hall, B1, 16 Teheran-ro 53-gil, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/296531118/",
+      "organisers": [
+        "Herick Jee",
+        "Abimbola Adebayo"
+      ],
+      "attendees": 35,
+      "talks": [
+        {
+          "speaker": "Sangtae Humphrey Ahn",
+          "company": "Data Engineer, Lead, SOCAR",
+          "title": "Survive to Thrive: A Journey to the Next Level Data",
+          "topics": [
+            "data modeling"
+          ]
+        },
+        {
+          "speaker": "Jensen Yap",
+          "company": "Data Tech Lead, NFTBank",
+          "title": "How dbt Saved My Data Engineering Startup Team",
+          "topics": [
+            "team & org design"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #2",
+      "date": "2024-04-18",
+      "venue": "Cafe en Travel, 45 Gangnam-daero 102-gil, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/299946341/",
+      "organisers": [
+        "Herick Jee",
+        "Abimbola Adebayo"
+      ],
+      "attendees": 52,
+      "talks": [
+        {
+          "speaker": "Benoit Perigaud, Louis Lee, Abi Adebayo, Wynn Park",
+          "company": "dbt Labs; Snowflake; Pinnu Analytics; DataMarketingKorea",
+          "title": "Demystifying the Modern Data Stack (Panel Q&A)",
+          "topics": [
+            "modern data stack",
+            "career development"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #3",
+      "date": "2024-07-24",
+      "venue": "Jidining Company, 629-1 Yeoksam-dong, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/301960621/",
+      "organisers": [
+        "Abimbola Adebayo",
+        "Herick Jee"
+      ],
+      "attendees": 61,
+      "talks": [
+        {
+          "speaker": "Joshua Kim (Jinsuk Kim)",
+          "company": "IoTrust",
+          "title": "Developing a Data Warehouse via dbt",
+          "topics": [
+            "data modeling",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Jaesung Ryu",
+          "company": "Wrtn Technologies",
+          "title": "How to Reduce Costs in BigQuery Using dbt",
+          "topics": [
+            "data warehouse & platforms",
+            "performance & scale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #4",
+      "date": "2024-09-24",
+      "venue": "Jidining Company, 629-1 Yeoksam-dong, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/303073333/",
+      "organisers": [
+        "Abimbola Adebayo",
+        "Herick Jee"
+      ],
+      "attendees": 40,
+      "talks": [
+        {
+          "speaker": "Abi Adebayo",
+          "company": "Founder, Pinnu Analytics",
+          "title": "Getting Started with dbt: When & How",
+          "topics": [
+            "dbt best practices",
+            "dbt fundamentals"
+          ]
+        },
+        {
+          "speaker": "Jean-Christophe Gnansounou",
+          "company": "Cartier",
+          "title": "How to Improve Time to Market Leveraging Data Mesh Capabilities",
+          "topics": [
+            "data mesh",
+            "team & org design"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Coalesce Watch Party",
+      "date": "2024-10-17",
+      "venue": "OrangePlanet, 4th Floor, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/303636795/",
+      "organisers": [
+        "Abimbola Adebayo",
+        "Herick Jee"
+      ],
+      "attendees": 7,
+      "talks": []
+    },
+    {
+      "name": "Seoul dbt Meetup #5",
+      "date": "2024-12-18",
+      "venue": "OrangePlanet, 4th Floor, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/304791613/",
+      "organisers": [
+        "Herick Jee",
+        "Abimbola Adebayo"
+      ],
+      "attendees": 31,
+      "talks": [
+        {
+          "speaker": "Sangwon Hwang",
+          "company": "Megazone Cloud",
+          "title": "PoC Journey for an Automated CRM Pipeline Using dbt",
+          "topics": [
+            "dbt product features"
+          ]
+        },
+        {
+          "speaker": "Yeezy Yoon (Yoon Do-kyung)",
+          "company": "Data Engineer, Zigbang",
+          "title": "Exploring dbt with Dagster",
+          "topics": [
+            "orchestration & ci/cd",
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #6",
+      "date": "2025-09-24",
+      "venue": "Jidining Company, 629-1 Yeoksam-dong, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/311067596/",
+      "organisers": [
+        "Abimbola Adebayo",
+        "Herick Jee",
+        "Joshua Kim"
+      ],
+      "attendees": 36,
+      "talks": [
+        {
+          "speaker": "Sanghoon Lee",
+          "company": "Backend Developer, AB180",
+          "title": "Building a dbt Pipeline with Snowflake",
+          "topics": [
+            "data warehouse & platforms"
+          ]
+        },
+        {
+          "speaker": "Herick Jee, Joshua Kim",
+          "company": null,
+          "title": "Seoul dbt Meetup Community Updates",
+          "topics": [
+            "community"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #7",
+      "date": "2025-12-17",
+      "venue": "Berry Space, 28 Bongeunsa-ro 16-gil, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/312130999/",
+      "organisers": [
+        "Joshua Kim",
+        "Abimbola Adebayo"
+      ],
+      "attendees": 90,
+      "talks": [
+        {
+          "speaker": "Thomas Kim",
+          "company": "Reseller Partner Development Manager, APAC & South Korea, Fivetran",
+          "title": "Fivetran and dbt Labs are Uniting to Set the Standard for Open Data Infrastructure",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Joshua Kim",
+          "company": "Analytics Engineer, Wrtn Technologies",
+          "title": "Custom BigQuery TVF Development Journey in dbt",
+          "topics": [
+            "data warehouse & platforms",
+            "developer workflow"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #8",
+      "date": "2026-05-27",
+      "venue": "Snowflake Korea Office, 134 Teheran-ro, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/314537602/",
+      "organisers": [
+        "Thomas Kim",
+        "Joshua Kim"
+      ],
+      "attendees": 53,
+      "talks": [
+        {
+          "speaker": "DK Cho (Dong-kyu Cho)",
+          "company": "CSP PDM, Snowflake Korea",
+          "title": "Three Keywords for Problem Solving: People + Solutions + Data",
+          "topics": [
+            "career development",
+            "data governance"
+          ]
+        },
+        {
+          "speaker": "Kyung-jun Lee",
+          "company": "Analytics Engineer, Wrtn Technologies",
+          "title": "dbt Materialization Essentials",
+          "topics": [
+            "dbt best practices",
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #9",
+      "date": "2026-07-03",
+      "venue": "MARU360, B1, 172 Yeoksam-ro, Gangnam-gu, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/315240680/",
+      "organisers": [
+        "Thomas Kim",
+        "Kyungjun Lee",
+        "Joshua Kim"
+      ],
+      "attendees": 40,
+      "talks": [
+        {
+          "speaker": "Thomas Kim",
+          "company": "Reseller Partner Development Manager, APAC & South Korea, Fivetran",
+          "title": "Fivetran + dbt Labs = ODI (Open Data Infra)",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Riven Lee",
+          "company": "Analytics Engineer, Wrtn Technologies",
+          "title": "dbt Core → dbt Fusion Migration Journey",
+          "topics": [
+            "dbt product features",
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Zoe Yim",
+          "company": "Senior Technical Business Analyst, National Vision Inc.; 2026 dbt Champion",
+          "title": "Analyst to Analytics Engineer: Becoming a Builder, a dbt Champion, and a Better Beginner",
+          "topics": [
+            "career development",
+            "community"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Seoul dbt Meetup #10",
+      "date": "2026-09-17",
+      "venue": "데이터브릭스 서울 오피스 (Databricks Seoul Office), 13F JustCo Tower, 431 Teheran-ro, Seoul",
+      "url": "https://www.meetup.com/seoul-dbt-meetup/events/316380348/",
+      "organisers": [
+        "Kyungjun Lee",
+        "Thomas Kim",
+        "Seo Hangyeol"
+      ],
+      "attendees": 35,
+      "talks": [
+        {
+          "speaker": "Sanghoon Han",
+          "company": "Solution Architect, Databricks",
+          "title": "dbt with Databricks",
+          "topics": [
+            "data warehouse & platforms",
+            "tools & ecosystem"
+          ]
+        },
+        {
+          "speaker": "Hangyeol Seo",
+          "company": "dbt Community Korea",
+          "title": "dbt Summit Recap: Q3 Agenda",
+          "topics": [
+            "dbt product updates",
+            "community"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "dbt Slack #local-seoul",
+      "url": "https://slack.getdbt.com",
+      "note": "the chapter's own channel"
+    },
+    {
+      "name": "Apache Airflow Korea forum",
+      "url": "https://discourse.airflow-kr.org/",
+      "note": "accepts dbt meetup announcements with admin approval"
+    },
+    {
+      "name": "Apache Airflow Korea YouTube",
+      "url": "https://www.youtube.com/@Airflow-users-Korea",
+      "note": "recorded meetup talks"
+    },
+    {
+      "name": "Snowflake Korea User Group events (event-us)",
+      "url": "https://event-us.kr/flakers",
+      "note": "registration for Flakers meetups"
+    },
+    {
+      "name": "PyLadies Seoul",
+      "url": "https://www.meetup.com/seoul-pyladies-meetup/",
+      "note": "women-only data and Python events"
+    },
+    {
+      "name": "AWSKRUG",
+      "url": "https://www.meetup.com/awskrug/",
+      "note": "large AWS user group with a data subgroup"
+    }
+  ]
+}
