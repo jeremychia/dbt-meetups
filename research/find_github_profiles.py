@@ -38,6 +38,15 @@ def employer_tokens(company):
     return {t for t in norm(company).split() if len(t) > 3 and t not in GENERIC}
 
 
+# --country: also accept a profile whose location names the chapter's country, but only when its name is unique on GitHub
+COUNTRY = {"amsterdam": "netherlands nederland", "atlanta": "usa united states", "baltics": "lithuania lietuva", "belgium": "belgium belgique belgie",
+           "berlin_planning": "germany deutschland", "boston": "usa united states", "copenhagen": "denmark danmark", "dusseldorf": "germany deutschland",
+           "kuala_lumpur": "malaysia", "london": "uk united kingdom england", "melbourne": "australia", "montreal": "canada quebec",
+           "munich": "germany deutschland bavaria bayern", "new_york": "usa united states", "paris": "france", "san_francisco": "usa united states california",
+           "seattle": "usa united states washington", "seoul": "korea", "singapore": "singapore", "sofia": "bulgaria", "stockholm": "sweden sverige",
+           "sydney": "australia", "taipei": "taiwan", "tokyo": "japan", "toronto": "canada ontario"}
+
+
 def verified(user, employer, city_words):
     text = norm(" ".join(str(user.get(k) or "") for k in ("company", "bio", "blog")))
     if employer and employer & set(text.split()):
@@ -47,11 +56,14 @@ def verified(user, employer, city_words):
 
 
 def main(folders):
+    by_country = "--country" in folders
+    folders = [x for x in folders if x != "--country"]
     files = [f for f in sorted(glob.glob("*/*_dbt_companies.json")) if not folders or f.split("/")[0] in folders]
     for f in files:
         raw = open(f).read()
         d = json.loads(raw)
         city_words = set(norm(d["metadata"]["region"]).split()) - {"dbt", "meetup", "the", "and"}
+        country_words = set(COUNTRY.get(f.split("/")[0], "").split())
         n = 0
         for c in d["companies"]:
             employer = employer_tokens(c["name"])
@@ -69,7 +81,10 @@ def main(folders):
                 for item in res["items"][:5]:
                     user = gh(f"users/{item['login']}") or {}
                     full = norm(user.get("name"))
-                    if user.get("type") == "User" and tok[0] in full and tok[-1] in full and verified(user, employer, city_words):
+                    if user.get("type") != "User" or tok[0] not in full or tok[-1] not in full:
+                        continue
+                    in_country = res.get("total_count") == 1 and country_words & set(norm(user.get("location")).split()) and DATA.search(user.get("bio") or "")
+                    if verified(user, employer, city_words) or (by_country and in_country):
                         good.append(user)
                 if len(good) != 1:
                     continue
