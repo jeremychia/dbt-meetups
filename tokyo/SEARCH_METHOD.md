@@ -17,10 +17,10 @@ This file holds what is specific to Tokyo. The method, scoring rules, schema and
 | First-time speakers (publish, no talk yet) | 80 |
 | Proven speakers | 55 |
 | Spoke at this chapter before | 40 |
-| Based in the region | 108 |
+| Based in the region | 109 |
 | Based elsewhere | 5 |
-| Location unknown | 33 |
-| With a LinkedIn profile | 13 |
+| Location unknown | 32 |
+| With a LinkedIn profile | 16 |
 | Job ads mentioning dbt | 47 |
 | Past chapter meetups | 19 |
 <!-- at-a-glance:end -->

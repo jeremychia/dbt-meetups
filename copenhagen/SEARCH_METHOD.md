@@ -17,10 +17,10 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 | First-time speakers (publish, no talk yet) | 6 |
 | Proven speakers | 72 |
 | Spoke at this chapter before | 32 |
-| Based in the region | 74 |
+| Based in the region | 75 |
 | Based elsewhere | 8 |
-| Location unknown | 17 |
-| With a LinkedIn profile | 42 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 43 |
 | Job ads mentioning dbt | 24 |
 | Past chapter meetups | 11 |
 <!-- at-a-glance:end -->

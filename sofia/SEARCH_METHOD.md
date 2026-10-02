@@ -17,10 +17,10 @@ This file holds what is specific to Sofia and Bulgaria. The method, scoring rule
 | First-time speakers (publish, no talk yet) | 2 |
 | Proven speakers | 8 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 17 |
+| Based in the region | 18 |
 | Based elsewhere | 1 |
-| Location unknown | 4 |
-| With a LinkedIn profile | 9 |
+| Location unknown | 3 |
+| With a LinkedIn profile | 11 |
 | Job ads mentioning dbt | 22 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 | First-time speakers (publish, no talk yet) | 14 |
 | Proven speakers | 66 |
 | Spoke at this chapter before | 28 |
-| Based in the region | 70 |
+| Based in the region | 71 |
 | Based elsewhere | 5 |
-| Location unknown | 14 |
-| With a LinkedIn profile | 47 |
+| Location unknown | 13 |
+| With a LinkedIn profile | 50 |
 | Job ads mentioning dbt | 211 |
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->

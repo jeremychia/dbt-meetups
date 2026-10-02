@@ -49,13 +49,14 @@ def check(path):
             assert all(x in V for x in (t["topics"] or [])), t["title"]
     return d
 
-import glob
-# with no arguments, check every chapter file; berlin's field_definitions are the reference
-files = (sys.argv[1:] or sorted(p for p in glob.glob("*/*_dbt_companies.json") if "berlin" not in p)) + ["berlin_planning/berlin_dbt_companies.json"]
-ds = [check(f) for f in files]
-ref = ds[-1]
-for d in ds:
-    assert d["metadata"]["field_definitions"] == ref["metadata"]["field_definitions"], "field_definitions differ"
-    assert list(d["metadata"]["counts"]) == list(ref["metadata"]["counts"]), "counts keys differ"
-    assert d["metadata"]["schema_version"] == ref["metadata"]["schema_version"]
-print("ok")
+if __name__ == "__main__":
+    import glob
+    # with no arguments, check every chapter file; berlin's field_definitions are the reference
+    files = (sys.argv[1:] or sorted(p for p in glob.glob("*/*_dbt_companies.json") if "berlin" not in p)) + ["berlin_planning/berlin_dbt_companies.json"]
+    ds = [check(f) for f in files]
+    ref = ds[-1]
+    for d in ds:
+        assert d["metadata"]["field_definitions"] == ref["metadata"]["field_definitions"], "field_definitions differ"
+        assert list(d["metadata"]["counts"]) == list(ref["metadata"]["counts"]), "counts keys differ"
+        assert d["metadata"]["schema_version"] == ref["metadata"]["schema_version"]
+    print("ok")

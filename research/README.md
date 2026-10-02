@@ -83,6 +83,7 @@ Work through these sources in order. Each city's notes say which local sources m
 ### LinkedIn profiles
 
 - **Search, don't fetch:** search `"<name>" <company> site:linkedin.com/in`, logged out. Use only what the search results show.
+- **Then search wider:** for people the first search misses, search `"<name>" <employer>` with no domain filter, and read their own event or speaker pages for a profile link. A sessionize, GitHub or X profile tied to the person counts as a contact too. [`apply_contacts.py`](apply_contacts.py) writes both kinds.
 - **Or take it from a page tied to the person:** a profile link on the person's event, speaker or author page, or in their GitHub social accounts, copied word for word. The link must name the person, and no one else on the page may match it. [`harvest_linkedin.py`](harvest_linkedin.py) does this without searching. GitHub links are high confidence; page links are medium.
 - **Accept a URL** only when the result's title or snippet matches the **name** and the **company or role**. Never guess URLs.
 - **`linkedin_confidence` high:** the name and the company or role both appear in the result title.
