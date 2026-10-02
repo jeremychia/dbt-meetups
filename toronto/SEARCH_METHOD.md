@@ -18,9 +18,9 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 | Proven speakers | 52 |
 | Spoke at this chapter before | 4 |
 | Based in the region | 68 |
-| Based elsewhere | 2 |
-| Location unknown | 6 |
-| With a LinkedIn profile | 24 |
+| Based elsewhere | 3 |
+| Location unknown | 5 |
+| With a LinkedIn profile | 52 |
 | Job ads mentioning dbt | 83 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

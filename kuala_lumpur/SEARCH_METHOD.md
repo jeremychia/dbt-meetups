@@ -17,10 +17,10 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 | First-time speakers (publish, no talk yet) | 8 |
 | Proven speakers | 30 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 37 |
+| Based in the region | 42 |
 | Based elsewhere | 4 |
-| Location unknown | 12 |
-| With a LinkedIn profile | 39 |
+| Location unknown | 7 |
+| With a LinkedIn profile | 45 |
 | Job ads mentioning dbt | 92 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

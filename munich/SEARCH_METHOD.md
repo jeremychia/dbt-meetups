@@ -17,10 +17,10 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 23 |
 | Proven speakers | 51 |
 | Spoke at this chapter before | 16 |
-| Based in the region | 58 |
-| Based elsewhere | 12 |
-| Location unknown | 19 |
-| With a LinkedIn profile | 36 |
+| Based in the region | 59 |
+| Based elsewhere | 14 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 49 |
 | Job ads mentioning dbt | 34 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

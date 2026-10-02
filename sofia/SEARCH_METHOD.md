@@ -20,7 +20,7 @@ This file holds what is specific to Sofia and Bulgaria. The method, scoring rule
 | Based in the region | 17 |
 | Based elsewhere | 1 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 3 |
+| With a LinkedIn profile | 9 |
 | Job ads mentioning dbt | 22 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

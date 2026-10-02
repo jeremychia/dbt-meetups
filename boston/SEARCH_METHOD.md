@@ -17,10 +17,10 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 42 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 43 |
+| Based in the region | 45 |
 | Based elsewhere | 4 |
-| Location unknown | 14 |
-| With a LinkedIn profile | 17 |
+| Location unknown | 12 |
+| With a LinkedIn profile | 31 |
 | Job ads mentioning dbt | 79 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 97 |
 | Spoke at this chapter before | 33 |
-| Based in the region | 79 |
+| Based in the region | 80 |
 | Based elsewhere | 6 |
-| Location unknown | 31 |
-| With a LinkedIn profile | 45 |
+| Location unknown | 30 |
+| With a LinkedIn profile | 65 |
 | Job ads mentioning dbt | 12 |
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->

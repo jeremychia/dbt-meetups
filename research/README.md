@@ -345,7 +345,7 @@ companies and dbt roles, people who have moved, and any topic trends.
 
 ### Limits and traps
 
-- **Web search is capped at about 200 calls per session.** The cap is shared by every parallel run, and bursts are rate-limited too. Fifteen runs in parallel used it up within the first 20–25 searches each. Run the LinkedIn pass in its own session, or give each run a smaller budget.
+- **Web search limits bursts, not totals.** Thirteen runs searching in parallel were all stopped within their first 10 searches. Four runs making one search at a time, and retrying on `too_many_requests`, finished more than 900 searches in one session. Tell every LinkedIn run to search one person at a time.
 - **The tier-1 rule is generous.** Any first-time speaker with a post from 2024 onwards is raised to tier 1. That includes vendor bloggers and authors whose post doesn't mention dbt. Check them before outreach.
 - **One consultancy can dominate a city.** Examples are Xebia in Amsterdam, Brooklyn Data in New York, The Information Lab in London and adesso in Rhein-Ruhr. Plan for one speaker per company per event.
 - **General data meetups rarely mention dbt.** Treat their speakers as a pool of local data practitioners, not dbt speakers. Filter by tier and topics.

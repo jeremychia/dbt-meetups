@@ -18,9 +18,9 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 | Proven speakers | 51 |
 | Spoke at this chapter before | 20 |
 | Based in the region | 52 |
-| Based elsewhere | 2 |
-| Location unknown | 15 |
-| With a LinkedIn profile | 5 |
+| Based elsewhere | 3 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 11 |
 | Job ads mentioning dbt | 38 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->

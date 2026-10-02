@@ -19,10 +19,10 @@ This file holds what is specific to Berlin. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 16 |
 | Proven speakers | 132 |
 | Spoke at this chapter before | 10 |
-| Based in the region | 101 |
-| Based elsewhere | 11 |
-| Location unknown | 53 |
-| With a LinkedIn profile | 111 |
+| Based in the region | 106 |
+| Based elsewhere | 13 |
+| Location unknown | 46 |
+| With a LinkedIn profile | 131 |
 | Job ads mentioning dbt | 128 |
 | Past chapter meetups | 15 |
 <!-- at-a-glance:end -->

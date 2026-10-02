@@ -17,10 +17,10 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 | First-time speakers (publish, no talk yet) | 20 |
 | Proven speakers | 53 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 46 |
-| Based elsewhere | 8 |
-| Location unknown | 33 |
-| With a LinkedIn profile | 19 |
+| Based in the region | 47 |
+| Based elsewhere | 10 |
+| Location unknown | 30 |
+| With a LinkedIn profile | 41 |
 | Job ads mentioning dbt | 54 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

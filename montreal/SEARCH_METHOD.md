@@ -17,10 +17,10 @@ This file holds what is specific to Montreal. The method, scoring rules, schema 
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 53 |
 | Spoke at this chapter before | 15 |
-| Based in the region | 54 |
+| Based in the region | 56 |
 | Based elsewhere | 1 |
-| Location unknown | 18 |
-| With a LinkedIn profile | 17 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 39 |
 | Job ads mentioning dbt | 43 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

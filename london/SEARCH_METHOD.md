@@ -17,10 +17,10 @@ This file holds what is specific to London. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 11 |
 | Proven speakers | 109 |
 | Spoke at this chapter before | 33 |
-| Based in the region | 101 |
+| Based in the region | 103 |
 | Based elsewhere | 6 |
-| Location unknown | 27 |
-| With a LinkedIn profile | 44 |
+| Location unknown | 25 |
+| With a LinkedIn profile | 70 |
 | Job ads mentioning dbt | 34 |
 | Past chapter meetups | 22 |
 <!-- at-a-glance:end -->

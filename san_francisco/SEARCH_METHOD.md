@@ -17,10 +17,10 @@ This file holds what is specific to San Francisco. The method, scoring rules, sc
 | First-time speakers (publish, no talk yet) | 10 |
 | Proven speakers | 67 |
 | Spoke at this chapter before | 36 |
-| Based in the region | 56 |
+| Based in the region | 61 |
 | Based elsewhere | 13 |
-| Location unknown | 28 |
-| With a LinkedIn profile | 28 |
+| Location unknown | 23 |
+| With a LinkedIn profile | 48 |
 | Job ads mentioning dbt | 48 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->

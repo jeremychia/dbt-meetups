@@ -18,9 +18,9 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 | Proven speakers | 55 |
 | Spoke at this chapter before | 19 |
 | Based in the region | 56 |
-| Based elsewhere | 6 |
-| Location unknown | 10 |
-| With a LinkedIn profile | 29 |
+| Based elsewhere | 8 |
+| Location unknown | 8 |
+| With a LinkedIn profile | 48 |
 | Job ads mentioning dbt | 66 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

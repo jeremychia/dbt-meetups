@@ -3,6 +3,7 @@
 usage, from the repo root: python3 research/apply_contacts.py <city file> <patch.json>
 patch: {"<person id>": {"linkedin_url": "...", "evidence": "result title and location", "confidence": "high|medium",
          "based_in_region": true|false|null, "city": "..."}}
+a person searched without a match is {"confidence": "low"}, which marks them searched.
 a known location is never overwritten; a person who already has the link is skipped.
 """
 
@@ -14,12 +15,17 @@ raw = open(path).read()
 d = json.loads(raw)
 patch = json.load(open(patch_path))
 people = {p["id"]: (p, c) for c in d["companies"] for p in c["people"]}
-applied, located, problems = 0, 0, []
+applied, located, missed, problems = 0, 0, 0, []
 for pid, f in patch.items():
     if pid not in people:
         problems.append(f"unknown person id {pid}")
         continue
     p, c = people[pid]
+    if f.get("confidence") == "low" and not f.get("linkedin_url"):
+        if p["linkedin_confidence"] == "not_searched":
+            p["linkedin_confidence"] = "low"
+            missed += 1
+        continue
     url = f.get("linkedin_url") or ""
     if "linkedin.com/in/" not in url or f.get("confidence") not in ("high", "medium"):
         problems.append(f"{pid}: needs a linkedin.com/in url and confidence high|medium")
@@ -47,4 +53,4 @@ m["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
 m["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
 m["attendee_potential"] = dict(Counter(p["meetup_fit"]["attendee_potential"] for p in allp))
 open(path, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
-print(f"{path}: {applied} linkedin profiles, {located} locations")
+print(f"{path}: {applied} linkedin profiles, {located} locations, {missed} searched without a match")
