@@ -20,7 +20,7 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 | Based in the region | 70 |
 | Based elsewhere | 5 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 36 |
+| With a LinkedIn profile | 38 |
 | Job ads mentioning dbt | 211 |
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->

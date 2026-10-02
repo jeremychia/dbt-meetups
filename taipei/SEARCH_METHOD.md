@@ -20,7 +20,7 @@ This file holds what is specific to Taipei. The method, scoring rules, schema an
 | Based in the region | 40 |
 | Based elsewhere | 3 |
 | Location unknown | 44 |
-| With a LinkedIn profile | 2 |
+| With a LinkedIn profile | 3 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 46 |
 <!-- at-a-glance:end -->

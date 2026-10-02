@@ -20,7 +20,7 @@ This file holds what is specific to Sydney. The method, scoring rules, schema an
 | Based in the region | 110 |
 | Based elsewhere | 10 |
 | Location unknown | 29 |
-| With a LinkedIn profile | 58 |
+| With a LinkedIn profile | 62 |
 | Job ads mentioning dbt | 252 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->

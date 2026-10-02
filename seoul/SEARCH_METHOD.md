@@ -20,7 +20,7 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 | Based in the region | 52 |
 | Based elsewhere | 2 |
 | Location unknown | 15 |
-| With a LinkedIn profile | 4 |
+| With a LinkedIn profile | 5 |
 | Job ads mentioning dbt | 38 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
