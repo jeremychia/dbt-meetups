@@ -17,9 +17,9 @@ This file holds what is specific to Taipei. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 23 |
 | Proven speakers | 55 |
 | Spoke at this chapter before | 30 |
-| Based in the region | 45 |
+| Based in the region | 47 |
 | Based elsewhere | 5 |
-| Location unknown | 37 |
+| Location unknown | 35 |
 | With a LinkedIn profile | 16 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 46 |

@@ -20,7 +20,7 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 | Based in the region | 42 |
 | Based elsewhere | 4 |
 | Location unknown | 7 |
-| With a LinkedIn profile | 45 |
+| With a LinkedIn profile | 46 |
 | Job ads mentioning dbt | 92 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
