@@ -20,7 +20,7 @@ This file holds what is specific to Copenhagen. The method, scoring rules, schem
 | Based in the region | 72 |
 | Based elsewhere | 8 |
 | Location unknown | 19 |
-| With a LinkedIn profile | 14 |
+| With a LinkedIn profile | 18 |
 | Job ads mentioning dbt | 24 |
 | Past chapter meetups | 11 |
 <!-- at-a-glance:end -->

@@ -22,7 +22,7 @@ This file holds what is specific to Berlin. The method, scoring rules, schema an
 | Based in the region | 101 |
 | Based elsewhere | 11 |
 | Location unknown | 53 |
-| With a LinkedIn profile | 110 |
+| With a LinkedIn profile | 111 |
 | Job ads mentioning dbt | 128 |
 | Past chapter meetups | 15 |
 <!-- at-a-glance:end -->

@@ -17,9 +17,14 @@ def norm(s):
     return re.sub(r"[^a-z0-9 ]", " ", unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower())
 
 
-def gh(path):
+def gh(path, *params):
+    # query text goes in -f params so gh encodes it; a raw space or quote in the path makes the call hang
+    args = ["gh", "api", "-X", "GET", path] + [x for p in params for x in ("-f", p)]
     for attempt in range(4):
-        r = subprocess.run(["gh", "api", path], capture_output=True, text=True)
+        try:
+            r = subprocess.run(args, capture_output=True, text=True, timeout=30)
+        except subprocess.TimeoutExpired:
+            continue
         if r.returncode == 0:
             return json.loads(r.stdout)
         if "rate limit" in (r.stderr + r.stdout).lower():
@@ -56,7 +61,7 @@ def main(folders):
                 tok = [t for t in norm(re.sub(r"\(.*?\)", "", p["name"])).split() if len(t) > 1]
                 if len(tok) < 2:
                     continue
-                res = gh(f'search/users?q=fullname:"{" ".join(tok)}"&per_page=5') or {}
+                res = gh("search/users", f'q=fullname:"{" ".join(tok)}"', "per_page=5") or {}
                 time.sleep(2.2)  # search allows 30 calls a minute
                 if not res.get("items") or res.get("total_count", 0) > 15:  # too common a name to verify
                     continue

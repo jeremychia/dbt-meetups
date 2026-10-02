@@ -20,7 +20,7 @@ This file holds what is specific to Melbourne. The method, scoring rules, schema
 | Based in the region | 56 |
 | Based elsewhere | 3 |
 | Location unknown | 11 |
-| With a LinkedIn profile | 19 |
+| With a LinkedIn profile | 20 |
 | Job ads mentioning dbt | 130 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
