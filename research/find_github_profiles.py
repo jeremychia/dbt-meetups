@@ -1,4 +1,4 @@
-"""Finds GitHub profiles for people with no contact yet, by full-name search, keeping only verified matches.
+"""Finds GitHub profiles for people with no contact yet, by the handle the record gives or full-name search, keeping only verified matches.
 
 usage, from the repo root: python3 research/find_github_profiles.py [<city folder> ...]
 
@@ -8,7 +8,9 @@ about data. its linked LinkedIn account is added too. needs a logged-in gh; sear
 """
 
 import glob, json, re, subprocess, sys, time, unicodedata
+from harvest_profiles import handles
 
+NATIVE = re.compile(r"[\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]")  # chinese, japanese or korean script
 DATA = re.compile(r"\b(data|analytics|dbt|sql|bi|warehouse|etl|engineer|scientist)\b", re.I)
 GENERIC = {"independent", "no", "company", "employer", "not", "identified", "stated", "the", "and", "group", "inc", "gmbh", "ltd", "labs", "data", "ab", "as", "sa", "bv", "co"}
 
@@ -71,21 +73,27 @@ def main(folders):
                 if p["has_linkedin"] or p["profile_urls"]:
                     continue
                 tok = [t for t in norm(re.sub(r"\(.*?\)", "", p["name"])).split() if len(t) > 1]
-                if len(tok) < 2:
-                    continue
-                res = gh("search/users", f'q=fullname:"{" ".join(tok)}"', "per_page=5") or {}
-                time.sleep(2.2)  # search allows 30 calls a minute
-                if not res.get("items") or res.get("total_count", 0) > 15:  # too common a name to verify
-                    continue
+                native = re.sub(r"\s*\(.*?\)", "", p["name"]).strip()
                 good = []
-                for item in res["items"][:5]:
-                    user = gh(f"users/{item['login']}") or {}
-                    full = norm(user.get("name"))
-                    if user.get("type") != "User" or tok[0] not in full or tok[-1] not in full:
-                        continue
-                    in_country = res.get("total_count") == 1 and country_words & set(norm(user.get("location")).split()) and DATA.search(user.get("bio") or "")
-                    if verified(user, employer, city_words) or (by_country and in_country):
+                for h in handles(p):  # a handle the record gives may be the github login; it still has to name the employer or city
+                    user = gh(f"users/{h}") or {}
+                    if user.get("type") == "User" and verified(user, employer, city_words):
                         good.append(user)
+                if not good and (len(tok) >= 2 or NATIVE.search(native)):
+                    query = native if NATIVE.search(native) else " ".join(tok)
+                    res = gh("search/users", f'q=fullname:"{query}"', "per_page=5") or {}
+                    time.sleep(2.2)  # search allows 30 calls a minute
+                    if not res.get("items") or res.get("total_count", 0) > 15:  # too common a name to verify
+                        continue
+                    for item in res["items"][:5]:
+                        user = gh(f"users/{item['login']}") or {}
+                        full = norm(user.get("name"))
+                        named = query in (user.get("name") or "") if NATIVE.search(native) else (tok[0] in full and tok[-1] in full)
+                        if user.get("type") != "User" or not named:
+                            continue
+                        in_country = res.get("total_count") == 1 and country_words & set(norm(user.get("location")).split()) and DATA.search(user.get("bio") or "")
+                        if verified(user, employer, city_words) or (by_country and in_country):
+                            good.append(user)
                 if len(good) != 1:
                     continue
                 user = good[0]

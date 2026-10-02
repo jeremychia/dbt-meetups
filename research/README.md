@@ -80,12 +80,18 @@ Work through these sources in order. Each city's notes say which local sources m
 - **New companies** from job ads are added as `employer`, `vendor` or `consultancy`, with `local_presence: confirmed`. Raise their `dbt_signal` to at least **medium**. Strong stays strong.
 - **Never use the LinkedIn jobs API** or fetch LinkedIn pages.
 
-### LinkedIn profiles
+### Public profiles
 
-- **Search, don't fetch:** search `"<name>" <company> site:linkedin.com/in`, logged out. Use only what the search results show.
-- **Then search wider:** for people the first search misses, search `"<name>" <employer>` with no domain filter, and read their own event or speaker pages for a profile link. A sessionize, GitHub or X profile tied to the person counts as a contact too. [`apply_contacts.py`](apply_contacts.py) writes both kinds.
-- **Or take it from a page tied to the person:** a profile link on the person's event, speaker or author page, or in their GitHub social accounts, copied word for word. The link must name the person, and no one else on the page may match it. [`harvest_linkedin.py`](harvest_linkedin.py) does this without searching. GitHub links are high confidence; page links are medium.
-- **Accept a URL** only when the result's title or snippet matches the **name** and the **company or role**. Never guess URLs.
+A person counts as reachable with a LinkedIn profile or any other public profile in `profile_urls` (types in `PROFILE_TYPES` in [validate.py](validate.py)). Run the scripts first, since they cost no searches. Then search.
+
+1. **Profiles the evidence already proves:** `python3 research/derive_profiles.py`. It adds author pages on Zenn, Qiita, note, velog, Medium and dev.to, Meetup and sessionize pages, and GitHub owners.
+2. **Meetup members:** `python3 research/match_meetup_members.py`. It adds the Meetup profile of a speaker who hosted or RSVP'd to their own event.
+3. **Links on the person's own pages:** `python3 research/harvest_profiles.py fetch <cache>`, then `check <cache>`, then `apply <cache>`. It reads evidence pages and GitHub social accounts for LinkedIn, X, Bluesky, sessionize and GitHub links. A link counts when it names the person, equals their recorded handle, or is the closest profile link to their name with a slug that fits it. `check` lists every match and how often the rules agree with links already on file. Run it before `apply`.
+4. **GitHub search:** `python3 research/find_github_profiles.py [<city folder> ...]`. It tries the recorded handle as a login, then a full-name search. It keeps a profile only when it names the employer, or the city with a data bio.
+5. **Search:** brief the runs with [contact-task.md](contact-task.md) and apply with [`apply_contacts.py`](apply_contacts.py). Named leads go first, then everyone `not_searched`, then a wider pass on everyone `low`.
+
+- **Search, don't fetch LinkedIn:** use only what the search result shows, logged out.
+- **Accept a URL** only when the result ties the **name** to the **employer, talk or community**, and it is the only candidate. Never guess or build a URL.
 - **`linkedin_confidence` high:** the name and the company or role both appear in the result title.
 - **`linkedin_confidence` medium:** indirect evidence or a name variant.
 - **`linkedin_confidence` low:** searched but not found. The URL is `null`.
@@ -182,6 +188,7 @@ community_channels[] name, url, note
 | 2. Assemble | Turns the loose research records into a valid file | — | [assemble.py](assemble.py) |
 | 3. Location | Finds where each person is based, from public pages | [location-task.md](location-task.md) | [apply_locations.py](apply_locations.py) |
 | 4. LinkedIn | Fills the remaining locations from LinkedIn search results | [linkedin-task.md](linkedin-task.md) | [apply_locations.py](apply_locations.py) |
+| 5. Contacts | Finds a public profile for everyone, scripts first and then search | [contact-task.md](contact-task.md) | [apply_contacts.py](apply_contacts.py), [harvest_profiles.py](harvest_profiles.py) |
 
 Then validate, fill the city notes and rebuild the cockpit:
 
@@ -287,8 +294,8 @@ Tasks, in priority order:
    - Check women-in-data communities through their own events.
 
 3. PEOPLE
-   - Find LinkedIn URLs for tier 1-2 people whose linkedin_confidence is "not_searched" or
-     "low". Re-check "medium" ones.
+   - Find a public profile for everyone without one: run the scripts in central method
+     section 2 (public profiles), then search with research/contact-task.md, one search at a time.
    - Fill unknown locations by the location rules (central method section 6).
    - Re-check people with notes like "verify" or "may have left".
 
@@ -327,6 +334,7 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **LinkedIn search results** show a person's location next to their name and employer. No other source does this as reliably. They also confirm a profile URL and current role without logging in.
 - **GitHub profiles** have a location field. The unauthenticated API allows about 60 calls an hour, shared by every parallel run. The HTML profile page still shows the location after that.
 - **Sessionize speaker pages** often state a city.
+- **Event and speaker pages link profiles next to each name.** Meetup descriptions, Tableau and Snowflake user-group pages, and sessionize pages carry LinkedIn and X links that a name search misses, such as `konradmal` for Konrad Maliszewski.
 - **Company blogs with author boxes** were the best source of first-time speakers. Examples are adesso and ORAYLIS (Rhein-Ruhr), Xebia (Amsterdam), dataroots (Belgium), b.telligent and synvert (Munich), Brooklyn Data (New York) and The Information Lab (London).
 - **dbt Labs case studies** name the data lead and give concrete numbers.
 - **Conference agenda pages** (dbt Summit, Data + AI Summit) name the speaker and company and include an abstract.
@@ -341,6 +349,7 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **Substack:** plain fetches return empty pages. Read issues through the browser or Substack's JSON API.
 - **meetup.com past-events lists:** a plain fetch returns nothing useful. Use `gql2`, or read the `__NEXT_DATA__` block on each event page.
 - **LinkedIn post text** is not readable when logged out.
+- **iThome and Medium article pages** answer 403 or 429 to fetches, so their author links are out of reach. Taipei handles stay hard to match.
 - **dbt Slack local channels** can't be searched from outside Slack.
 - **Old talks:** most chapter talks before late 2024 give no location evidence.
 
@@ -355,6 +364,8 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **Past speakers' employers** come from the Meetup talk text. A talk with several speakers can produce a company record named after a job title. Check `companies` for those after assembling.
 - **Duplicate people:** the same person can appear under two spellings or two employers. Search each city for near-duplicate names before outreach. Merge them with `merge_people.py`.
 - **Same-name people** are common. Always check a match against the company or role.
+- **Search runs pick one of two profiles** when told to find a match. Ask them to flag every unsure match by id, and check each one before applying. About one flagged match in three had nothing tying it to the record.
+- **Second and third search rounds find less.** The first LinkedIn search found about 40% of people. The wider pass on those it missed found about 20%.
 - **Name variants need normalising** when matching, for example a nickname in quotes. Match on the first and last token after removing accents.
 - **Stale roles:** titles and employers go out of date. Check the latest search snippet before outreach.
 - **Speakers at local events can live elsewhere.** A talk in the city does not show where someone lives. The location rules are in [§6](#6-location-rules).
