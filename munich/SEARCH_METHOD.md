@@ -20,7 +20,7 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 | Based in the region | 58 |
 | Based elsewhere | 12 |
 | Location unknown | 19 |
-| With a LinkedIn profile | 33 |
+| With a LinkedIn profile | 35 |
 | Job ads mentioning dbt | 34 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

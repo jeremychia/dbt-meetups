@@ -17,10 +17,10 @@ This file holds what is specific to New York. The method, scoring rules, schema 
 | First-time speakers (publish, no talk yet) | 24 |
 | Proven speakers | 121 |
 | Spoke at this chapter before | 65 |
-| Based in the region | 72 |
+| Based in the region | 73 |
 | Based elsewhere | 17 |
-| Location unknown | 77 |
-| With a LinkedIn profile | 38 |
+| Location unknown | 76 |
+| With a LinkedIn profile | 39 |
 | Job ads mentioning dbt | 59 |
 | Past chapter meetups | 30 |
 <!-- at-a-glance:end -->

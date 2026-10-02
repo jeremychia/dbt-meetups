@@ -20,7 +20,7 @@ This file holds what is specific to San Francisco. The method, scoring rules, sc
 | Based in the region | 56 |
 | Based elsewhere | 13 |
 | Location unknown | 28 |
-| With a LinkedIn profile | 25 |
+| With a LinkedIn profile | 27 |
 | Job ads mentioning dbt | 48 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->

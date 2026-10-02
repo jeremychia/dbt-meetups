@@ -20,7 +20,7 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 | Based in the region | 68 |
 | Based elsewhere | 2 |
 | Location unknown | 6 |
-| With a LinkedIn profile | 16 |
+| With a LinkedIn profile | 22 |
 | Job ads mentioning dbt | 83 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
