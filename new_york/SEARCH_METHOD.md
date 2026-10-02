@@ -20,7 +20,7 @@ This file holds what is specific to New York. The method, scoring rules, schema 
 | Based in the region | 73 |
 | Based elsewhere | 17 |
 | Location unknown | 76 |
-| With a LinkedIn profile | 39 |
+| With a LinkedIn profile | 43 |
 | Job ads mentioning dbt | 59 |
 | Past chapter meetups | 30 |
 <!-- at-a-glance:end -->

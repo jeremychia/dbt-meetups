@@ -22,7 +22,7 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 | Based in the region | 171 |
 | Based elsewhere | 12 |
 | Location unknown | 24 |
-| With a LinkedIn profile | 66 |
+| With a LinkedIn profile | 72 |
 | Job ads mentioning dbt | 160 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->

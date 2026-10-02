@@ -20,7 +20,7 @@ This file holds what is specific to Seattle. The method, scoring rules, schema a
 | Based in the region | 65 |
 | Based elsewhere | 9 |
 | Location unknown | 23 |
-| With a LinkedIn profile | 42 |
+| With a LinkedIn profile | 46 |
 | Job ads mentioning dbt | 81 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
