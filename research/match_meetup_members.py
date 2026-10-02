@@ -1,0 +1,85 @@
+"""Adds a person's Meetup member profile when they host or RSVP to the event where they spoke.
+
+usage, from the repo root: python3 research/match_meetup_members.py
+
+the events come from the person's evidence (meetup.com/<group>/events/<id>) and from the chapter meetups in
+past_chapter_talks. a member counts only when exactly one host or RSVP of that event has the person's first and
+last name, so the profile is tied to the talk, not to a namesake.
+"""
+
+import concurrent.futures, glob, json, re, unicodedata, urllib.request
+
+UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
+EVENT = re.compile(r"meetup\.com/[^/]+/events/(\d+)")
+QUERY = "query($id:ID!,$after:String){event(id:$id){eventHosts{member{id name}} rsvps(first:500,after:$after){pageInfo{hasNextPage endCursor} edges{node{member{id name}}}}}}"
+
+
+def norm(s):
+    return re.sub(r"[^a-z0-9 ]", " ", unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()).split()
+
+
+def members(event_id):
+    found, after = {}, None
+    for _ in range(10):
+        body = json.dumps({"query": QUERY, "variables": {"id": event_id, "after": after}}).encode()
+        req = urllib.request.Request("https://www.meetup.com/gql2", body, {"content-type": "application/json", "user-agent": UA})
+        try:
+            ev = (json.load(urllib.request.urlopen(req, timeout=30)).get("data") or {}).get("event") or {}
+        except Exception:
+            break
+        for h in ev.get("eventHosts") or []:
+            found[h["member"]["id"]] = h["member"]["name"]
+        r = ev.get("rsvps") or {}
+        for e in r.get("edges") or []:
+            found[e["node"]["member"]["id"]] = e["node"]["member"]["name"]
+        if not (r.get("pageInfo") or {}).get("hasNextPage"):
+            break
+        after = r["pageInfo"]["endCursor"]
+    return found
+
+
+def match(person_name, roster):
+    tok = [t for t in norm(re.sub(r"\(.*?\)", "", person_name)) if len(t) > 1]
+    if len(tok) < 2:
+        return None
+    hits = [mid for mid, name in roster.items() if tok[0] in norm(name) and tok[-1] in norm(name)]
+    return hits[0] if len(hits) == 1 else None
+
+
+def main():
+    files = sorted(glob.glob("*/*_dbt_companies.json"))
+    data = {f: json.loads(open(f).read()) for f in files}
+    wanted = {}  # (file, person id) -> event ids
+    for f, d in data.items():
+        by_date = {m["date"]: m["url"] for m in d["past_meetups"] if m.get("url")}
+        for c in d["companies"]:
+            for p in c["people"]:
+                if p["has_linkedin"] or any(u["type"] == "meetup" for u in p["profile_urls"]):
+                    continue
+                ids = {m.group(1) for e in p["speaker_evidence"] + p["evidence"] for m in [EVENT.search(e.get("url") or "")] if m}
+                ids |= {m.group(1) for t in p["past_chapter_talks"] for m in [EVENT.search(by_date.get(t["date"], ""))] if m}
+                if ids:
+                    wanted[(f, p["id"])] = ids
+    events = sorted({i for ids in wanted.values() for i in ids})
+    with concurrent.futures.ThreadPoolExecutor(6) as pool:
+        rosters = dict(zip(events, pool.map(members, events)))
+    for f, d in data.items():
+        n = 0
+        for c in d["companies"]:
+            for p in c["people"]:
+                for eid in sorted(wanted.get((f, p["id"]), ())):
+                    mid = match(p["name"], rosters.get(eid, {}))
+                    if mid:
+                        p["profile_urls"].append({"type": "meetup", "url": f"https://www.meetup.com/members/{mid}/", "source": f"https://www.meetup.com/events/{eid}/ (host or RSVP)"})
+                        n += 1
+                        break
+        allp = [p for c in d["companies"] for p in c["people"]]
+        d["metadata"]["counts"]["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        raw = open(f).read()
+        open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
+        print(f"{f.split('/')[0]:16} +{n:3} meetup profiles  reachable {d['metadata']['counts']['people_with_contact']}/{len(allp)}")
+    print(f"{len(events)} events read")
+
+
+if __name__ == "__main__":
+    main()

@@ -15,10 +15,11 @@ COMPANY = ["id","name","type","watchlist","excluded_from_outreach","cities","loc
 JOB = ["title","url","source","linkedin_company_name","dbt_mentioned_in_text","dbt_snippet","job_poster",
        "posted_date","last_seen","job_family","work_mode"]
 PERSON = ["id","name","pronouns","title","city","based_in_region","level","linkedin_urls","has_linkedin",
-          "linkedin_confidence","meetup_fit","lead_type","sourced_via","mentions_dbt","speaker_evidence","attendee_signal","evidence",
+          "linkedin_confidence","profile_urls","meetup_fit","lead_type","sourced_via","mentions_dbt","speaker_evidence","attendee_signal","evidence",
           "confidence","internal_vinted","priority_tier","suggested_talk_angle","past_chapter_talks","notes"]
 EVID = ["type","event","title","date","url","content_id","co_authors","mentions_dbt","description","topics",
         "suggested_talk_angle","url_precision","confidence"]
+PROFILE_TYPES = {"github","meetup","zenn","qiita","velog","medium","devto","substack","ithome","sessionize","x","bluesky","website","note"}
 PAST = ["name","date","venue","url","organisers","attendees","talks"]
 PAST_TALK = ["speaker","company","title","topics"]
 
@@ -36,6 +37,8 @@ def check(path):
         for p in c["people"]:
             keys(p, PERSON, p["id"])
             assert p["id"] not in people_ids, ("duplicate person", p["id"]); people_ids.add(p["id"])
+            for u in p["profile_urls"]:
+                assert set(u) == {"type", "url", "source"} and u["type"] in PROFILE_TYPES and u["url"].startswith("http"), (p["id"], u)
             for e in p["speaker_evidence"]:
                 keys(e, EVID, (p["id"], e["title"]))
                 assert 1 <= len(e["topics"]) <= 3 and all(t in V for t in e["topics"]), (p["id"], e["title"])

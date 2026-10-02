@@ -22,6 +22,7 @@ for drop in (people[i] for i in drop_ids):
     keep["evidence"] = merge_lists(keep["evidence"], drop["evidence"], lambda e: e["url"])
     keep["past_chapter_talks"] = merge_lists(keep["past_chapter_talks"], drop["past_chapter_talks"], lambda t: (t["date"], t["talk_title"]))
     keep["linkedin_urls"] = list(dict.fromkeys(keep["linkedin_urls"] + drop["linkedin_urls"]))
+    keep["profile_urls"] = merge_lists(keep["profile_urls"], drop["profile_urls"], lambda u: u["url"])
     keep["has_linkedin"] = bool(keep["linkedin_urls"])
     keep["sourced_via"] = list(dict.fromkeys(keep["sourced_via"] + drop["sourced_via"]))
     if keep["based_in_region"] is None and drop["based_in_region"] is not None:

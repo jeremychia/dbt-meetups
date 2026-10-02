@@ -57,6 +57,7 @@ def person(p, company_name):
         "city": p.get("city"), "based_in_region": p.get("based_in_region"), "level": None,
         "linkedin_urls": links, "has_linkedin": bool(links),
         "linkedin_confidence": p.get("linkedin_confidence") or ("medium" if links else "not_searched"),
+        "profile_urls": p.get("profile_urls") or [],
         "meetup_fit": {}, "lead_type": p.get("lead_type"), "sourced_via": p.get("sourced_via") or ["other"],
         "mentions_dbt": p.get("mentions_dbt"),
         "speaker_evidence": [evidence_item(e, who) for e in p.get("speaker_evidence") or []],
@@ -143,6 +144,7 @@ def merge(base, raw_companies):
                     existing["lead_type"] = "proven_speaker"  # a talk on record makes anyone a proven speaker
                 existing["evidence"] = merge_lists(existing["evidence"], p["evidence"], lambda e: e["url"])
                 existing["linkedin_urls"] = list(dict.fromkeys(existing["linkedin_urls"] + p["linkedin_urls"]))
+                existing["profile_urls"] = merge_lists(existing["profile_urls"], p["profile_urls"], lambda u: u["url"])
                 existing["sourced_via"] = list(dict.fromkeys(existing["sourced_via"] + p["sourced_via"]))
                 if p["notes"] and p["notes"] not in (existing["notes"] or ""):
                     existing["notes"] = " | ".join(x for x in [existing["notes"], p["notes"]] if x)
@@ -239,6 +241,7 @@ def standard_counts(ds):
             "speaker_evidence_items": sum(len(p["speaker_evidence"]) for p in allp),
             "unique_content_items": len({e["content_id"] for p in allp for e in p["speaker_evidence"]}),
             "people_with_linkedin": sum(p["has_linkedin"] for p in allp),
+            "people_with_contact": sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp),
             "people_who_spoke_at_this_chapter": sum(1 for p in allp if p["past_chapter_talks"]),
             "internal_vinted": sum(p["internal_vinted"] for p in allp),
             "level": dict(Counter(p["level"] for p in allp)),
@@ -278,7 +281,7 @@ def main():
             "title": m.get("title") or f"{raw['city']} dbt companies and people for the {raw['chapter_name']}",
             "generated_at": TODAY, "prepared_for": m.get("prepared_for") or "Jeremy Chia (dbt meetups)",
             "purpose": m.get("purpose") or f"Find {raw['city']} companies using dbt, and people who could speak at or attend the {raw['chapter_name']}.",
-            "version": (m.get("version") or 0) + 1, "schema_version": 3,
+            "version": (m.get("version") or 0) + 1, "schema_version": 4,
             "region": m.get("region") or f"{raw['city']} ({raw['chapter_name']})",
             "method": (m.get("method") or []) + [f"v{(m.get('version') or 0) + 1} ({TODAY}): {method_line}"] + (raw.get("lessons") or []),
             "field_definitions": json.load(open("berlin_planning/berlin_dbt_companies.json"))["metadata"]["field_definitions"],
