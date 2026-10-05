@@ -7,20 +7,20 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 4, 2026-10-01)
+**At a glance** (version 5, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 93 |
-| People | 61 |
+| Companies | 95 |
+| People | 63 |
 | Tier 1 leads | 6 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 42 |
+| Proven speakers | 44 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 45 |
+| Based in the region | 46 |
 | Based elsewhere | 4 |
-| Location unknown | 12 |
-| With a LinkedIn profile | 35 |
+| Location unknown | 13 |
+| With a LinkedIn profile | 36 |
 | Job ads mentioning dbt | 79 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
@@ -93,11 +93,11 @@ The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan
 - **No first-time speakers yet.** Boston has none, so the list leans on people who already speak.
 
 <!-- companies:start -->
-92 companies and communities were looked at. A company is local when it has people or roles in the region.
+94 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (12)</summary>
+<details><summary><b>Strong dbt use</b> (13)</summary>
 
-Agero, CarGurus, Cleartelligence, Connie Health, EF Education First (local presence not confirmed), Global Partners LP, HubSpot, Klaviyo, meQuilibrium, Tive, Toast, WHOOP
+Agero, CarGurus, Cleartelligence, Connie Health, EF Education First (local presence not confirmed), Global Partners LP, HubSpot, Klaviyo, meQuilibrium, Ratio PBC (local presence not confirmed), Tive, Toast, WHOOP
 
 </details>
 
@@ -119,9 +119,9 @@ Battery Ventures (local presence not confirmed), dbt Labs (local presence not co
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (8)</summary>
+<details><summary><b>Uses a different stack</b> (9)</summary>
 
-Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI Cambridge, Metro Boston Data Ladies, MIT, WiDS Boston, Women in the Enterprise of Science & Technology (WEST), Women Techmakers Boston (GDG Boston and GDG Cloud Boston), X-Chem (local presence not confirmed)
+Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI Cambridge, Boston Children's Hospital, Metro Boston Data Ladies, MIT, WiDS Boston, Women in the Enterprise of Science & Technology (WEST), Women Techmakers Boston (GDG Boston and GDG Cloud Boston), X-Chem (local presence not confirmed)
 
 </details>
 
@@ -136,7 +136,7 @@ Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI
 
 </details>
 
-<details><summary><b>Other sources checked</b> (37)</summary>
+<details><summary><b>Other sources checked</b> (48)</summary>
 
 - [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
 - [Coalesce 2025 on-demand](https://www.getdbt.com/resources/coalesce-on-demand)
@@ -175,6 +175,17 @@ Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI
 - [Women in Data (womenindata.org)](https://www.womenindata.org/) (nothing useful)
 - [Boston Tableau User Group (Data + Women check)](https://usergroups.tableau.com/boston-tableau-user-group/) (nothing useful)
 - [She Loves Data, Girls in Tech and WiMLDS Boston Meetup names](https://www.meetup.com/she-loves-data-boston/) (nothing useful)
+- [dbt Analytics Engineering Roundup: dispatches from the frontiers](https://roundup.getdbt.com/p/dispatches-from-the-frontiers)
+- [Jenna Jordan: City of Boston reflection](https://jennajordan.me/blog/cob-reflection)
+- [dbt Summit speaker page: Jenna Jordan](https://www.getdbt.com/dbt-summit/speakers/jenna-jordan)
+- [GitHub user search dbt location:Boston](https://api.github.com/search/users?q=dbt+location:Boston&per_page=30) (nothing useful)
+- [Snowflake User Group Boston 2022 event](https://usergroups.snowflake.com/events/details/snowflake-boston-presents-boston-user-group-meeting-lessons-learned-building-a-low-latency-data-warehouse-in-person-4) (nothing useful)
+- [DBTA Data Summit 2026 Boston (Luma)](https://luma.com/3u9uklwd) (nothing useful)
+- [DuckDB Boston Meetup 2026-09-03](https://duckdb.org/events/2026/09/03/duckdb-boston-meetup/)
+- [dbt Summit speaker page: Derek Andres](https://www.getdbt.com/dbt-summit/speakers/derek-andres) (nothing useful)
+- [dbt Summit speaker page: David Drummond](https://www.getdbt.com/dbt-summit/speakers/david-drummond) (nothing useful)
+- [Databricks community Boston Women in Data panel](https://community.databricks.com/t5/boston/women-in-data-panel/ev-p/91494) (nothing useful)
+- [Northeastern DATA Initiative Women in Analytics event](https://damore-mckim.northeastern.edu/events/data-detox-cleansing-your-way-to-accurate-machine-learning) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -229,3 +240,4 @@ Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI
 | 2026-10-01 | 2 | LinkedIn pass: 5 people placed from LinkedIn search results, 4 in the region and 1 outside. 9 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass: WEST, WiDS Boston, Women Techmakers through GDG Boston and GDG Cloud Boston, Metro Boston Data Ladies, AWS User Group Women in AI Cambridge and new PyLadies Boston hosts. 18 new people: 4 speakers and panellists, and 14 organisers as connectors. |
 | 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code search and Meetup venues. 85 to 93 companies. 8 added, 4 with a strong dbt signal (Tive, meQuilibrium, Toast, Agero). Connie Health and Global Partners LP raised to strong. Starburst Data raised to nice-to-have, with Boston presence confirmed. Job ads 62 to 79. |
+| 2026-10-05 | 5 | 2 more people: Jenna Jordan (Ratio PBC), who led dbt adoption at the City of Boston, and Dan Gottlieb (Boston Children's Hospital). |

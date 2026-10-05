@@ -7,20 +7,20 @@ This file holds what is specific to Sofia and Bulgaria. The method, scoring rule
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-01)
+**At a glance** (version 2, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 43 |
-| People | 22 |
+| Companies | 48 |
+| People | 29 |
 | Tier 1 leads | 3 |
 | First-time speakers (publish, no talk yet) | 2 |
-| Proven speakers | 8 |
+| Proven speakers | 14 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 18 |
+| Based in the region | 23 |
 | Based elsewhere | 1 |
-| Location unknown | 3 |
-| With a LinkedIn profile | 11 |
+| Location unknown | 5 |
+| With a LinkedIn profile | 13 |
 | Job ads mentioning dbt | 22 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -84,7 +84,7 @@ Nobody in Sofia has given a public dbt talk that this search could find. So the 
 - **Large employers with no dbt evidence:** Paysafe runs Snowflake and Databricks. SumUp uses dbt only in Berlin. Tide and Trading 212 show none. They are on the watchlist.
 
 <!-- companies:start -->
-42 companies and communities were looked at. A company is local when it has people or roles in the region.
+47 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (6)</summary>
 
@@ -104,19 +104,19 @@ A1 Bulgaria, B EYE, Betty Technology, CADABRA, DSK Bank, Fourth (Sofia), Ocado T
 
 </details>
 
-<details><summary><b>Not verified</b> (19)</summary>
+<details><summary><b>Not verified</b> (23)</summary>
 
-Adastra Bulgaria, AWS Bulgaria User Group, Bulgarian SQL & BI User Group "Let's SQL Together!" and Azure Analytics User Group Bulgaria, Coherent Solutions, Dreamix, Experian (Sofia), Insurify (Sofia), Large Sofia employers checked, no public job board found (Payhawk, Uber, Experian, Endava, VMware/Broadcom, SAP Labs Bulgaria, Bosch, Shelly, Nexo, Progress, Playtech, MentorMate, HedgeServ) (local presence not confirmed), LucidLink, Paysafe (Sofia), PyData Sofia and Data Science Society, Python Meetup at Sofia (HackBulgaria), SiteGround, Sofia Low-Key Data Meetup, Sofia Microsoft Fabric Meetup and Data Saturday Sofia, TechPods, Tide (Sofia), Trading 212, Women in Agile Bulgaria
-
-</details>
-
-<details><summary><b>Uses a different stack</b> (1)</summary>
-
-INSPIRIT
+Adastra Bulgaria, AWS Bulgaria User Group, Bulgarian SQL & BI User Group "Let's SQL Together!" and Azure Analytics User Group Bulgaria, Coherent Solutions, Dreamix, Experian (Sofia), Innova Consult, Insurify (Sofia), Large Sofia employers checked, no public job board found (Payhawk, Uber, Experian, Endava, VMware/Broadcom, SAP Labs Bulgaria, Bosch, Shelly, Nexo, Progress, Playtech, MentorMate, HedgeServ) (local presence not confirmed), LucidLink, Paysafe (Sofia), PyData Sofia and Data Science Society, Python Meetup at Sofia (HackBulgaria), SAP Labs Bulgaria, Schwarz IT (Sofia), SiteGround, Sofia Low-Key Data Meetup, Sofia Microsoft Fabric Meetup and Data Saturday Sofia, TechPods, Tide (Sofia), Trading 212, Women in Agile Bulgaria, World Bank Group (Sofia)
 
 </details>
 
-<details><summary><b>Other sources checked</b> (30)</summary>
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+Data Stack Conf (Sofia), INSPIRIT
+
+</details>
+
+<details><summary><b>Other sources checked</b> (35)</summary>
 
 - [Meetup gql2 groupSearch near Sofia](https://www.meetup.com/gql2)
 - [Bulgarian SQL & BI User Group past events (Meetup gql2)](https://www.meetup.com/bg-sql-bi-user-group-lets-sql-together/)
@@ -148,6 +148,11 @@ INSPIRIT
 - [Women in Tech Bulgaria sites](https://womenintech.bg) (nothing useful)
 - [Meetup gql2 women-in-tech groups near Sofia](https://www.meetup.com/gql2) (nothing useful)
 - [Paysafe Talks and Progress women-in-IT panels](https://www.meetup.com/paysafetalks-fintech-innovation-collaboration/events/299792697/) (nothing useful)
+- [Databricks Community Sofia group event pages](https://community.databricks.com/t5/sofia-bulgaria/gh-p/Sofia-Bulgaria)
+- [Data Saturdays Sofia 2025 call for speakers](https://sessionize.com/data-saturdays-sofia-2025/) (nothing useful)
+- [Data Saturdays Sofia 2026 call for speakers](https://sessionize.com/data-saturdays-sofia-2026/) (nothing useful)
+- [Discovery Day 2026 call for speakers](https://sessionize.com/discovery-day-2026-sofia-copy) (nothing useful)
+- [Data Stack Conf 2026](https://datastackconf.com/)
 
 </details>
 <!-- companies:end -->
@@ -201,3 +206,4 @@ INSPIRIT
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-01 | 1 | First build. 43 companies (14 on the watchlist), 22 people, 22 job postings at 20 companies. 3 tier-1 leads (Miroslav Dimitrov, Ivan Krumov, Dimitar Hadzhiev), 13 connectors. LinkedIn URLs for 2 people. No women-in-data community found with data events. |
+| 2026-10-05 | 2 | 7 more people, all speakers at the Databricks Community Sofia meetups. No first-time speakers: searches for Sofia dbt authors returned only job ads. |

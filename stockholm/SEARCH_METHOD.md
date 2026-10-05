@@ -7,20 +7,20 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 4, 2026-10-01)
+**At a glance** (version 5, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 102 |
-| People | 72 |
+| Companies | 104 |
+| People | 76 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 55 |
+| Proven speakers | 59 |
 | Spoke at this chapter before | 19 |
 | Based in the region | 56 |
 | Based elsewhere | 8 |
-| Location unknown | 8 |
-| With a LinkedIn profile | 53 |
+| Location unknown | 12 |
+| With a LinkedIn profile | 55 |
 | Job ads mentioning dbt | 66 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
@@ -80,7 +80,7 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **No company dominates the job ads.** 62 ads are spread across 55 companies.
 
 <!-- companies:start -->
-101 companies and communities were looked at. A company is local when it has people or roles in the region.
+103 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
@@ -100,6 +100,12 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Anyfin, Avalanche Studios Group, Bokad
 
 </details>
 
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+Embark Studios (local presence not confirmed), TELETID (local presence not confirmed)
+
+</details>
+
 <details><summary><b>Blogs and sites scanned</b> (8)</summary>
 
 - https://dataaistockholm.com/
@@ -113,7 +119,7 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Anyfin, Avalanche Studios Group, Bokad
 
 </details>
 
-<details><summary><b>Other sources checked</b> (24)</summary>
+<details><summary><b>Other sources checked</b> (29)</summary>
 
 - Local chapter history (enriched/stockholm-dbt-meetup.json): `enriched/stockholm-dbt-meetup.json`
 - [Data & AI Stockholm site + Substack feed](https://dataaistockholm.com/)
@@ -139,6 +145,11 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Anyfin, Avalanche Studios Group, Bokad
 - [GDG Stockholm events API (Women Techmakers)](https://gdg.community.dev/gdg-cloud-stockholm/)
 - [Women in Tech Sweden speakers and sessions](https://womenintech.se/speakers/)
 - [Women in Tech Sweden meetups (WordPress API)](https://womenintech.se/wp-json/wp/v2/meetups) (nothing useful)
+- [Data & AI Stockholm Substack archive](https://dataaistockholm1.substack.com/archive)
+- [Snowflake User Group Stockholm startups event](https://usergroups.snowflake.com/events/details/snowflake-stockholm-presents-startups-on-snowflake-unlock-quick-insights-at-scale/) (nothing useful)
+- [Databricks User Group Stockholm, Adlibris event](https://usergroups.databricks.com/events/details/databricks-user-groups-stockholm-databricks-user-group-presents-databricks-customer-data-journey-with-adlibris/) (nothing useful)
+- [Coalesce speaker search result](https://coalesce.getdbt.com/speakers/quentin-coviaux)
+- [Data Innovation Summit 2025 search](https://allai.events/event/data-innovation-summit-2025) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -200,3 +211,4 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Anyfin, Avalanche Studios Group, Bokad
 | 2026-10-01 | 2 | LinkedIn pass on 7 past chapter speakers. 3 placed: 2 in the region and 1 elsewhere. 7 locations are still unknown, and 20 people now have LinkedIn profiles. |
 | 2026-10-01 | 3 | Women-in-data pass. Checked Women in Tech Sweden (speakers and sessions), PyLadies Stockholm and AWS Women's User Group Sweden (past events and hosts), Women on Snowflake, Women Techmakers through GDG Stockholm, WiDS Sweden, R-Ladies Stockholm and two new Meetup groups. Added 21 people with `sourced_via: women_in_data_community`: 13 speakers and 8 organisers as connectors. Added new events for Anastasiia Stefanska and Isabella Renzetti. Added 6 community channels. |
 | 2026-10-01 | 4 | Company pass from open job boards (Greenhouse, Lever, Ashby), HN Who is hiring, dbt Labs case studies and Meetup gql2 line-ups. 2 companies added, for 102. McDonald's Nordics has a strong dbt signal. Rebtel raised to strong. People are unchanged. |
+| 2026-10-05 | 5 | 4 more people, including Quentin Coviaux (Rebtel), a dbt Summit speaker. Searches for local dbt authors returned only job ads. |

@@ -7,20 +7,20 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 4, 2026-10-01)
+**At a glance** (version 5, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 112 |
-| People | 76 |
+| Companies | 114 |
+| People | 80 |
 | Tier 1 leads | 4 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 52 |
+| Proven speakers | 54 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 68 |
+| Based in the region | 70 |
 | Based elsewhere | 3 |
-| Location unknown | 5 |
-| With a LinkedIn profile | 60 |
+| Location unknown | 7 |
+| With a LinkedIn profile | 61 |
 | Job ads mentioning dbt | 83 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
@@ -106,11 +106,11 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
 
 <!-- companies:start -->
-111 companies and communities were looked at. A company is local when it has people or roles in the region.
+113 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (8)</summary>
+<details><summary><b>Strong dbt use</b> (9)</summary>
 
-Instacart (local presence not confirmed), KOHO Financial, Secoda, SELECT, Shopify, Super.com, Toronto Modern Data Stack (now 'Toronto Enterprise AI'), Wealthsimple
+dbt Labs (local presence not confirmed), Instacart (local presence not confirmed), KOHO Financial, Secoda, SELECT, Shopify, Super.com, Toronto Modern Data Stack (now 'Toronto Enterprise AI'), Wealthsimple
 
 </details>
 
@@ -128,13 +128,13 @@ Archetype Consulting Inc., Cohere, Snowflake Toronto User Group, Zeta Global (lo
 
 <details><summary><b>Not verified</b> (34)</summary>
 
-Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CBC, CIBC, Cineplex, Compass Data + AI (local presence not confirmed), Create Music Group (local presence not confirmed), Data Engineers in Toronto, Databricks (local presence not confirmed), Dataiku (local presence not confirmed), dbt Labs (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), FiveOneFour (local presence not confirmed), Georgian, Geotab, Intact Financial Corporation, Interac, kWwhat (local presence not confirmed), Manulife, Mejuri, MHS Analytics Inc. (local presence not confirmed), Moneris, New Stadium, OneEleven, Polar Labs, Rootly, Sanofi, Snowflake, TD Bank, Toronto Apache Airflow Meetup, Viafoura (local presence not confirmed), Women in Big Data Toronto
+Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CBC, CIBC, Cineplex, Compass Data + AI (local presence not confirmed), Create Music Group (local presence not confirmed), Data Engineers in Toronto, Databricks (local presence not confirmed), Dataiku (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), FiveOneFour (local presence not confirmed), Georgian, Geotab, Hightouch (local presence not confirmed), Intact Financial Corporation, Interac, kWwhat (local presence not confirmed), Manulife, Mejuri, MHS Analytics Inc. (local presence not confirmed), Moneris, New Stadium, OneEleven, Polar Labs, Rootly, Sanofi, Snowflake, TD Bank, Toronto Apache Airflow Meetup, Viafoura (local presence not confirmed), Women in Big Data Toronto
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (3)</summary>
+<details><summary><b>Uses a different stack</b> (4)</summary>
 
-AWS User Group Women in Tech Ontario, PyLadies Toronto, Women Techmakers Toronto
+AWS User Group Women in Tech Ontario, PyLadies Toronto, Toronto Womxn in Data Science, Women Techmakers Toronto
 
 </details>
 
@@ -150,7 +150,7 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto, Women Techmakers Toronto
 
 </details>
 
-<details><summary><b>Other sources checked</b> (41)</summary>
+<details><summary><b>Other sources checked</b> (51)</summary>
 
 - [Toronto dbt Meetup past events (Meetup gql2)](https://www.meetup.com/toronto-dbt-meetup/)
 - [dbt Summit 2026 speakers](https://www.getdbt.com/dbt-summit/speakers)
@@ -193,6 +193,16 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto, Women Techmakers Toronto
 - [QueerTech Toronto (Meetup gql2)](https://www.meetup.com/queertech-toronto/) (nothing useful)
 - [Women in STEM/Finance career Meetup Group](https://www.meetup.com/women-in-stem-finance-career-meetup-group/) (nothing useful)
 - [She Loves Data, Lesbians Who Tech, Women in AI and Data + Women Toronto on Meetup](https://www.meetup.com/she-loves-data-toronto/) (nothing useful)
+- [Snowflake Toronto User Group April 2026 event](https://usergroups.snowflake.com/events/details/snowflake-toronto-presents-snowflake-toronto-user-group-april-2026-event/) (nothing useful)
+- [Toronto Databricks User Group July 2026 event](https://usergroups.databricks.com/events/details/databricks-user-groups-toronto-databricks-user-group-presents-toronto-databricks-user-group/)
+- [Data Engineers in Toronto call for speakers](https://sessionize.com/data-engineers-in-toronto/) (nothing useful)
+- [Data Engineers in Toronto past events](https://www.meetup.com/data-engineers-in-toronto/events/?type=past) (nothing useful)
+- [dbt Summit speaker page (Zach Mandell)](https://www.getdbt.com/dbt-summit/speakers/zach-mandell) (nothing useful)
+- [dbt community spotlight](https://docs.getdbt.com/community/spotlight) (nothing useful)
+- [Medium dbt tag feed (rss2json)](https://medium.com/tag/dbt) (nothing useful)
+- [Snowflake Toronto Women in Data (April 2024)](https://snowflake.com/event/toronto-women-in-data) (nothing useful)
+- [Toronto Womxn in Data Science search](https://www.ifundwomen.com/projects/toronto-womxn-data-science)
+- [Big Data & Analytics Summit Canada speakers (dev site)](https://dev.bigdatasummitcanada.com/all-speakers/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -251,3 +261,4 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto, Women Techmakers Toronto
 | 2026-10-01 | 2 | LinkedIn pass from search results: 1 person searched; the profile link was recorded but the location stays unknown. 5 people are still unknown. |
 | 2026-10-01 | 3 | Women-in-data pass: AWS User Group Women in Tech Ontario, PyLadies Toronto and Women Techmakers Toronto. 7 new people: 1 speaker, and 6 organisers as connectors. |
 | 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code and repository search, and Meetup venues. 105 to 112 companies. 7 added: Instacart with a strong dbt signal, and 1Password, PointClickCare, Borrowell, Squaredance, Cohere and Georgian. Super.com raised from weak to strong. Job ads added at Wealthsimple and Docebo. |
+| 2026-10-05 | 5 | 4 more people, including Michelle Ark (dbt Labs) and two community connectors. |

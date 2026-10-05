@@ -7,19 +7,19 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 - **First built:** 2026-09-23
 
 <!-- at-a-glance:start -->
-**At a glance** (version 7, 2026-10-01)
+**At a glance** (version 8, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 101 |
-| People | 53 |
+| Companies | 102 |
+| People | 55 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 30 |
+| Proven speakers | 32 |
 | Spoke at this chapter before | 0 |
 | Based in the region | 42 |
-| Based elsewhere | 4 |
-| Location unknown | 7 |
+| Based elsewhere | 5 |
+| Location unknown | 8 |
 | With a LinkedIn profile | 47 |
 | Job ads mentioning dbt | 92 |
 | Past chapter meetups | 0 |
@@ -90,7 +90,7 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **Many large firms are on the watchlist.** 55 of the 94 companies are watchlisted, mostly large Malaysian firms checked without finding dbt. They are kept so they are not researched again. Grab, Shopee, Lazada and Xendit have their data teams mostly in Singapore, Indonesia or China.
 
 <!-- companies:start -->
-99 companies and communities were looked at. A company is local when it has people or roles in the region.
+100 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (19)</summary>
 
@@ -116,9 +116,9 @@ Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Ha
 
 </details>
 
-<details><summary><b>Uses a different stack</b> (13)</summary>
+<details><summary><b>Uses a different stack</b> (14)</summary>
 
-AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identified (local presence not confirmed), Experian Malaysia, Genting Malaysia, Grab (PJ/KL tech centre) (local presence not confirmed), JetBrains (local presence not confirmed), Microsoft Fabric Community Malaysia, MR DIY International, PropertyGuru / iProperty (local presence not confirmed), PyLadies Kuala Lumpur, SEEK / Jobstreet (KL tech hub)
+AWS Malaysia, AWS User Groups Malaysia, BentoML (local presence not confirmed), Databricks Malaysia, Employer not identified (local presence not confirmed), Experian Malaysia, Genting Malaysia, Grab (PJ/KL tech centre) (local presence not confirmed), JetBrains (local presence not confirmed), Microsoft Fabric Community Malaysia, MR DIY International, PropertyGuru / iProperty (local presence not confirmed), PyLadies Kuala Lumpur, SEEK / Jobstreet (KL tech hub)
 
 </details>
 
@@ -135,7 +135,7 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identi
 
 </details>
 
-<details><summary><b>Other sources checked</b> (18)</summary>
+<details><summary><b>Other sources checked</b> (29)</summary>
 
 - [Meetup gql2 groupSearch near Kuala Lumpur](https://www.meetup.com/gql2)
 - [R-Ladies Kuala Lumpur (Meetup gql2)](https://www.meetup.com/rladies-kuala-lumpur/) (nothing useful)
@@ -155,6 +155,17 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identi
 - [freehire.me API, Malaysia, skill dbt](https://freehire.me/api/v1/jobs/search?skills=dbt&countries=MY)
 - [Hacker News Who is hiring (Algolia)](https://hn.algolia.com/api/v1/search?query=dbt%20malaysia&tags=comment) (nothing useful)
 - [getdbt.com case studies (llms-full-case-studies.txt)](https://www.getdbt.com/llms-full-case-studies.txt) (nothing useful)
+- [Data Council Talks #10 (Luma)](https://lu.ma/ykeg7loq)
+- [Data Council Talks #11 (Luma)](https://luma.com/aufuyvtq)
+- [Data Council KL calendar (Luma)](https://luma.com/dckl) (nothing useful)
+- [PyLadies x PyData KL meetup, 30 Oct 2025](https://www.meetup.com/pydatakl/events/311302096/) (nothing useful)
+- [PyData KL past events (Meetup)](https://www.meetup.com/pydatakl/events/?type=past) (nothing useful)
+- [Snowflake User Group KL](https://usergroups.snowflake.com/kuala-lumpur) (nothing useful)
+- [DevFest 2025 KL (GDG KL x GDG Cloud KL)](https://gdg.community.dev/events/details/google-gdg-kuala-lumpur-presents-devfest-2025-kl-gdg-kl-x-gdg-cloud-kl/cohost-gdg-cloud-kl/) (nothing useful)
+- [Chief Digital & Data Officer Malaysia Summit 2026](https://www.cdotrends.com/event/chief-digital-officer-asia-summit/2026/kuala-lumpur/) (nothing useful)
+- [Databricks Data + AI World Tour Malaysia 2023](https://www.imoney.my/articles/dataai-world-tour-malaysia) (nothing useful)
+- [Snowflake World Tour Kuala Lumpur 2026](https://www.snowflake.com/en/world-tour/kuala-lumpur/?lang=ko) (nothing useful)
+- [d-Conference 2026 agenda](https://d-conference.com.my/2026-agenda/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -216,3 +227,4 @@ AWS Malaysia, AWS User Groups Malaysia, Databricks Malaysia, Employer not identi
 | 2026-10-01 | 5 | Location pass and LinkedIn pass, by the evidence rules in `../research/README.md`. An in-person talk at a Snowflake community meetup in Kuala Lumpur placed Chang Boon Heng. LinkedIn search results placed Izzudin Hafiz in Kuala Lumpur and Feng Cheng in Singapore. 3 people are still unknown. |
 | 2026-10-01 | 6 | Women-in-data pass. Removed the `HIGHLIGHT` notes. Checked PyLadies KL, Women Techmakers Ambassadors KL (through GDG KL), R-Ladies KL, WiDS, She Loves Data, Girls in Tech Malaysia and Women in Tech Malaysia. Added 9 people with `sourced_via: women_in_data_community`: 4 speakers (Cheuk Ting Ho, Kim-Ann Git, Surabhi Pandey, Christine Tee) and 5 PyLadies KL organisers as connectors. Added community channels for Women Techmakers KL and R-Ladies KL. |
 | 2026-10-01 | 7 | Company pass from job ads: the freehire.me API. 7 companies and 42 job ads added. BonusLink, Ikano Retail and ams OSRAM raised to strong. AirAsia raised to medium. The file has no chapter, so `enriched_file` is null. |
+| 2026-10-05 | 8 | 2 more people, both tier 3 (an MLOps talk and a Singapore-based speaker). Search ignores location words, so most results were global. |
