@@ -85,8 +85,8 @@ Work through these sources in order. Each city's notes say which local sources m
 A person counts as reachable with a LinkedIn profile or any other public profile in `profile_urls` (types in `PROFILE_TYPES` in [validate.py](validate.py)). Run the scripts first, since they cost no searches. Then search.
 
 1. **Profiles the evidence already proves:** `python3 research/derive_profiles.py`. It adds author pages on Zenn, Qiita, note, velog, Medium and dev.to, Meetup and sessionize pages, and GitHub owners.
-2. **Meetup members:** `python3 research/match_meetup_members.py`. It adds the Meetup profile of a speaker who hosted or RSVP'd to their own event.
-3. **Links on the person's own pages:** `python3 research/harvest_profiles.py fetch <cache>`, then `check <cache>`, then `apply <cache>`. It reads evidence pages and GitHub social accounts for LinkedIn, X, Bluesky, sessionize and GitHub links. A link counts when it names the person, equals their recorded handle, or is the closest profile link to their name with a slug that fits it. `check` lists every match and how often the rules agree with links already on file. Run it before `apply`.
+2. **Meetup members:** `python3 research/match_meetup_members.py`. It adds the Meetup profile of a speaker who hosted or RSVP'd to their own event. With `--city-pool`, it also matches people still without a contact against everyone who RSVP'd to the city's meetup events, but only for a name that is unique there and rare on GitHub.
+3. **Links on the person's own pages:** `python3 research/harvest_profiles.py fetch <cache>`, then `check <cache>`, then `apply <cache>`. It reads evidence pages, the speaker or author page each one links from the person's name, the speaker and host records inside Bevy and Luma pages, and GitHub social accounts. It takes LinkedIn, X, Bluesky, sessionize and GitHub links. A link counts when it names the person, equals their recorded handle, sits on their own page, or is the closest profile link to their name with a slug that fits it. `check` lists every match and how often the rules agree with links already on file. Run it before `apply`.
 4. **GitHub search:** `python3 research/find_github_profiles.py [<city folder> ...]`. It tries the recorded handle as a login, then a full-name search. It keeps a profile only when it names the employer, or the city with a data bio.
 5. **Search:** brief the runs with [contact-task.md](contact-task.md) and apply with [`apply_contacts.py`](apply_contacts.py). Named leads go first, then everyone `not_searched`, then a wider pass on everyone `low`.
 
@@ -334,6 +334,7 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **LinkedIn search results** show a person's location next to their name and employer. No other source does this as reliably. They also confirm a profile URL and current role without logging in.
 - **GitHub profiles** have a location field. The unauthenticated API allows about 60 calls an hour, shared by every parallel run. The HTML profile page still shows the location after that.
 - **Sessionize speaker pages** often state a city.
+- **Bevy and Luma event pages** (Snowflake, Tableau and Google Developer Group user groups, and Luma events) store each speaker's or host's LinkedIn and X username in the page data, even when the page shows no link.
 - **Event and speaker pages link profiles next to each name.** Meetup descriptions, Tableau and Snowflake user-group pages, and sessionize pages carry LinkedIn and X links that a name search misses, such as `konradmal` for Konrad Maliszewski.
 - **Company blogs with author boxes** were the best source of first-time speakers. Examples are adesso and ORAYLIS (Rhein-Ruhr), Xebia (Amsterdam), dataroots (Belgium), b.telligent and synvert (Munich), Brooklyn Data (New York) and The Information Lab (London).
 - **dbt Labs case studies** name the data lead and give concrete numbers.
@@ -363,6 +364,7 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **Platforms disagree on dates.** Luma and meetup.com can differ for the same event. Trust the event page.
 - **Past speakers' employers** come from the Meetup talk text. A talk with several speakers can produce a company record named after a job title. Check `companies` for those after assembling.
 - **Duplicate people:** the same person can appear under two spellings or two employers. Search each city for near-duplicate names before outreach. Merge them with `merge_people.py`.
+- **The same person can sit in two city files.** Copy a profile across when the name and employer or title match.
 - **Same-name people** are common. Always check a match against the company or role.
 - **Search runs pick one of two profiles** when told to find a match. Ask them to flag every unsure match by id, and check each one before applying. About one flagged match in three had nothing tying it to the record.
 - **Second and third search rounds find less.** The first LinkedIn search found about 40% of people. The wider pass on those it missed found about 20%.

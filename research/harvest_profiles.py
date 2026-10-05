@@ -10,6 +10,11 @@ a link counts only when it appears on a page in the person's own evidence and on
 - handle: the username equals the handle the record gives, e.g. "kayo (tshizuku03)" and x.com/tshizuku03.
 - nearby: it is the profile link closest to the person's name on the page, no other known person's name is closer,
   and the slug fits the name (see slug_fits_name).
+- the page's own data: bevy (snowflake, tableau and google developer group events) and luma store each speaker's or
+  host's name next to their linkedin and x usernames. those count under the name rule, with the stored name as the link text.
+- own page: the evidence page links the person's full name to their own page on the same site (a speaker, author or
+  cv page), and that page has exactly one link of the type. outside linkedin the slug must also fit the name,
+  since x and github links on those pages are often the organiser's own account.
 a person gets a link of a type only when exactly one link of that type matches.
 links from the person's own GitHub social accounts are high confidence; links from event, speaker or author pages are medium.
 """
@@ -28,6 +33,7 @@ PROFILE = [  # type, pattern, canonical url
     ("github", re.compile(r"github\.com/(?!orgs|sponsors|topics|features|about)([A-Za-z0-9\-]+)/?(?![A-Za-z0-9\-_./])", re.I), "https://github.com/{}"),
 ]
 URL = re.compile(r"""https?://[^\s"'<>)\]]+""")
+OWN = re.compile(r"""<a\b[^>]*?href=["']([^"']+)["'][^>]*>(.*?)</a>""", re.I | re.S)
 TAG = re.compile(r"""<a\b[^>]*?href=["']([^"']+)["'][^>]*>(.*?)</a>|<script.*?</script>|<style.*?</style>|<[^>]+>""", re.I | re.S)
 
 
@@ -73,6 +79,24 @@ def evidence_urls(p):
     return [e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"]]
 
 
+def own_pages(p, cache):
+    """same-site pages that an evidence page links from the person's full name, such as a speaker or author page."""
+    tok, out = tokens(p["name"]), []
+    if not tok:
+        return out
+    for u in evidence_urls(p):
+        if not u.startswith("http") or any(d in u for d in SKIP):
+            continue
+        site = urllib.parse.urlparse(u).netloc.split(".")[-2:]
+        for href, label in OWN.findall(page_text(u, cache)):
+            words = norm(re.sub(r"<[^>]+>", " ", label)).split()
+            full = urllib.parse.urljoin(u, html.unescape(href)).split("#")[0]
+            if (len(words) <= 5 and tok[0] in words and tok[1] in words and full.startswith("http")
+                    and urllib.parse.urlparse(full).netloc.split(".")[-2:] == site and full.rstrip("/") != u.rstrip("/") and full not in out):
+                out.append(full)
+    return out
+
+
 def github_login(u):
     m = re.match(r"https?://(?:www\.)?github\.com/([A-Za-z0-9-]+)/?$", u) or re.match(r"https?://api\.github\.com/users/([A-Za-z0-9-]+)", u)
     return m.group(1) if m else None
@@ -114,6 +138,39 @@ def classify(url):
     return None
 
 
+def embedded(text):
+    """(name, profile url) pairs from speaker and host records that bevy and luma pages carry in their page data."""
+    out = []
+    for m in re.finditer(r'"first_name":"([^"]*)","last_name":"([^"]*)"', text):  # bevy speakers
+        rec = text[m.end():m.end() + 3000].split('"first_name":')[0]
+        name = json.loads(f'"{m.group(1)} {m.group(2)}"')
+        li = re.search(r'"personal_linkedin_page":"([^"]+)"', rec)
+        tw = re.search(r'"personal_twitter":"([^"]+)"', rec)
+        if li:
+            out.append((name, li.group(1) if "linkedin.com" in li.group(1) else "https://www.linkedin.com/in/" + li.group(1).strip("/")))
+        if tw:
+            out.append((name, tw.group(1) if "/" in tw.group(1) else "https://x.com/" + tw.group(1).lstrip("@")))
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', text, re.S)
+    if m and "luma" in text[:5000].lower():
+        def walk(o):
+            if isinstance(o, dict):
+                if isinstance(o.get("name"), str):
+                    if (o.get("linkedin_handle") or "").startswith("/in/"):
+                        out.append((o["name"], "https://www.linkedin.com" + o["linkedin_handle"]))
+                    if o.get("twitter_handle"):
+                        out.append((o["name"], "https://x.com/" + o["twitter_handle"].lstrip("@")))
+                for v in o.values():
+                    walk(v)
+            elif isinstance(o, list):
+                for v in o:
+                    walk(v)
+        try:
+            walk(json.loads(m.group(1)))
+        except ValueError:
+            pass
+    return out
+
+
 def links_on(text):
     """the page as plain text, plus every profile link with its position in that text and its link text."""
     plain, links, last = [], [], 0
@@ -131,6 +188,11 @@ def links_on(text):
         last = m.end()
     plain.append(html.unescape(text[last:]))
     plain = "".join(plain)
+    for name, url in embedded(text):
+        c = classify(url)
+        if c:
+            links.append((len(plain), c, name))
+            plain += f" {name} "
     for m in URL.finditer(plain):  # bare links, as in meetup descriptions
         c = classify(m.group(0))
         if c and not any(abs(p - m.start()) < 5 and c[2] == x[2] for p, x, _ in links):
@@ -184,10 +246,12 @@ def fetch(cache):
                 jobs.add(u)
     with concurrent.futures.ThreadPoolExecutor(8) as pool:
         list(pool.map(lambda u: page_text(u, cache), sorted(jobs)))
+        own = sorted({u for f, p in people() for u in own_pages(p, cache)})
+        list(pool.map(lambda u: page_text(u, cache), own))
     for login in gh:
         gh[login] = github_social(login)
     json.dump(gh, open(os.path.join(cache, "github.json"), "w"))
-    print(f"fetched {len(jobs)} pages and {len(gh)} github accounts into {cache}")
+    print(f"fetched {len(jobs)} pages, {len(own)} own pages and {len(gh)} github accounts into {cache}")
 
 
 def candidates(cache, everyone=False):
@@ -201,7 +265,8 @@ def candidates(cache, everyone=False):
     for f, p in people():
         tok, hs = tokens(p["name"]), handles(p)
         hits = {}  # type -> {url: (source, confidence, rule)}
-        for u in evidence_urls(p):
+        mine_pages = set(own_pages(p, cache))
+        for u in evidence_urls(p) + sorted(mine_pages):
             login = github_login(u)
             if login and gh.get(login):
                 for s in gh[login]:
@@ -213,7 +278,7 @@ def candidates(cache, everyone=False):
                 continue
             if u not in parsed:
                 text = page_text(u, cache)
-                parsed[u] = links_on(text) if re.search(r"linkedin\.com/in/|x\.com/|twitter\.com/|bsky\.app|sessionize\.com/|github\.com/", text) else ("", [])
+                parsed[u] = links_on(text) if re.search(r"linkedin\.com/in/|x\.com/|twitter\.com/|bsky\.app|sessionize\.com/|github\.com/|personal_linkedin_page|linkedin_handle", text) else ("", [])
             plain, links = parsed[u]
             if not links:
                 continue
@@ -227,6 +292,8 @@ def candidates(cache, everyone=False):
                 rule = None
                 if matches_name(slug, tok) or matches_name(label, tok):
                     rule = "name"
+                elif u in mine_pages and sum(x[0] == kind for _, x, _ in links) == 1 and (kind == "linkedin" or slug_fits_name(slug, p)):
+                    rule = "own page"
                 elif any(same_handle(slug, h) for h in hs):
                     rule = "handle"
                 elif mine and slug_fits_name(slug, p):

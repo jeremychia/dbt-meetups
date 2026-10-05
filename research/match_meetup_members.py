@@ -1,13 +1,17 @@
 """Adds a person's Meetup member profile when they host or RSVP to the event where they spoke.
 
-usage, from the repo root: python3 research/match_meetup_members.py
+usage, from the repo root: python3 research/match_meetup_members.py [--city-pool]
 
 the events come from the person's evidence (meetup.com/<group>/events/<id>) and from the chapter meetups in
 past_chapter_talks. a member counts only when exactly one host or RSVP of that event has the person's first and
 last name, so the profile is tied to the talk, not to a namesake.
+
+--city-pool: for people still without a contact, also look among everyone who hosted or RSVP'd to any meetup event in
+the city file. a member counts only when exactly one person in that pool has the first and last name, and the name is
+rare: 15 or fewer GitHub users share it. the source says so, since the tie is to the city's data meetups, not the talk.
 """
 
-import concurrent.futures, glob, json, re, unicodedata, urllib.request
+import concurrent.futures, glob, json, re, sys, time, unicodedata, urllib.request
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 EVENT = re.compile(r"meetup\.com/[^/]+/events/(\d+)")
@@ -81,5 +85,42 @@ def main():
     print(f"{len(events)} events read")
 
 
+def rare(tok):
+    from find_github_profiles import gh
+    res = gh("search/users", f'q=fullname:"{" ".join(tok)}"', "per_page=1") or {}
+    time.sleep(2.2)  # search allows 30 calls a minute
+    return res.get("total_count", 99) <= 15
+
+
+def city_pool():
+    files = sorted(glob.glob("*/*_dbt_companies.json"))
+    data = {f: json.loads(open(f).read()) for f in files}
+    pools = {}
+    for f, d in data.items():
+        urls = [m.get("url") or "" for m in d["past_meetups"]] + [e.get("url") or "" for c in d["companies"] for p in c["people"] for e in p["speaker_evidence"] + p["evidence"]]
+        pools[f] = {m.group(1) for u in urls for m in [EVENT.search(u)] if m}
+    events = sorted(set().union(*pools.values()))
+    with concurrent.futures.ThreadPoolExecutor(6) as pool:
+        rosters = dict(zip(events, pool.map(members, events)))
+    for f, d in data.items():
+        roster = {mid: name for eid in pools[f] for mid, name in rosters.get(eid, {}).items()}
+        n = 0
+        for c in d["companies"]:
+            for p in c["people"]:
+                if p["has_linkedin"] or p["profile_urls"]:
+                    continue
+                tok = [t for t in norm(re.sub(r"\(.*?\)", "", p["name"])) if len(t) > 1]
+                mid = match(p["name"], roster)
+                if mid and len(tok) >= 2 and rare(tok):
+                    p["profile_urls"].append({"type": "meetup", "url": f"https://www.meetup.com/members/{mid}/",
+                                              "source": f"only member named {roster[mid]} among hosts and RSVPs of this city's meetup events"})
+                    n += 1
+        allp = [p for c in d["companies"] for p in c["people"]]
+        d["metadata"]["counts"]["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        raw = open(f).read()
+        open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
+        print(f"{f.split('/')[0]:16} +{n:3} meetup profiles from the city pool  reachable {d['metadata']['counts']['people_with_contact']}/{len(allp)}")
+
+
 if __name__ == "__main__":
-    main()
+    city_pool() if "--city-pool" in sys.argv else main()
