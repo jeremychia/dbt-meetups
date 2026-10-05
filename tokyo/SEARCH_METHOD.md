@@ -12,15 +12,15 @@ This file holds what is specific to Tokyo. The method, scoring rules, schema and
 | | Count |
 |---|---|
 | Companies | 135 |
-| People | 146 |
-| Tier 1 leads | 103 |
+| People | 145 |
+| Tier 1 leads | 102 |
 | First-time speakers (publish, no talk yet) | 80 |
-| Proven speakers | 55 |
+| Proven speakers | 54 |
 | Spoke at this chapter before | 40 |
-| Based in the region | 110 |
+| Based in the region | 109 |
 | Based elsewhere | 5 |
 | Location unknown | 31 |
-| With a LinkedIn profile | 20 |
+| With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 47 |
 | Past chapter meetups | 19 |
 <!-- at-a-glance:end -->
