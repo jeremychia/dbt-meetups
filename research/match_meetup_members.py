@@ -6,8 +6,8 @@ the events come from the person's evidence (meetup.com/<group>/events/<id>) and 
 past_chapter_talks. a member counts only when exactly one host or RSVP of that event has the person's first and
 last name, so the profile is tied to the talk, not to a namesake.
 
---city-pool: for people still without a contact, also look among everyone who hosted or RSVP'd to any meetup event in
-the city file. a member counts only when exactly one person in that pool has the first and last name, and the name is
+--city-pool: for people still without a contact, also look among everyone who hosted or RSVP'd to any past event of
+the meetup groups the city file mentions. a member counts only when exactly one person in that pool has the first and last name, and the name is
 rare: 15 or fewer GitHub users share it. the source says so, since the tie is to the city's data meetups, not the talk.
 """
 
@@ -93,13 +93,37 @@ def rare(tok):
     return res.get("total_count", 99) <= 15
 
 
+GROUP = re.compile(r"meetup\.com/([^/]+)/events/\d+")
+GROUP_EVENTS = "query($u:String!,$a:String){groupByUrlname(urlname:$u){events(status:PAST,first:200,after:$a){pageInfo{hasNextPage endCursor} edges{node{id}}}}}"
+
+
+def past_events(urlname):
+    found, after = [], None
+    for _ in range(10):
+        body = json.dumps({"query": GROUP_EVENTS, "variables": {"u": urlname, "a": after}}).encode()
+        req = urllib.request.Request("https://www.meetup.com/gql2", body, {"content-type": "application/json", "user-agent": UA})
+        try:
+            ev = (((json.load(urllib.request.urlopen(req, timeout=30)).get("data") or {}).get("groupByUrlname") or {}).get("events") or {})
+        except Exception:
+            break
+        found += [e["node"]["id"] for e in ev.get("edges") or []]
+        if not (ev.get("pageInfo") or {}).get("hasNextPage"):
+            break
+        after = ev["pageInfo"]["endCursor"]
+    return found
+
+
 def city_pool():
     files = sorted(glob.glob("*/*_dbt_companies.json"))
     data = {f: json.loads(open(f).read()) for f in files}
-    pools = {}
+    groups = {}
     for f, d in data.items():
         urls = [m.get("url") or "" for m in d["past_meetups"]] + [e.get("url") or "" for c in d["companies"] for p in c["people"] for e in p["speaker_evidence"] + p["evidence"]]
-        pools[f] = {m.group(1) for u in urls for m in [EVENT.search(u)] if m}
+        groups[f] = {m.group(1).lower() for u in urls for m in [GROUP.search(u)] if m}
+    names = sorted(set().union(*groups.values()))
+    with concurrent.futures.ThreadPoolExecutor(6) as pool:
+        group_events = dict(zip(names, pool.map(past_events, names)))
+    pools = {f: {e for g in gs for e in group_events.get(g, [])} for f, gs in groups.items()}
     events = sorted(set().union(*pools.values()))
     with concurrent.futures.ThreadPoolExecutor(6) as pool:
         rosters = dict(zip(events, pool.map(members, events)))
@@ -114,7 +138,7 @@ def city_pool():
                 mid = match(p["name"], roster)
                 if mid and len(tok) >= 2 and rare(tok):
                     p["profile_urls"].append({"type": "meetup", "url": f"https://www.meetup.com/members/{mid}/",
-                                              "source": f"only member named {roster[mid]} among hosts and RSVPs of this city's meetup events"})
+                                              "source": f"only member named {roster[mid]} among hosts and RSVPs of this city's meetup groups"})
                     n += 1
         allp = [p for c in d["companies"] for p in c["people"]]
         d["metadata"]["counts"]["people_with_contact"] = sum(map(reachable, allp))
