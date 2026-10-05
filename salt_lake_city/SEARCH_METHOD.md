@@ -7,20 +7,20 @@ This file holds what is specific to Salt Lake City and the Wasatch Front. The me
 - **First built:** 2026-10-05
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-05)
+**At a glance** (version 4, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 72 |
-| People | 80 |
+| Companies | 102 |
+| People | 142 |
 | Tier 1 leads | 6 |
 | First-time speakers (publish, no talk yet) | 1 |
-| Proven speakers | 47 |
+| Proven speakers | 82 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 51 |
+| Based in the region | 95 |
 | Based elsewhere | 2 |
-| Location unknown | 27 |
-| With a LinkedIn profile | 51 |
+| Location unknown | 45 |
+| With a LinkedIn profile | 90 |
 | Job ads mentioning dbt | 19 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -30,6 +30,8 @@ This file holds what is specific to Salt Lake City and the Wasatch Front. The me
 - **Utah Data Engineering Meetup:** [meetup.com/utah-data-engineering-meetup](https://www.meetup.com/utah-data-engineering-meetup/). The main local pool, with 92 past events and a monthly in-person slot in Salt Lake City or Lehi. Joe Reis and dbt Labs already ran a dbt event here in 2023. The event text never names the speaker, but Meetup's `speakerDetails` field does, often with a LinkedIn link: query it through `gql2` for every event.
 - **GitHub user search by location:** `dbt location:Utah`, `"analytics engineer" location:Utah` and `"data engineer" location:"Salt Lake City"` find local practitioners with a stated city, which is high-confidence location evidence. Drop accounts whose bio reads "Data engineer by day, homelab tinkerer by night": they are generated.
 - **Big Data Utah:** [meetup.com/bigdatautah](https://www.meetup.com/bigdatautah/). Its event text carries a speaker bio.
+- **Other local groups found by `groupSearch`:** [MLOps and AI Utah](https://www.meetup.com/machine-learning-utah/) (monthly in Lehi), the [Utah SQL Server Group](https://www.meetup.com/Utah-SQL-Server-Group/), [Salt Lake PyLadies](https://www.meetup.com/Salt-Lake-Pyladies/), SLC Python and Python at the Point. Their hosts are connectors. Most of their talks are on ML or Python, so their speakers are tier 3.
+- **Lehi Tableau User Group:** [usergroups.tableau.com/lehi-tableau-user-group](https://usergroups.tableau.com/lehi-tableau-user-group/), new in July 2026, a BI crowd close to analytics engineering.
 - **Utah Snowflake User Group:** [usergroups.snowflake.com/utah](https://usergroups.snowflake.com/utah/). About 300 members. `api/event_slim/for_chapter/37/?status=Completed` lists every past event, and each event page holds speaker and host records with title, employer and LinkedIn. It is also the best route to venues: Pluralsight in Draper, Vivint in Lehi, CHG Healthcare in Midvale and Crumbl HQ.
 - **Built In Salt Lake City:** [analytics](https://builtin.com/jobs/salt-lake-city/data-analytics/analytics) and [data engineering](https://builtin.com/jobs/salt-lake-city/data-analytics/data-engineering) listings show a dbt skill tag and need one fetch each.
 - **Investor job boards:** the DCVC and Accel boards keep closed ads readable with the data stack. They gave the Recursion and Podium roles.
@@ -53,7 +55,7 @@ This file holds what is specific to Salt Lake City and the Wasatch Front. The me
 - **Local data startups:** Buster (AI agents for dbt, Y Combinator W24) and Aero (Snowflake cost tool) are both dbt-adjacent.
 
 <!-- companies:start -->
-70 companies and communities were looked at. A company is local when it has people or roles in the region.
+100 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (8)</summary>
 
@@ -67,9 +69,9 @@ Affirm (local presence not confirmed), ConsultNet, Engine (local presence not co
 
 </details>
 
-<details><summary><b>Not verified</b> (49)</summary>
+<details><summary><b>Not verified</b> (79)</summary>
 
-3M (local presence not confirmed), Adobe (local presence not confirmed), Aptive Environmental (local presence not confirmed), Astrodata (local presence not confirmed), Autodesk (local presence not confirmed), Avantlink (local presence not confirmed), Big Fish Games (local presence not confirmed), CDW (local presence not confirmed), CHG Healthcare, Clicklease LLC (local presence not confirmed), Cotiviti, Inc. (local presence not confirmed), Crumbl HQ, Domo, Employer not found, Ensign College (local presence not confirmed), Entrata (local presence not confirmed), Etsy (local presence not confirmed), FirstEnergy (local presence not confirmed), Fivetran (local presence not confirmed), Google (local presence not confirmed), Highland Analytics (local presence not confirmed), Imagine Learning (local presence not confirmed), Imply (local presence not confirmed), JourneyTeam (local presence not confirmed), KUBRA (local presence not confirmed), Lendio (local presence not confirmed), LGCY Power (local presence not confirmed), Life Line Screening (local presence not confirmed), MarketDial (local presence not confirmed), MinIO (local presence not confirmed), MotherDuck (local presence not confirmed), O.C. Tanner (local presence not confirmed), Paradime (local presence not confirmed), PCF-BI (local presence not confirmed), PepsiCo (local presence not confirmed), Purple (local presence not confirmed), SelectHealth (local presence not confirmed), Snowflake (local presence not confirmed), Sotheby's (local presence not confirmed), Streamkap (local presence not confirmed), Swire Coca-Cola (local presence not confirmed), Ternary Data, University of Utah, Utah Data Engineering Meetup, Utah Snowflake User Group, Vivint, Weave, Xcelerate (local presence not confirmed), Zions Bancorporation (local presence not confirmed)
+3M (local presence not confirmed), Adobe (local presence not confirmed), Alianza (local presence not confirmed), Analyst (local presence not confirmed), Aptive Environmental (local presence not confirmed), Astrodata (local presence not confirmed), Autodesk (local presence not confirmed), Avantlink (local presence not confirmed), BENlabs (local presence not confirmed), Big Fish Games (local presence not confirmed), Bunked (local presence not confirmed), Capital One (local presence not confirmed), CareXM (local presence not confirmed), CDW (local presence not confirmed), CHG Healthcare, Clicklease LLC (local presence not confirmed), Cotiviti, Inc. (local presence not confirmed), Crumbl HQ, Databricks (local presence not confirmed), Domo, doxy.me (local presence not confirmed), Employer not found, Ensign College (local presence not confirmed), Entrata (local presence not confirmed), Etsy (local presence not confirmed), Extra Space Storage (local presence not confirmed), FirstEnergy (local presence not confirmed), Fivetran (local presence not confirmed), Goldman Sachs (local presence not confirmed), Google (local presence not confirmed), Highland Analytics (local presence not confirmed), Imagine Learning (local presence not confirmed), Imply (local presence not confirmed), JourneyTeam (local presence not confirmed), KUBRA (local presence not confirmed), Lendio (local presence not confirmed), LexisNexis Risk Solutions (local presence not confirmed), LGCY Power (local presence not confirmed), Life Line Screening (local presence not confirmed), Lucid (local presence not confirmed), Lynd Bacon & Assoc. Ltd. DBA Loma Buena Associates (local presence not confirmed), Macabacus (local presence not confirmed), MarketDial (local presence not confirmed), MinIO (local presence not confirmed), MotherDuck (local presence not confirmed), nearmap (local presence not confirmed), O.C. Tanner (local presence not confirmed), OODA Health (local presence not confirmed), Paradime (local presence not confirmed), Pattern (local presence not confirmed), PCF-BI (local presence not confirmed), Penske Logistics (local presence not confirmed), PepsiCo (local presence not confirmed), Pittsburgh Pirates (local presence not confirmed), PointClickCare (local presence not confirmed), Purple (local presence not confirmed), Redo (local presence not confirmed), SchoolAI (local presence not confirmed), SelectHealth (local presence not confirmed), Snowflake (local presence not confirmed), Sotheby's (local presence not confirmed), Streamkap (local presence not confirmed), Swire Coca-Cola (local presence not confirmed), Ternary Data, Thumbtack (local presence not confirmed), torusco (local presence not confirmed), University of Utah, Utah Data Engineering Meetup, Utah Snowflake User Group, Vasion (local presence not confirmed), VEOX (local presence not confirmed), Vivint, Voxel51 (local presence not confirmed), Weave, WFRCAnalytics (local presence not confirmed), www.neo4j.com (local presence not confirmed), Xcelerate (local presence not confirmed), Y2 Analytics (local presence not confirmed), Zions Bancorporation (local presence not confirmed)
 
 </details>
 
@@ -172,3 +174,4 @@ Posit (local presence not confirmed), Utah Geek Events
 | 2026-10-05 | 1 | First build: 31 companies, 15 people and 19 dbt job ads, from three research runs. Every link was checked before assembling. |
 | 2026-10-05 | 2 | 6 more people from a second search run, mostly Snowflake event speakers and organisers. |
 | 2026-10-05 | 3 | 59 more people without web search: speakers from Meetup `speakerDetails` and the Snowflake user group's event records, and Utah data people from GitHub, each then looked up once on LinkedIn. |
+| 2026-10-05 | 4 | 62 more people from `find_local_speakers.py`: hosts of 9 more local groups, in-person speakers at MLOps and AI Utah and the Lehi Tableau User Group, and 27 working data people from GitHub. |
