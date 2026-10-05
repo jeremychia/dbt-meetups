@@ -125,7 +125,7 @@ def main():
         n = 0
         for c in d["companies"]:
             for p in c["people"]:
-                have = {u["url"].lower() for u in p["profile_urls"]}
+                have = {u["url"].lower().rstrip("/") for u in p["profile_urls"]}
                 urls = [e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"]]
                 for u in urls:
                     for pattern, kind, template in AUTHOR:
@@ -135,9 +135,9 @@ def main():
                             if kind == "zenn":  # the article's own author decides, since a publication's name sits in the same place
                                 user = zenn_author(u)
                                 url = f"https://zenn.dev/{user['username']}" if is_person(user, p) else None
-                            if url and url.lower() not in have and url not in shared and not company_page(url.rsplit("/", 1)[-1], c["name"]) and own_author(kind, url.rstrip("/").rsplit("/", 1)[-1].lstrip("@"), p):
+                            if url and url.lower().rstrip("/") not in have and url not in shared and not company_page(url.rsplit("/", 1)[-1], c["name"]) and own_author(kind, url.rstrip("/").rsplit("/", 1)[-1].lstrip("@"), p):
                                 p["profile_urls"].append({"type": kind, "url": url, "source": u})
-                                have.add(url.lower())
+                                have.add(url.lower().rstrip("/"))
                                 n += 1
                     m = GITHUB.search(u)
                     login = m and (m.group(1) or m.group(2))
@@ -145,9 +145,9 @@ def main():
                         user, social = github_user(login)
                         if user.get("type") == "User" and name_matches(p["name"], user.get("name"), login):
                             url = user["html_url"]
-                            if url.lower() not in have:
+                            if url.lower().rstrip("/") not in have:
                                 p["profile_urls"].append({"type": "github", "url": url, "source": u})
-                                have.add(url.lower())
+                                have.add(url.lower().rstrip("/"))
                                 n += 1
                             for a in social:
                                 li = a.get("url", "")
