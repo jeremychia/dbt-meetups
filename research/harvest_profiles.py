@@ -351,6 +351,9 @@ def candidates(cache, everyone=False):
                 if rule:
                     hits.setdefault(kind, {}).setdefault(canon, (u, "medium", rule))
         out = {k: (url, *v) for k, urls in hits.items() if len(urls) == 1 for url, v in urls.items()}
+        if not everyone:  # a link already on file is not new
+            have = {classify(u)[2] for u in p["linkedin_urls"] + [x["url"] for x in p["profile_urls"]] if classify(u)}
+            out = {k: v for k, v in out.items() if v[0] not in have}
         if not everyone:
             if p["has_linkedin"]:
                 out.pop("linkedin", None)
