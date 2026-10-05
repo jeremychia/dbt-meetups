@@ -20,7 +20,7 @@ This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The met
 | Based in the region | 48 |
 | Based elsewhere | 10 |
 | Location unknown | 29 |
-| With a LinkedIn profile | 49 |
+| With a LinkedIn profile | 52 |
 | Job ads mentioning dbt | 54 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

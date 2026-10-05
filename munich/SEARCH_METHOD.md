@@ -18,9 +18,9 @@ This file holds what is specific to Munich. The method, scoring rules, schema an
 | Proven speakers | 51 |
 | Spoke at this chapter before | 16 |
 | Based in the region | 59 |
-| Based elsewhere | 15 |
-| Location unknown | 15 |
-| With a LinkedIn profile | 52 |
+| Based elsewhere | 16 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 53 |
 | Job ads mentioning dbt | 34 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

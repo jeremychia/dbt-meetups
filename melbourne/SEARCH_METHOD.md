@@ -18,9 +18,9 @@ This file holds what is specific to Melbourne. The method, scoring rules, schema
 | Proven speakers | 59 |
 | Spoke at this chapter before | 7 |
 | Based in the region | 57 |
-| Based elsewhere | 3 |
-| Location unknown | 10 |
-| With a LinkedIn profile | 42 |
+| Based elsewhere | 4 |
+| Location unknown | 9 |
+| With a LinkedIn profile | 44 |
 | Job ads mentioning dbt | 130 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

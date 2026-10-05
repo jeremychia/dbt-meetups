@@ -17,10 +17,10 @@ This file holds what is specific to Atlanta. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 13 |
 | Proven speakers | 60 |
 | Spoke at this chapter before | 17 |
-| Based in the region | 75 |
+| Based in the region | 76 |
 | Based elsewhere | 4 |
-| Location unknown | 17 |
-| With a LinkedIn profile | 62 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 65 |
 | Job ads mentioning dbt | 40 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->

@@ -18,9 +18,9 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 | Proven speakers | 92 |
 | Spoke at this chapter before | 34 |
 | Based in the region | 86 |
-| Based elsewhere | 6 |
-| Location unknown | 28 |
-| With a LinkedIn profile | 77 |
+| Based elsewhere | 7 |
+| Location unknown | 27 |
+| With a LinkedIn profile | 81 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 14 |
 <!-- at-a-glance:end -->

@@ -20,7 +20,7 @@ This file holds what is specific to London. The method, scoring rules, schema an
 | Based in the region | 104 |
 | Based elsewhere | 6 |
 | Location unknown | 24 |
-| With a LinkedIn profile | 83 |
+| With a LinkedIn profile | 87 |
 | Job ads mentioning dbt | 34 |
 | Past chapter meetups | 22 |
 <!-- at-a-glance:end -->
