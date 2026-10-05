@@ -1,6 +1,8 @@
 """Adds public profiles that a person's own evidence already proves, without searching.
 a page that the evidence of two or more different people points to is skipped: it is a company publication or an event.
 so is a page whose username names the employer, and a medium author whose username does not fit the person.
+for a zenn article, the article's own author is looked up and kept when it is the person, since a company publication
+puts its name where the author's would be.
 
 usage, from the repo root: python3 research/derive_profiles.py
 
@@ -75,6 +77,32 @@ def own_author(kind, slug, p):
     return slug_fits_name(slug, p) or matches_name(slug, tokens(p["name"])) or any(same_handle(slug, h) for h in handles(p))
 
 
+_zenn = {}
+
+
+def zenn_author(article_url):
+    """the author of a zenn article; a company publication keeps its articles under the company's name."""
+    m = re.match(r"https?://zenn\.dev/[A-Za-z0-9_]+/articles/([A-Za-z0-9_-]+)", article_url)
+    if not m:
+        return {}
+    if m.group(1) not in _zenn:
+        out = subprocess.run(["curl", "-s", "-m", "20", f"https://zenn.dev/api/articles/{m.group(1)}"], capture_output=True, text=True).stdout
+        try:
+            _zenn[m.group(1)] = (json.loads(out).get("article") or {}).get("user") or {}
+        except ValueError:
+            _zenn[m.group(1)] = {}
+    return _zenn[m.group(1)]
+
+
+def is_person(user, p):
+    """the zenn user is the person: the username is their handle, or the display name holds their name."""
+    from harvest_profiles import handles, matches_name, same_handle, tokens
+    native = re.sub(r"\s*\(.*?\)", "", p["name"]).strip()
+    shown = user.get("name") or ""
+    return bool(user.get("username")) and (any(same_handle(user["username"], h) for h in handles(p)) or same_handle(user["username"], native)
+                                           or matches_name(shown, tokens(p["name"])) or (len(native) > 1 and native in shown))
+
+
 def author_pages(p):
     return {template.format(m.group(1)) for u in (e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"])
             for pattern, kind, template in AUTHOR for m in [pattern.search(u)] if m}
@@ -104,7 +132,10 @@ def main():
                         m = pattern.search(u)
                         if m:
                             url = template.format(m.group(1))
-                            if url not in have and url not in shared and not company_page(m.group(1), c["name"]) and own_author(kind, m.group(1), p):
+                            if kind == "zenn":  # the article's own author decides, since a publication's name sits in the same place
+                                user = zenn_author(u)
+                                url = f"https://zenn.dev/{user['username']}" if is_person(user, p) else None
+                            if url and url not in have and url not in shared and not company_page(url.rsplit("/", 1)[-1], c["name"]) and own_author(kind, url.rstrip("/").rsplit("/", 1)[-1].lstrip("@"), p):
                                 p["profile_urls"].append({"type": kind, "url": url, "source": u})
                                 have.add(url)
                                 n += 1
