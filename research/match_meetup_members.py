@@ -12,6 +12,7 @@ rare: 15 or fewer GitHub users share it. the source says so, since the tie is to
 """
 
 import concurrent.futures, glob, json, re, sys, time, unicodedata, urllib.request
+from validate import reachable
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 EVENT = re.compile(r"meetup\.com/[^/]+/events/(\d+)")
@@ -78,7 +79,7 @@ def main():
                         n += 1
                         break
         allp = [p for c in d["companies"] for p in c["people"]]
-        d["metadata"]["counts"]["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        d["metadata"]["counts"]["people_with_contact"] = sum(map(reachable, allp))
         raw = open(f).read()
         open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
         print(f"{f.split('/')[0]:16} +{n:3} meetup profiles  reachable {d['metadata']['counts']['people_with_contact']}/{len(allp)}")
@@ -107,7 +108,7 @@ def city_pool():
         n = 0
         for c in d["companies"]:
             for p in c["people"]:
-                if p["has_linkedin"] or p["profile_urls"]:
+                if reachable(p):
                     continue
                 tok = [t for t in norm(re.sub(r"\(.*?\)", "", p["name"])) if len(t) > 1]
                 mid = match(p["name"], roster)
@@ -116,7 +117,7 @@ def city_pool():
                                               "source": f"only member named {roster[mid]} among hosts and RSVPs of this city's meetup events"})
                     n += 1
         allp = [p for c in d["companies"] for p in c["people"]]
-        d["metadata"]["counts"]["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        d["metadata"]["counts"]["people_with_contact"] = sum(map(reachable, allp))
         raw = open(f).read()
         open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
         print(f"{f.split('/')[0]:16} +{n:3} meetup profiles from the city pool  reachable {d['metadata']['counts']['people_with_contact']}/{len(allp)}")

@@ -7,10 +7,13 @@ import glob
 import json
 import os
 import re
+import sys
 from collections import Counter, defaultdict
 
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
 ANALYSIS_DIR = os.path.dirname(DASHBOARD_DIR)
+sys.path.insert(0, os.path.join(ANALYSIS_DIR, "research"))
+from validate import MESSAGING_TYPES, reachable
 SOURCE_GLOB = os.environ.get(
     "ORGANISER_SOURCE_GLOB", os.path.join(ANALYSIS_DIR, "*", "*_dbt_companies.json")
 )
@@ -148,6 +151,8 @@ def shape_person(person, company, label):
         "level": person["level"],
         "linkedin": person["linkedin_urls"][0] if person["linkedin_urls"] else None,
         "linkedin_confidence": person["linkedin_confidence"],
+        "contacts": [{"type": u["type"], "url": u["url"]} for u in person["profile_urls"] if u["type"] in MESSAGING_TYPES],
+        "reachable": reachable(person),
         "confidence": person["confidence"],
         "speaker_potential": fit["speaker_potential"],
         "attendee_potential": fit["attendee_potential"],

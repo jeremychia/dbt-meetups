@@ -189,6 +189,7 @@
       <option value="confirmed">Confirmed</option>
     </select>
     <label><input type="checkbox" id="in-region"> In region only</label>
+    <label id="reachable-label"><input type="checkbox" id="reachable-only"> Can be messaged only</label>
     <label id="hide-vinted-label"><input type="checkbox" id="hide-vinted"> Hide Vinted colleagues</label>
     <label id="hide-vendor-label"><input type="checkbox" id="hide-vendor"> Hide dbt Labs and Fivetran staff</label>
     <button class="btn" id="export">Export CSV</button>
@@ -203,6 +204,7 @@
 <script>
 const DATA = __ORGANISER_DATA__;
 
+const CONTACT_LABELS = { x: 'X', bluesky: 'Bluesky', meetup: 'Meetup' };
 const STATUSES = ['', 'contacted', 'confirmed', 'declined', 'skip'];
 const STATUS_LABELS = { '': 'not contacted', contacted: 'contacted', confirmed: 'confirmed', declined: 'declined', skip: 'skip' };
 const VIEW_NOTES = {
@@ -220,7 +222,7 @@ const store = {
 let statuses = store.get('organiser-status', {});
 
 const state = {
-  chapter: null, view: null, search: '', topic: '', lead: '', status: '', inRegion: false, hideVinted: false, hideVendor: false,
+  chapter: null, view: null, search: '', topic: '', lead: '', status: '', inRegion: false, reachableOnly: false, hideVinted: false, hideVendor: false,
 };
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -255,6 +257,7 @@ function alsoInChip(names) {
 // ---- filtering
 function matchesPerson(p) {
   if (state.inRegion && p.based_in_region !== true) return false;
+  if (state.reachableOnly && !p.reachable) return false;
   if (state.hideVinted && p.internal_vinted) return false;
   if (state.hideVendor && p.vendor_staff) return false;
   if (state.topic && !p.topics.includes(state.topic)) return false;
@@ -307,7 +310,8 @@ function personRow(p) {
   const reasons = speakerView ? p.speaker_reasons : p.attendee_reasons;
   const links = [
     p.linkedin ? `<a href="${esc(p.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>${p.linkedin_confidence !== 'high' ? ` <span class="chip warn">match ${esc(p.linkedin_confidence)}</span>` : ''}` : '',
-  ].filter(Boolean).join(' ');
+    ...p.contacts.map(c => `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(CONTACT_LABELS[c.type] || c.type)}</a>`),
+  ].filter(Boolean).join(' · ') || '<span class="chip warn">no way to message yet</span>';
   const items = [
     ...p.past_talks.map(t => `<li><b>Spoke here</b> ${esc(t.date)} · ${esc(t.talk_title)}</li>`),
     ...p.evidence.map(e => `<li>${esc(e.date || 'undated')} · ${esc(e.type)}${e.event ? ' at ' + esc(e.event) : ''} · ${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a>` : esc(e.title)}${e.mentions_dbt ? '' : ' <span class="chip">no dbt</span>'}</li>`),
@@ -402,6 +406,7 @@ function renderStats() {
   const speakerLeads = people.filter(p => ['1', '2'].includes(p.priority_tier)).length;
   const firstTime = people.filter(p => p.lead_type === 'emerging_voice' && ['1', '2'].includes(p.priority_tier) && !p.internal_vinted).length;
   const inRegion = people.filter(p => p.based_in_region === true).length;
+  const canMessage = people.filter(p => p.reachable).length;
   const localDbt = ch.companies.filter(c => c.local_presence === 'confirmed' && c.dbt_signal === 'strong').length;
   const dbtJobs = ch.companies.reduce((n, c) => n + c.dbt_job_count, 0);
   const contacted = Object.entries(statuses).filter(([k, v]) => k.startsWith(ch.key + ':') && ['contacted', 'confirmed'].includes(v)).length;
@@ -410,6 +415,7 @@ function renderStats() {
     [speakerLeads, 'tier 1–2 speaker leads'],
     [firstTime, 'of them first-time speakers'],
     [inRegion, `people confirmed in ${ch.label}`],
+    [`${canMessage} of ${people.length}`, 'people you can message (LinkedIn, X, Bluesky or Meetup)'],
     [localDbt, 'local companies with strong dbt use'],
     [dbtJobs, 'open job ads mentioning dbt'],
     [last ? last.date.slice(0, 7) : '—', `last meetup (${ch.past_meetups.length} total)`],
@@ -442,6 +448,7 @@ function render() {
   document.getElementById('toolbar').classList.toggle('hidden', !(peopleView || state.view === 'companies'));
   document.getElementById('topic-filter').classList.toggle('hidden', !peopleView);
   document.getElementById('lead-filter').classList.toggle('hidden', state.view !== 'speakers');
+  document.getElementById('reachable-label').classList.toggle('hidden', !peopleView);
   document.getElementById('hide-vinted-label').classList.toggle('hidden', !peopleView);
   document.getElementById('hide-vendor-label').classList.toggle('hidden', !peopleView);
   document.getElementById('view-note').textContent = VIEW_NOTES[state.view];
@@ -471,8 +478,8 @@ function exportCsv() {
     rows = ch.companies.filter(matchesCompany).map((c, i) => [i + 1, c.name, c.type, c.cities.join('; '), c.dbt_signal, c.local_presence, c.dbt_job_count, c.people_count, statusOf('company', c.id)]);
   } else {
     const rankKey = state.view === 'attendees' ? 'attendee_rank' : 'speaker_rank';
-    header = ['rank', 'name', 'title', 'company', 'city', 'in_region', 'tier', 'lead_type', 'speaker_potential', 'attendee_potential', 'talk_idea', 'linkedin', 'vinted_colleague', 'vendor_staff', 'status'];
-    rows = visiblePeople().map(p => [p[rankKey], p.name, p.title, p.company_name, p.city, p.based_in_region, p.priority_tier, p.lead_type, p.speaker_potential, p.attendee_potential, p.talk_angle, p.linkedin, p.internal_vinted, p.vendor_staff || '', statusOf('person', p.id)]);
+    header = ['rank', 'name', 'title', 'company', 'city', 'in_region', 'tier', 'lead_type', 'speaker_potential', 'attendee_potential', 'talk_idea', 'linkedin', 'other_contacts', 'vinted_colleague', 'vendor_staff', 'status'];
+    rows = visiblePeople().map(p => [p[rankKey], p.name, p.title, p.company_name, p.city, p.based_in_region, p.priority_tier, p.lead_type, p.speaker_potential, p.attendee_potential, p.talk_angle, p.linkedin, p.contacts.map(c => c.url).join(' '), p.internal_vinted, p.vendor_staff || '', statusOf('person', p.id)]);
   }
   const csv = [header, ...rows].map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
   const a = document.createElement('a');
@@ -521,6 +528,7 @@ document.getElementById('topic-filter').addEventListener('change', e => { state.
 document.getElementById('lead-filter').addEventListener('change', e => { state.lead = e.target.value; render(); });
 document.getElementById('status-filter').addEventListener('change', e => { state.status = e.target.value; render(); });
 document.getElementById('in-region').addEventListener('change', e => { state.inRegion = e.target.checked; render(); });
+document.getElementById('reachable-only').addEventListener('change', e => { state.reachableOnly = e.target.checked; render(); });
 document.getElementById('hide-vinted').addEventListener('change', e => { state.hideVinted = e.target.checked; render(); });
 document.getElementById('hide-vendor').addEventListener('change', e => { state.hideVendor = e.target.checked; render(); });
 document.getElementById('export').addEventListener('click', exportCsv);

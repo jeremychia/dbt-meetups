@@ -9,6 +9,7 @@ about data. its linked LinkedIn account is added too. needs a logged-in gh; sear
 
 import glob, json, re, subprocess, sys, time, unicodedata
 from harvest_profiles import handles
+from validate import reachable
 
 NATIVE = re.compile(r"[\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]")  # chinese, japanese or korean script
 DATA = re.compile(r"\b(data|analytics|dbt|sql|bi|warehouse|etl|engineer|scientist)\b", re.I)
@@ -70,7 +71,7 @@ def main(folders):
         for c in d["companies"]:
             employer = employer_tokens(c["name"])
             for p in c["people"]:
-                if p["has_linkedin"] or p["profile_urls"]:
+                if reachable(p) or any(u["type"] == "github" for u in p["profile_urls"]):
                     continue
                 tok = [t for t in norm(re.sub(r"\(.*?\)", "", p["name"])).split() if len(t) > 1]
                 native = re.sub(r"\s*\(.*?\)", "", p["name"]).strip()
@@ -108,7 +109,7 @@ def main(folders):
                 n += 1
         allp = [p for c in d["companies"] for p in c["people"]]
         d["metadata"]["counts"]["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
-        d["metadata"]["counts"]["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        d["metadata"]["counts"]["people_with_contact"] = sum(map(reachable, allp))
         open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
         print(f"{f.split('/')[0]:16} +{n:3} github profiles  reachable {d['metadata']['counts']['people_with_contact']}/{len(allp)}", flush=True)
 

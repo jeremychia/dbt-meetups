@@ -82,7 +82,7 @@ Work through these sources in order. Each city's notes say which local sources m
 
 ### Public profiles
 
-A person counts as reachable with a LinkedIn profile or any other public profile in `profile_urls` (types in `PROFILE_TYPES` in [validate.py](validate.py)). Run the scripts first, since they cost no searches. Then search.
+A person counts as reachable when an organiser can message them: a LinkedIn profile, or a Meetup, X or Bluesky profile in `profile_urls` (`reachable()` in [validate.py](validate.py)). Other profiles, such as GitHub, Zenn or Qiita, show the person's work and are kept, but don't count. `people_with_contact` and the cockpit's "people you can message" use this rule. Run the scripts first, since they cost no searches. Then search.
 
 1. **Profiles the evidence already proves:** `python3 research/derive_profiles.py`. It adds author pages on Zenn, Qiita, note, velog, Medium and dev.to, Meetup and sessionize pages, and GitHub owners.
 2. **Meetup members:** `python3 research/match_meetup_members.py`. It adds the Meetup profile of a speaker who hosted or RSVP'd to their own event. With `--city-pool`, it also matches people still without a contact against everyone who RSVP'd to the city's meetup events, but only for a name that is unique there and rare on GitHub.

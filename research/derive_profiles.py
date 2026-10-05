@@ -13,6 +13,7 @@ a profile counts when the evidence url itself names its author or owner:
 """
 
 import glob, json, re, subprocess, unicodedata
+from validate import reachable
 
 AUTHOR = [
     (re.compile(r"https?://zenn\.dev/([A-Za-z0-9_]+)/(?:articles|books|scraps)/"), "zenn", "https://zenn.dev/{}"),
@@ -126,7 +127,7 @@ def main():
                                     p["evidence"].append({"url": li, "note": f"linkedin profile linked from github.com/{login} social accounts"})
         allp = [p for c in d["companies"] for p in c["people"]]
         d["metadata"]["counts"]["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
-        d["metadata"]["counts"]["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        d["metadata"]["counts"]["people_with_contact"] = sum(map(reachable, allp))
         open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
         added[f] = (n, d["metadata"]["counts"]["people_with_contact"], len(allp))
     for f, (n, contact, total) in added.items():

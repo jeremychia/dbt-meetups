@@ -3,8 +3,8 @@
 usage, from the repo root: python3 research/validate.py [<file> ...]
 """
 
-import json, re, sys
-sys.path.insert(0, "pipeline")
+import json, os, re, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline"))
 from enrich import TOPIC_VOCABULARY as V
 
 TOP = ["metadata","companies","sources","past_meetups","community_channels"]
@@ -20,6 +20,13 @@ PERSON = ["id","name","pronouns","title","city","based_in_region","level","linke
 EVID = ["type","event","title","date","url","content_id","co_authors","mentions_dbt","description","topics",
         "suggested_talk_angle","url_precision","confidence"]
 PROFILE_TYPES = {"github","meetup","zenn","qiita","velog","medium","devto","substack","ithome","sessionize","x","bluesky","website","note"}
+MESSAGING_TYPES = {"meetup","x","bluesky"}  # profiles an organiser can send a message through, with linkedin
+
+
+def reachable(p):
+    """the person can be messaged: a linkedin profile, or a meetup, x or bluesky profile."""
+    return p["has_linkedin"] or any(u["type"] in MESSAGING_TYPES for u in p["profile_urls"])
+
 PAST = ["name","date","venue","url","organisers","attendees","talks"]
 PAST_TALK = ["speaker","company","title","topics"]
 

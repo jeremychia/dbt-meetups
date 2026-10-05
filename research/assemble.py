@@ -9,6 +9,7 @@ from collections import Counter
 
 sys.path.insert(0, "pipeline")
 from enrich import TOPIC_VOCABULARY as V
+from validate import reachable
 
 TODAY = datetime.date.today().isoformat()
 LEAD_TYPES = {"proven_speaker", "emerging_voice", "featured", "no_public_content"}
@@ -241,7 +242,7 @@ def standard_counts(ds):
             "speaker_evidence_items": sum(len(p["speaker_evidence"]) for p in allp),
             "unique_content_items": len({e["content_id"] for p in allp for e in p["speaker_evidence"]}),
             "people_with_linkedin": sum(p["has_linkedin"] for p in allp),
-            "people_with_contact": sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp),
+            "people_with_contact": sum(map(reachable, allp)),
             "people_who_spoke_at_this_chapter": sum(1 for p in allp if p["past_chapter_talks"]),
             "internal_vinted": sum(p["internal_vinted"] for p in allp),
             "level": dict(Counter(p["level"] for p in allp)),

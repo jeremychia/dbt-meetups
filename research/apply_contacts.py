@@ -10,7 +10,7 @@ a known location is never overwritten; a person who already has the link is skip
 
 import json, sys
 from collections import Counter
-from validate import PROFILE_TYPES
+from validate import PROFILE_TYPES, reachable
 
 path, patch_path = sys.argv[1], sys.argv[2]
 raw = open(path).read()
@@ -66,7 +66,7 @@ if problems:
 allp = [p for c in d["companies"] for p in c["people"]]
 m = d["metadata"]["counts"]
 m["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
-m["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+m["people_with_contact"] = sum(map(reachable, allp))
 m["attendee_potential"] = dict(Counter(p["meetup_fit"]["attendee_potential"] for p in allp))
 open(path, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
 print(f"{path}: {applied} linkedin profiles, {profiled} other profiles, {located} locations, {missed} searched without a match")

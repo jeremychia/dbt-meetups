@@ -21,6 +21,7 @@ links from the person's own GitHub social accounts are high confidence; links fr
 
 import concurrent.futures, glob, hashlib, html, json, os, re, subprocess, sys, unicodedata, urllib.parse, urllib.request
 from collections import Counter
+from validate import reachable
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 SKIP = ("linkedin.com", "medium.com")  # medium answers 429 to scripted fetches
@@ -308,7 +309,7 @@ def candidates(cache, everyone=False):
         if not everyone:
             if p["has_linkedin"]:
                 out.pop("linkedin", None)
-            if p["has_linkedin"] or p["profile_urls"]:
+            if reachable(p):
                 out = {k: v for k, v in out.items() if k == "linkedin"}
         if out:
             found[(f, p["id"])] = out
@@ -361,7 +362,7 @@ def apply(cache):
         allp = [p for c in d["companies"] for p in c["people"]]
         m = d["metadata"]["counts"]
         m["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
-        m["people_with_contact"] = sum(bool(p["has_linkedin"] or p["profile_urls"]) for p in allp)
+        m["people_with_contact"] = sum(map(reachable, allp))
         open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
         n = sum(len(h) for h in found.values())
         total += n
