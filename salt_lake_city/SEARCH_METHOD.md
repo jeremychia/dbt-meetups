@@ -1,0 +1,145 @@
+# Salt Lake City: city notes
+
+This file holds what is specific to Salt Lake City and the Wasatch Front. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+
+- **Chapter:** [Salt Lake City dbt Meetup](https://www.meetup.com/salt-lake-city-dbt-meetup/), 55 members and no local event yet. Its only events were two dbt Labs online sessions posted to every group. The goal is the people and companies who could start a first local meetup: speakers, co-organisers, venues and co-hosts. Data in `salt_lake_city_dbt_companies.json`.
+- **Region:** Salt Lake City and the Wasatch Front within about an hour: Ogden, Layton, Sandy, Draper, Lehi, American Fork, Orem, Provo and Park City. Logan and St. George do not count.
+- **First built:** 2026-10-05
+
+<!-- at-a-glance:start -->
+**At a glance** (version 1, 2026-10-05)
+
+| | Count |
+|---|---|
+| Companies | 31 |
+| People | 15 |
+| Tier 1 leads | 3 |
+| First-time speakers (publish, no talk yet) | 0 |
+| Proven speakers | 13 |
+| Spoke at this chapter before | 0 |
+| Based in the region | 7 |
+| Based elsewhere | 0 |
+| Location unknown | 8 |
+| With a LinkedIn profile | 7 |
+| Job ads mentioning dbt | 19 |
+| Past chapter meetups | 0 |
+<!-- at-a-glance:end -->
+
+## 1. Where to look in Salt Lake City
+
+- **Utah Data Engineering Meetup:** [meetup.com/utah-data-engineering-meetup](https://www.meetup.com/utah-data-engineering-meetup/). The main local pool, with 92 past events and a monthly in-person slot. Joe Reis and dbt Labs already ran a dbt event here in 2023. Event text rarely names the speaker, so read the title and host.
+- **Utah Snowflake User Group:** [usergroups.snowflake.com/utah](https://usergroups.snowflake.com/utah/). About 300 members. Its event pages name the organisers and the host company of each event, which is the best route to venues: Pluralsight in Draper, Vivint in Lehi, CHG Healthcare in Midvale and Crumbl HQ.
+- **Built In Salt Lake City:** [analytics](https://builtin.com/jobs/salt-lake-city/data-analytics/analytics) and [data engineering](https://builtin.com/jobs/salt-lake-city/data-analytics/data-engineering) listings show a dbt skill tag and need one fetch each.
+- **Investor job boards:** the DCVC and Accel boards keep closed ads readable with the data stack. They gave the Recursion and Podium roles.
+- **Salt Lake City R User Group:** [the R Consortium interview with Julia Silge](https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/) names its organisers, Julia Silge and Andrew Redd.
+- **Meetup `groupSearch`:** a latitude and longitude search lists the whole local data calendar in one call: Big Data Utah, the Salt Lake Valley Fabric User Group, SLC Python, PyLadies and the Postgres group.
+
+## 2. What didn't work here
+
+- **Built In job listings:** most dbt-tagged roles tagged "Salt Lake City" are remote, at companies based elsewhere, such as Toast, Jellyfish and SharkNinja. They don't show a local employer.
+- **dbt Labs, Snowflake and Fivetran case studies:** no Utah company has one that search surfaced.
+- **Women-in-data communities:** no WiDS event in Utah, and [Women Tech Council](https://www.womentechcouncil.com/) runs general tech events, not data ones. There is no R-Ladies chapter.
+- **Big Mountain Data & Dev, Utah Geek Events and Silicon Slopes Summit:** no speaker list found.
+- **Utah Tableau and Power BI user groups:** no local leader or events found.
+- **Job boards that block fetches:** careerbuilder.com and edtech.com answer 403, and Greenhouse boards and builtin single-job pages return nothing.
+
+## 3. Companies looked at
+
+- **Strongest dbt employers:** Recursion, Podium (Lehi) and Lucid Software all list dbt in data ads, but none of their analytics engineers is named on a public page yet. Pluralsight and Instructure also list dbt.
+- **No company case study:** the named people come from meetups, the Snowflake user group and dbt Labs pages, not from company blogs.
+- **Local data startups:** Buster (AI agents for dbt, Y Combinator W24) and Aero (Snowflake cost tool) are both dbt-adjacent.
+
+<!-- companies:start -->
+30 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Strong dbt use</b> (8)</summary>
+
+Buster, dbt Labs, Instructure (local presence not confirmed), Lucid Software, Okta (local presence not confirmed), Pluralsight, Podium, Recursion
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (11)</summary>
+
+Affirm (local presence not confirmed), ConsultNet, Engine (local presence not confirmed), Health Catalyst, Hercules (local presence not confirmed), Jellyfish (local presence not confirmed), LangChain (local presence not confirmed), MetLife (local presence not confirmed), Runpod (local presence not confirmed), SharkNinja (local presence not confirmed), Toast (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (9)</summary>
+
+Adobe (local presence not confirmed), CHG Healthcare, Domo, Employer not found, Ternary Data, Utah Data Engineering Meetup, Utah Snowflake User Group, Vivint, Weave
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (2)</summary>
+
+Posit (local presence not confirmed), Utah Geek Events
+
+</details>
+
+<details><summary><b>Blogs and sites scanned</b> (2)</summary>
+
+- https://usergroups.snowflake.com/utah/
+- https://www.getdbt.com/dbt-summit/speakers
+
+</details>
+
+<details><summary><b>Other sources checked</b> (21)</summary>
+
+- [builtin.com Salt Lake City analytics jobs](https://builtin.com/jobs/salt-lake-city/data-analytics/analytics)
+- [builtin.com Salt Lake City data engineering jobs](https://builtin.com/jobs/salt-lake-city/data-analytics/data-engineering)
+- [Podium analytics engineer ad](https://jobs.accel.com/companies/podium/jobs/78630747-analytics-engineer)
+- [Recursion data ads](https://jobs.dcvc.com/companies/recursion-pharmaceuticals-2-ccbe89ca-ec35-439d-885e-ca59051ce93b/jobs/54214851-engineering-manager-data)
+- [Lucid Greenhouse board](https://job-boards.greenhouse.io/lucidsoftware/jobs/6017710004) (nothing useful)
+- [Utah Snowflake User Group](https://usergroups.snowflake.com/salt-lake-city)
+- [Meetup gql2 groupSearch near Salt Lake City](https://www.meetup.com/gql2)
+- [Utah Data Engineering Meetup past events](https://www.meetup.com/utah-data-engineering-meetup/)
+- [Big Data Utah, Utah SQL Server, SLC Python, Python at the Point, Salt Lake Fabric, Postgres, Elastic past events](https://www.meetup.com/bigdatautah/) (nothing useful)
+- [Snowflake Utah User Group](https://usergroups.snowflake.com/salt-lake-city)
+- [Big Mountain Data & Dev and Utah Geek Events](https://utahgeekevents.com) (nothing useful)
+- [dbt Summit speaker pages](https://www.getdbt.com/dbt-summit/speakers)
+- [Utah Tableau and Power BI user groups](https://usergroups.tableau.com) (nothing useful)
+- [Silicon Slopes Summit](https://siliconslopes.com) (nothing useful)
+- [Utah Snowflake User Group](https://usergroups.snowflake.com/utah/)
+- [Built In Salt Lake City analytics jobs](https://builtin.com/jobs/salt-lake-city/data-analytics/analytics) (nothing useful)
+- [dbt Summit speakers](https://www.getdbt.com/dbt-summit/speakers)
+- [dbt Labs and Snowflake case study search for Utah companies](https://www.getdbt.com/case-studies) (nothing useful)
+- [WiDS regional events Utah](https://www.widsworldwide.org/) (nothing useful)
+- [Women Tech Council](https://www.womentechcouncil.com/) (nothing useful)
+- [PyLadies / R-Ladies Salt Lake City](https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/)
+
+</details>
+<!-- companies:end -->
+
+## 4. Key leads
+
+- **Anchor speakers:**
+  - Joe Reis (Ternary Data), co-author of *Fundamentals of Data Engineering*, who has spoken at the Utah Data Engineering Meetup several times, including [a dbt Labs event in 2023](https://www.meetup.com/utah-data-engineering-meetup/events/291827521/).
+  - Dallin Bentley (Buster), who [presented building an AI data engineer](https://www.meetup.com/utah-data-engineering-meetup/events/311226999/) in January 2026. His talk risks becoming a product pitch, so ask for one about practice.
+- **dbt Labs staff:** Brandon Thomson, Manager of Analytics Engineering, writes on [cutting dbt Labs' own compute costs](https://www.getdbt.com/authors/brandon-thomson). His location is unverified.
+- **Connectors:**
+  - Miriah Peterson hosts every Utah Data Engineering Meetup event.
+  - Noah Goodrich and Chandu Yaramasu run the Utah Snowflake User Group.
+  - Julia Silge (Posit) co-runs the Salt Lake City R User Group.
+
+## 5. Before outreach
+
+- [ ] Confirm Brandon Thomson is based in Utah. Search summaries say so, but the page they cite returns 404.
+- [ ] Confirm Miriah Peterson's employer. Weave comes from an older profile snippet.
+- [ ] Check that Dallin Bentley gave the January 2026 talk. The event title names him, but the page doesn't list him as speaker.
+- [ ] Find employers for Noah Goodrich, Chandu Yaramasu and the meetup co-hosts.
+- [ ] Note that Safiyy Momen is also in the New York file, and nothing ties him to Utah.
+
+## 6. Next run
+
+- **Sources to try first:**
+  - The Utah Data Engineering Meetup's newer events, for named speakers.
+  - The Utah Snowflake User Group's past event pages, for speakers.
+  - LinkedIn searches for analytics engineers at Recursion, Podium, Lucid and Pluralsight.
+- **People to locate:** Brandon Thomson, Pooja Crahen and Jake Van Hecke.
+- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with this city's file, the chapter, `enriched/salt-lake-city-dbt-meetup.json` and the region above.
+
+## Change log
+
+| Date | Version | Change |
+|---|---|---|
+| 2026-10-05 | 1 | First build: 31 companies, 15 people and 19 dbt job ads, from three research runs. Every link was checked before assembling. |

@@ -1,0 +1,2343 @@
+{
+  "metadata": {
+    "title": "Salt Lake City dbt companies and people for the Salt Lake City dbt Meetup (no local event yet)",
+    "generated_at": "2026-10-05",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Salt Lake City companies using dbt, and people who could speak at, co-organise or host a first local Salt Lake City dbt Meetup.",
+    "version": 1,
+    "schema_version": 4,
+    "region": "Salt Lake City (Salt Lake City dbt Meetup, no local event yet)",
+    "method": [
+      "v1 (2026-10-05): three parallel runs of about 30 web calls each: dbt job ads and Utah tech employers; other Utah data meetups via meetup gql2 and the Utah Snowflake User Group; company blogs, case studies and women-in-data communities. every link was checked before assembling.",
+      "builtin.com Salt Lake City analytics and data-engineering listing pages worked with one fetch each and show a dbt skill tag, but most roles are remote.",
+      "Investor job-board mirrors (dcvc, accel, spectrumequity) kept closed ads readable with the data stack.",
+      "No named analytics engineer at a Utah employer turned up from ads. Named people came from dbt Labs speaker pages and a dbt community spotlight.",
+      "Several fetches returned nothing (builtin single-job pages, Greenhouse boards, amvetsjobs, jointaro). Search summaries were the only evidence for Weave, Health Catalyst and Domo.",
+      "Meetup gql2 groupSearch with latitude and longitude plus past events gave the whole local data calendar in one pass, but event text rarely names the speaker.",
+      "Search results often answered with unrelated dbt Summit pages; searching a named person worked better than searching a topic.",
+      "Utah Data Engineering Meetup is the main local pool; Joe Reis and dbt Labs already ran a dbt event there in 2023.",
+      "Search for Utah dbt case studies and engineering blogs returned almost nothing: no Utah company has a dbt Labs, Snowflake or Fivetran case study that the search surfaced.",
+      "The Snowflake user group pages (usergroups.snowflake.com/utah) name the local organisers and list host companies for each event, which is the best route to local venues.",
+      "dbt Summit speaker pages sometimes state where the speaker lives, which is the only location evidence found for dbt people here.",
+      "Built In 'Salt Lake City' job listings are mostly remote roles at companies headquartered elsewhere, so they do not show a local employer.",
+      "Job-board pages on careerbuilder.com and edtech.com answer 403 to fetches, and dejobs.org links redirect once an ad has expired."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Ads on investor mirrors are closed, so they show the stack, not open roles.",
+      "Board dbt tags come from automatic extraction. Remote roles do not show a Utah office.",
+      "Brandon Thomson and Safiyy Momen details come from search summaries; their pages did not load fully. Verify before outreach.",
+      "Only about 20 web calls were used; Qualtrics, Pluralsight, Vivint, Entrata, Ancestry, Beyond, Purple, CHG, Nav, BILL, Goldman and Adobe were not confirmed either way.",
+      "Titles, employers and cities come from search snippets and meetup pages; verify before outreach.",
+      "Many meetup talks have no named speaker in the event text, so only named speakers are listed.",
+      "Ternary Data, Buster and Weave details are from search snippets only.",
+      "Salt Lake City meetup venues and Big Mountain Data & Dev 2026 speakers were not found.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "The Utah Snowflake user group kickoff page shows 14 April 2025 but calls it a Tuesday; 14 April is a Tuesday in 2026, so the year is uncertain.",
+      "No women-in-data community with a Salt Lake City chapter was confirmed: no WiDS Utah, R-Ladies Salt Lake City or Women in Data Utah event surfaced, and the Women Tech Council results were general tech events.",
+      "Employers of Noah Goodrich, Chandu Yaramasu and Daniel O'Hare were not found."
+    ],
+    "counts": {
+      "companies": 31,
+      "people": 15,
+      "job_postings": 19,
+      "companies_with_job_postings": 17,
+      "speaker_evidence_items": 22,
+      "unique_content_items": 19,
+      "people_with_linkedin": 7,
+      "people_with_contact": 15,
+      "people_who_spoke_at_this_chapter": 0,
+      "internal_vinted": 0,
+      "level": {
+        "working": 8,
+        "leadership": 7
+      },
+      "speaker_potential": {
+        "medium": 9,
+        "high": 5,
+        "low": 1
+      },
+      "attendee_potential": {
+        "medium": 13,
+        "high": 2
+      },
+      "priority_tier": {
+        "connector": 7,
+        "1": 3,
+        "2": 5
+      },
+      "watchlist_companies": 19,
+      "past_meetups": 0,
+      "lead_type": {
+        "proven_speaker": 13,
+        "no_public_content": 2
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 11,
+        "newsletter_or_blog": 2,
+        "other": 2,
+        "linkedin_search": 1
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 10,
+      "data engineering": 5,
+      "analytics engineering": 4,
+      "data warehouse & platforms": 4,
+      "genai & llm": 4,
+      "data modeling": 3,
+      "business intelligence": 2,
+      "performance & scale": 2,
+      "orchestration & ci/cd": 2,
+      "data governance": 2,
+      "semantic layer": 1,
+      "industry trends": 1,
+      "career development": 1,
+      "dbt product features": 1,
+      "team & org design": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "recursion",
+      "name": "Recursion",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Fivetran",
+        "Prefect",
+        "Airflow",
+        "Looker",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Engineering Manager, Data",
+          "url": "https://jobs.dcvc.com/companies/recursion-pharmaceuticals-2-ccbe89ca-ec35-439d-885e-ca59051ce93b/jobs/54214851-engineering-manager-data",
+          "source": "investor job board mirror of company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Python, dbt, Big Query, Postgres, Fivetran, Prefect, Looker, Spotfire, Atlan and GCP",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "hybrid (Salt Lake City or New York)"
+        },
+        {
+          "title": "Data Analytics Engineer, Data Platforms",
+          "url": "https://jobs.dcvc.com/companies/recursion-pharmaceuticals-2-ccbe89ca-ec35-439d-885e-ca59051ce93b/jobs/38165091-data-analytics-engineer-data-platforms",
+          "source": "investor job board mirror of company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt, Airflow, PostgreSQL, Big Query, GCP Buckets, Looker",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "hybrid (Salt Lake City or Toronto)"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Headquartered in Salt Lake City. Both ads are marked no longer accepting applications (posted over 6 months ago), so they show the stack, not an open role. No named data person found."
+    },
+    {
+      "id": "podium",
+      "name": "Podium",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Lehi"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://jobs.accel.com/companies/podium/jobs/78630747-analytics-engineer",
+          "source": "investor job board mirror of company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design and implement a semantic data warehouse layer on top of our datalake using Snowflake and dbt",
+          "job_poster": null,
+          "posted_date": "2026-05-13",
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "onsite 5 days a week (Lehi)"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Lehi office. dbt is desirable, not strictly required. Possible host venue, unchecked."
+    },
+    {
+      "id": "lucid-software",
+      "name": "Lucid Software",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks",
+        "Fivetran",
+        "Stitch",
+        "Airflow",
+        "Hightouch"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer Internship 2026",
+          "url": "https://careers.spectrumequity.com/companies/lucid-3-454abd71-fe9a-4e89-b4e7-5f7dd02b5505/jobs/58548388-analytics-engineer-internship-2026",
+          "source": "investor job board mirror of company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Stitch, Fivetran, Airflow, Snowflake, Databricks, dbt, and Hightouch",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Ad is closed (posted over 6 months ago). The current Lucid careers board showed no dbt role."
+    },
+    {
+      "id": "health-catalyst",
+      "name": "Health Catalyst",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "South Jordan",
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://amvetsjobs.org/south-jordan-ut/senior-analytics-engineer/39EC687BBC23411CAF05B3F7D639826E/job",
+          "source": "aggregator (AMVETS Jobs)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "dbt appears only in a search-result summary; the page itself returned nothing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "South Jordan analytics engineer ad. dbt not confirmed on the ad page."
+    },
+    {
+      "id": "weave",
+      "name": "Weave",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Lehi"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://www.jointaro.com/jobs/weave/senior-analytics-engineer",
+          "source": "aggregator (Taro)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "search result lists a Senior Analytics Engineer at Lehi headquarters (hybrid, 3 days); page content did not load",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "miriah-peterson",
+          "name": "Miriah Peterson",
+          "pronouns": null,
+          "title": "Data Engineer (Weave, Lehi, per a profile snippet); organiser, Utah Data Engineering Meetup",
+          "city": "Lehi",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/249622824/",
+              "source": "https://www.meetup.com/events/290681404/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Monthly host and organiser of the meetup",
+              "date": "2026-08",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536541/",
+              "content_id": "utah-data-engineering-meetupmonthly-host-and-organiser-of-th",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "lists as host on every event 2023 to 2026 and invites speakers by email in the event text.",
+              "topics": [
+                "community",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Lightning talks and talks on data architecture strategy",
+              "date": "2023-02",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/290681404/",
+              "content_id": "utah-data-engineering-meetuplightning-talks-and-talks-on-dat",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host; profile snippet says she has given talks on data engineering and data architecture strategy.",
+              "topics": [
+                "data engineering",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://aicouncil.com/profile/miriah-peterson",
+              "note": "search snippet: data engineer at Weave in Lehi; organiser of Utah Data Engineering and Machine Learning Utah meetups"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "scaling data pipelines at a mid-size utah software company",
+          "past_chapter_talks": [],
+          "notes": "the route to the whole utah data engineering crowd. employer (Weave) comes from an older profile snippet at aicouncil.com/profile/miriah-peterson; verify before outreach. also a Forge Foundation board member."
+        }
+      ],
+      "notes": "Analytics engineer ad in Lehi. dbt not verified."
+    },
+    {
+      "id": "domo",
+      "name": "Domo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "American Fork"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_search_result",
+          "url": "https://jobs.jobg8.com/jobs/analytics-engineer-jobs-in-lehi-utah-united-states",
+          "note": "search result mentioned a Data Engineer role in American Fork, onsite 5 days; no dbt mention seen"
+        }
+      ],
+      "people": [],
+      "notes": "Local data hiring, dbt not verified."
+    },
+    {
+      "id": "instructure",
+      "name": "Instructure",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (Mexico)",
+          "url": "https://startup.jobs/senior-data-engineer-mexico-instructure-inc-7920843",
+          "source": "startup.jobs",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "semantic layer development using Snowflake, dbt, and Databricks (per search summary)",
+          "job_poster": null,
+          "posted_date": "2026-07-26",
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Ad is for a Mexico-based remote role. Company has a Utah presence but no local data role was found."
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.secoda.co/blog/dbt-coalesce-2023-day-2-3-sessions-recap",
+          "note": "recap of Coalesce 2023 sessions including Brandon Thomson's talk"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://www.getdbt.com/dbt-summit/speakers",
+          "note": "dbt Summit 2026 speaker pages scanned for Utah-based speakers"
+        }
+      ],
+      "people": [
+        {
+          "id": "brandon-thomson",
+          "name": "Brandon Thomson",
+          "pronouns": null,
+          "title": "Manager, Analytics Engineering, dbt Labs",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/388044537/",
+              "source": "only member named Brandon Thomson among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Coalesce 2023",
+              "title": "Campaign 360 data product built by the dbt Labs data team",
+              "date": "2023-10",
+              "url": "https://www.secoda.co/blog/dbt-coalesce-2023-day-2-3-sessions-recap",
+              "content_id": "coalesce-2023campaign-360-data-product-built-by-the-dbt-labs",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Built a marketing data product so the marketing team could self-serve reporting, using Fivetran packages as shortcuts.",
+              "topics": [
+                "analytics engineering",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            },
+            {
+              "type": "blog",
+              "event": "dbt Labs blog",
+              "title": "How dbt Labs reduced dbt-related compute costs by 64% with Fusion and state-aware orchestration",
+              "date": null,
+              "url": "https://www.getdbt.com/authors/brandon-thomson",
+              "content_id": "dbt-labs-bloghow-dbt-labs-reduced-dbtrelated-compute-costs-b",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "author page lists his posts on cutting dbt Labs' own compute costs and cost-aware development",
+              "topics": [
+                "performance & scale",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.secoda.co/blog/dbt-coalesce-2023-day-2-3-sessions-recap",
+              "note": "talk: Campaign 360 data product built by the dbt Labs data team"
+            },
+            {
+              "url": "https://www.getdbt.com/authors/brandon-thomson",
+              "note": "blog: How dbt Labs reduced dbt-related compute costs by 64% with Fusion and state-aware orchestration"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "How the dbt Labs data team runs its own dbt project, and what a small team can learn from it.",
+          "past_chapter_talks": [],
+          "notes": "dbt Labs staff. search summaries say his dbt Summit speaker page puts him in Salt Lake City, but that page returns 404, so the location is unverified. author page: https://www.getdbt.com/authors/brandon-thomson"
+        }
+      ],
+      "notes": "Vendor, not an outreach target as an employer. Staff here is a possible anchor speaker or connector."
+    },
+    {
+      "id": "aero",
+      "name": "Aero",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "safiyy-momen",
+          "name": "Safiyy Momen",
+          "pronouns": null,
+          "title": "Founder, Aero",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/44987572/",
+              "source": "only member named Safiyy Momen among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "New York dbt Meetup (per dbt community spotlight)",
+              "title": "Data warehouse cost optimisation",
+              "date": null,
+              "url": "https://docs.getdbt.com/community/spotlight/safiyy-momen",
+              "content_id": "new-york-dbt-meetup-per-dbt-community-spotlightdata-warehous",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Spoke on warehouse cost optimisation; founder of Aero, a Snowflake cost tool.",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://docs.getdbt.com/community/spotlight/safiyy-momen",
+              "note": "talk: Data warehouse cost optimisation"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Cutting Snowflake warehouse costs for dbt projects.",
+          "past_chapter_talks": [],
+          "notes": "Search summary says he has spoken at meetups including the New York dbt Meetup. Verify on the spotlight page before outreach. | no evidence ties him to Utah; also in the new_york file."
+        }
+      ],
+      "notes": "Snowflake cost-optimisation product. Details come from a search summary of a dbt community spotlight page; the page itself did not load."
+    },
+    {
+      "id": "toast",
+      "name": "Toast",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Manager, Analytics Engineering",
+          "url": "https://builtin.com/job/senior-manager-analytics-engineering/11407373",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "jellyfish",
+      "name": "Jellyfish",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://builtin.com/job/senior-analytics-engineer/11225896",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote or hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "runpod",
+      "name": "Runpod",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Head of Analytics and Business Intelligence",
+          "url": "https://builtin.com/job/head-analytics-and-business-intelligence/11243286",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "hercules",
+      "name": "Hercules",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer, Full-stack",
+          "url": "https://builtin.com/job/senior-analytics-engineer-full-stack/11497059",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "in-office or remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "sharkninja",
+      "name": "SharkNinja",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://builtin.com/job/senior-analytics-engineer/11032844",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "langchain",
+      "name": "LangChain",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://builtin.com/job/analytics-engineer/11493151",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "engine",
+      "name": "Engine",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Manager, Product Analytics",
+          "url": "https://builtin.com/job/manager-product-analytics/11208281",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        },
+        {
+          "title": "Director, Business Analytics",
+          "url": "https://builtin.com/job/director-business-analytics/11208221",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "affirm",
+      "name": "Affirm",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Lead, Deposit Fraud Risk",
+          "url": "https://builtin.com/job/analytics-lead-deposit-fraud-risk/11424896",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "metlife",
+      "name": "MetLife",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Principal Data & Analytics Lead",
+          "url": "https://builtin.com/job/principal-data-analytics-lead/11067522",
+          "source": "builtin.com Salt Lake City listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed in the skills tag on the board listing",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "remote or hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
+    },
+    {
+      "id": "ternary-data",
+      "name": "Ternary Data",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "data engineering"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "joe-reis",
+          "name": "Joe Reis",
+          "pronouns": null,
+          "title": "Co-founder and CEO, Ternary Data; co-author of Fundamentals of Data Engineering",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/josephreis/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (dbt Labs event)",
+              "title": "The Future Of Data Analytics With Joe Reis",
+              "date": "2023-03-15",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/291827521/",
+              "content_id": "utah-data-engineering-meetup-dbt-labs-eventthe-future-of-dat",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "in-person talk on data modeling and the semantic layer, followed by a dbt customer panel he hosted.",
+              "topics": [
+                "data modeling",
+                "semantic layer",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Data Modeling is Dead. Long Live Data Modeling!",
+              "date": "2023-08-16",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/292397377/",
+              "content_id": "utah-data-engineering-meetupdata-modeling-is-dead-long-live",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "argues data modeling matters more as ai adoption grows.",
+              "topics": [
+                "data modeling",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Notes from the Field - Trends in Data Engineering in 2025",
+              "date": "2025-06-18",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/307410818/",
+              "content_id": "utah-data-engineering-meetupnotes-from-the-field-trends-in-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "in-person chat on data engineering trends.",
+              "topics": [
+                "industry trends",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "panel",
+              "event": "Utah Data Engineering Meetup",
+              "title": "AMA with Joe Reis and Zach Wilson",
+              "date": "2024-10-16",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/303569399/",
+              "content_id": "utah-data-engineering-meetupama-with-joe-reis-and-zach-wilso",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "in-person ama.",
+              "topics": [
+                "career development",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.superdatascience.com/595",
+              "note": "search snippet: ceo and cofounder of Ternary Data, a consultancy based in Salt Lake City, Utah"
+            },
+            {
+              "url": "https://www.linkedin.com/in/josephreis/",
+              "note": "linkedin search result: Joe Reis - Salt Lake City, Utah, United States; posts under the same profile are about Ternary Data"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "data modeling in the age of ai, and where the semantic layer fits",
+          "past_chapter_talks": [],
+          "notes": "already hosted a dbt Labs event at the meetup in 2023, so a dbt meetup is a short step. co-founder of the Utah Data Engineering Meetup. Salt Lake City base and Ternary Data from search snippet (superdatascience.com/595); verify the current role."
+        }
+      ],
+      "notes": "data engineering and architecture consultancy; dbt use not verified."
+    },
+    {
+      "id": "buster",
+      "name": "Buster",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://www.buster.so/how-it-works",
+          "note": "turns a dbt project into an ai data analyst"
+        }
+      ],
+      "people": [
+        {
+          "id": "dallin-bentley",
+          "name": "Dallin Bentley",
+          "pronouns": null,
+          "title": "Co-founder and CTO, Buster",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/dallinbentley/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/448644144/",
+              "source": "only member named Dallin Bentley among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Dallin Bentley building an ai data engineer",
+              "date": "2026-01-21",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/311226999/",
+              "content_id": "utah-data-engineering-meetupdallin-bentley-building-an-ai-da",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk on building an ai agent for data engineering; the description gives no abstract.",
+              "topics": [
+                "genai & llm",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "organiser",
+              "event": "Buster company site",
+              "title": "Buster: ai agents for dbt and data engineering workflows",
+              "date": "2025",
+              "url": "https://docs.buster.so/overview",
+              "content_id": "buster-company-sitebuster-ai-agents-for-dbt-and-data-enginee",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "company docs describe agents that automate dbt documentation, review and data quality checks.",
+              "topics": [
+                "genai & llm",
+                "dbt product features"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://happenstance.ai/u/dal",
+              "note": "search snippet: co-founder and cto of Buster, based in Salt Lake City"
+            },
+            {
+              "url": "https://ycombinator.com/companies/buster",
+              "note": "Buster in Y Combinator W24"
+            },
+            {
+              "url": "https://www.linkedin.com/in/dallinbentley/",
+              "note": "linkedin profile linked from https://happenstance.ai/u/dal (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "using ai agents to keep a dbt project documented, tested and reliable",
+          "past_chapter_talks": [],
+          "notes": "buster is a Y Combinator W24 company based in Salt Lake City per search snippets. the january 2026 meetup title names him; the page does not state he was the speaker, so verify. a vendor pitch risk: keep the talk about practice, not product."
+        }
+      ],
+      "notes": "y combinator w24 startup selling ai agents for dbt projects."
+    },
+    {
+      "id": "utah-data-engineering-meetup",
+      "name": "Utah Data Engineering Meetup",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.meetup.com/utah-data-engineering-meetup/",
+          "note": "past events via gql2; 2024-2026 titles include data modeling, governance, data quality, semantic layer and unit tests"
+        }
+      ],
+      "people": [
+        {
+          "id": "ayla-khan",
+          "name": "Ayla Khan",
+          "pronouns": null,
+          "title": "Co-host, Utah Data Engineering Meetup (employer not found)",
+          "city": "Salt Lake City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/166817852/",
+              "source": "https://www.meetup.com/events/314536482/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Co-host of the monthly meetup",
+              "date": "2026-07",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536482/",
+              "content_id": "utah-data-engineering-meetupcohost-of-the-monthly-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as event host on most events since 2023.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536482/",
+              "note": "host: Co-host of the monthly meetup"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from the utah data community",
+          "past_chapter_talks": [],
+          "notes": "employer and city not verified; only the host role is on record."
+        },
+        {
+          "id": "erick-hollenbaugh",
+          "name": "Erick Hollenbaugh",
+          "pronouns": null,
+          "title": "Co-host, Utah Data Engineering Meetup (employer not found)",
+          "city": "Salt Lake City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/408292842/",
+              "source": "https://www.meetup.com/events/314536541/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Co-host of the monthly meetup",
+              "date": "2026-08",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536541/",
+              "content_id": "utah-data-engineering-meetupcohost-of-the-monthly-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as host from 2024-08 on; the same events cover governance, data quality and star schema.",
+              "topics": [
+                "community",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536541/",
+              "note": "host: Co-host of the monthly meetup"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers on governance and data quality",
+          "past_chapter_talks": [],
+          "notes": "employer and city not verified; only the host role is on record."
+        },
+        {
+          "id": "marc-keeling",
+          "name": "Marc Keeling",
+          "pronouns": null,
+          "title": "(employer not found)",
+          "city": "Salt Lake City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/213875821/",
+              "source": "https://www.meetup.com/events/297617321/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Real world pipelines - Marc Keeling",
+              "date": "2024-03-20",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/297617321/",
+              "content_id": "utah-data-engineering-meetupreal-world-pipelines-marc-keelin",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "demo of a real pipeline with MySQL, Airbyte, Clickhouse and Dagster, with some dbt.",
+              "topics": [
+                "data engineering",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/297617321/",
+              "note": "talk: Real world pipelines - Marc Keeling"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "building a real pipeline with airbyte, clickhouse, dagster and some dbt",
+          "past_chapter_talks": [],
+          "notes": "in-person at Recursion in Salt Lake City; employer unknown. description mentions dbt."
+        },
+        {
+          "id": "nick-johnson",
+          "name": "Nick Johnson",
+          "pronouns": null,
+          "title": "(employer not found)",
+          "city": "Salt Lake City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/55216182/",
+              "source": "https://www.meetup.com/events/300296775/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Intro to Data Modeling for Analytics - Nick Johnson",
+              "date": "2024-05-15",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/300296775/",
+              "content_id": "utah-data-engineering-meetupintro-to-data-modeling-for-analy",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "dimensional modelling for analytics, versus transactional models, with data vault ideas.",
+              "topics": [
+                "data modeling",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/300296775/",
+              "note": "talk: Intro to Data Modeling for Analytics - Nick Johnson"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "star schema and data vault for analytics, and when to use which",
+          "past_chapter_talks": [],
+          "notes": "in-person at Recursion; employer unknown. a search for him found nothing, so there may be several people of this name."
+        }
+      ],
+      "notes": "monthly in-person meetup since before 2020; about 90 past events, more than 40 since 2023. hosted at Recursion, Vivint and other venues. asks speakers to email the organiser."
+    },
+    {
+      "id": "utah-snowflake-user-group",
+      "name": "Utah Snowflake User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/salt-lake-city",
+          "note": "chapter page with past events"
+        },
+        {
+          "type": "blog_scanned",
+          "url": "https://usergroups.snowflake.com/utah/",
+          "note": "chapter page and three event pages scanned; no speakers listed, organisers seeking speakers"
+        }
+      ],
+      "people": [
+        {
+          "id": "noah-goodrich",
+          "name": "Noah Goodrich",
+          "pronouns": null,
+          "title": "Chapter Leader, Snowflake Utah User Group",
+          "city": "Pleasant Grove, Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/noahgoodrich/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Utah User Group",
+              "title": "SLC Snowflake User Group kickoff and networking",
+              "date": "2025-04-14",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
+              "content_id": "snowflake-utah-user-groupslc-snowflake-user-group-kickoff-an",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "chapter leader and organiser of the group; the kickoff was hosted by CHG Healthcare in Midvale.",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "organiser",
+              "event": "Utah Snowflake User Group",
+              "title": "Snowflake Unstuck: A Community Round Table and AMA",
+              "date": "2026-02",
+              "url": "https://usergroups.snowflake.com/v0/events/details/snowflake-utah-presents-snowflake-unstuck-a-community-round-table-amp-ama/",
+              "content_id": "utah-snowflake-user-groupsnowflake-unstuck-a-community-round",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "chapter leader and organiser of the local Snowflake user group events",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
+              "note": "organiser: SLC Snowflake User Group kickoff and networking"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/v0/events/details/snowflake-utah-presents-snowflake-unstuck-a-community-round-table-amp-ama/",
+              "note": "organiser: Snowflake Unstuck: A Community Round Table and AMA"
+            },
+            {
+              "url": "https://www.linkedin.com/in/noahgoodrich/",
+              "note": "linkedin search result: Noah Goodrich - Utah Valley University - Pleasant Grove, Utah; summary says he organises the Utah Snowflake meetups"
+            },
+            {
+              "url": "https://www.linkedin.com/in/noahgoodrich/",
+              "note": "location (medium): linkedin search result: Noah Goodrich - Utah Valley University - Pleasant Grove, Utah; summary says he organises the Utah Snowflake meetups https://www.linkedin.com/in/noahgoodrich/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "snowflake and dbt in practice for utah data teams",
+          "past_chapter_talks": [],
+          "notes": "employer not found. the group has about 300 members and asks for speakers. | employer not found. Region from organising in-person events across Salt Lake County and Lehi. | location (medium): linkedin search result: Noah Goodrich - Utah Valley University - Pleasant Grove, Utah; summary says he organises the Utah Snowflake meetups https://www.linkedin.com/in/noahgoodrich/"
+        },
+        {
+          "id": "chandu-yaramasu",
+          "name": "Chandu Yaramasu",
+          "pronouns": null,
+          "title": "Director, AI - Data and Analytics (employer not found)",
+          "city": "Salt Lake City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/223055969/",
+              "source": "only member named Chandu Yaramasu among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Utah User Group",
+              "title": "SLC Snowflake User Group kickoff and networking",
+              "date": "2025-04-14",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
+              "content_id": "snowflake-utah-user-groupslc-snowflake-user-group-kickoff-an",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser with Noah Goodrich.",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "organiser",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group organiser",
+              "date": "2026-02",
+              "url": "https://usergroups.snowflake.com/v0/events/details/snowflake-utah-presents-snowflake-unstuck-a-community-round-table-amp-ama/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "co-organiser of the local Snowflake user group events",
+              "topics": [
+                "community",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
+              "note": "organiser: SLC Snowflake User Group kickoff and networking"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/v0/events/details/snowflake-utah-presents-snowflake-unstuck-a-community-round-table-amp-ama/",
+              "note": "organiser: Utah Snowflake User Group organiser"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "leading an ai and analytics team",
+          "past_chapter_talks": [],
+          "notes": "employer not stated on the page; do not assume it is CHG Healthcare. | employer not found. Co-organiser of the Utah Snowflake User Group; may be a possible co-organiser or host for the dbt meetup."
+        }
+      ],
+      "notes": "about 300 members; kickoff April 2025 at CHG Healthcare, Midvale; earlier events at Crumbl HQ and Canyon Park."
+    },
+    {
+      "id": "utah-geek-events",
+      "name": "Utah Geek Events",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://utahgeekevents.com",
+          "note": "events page"
+        },
+        {
+          "type": "talk",
+          "url": "https://sessionize.com/big-mountain-data-and-dev-conference_202",
+          "note": "call for speakers"
+        }
+      ],
+      "people": [],
+      "notes": "organises Big Mountain Data & Dev (17 Oct 2026, Neumont College, Salt Lake City) and Day of Data (19 Sep 2026). organiser Pat Wright also runs Big Data Utah. speaker pool for local data talks."
+    },
+    {
+      "id": "vivint",
+      "name": "Vivint",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Lehi"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "host_venue",
+          "url": "https://usergroups.snowflake.com/v0/events/details/snowflake-utah-presents-snowflake-unstuck-a-community-round-table-amp-ama/",
+          "note": "hosted the Utah Snowflake User Group round table at its Lehi office, February 2026; Vivint also gave a Snowflake use case at the November 2021 meeting"
+        }
+      ],
+      "people": [],
+      "notes": "hosts the Utah Data Engineering Meetup and Python at the Point and sponsors pizza. a venue lead."
+    },
+    {
+      "id": "consultnet",
+      "name": "ConsultNet",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Lehi"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Mid-Level Data Engineer",
+          "url": "https://www.careerbuilder.com/job-details/mid-level-data-engineer-lehi-ut--e9e17207-7d5a-4838-869e-c876b717f144",
+          "source": "careerbuilder",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "design and develop data transformation pipelines using dbt (search snippet)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "staffing firm; the role may be for a client. found in a search snippet only; the ad page returned 403."
+    },
+    {
+      "id": "posit",
+      "name": "Posit",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "R"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "julia-silge",
+          "name": "Julia Silge",
+          "pronouns": null,
+          "title": "Data Scientist and Software Engineer",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/juliasilge/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/juliasilge",
+              "source": "github user search, profile names @posit-dev"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Salt Lake City R User Group",
+              "title": "Julia Silge on Fostering a Technical, Inclusive R Community in Salt Lake City",
+              "date": "2025-07",
+              "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
+              "content_id": "salt-lake-city-r-user-groupjulia-silge-on-fostering-a-techni",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "interview on running the local R user group with remote and in-person talks",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
+              "note": "organiser: Julia Silge on Fostering a Technical, Inclusive R Community in Salt Lake City"
+            },
+            {
+              "url": "https://www.linkedin.com/in/juliasilge/",
+              "note": "linkedin profile linked from https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/ (name match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "open-source MLOps and tidy modelling for analytics teams",
+          "past_chapter_talks": [],
+          "notes": "co-organiser of the Salt Lake City R User Group; her own about page says she lives in Salt Lake City. Topics are R and ML rather than dbt."
+        }
+      ],
+      "notes": "Julia Silge works remotely from Salt Lake City; Posit has no dbt signal."
+    },
+    {
+      "id": "okta",
+      "name": "Okta",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "pooja-crahen",
+          "name": "Pooja Crahen",
+          "pronouns": null,
+          "title": "Senior Manager, Analytics Engineering",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/drexelpooja/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "dbt Summit 2026",
+              "title": "From AI experiment to production: how Okta governs context for agents at scale",
+              "date": "2026-09",
+              "url": "https://www.getdbt.com/dbt-summit/speakers/pooja-crahen",
+              "content_id": "dbt-summit-2026from-ai-experiment-to-production-how-okta-gov",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "dbt Summit session on governing context for AI agents; she also appears in the Level Up keynote",
+              "topics": [
+                "genai & llm",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.getdbt.com/dbt-summit/speakers/pooja-crahen",
+              "note": "talk: From AI experiment to production: how Okta governs context for agents at scale"
+            },
+            {
+              "url": "https://www.linkedin.com/in/drexelpooja/",
+              "note": "linkedin search result: Pooja Crahen - Okta"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "building an analytics engineering team and moving to dbt, from a former Pluralsight director",
+          "past_chapter_talks": [],
+          "notes": "former Director of Analytics Engineering at Pluralsight (Draper host venue). No location evidence, so region unknown."
+        }
+      ],
+      "notes": "Pooja Crahen leads analytics engineering and drove Okta's move to dbt; location not found."
+    },
+    {
+      "id": "pluralsight",
+      "name": "Pluralsight",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Draper"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer, Data Ops",
+          "url": "https://www.edtech.com/jobs/senior-data-engineer-data-ops-2887",
+          "source": "edtech.com job board (from search snippet; page not fetchable)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "requires extensive experience with dbt core pipelines",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-05",
+          "job_family": "data engineering",
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "host_venue",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-utah-presents-utah-user-group-meeting",
+          "note": "hosted the Utah Snowflake User Group at its Draper HQ, 17 November 2021"
+        }
+      ],
+      "people": [],
+      "notes": "possible host venue. The ad is remote with on-site days near Texas; an analytics engineer ad for Draper was seen in a snippet but had expired."
+    },
+    {
+      "id": "chg-healthcare",
+      "name": "CHG Healthcare",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Midvale"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "host_venue",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
+          "note": "hosted the Utah Snowflake User Group kickoff at its Midvale office (page shows 14 April 2025, year uncertain)"
+        }
+      ],
+      "people": [],
+      "notes": "possible host venue; dbt use not verified."
+    },
+    {
+      "id": "adobe",
+      "name": "Adobe",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jake-van-hecke",
+          "name": "Jake Van Hecke",
+          "pronouns": null,
+          "title": "Business Intelligence Engineer",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jakevanhecke/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group organiser",
+              "date": null,
+              "url": "https://usergroups.snowflake.com/utah/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as co-organiser of the local Snowflake user group",
+              "topics": [
+                "community",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/utah/",
+              "note": "organiser: Utah Snowflake User Group organiser"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jakevanhecke/",
+              "note": "linkedin search result: Jake Van Hecke - Adobe; summary says he is located in Salt Lake City"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jakevanhecke/",
+              "note": "location (high): linkedin search result: Jake Van Hecke - Adobe; summary says he is located in Salt Lake City https://www.linkedin.com/in/jakevanhecke/"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "business intelligence engineering on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "named as organiser in a search snippet of the Utah Snowflake User Group page; not seen on the group page itself. | location (high): linkedin search result: Jake Van Hecke - Adobe; summary says he is located in Salt Lake City https://www.linkedin.com/in/jakevanhecke/"
+        }
+      ],
+      "notes": "Jake Van Hecke is named as a Utah Snowflake User Group organiser with the Adobe title; location of his office not found."
+    },
+    {
+      "id": "employer-not-found",
+      "name": "Employer not found",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Lehi"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-ohare",
+          "name": "Daniel O'Hare",
+          "pronouns": null,
+          "title": "Lead Analytics Engineer",
+          "city": "Lehi",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/oharedaniel"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "linkedin_search"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "analytics engineering and AI data platforms from a Lehi data lead",
+          "past_chapter_talks": [],
+          "notes": "search result shows the title and Lehi, Utah; employer and dbt use not seen. Profile url appeared word for word in a search result."
+        }
+      ],
+      "notes": "placeholder for a person whose employer was not visible in search results."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/salt-lake-city-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/salt-lake-city-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "builtin.com Salt Lake City analytics jobs",
+        "url": "https://builtin.com/jobs/salt-lake-city/data-analytics/analytics",
+        "yielded": true,
+        "note": "25 roles, 10 with a dbt tag, mostly remote"
+      },
+      {
+        "name": "builtin.com Salt Lake City data engineering jobs",
+        "url": "https://builtin.com/jobs/salt-lake-city/data-analytics/data-engineering",
+        "yielded": true,
+        "note": "25 roles, 5 with a dbt tag, all remote or hybrid; none of those 5 companies were added"
+      },
+      {
+        "name": "Podium analytics engineer ad",
+        "url": "https://jobs.accel.com/companies/podium/jobs/78630747-analytics-engineer",
+        "yielded": true,
+        "note": "Lehi, dbt and Snowflake"
+      },
+      {
+        "name": "Recursion data ads",
+        "url": "https://jobs.dcvc.com/companies/recursion-pharmaceuticals-2-ccbe89ca-ec35-439d-885e-ca59051ce93b/jobs/54214851-engineering-manager-data",
+        "yielded": true,
+        "note": "dbt in stack, Salt Lake City"
+      },
+      {
+        "name": "Lucid Greenhouse board",
+        "url": "https://job-boards.greenhouse.io/lucidsoftware/jobs/6017710004",
+        "yielded": false,
+        "note": "no dbt role open now"
+      },
+      {
+        "name": "Utah Snowflake User Group",
+        "url": "https://usergroups.snowflake.com/salt-lake-city",
+        "yielded": true,
+        "note": "303 members, two organisers, past events at CHG Healthcare and Crumbl HQ"
+      },
+      {
+        "name": "Meetup gql2 groupSearch near Salt Lake City",
+        "url": "https://www.meetup.com/gql2",
+        "yielded": true,
+        "note": "found Utah Data Engineering Meetup, Big Data Utah, Fabric User Group, SQL Server, SLC Python, Python at the Point, PyLadies, R, Postgres, Kafka, Elastic and AI groups"
+      },
+      {
+        "name": "Utah Data Engineering Meetup past events",
+        "url": "https://www.meetup.com/utah-data-engineering-meetup/",
+        "yielded": true,
+        "note": "92 events; speakers rarely named in text"
+      },
+      {
+        "name": "Big Data Utah, Utah SQL Server, SLC Python, Python at the Point, Salt Lake Fabric, Postgres, Elastic past events",
+        "url": "https://www.meetup.com/bigdatautah/",
+        "yielded": false,
+        "note": "few dbt or modeling talks; mostly platform, python and AI"
+      },
+      {
+        "name": "Snowflake Utah User Group",
+        "url": "https://usergroups.snowflake.com/salt-lake-city",
+        "yielded": true,
+        "note": "organisers and venues only"
+      },
+      {
+        "name": "Big Mountain Data & Dev and Utah Geek Events",
+        "url": "https://utahgeekevents.com",
+        "yielded": false,
+        "note": "no speaker list found"
+      },
+      {
+        "name": "dbt Summit speaker pages",
+        "url": "https://www.getdbt.com/dbt-summit/speakers",
+        "yielded": true,
+        "note": "Brandon Thomson, location unverified"
+      },
+      {
+        "name": "Utah Tableau and Power BI user groups",
+        "url": "https://usergroups.tableau.com",
+        "yielded": false,
+        "note": "no local leader or events found"
+      },
+      {
+        "name": "Silicon Slopes Summit",
+        "url": "https://siliconslopes.com",
+        "yielded": false,
+        "note": "search returned nothing on data speakers"
+      },
+      {
+        "name": "Utah Snowflake User Group",
+        "url": "https://usergroups.snowflake.com/utah/",
+        "yielded": true,
+        "note": "organisers and host venues: Pluralsight Draper, Vivint Lehi, CHG Healthcare Midvale, Crumbl HQ"
+      },
+      {
+        "name": "Built In Salt Lake City analytics jobs",
+        "url": "https://builtin.com/jobs/salt-lake-city/data-analytics/analytics",
+        "yielded": false,
+        "note": "seven dbt-tagged roles, all remote at companies based elsewhere (Toast, Jellyfish, Engine, Hercules, SharkNinja, LangChain)"
+      },
+      {
+        "name": "dbt Summit speakers",
+        "url": "https://www.getdbt.com/dbt-summit/speakers",
+        "yielded": true,
+        "note": "Brandon Thomson (dbt Labs), location unverified; Pooja Crahen (Okta) formerly Pluralsight"
+      },
+      {
+        "name": "dbt Labs and Snowflake case study search for Utah companies",
+        "url": "https://www.getdbt.com/case-studies",
+        "yielded": false,
+        "note": "no Utah company found"
+      },
+      {
+        "name": "WiDS regional events Utah",
+        "url": "https://www.widsworldwide.org/",
+        "yielded": false,
+        "note": "no Utah event found in search"
+      },
+      {
+        "name": "Women Tech Council",
+        "url": "https://www.womentechcouncil.com/",
+        "yielded": false,
+        "note": "general tech awards and networking, no data-specific events found"
+      },
+      {
+        "name": "PyLadies / R-Ladies Salt Lake City",
+        "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
+        "yielded": true,
+        "note": "no R-Ladies chapter; Salt Lake City R User Group organisers named"
+      }
+    ]
+  },
+  "past_meetups": [],
+  "community_channels": [
+    {
+      "name": "Utah Snowflake User Group",
+      "url": "https://usergroups.snowflake.com/utah/",
+      "note": "about 300 members, in-person events at local company offices (Pluralsight, Vivint, CHG Healthcare, Crumbl HQ); chapter leader Noah Goodrich, co-organiser Chandu Yaramasu; seeking speakers"
+    },
+    {
+      "name": "Utah Data Engineering Meetup",
+      "url": "https://www.meetup.com/utah-data-engineering-meetup/",
+      "note": "monthly, third wednesday; Forge Utah slack at forgeutah.tech; speakers email the organiser"
+    },
+    {
+      "name": "Salt Lake Valley Fabric User Group",
+      "url": "https://www.meetup.com/microsoft-fabric-and-data-engineering-group/",
+      "note": "new in 2026, four events"
+    },
+    {
+      "name": "Big Data Utah",
+      "url": "https://www.meetup.com/bigdatautah/",
+      "note": "largely online, organiser Pat Wright"
+    },
+    {
+      "name": "Salt Lake City R User Group",
+      "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
+      "note": "organised by Julia Silge and Andrew Redd, monthly remote talks and quarterly in-person gatherings"
+    },
+    {
+      "name": "Women Tech Council",
+      "url": "https://www.womentechcouncil.com/",
+      "note": "Utah tech community for women, annual Women Tech Awards in Salt Lake City; no data-specific events found"
+    },
+    {
+      "name": "PyLadies Utah",
+      "url": "https://en.wikipedia.org/wiki/PyLadies",
+      "note": "mentioned in search results; no event page checked"
+    }
+  ]
+}

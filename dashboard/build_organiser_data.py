@@ -46,6 +46,7 @@ CHAPTERS = {
     "belgium": {"label": "Belgium", "goal": "speakers", "area": "Europe"},
     "new_york": {"label": "New York", "goal": "speakers", "area": "North America"},
     "san_francisco": {"label": "San Francisco", "goal": "speakers", "area": "North America"},
+    "salt_lake_city": {"label": "Salt Lake City", "goal": "speakers", "area": "North America"},
     "singapore": {"label": "Singapore", "goal": "speakers", "area": "Asia-Pacific"},
     "tokyo": {"label": "Tokyo", "goal": "speakers", "area": "Asia-Pacific"},
     "seoul": {"label": "Seoul", "goal": "speakers", "area": "Asia-Pacific"},

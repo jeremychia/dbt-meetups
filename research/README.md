@@ -19,6 +19,7 @@ This is the one method behind every `<folder>/<city>_dbt_companies.json` researc
 | North America | Boston | [boston](../boston/SEARCH_METHOD.md) |
 | North America | Montreal | [montreal](../montreal/SEARCH_METHOD.md) |
 | North America | New York | [new_york](../new_york/SEARCH_METHOD.md) |
+| North America | Salt Lake City (no local event yet) | [salt_lake_city](../salt_lake_city/SEARCH_METHOD.md) |
 | North America | San Francisco | [san_francisco](../san_francisco/SEARCH_METHOD.md) |
 | North America | Seattle | [seattle](../seattle/SEARCH_METHOD.md) |
 | North America | Toronto | [toronto](../toronto/SEARCH_METHOD.md) |
