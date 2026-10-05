@@ -7,20 +7,20 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 - **First built:** 2026-09-23
 
 <!-- at-a-glance:start -->
-**At a glance** (version 8, 2026-10-05)
+**At a glance** (version 9, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 102 |
-| People | 55 |
+| Companies | 120 |
+| People | 92 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 8 |
 | Proven speakers | 32 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 42 |
+| Based in the region | 79 |
 | Based elsewhere | 5 |
 | Location unknown | 8 |
-| With a LinkedIn profile | 47 |
+| With a LinkedIn profile | 67 |
 | Job ads mentioning dbt | 92 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -90,7 +90,7 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **Many large firms are on the watchlist.** 55 of the 94 companies are watchlisted, mostly large Malaysian firms checked without finding dbt. They are kept so they are not researched again. Grab, Shopee, Lazada and Xendit have their data teams mostly in Singapore, Indonesia or China.
 
 <!-- companies:start -->
-100 companies and communities were looked at. A company is local when it has people or roles in the region.
+117 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (19)</summary>
 
@@ -110,9 +110,9 @@ Concentrix (KL), K3 Advisory Group (incl. Quantuma), ONL Biz Solutions, Reap (KL
 
 </details>
 
-<details><summary><b>Not verified</b> (35)</summary>
+<details><summary><b>Not verified</b> (52)</summary>
 
-Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), Fasset (KL), Fave, Fuku, iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), Petronas / Petronas Digital, RBC Shared Services Malaysia, Roche (KL), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), Wise (KL office)
+Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Boost Credit (local presence not confirmed), Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), DHL IT Services (local presence not confirmed), Fasset (KL), Fave, Fuku, FWD Technology and Innovation (local presence not confirmed), iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MMA Cloud Services (local presence not confirmed), MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), MONASH UNIVERSITY (local presence not confirmed), Multimedia University (local presence not confirmed), My current organization @datopian (local presence not confirmed), Norah Labs (local presence not confirmed), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), PayNet (local presence not confirmed), Petronas / Petronas Digital, PETRONAS Digital (local presence not confirmed), Prudential (local presence not confirmed), RBC Shared Services Malaysia, Roche (KL), Royal Melbourne Institute of Technology (local presence not confirmed), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), SV Solution Centric (local presence not confirmed), The Center of Applied Data Science (local presence not confirmed), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), Unemployed (local presence not confirmed), Universiti Teknologi MARA (local presence not confirmed), Wise (KL office)
 
 </details>
 
@@ -228,3 +228,4 @@ AWS Malaysia, AWS User Groups Malaysia, BentoML (local presence not confirmed), 
 | 2026-10-01 | 6 | Women-in-data pass. Removed the `HIGHLIGHT` notes. Checked PyLadies KL, Women Techmakers Ambassadors KL (through GDG KL), R-Ladies KL, WiDS, She Loves Data, Girls in Tech Malaysia and Women in Tech Malaysia. Added 9 people with `sourced_via: women_in_data_community`: 4 speakers (Cheuk Ting Ho, Kim-Ann Git, Surabhi Pandey, Christine Tee) and 5 PyLadies KL organisers as connectors. Added community channels for Women Techmakers KL and R-Ladies KL. |
 | 2026-10-01 | 7 | Company pass from job ads: the freehire.me API. 7 companies and 42 job ads added. BonusLink, Ikano Retail and ams OSRAM raised to strong. AirAsia raised to medium. The file has no chapter, so `enriched_file` is null. |
 | 2026-10-05 | 8 | 2 more people, both tier 3 (an MLOps talk and a Singapore-based speaker). Search ignores location words, so most results were global. |
+| 2026-10-05 | 9 | 37 more people from `find_local_speakers.py`: 37 data people from GitHub with a town in the region. Speakers count only when a LinkedIn lookup placed them in the region. |

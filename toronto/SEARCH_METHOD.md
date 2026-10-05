@@ -7,20 +7,20 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 5, 2026-10-05)
+**At a glance** (version 6, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 114 |
-| People | 80 |
+| Companies | 177 |
+| People | 210 |
 | Tier 1 leads | 4 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 54 |
+| Proven speakers | 78 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 70 |
+| Based in the region | 200 |
 | Based elsewhere | 3 |
 | Location unknown | 7 |
-| With a LinkedIn profile | 61 |
+| With a LinkedIn profile | 110 |
 | Job ads mentioning dbt | 83 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
@@ -106,7 +106,7 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **KOHO is based in Toronto.** Célia Bru, Gabriel Gambacorta and Ian Whitestone also appear in the Montreal file.
 
 <!-- companies:start -->
-113 companies and communities were looked at. A company is local when it has people or roles in the region.
+176 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (9)</summary>
 
@@ -126,9 +126,9 @@ Archetype Consulting Inc., Cohere, Snowflake Toronto User Group, Zeta Global (lo
 
 </details>
 
-<details><summary><b>Not verified</b> (34)</summary>
+<details><summary><b>Not verified</b> (97)</summary>
 
-Apotex, Astronomer (local presence not confirmed), Canadian Tire Corporation, CBC, CIBC, Cineplex, Compass Data + AI (local presence not confirmed), Create Music Group (local presence not confirmed), Data Engineers in Toronto, Databricks (local presence not confirmed), Dataiku (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), FiveOneFour (local presence not confirmed), Georgian, Geotab, Hightouch (local presence not confirmed), Intact Financial Corporation, Interac, kWwhat (local presence not confirmed), Manulife, Mejuri, MHS Analytics Inc. (local presence not confirmed), Moneris, New Stadium, OneEleven, Polar Labs, Rootly, Sanofi, Snowflake, TD Bank, Toronto Apache Airflow Meetup, Viafoura (local presence not confirmed), Women in Big Data Toronto
+Adastra Company (local presence not confirmed), Affirm (local presence not confirmed), Apotex, Appnovation (local presence not confirmed), Arimac Lanka (Pvt) Ltd (local presence not confirmed), Astronomer (local presence not confirmed), Autonomous Vehicle Organization Inc (local presence not confirmed), BenchSci (local presence not confirmed), BlueDot (local presence not confirmed), BlueDot.global (local presence not confirmed), Boltz.AI (local presence not confirmed), Bounteous (local presence not confirmed), Brainfuse (local presence not confirmed), Canadian Tire Corporation, CBC, Centre for Analytics and Artificial Intelligence Engineering (local presence not confirmed), CIBC, Cineplex, clevertech (local presence not confirmed), Client server Technology (local presence not confirmed), Cognizant (local presence not confirmed), Compass Data + AI (local presence not confirmed), Countly (local presence not confirmed), Create Music Group (local presence not confirmed), Data Architect/Data Analyst/Data Scientist (local presence not confirmed), Data Engineers in Toronto, Data Scientist (local presence not confirmed), Databricks (local presence not confirmed), Dataiku (local presence not confirmed), EventGo Digital Inc. (local presence not confirmed), Evidence (local presence not confirmed), Faire (local presence not confirmed), Findhelp Information Services (local presence not confirmed), FiveOneFour (local presence not confirmed), Gartner (local presence not confirmed), Georgian, Geotab, Google (local presence not confirmed), HealthShare Ltd. (local presence not confirmed), HexaCluster (local presence not confirmed), Hightouch (local presence not confirmed), HR Data Analyst (local presence not confirmed), https://www.linkedin.com/in/nidhishivakumar/ (local presence not confirmed), hydro one (local presence not confirmed), Intact Financial Corporation, Interac, Intuit Turbotax Canada (local presence not confirmed), James Auto Corp (local presence not confirmed), Jarvis Consulting Group (local presence not confirmed), justworkshr (local presence not confirmed), Jutomate (local presence not confirmed), KPMG Canada (local presence not confirmed), kWwhat (local presence not confirmed), Lakehead University (local presence not confirmed), LINZ (local presence not confirmed), Livestock Improvement Corporation (local presence not confirmed), Manulife, Mejuri, Mercator.ai (local presence not confirmed), MHS Analytics Inc. (local presence not confirmed), Moneris, National Tire Distributors (local presence not confirmed), New Stadium, ObjectSharp (local presence not confirmed), OneEleven, Ontario Tech University ' 22 (local presence not confirmed), Payfare (local presence not confirmed), Polar Labs, PwC Canada (local presence not confirmed), rapidinsights (local presence not confirmed), Rootly, Saint Mary's University (local presence not confirmed), Sanofi, SensorTower (local presence not confirmed), Snowflake, Sonder Inc. (local presence not confirmed), St. Elizabeth Healthcare (local presence not confirmed), St. Joseph's Healthcare Hamilton (local presence not confirmed), Sun Life (local presence not confirmed), Sunlife (local presence not confirmed), Synpulse (local presence not confirmed), TD Bank, The University of Waikato (local presence not confirmed), Tiger Analytics (local presence not confirmed), tms (local presence not confirmed), Toronto Apache Airflow Meetup, Tskhay & Associates, Inc. (local presence not confirmed), Tubi (local presence not confirmed), unionstreetmedia (local presence not confirmed), University of Calgary (as shown in result title) (local presence not confirmed), University of Toronto (local presence not confirmed), University of Vermont (local presence not confirmed), Untangle Money (local presence not confirmed), Uplimit (local presence not confirmed), Upwork Inc. (local presence not confirmed), Viafoura (local presence not confirmed), Women in Big Data Toronto
 
 </details>
 
@@ -262,3 +262,4 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto, Toronto Womxn in Data Sc
 | 2026-10-01 | 3 | Women-in-data pass: AWS User Group Women in Tech Ontario, PyLadies Toronto and Women Techmakers Toronto. 7 new people: 1 speaker, and 6 organisers as connectors. |
 | 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code and repository search, and Meetup venues. 105 to 112 companies. 7 added: Instacart with a strong dbt signal, and 1Password, PointClickCare, Borrowell, Squaredance, Cohere and Georgian. Super.com raised from weak to strong. Job ads added at Wealthsimple and Docebo. |
 | 2026-10-05 | 5 | 4 more people, including Michelle Ark (dbt Labs) and two community connectors. |
+| 2026-10-05 | 6 | 130 more people from `find_local_speakers.py`: 24 organisers of local data groups, 106 data people from GitHub with a town in the region. Speakers count only when a LinkedIn lookup placed them in the region. |

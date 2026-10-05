@@ -7,20 +7,20 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 5, 2026-10-05)
+**At a glance** (version 6, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 95 |
-| People | 63 |
+| Companies | 152 |
+| People | 204 |
 | Tier 1 leads | 6 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 44 |
+| Proven speakers | 87 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 46 |
+| Based in the region | 187 |
 | Based elsewhere | 4 |
 | Location unknown | 13 |
-| With a LinkedIn profile | 36 |
+| With a LinkedIn profile | 103 |
 | Job ads mentioning dbt | 79 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
@@ -93,7 +93,7 @@ The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan
 - **No first-time speakers yet.** Boston has none, so the list leans on people who already speak.
 
 <!-- companies:start -->
-94 companies and communities were looked at. A company is local when it has people or roles in the region.
+151 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (13)</summary>
 
@@ -113,9 +113,9 @@ EverQuote, Hometap, Starburst Data
 
 </details>
 
-<details><summary><b>Not verified</b> (20)</summary>
+<details><summary><b>Not verified</b> (77)</summary>
 
-Battery Ventures (local presence not confirmed), dbt Labs (local presence not confirmed), Drizly (local presence not confirmed), Fidelity Investments (local presence not confirmed), Grand Circle Corp. (local presence not confirmed), InterSystems (local presence not confirmed), Kensho, Microsoft New England (NERD Center), Moderna, PyData Boston - Cambridge, PyLadies Boston, R-Ladies Boston, Simply Business (local presence not confirmed), Stratdigy (formerly DataOps.live) (local presence not confirmed), Strategic Data Insights, LLC (local presence not confirmed), VaultSpeed (local presence not confirmed), WiDS Cambridge, Wistia (local presence not confirmed), Women in Data (Boston), Zing Data (local presence not confirmed)
+Abbott (local presence not confirmed), Advent International (local presence not confirmed), Alexion Pharmaceuticals (local presence not confirmed), AltaPotentia (local presence not confirmed), Appfolio Inc (local presence not confirmed), Battery Ventures (local presence not confirmed), BCG (local presence not confirmed), Bose Corporation (local presence not confirmed), Boston University (local presence not confirmed), Brown and Caldwell (local presence not confirmed), Bryant University (local presence not confirmed), Center for Astrophysics | Harvard & Smithsonian (local presence not confirmed), Clark University | School of Business (local presence not confirmed), clarkuniversity (local presence not confirmed), Commonwealth Care Alliance (local presence not confirmed), CoreLogic (local presence not confirmed), CVS Health (local presence not confirmed), Databricks (local presence not confirmed), dbt Labs (local presence not confirmed), Drizly (local presence not confirmed), Exemplar Luxury Group (formerly Saks Global) (local presence not confirmed), Fidelity Investments (local presence not confirmed), Free Agent (local presence not confirmed), Fresenius Medical Care (local presence not confirmed), GMO LLC (local presence not confirmed), Google (local presence not confirmed), Graduate Student at Northeastern University (local presence not confirmed), Grand Circle Corp. (local presence not confirmed), IBM (local presence not confirmed), InterSystems (local presence not confirmed), JLL (local presence not confirmed), Kensho, Knapp Consulting LLC (local presence not confirmed), Lehigh University (local presence not confirmed), Mass General Brigham (local presence not confirmed), MassMutual (local presence not confirmed), Microsoft (local presence not confirmed), Microsoft New England (NERD Center), Moderna, National Geographic Society (local presence not confirmed), National Tire Distributors (local presence not confirmed), NYU Langone Health (local presence not confirmed), Open to Financial Analyst, Business Analyst, Operations Analyst, and FinTech Analyst roles (local presence not confirmed), PhiKonnect Solutions (local presence not confirmed), procter-gamble (local presence not confirmed), PyData Boston - Cambridge, PyLadies Boston, R-Ladies Boston, Ratio Therapeutics (local presence not confirmed), Raytheon Technologies (local presence not confirmed), Real Chemistry (local presence not confirmed), SeatGeek (local presence not confirmed), SimpliSafe (local presence not confirmed), Simply Business (local presence not confirmed), Staples (local presence not confirmed), Stratdigy (formerly DataOps.live) (local presence not confirmed), Strategic Data Insights, LLC (local presence not confirmed), symplr (local presence not confirmed), The Kraft Group (local presence not confirmed), theinkart.com (local presence not confirmed), Think Labs @thinklabs-ai (local presence not confirmed), tsaxena@ampersand.bio (local presence not confirmed), unionstreetmedia (local presence not confirmed), University of Maryland - College Park (local presence not confirmed), University of Vermont (local presence not confirmed), VaultSpeed (local presence not confirmed), Versetal Information Systems (local presence not confirmed), Virsolus Limited (local presence not confirmed), Weaviate (local presence not confirmed), Wentworth Institute of Technology (local presence not confirmed), WiDS Cambridge, Wistia (local presence not confirmed), Women in Data (Boston), Worcester Polytechnic Institute (local presence not confirmed), Workfabric AI (local presence not confirmed), Xolix.AI Research Labs (local presence not confirmed), Zing Data (local presence not confirmed)
 
 </details>
 
@@ -241,3 +241,4 @@ Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI
 | 2026-10-01 | 3 | Women-in-data pass: WEST, WiDS Boston, Women Techmakers through GDG Boston and GDG Cloud Boston, Metro Boston Data Ladies, AWS User Group Women in AI Cambridge and new PyLadies Boston hosts. 18 new people: 4 speakers and panellists, and 14 organisers as connectors. |
 | 2026-10-01 | 4 | Company pass with fetches only: HN Who is hiring, company job boards, dbt Labs case studies, GitHub code search and Meetup venues. 85 to 93 companies. 8 added, 4 with a strong dbt signal (Tive, meQuilibrium, Toast, Agero). Connie Health and Global Partners LP raised to strong. Starburst Data raised to nice-to-have, with Boston presence confirmed. Job ads 62 to 79. |
 | 2026-10-05 | 5 | 2 more people: Jenna Jordan (Ratio PBC), who led dbt adoption at the City of Boston, and Dan Gottlieb (Boston Children's Hospital). |
+| 2026-10-05 | 6 | 141 more people from `find_local_speakers.py`: 8 local speakers, 35 organisers of local data groups, 98 data people from GitHub with a town in the region. Speakers count only when a LinkedIn lookup placed them in the region. |

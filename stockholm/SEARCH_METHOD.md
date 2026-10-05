@@ -7,20 +7,20 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **First built:** 2026-09-24
 
 <!-- at-a-glance:start -->
-**At a glance** (version 5, 2026-10-05)
+**At a glance** (version 6, 2026-10-05)
 
 | | Count |
 |---|---|
-| Companies | 104 |
-| People | 76 |
+| Companies | 142 |
+| People | 182 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 59 |
+| Proven speakers | 82 |
 | Spoke at this chapter before | 19 |
-| Based in the region | 56 |
+| Based in the region | 162 |
 | Based elsewhere | 8 |
 | Location unknown | 12 |
-| With a LinkedIn profile | 55 |
+| With a LinkedIn profile | 77 |
 | Job ads mentioning dbt | 66 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
@@ -80,7 +80,7 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 - **No company dominates the job ads.** 62 ads are spread across 55 companies.
 
 <!-- companies:start -->
-103 companies and communities were looked at. A company is local when it has people or roles in the region.
+141 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
@@ -94,9 +94,9 @@ Academedia, Adavo, Agio, Agoda, ANIMARUM, Anyfin, Avalanche Studios Group, Bokad
 
 </details>
 
-<details><summary><b>Not verified</b> (39)</summary>
+<details><summary><b>Not verified</b> (77)</summary>
 
-0TO9 (local presence not confirmed), Acast, Adapteo Group (local presence not confirmed), AKLYON Consulting / PwC Sweden (local presence not confirmed), AWS Women's User Group Sweden (local presence not confirmed), CEMIT Digital (local presence not confirmed), Data & AI Stockholm (DAIS), dbt Labs (local presence not confirmed), EasyPark Group (local presence not confirmed), Einride (local presence not confirmed), Electrolux Group (local presence not confirmed), EQT (local presence not confirmed), Funnel (local presence not confirmed), Google Cloud (local presence not confirmed), Grafana Labs (local presence not confirmed), H&M Group (local presence not confirmed), Handelsbanken (local presence not confirmed), ICA Gruppen (local presence not confirmed), Iver Sverige (local presence not confirmed), King, Knightec Group (local presence not confirmed), Nextory, Nordea (local presence not confirmed), NordicFeel (local presence not confirmed), Northridge Analytics (local presence not confirmed), Northvolt (local presence not confirmed), Once Upon (local presence not confirmed), PyLadies Stockholm (local presence not confirmed), Sifflet (local presence not confirmed), SLB (local presence not confirmed), Snowflake (local presence not confirmed), Supercargo (local presence not confirmed), Svedea, SYNQ (local presence not confirmed), Tele2, TUI (local presence not confirmed), Visma Group (local presence not confirmed), Voi (local presence not confirmed), WiDS (AI & ML) Sweden
+0TO9 (local presence not confirmed), A_SPACE (local presence not confirmed), Acast, Adapteo Group (local presence not confirmed), AKLYON Consulting / PwC Sweden (local presence not confirmed), AWS Women's User Group Sweden (local presence not confirmed), CEMIT Digital (local presence not confirmed), CGI (local presence not confirmed), Coop Sverige AB (local presence not confirmed), Data & AI Stockholm (DAIS), DBT Capital (local presence not confirmed), dbt Labs (local presence not confirmed), Dometic (local presence not confirmed), EasyPark Group (local presence not confirmed), Einride (local presence not confirmed), Electrolux Group (local presence not confirmed), epidemicsound (local presence not confirmed), EQT (local presence not confirmed), Ericsson (local presence not confirmed), Freelance (local presence not confirmed), Freelancing Full Stack Web Developer (local presence not confirmed), Funnel (local presence not confirmed), Funnel AB (local presence not confirmed), Globhe (local presence not confirmed), Google Cloud (local presence not confirmed), Grafana Labs (local presence not confirmed), H&M Group (local presence not confirmed), Handelsbanken (local presence not confirmed), Hive Streaming (local presence not confirmed), ICA Gruppen (local presence not confirmed), ICA Sverige (local presence not confirmed), imeto Consulting AB (local presence not confirmed), innofactor (local presence not confirmed), Iver Sverige (local presence not confirmed), King, klarna (local presence not confirmed), Klarna AB (local presence not confirmed), Knightec Group (local presence not confirmed), KTH Royal Institute of Technology (local presence not confirmed), majority (local presence not confirmed), ManpowerGroup (local presence not confirmed), Millnet BI (local presence not confirmed), Netlight Consulting (local presence not confirmed), Nexer insight (local presence not confirmed), Nextory, Nordea (local presence not confirmed), NordicFeel (local presence not confirmed), Northridge Analytics (local presence not confirmed), Northvolt (local presence not confirmed), OKQ8 (local presence not confirmed), Once Upon (local presence not confirmed), Pricer AB (local presence not confirmed), PyLadies Stockholm (local presence not confirmed), Redfield-AB (local presence not confirmed), SciLifeLab & Karolinska Institutet (local presence not confirmed), SciLifeLab Data Center (local presence not confirmed), ScilifelabDataCentre (local presence not confirmed), Sifflet (local presence not confirmed), SLB (local presence not confirmed), SmallPDF (local presence not confirmed), Snowflake (local presence not confirmed), Sovereign by Source (local presence not confirmed), Statskontoretdatalabb (local presence not confirmed), Stockholm University (local presence not confirmed), Supercargo (local presence not confirmed), Svedea, Sveriges Radio (local presence not confirmed), SYNQ (local presence not confirmed), Tele2, TolveAB (local presence not confirmed), TUI (local presence not confirmed), Uppsala University (local presence not confirmed), viaplaygroup (local presence not confirmed), Visma Group (local presence not confirmed), Voi (local presence not confirmed), WiDS (AI & ML) Sweden, zero-plus-x (local presence not confirmed)
 
 </details>
 
@@ -212,3 +212,4 @@ Embark Studios (local presence not confirmed), TELETID (local presence not confi
 | 2026-10-01 | 3 | Women-in-data pass. Checked Women in Tech Sweden (speakers and sessions), PyLadies Stockholm and AWS Women's User Group Sweden (past events and hosts), Women on Snowflake, Women Techmakers through GDG Stockholm, WiDS Sweden, R-Ladies Stockholm and two new Meetup groups. Added 21 people with `sourced_via: women_in_data_community`: 13 speakers and 8 organisers as connectors. Added new events for Anastasiia Stefanska and Isabella Renzetti. Added 6 community channels. |
 | 2026-10-01 | 4 | Company pass from open job boards (Greenhouse, Lever, Ashby), HN Who is hiring, dbt Labs case studies and Meetup gql2 line-ups. 2 companies added, for 102. McDonald's Nordics has a strong dbt signal. Rebtel raised to strong. People are unchanged. |
 | 2026-10-05 | 5 | 4 more people, including Quentin Coviaux (Rebtel), a dbt Summit speaker. Searches for local dbt authors returned only job ads. |
+| 2026-10-05 | 6 | 106 more people from `find_local_speakers.py`: 23 organisers of local data groups, 83 data people from GitHub with a town in the region. Speakers count only when a LinkedIn lookup placed them in the region. Speaker lookups stopped after 3 people, so this city's speakers are not added yet. |
