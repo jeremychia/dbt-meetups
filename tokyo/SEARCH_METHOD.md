@@ -20,7 +20,7 @@ This file holds what is specific to Tokyo. The method, scoring rules, schema and
 | Based in the region | 109 |
 | Based elsewhere | 5 |
 | Location unknown | 32 |
-| With a LinkedIn profile | 18 |
+| With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 47 |
 | Past chapter meetups | 19 |
 <!-- at-a-glance:end -->
