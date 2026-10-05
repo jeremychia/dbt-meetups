@@ -13,7 +13,13 @@ load the tools with ToolSearch "select:WebSearch,WebFetch".
 2. WebSearch `"<name>" <employer>` with no domain filter. results can include the linkedin profile, a sessionize page, a speaker page or a github profile.
 3. WebFetch an `evidence_url` that is an event, speaker or author page (never linkedin.com), and look for a profile link next to the name.
 
-if step 1 already ran in an earlier round (`linkedin_confidence` low), start at step 2, and use a talk or title keyword plus the chapter city instead of the employer in the linkedin search.
+## people an earlier round missed (`linkedin_confidence` low)
+do not repeat the employer queries. search the talk instead:
+1. WebSearch `"<distinctive 4-6 words of the talk title>" <name>` with no domain filter. this finds the recording, the slides or the speaker page.
+2. WebFetch the best speaker page, agenda entry, slides page, video page or post by the person, and look for a profile link next to the name or in the description.
+3. WebSearch `"<name>" <chapter city>`, allowed_domains ["linkedin.com"], and accept only a result tied to the talk, the event, the community or the employer.
+
+a page that shows the name, the talk title and a profile link ties that profile to the person.
 
 ## names that are not a full latin name
 - a handle (in parentheses, or the whole name): search `"<handle>"` with the employer or community. look for that exact username on x.com, github.com, zenn.dev, qiita.com, connpass.com, note.com, ithelp.ithome.com.tw or medium.

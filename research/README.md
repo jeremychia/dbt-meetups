@@ -88,7 +88,8 @@ A person counts as reachable with a LinkedIn profile or any other public profile
 2. **Meetup members:** `python3 research/match_meetup_members.py`. It adds the Meetup profile of a speaker who hosted or RSVP'd to their own event. With `--city-pool`, it also matches people still without a contact against everyone who RSVP'd to the city's meetup events, but only for a name that is unique there and rare on GitHub.
 3. **Links on the person's own pages:** `python3 research/harvest_profiles.py fetch <cache>`, then `check <cache>`, then `apply <cache>`. It reads evidence pages, the speaker or author page each one links from the person's name, the speaker and host records inside Bevy and Luma pages, and GitHub social accounts. It takes LinkedIn, X, Bluesky, sessionize and GitHub links. A link counts when it names the person, equals their recorded handle, sits on their own page, or is the closest profile link to their name with a slug that fits it. `check` lists every match and how often the rules agree with links already on file. Run it before `apply`.
 4. **GitHub search:** `python3 research/find_github_profiles.py [<city folder> ...]`. It tries the recorded handle as a login, then a full-name search. It keeps a profile only when it names the employer, or the city with a data bio.
-5. **Search:** brief the runs with [contact-task.md](contact-task.md) and apply with [`apply_contacts.py`](apply_contacts.py). Named leads go first, then everyone `not_searched`, then a wider pass on everyone `low`.
+5. **Search:** brief the runs with [contact-task.md](contact-task.md) and apply with [`apply_contacts.py`](apply_contacts.py). Named leads go first, then everyone `not_searched`, then a wider pass and a talk-title pass on everyone `low`.
+6. **Copy across cities:** a person in two city files can take the profile from their other record when the name and the employer or title match.
 
 - **Search, don't fetch LinkedIn:** use only what the search result shows, logged out.
 - **Accept a URL** only when the result ties the **name** to the **employer, talk or community**, and it is the only candidate. Never guess or build a URL.
@@ -367,7 +368,8 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **The same person can sit in two city files.** Copy a profile across when the name and employer or title match.
 - **Same-name people** are common. Always check a match against the company or role.
 - **Search runs pick one of two profiles** when told to find a match. Ask them to flag every unsure match by id, and check each one before applying. About one flagged match in three had nothing tying it to the record.
-- **Second and third search rounds find less.** The first LinkedIn search found about 40% of people. The wider pass on those it missed found about 20%.
+- **Second and third search rounds find less.** The first LinkedIn search found about 40% of people. The wider pass on those it missed found about 20%, and a pass on the talk title after that found about 12%.
+- **Slides and podcast pages carry profile links.** Speaker Deck pages, podcast show notes and conference schedules often list the speaker's X, Zenn or LinkedIn next to the talk.
 - **Name variants need normalising** when matching, for example a nickname in quotes. Match on the first and last token after removing accents.
 - **Stale roles:** titles and employers go out of date. Check the latest search snippet before outreach.
 - **Speakers at local events can live elsewhere.** A talk in the city does not show where someone lives. The location rules are in [§6](#6-location-rules).
