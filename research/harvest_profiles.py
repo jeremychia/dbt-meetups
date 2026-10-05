@@ -12,6 +12,8 @@ a link counts only when it appears on a page in the person's own evidence and on
   and the slug fits the name (see slug_fits_name).
 - the page's own data: bevy (snowflake, tableau and google developer group events) and luma store each speaker's or
   host's name next to their linkedin and x usernames. those count under the name rule, with the stored name as the link text.
+- own profile: the person's own github, qiita or zenn account lists the link, or their sessionize, personal site or
+  other profile page carries it under the own page rule.
 - own page: the evidence page links the person's full name to their own page on the same site (a speaker, author or
   cv page), and that page has exactly one link of the type. outside linkedin the slug must also fit the name,
   since x and github links on those pages are often the organiser's own account.
@@ -124,11 +126,46 @@ def page_text(url, cache):
 
 
 def github_social(login):
+    """the accounts a github user lists on their profile, including the x username field."""
     try:
         out = subprocess.run(["gh", "api", f"users/{login}/social_accounts"], capture_output=True, text=True, timeout=30).stdout
-        return [a["url"] for a in json.loads(out or "[]")]
+        user = subprocess.run(["gh", "api", f"users/{login}"], capture_output=True, text=True, timeout=30).stdout
+        x = (json.loads(user or "{}") or {}).get("twitter_username")
+        return [a["url"] for a in json.loads(out or "[]")] + ([f"https://x.com/{x}"] if x else [])
     except Exception:
         return []
+
+
+def profile_api(url):
+    """the api url for a qiita or zenn profile, whose json holds the user's own x and linkedin usernames."""
+    m = re.match(r"https?://qiita\.com/([A-Za-z0-9_-]+)/?$", url)
+    if m:
+        return f"https://qiita.com/api/v2/users/{m.group(1)}"
+    m = re.match(r"https?://zenn\.dev/([A-Za-z0-9_]+)/?$", url)
+    return f"https://zenn.dev/api/users/{m.group(1)}" if m else None
+
+
+def api_links(text):
+    try:
+        d = json.loads(text or "{}")
+    except ValueError:
+        return []
+    d = d.get("user", d) if isinstance(d, dict) else {}
+    out = []
+    if d.get("twitter_screen_name") or d.get("twitter_username"):
+        out.append("https://x.com/" + (d.get("twitter_screen_name") or d.get("twitter_username")))
+    if d.get("linkedin_id"):
+        out.append("https://www.linkedin.com/in/" + d["linkedin_id"])
+    if d.get("github_login_name") or d.get("github_username"):
+        out.append("https://github.com/" + (d.get("github_login_name") or d.get("github_username")))
+    return out
+
+
+OWN_TYPES = {"sessionize", "website", "velog", "devto", "note", "substack"}  # profile pages to read like the person's own page
+
+
+def own_profiles(p):
+    return [u["url"] for u in p["profile_urls"] if u["type"] in OWN_TYPES and not any(d in u["url"] for d in SKIP)]
 
 
 def classify(url):
@@ -239,12 +276,13 @@ def fetch(cache):
     os.makedirs(cache, exist_ok=True)
     jobs, gh = set(), {}
     for f, p in people():  # everyone, so check can compare the rules with links already on file
-        for u in evidence_urls(p):
+        for u in evidence_urls(p) + [x["url"] for x in p["profile_urls"] if x["type"] == "github"]:
             login = github_login(u)
             if login:
                 gh.setdefault(login, None)
             elif u.startswith("http") and not any(d in u for d in SKIP):
                 jobs.add(u)
+        jobs |= set(own_profiles(p)) | {a for a in map(profile_api, (x["url"] for x in p["profile_urls"])) if a}
     with concurrent.futures.ThreadPoolExecutor(8) as pool:
         list(pool.map(lambda u: page_text(u, cache), sorted(jobs)))
         own = sorted({u for f, p in people() for u in own_pages(p, cache)})
@@ -266,7 +304,14 @@ def candidates(cache, everyone=False):
     for f, p in people():
         tok, hs = tokens(p["name"]), handles(p)
         hits = {}  # type -> {url: (source, confidence, rule)}
-        mine_pages = set(own_pages(p, cache))
+        mine_pages = set(own_pages(p, cache)) | set(own_profiles(p))
+        for prof in p["profile_urls"]:  # the person's own github, qiita or zenn account lists their other accounts
+            login = github_login(prof["url"]) if prof["type"] == "github" else None
+            listed = gh.get(login) or [] if login else api_links(page_text(profile_api(prof["url"]), cache)) if profile_api(prof["url"]) else []
+            for s in listed:
+                c = classify(s)
+                if c and c[0] != prof["type"]:
+                    hits.setdefault(c[0], {})[c[2]] = (f"{prof['url']} profile", "high", "own profile")
         for u in evidence_urls(p) + sorted(mine_pages):
             login = github_login(u)
             if login and gh.get(login):
