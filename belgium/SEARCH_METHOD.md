@@ -20,7 +20,7 @@ This file holds what is specific to Belgium. The method, scoring rules, schema a
 | Based in the region | 86 |
 | Based elsewhere | 7 |
 | Location unknown | 27 |
-| With a LinkedIn profile | 81 |
+| With a LinkedIn profile | 85 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 14 |
 <!-- at-a-glance:end -->

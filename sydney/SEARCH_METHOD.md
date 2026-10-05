@@ -18,9 +18,9 @@ This file holds what is specific to Sydney. The method, scoring rules, schema an
 | Proven speakers | 108 |
 | Spoke at this chapter before | 28 |
 | Based in the region | 113 |
-| Based elsewhere | 10 |
-| Location unknown | 26 |
-| With a LinkedIn profile | 107 |
+| Based elsewhere | 11 |
+| Location unknown | 25 |
+| With a LinkedIn profile | 109 |
 | Job ads mentioning dbt | 252 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->

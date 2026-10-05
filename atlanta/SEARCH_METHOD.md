@@ -20,7 +20,7 @@ This file holds what is specific to Atlanta. The method, scoring rules, schema a
 | Based in the region | 76 |
 | Based elsewhere | 4 |
 | Location unknown | 16 |
-| With a LinkedIn profile | 65 |
+| With a LinkedIn profile | 68 |
 | Job ads mentioning dbt | 40 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->

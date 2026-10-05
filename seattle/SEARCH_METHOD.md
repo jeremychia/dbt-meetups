@@ -17,10 +17,10 @@ This file holds what is specific to Seattle. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 2 |
 | Proven speakers | 81 |
 | Spoke at this chapter before | 16 |
-| Based in the region | 67 |
+| Based in the region | 68 |
 | Based elsewhere | 11 |
-| Location unknown | 19 |
-| With a LinkedIn profile | 77 |
+| Location unknown | 18 |
+| With a LinkedIn profile | 81 |
 | Job ads mentioning dbt | 81 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
