@@ -4,7 +4,7 @@
     "generated_at": "2026-10-05",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Salt Lake City companies using dbt, and people who could speak at, co-organise or host a first local Salt Lake City dbt Meetup.",
-    "version": 1,
+    "version": 3,
     "schema_version": 4,
     "region": "Salt Lake City (Salt Lake City dbt Meetup, no local event yet)",
     "method": [
@@ -20,7 +20,16 @@
       "The Snowflake user group pages (usergroups.snowflake.com/utah) name the local organisers and list host companies for each event, which is the best route to local venues.",
       "dbt Summit speaker pages sometimes state where the speaker lives, which is the only location evidence found for dbt people here.",
       "Built In 'Salt Lake City' job listings are mostly remote roles at companies headquartered elsewhere, so they do not show a local employer.",
-      "Job-board pages on careerbuilder.com and edtech.com answer 403 to fetches, and dejobs.org links redirect once an ad has expired."
+      "Job-board pages on careerbuilder.com and edtech.com answer 403 to fetches, and dejobs.org links redirect once an ad has expired.",
+      "v2 (2026-10-05): second people pass: about 30 web calls, one at a time, for people not yet on file (first-time speakers, speakers at other local events, women-in-data communities, connectors); every link checked before merging.",
+      "Lesson: Utah Data Engineering Meetup event pages (July and Aug 2026) name hosts but not the speaker, so they give no new people.",
+      "Lesson: Utah Snowflake User Group event pages list speakers with title and company, and gave the Crumbl speaker.",
+      "Lesson: Snowflake Data for Breakfast Salt Lake City (March 2026) lists named local customer speakers.",
+      "Lesson: searches for Utah dbt bloggers, newsletters and open source authors returned only job ads and out-of-region authors.",
+      "v3 (2026-10-05): third people pass without web search: speaker records of every Utah Snowflake User Group event (bevy data), the meetup speakerDetails field for every 2023-2026 event of the Utah Data Engineering Meetup, Big Data Utah, the Fabric group and SLC Python, and a github user search by Utah location; then one linkedin search per speaker for employer and location.",
+      "Lesson: meetup gql2 has a speakerDetails field (name, linkedin) that the event text leaves out; the Utah Data Engineering Meetup names no speaker in its text but fills that field for most events.",
+      "Lesson: github user search with location:Utah plus a role word (dbt, analytics engineer, data engineer) finds local practitioners with a stated city, which counts as high-confidence location. Drop accounts with the bio \"Data engineer by day, homelab tinkerer by night\": they are generated.",
+      "Lesson: none of the 178 dbt Summit speaker pages mentions Utah."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -68,48 +77,56 @@
       "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
       "The Utah Snowflake user group kickoff page shows 14 April 2025 but calls it a Tuesday; 14 April is a Tuesday in 2026, so the year is uncertain.",
       "No women-in-data community with a Salt Lake City chapter was confirmed: no WiDS Utah, R-Ladies Salt Lake City or Women in Data Utah event surfaced, and the Women Tech Council results were general tech events.",
-      "Employers of Noah Goodrich, Chandu Yaramasu and Daniel O'Hare were not found."
+      "Employers of Noah Goodrich, Chandu Yaramasu and Daniel O'Hare were not found.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "No first-time speaker with a verified Utah location was found.",
+      "Noah Goodrich (already on file) is listed as Staff Data Engineer at LimbleCMMS on the August 2025 Crumbl event page; his employer on file may need updating.",
+      "Dean Raynes and Mason Lancaster are located by employer office (CHG Healthcare, Midvale) plus a local in-person event, so location is medium evidence."
     ],
     "counts": {
-      "companies": 31,
-      "people": 15,
+      "companies": 72,
+      "people": 80,
       "job_postings": 19,
       "companies_with_job_postings": 17,
-      "speaker_evidence_items": 22,
-      "unique_content_items": 19,
-      "people_with_linkedin": 7,
-      "people_with_contact": 15,
+      "speaker_evidence_items": 67,
+      "unique_content_items": 54,
+      "people_with_linkedin": 51,
+      "people_with_contact": 69,
       "people_who_spoke_at_this_chapter": 0,
       "internal_vinted": 0,
       "level": {
-        "working": 8,
-        "leadership": 7
+        "working": 62,
+        "leadership": 18
       },
       "speaker_potential": {
-        "medium": 9,
-        "high": 5,
-        "low": 1
+        "medium": 41,
+        "high": 9,
+        "low": 30
       },
       "attendee_potential": {
-        "medium": 13,
-        "high": 2
+        "medium": 75,
+        "high": 3,
+        "low": 2
       },
       "priority_tier": {
-        "connector": 7,
-        "1": 3,
-        "2": 5
+        "connector": 12,
+        "1": 6,
+        "2": 23,
+        "3": 39
       },
-      "watchlist_companies": 19,
+      "watchlist_companies": 59,
       "past_meetups": 0,
       "lead_type": {
-        "proven_speaker": 13,
-        "no_public_content": 2
+        "proven_speaker": 47,
+        "no_public_content": 32,
+        "emerging_voice": 1
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
-        "conference_or_meetup_agenda": 11,
+        "conference_or_meetup_agenda": 46,
         "newsletter_or_blog": 2,
-        "other": 2,
+        "github": 30,
+        "other": 5,
         "linkedin_search": 1
       }
     },
@@ -143,21 +160,23 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 10,
-      "data engineering": 5,
-      "analytics engineering": 4,
-      "data warehouse & platforms": 4,
-      "genai & llm": 4,
-      "data modeling": 3,
+      "data warehouse & platforms": 20,
+      "data engineering": 17,
+      "community": 13,
+      "genai & llm": 10,
+      "data modeling": 8,
+      "analytics engineering": 5,
+      "team & org design": 4,
+      "performance & scale": 3,
+      "data governance": 3,
       "business intelligence": 2,
-      "performance & scale": 2,
       "orchestration & ci/cd": 2,
-      "data governance": 2,
+      "industry trends": 2,
+      "career development": 2,
       "semantic layer": 1,
-      "industry trends": 1,
-      "career development": 1,
       "dbt product features": 1,
-      "team & org design": 1
+      "data quality & testing": 1,
+      "tools & ecosystem": 1
     }
   },
   "companies": [
@@ -641,12 +660,13 @@
             }
           ],
           "meetup_fit": {
-            "speaker_potential": "medium",
+            "speaker_potential": "high",
             "attendee_potential": "medium"
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "newsletter_or_blog"
+            "newsletter_or_blog",
+            "conference_or_meetup_agenda"
           ],
           "mentions_dbt": false,
           "speaker_evidence": [
@@ -667,6 +687,24 @@
               "suggested_talk_angle": null,
               "url_precision": "overview_page",
               "confidence": "low"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "An Insider's Guide to Snowflake Cost Optimization (lightning talk)",
+              "date": "2024-01-17",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174946/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityan-insiders-guide",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "lightning talk on Snowflake cost optimisation, listed in the event text",
+              "topics": [
+                "performance & scale",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
             }
           ],
           "attendee_signal": null,
@@ -674,6 +712,10 @@
             {
               "url": "https://docs.getdbt.com/community/spotlight/safiyy-momen",
               "note": "talk: Data warehouse cost optimisation"
+            },
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174946/",
+              "note": "talk: An Insider's Guide to Snowflake Cost Optimization (lightning talk)"
             }
           ],
           "confidence": "Low",
@@ -681,7 +723,7 @@
           "priority_tier": 2,
           "suggested_talk_angle": "Cutting Snowflake warehouse costs for dbt projects.",
           "past_chapter_talks": [],
-          "notes": "Search summary says he has spoken at meetups including the New York dbt Meetup. Verify on the spotlight page before outreach. | no evidence ties him to Utah; also in the new_york file."
+          "notes": "Search summary says he has spoken at meetups including the New York dbt Meetup. Verify on the spotlight page before outreach. | no evidence ties him to Utah; also in the new_york file. | gave the Snowflake cost lightning talk at the Utah Data Engineering Meetup in January 2024, listed as \"Safiyy Mohem\""
         }
       ],
       "notes": "Snowflake cost-optimisation product. Details come from a search summary of a dbt community spotlight page; the page itself did not load."
@@ -927,7 +969,50 @@
         }
       ],
       "other_evidence": [],
-      "people": [],
+      "people": [
+        {
+          "id": "jonathan-seery",
+          "name": "Jonathan Seery",
+          "pronouns": null,
+          "title": "Data Engineer at Engine",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jseery",
+              "source": "github user search with a Utah location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/271156406/",
+              "source": "only member named Jonathan Seery among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jseery gives the location Salt Lake City, UT"
+        }
+      ],
       "notes": "Listed on the Salt Lake City board, but the role is remote or hybrid and no Utah office is confirmed. Open the ad before treating this as a local employer."
     },
     {
@@ -1022,7 +1107,8 @@
           "based_in_region": true,
           "level": "leadership",
           "linkedin_urls": [
-            "https://www.linkedin.com/in/josephreis/"
+            "https://www.linkedin.com/in/josephreis/",
+            "https://www.linkedin.com/in/josephreis"
           ],
           "has_linkedin": true,
           "linkedin_confidence": "medium",
@@ -1109,6 +1195,41 @@
               "suggested_talk_angle": null,
               "url_precision": "direct",
               "confidence": "medium"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "Data Modeling in the Age of Ai",
+              "date": "2026-04-22",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/313618650/",
+              "content_id": "utah-data-engineering-meetup-lehidata-modeling-in-the-age-of",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data modeling",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "Notes from the Field - Trends in Data Engineering in 2025: By Joe Reis",
+              "date": "2025-06-18",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/307410818/",
+              "content_id": "utah-data-engineering-meetup-lehinotes-from-the-field-trends",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -1120,6 +1241,14 @@
             {
               "url": "https://www.linkedin.com/in/josephreis/",
               "note": "linkedin search result: Joe Reis - Salt Lake City, Utah, United States; posts under the same profile are about Ternary Data"
+            },
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/313618650/",
+              "note": "talk: Data Modeling in the Age of Ai"
+            },
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/307410818/",
+              "note": "talk: Notes from the Field - Trends in Data Engineering in 2025: By Joe Reis"
             }
           ],
           "confidence": "High",
@@ -1128,6 +1257,62 @@
           "suggested_talk_angle": "data modeling in the age of ai, and where the semantic layer fits",
           "past_chapter_talks": [],
           "notes": "already hosted a dbt Labs event at the meetup in 2023, so a dbt meetup is a short step. co-founder of the Utah Data Engineering Meetup. Salt Lake City base and Ternary Data from search snippet (superdatascience.com/595); verify the current role."
+        },
+        {
+          "id": "matt-housley",
+          "name": "Matt Housley",
+          "pronouns": null,
+          "title": "CTO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/matt-housley/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Bridging the Gap Between ML and Data Engineering",
+              "date": "2024-09-18",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/301367453/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-citybridging-the-gap",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/301367453/",
+              "note": "talk: Bridging the Gap Between ML and Data Engineering"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "where ML and analytics engineering meet",
+          "past_chapter_talks": [],
+          "notes": "lookup: Matthew Housley - It's About Data; CTO at Ternary Data; co-author of Fundamentals of Data Engineering; no location shown"
         }
       ],
       "notes": "data engineering and architecture consultancy; dbt use not verified."
@@ -1221,6 +1406,23 @@
               "suggested_talk_angle": null,
               "url_precision": "overview_page",
               "confidence": "medium"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Real world use cases for AI agents in Data Analytics and Engineering",
+              "date": "2025-01-15",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/303569442/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityreal-world-use-ca",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
             }
           ],
           "attendee_signal": null,
@@ -1236,6 +1438,10 @@
             {
               "url": "https://www.linkedin.com/in/dallinbentley/",
               "note": "linkedin profile linked from https://happenstance.ai/u/dal (name match)"
+            },
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/303569442/",
+              "note": "talk: Real world use cases for AI agents in Data Analytics and Engineering"
             }
           ],
           "confidence": "Medium",
@@ -1398,7 +1604,9 @@
           "city": "Salt Lake City",
           "based_in_region": null,
           "level": "working",
-          "linkedin_urls": [],
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/marckeelingiv"
+          ],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "profile_urls": [
@@ -1431,6 +1639,23 @@
               "topics": [
                 "data engineering",
                 "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Real world pipelines -Marc Keeling",
+              "date": "2024-03-20",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/297617321/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityreal-world-pipeli",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering"
               ],
               "suggested_talk_angle": null,
               "url_precision": "direct",
@@ -1741,8 +1966,69 @@
           "note": "call for speakers"
         }
       ],
-      "people": [],
-      "notes": "organises Big Mountain Data & Dev (17 Oct 2026, Neumont College, Salt Lake City) and Day of Data (19 Sep 2026). organiser Pat Wright also runs Big Data Utah. speaker pool for local data talks."
+      "people": [
+        {
+          "id": "pat-wright",
+          "name": "Pat Wright",
+          "pronouns": null,
+          "title": "Organiser, Big Data Utah",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/10582134/",
+              "source": "only member named Pat Wright among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Big Data Utah",
+              "title": null,
+              "date": "2025-04",
+              "url": "https://meetup.com/BigDataUtah",
+              "content_id": "big-data-utah",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser of the 3,338-member Big Data Utah meetup.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://meetup.com/BigDataUtah",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from Big Data Utah and Utah Geek Events",
+          "past_chapter_talks": [],
+          "notes": "named as organiser of Big Data Utah and the conference contact; employer not found."
+        }
+      ],
+      "notes": "organises Big Mountain Data & Dev (17 Oct 2026, Neumont College, Salt Lake City) and Day of Data (19 Sep 2026). organiser Pat Wright also runs Big Data Utah. speaker pool for local data talks. | runs Big Mountain Data and Dev."
     },
     {
       "id": "vivint",
@@ -2017,7 +2303,8 @@
       "watchlist": true,
       "excluded_from_outreach": false,
       "cities": [
-        "Midvale"
+        "Midvale",
+        "Salt Lake City"
       ],
       "local_presence": "confirmed",
       "dbt_signal": "weak",
@@ -2030,10 +2317,132 @@
           "type": "host_venue",
           "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
           "note": "hosted the Utah Snowflake User Group kickoff at its Midvale office (page shows 14 April 2025, year uncertain)"
+        },
+        {
+          "type": "talk",
+          "url": "https://www.snowflake.com/events/data-for-breakfast/salt-lake-city/",
+          "note": "two data staff spoke at Snowflake Data for Breakfast, March 2026"
         }
       ],
-      "people": [],
-      "notes": "possible host venue; dbt use not verified."
+      "people": [
+        {
+          "id": "dean-raynes",
+          "name": "Dean Raynes",
+          "pronouns": null,
+          "title": "Sr Manager Data Product Management",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Data for Breakfast Salt Lake City",
+              "title": null,
+              "date": "2026-03",
+              "url": "https://www.snowflake.com/events/data-for-breakfast/salt-lake-city/",
+              "content_id": "snowflake-data-for-breakfast-salt-lake-city",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a featured speaker at the March 2026 vendor event in Salt Lake City.",
+              "topics": [
+                "data warehouse & platforms",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.snowflake.com/events/data-for-breakfast/salt-lake-city/",
+              "note": "talk: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "running data products on Snowflake in a large healthcare employer",
+          "past_chapter_talks": [],
+          "notes": "location from a local in-person event and CHG's Midvale office; verify."
+        },
+        {
+          "id": "mason-lancaster",
+          "name": "Mason Lancaster",
+          "pronouns": null,
+          "title": "Sr Data Engineer",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/409440352/",
+              "source": "only member named Mason Lancaster among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Data for Breakfast Salt Lake City",
+              "title": null,
+              "date": "2026-03",
+              "url": "https://www.snowflake.com/events/data-for-breakfast/salt-lake-city/",
+              "content_id": "snowflake-data-for-breakfast-salt-lake-city",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a featured speaker at the March 2026 vendor event in Salt Lake City.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.snowflake.com/events/data-for-breakfast/salt-lake-city/",
+              "note": "talk: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "data engineering practice on Snowflake at a healthcare employer",
+          "past_chapter_talks": [],
+          "notes": "location from a local in-person event and CHG's Midvale office; verify."
+        }
+      ],
+      "notes": "possible host venue; dbt use not verified. | hosted the April 2025 Utah Snowflake kickoff in Midvale."
     },
     {
       "id": "adobe",
@@ -2168,6 +2577,3830 @@
         }
       ],
       "notes": "placeholder for a person whose employer was not visible in search results."
+    },
+    {
+      "id": "crumbl-hq",
+      "name": "Crumbl HQ",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Lindon"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-august-snowflake-meetup-at-crumbl-hq/",
+          "note": "hosted the Utah Snowflake meetup in August 2025 at its Lindon office; dbt use not verified"
+        }
+      ],
+      "people": [
+        {
+          "id": "chandler-soto",
+          "name": "Chandler Soto",
+          "pronouns": null,
+          "title": "Data Engineer II",
+          "city": "Lindon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/chandlersoto/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group, August Snowflake Meetup at Crumbl HQ",
+              "title": null,
+              "date": "2025-08",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-august-snowflake-meetup-at-crumbl-hq/",
+              "content_id": "utah-snowflake-user-group-august-snowflake-meetup-at-crumbl",
+              "co_authors": [
+                "Noah Goodrich"
+              ],
+              "mentions_dbt": false,
+              "description": "listed as a speaker at the August 2025 meetup hosted at Crumbl HQ.",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-august-snowflake-meetup-at-crumbl-hq/",
+              "note": "talk: None"
+            },
+            {
+              "url": "https://www.linkedin.com/in/chandlersoto/",
+              "note": "linkedin search result: Chandler Soto, MSIS - Crumbl"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how a consumer brand's data team runs its Snowflake warehouse",
+          "past_chapter_talks": [],
+          "notes": "location from an in-person talk at the employer's own office; verify."
+        },
+        {
+          "id": "kal-kistner",
+          "name": "Kal Kistner",
+          "pronouns": null,
+          "title": null,
+          "city": "Lindon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/james-kaleo-kistner/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Utah Snowflake User Group, August Snowflake Meetup at Crumbl HQ",
+              "title": null,
+              "date": "2025-08",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-august-snowflake-meetup-at-crumbl-hq/",
+              "content_id": "utah-snowflake-user-group-august-snowflake-meetup-at-crumbl",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a host of the meetup at Crumbl HQ.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-august-snowflake-meetup-at-crumbl-hq/",
+              "note": "host: None"
+            },
+            {
+              "url": "https://www.linkedin.com/in/james-kaleo-kistner/",
+              "note": "linkedin search result: James Kaleo Kistner - Crumbl; snippet: Kal Kistner, Data Science and Analytics Manager at Crumbl"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "host a first local dbt meetup at Crumbl HQ",
+          "past_chapter_talks": [],
+          "notes": "named as host of the August 2025 Utah Snowflake meetup at Crumbl HQ; title not shown."
+        }
+      ],
+      "notes": "Lindon is in the Orem and Provo area."
+    },
+    {
+      "id": "university-of-utah",
+      "name": "University of Utah",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://www.practicaldatasummit.com/",
+          "note": "hosts the Practical Data Summit in January 2027"
+        }
+      ],
+      "people": [
+        {
+          "id": "andrew-redd",
+          "name": "Andrew Redd",
+          "pronouns": null,
+          "title": "Assistant Professor, School of Medicine; founder, Salt Lake City R User Group",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/andrew-redd-202b5736/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/halpo",
+              "source": "github user search, profile names University of Utah"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Salt Lake City R User Group",
+              "title": "Julia Silge on Fostering a Technical, Inclusive R Community in Salt Lake City",
+              "date": "2023-12",
+              "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
+              "content_id": "salt-lake-city-r-user-groupjulia-silge-on-fostering-a-techni",
+              "co_authors": [
+                "Julia Silge"
+              ],
+              "mentions_dbt": false,
+              "description": "named as founder and organiser of the Salt Lake City R User Group.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
+              "note": "organiser: Julia Silge on Fostering a Technical, Inclusive R Community in Salt Lake City"
+            },
+            {
+              "url": "https://www.linkedin.com/in/andrew-redd-202b5736/",
+              "note": "linkedin profile linked from https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce R and research data people to a local dbt meetup",
+          "past_chapter_talks": [],
+          "notes": "co-runs the group with Julia Silge; not a dbt practitioner."
+        },
+        {
+          "id": "tyler-ford",
+          "name": "Tyler Ford",
+          "pronouns": null,
+          "title": "Principal Data & Analytics Leader",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tyler-ford-utah/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Big Data Utah",
+              "title": "Big Data Utah talk 2024-06",
+              "date": "2024-06",
+              "url": "https://www.meetup.com/bigdatautah/events/300924538/",
+              "content_id": "big-data-utahbig-data-utah-talk-202406",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "data engineer and trainer; Big Data Utah talk 2024-06",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bigdatautah/events/300924538/",
+              "note": "talk: Big Data Utah talk 2024-06"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Tyler Ford - Principal Data & Analytics Leader (tyler-ford-utah); University of Utah data analytics bootcamp instructor and data platform architect; city inferred from the university | location unverified: the only tie is the University of Utah, which does not show where he lives."
+        }
+      ],
+      "notes": "academic, R and statistics community."
+    },
+    {
+      "id": "autodesk",
+      "name": "Autodesk",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jake-anderson",
+          "name": "Jake Anderson",
+          "pronouns": null,
+          "title": "Data Architect",
+          "city": "Saratoga Springs, Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jakeanderson17/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "The Hidden Curriculum: Techniques for Learning the Business",
+              "date": "2026-08-19",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536541/",
+              "content_id": "utah-data-engineering-meetup-lehithe-hidden-curriculum-techn",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Conceptual Data Modeling: The Blueprint for Better Data Systems",
+              "date": "2025-05-21",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920437/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityconceptual-data-m",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536541/",
+              "note": "talk: The Hidden Curriculum: Techniques for Learning the Business"
+            },
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920437/",
+              "note": "talk: Conceptual Data Modeling: The Blueprint for Better Data Systems"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "conceptual data modelling before you write a dbt model",
+          "past_chapter_talks": [],
+          "notes": "lookup: Jake Anderson - Data Architect at Autodesk; Saratoga Springs, Utah; conceptual data modeling talks at Utah Data Engineering Meetup"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ayden-smith",
+          "name": "Ayden Smith",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "Keeping Items Found: Applying Narrow Agents in Caregiving Environments",
+              "date": "2026-06-17",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314154385/",
+              "content_id": "utah-data-engineering-meetup-lehikeeping-items-found-applyin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314154385/",
+              "note": "talk: Keeping Items Found: Applying Narrow Agents in Caregiving Environments"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: no profile tied to the talk; several unrelated Ayden Smith profiles, Utah search found nothing"
+        },
+        {
+          "id": "mary-welsh",
+          "name": "Mary Welsh",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "Data Modeling with Star Schema",
+              "date": "2025-10-15",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/310486417/",
+              "content_id": "utah-data-engineering-meetup-lehidata-modeling-with-star-sch",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "An Introduction to Data Warehousing",
+              "date": "2025-02-19",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920674/",
+              "content_id": "utah-data-engineering-meetup-lehian-introduction-to-data-war",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/310486417/",
+              "note": "talk: Data Modeling with Star Schema"
+            },
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920674/",
+              "note": "talk: An Introduction to Data Warehousing"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "star schemas and warehouse design, applied to a dbt project",
+          "past_chapter_talks": [],
+          "notes": "lookup: no matching result in either search"
+        },
+        {
+          "id": "lisa-cao",
+          "name": "Lisa Cao",
+          "pronouns": null,
+          "title": "Developer Relations, Open Source",
+          "city": "San Francisco Bay Area",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lisancao/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Using metadata to power and govern MCP and A2A in open lakehouse architecture",
+              "date": "2025-07-16",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920489/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityusing-metadata-to",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920489/",
+              "note": "talk: Using metadata to power and govern MCP and A2A in open lakehouse architecture"
+            },
+            {
+              "url": "https://www.linkedin.com/in/lisancao/",
+              "note": "linkedin search result: Lisa N. Cao - Developer Relations, Open Source; search snippet says San Francisco Bay Area"
+            },
+            {
+              "url": "https://www.linkedin.com/in/lisancao/",
+              "note": "location (medium): linkedin search result: Lisa N. Cao - Developer Relations, Open Source; search snippet says San Francisco Bay Area https://www.linkedin.com/in/lisancao/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Lisa N. Cao - Developer Relations, Open Source ... (title truncated; open source data infrastructure); no employer or location shown; other Lisa Caos are in LA, NY, Google | location (medium): linkedin search result: Lisa N. Cao - Developer Relations, Open Source; search snippet says San Francisco Bay Area https://www.linkedin.com/in/lisancao/"
+        },
+        {
+          "id": "jeff-potter",
+          "name": "Jeff Potter",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/126279802/",
+              "source": "only member named Jeff Potter among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Machine Learning in SQL - Train, Test, Serve",
+              "date": "2025-03-19",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920416/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-citymachine-learning",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920416/",
+              "note": "talk: Machine Learning in SQL - Train, Test, Serve"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: summary mentioned a Jeff Potter in Provo/Lehi formerly at Jane.com, but no profile url or talk tie in the results; many other Jeff Potters"
+        },
+        {
+          "id": "aaron-n-cutshall",
+          "name": "Aaron N. Cutshall",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/179001362/",
+              "source": "https://www.meetup.com/events/295174942/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Draper)",
+              "title": "“There Be Whales Here!” — Big Data in SQL Server (LOCATION CHANGE)",
+              "date": "2023-10-18",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174942/",
+              "content_id": "utah-data-engineering-meetup-draperthere-be-whales-here-big",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174942/",
+              "note": "talk: “There Be Whales Here!” — Big Data in SQL Server (LOCATION CHANGE)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: no matching result in either search"
+        },
+        {
+          "id": "nate-snapp",
+          "name": "Nate Snapp",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Big Data Utah",
+              "title": "Big Data Utah talk 2025-01",
+              "date": "2025-01",
+              "url": "https://www.meetup.com/bigdatautah/events/304846996/",
+              "content_id": "big-data-utahbig-data-utah-talk-202501",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "data engineer, built a data lake at Temporal Technologies; Big Data Utah talk 2025-01",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bigdatautah/events/304846996/",
+              "note": "talk: Big Data Utah talk 2025-01"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Nathan Snapp - Data and machine learning product architect, SF Bay Area; Temporal tie unclear, so not accepted"
+        },
+        {
+          "id": "travis-smith",
+          "name": "Travis Smith",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group speaker 2022-12",
+              "date": "2022-12",
+              "url": "https://usergroups.snowflake.com/e/mcvkzx/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-speaker-2",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Manager of Data Engineering, Sorenson Communications; Utah Snowflake User Group speaker 2022-12",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mcvkzx/",
+              "note": "talk: Utah Snowflake User Group speaker 2022-12"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: two plausible profiles (Wheeler Machinery, ex Sorenson Communications data scientist, open to Salt Lake City roles; and a Data Engineer profile); not resolved"
+        },
+        {
+          "id": "dan-stober",
+          "name": "Dan Stober",
+          "pronouns": null,
+          "title": "Data architect, BI Consultant, Instructor, Databases (Oracle, Snowflake, SQL Server, Redshift), PLSQL, Python, DBT, Qlik. World traveler. Bl",
+          "city": "Herriman Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/danstober/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/hoover82",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/danstober/",
+              "note": "linkedin search result: Daniel Stober - From Raw Data To Actionable Insights; snippet: data architect, BI, Snowflake and dbt at Align BI"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "a talk on moving a BI team onto dbt and Snowflake",
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/hoover82 gives the location Herriman Utah; BI consultant, instructor and presenter; dbt, Snowflake and Qlik"
+        },
+        {
+          "id": "xander-bennett",
+          "name": "Xander Bennett",
+          "pronouns": null,
+          "title": "Analytics engineer modeling the messy middle of the data stack — dbt, LookML, GTM. Building public AE projects → xander-bennett.com",
+          "city": "Salt Lake City, Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/xander-bennett/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/xander-bennett",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "personal site",
+              "title": "public analytics engineering projects",
+              "date": null,
+              "url": "https://xander-bennett.com/",
+              "content_id": "personal-sitepublic-analytics-engineering-projects",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "his site lists public analytics engineering projects with dbt and LookML, per his GitHub bio",
+              "topics": [
+                "analytics engineering",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://xander-bennett.com/",
+              "note": "blog: public analytics engineering projects"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "a first talk on one of his public analytics engineering projects",
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/xander-bennett gives the location Salt Lake City, Utah; builds public analytics engineering projects (dbt, LookML) on his site"
+        },
+        {
+          "id": "adam-forbush",
+          "name": "Adam Forbush",
+          "pronouns": null,
+          "title": "Data Engineer · SQL, Python, Snowflake, dbt, Airflow · Workday data migration",
+          "city": "Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/adamforbush"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/aforbush1",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/aforbush1 gives the location Utah"
+        },
+        {
+          "id": "lucas-reynolds",
+          "name": "Lucas Reynolds",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lucas-reynolds",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lucas-reynolds gives the location Utah"
+        },
+        {
+          "id": "jason-pedely",
+          "name": "Jason Pedely",
+          "pronouns": null,
+          "title": "Data Engineer at Property Reserve",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jasonpedely"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jasonpedely",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jasonpedely gives the location Salt Lake City, UT"
+        },
+        {
+          "id": "benjamin-sila-mutuku",
+          "name": "Benjamin Sila Mutuku",
+          "pronouns": null,
+          "title": "Data Engineer | Data Governance | Master Data Management — Solving Healthcare Data Challenges To Drive Business Value",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/benjaminsilamutuku/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/besimum",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/benjaminsilamutuku/",
+              "note": "linkedin search result: Benjamin M. - Product Manager; snippet: data governance, master data management, cloud data engineering"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/besimum gives the location Salt Lake City"
+        },
+        {
+          "id": "marc-farnsworth",
+          "name": "Marc Farnsworth",
+          "pronouns": null,
+          "title": "Data Engineer with experience in eCommerce and BigData. Working alot with streaming data tech (Pulsar, Kafka), GCP, Imply, Druid, Kubernetes",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/go-on-git-hub",
+              "source": "github user search with a Utah location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/383927243/",
+              "source": "only member named Marc Farnsworth among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/go-on-git-hub gives the location Salt Lake City, UT"
+        },
+        {
+          "id": "peter-jones",
+          "name": "Peter Jones",
+          "pronouns": null,
+          "title": "Interested in data, knowledge, information, and wisdom. Analyst and data engineer for a large, integrated healthcare system.",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/pbsjones",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/pbsjones gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ensign-college",
+      "name": "Ensign College",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "miguel-elizalde-cruz",
+          "name": "Miguel Elizalde Cruz",
+          "pronouns": null,
+          "title": "Data Science & Engineering Student Employee",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/miguelelizaldecruz/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Not all Data needs to be Real-Time",
+              "date": "2025-09-17",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/310486404/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-citynot-all-data-need",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/310486404/",
+              "note": "talk: Not all Data needs to be Real-Time"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Miguel Elizalde Cruz - Data Science & Engineering - Student Employee - Ensign College; located in Salt Lake City"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "minio",
+      "name": "MinIO",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "brenna-buuck",
+          "name": "Brenna Buuck",
+          "pronouns": null,
+          "title": "Subject Matter Expert, databases and datalakes",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/brennabuuck/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "building Iceberg data lakehouses on prem",
+              "date": "2025-08-20",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/307410823/",
+              "content_id": "utah-data-engineering-meetup-lehibuilding-iceberg-data-lakeh",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/307410823/",
+              "note": "talk: building Iceberg data lakehouses on prem"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Brenna Buuck LinkedIn posts; MinIO subject matter expert for databases and datalakes, Iceberg lakehouse topic; no location shown"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "selecthealth",
+      "name": "SelectHealth",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "john-kerleyweeks",
+          "name": "John Kerley-Weeks",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/johnbweeks/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "Achieving Data Quality",
+              "date": "2025-04-16",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920616/",
+              "content_id": "utah-data-engineering-meetup-lehiachieving-data-quality",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/305920616/",
+              "note": "talk: Achieving Data Quality"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "data quality checks as dbt tests",
+          "past_chapter_talks": [],
+          "notes": "lookup: John Kerley-Weeks - SelectHealth; data quality interest; no location shown"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "etsy",
+      "name": "Etsy",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "murium-iqbal",
+          "name": "Murium Iqbal",
+          "pronouns": null,
+          "title": "Staff Applied Scientist",
+          "city": "Salt Lake City Metropolitan Area",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/murium-iqbal-ba894a74/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Modularized training data pipelines",
+              "date": "2024-11-20",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/301367463/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-citymodularized-train",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/301367463/",
+              "note": "talk: Modularized training data pipelines"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Murium Iqbal - Staff Applied Scientist; Etsy; Salt Lake City Metropolitan Area"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cdw",
+      "name": "CDW",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ben-castleton",
+          "name": "Ben Castleton",
+          "pronouns": null,
+          "title": "AI governance and data quality/governance",
+          "city": "Salt Lake City Metropolitan Area",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ben-castleton-ab393b3/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Lehi)",
+              "title": "Minimum Viable Governance (MVG)with open-source and other popular tools",
+              "date": "2024-08-21",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/302041807/",
+              "content_id": "utah-data-engineering-meetup-lehiminimum-viable-governance-m",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/302041807/",
+              "note": "talk: Minimum Viable Governance (MVG)with open-source and other popular tools"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "minimum viable governance with dbt docs and tests",
+          "past_chapter_talks": [],
+          "notes": "lookup: Ben Castleton - CDW (profile on event page); Salt Lake City Metropolitan Area; data quality and governance, ex Great Expectations Labs"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christina-lin",
+          "name": "Christina Lin",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christina-lin-14a4b655/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Sandy)",
+              "title": "Getting started with Streaming on K8",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295175005/",
+              "content_id": "utah-data-engineering-meetup-sandygetting-started-with-strea",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295175005/",
+              "note": "talk: Getting started with Streaming on K8"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Christina Lin - Google (profile on event page); Redpanda Kubernetes streaming content, formerly Director of Developer Advocacy; no location shown"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "imply",
+      "name": "Imply",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "dave-klein",
+          "name": "Dave Klein",
+          "pronouns": null,
+          "title": "Senior Developer Advocate",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/daveklein19/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Introduction to Apache Kafka + Snowflake optimization Lightning Talk",
+              "date": "2024-01-17",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174946/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityintroduction-to-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174946/",
+              "note": "talk: Introduction to Apache Kafka + Snowflake optimization Lightning Talk"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Dave Klein - Senior Developer Advocate with Imply; Kafka expert, also Quix and Tabular; no Utah tie or location shown"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "paradime",
+      "name": "Paradime",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "parker-rogers",
+          "name": "Parker Rogers",
+          "pronouns": null,
+          "title": "Data Advocate",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jparkerrogers/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Modeling NBA data with Paradime",
+              "date": "2023-11-15",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174995/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-citymodeling-nba-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/295174995/",
+              "note": "talk: Modeling NBA data with Paradime"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "modelling sports data with dbt",
+          "past_chapter_talks": [],
+          "notes": "lookup: Parker Rogers, Data Advocate at Paradime as of Feb 2023 (OA Digest posts); url is the event page link, not shown in results; no location"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "motherduck",
+      "name": "MotherDuck",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ryan-boyd",
+          "name": "Ryan Boyd",
+          "pronouns": null,
+          "title": "Co-Founder",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ryguyrg/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup (Salt Lake City)",
+              "title": "Quacking DuckDB - Local and in the Cloud",
+              "date": "2023-04-19",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/292396661/",
+              "content_id": "utah-data-engineering-meetup-salt-lake-cityquacking-duckdb-l",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/292396661/",
+              "note": "talk: Quacking DuckDB - Local and in the Cloud"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Ryan Boyd - Co-Founder @ MotherDuck; DuckDB; no location shown"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "fivetran",
+      "name": "Fivetran",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mark-van-de-wiel",
+          "name": "Mark Van de Wiel",
+          "pronouns": null,
+          "title": "Field CTO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Data Engineering Meetup",
+              "title": "Why We Integrate Data w/ Mark Van de Wiel (Field CTO at Fivetran)",
+              "date": "2023-01-18",
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/290364904/",
+              "content_id": "utah-data-engineering-meetupwhy-we-integrate-data-w-mark-van",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the meetup event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/utah-data-engineering-meetup/events/290364904/",
+              "note": "talk: Why We Integrate Data w/ Mark Van de Wiel (Field CTO at Fivetran)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: results confirm Field CTO at Fivetran but no profile url or location"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "kubra",
+      "name": "KUBRA",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rho-lall",
+          "name": "Rho Lall",
+          "pronouns": null,
+          "title": "Sr. Analytics Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/rholall/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Big Data Utah",
+              "title": "Big Data Utah talk on getting hired, 2024-02",
+              "date": "2024-02",
+              "url": "https://www.meetup.com/bigdatautah/events/298791424/",
+              "content_id": "big-data-utahbig-data-utah-talk-on-getting-hired-202402",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "senior analytics engineer; Big Data Utah talk on getting hired, 2024-02",
+              "topics": [
+                "career development"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bigdatautah/events/298791424/",
+              "note": "talk: Big Data Utah talk on getting hired, 2024-02"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Rho Lall - KUBRA; Sr. Analytics Engineer (dbt, Snowflake, Looker); studied at BYU; no location stated"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "firstenergy",
+      "name": "FirstEnergy",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "justin-ball",
+          "name": "Justin Ball",
+          "pronouns": null,
+          "title": null,
+          "city": "Lehi, Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/justin-ball-lean-data-guy/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Big Data Utah",
+              "title": "Big Data Utah talk 2025-04",
+              "date": "2025-04",
+              "url": "https://www.meetup.com/bigdatautah/events/304846998/",
+              "content_id": "big-data-utahbig-data-utah-talk-202504",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data and AI leader at FirstEnergy; Big Data Utah talk 2025-04",
+              "topics": [
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bigdatautah/events/304846998/",
+              "note": "talk: Big Data Utah talk 2025-04"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Justin Ball - FirstEnergy; cloud data ecosystems; based in Lehi; Utah State University"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "purple",
+      "name": "Purple",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hyrum-ward",
+          "name": "Hyrum Ward",
+          "pronouns": null,
+          "title": "Director of Data Enablement",
+          "city": "Provo",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hyrum-ward-6a47607/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group speaker 2022-07",
+              "date": "2022-07",
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-speaker-2",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Manager of Data Engineering, Purple; Utah Snowflake User Group speaker 2022-07",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "note": "talk: Utah Snowflake User Group speaker 2022-07"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "enabling analysts at Purple with self-serve data",
+          "past_chapter_talks": [],
+          "notes": "lookup: Hyrum Ward - Director of Data Enablement at Purple; located in Provo"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "aptive-environmental",
+      "name": "Aptive Environmental",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "trevis-thomas",
+          "name": "Trevis Thomas",
+          "pronouns": null,
+          "title": "Director, Business Intelligence",
+          "city": "Provo",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/trevis-thomas/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group speaker 2022-07",
+              "date": "2022-07",
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-speaker-2",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Sr. Manager, Business Intelligence, Aptive Environmental; Utah Snowflake User Group speaker 2022-07",
+              "topics": [
+                "data warehouse & platforms",
+                "team & org design"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "note": "talk: Utah Snowflake User Group speaker 2022-07"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "running BI on a modern stack at Aptive",
+          "past_chapter_talks": [],
+          "notes": "lookup: Trevis Thomas - Director, Business Intelligence at Aptive ...; based in Provo"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sothebys",
+      "name": "Sotheby's",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "travis-irwin",
+          "name": "Travis Irwin",
+          "pronouns": null,
+          "title": "Data Engineering Manager",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/travis-irwin/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group speaker 2022-12",
+              "date": "2022-12",
+              "url": "https://usergroups.snowflake.com/e/mcvkzx/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-speaker-2",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Manager of Data Engineering, Podium; Utah Snowflake User Group speaker 2022-12",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mcvkzx/",
+              "note": "talk: Utah Snowflake User Group speaker 2022-12"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Travis Irwin - Data Engineering Manager @ Sotheby's; earlier data engineering at Podium; no location shown"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "entrata",
+      "name": "Entrata",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "simon-cascante",
+          "name": "Simón Cascante",
+          "pronouns": null,
+          "title": "Staff Data Engineer",
+          "city": "Eagle Mountain, Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/scascacha/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group speaker 2022-12",
+              "date": "2022-12",
+              "url": "https://usergroups.snowflake.com/e/mcvkzx/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-speaker-2",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Data Engineering Manager, Entrata; Utah Snowflake User Group speaker 2022-12",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mcvkzx/",
+              "note": "talk: Utah Snowflake User Group speaker 2022-12"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Simón Cascante - Staff Data Engineer; Entrata data engineer tech lead; based in Eagle Mountain"
+        },
+        {
+          "id": "tyler-shepherd",
+          "name": "Tyler Shepherd",
+          "pronouns": null,
+          "title": "Data Engineer | Python, AI/ML, SQL, BI",
+          "city": "Lehi, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://linkedin.com/in/shepherd-tyler/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/TylerShep",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/TylerShep gives the location Lehi, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "swire-cocacola",
+      "name": "Swire Coca-Cola",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "peter-scherf",
+          "name": "Peter Scherf",
+          "pronouns": null,
+          "title": "VP, Head of Enterprise Research and Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/peter-scherf/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group host 2022-07",
+              "date": "2022-07",
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-host-2022",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "VP, Head of Enterprise Research and Analytics, Swire Coca-Cola; Utah Snowflake User Group host 2022-07",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "note": "talk: Utah Snowflake User Group host 2022-07"
+            },
+            {
+              "url": "https://www.linkedin.com/in/peter-scherf/",
+              "note": "linkedin search result: Peter Scherf - Genpact; snippet: past VP Head of Enterprise Research and Analytics at Swire Coca-Cola"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: results say VP of Analytics and AI / Head of Enterprise Research and Analytics at Swire Coca-Cola; the only named profile showed Genpact, so no url; company HQ is Draper but person location not shown"
+        },
+        {
+          "id": "bharathi-rajan",
+          "name": "Bharathi Rajan",
+          "pronouns": null,
+          "title": "VP, Head of Enterprise Data",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bharathirajan/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group host 2022-07",
+              "date": "2022-07",
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-host-2022",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "VP Enterprise Data and Applications, Swire Coca-Cola; Utah Snowflake User Group host 2022-07",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpfsfk/",
+              "note": "talk: Utah Snowflake User Group host 2022-07"
+            },
+            {
+              "url": "https://www.linkedin.com/in/bharathirajan/",
+              "note": "linkedin search result: Bharathi Rajan - Digital Transformation; snippet: VP Data, AI & Digital at Swire Coca-Cola, USA"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: text result: VP - Head of Enterprise Data, Swire Coca-Cola, USA; no profile url or location"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "streamkap",
+      "name": "Streamkap",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "paul-dudley",
+          "name": "Paul Dudley",
+          "pronouns": null,
+          "title": "Co-Founder",
+          "city": null,
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pauldudley/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Utah Snowflake User Group",
+              "title": "Utah Snowflake User Group speaker 2025-09",
+              "date": "2025-09",
+              "url": "https://usergroups.snowflake.com/e/m5ku6h/",
+              "content_id": "utah-snowflake-user-grouputah-snowflake-user-group-speaker-2",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "CEO, Streamkap; Utah Snowflake User Group speaker 2025-09",
+              "topics": [
+                "data engineering",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m5ku6h/",
+              "note": "talk: Utah Snowflake User Group speaker 2025-09"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "lookup: Paul Dudley - Co-Founder, Streamkap: Fast, Reliable CDC; located in San Francisco"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "astrodata",
+      "name": "Astrodata",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "johnathan-brooks",
+          "name": "Johnathan Brooks",
+          "pronouns": null,
+          "title": "Data & AI Architect, dbt Champion, passion for building strong & happy data teams, currently in my K-pop era",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/johnathan-brooks/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jmbrooks",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/johnathan-brooks/",
+              "note": "linkedin search result: Johnathan Brooks - Astrodata; snippet: San Francisco Bay Area, dbt Champion"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "a talk on building strong data teams with dbt, from a dbt Champion",
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jmbrooks gives the location Salt Lake City, UT; dbt Champion; Data & AI Architect at Astrodata"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "lendio",
+      "name": "Lendio",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "cameron-spilker",
+          "name": "Cameron Spilker",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Lehi, Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/cameronspilker/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/cspilkerlendio",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/cameronspilker/",
+              "note": "linkedin search result: Cameron Spilker - Typeform; snippet: analytics engineer, past role at Lendio"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/cspilkerlendio gives the location Lehi, Utah"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "pcfbi",
+      "name": "PCF-BI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "eric-stakebake",
+          "name": "Eric Stakebake",
+          "pronouns": null,
+          "title": "Analytics Engineer & Software Entrepreneur",
+          "city": "Utah, USA",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ericstakebake/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ericstakebake",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ericstakebake gives the location Utah, USA"
+        },
+        {
+          "id": "keller-brown",
+          "name": "Keller Brown",
+          "pronouns": null,
+          "title": "Data engineer | Python & SQL",
+          "city": "Lehi, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/keller-brown-125221153/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kellerbrown",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/keller-brown-125221153/",
+              "note": "linkedin search result: Keller Brown - Senior Data Engineer at Trucordia; snippet: Data Engineer at PCF Insurance Services"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kellerbrown gives the location Lehi, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "imagine-learning",
+      "name": "Imagine Learning",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rick-wilde",
+          "name": "Rick Wilde",
+          "pronouns": null,
+          "title": "Data Engineer SQL/Python/dbt/Airflow/AWS  Prev web experience HTML/CSS/JS/PHP/SQL/Node...    Prev experience in actuarial science & quant mo",
+          "city": "Provo, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/richard-wilde-48602227/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rkwilde",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/richard-wilde-48602227/",
+              "note": "linkedin search result: Richard Wilde - NiCE; snippet: 10 years at Imagine Learning as data engineer, Pleasant Grove"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rkwilde gives the location Provo, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cotiviti-inc",
+      "name": "Cotiviti, Inc.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kevin-woodward",
+          "name": "Kevin Woodward",
+          "pronouns": null,
+          "title": "Senior Business Intelligence Developer",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AFSkier",
+              "source": "github user search with a Utah location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/AFSkier",
+              "source": "https://github.com/AFSkier profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AFSkier gives the location Salt Lake City"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "3m",
+      "name": "3M",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bjorn-melin",
+          "name": "Bjorn Melin",
+          "pronouns": null,
+          "title": "Advanced Data Engineer at 3M Corporate Research Analytical Lab based remotely out of SLC, UT. Skilled full-stack Software Engineer. Augsburg",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bjorn-melin/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Bjorn-Melin-3M",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Bjorn-Melin-3M gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "xcelerate",
+      "name": "Xcelerate",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "colby-stam",
+          "name": "Colby Stam",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Lehi UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/colbystam"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ColbyStam",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ColbyStam gives the location Lehi UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "big-fish-games",
+      "name": "Big Fish Games",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jerimiah-dickey",
+          "name": "Jerimiah Dickey",
+          "pronouns": null,
+          "title": "Data Engineer, Data Scientist, analytics specialist, and data visualization expert.",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Ddickey",
+              "source": "github user search with a Utah location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/42236282/",
+              "source": "only member named Jerimiah Dickey among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Ddickey gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "journeyteam",
+      "name": "JourneyTeam",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nathan-giullian",
+          "name": "Nathan Giullian",
+          "pronouns": null,
+          "title": "Business Intelligence Solution Architect and DAX expert at JourneyTEAM. Economics graduate from Brigham Young University with multiple Micro",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/GiullianJT",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "github",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Salt Lake Valley Fabric User Group (Salt Lake City)",
+              "title": "Re-igniting the Fabric Data Community in SLC and Online",
+              "date": "2026-02-26",
+              "url": "https://www.meetup.com/microsoft-fabric-and-data-engineering-group/events/312909424/",
+              "content_id": "slc-fabric-2026-02-26-reigniting",
+              "co_authors": [
+                "Iurii Iurchenko"
+              ],
+              "mentions_dbt": false,
+              "description": "co-organiser talk at the group relaunch, on Microsoft Fabric",
+              "topics": [
+                "data warehouse & platforms",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/GiullianJT gives the location Salt Lake City, UT | co-organises the Salt Lake Valley Fabric User Group"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "clicklease-llc",
+      "name": "Clicklease LLC",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "joseph-luker",
+          "name": "Joseph Luker",
+          "pronouns": null,
+          "title": "Data Engineer, Happily Forever GM, and Semi-Professional Choral Singer",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/JoeLuker",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/JoeLuker gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "highland-analytics",
+      "name": "Highland Analytics",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "pierce-scott",
+          "name": "Pierce Scott",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pierce-scott-a15b04176/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Pierce1396",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Pierce1396 gives the location Salt Lake City"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "zions-bancorporation",
+      "name": "Zions Bancorporation",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rahul-reddy-ala",
+          "name": "Rahul Reddy Ala",
+          "pronouns": null,
+          "title": "👋 Hi there! I'm a Data Engineer with nearly 2 years of experience. My passion for data drives me to continually learn and adapt to new techn",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/rahulreddyala/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Rahulreddy09",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Rahulreddy09 gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "pepsico",
+      "name": "PepsiCo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "david-ostler",
+          "name": "David Ostler",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dro248",
+              "source": "github user search with a Utah location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/192555475/",
+              "source": "only member named David Ostler among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dro248 gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "marketdial",
+      "name": "MarketDial",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "quentin-holness",
+          "name": "Quentin Holness",
+          "pronouns": null,
+          "title": "Data Engineer @ MarketDial",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/qholnessMD",
+              "source": "github user search with a Utah location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/219376550/",
+              "source": "only member named Quentin Holness among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/qholnessMD gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "lgcy-power",
+      "name": "LGCY Power",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "richard-demke",
+          "name": "Richard Demke",
+          "pronouns": null,
+          "title": "Senior Data Engineer. All things databases",
+          "city": "Lehi",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/richarddemke/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/richarddemke-lgcy",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/richarddemke/",
+              "note": "linkedin search result: Richard Demke - LGCY Power; Lehi"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/richarddemke-lgcy gives the location Lehi"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "oc-tanner",
+      "name": "O.C. Tanner",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "robert-tokita",
+          "name": "Robert Tokita",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Salt Lake City",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/robert-tokita-598b0b168/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/robert-tokita",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/robert-tokita-598b0b168/",
+              "note": "linkedin search result: Robert Tokita - O.C. Tanner; Salt Lake City Metropolitan Area"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/robert-tokita gives the location Salt Lake City"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ali-khosro",
+          "name": "Ali Khosro",
+          "pronouns": null,
+          "title": "Partner Solution Engineer for Snowflake working with Cloud Providers GCP/AWS ",
+          "city": "Sandy Utah",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alikhosro/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/sfc-gh-akhosro",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/alikhosro/",
+              "note": "linkedin search result: Ali Khosro - Snowflake; Sandy"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/sfc-gh-akhosro gives the location Sandy Utah"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "avantlink",
+      "name": "Avantlink",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "shehar-yar-chaudhary",
+          "name": "Shehar Yar Chaudhary",
+          "pronouns": null,
+          "title": "Data Engineer with Education, Training and nearly 9 years of extensive hands on experience in Data Engineering and Data Analytics",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/sheharyarchaudhary",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/sheharyarchaudhary gives the location Salt Lake City, UT"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "life-line-screening",
+      "name": "Life Line Screening",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Salt Lake City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "iurii-iurchenko",
+          "name": "Iurii Iurchenko",
+          "pronouns": null,
+          "title": "Senior Data Engineer, Healthcare & Marketing, Databricks & Fabric Expert, TOP 1% ADPList Mentor, Open Source Contributor",
+          "city": "Salt Lake City, UT",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/4iurchenko/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/iurii-iurchenko-1",
+              "source": "github user search with a Utah location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "github",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Salt Lake Valley Fabric User Group (Salt Lake City)",
+              "title": "Re-igniting the Fabric Data Community in SLC and Online",
+              "date": "2026-02-26",
+              "url": "https://www.meetup.com/microsoft-fabric-and-data-engineering-group/events/312909424/",
+              "content_id": "slc-fabric-2026-02-26-reigniting",
+              "co_authors": [
+                "Nathan Giullian"
+              ],
+              "mentions_dbt": false,
+              "description": "co-organiser talk at the group relaunch, on Microsoft Fabric",
+              "topics": [
+                "data warehouse & platforms",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/4iurchenko/",
+              "note": "linkedin search result: Iurii Iurchenko - Life Line Screening; Salt Lake City"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/iurii-iurchenko-1 gives the location Salt Lake City, UT | co-organises the Salt Lake Valley Fabric User Group"
+        }
+      ],
+      "notes": null
     }
   ],
   "sources": {
@@ -2299,6 +6532,102 @@
         "url": "https://r-consortium.org/posts/julia-silge-on-fostering-a-technical-inclusive-r-community-in-salt-lake-city/",
         "yielded": true,
         "note": "no R-Ladies chapter; Salt Lake City R User Group organisers named"
+      },
+      {
+        "name": "Utah Data Engineering Meetup",
+        "url": "https://meetup.com/utah-data-engineering-meetup",
+        "yielded": false,
+        "note": "recent events listed with venues only; speakers not named"
+      },
+      {
+        "name": "Utah Data Engineering Meetup, Beyond Clicks event",
+        "url": "https://www.meetup.com/utah-data-engineering-meetup/events/314536482/",
+        "yielded": false,
+        "note": "hosts Miriah P. and Ayla K.; speaker not named"
+      },
+      {
+        "name": "Snowflake User Group: August meetup at Crumbl HQ",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-august-snowflake-meetup-at-crumbl-hq/",
+        "yielded": true,
+        "note": "speakers Chandler Soto and Noah Goodrich, host Kal Kistner"
+      },
+      {
+        "name": "Snowflake User Group: Apr 14 2025 kickoff",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-apr-14-slc-snowflake-user-group-kickoff-amp-networking",
+        "yielded": false,
+        "note": "no speakers named"
+      },
+      {
+        "name": "Snowflake User Group: Unstuck round table",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-utah-presents-snowflake-unstuck-a-community-round-table-amp-ama/",
+        "yielded": false,
+        "note": "round table, no speakers named"
+      },
+      {
+        "name": "Snowflake User Group: Dec 2022 meeting at Podium",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-salt-lake-city-presents-utah-user-group-meeting-in-person-1",
+        "yielded": false,
+        "note": "speakers older than 2 years, so skipped"
+      },
+      {
+        "name": "Snowflake Data for Breakfast Salt Lake City",
+        "url": "https://www.snowflake.com/events/data-for-breakfast/salt-lake-city/",
+        "yielded": true,
+        "note": "two CHG Healthcare speakers"
+      },
+      {
+        "name": "Big Data Utah",
+        "url": "https://meetup.com/BigDataUtah",
+        "yielded": true,
+        "note": "organiser Pat Wright; no speakers named"
+      },
+      {
+        "name": "Big Mountain Data and Dev 2026 on Sessionize",
+        "url": "https://sessionize.com/big-mountain-data-and-dev-conference_202",
+        "yielded": true,
+        "note": "cancelled; contact Pat Wright"
+      },
+      {
+        "name": "Practical Data Summit",
+        "url": "https://www.practicaldatasummit.com/",
+        "yielded": false,
+        "note": "Jan 2027 at University of Utah; no local speakers named"
+      },
+      {
+        "name": "Salt Lake City Python event",
+        "url": "https://www.meetup.com/slcpython/events/308394877",
+        "yielded": false,
+        "note": "machine learning talk, not relevant"
+      },
+      {
+        "name": "dbt Summit speaker page for Jessica Stayton",
+        "url": "https://www.getdbt.com/dbt-summit/speakers/jessica-stayton",
+        "yielded": false,
+        "note": "dbt Labs, no location"
+      },
+      {
+        "name": "dbt community spotlight search",
+        "url": "https://docs.getdbt.com/community/spotlight",
+        "yielded": false,
+        "note": "only Safiyy Momen, already on file"
+      },
+      {
+        "name": "Utah Snowflake User Group past events (bevy api)",
+        "url": "https://usergroups.snowflake.com/api/event_slim/for_chapter/37/?status=Completed",
+        "yielded": true,
+        "note": "10 events; speaker and host records with titles and employers"
+      },
+      {
+        "name": "GitHub user search by Utah location",
+        "url": "https://github.com/search?q=dbt+location%3AUtah&type=users",
+        "yielded": true,
+        "note": "about 30 working data people with a Utah city"
+      },
+      {
+        "name": "dbt Summit speaker pages (sitemap)",
+        "url": "https://www.getdbt.com/sitemap-0.xml",
+        "yielded": false,
+        "note": "178 pages, none mention Utah"
       }
     ]
   },
@@ -2338,6 +6667,11 @@
       "name": "PyLadies Utah",
       "url": "https://en.wikipedia.org/wiki/PyLadies",
       "note": "mentioned in search results; no event page checked"
+    },
+    {
+      "name": "Big Data Utah",
+      "url": "https://meetup.com/BigDataUtah",
+      "note": "3,338 members, mostly online events, organiser Pat Wright"
     }
   ]
 }
