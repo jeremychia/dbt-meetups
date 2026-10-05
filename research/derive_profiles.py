@@ -1,4 +1,6 @@
 """Adds public profiles that a person's own evidence already proves, without searching.
+a page that the evidence of two or more different people points to is skipped: it is a company publication or an event.
+so is a page whose username names the employer, and a medium author whose username does not fit the person.
 
 usage, from the repo root: python3 research/derive_profiles.py
 
@@ -53,9 +55,42 @@ def github_user(login):
     return _gh[login]
 
 
+COMPANY_WORDS = {"tech", "data", "blog", "dev", "jp", "inc", "engineering", "team", "official", "digital", "media"}
+
+
+def company_page(slug, company):
+    """the username is the employer's name, as in zenn.dev/pixiv for pixiv or zenn.dev/cybozu_data for Cybozu: a company publication.
+    a personal account with a company prefix, such as qiita.com/nttd-maruyamat, is not."""
+    stem = "".join(w for w in re.split(r"[_\-.]", slug.lower()) if w not in COMPANY_WORDS)
+    emp = [t for t in norm(company).split() if len(t) >= 3 and t not in {"the", "inc", "group", "holdings", "formerly"}]
+    return bool(stem) and (stem in "".join(norm(company).split()) or any((stem.startswith(t) or stem.endswith(t)) and len(stem) - len(t) <= 4 for t in emp))
+
+
+def own_author(kind, slug, p):
+    """a medium post is often someone else writing about the talk, so its author counts only when the username fits the person."""
+    if kind != "medium":
+        return True
+    from harvest_profiles import handles, matches_name, same_handle, slug_fits_name, tokens
+    return slug_fits_name(slug, p) or matches_name(slug, tokens(p["name"])) or any(same_handle(slug, h) for h in handles(p))
+
+
+def author_pages(p):
+    return {template.format(m.group(1)) for u in (e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"])
+            for pattern, kind, template in AUTHOR for m in [pattern.search(u)] if m}
+
+
 def main():
     added = {}
-    for f in sorted(glob.glob("*/*_dbt_companies.json")):
+    files = sorted(glob.glob("*/*_dbt_companies.json"))
+    # a page that several people's evidence points to is a company publication or an event, not one person's profile
+    owners = {}
+    for f in files:
+        for c in json.load(open(f))["companies"]:
+            for p in c["people"]:
+                for url in author_pages(p):
+                    owners.setdefault(url, set()).add(norm(p["name"]).strip())
+    shared = {url for url, names in owners.items() if len(names) > 1}
+    for f in files:
         raw = open(f).read()
         d = json.loads(raw)
         n = 0
@@ -68,7 +103,7 @@ def main():
                         m = pattern.search(u)
                         if m:
                             url = template.format(m.group(1))
-                            if url not in have:
+                            if url not in have and url not in shared and not company_page(m.group(1), c["name"]) and own_author(kind, m.group(1), p):
                                 p["profile_urls"].append({"type": kind, "url": url, "source": u})
                                 have.add(url)
                                 n += 1

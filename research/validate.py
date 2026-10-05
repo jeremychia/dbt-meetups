@@ -3,7 +3,7 @@
 usage, from the repo root: python3 research/validate.py [<file> ...]
 """
 
-import json, sys
+import json, re, sys
 sys.path.insert(0, "pipeline")
 from enrich import TOPIC_VOCABULARY as V
 
@@ -30,7 +30,7 @@ def check(path):
     d = json.load(open(path))
     keys(d, TOP, "top"); keys(d["metadata"], META, "metadata")
     assert d["metadata"]["topic_vocabulary"] == V, "vocabulary out of date"
-    people_ids = set()
+    people_ids, owner = set(), {}
     for c in d["companies"]:
         keys(c, COMPANY, c["id"])
         for j in c["job_postings"]: keys(j, JOB, j["url"])
@@ -39,6 +39,10 @@ def check(path):
             assert p["id"] not in people_ids, ("duplicate person", p["id"]); people_ids.add(p["id"])
             for u in p["profile_urls"]:
                 assert set(u) == {"type", "url", "source"} and u["type"] in PROFILE_TYPES and u["url"].startswith("http"), (p["id"], u)
+                assert owner.setdefault(u["url"], p["id"]) == p["id"], ("profile shared by two people; merge them or drop the link", u["url"], owner[u["url"]], p["id"])
+            for u in p["linkedin_urls"]:
+                slug = "linkedin:" + re.sub(r"^.*linkedin\.com/in/", "", u).split("?")[0].strip("/").lower()
+                assert owner.setdefault(slug, p["id"]) == p["id"], ("linkedin profile shared by two people; merge them or drop the link", u, owner[slug], p["id"])
             for e in p["speaker_evidence"]:
                 keys(e, EVID, (p["id"], e["title"]))
                 assert 1 <= len(e["topics"]) <= 3 and all(t in V for t in e["topics"]), (p["id"], e["title"])

@@ -365,6 +365,7 @@ companies and dbt roles, people who have moved, and any topic trends.
 - **Platforms disagree on dates.** Luma and meetup.com can differ for the same event. Trust the event page.
 - **Past speakers' employers** come from the Meetup talk text. A talk with several speakers can produce a company record named after a job title. Check `companies` for those after assembling.
 - **Duplicate people:** the same person can appear under two spellings or two employers. Search each city for near-duplicate names before outreach. Merge them with `merge_people.py`.
+- **Company publications look like author pages.** A Zenn, note or dev.to company publication puts its articles under the company's name, so `zenn.dev/pixiv/articles/...` reads like a personal page. A Medium post can be someone else writing about the talk. `derive_profiles.py` skips a page that names the employer or that several people share, and `validate.py` fails when two people in one file share a profile link.
 - **The same person can sit in two city files.** Copy a profile across when the name and employer or title match.
 - **Same-name people** are common. Always check a match against the company or role.
 - **Search runs pick one of two profiles** when told to find a match. Ask them to flag every unsure match by id, and check each one before applying. About one flagged match in three had nothing tying it to the record.
