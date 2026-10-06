@@ -4,12 +4,19 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Zurich companies using dbt, and people who could speak at or attend the Switzerland dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Zurich (Switzerland dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Swiss job-board pages (myjob.ch, jobscout24, jobup, topjobs) return 404 or 410 once an ad closes, so ads were recorded from search results and the few pages that still loaded.",
+      "aijobs.net links redirect to a generic foorilla page and cannot be read.",
+      "digitec.ch job pages timed out on fetch; the dbt wording comes from the search result text.",
+      "theirstack.com lists 227 companies using dbt in Switzerland but shows only 10 without a login; a paid or logged-in view would give the rest.",
+      "Snowflake user group chapter pages name the co-leads, which is a good source of community connectors.",
+      "Few Swiss people publish dbt content in English, and German and French searches gave mostly job ads."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +54,54 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets. Verify before outreach.",
+      "Two job ads (Bring! Labs, SMG) are recorded from search result text only because the pages were closed or unreadable.",
+      "theirstack companies are tagged as using dbt in Switzerland. Their Zurich presence is not confirmed.",
+      "No new first-time speakers were found. Most local dbt content sits with already-known people."
     ],
     "counts": {
-      "companies": 42,
-      "people": 106,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 63,
-      "unique_content_items": 24,
+      "companies": 56,
+      "people": 112,
+      "job_postings": 5,
+      "companies_with_job_postings": 5,
+      "speaker_evidence_items": 69,
+      "unique_content_items": 29,
       "people_with_linkedin": 14,
       "people_with_contact": 68,
       "people_who_spoke_at_this_chapter": 10,
       "internal_vinted": 0,
       "level": {
-        "working": 97,
-        "leadership": 9
+        "working": 99,
+        "leadership": 13
       },
       "speaker_potential": {
-        "high": 12,
+        "high": 13,
         "low": 36,
-        "medium": 58
+        "medium": 63
       },
       "attendee_potential": {
-        "medium": 105,
+        "medium": 111,
         "high": 1
       },
       "priority_tier": {
-        "2": 8,
-        "3": 53,
+        "2": 11,
+        "3": 54,
         "1": 3,
-        "connector": 42
+        "connector": 44
       },
-      "watchlist_companies": 41,
+      "watchlist_companies": 48,
       "past_meetups": 4,
       "lead_type": {
-        "proven_speaker": 70,
-        "no_public_content": 36
+        "proven_speaker": 74,
+        "no_public_content": 38
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 10,
         "github": 36,
-        "conference_or_meetup_agenda": 60
+        "conference_or_meetup_agenda": 64,
+        "other": 2
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -122,11 +134,16 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 42,
+      "community": 44,
       "data engineering": 12,
       "data warehouse & platforms": 11,
-      "analytics engineering": 3,
-      "semantic layer": 1
+      "analytics engineering": 4,
+      "semantic layer": 2,
+      "data modeling": 2,
+      "data quality & testing": 1,
+      "business intelligence": 1,
+      "domain-specific use cases": 1,
+      "dbt best practices": 1
     }
   },
   "companies": [
@@ -6314,12 +6331,795 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "digitec-galaxus-ag",
+      "name": "Digitec Galaxus AG",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Zurich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Dataform",
+        "BigQuery",
+        "Airflow",
+        "Dagster"
+      ],
+      "job_postings": [
+        {
+          "title": "(Senior) Analytics Engineer (f/m/d)",
+          "url": "https://www.digitec.ch/joboffer/4140",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "experience with Google BigQuery and data workflow tools such as Dataform/dbt (from search result text)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+          "note": "two Digitec Galaxus staff spoke at the Zurich analytics meetup in January 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "david-hermann",
+          "name": "David Hermann",
+          "pronouns": null,
+          "title": "Analytics Engineering",
+          "city": "Zurich",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Debug'Em All Meetup Zurich",
+              "title": "Building a robust data collection setup",
+              "date": "2026-01-12",
+              "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+              "content_id": "debugem-all-meetup-zurichbuilding-a-robust-data-collection-s",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk at the Zurich analytics meetup, 18:20 slot",
+              "topics": [
+                "analytics engineering",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+              "note": "talk: Building a robust data collection setup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how an analytics engineering team builds a reliable event data collection setup",
+          "past_chapter_talks": [],
+          "notes": "location is medium evidence: in-person talk at a Zurich meetup and the employer has a Zurich office."
+        },
+        {
+          "id": "clara-goebel",
+          "name": "Clara Goebel",
+          "pronouns": null,
+          "title": "Product Manager",
+          "city": "Zurich",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Debug'Em All Meetup Zurich",
+              "title": "Automating A/B Tests at Scale",
+              "date": "2026-01-12",
+              "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+              "content_id": "debugem-all-meetup-zurichautomating-ab-tests-at-scale",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk at the Zurich analytics meetup, 19:30 slot",
+              "topics": [
+                "business intelligence",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+              "note": "talk: Automating A/B Tests at Scale"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "running A/B tests at scale on an e-commerce platform",
+          "past_chapter_talks": [],
+          "notes": "talk is on experimentation, only loosely relevant to a dbt meetup. location is medium evidence."
+        }
+      ],
+      "notes": "ad lists dbt as an alternative to Dataform."
+    },
+    {
+      "id": "d-one",
+      "name": "D ONE",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Zurich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Microsoft Fabric",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineering Consultant (Zurich, Switzerland)",
+          "url": "https://apply.workable.com/d-one/jobs/view/BBA9D43232.md",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience with Databricks or Microsoft Fabric, dbt, and Azure, including solid data warehousing fundamentals, SQL, and Python",
+          "job_poster": null,
+          "posted_date": "2026-09-02",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "consultancy with offices in Zurich, Munich and Athens. the ad names dbt in its requirements."
+    },
+    {
+      "id": "bring-labs-ag",
+      "name": "Bring! Labs AG",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Zurich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "AWS",
+        "data mesh"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (m/w/x)",
+          "url": "https://www.iamexpat.ch/career/jobs-switzerland/it-technology-positions/senior-data-engineer-mwx/2EGaUu676ppKzbekGjq9Ho",
+          "source": "iamexpat.ch",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "designing, building and operating a dbt-based data architecture on AWS (from search result text; the page itself no longer showed the ad)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "listed among companies using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "ad says Zurich/Basel office. ad text could not be re-read, so strong rests on the search snippet."
+    },
+    {
+      "id": "smg-swiss-marketplace-group",
+      "name": "SMG Swiss Marketplace Group",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Zurich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Tableau",
+        "Streamlit"
+      ],
+      "job_postings": [
+        {
+          "title": "Data & Analytics Engineer (Jr/Mid-Level) (f|m|d) | 100% | Zurich - Hybrid Work",
+          "url": "https://www.myjob.ch/job/data-analytics-engineer-jr-mid-level-fmd-100-zurich-hybrid-work/2457093",
+          "source": "myjob.ch",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "requires experience with dbt, CI/CD, Pandas, Plotly, Streamlit, APIs, data warehousing (e.g. BigQuery) and BI tools (e.g. Tableau) (from search result text; page now closed)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "the myjob.ch listing names IAZI AG as the advertiser, while the search result names SMG. confirm which entity hires."
+    },
+    {
+      "id": "kanadevia-inova",
+      "name": "Kanadevia Inova",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Zurich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.myjob.ch/job/data-engineer/3326610",
+          "source": "myjob.ch",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": null,
+          "dbt_snippet": "design, develop and maintain data pipelines using Snowflake, DBT and Azure (from search result text; page now closed)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "snippet only, so medium."
+    },
+    {
+      "id": "oviva",
+      "name": "Oviva",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "tagged as using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "job board tag only."
+    },
+    {
+      "id": "kuehnenagel",
+      "name": "Kuehne+Nagel",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "tagged as using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "job board tag only."
+    },
+    {
+      "id": "visium",
+      "name": "Visium",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "tagged as using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "job board tag only."
+    },
+    {
+      "id": "roompricegenie",
+      "name": "RoomPriceGenie",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "tagged as using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "job board tag only."
+    },
+    {
+      "id": "cartier",
+      "name": "Cartier",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "tagged as using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "job board tag only."
+    },
+    {
+      "id": "luxoft",
+      "name": "Luxoft",
+      "type": "outsourcing",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_tag",
+          "url": "https://theirstack.com/en/technology/dbt/ch",
+          "note": "tagged as using dbt in Switzerland"
+        }
+      ],
+      "people": [],
+      "notes": "job board tag only."
+    },
+    {
+      "id": "mohrstade",
+      "name": "mohrstade",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Malloy"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marcus-stade",
+          "name": "Marcus Stade",
+          "pronouns": null,
+          "title": "Head of Analytics / Managing Director",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Debug'Em All Meetup Zurich",
+              "title": "Introduction to Malloy",
+              "date": "2026-01-12",
+              "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+              "content_id": "debugem-all-meetup-zurichintroduction-to-malloy",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "intro talk on the Malloy semantic modelling language",
+              "topics": [
+                "semantic layer",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+              "note": "talk: Introduction to Malloy"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "Malloy as a semantic modelling language next to dbt",
+          "past_chapter_talks": [],
+          "notes": "location unknown. spoke at a Zurich meetup, which is not proof of residence."
+        }
+      ],
+      "notes": "analytics consultancy."
+    },
+    {
+      "id": "datazip",
+      "name": "Datazip",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Data Vault"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://gdg.community.dev/events/details/google-gdg-cloud-zurich-presents-gdg-cloud-zurich-june-2024-meetup-17",
+          "note": "data vault with dbt talk at GDG Cloud Zurich, June 2024"
+        }
+      ],
+      "people": [
+        {
+          "id": "jean-dupuis",
+          "name": "Jean Dupuis",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "GDG Cloud Zurich June 2024 Meetup",
+              "title": "Introduction to data vault data modeling, presentation of v1.0 and 2.0 and possible implementation with DBT",
+              "date": "2024-06-20",
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-zurich-presents-gdg-cloud-zurich-june-2024-meetup-17",
+              "content_id": "gdg-cloud-zurich-june-2024-meetupintroduction-to-data-vault",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "data vault modelling in BigQuery with dbt at Google Zurich offices",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-zurich-presents-gdg-cloud-zurich-june-2024-meetup-17",
+              "note": "talk: Introduction to data vault data modeling, presentation of v1.0 and 2.0 and possible implementation with DBT"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "implementing data vault 2.0 with dbt on BigQuery",
+          "past_chapter_talks": [],
+          "notes": "talk is from June 2024, slightly outside the 2 year window. location unknown."
+        }
+      ],
+      "notes": "talk is just over two years old."
+    },
+    {
+      "id": "snowflake-user-group-switzerland",
+      "name": "Snowflake User Group Switzerland",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Zurich"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community_page",
+          "url": "https://usergroups.snowflake.com/swiss-german-region",
+          "note": "four co-leads; events at Eraneos and ANYbotics"
+        }
+      ],
+      "people": [
+        {
+          "id": "paola-valli",
+          "name": "Paola Valli",
+          "pronouns": null,
+          "title": "Co-lead, Snowflake User Group Swiss German Region",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Group Swiss German Region",
+              "title": "Co-lead",
+              "date": null,
+              "url": "https://usergroups.snowflake.com/swiss-german-region",
+              "content_id": "snowflake-user-group-swiss-german-regioncolead",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as co-lead of the Swiss German chapter",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/swiss-german-region",
+              "note": "organiser: Co-lead"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to Swiss Snowflake and dbt practitioners",
+          "past_chapter_talks": [],
+          "notes": "employer not stated. location unknown."
+        },
+        {
+          "id": "kevin-perera",
+          "name": "Kevin Perera",
+          "pronouns": null,
+          "title": "Co-lead, Snowflake User Group Swiss German Region",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Group Swiss German Region",
+              "title": "Co-lead",
+              "date": null,
+              "url": "https://usergroups.snowflake.com/swiss-german-region",
+              "content_id": "snowflake-user-group-swiss-german-regioncolead",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as co-lead of the Swiss German chapter",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/swiss-german-region",
+              "note": "organiser: Co-lead"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to Swiss Snowflake and dbt practitioners",
+          "past_chapter_talks": [],
+          "notes": "employer not stated. location unknown."
+        }
+      ],
+      "notes": "two more co-leads, Benjamin Saladin and Sibel Atasoy Wuersch, are already on file."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/swiss-dbt-meetup/",
     "past_meetups_derived_from": "enriched/swiss-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Debug'Em All Meetup Zurich 2026",
+        "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+        "yielded": true,
+        "note": "four speakers, two from Digitec Galaxus"
+      },
+      {
+        "name": "GDG Cloud Zurich June 2024",
+        "url": "https://gdg.community.dev/events/details/google-gdg-cloud-zurich-presents-gdg-cloud-zurich-june-2024-meetup-17",
+        "yielded": true,
+        "note": "data vault with dbt talk by Jean Dupuis"
+      },
+      {
+        "name": "Snowflake User Group Swiss German Region",
+        "url": "https://usergroups.snowflake.com/swiss-german-region",
+        "yielded": true,
+        "note": "four co-leads named"
+      },
+      {
+        "name": "theirstack dbt companies in Switzerland",
+        "url": "https://theirstack.com/en/technology/dbt/ch",
+        "yielded": true,
+        "note": "10 of 227 companies shown"
+      },
+      {
+        "name": "D ONE careers (Workable)",
+        "url": "https://apply.workable.com/d-one/jobs/view/BBA9D43232.md",
+        "yielded": true,
+        "note": "dbt named in requirements"
+      },
+      {
+        "name": "Women in Data Science Zurich 2026",
+        "url": "https://shecancode.io/attend-events/women-in-data-science-zurich-2026",
+        "yielded": false,
+        "note": "no organisers or speakers named on the page"
+      },
+      {
+        "name": "Data Platform Conference Switzerland 2025",
+        "url": "https://sessionize.com/data-platform-conference-switzerland-2025",
+        "yielded": false,
+        "note": "call for speakers only, Fabric focus"
+      },
+      {
+        "name": "Snowflake and dbt Labs bootcamp Zurich 2023",
+        "url": "https://snowflake.com/event/accelerating-data-teams-with-dbt-labs-zurich/?lang=ko",
+        "yielded": false,
+        "note": "no speakers named, and from 2023"
+      },
+      {
+        "name": "Swiss job boards via search (myjob.ch, jobs.ch, jobup.ch, topjobs.ch)",
+        "url": "https://www.myjob.ch/job/data-engineer/3326610",
+        "yielded": false,
+        "note": "ad pages closed (404 or 410)"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6543,6 +7343,26 @@
       "name": "Swiss Data and AI Meetup",
       "url": "https://www.meetup.com/daizurich/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake User Group Switzerland, Swiss German Region",
+      "url": "https://usergroups.snowflake.com/swiss-german-region",
+      "note": "runs events in Zurich at Eraneos and ANYbotics"
+    },
+    {
+      "name": "Women in Data Science Zurich",
+      "url": "https://shecancode.io/attend-events/women-in-data-science-zurich-2026",
+      "note": "hosted by On Labs and Swiss Re Centre for Global Dialogue, three events in 2026"
+    },
+    {
+      "name": "Debug'Em All Meetup Zurich",
+      "url": "https://meetup.analytics-debugger.com/event/zurich-2026",
+      "note": "analytics and tracking meetup"
+    },
+    {
+      "name": "Data Platform Conference Switzerland",
+      "url": "https://sessionize.com/data-platform-conference-switzerland-2025",
+      "note": "Zurich, 22 Oct 2025, Microsoft Fabric and Azure focus"
     }
   ]
 }

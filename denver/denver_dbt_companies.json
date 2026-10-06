@@ -4,12 +4,18 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Denver companies using dbt, and people who could speak at or attend the Denver dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Denver (Denver dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: builtincolorado.com job pages fetch cleanly and show title, location, work mode and posting text, but most ads are already removed or closed by fetch time.",
+      "Lesson: builtincolorado.com data-analytics listing pages mostly return remote or hybrid US roles, so a Denver or Boulder location has to be read from each ad.",
+      "Lesson: web search for 'Denver analytics engineer blog dbt' returns national writers with no stated location, so first-time speakers need a location source and were not found this run.",
+      "Lesson: sessionize pages list speakers and sessions but not employers or cities, so they cannot confirm a person is local.",
+      "Lesson: inceed and veriipro job links from search results returned 404 when fetched."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,46 +53,50 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets and should be verified before outreach.",
+      "Most dbt job ads found were closed or removed by the time they were fetched, so they show past use of dbt, not open roles.",
+      "No first-time speaker was found. Denver Dev Day 2026 speakers (Andrew Madson, Gilberto Hernandez, Varun Joshi, Sravanthi Kondoju) were seen on sessionize with data sessions but no employer or city, so none were recorded as people.",
+      "Contentful and Slalom dbt evidence comes from search-result summaries only, not from the ad text itself."
     ],
     "counts": {
-      "companies": 72,
-      "people": 127,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 24,
-      "unique_content_items": 10,
+      "companies": 81,
+      "people": 128,
+      "job_postings": 7,
+      "companies_with_job_postings": 7,
+      "speaker_evidence_items": 25,
+      "unique_content_items": 11,
       "people_with_linkedin": 25,
       "people_with_contact": 54,
       "people_who_spoke_at_this_chapter": 4,
       "internal_vinted": 0,
       "level": {
         "leadership": 9,
-        "working": 118
+        "working": 119
       },
       "speaker_potential": {
         "high": 4,
-        "medium": 24,
+        "medium": 25,
         "low": 99
       },
       "attendee_potential": {
-        "medium": 127
+        "medium": 128
       },
       "priority_tier": {
-        "2": 4,
+        "2": 5,
         "3": 107,
         "connector": 16
       },
-      "watchlist_companies": 71,
+      "watchlist_companies": 73,
       "past_meetups": 4,
       "lead_type": {
-        "proven_speaker": 28,
+        "proven_speaker": 29,
         "no_public_content": 99
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 4,
-        "conference_or_meetup_agenda": 24,
+        "conference_or_meetup_agenda": 25,
         "github": 100
       }
     },
@@ -122,8 +132,9 @@
     "topic_counts": {
       "community": 16,
       "data engineering": 8,
-      "business intelligence": 4,
-      "analytics engineering": 4
+      "business intelligence": 5,
+      "analytics engineering": 4,
+      "data warehouse & platforms": 1
     }
   },
   "companies": [
@@ -4121,15 +4132,31 @@
       "id": "slalom",
       "name": "Slalom",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Denver"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://www.themuse.com/hiring/location/denver/keyword/senior-analytics-engineer",
+          "source": "The Muse search listing",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": "Denver, CO, multiple openings, hybrid (from search summary; dbt not seen in ad text)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -4170,7 +4197,7 @@
           "notes": "github profile https://github.com/andew-allen gives the location Denver, CO"
         }
       ],
-      "notes": null
+      "notes": "Denver office has analytics engineer openings; dbt in the ad text was not checked."
     },
     {
       "id": "weber-tech",
@@ -6788,12 +6815,386 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "litera",
+      "name": "Litera",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Denver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (DBT + Snowflake Required)",
+          "url": "https://jobs.insightpartners.com/companies/litera/jobs/77961966-senior-data-engineer-dbt-snowflake-required",
+          "source": "Insight Partners portfolio job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "2+ years of production experience using dbt",
+          "job_poster": null,
+          "posted_date": "2026-05-08",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad is no longer accepting applications; hybrid, at least 3 days a week in the Denver office."
+    },
+    {
+      "id": "summit-utilities",
+      "name": "Summit Utilities",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Denver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Microsoft Fabric",
+        "Azure SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer II",
+          "url": "https://www.builtincolorado.com/job/analytics-engineer-ii/10372898",
+          "source": "Built In Colorado",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design, build, and maintain dbt models that transform source data into governed, analytics-ready datasets",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "listing removed 2026-09-15. ad also asks for dbt schema tests and project structure, so a testing or governance talk fits."
+    },
+    {
+      "id": "sumup",
+      "name": "SumUp",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Boulder"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Core",
+        "Snowflake",
+        "Tableau",
+        "Salesforce"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer - Boulder, Colorado",
+          "url": "https://jobs.b2venture.vc/companies/sumup-2/jobs/83179569-data-analytics-engineer-boulder-colorado",
+          "source": "B2 Ventures portfolio job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL and DBT Core skills, hands-on experience with Snowflake",
+          "job_poster": null,
+          "posted_date": "2026-06-18",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad closed; office-first role in Boulder."
+    },
+    {
+      "id": "contentful",
+      "name": "Contentful",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Denver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://job-boards.greenhouse.io/contentful/jobs/7544101",
+          "source": "company careers page (Greenhouse)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "designing, building, and maintaining efficient, scalable analytics models in dbt and Snowflake (from search summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "the careers page now shows 20 roles, 4 in Denver, and the analytics engineer ad was no longer listed, so dbt text is from a search summary only."
+    },
+    {
+      "id": "abnormal-security",
+      "name": "Abnormal Security",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "FedRAMP"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://www.builtincolorado.com/job/analytics-engineer/7427719",
+          "source": "Built In Colorado",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Full ownership of the DBT analytics pipeline, ensuring its reliability and performance",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "remote US role listed on a Colorado board; removed 2026-03-05. no Denver office seen."
+    },
+    {
+      "id": "neshant-technologies",
+      "name": "Neshant Technologies",
+      "type": "recruiter",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Broomfield"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake DBT Technical Lead",
+          "url": "https://veriipro.com/job/snowflake-dbt-technical-lead-job-contract-w2-at-neshant-technologies-in-broomfield-colorado-21657/",
+          "source": "veriipro job board (seen in search result, page returned 404)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake DBT Technical Lead, on-site in Broomfield, CO (from search summary)",
+          "job_poster": null,
+          "posted_date": "2026-07-01",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "staffing contract role; end client not named."
+    },
+    {
+      "id": "shane-co",
+      "name": "Shane Co.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.snowflake.com/event/comm-denver-user-group-2025",
+          "note": "employee spoke at the Snowflake Denver meetup, March 2025"
+        }
+      ],
+      "people": [
+        {
+          "id": "justin-grimme",
+          "name": "Justin Grimme",
+          "pronouns": null,
+          "title": "Data and Business Intelligence",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Meet Up Denver (user group)",
+              "title": "partner and customer talk, title not listed",
+              "date": "2025-03-05",
+              "url": "https://www.snowflake.com/event/comm-denver-user-group-2025",
+              "content_id": "snowflake-meet-up-denver-user-grouppartner-and-customer-talk",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a speaker at the Snowflake Denver office meetup",
+              "topics": [
+                "business intelligence",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.snowflake.com/event/comm-denver-user-group-2025",
+              "note": "talk: partner and customer talk, title not listed"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how a retailer's business intelligence team runs reporting on Snowflake",
+          "past_chapter_talks": [],
+          "notes": "location not verified; talk was in person in Denver."
+        }
+      ],
+      "notes": "no dbt evidence seen."
+    },
+    {
+      "id": "women-in-data-denver",
+      "name": "Women in Data Denver",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Denver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://givebutter.com/1000womenindata/amandalong2",
+          "note": "Denver chapter of Women in Data Science and Analytics Inc, free memberships, mentorship and training"
+        }
+      ],
+      "people": [],
+      "notes": "organisers not named on the page seen; find them via womenindata.org."
+    },
+    {
+      "id": "rladies-denver",
+      "name": "R-Ladies Denver",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Denver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://www.meetup.com/rladies-denver/",
+          "note": "local chapter of R-Ladies Global, seen in a search result"
+        }
+      ],
+      "people": [],
+      "notes": "organisers not checked."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/denver-dbt-meetup/",
     "past_meetups_derived_from": "enriched/denver-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Built In Colorado job pages (analytics engineer, dbt data engineer)",
+        "url": "https://www.builtincolorado.com/jobs/data-analytics/other",
+        "yielded": true,
+        "note": "gave Summit Utilities and Litera style ads; listing pages showed only remote or hybrid US roles"
+      },
+      {
+        "name": "Built In Colorado hybrid data and analytics listing",
+        "url": "https://www.builtincolorado.com/jobs/hybrid/data-analytics",
+        "yielded": false,
+        "note": "only Eve, Applied Systems and SailPoint, all remote or hybrid US, not confirmed local"
+      },
+      {
+        "name": "Denver Dev Day 2026 sessionize page",
+        "url": "https://sessionize.com/denver-dev-day-2026",
+        "yielded": false,
+        "note": "data speakers listed without employer or city"
+      },
+      {
+        "name": "Snowflake Denver user group event, March 2025",
+        "url": "https://www.snowflake.com/event/comm-denver-user-group-2025",
+        "yielded": true,
+        "note": "three speakers named, one with an employer that is not on file"
+      },
+      {
+        "name": "Women in Data Denver fundraiser page",
+        "url": "https://givebutter.com/1000womenindata/amandalong2",
+        "yielded": false,
+        "note": "no organiser names listed"
+      },
+      {
+        "name": "getdbt.com case studies, Colorado search",
+        "url": "https://www.getdbt.com/resources",
+        "yielded": false,
+        "note": "no Colorado headquartered case study found"
+      },
+      {
+        "name": "DenverBricks announcement on Databricks community",
+        "url": "https://community.databricks.com/t5/denverbricks/announcing-denverbricks-the-new-denver-databricks-user-group/m-p/132503/highlight/true",
+        "yielded": false,
+        "note": "page body did not load, no organisers seen"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6939,6 +7340,26 @@
       "name": "Women in Tech Colorado - Create Your Leading Edge!",
       "url": "https://www.meetup.com/wit-colorado/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women in Data Denver",
+      "url": "https://givebutter.com/1000womenindata/amandalong2",
+      "note": "chapter of Women in Data Science and Analytics Inc, free memberships, organisers not named on the page"
+    },
+    {
+      "name": "R-Ladies Denver",
+      "url": "https://www.meetup.com/rladies-denver/",
+      "note": "local R-Ladies chapter, seen in a search result only"
+    },
+    {
+      "name": "DenverBricks (Denver Databricks user group)",
+      "url": "https://community.databricks.com/t5/denverbricks/announcing-denverbricks-the-new-denver-databricks-user-group/m-p/132503/highlight/true",
+      "note": "announced on the Databricks community, seen in a search result only"
+    },
+    {
+      "name": "Denver Dev Day",
+      "url": "https://sessionize.com/denver-dev-day-2026",
+      "note": "community-run developer and data event, 26 June 2026 at Red Rocks Community College"
     }
   ]
 }
