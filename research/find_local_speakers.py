@@ -7,7 +7,8 @@ usage, from the repo root:
   speakerDetails field names the speaker even when the event text does not. hosts are listed as possible connectors.
 - bevy: every Snowflake, Tableau, Databricks and Google Developer Group chapter in one of --places, and the speaker and host
   records on each past event page, with title and employer.
-- github: users whose location is one of --places and whose profile names a data role, with the accounts they list.
+- github: users whose location is one of --places and whose profile names a data role, with the accounts they list. one graphql
+  search call returns 100 users with their profiles, so the hourly api allowance is not the limit.
 each candidate is marked known when the city file already has the name. it writes no city file: look the new people up,
 then merge them with assemble.py.
 """
@@ -141,56 +142,44 @@ def github_queries(places):
     return queries
 
 
+USER_SEARCH = """query($q:String!,$after:String){search(type:USER,query:$q,first:100,after:$after){pageInfo{hasNextPage endCursor}
+nodes{... on User{login name bio company location url twitterUsername socialAccounts(first:10){nodes{url}}}}}}"""
+
+
 def github(places):
-    logins = set()
+    """one graphql call returns 100 users with their profile and listed accounts, so a region costs a handful of calls, not two per user."""
+    users = {}
     for q in github_queries(places):
-        for page in range(1, 11):  # search returns at most 1000 results
-            for attempt in range(4):  # a burst of searches trips github's secondary limit; wait it out rather than count zero
-                r = subprocess.run(["gh", "api", "-X", "GET", "search/users", "-f", f"q={q}", "-f", "per_page=100", "-f", f"page={page}"], capture_output=True, text=True)
+        after = None
+        for _ in range(10):  # search returns at most 1000 results
+            args = ["gh", "api", "graphql", "-f", f"query={USER_SEARCH}", "-f", f"q={q}"] + (["-f", f"after={after}"] if after else [])
+            for attempt in range(4):
+                r = subprocess.run(args, capture_output=True, text=True)
                 if r.returncode == 0:
                     break
                 print(f"github search limited, retrying: {(r.stderr or r.stdout).strip()[:80]}", file=sys.stderr)
                 subprocess.run(["sleep", "60"])
             try:
-                items = json.loads(r.stdout or "{}").get("items") or []
+                found = (json.loads(r.stdout or "{}").get("data") or {}).get("search") or {}
             except ValueError:
-                items = []
-            logins |= {i["login"] for i in items}
-            subprocess.run(["sleep", "2.2"])  # search allows 30 calls a minute
-            if len(items) < 100:
+                found = {}
+            for u in found.get("nodes") or []:
+                if u.get("login"):
+                    users[u["login"]] = u
+            if not (found.get("pageInfo") or {}).get("hasNextPage"):
                 break
-
-    def profile(login):
-        return login, get_gh(f"users/{login}"), get_gh(f"users/{login}/social_accounts")
-
-    with concurrent.futures.ThreadPoolExecutor(3) as pool:
-        users = list(pool.map(profile, sorted(logins)))
+            after = found["pageInfo"]["endCursor"]
     out = []
-    for login, u, accounts in users:
+    for login, u in sorted(users.items()):
         bio = (u.get("bio") or "").replace("\r", " ").replace("\n", " ")
-        if u.get("type") != "User" or not u.get("name") or len(norm(u["name"]).split()) < 2 or GENERATED_BIO in bio.lower():
+        if not u.get("name") or len(norm(u["name"]).split()) < 2 or GENERATED_BIO in bio.lower():
             continue
         if not DATA_ROLE.search(bio + " " + (u.get("company") or "")):
             continue
-        social = [a["url"] for a in (accounts if isinstance(accounts, list) else [])] + ([f"https://x.com/{u['twitter_username']}"] if u.get("twitter_username") else [])
+        social = [a["url"] for a in ((u.get("socialAccounts") or {}).get("nodes") or [])] + ([f"https://x.com/{u['twitterUsername']}"] if u.get("twitterUsername") else [])
         out.append({"source": "github", "name": u["name"].strip(), "company": (u.get("company") or "").lstrip("@").strip() or None, "title": bio[:160] or None,
-                    "location": u.get("location"), "url": u["html_url"], "links": social, "role": "practitioner"})
+                    "location": u.get("location"), "url": u["url"], "links": social, "role": "practitioner"})
     return out
-
-
-def get_gh(path):
-    for attempt in range(4):  # parallel calls trip github's secondary limit; a failed call must not read as an empty profile
-        r = subprocess.run(["gh", "api", path], capture_output=True, text=True)
-        if r.returncode == 0:
-            try:
-                return json.loads(r.stdout or "{}")
-            except ValueError:
-                return {}
-        if "Not Found" in r.stdout + r.stderr:
-            return {}
-        subprocess.run(["sleep", str(30 * (attempt + 1))])
-    print(f"github call failed after retries: {path}", file=sys.stderr)
-    return {}
 
 
 def main():
