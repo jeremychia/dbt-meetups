@@ -4,12 +4,15 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Florianópolis companies using dbt, and people who could speak at or attend the Floripa dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Florianópolis (Floripa dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: job-board search results for dbt in Florianópolis return mostly remote Brazil roles from aggregators (Jobgether, CI&T, Coforge) and the lever links returned 404 when fetched.",
+      "Lesson: no local meetup or conference line-up with dbt talks surfaced; SQL Saturday Floripa 2026 has not published its schedule yet."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,11 +50,14 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Neoway has no dbt evidence; it is recorded only as a Florianópolis data employer to check.",
+      "Only a small number of searches yielded usable pages; job ads could not be fetched, so no job_postings were recorded."
     ],
     "counts": {
-      "companies": 39,
-      "people": 81,
+      "companies": 41,
+      "people": 82,
       "job_postings": 0,
       "companies_with_job_postings": 0,
       "speaker_evidence_items": 6,
@@ -62,34 +68,35 @@
       "internal_vinted": 0,
       "level": {
         "leadership": 7,
-        "working": 74
+        "working": 75
       },
       "speaker_potential": {
         "high": 21,
-        "low": 54,
+        "low": 55,
         "medium": 6
       },
       "attendee_potential": {
-        "medium": 47,
+        "medium": 48,
         "high": 34
       },
       "priority_tier": {
         "2": 5,
         "1": 16,
-        "3": 54,
+        "3": 55,
         "connector": 6
       },
-      "watchlist_companies": 38,
+      "watchlist_companies": 40,
       "past_meetups": 8,
       "lead_type": {
         "proven_speaker": 27,
-        "no_public_content": 54
+        "no_public_content": 55
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 21,
         "github": 54,
-        "conference_or_meetup_agenda": 6
+        "conference_or_meetup_agenda": 6,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -4175,12 +4182,109 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "neoway",
+      "name": "Neoway",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Florianópolis"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://convergenciadigital.com.br/?p=22750",
+          "note": "headquartered in Florianópolis, hybrid roles in Florianópolis or São Paulo; no dbt evidence seen"
+        }
+      ],
+      "people": [],
+      "notes": "data and analytics company; dbt use not verified"
+    },
+    {
+      "id": "the-estee-lauder-companies-inc",
+      "name": "The Estee Lauder Companies Inc.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bruno-machado-agostinho",
+          "name": "Bruno Machado Agostinho",
+          "pronouns": null,
+          "title": "SQL Developer / Data Engineer",
+          "city": "Florianópolis",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "migrating an etl and warehouse to dbt and cutting looker report times",
+          "past_chapter_talks": [],
+          "notes": "own resume page states Florianópolis and 6 years of dbt; employment 2025 listed as Estee Lauder after Backstage LLC 2020-2025"
+        }
+      ],
+      "notes": "employer listed on one person's public resume (2025)"
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/florianopolis-dbt-meetup/",
     "past_meetups_derived_from": "enriched/florianopolis-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "SQL Saturday Floripa 2026",
+        "url": "https://sqlsaturday.com/2026-10-17-sqlsaturday1158/",
+        "yielded": false,
+        "note": "event on 2026-10-17, schedule not published, call for speakers closed"
+      },
+      {
+        "name": "TheirStack dbt in Brazil",
+        "url": "https://theirstack.com/hi/technology/dbt/br",
+        "yielded": false,
+        "note": "seen in results only, not read"
+      },
+      {
+        "name": "Toptal resume Bruno Machado Agostinho",
+        "url": "https://www.toptal.com/developers/resume/bruno-machado-agostinho",
+        "yielded": true,
+        "note": "dbt experience and Florianópolis location on own profile"
+      },
+      {
+        "name": "Lever job pages (CI&T, Jobgether, Loadsmart)",
+        "url": "https://jobs.lever.co/ciandt/3ccc389e-ea57-4fef-8e31-0ea49ee78c7f",
+        "yielded": false,
+        "note": "404 when fetched"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -4489,6 +4593,11 @@
       "name": "data build tool (dbt) Brasil",
       "url": "https://www.meetup.com/data-build-tool-dbt-brasil-virtual/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "SQL Saturday Floripa",
+      "url": "https://sqlsaturday.com/2026-10-17-sqlsaturday1158/",
+      "note": "organiser listed: Rodrigo Dornel; event 2026-10-17"
     }
   ]
 }

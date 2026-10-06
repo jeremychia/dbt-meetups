@@ -7,17 +7,17 @@ This file holds what is specific to Floripa. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-06)
+**At a glance** (version 3, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 39 |
-| People | 81 |
+| Companies | 41 |
+| People | 82 |
 | Tier 1 leads | 16 |
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 27 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 60 |
+| Based in the region | 61 |
 | Based elsewhere | 0 |
 | Location unknown | 21 |
 | With a LinkedIn profile | 22 |
@@ -39,7 +39,7 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-38 companies and communities were looked at. A company is local when it has people or roles in the region.
+40 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (12)</summary>
 
@@ -47,16 +47,25 @@ Bayer (local presence not confirmed), Capim (local presence not confirmed), dbt 
 
 </details>
 
-<details><summary><b>Not verified</b> (26)</summary>
+<details><summary><b>Not verified</b> (28)</summary>
 
-avanade (local presence not confirmed), Bix Tech Corp. (local presence not confirmed), Conexa Saúde (local presence not confirmed), Data Engineer at Porltess (local presence not confirmed), DP6 (local presence not confirmed), FanDuel (local presence not confirmed), Fundação CERTI (local presence not confirmed), Grupo Boticário (local presence not confirmed), gympass (local presence not confirmed), IBM (local presence not confirmed), Inflection (local presence not confirmed), Infosys (local presence not confirmed), KisSolutions (local presence not confirmed), Market Analysis Brazil (local presence not confirmed), Mercado Libre Inc (local presence not confirmed), Mercado Livre (local presence not confirmed), Picpay (local presence not confirmed), Practia Global a company of Publicis Sapient (local presence not confirmed), recarga (local presence not confirmed), Rodrigo Villalba Data (local presence not confirmed), Select Soluções (local presence not confirmed), Statkraft (local presence not confirmed), Systems Analyst @ CIEESC (local presence not confirmed), TD Business (local presence not confirmed), TRM Labs (local presence not confirmed), VF TECNOLOGIA (local presence not confirmed)
+avanade (local presence not confirmed), Bix Tech Corp. (local presence not confirmed), Conexa Saúde (local presence not confirmed), Data Engineer at Porltess (local presence not confirmed), DP6 (local presence not confirmed), FanDuel (local presence not confirmed), Fundação CERTI (local presence not confirmed), Grupo Boticário (local presence not confirmed), gympass (local presence not confirmed), IBM (local presence not confirmed), Inflection (local presence not confirmed), Infosys (local presence not confirmed), KisSolutions (local presence not confirmed), Market Analysis Brazil (local presence not confirmed), Mercado Libre Inc (local presence not confirmed), Mercado Livre (local presence not confirmed), Neoway, Picpay (local presence not confirmed), Practia Global a company of Publicis Sapient (local presence not confirmed), recarga (local presence not confirmed), Rodrigo Villalba Data (local presence not confirmed), Select Soluções (local presence not confirmed), Statkraft (local presence not confirmed), Systems Analyst @ CIEESC (local presence not confirmed), TD Business (local presence not confirmed), The Estee Lauder Companies Inc. (local presence not confirmed), TRM Labs (local presence not confirmed), VF TECNOLOGIA (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Other sources checked</b> (4)</summary>
+
+- [SQL Saturday Floripa 2026](https://sqlsaturday.com/2026-10-17-sqlsaturday1158/) (nothing useful)
+- [TheirStack dbt in Brazil](https://theirstack.com/hi/technology/dbt/br) (nothing useful)
+- [Toptal resume Bruno Machado Agostinho](https://www.toptal.com/developers/resume/bruno-machado-agostinho)
+- [Lever job pages (CI&T, Jobgether, Loadsmart)](https://jobs.lever.co/ciandt/3ccc389e-ea57-4fef-8e31-0ea49ee78c7f) (nothing useful)
 
 </details>
 <!-- companies:end -->
 
 ## 4. Key leads
 
-To fill after the first research run.
+- **SQLSaturday Florianópolis:** [2026-10-17](https://sqlsaturday.com/2026-10-17-sqlsaturday1158/), schedule not yet published.
 
 ## 5. Before outreach
 
@@ -71,3 +80,4 @@ To fill after the first research run.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-06 | 1 | First build from the chapter history. |
+| 2026-10-06 | 3 | Research run: 2 companies, no open dbt job ad and 1 dbt practitioner. SQLSaturday Florianópolis on 2026-10-17 has no schedule yet: read it on the next run. |

@@ -4,12 +4,18 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Helsinki companies using dbt, and people who could speak at or attend the Helsinki dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Helsinki (Helsinki dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: Snowflake Finland User Group event pages (usergroups.snowflake.com) name speakers, titles, employers and hosts, and were the best source of organisers.",
+      "Lesson: duunitori.fi dbt keyword search returned zero results for Helsinki; dbt ads only surfaced through general web search and aggregators, and most were closed by fetch time.",
+      "Lesson: theirstack.com lists 89 Finnish companies using dbt but shows no job urls in a fetch; use it as a lead list only.",
+      "Lesson: no local first-time speakers found; Finnish dbt content appears to be mostly vendor and consultancy pages, with few personal blogs.",
+      "Lesson: helsinkidataweek.fi/speakers lists mostly international speakers; only two are already on file."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +53,58 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Nordea ad dbt wording comes from a search snippet; the ad page was closed ('position has been filled') when fetched.",
+      "Academic Work ad had closed at fetch time; end client is not named.",
+      "Wolt, KONE, Recordly and Enfuce dbt signals come from theirstack.com or search summaries, not from an ad or post read directly.",
+      "Tietoevry 'Data Engineer, Snowflake, dbt' ad on peerlist.io could not be fetched (403); its location is unknown.",
+      "R-Ladies Helsinki organisers come from a search snippet; the chapter page returned 404, so activity is unconfirmed."
     ],
     "counts": {
-      "companies": 48,
-      "people": 105,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 54,
-      "unique_content_items": 20,
+      "companies": 58,
+      "people": 111,
+      "job_postings": 2,
+      "companies_with_job_postings": 2,
+      "speaker_evidence_items": 58,
+      "unique_content_items": 24,
       "people_with_linkedin": 13,
       "people_with_contact": 61,
       "people_who_spoke_at_this_chapter": 17,
       "internal_vinted": 0,
       "level": {
-        "working": 87,
-        "leadership": 18
+        "working": 89,
+        "leadership": 22
       },
       "speaker_potential": {
         "high": 20,
-        "medium": 47,
-        "low": 38
+        "medium": 51,
+        "low": 40
       },
       "attendee_potential": {
-        "medium": 102,
-        "high": 3
+        "medium": 107,
+        "high": 4
       },
       "priority_tier": {
         "2": 7,
         "1": 10,
-        "3": 59,
-        "connector": 29
+        "3": 60,
+        "connector": 34
       },
-      "watchlist_companies": 47,
+      "watchlist_companies": 51,
       "past_meetups": 6,
       "lead_type": {
         "proven_speaker": 67,
-        "no_public_content": 38
+        "no_public_content": 43,
+        "featured": 1
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 17,
-        "conference_or_meetup_agenda": 50,
-        "github": 38
+        "conference_or_meetup_agenda": 53,
+        "github": 38,
+        "company_blog_scan": 1,
+        "women_in_data_community": 3
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -122,10 +137,12 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 29,
+      "community": 32,
       "data warehouse & platforms": 14,
       "business intelligence": 11,
-      "data engineering": 2
+      "data engineering": 2,
+      "tools & ecosystem": 1,
+      "dbt migration & adoption": 1
     }
   },
   "companies": [
@@ -310,16 +327,26 @@
       "id": "aiven",
       "name": "Aiven",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Helsinki"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://duunitori.fi/tyopaikat/tyo/software-engineer-analytics-scsom-20377060",
+          "note": "Software Engineer, Analytics, Helsinki, hybrid, posted 2026-06-16; dbt not mentioned in the ad"
+        }
+      ],
       "people": [
         {
           "id": "stijn-zanders",
@@ -374,7 +401,7 @@
           "notes": null
         }
       ],
-      "notes": "employer of a past Helsinki dbt Meetup speaker"
+      "notes": "employer of a past Helsinki dbt Meetup speaker | Open Helsinki analytics ad found does not mention dbt, so it is not recorded as a dbt job ad."
     },
     {
       "id": "smartlyio",
@@ -1155,16 +1182,24 @@
       "id": "twoday",
       "name": "Twoday",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Helsinki"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-april-2026-at-twoday/",
+          "note": "hosted Snowflake Finland User Group at its Helsinki office, 2026-04-16"
+        }
+      ],
       "people": [
         {
           "id": "jonni-henttinen",
@@ -1206,6 +1241,60 @@
             }
           ],
           "notes": null
+        },
+        {
+          "id": "eerik-puskala",
+          "name": "Eerik Puskala",
+          "pronouns": null,
+          "title": "Director, AI Practice",
+          "city": "Helsinki",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Snowflake Finland User Group Helsinki, April 2026",
+              "title": "Host, hosted at Twoday",
+              "date": "2026-04",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-april-2026-at-twoday/",
+              "content_id": "snowflake-finland-user-group-helsinki-april-2026host-hosted",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as organizer and host.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-april-2026-at-twoday/",
+              "note": "host: Host, hosted at Twoday"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "hosting a dbt meetup at the Twoday office",
+          "past_chapter_talks": [],
+          "notes": "Co-host of the April 2026 Snowflake Finland User Group. Location from the Helsinki event and office."
         }
       ],
       "notes": "employer of a past Helsinki dbt Meetup speaker"
@@ -5988,10 +6077,23 @@
         "Helsinki"
       ],
       "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://www.solita.fi/news/solita-becomes-the-first-dbt-labs-premier-consulting-partner-in-the-nordics",
+          "note": "first Nordic dbt Labs Premier Consulting Partner, 2024-03-27"
+        },
+        {
+          "type": "company_blog",
+          "url": "https://solita.fi/dbt",
+          "note": "dbt services page"
+        }
+      ],
       "people": [
         {
           "id": "rasmus-lindholm",
@@ -6029,6 +6131,61 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/rasmuslin gives the location Helsinki"
+        },
+        {
+          "id": "ludwig-sewall",
+          "name": "Ludwig Sewall",
+          "pronouns": null,
+          "title": "Data Tech Lead and dbt Partner Lead",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "featured",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "article",
+              "event": null,
+              "title": "Solita becomes the first dbt Labs Premier Consulting Partner in the Nordics",
+              "date": "2024-03-27",
+              "url": "https://www.solita.fi/news/solita-becomes-the-first-dbt-labs-premier-consulting-partner-in-the-nordics",
+              "content_id": "solita-becomes-the-first-dbt-labs-premier-consulting-partner",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Quoted in the partner announcement.",
+              "topics": [
+                "tools & ecosystem",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.solita.fi/news/solita-becomes-the-first-dbt-labs-premier-consulting-partner-in-the-nordics",
+              "note": "article: Solita becomes the first dbt Labs Premier Consulting Partner in the Nordics"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "running a dbt partner practice for Nordic clients",
+          "past_chapter_talks": [],
+          "notes": "Quoted in Solita's partner announcement; no location evidence."
         }
       ],
       "notes": null
@@ -6100,10 +6257,19 @@
         "Helsinki"
       ],
       "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://peerlist.io/company/tietoevry/careers/data-engineer--snowflake--dbt/jobhlkla7ajl7prq81lkojdrn7eodg",
+          "note": "Data Engineer (Snowflake, dbt) ad seen in search result; page returned 403, location unknown"
+        }
+      ],
       "people": [
         {
           "id": "muhammed-sezer",
@@ -6199,12 +6365,547 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "nordea",
+      "name": "Nordea",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Python",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer to Debt Collection Program in Nordea Finance",
+          "url": "https://careers.nordea.com/job/Helsinki-Data-Engineer-to-Debt-Collection-Program-in-Nordea-Finance-00500/1389791233/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "experienced in working with Snowflake and Data Build Tool (DBT), along with Python and SQL (search snippet; page closed)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://theirstack.com/hi/technology/dbt/fi",
+          "note": "listed as a Finnish dbt user, banking, about 30k staff"
+        }
+      ],
+      "people": [],
+      "notes": "Ad closed when fetched. Other Helsinki data engineer ads from Nordea did not show dbt."
+    },
+    {
+      "id": "academic-work",
+      "name": "Academic Work",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki",
+        "Tampere"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Build Tool -Developers, Helsinki or Tampere",
+          "url": "https://duunitori.fi/tyopaikat/tyo/data-build-tool-developers-helsinki-or-tampere-sasca-20328264",
+          "source": "duunitori.fi",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "We are looking for proactive DBT Developers to support our client, a global leader in its industry, currently building a cutting-edge Azure data platform",
+          "job_poster": null,
+          "posted_date": "2026-06-02",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://laura.fi/en/vacancies/academic-work-finland-oy/data-build-tool-developers-helsinki-or-tampere/3798692/",
+          "note": "same ad on laura.fi"
+        }
+      ],
+      "people": [],
+      "notes": "Recruiter for an unnamed end client. Requires hands-on dbt and Snowflake. Ad closed."
+    },
+    {
+      "id": "wolt",
+      "name": "Wolt",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Looker"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://theirstack.com/hi/technology/dbt/fi",
+          "note": "listed as a Finnish dbt user"
+        },
+        {
+          "type": "other",
+          "url": "https://job-boards.greenhouse.io/wolt/jobs/7385886",
+          "note": "Senior Analytics Engineer ad listing dbt among skills per search summary; page now shows other roles"
+        }
+      ],
+      "people": [],
+      "notes": "Ad location not verified."
+    },
+    {
+      "id": "kone",
+      "name": "KONE",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Espoo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://theirstack.com/hi/technology/dbt/fi",
+          "note": "listed as a Finnish dbt user, industrial machinery"
+        }
+      ],
+      "people": [],
+      "notes": "Signal from an aggregator only."
+    },
+    {
+      "id": "recordly",
+      "name": "Recordly",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki",
+        "Tampere"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://docs.getdbt.com/community/spotlight/mikko-sulonen",
+          "note": "dbt community spotlight on Mikko Sulonen, partner at Recordly (Tampere, outside the region)"
+        },
+        {
+          "type": "other",
+          "url": "https://usergroups.snowflake.com/helsinki",
+          "note": "Mika Heino of Recordly leads the Snowflake Finland User Group"
+        }
+      ],
+      "people": [],
+      "notes": "Nordic data consultancy; Mika Heino is already on file under another record."
+    },
+    {
+      "id": "enfuce",
+      "name": "Enfuce",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://theirstack.com/hi/technology/dbt/fi",
+          "note": "listed as a Finnish dbt user, financial services"
+        }
+      ],
+      "people": [],
+      "notes": "Signal from an aggregator only."
+    },
+    {
+      "id": "etlia-oy",
+      "name": "Etlia Oy",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Espoo"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-september-2026-at-etlia/",
+          "note": "hosted Snowflake Finland User Group in Espoo, 2026-09-08"
+        }
+      ],
+      "people": [
+        {
+          "id": "asko-ovaska",
+          "name": "Asko Ovaska",
+          "pronouns": null,
+          "title": "Senior Data Architect",
+          "city": "Espoo",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Snowflake Finland User Group Helsinki, September 2026",
+              "title": "Host, hosted at Etlia",
+              "date": "2026-09",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-september-2026-at-etlia/",
+              "content_id": "snowflake-finland-user-group-helsinki-september-2026host-hos",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Introduced the event with Mika Heino.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-september-2026-at-etlia/",
+              "note": "host: Host, hosted at Etlia"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "hosting a dbt meetup in Espoo",
+          "past_chapter_talks": [],
+          "notes": "Co-host of the September 2026 Snowflake Finland User Group at Etlia, Espoo."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "semantic-hub",
+      "name": "Semantic Hub",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "elvira-gizatullina",
+          "name": "Elvira Gizatullina",
+          "pronouns": null,
+          "title": "Event manager, DataTribe Collective",
+          "city": "Helsinki",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Finland User Group Helsinki, February 2026",
+              "title": "Host, DataTribe Collective event manager",
+              "date": "2026-02",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-february-2026-at-epicenter/",
+              "content_id": "snowflake-finland-user-group-helsinki-february-2026host-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Listed as co-host and DataTribe Collective event manager.",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-february-2026-at-epicenter/",
+              "note": "organiser: Host, DataTribe Collective event manager"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to Finnish data community speakers",
+          "past_chapter_talks": [],
+          "notes": "Co-host of the February 2026 Snowflake Finland User Group at Epicenter, Helsinki. Listed with employer Semantic Hub. Gender not stated; community source only."
+        }
+      ],
+      "notes": "Employer of a DataTribe Collective event manager."
+    },
+    {
+      "id": "datatribe-collective",
+      "name": "DataTribe Collective",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://substack.com/@datatribe",
+          "note": "volunteer data community in Finland, 212 subscribers; joint meetups with Helsinki Python and PyData"
+        }
+      ],
+      "people": [],
+      "notes": "Route to junior and career-changer speakers."
+    },
+    {
+      "id": "rladies-helsinki",
+      "name": "R-Ladies Helsinki",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Helsinki"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://rladies.org/chapters/finland-helsinki",
+          "note": "chapter page seen in search result, returned 404 on fetch; activity unconfirmed"
+        }
+      ],
+      "people": [
+        {
+          "id": "suvi-vasama",
+          "name": "Suvi Vasama",
+          "pronouns": null,
+          "title": "Co-founder, R-Ladies Helsinki",
+          "city": "Helsinki",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women in data speakers in Helsinki",
+          "past_chapter_talks": [],
+          "notes": "Organiser per search snippet; current activity and location unverified."
+        },
+        {
+          "id": "eijaleena-koponen",
+          "name": "Eija-Leena Koponen",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Helsinki",
+          "city": "Helsinki",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women in data speakers in Helsinki",
+          "past_chapter_talks": [],
+          "notes": "Organiser per search snippet; current activity and location unverified."
+        }
+      ],
+      "notes": "Organisers named in a search snippet: Suvi Vasama and Eija-Leena Koponen."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/helsinki-dbt-meetup/",
     "past_meetups_derived_from": "enriched/helsinki-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "duunitori.fi dbt Helsinki search",
+        "url": "https://duunitori.fi/tyopaikat?haku=dbt&alue=helsinki",
+        "yielded": false,
+        "note": "0 results"
+      },
+      {
+        "name": "duunitori.fi Academic Work dbt ad",
+        "url": "https://duunitori.fi/tyopaikat/tyo/data-build-tool-developers-helsinki-or-tampere-sasca-20328264",
+        "yielded": true,
+        "note": "dbt ad, posted 2026-06-02, closed"
+      },
+      {
+        "name": "Nordea careers",
+        "url": "https://careers.nordea.com/job/Helsinki-Data-Engineer-to-Debt-Collection-Program-in-Nordea-Finance-00500/1389791233/",
+        "yielded": true,
+        "note": "ad closed; dbt wording from search snippet"
+      },
+      {
+        "name": "theirstack.com dbt Finland",
+        "url": "https://theirstack.com/hi/technology/dbt/fi",
+        "yielded": true,
+        "note": "89 Finnish companies using dbt, top 10 named"
+      },
+      {
+        "name": "Helsinki Data Week 2026 speakers",
+        "url": "https://www.helsinkidataweek.fi/speakers",
+        "yielded": true,
+        "note": "mostly international; no new local dbt speaker"
+      },
+      {
+        "name": "Snowflake Finland UG April 2026",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-april-2026-at-twoday/",
+        "yielded": true,
+        "note": "organisers and speakers"
+      },
+      {
+        "name": "Snowflake Finland UG September 2026",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-september-2026-at-etlia/",
+        "yielded": true,
+        "note": "hosts Mika Heino and Asko Ovaska"
+      },
+      {
+        "name": "Snowflake Finland UG February 2026",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-helsinki-presents-snowflake-finland-user-group-helsinki-february-2026-at-epicenter/",
+        "yielded": true,
+        "note": "host Elvira Gizatullina"
+      },
+      {
+        "name": "Solita dbt Premier Partner news",
+        "url": "https://www.solita.fi/news/solita-becomes-the-first-dbt-labs-premier-consulting-partner-in-the-nordics",
+        "yielded": true,
+        "note": "2024-03-27"
+      },
+      {
+        "name": "PyData Helsinki Feb 2026",
+        "url": "https://hackers.pub/@pydata_helsinki@fosstodon.org/019c85fe-d6b6-71ce-a890-d247a0331748/quotes",
+        "yielded": false,
+        "note": "no speaker names"
+      },
+      {
+        "name": "DataTribe Collective substack",
+        "url": "https://substack.com/@datatribe",
+        "yielded": true,
+        "note": "community description only"
+      },
+      {
+        "name": "Aiven analytics ad on duunitori",
+        "url": "https://duunitori.fi/tyopaikat/tyo/software-engineer-analytics-scsom-20377060",
+        "yielded": false,
+        "note": "dbt not mentioned"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6497,6 +7198,31 @@
       "name": "Helsinki Snowflake User Group",
       "url": "https://www.meetup.com/helsinki-snowflake-user-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake Finland User Group",
+      "url": "https://usergroups.snowflake.com/helsinki",
+      "note": "chapter lead Mika Heino; events roughly every two months in Helsinki and Espoo"
+    },
+    {
+      "name": "DataTribe Collective",
+      "url": "https://substack.com/@datatribe",
+      "note": "volunteer data community in Finland; joint meetups with Helsinki Python and PyData"
+    },
+    {
+      "name": "PyData Helsinki",
+      "url": "https://hackers.pub/@pydata_helsinki@fosstodon.org/019c85fe-d6b6-71ce-a890-d247a0331748/quotes",
+      "note": "data engineering meetup at RELEX, 2026-02-26"
+    },
+    {
+      "name": "Helsinki Data Week",
+      "url": "https://www.helsinkidataweek.fi/speakers",
+      "note": "26-30 October 2026, main day 27 October at Epicenter"
+    },
+    {
+      "name": "Helsinki Data Analytics & Science Meetup",
+      "url": "https://www.meetup.com/helsinki-data-analytics-science-meetup/",
+      "note": "seen in a search result, not read"
     }
   ]
 }

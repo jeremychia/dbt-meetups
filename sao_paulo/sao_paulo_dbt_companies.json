@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find São Paulo companies using dbt, and people who could speak at or attend the São Paulo dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "São Paulo (São Paulo dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: WebFetch on job ad pages mostly failed (404, 410, redirect, closed), so search snippets were the only dbt evidence.",
+      "Lesson: dbt docs author pages name Brazilian consultancy staff with employer and dates.",
+      "Lesson: Brazilian event pages (Databricks, Snowflake, SQL Saturday) rarely list speakers in fetched text."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +51,55 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "Job ads from CI&T, Infosys and Nubank were not confirmed on the page, only in search summaries.",
+      "No person is marked as based in the region: no page stated a city."
     ],
     "counts": {
-      "companies": 77,
-      "people": 143,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 24,
-      "unique_content_items": 9,
+      "companies": 81,
+      "people": 150,
+      "job_postings": 4,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 34,
+      "unique_content_items": 14,
       "people_with_linkedin": 66,
       "people_with_contact": 88,
       "people_who_spoke_at_this_chapter": 22,
       "internal_vinted": 0,
       "level": {
         "leadership": 12,
-        "working": 131
+        "working": 138
       },
       "speaker_potential": {
-        "high": 23,
-        "low": 99,
-        "medium": 21
+        "high": 24,
+        "medium": 27,
+        "low": 99
       },
       "attendee_potential": {
-        "medium": 139,
+        "medium": 146,
         "high": 4
       },
       "priority_tier": {
-        "2": 10,
-        "1": 12,
+        "2": 16,
+        "1": 13,
         "3": 110,
         "connector": 11
       },
-      "watchlist_companies": 76,
+      "watchlist_companies": 78,
       "past_meetups": 7,
       "lead_type": {
-        "proven_speaker": 44,
+        "proven_speaker": 46,
+        "emerging_voice": 5,
         "no_public_content": 99
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 22,
+        "company_blog_scan": 3,
         "github": 99,
-        "conference_or_meetup_agenda": 22
+        "conference_or_meetup_agenda": 24,
+        "newsletter_or_blog": 2
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -124,8 +134,16 @@
     "topic_counts": {
       "community": 11,
       "data warehouse & platforms": 8,
-      "analytics engineering": 5,
-      "data engineering": 3
+      "dbt migration & adoption": 6,
+      "analytics engineering": 6,
+      "data quality & testing": 5,
+      "performance & scale": 3,
+      "data engineering": 3,
+      "data governance": 2,
+      "dbt best practices": 1,
+      "project structure": 1,
+      "data modeling": 1,
+      "dbt fundamentals": 1
     }
   },
   "companies": [
@@ -140,9 +158,18 @@
       ],
       "local_presence": "not_confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://docs.getdbt.com/author/christian_vanbellen",
+          "note": "three Indicium analytics engineers co-wrote two dbt developer blog posts in 2023"
+        }
+      ],
       "people": [
         {
           "id": "felipe-felisola",
@@ -348,9 +375,258 @@
             }
           ],
           "notes": null
+        },
+        {
+          "id": "christian-van-bellen",
+          "name": "Christian van Bellen",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "How we reduced a 6-hour runtime in Alteryx to 9 minutes with dbt and Snowflake",
+              "date": "2023-04-25",
+              "url": "https://docs.getdbt.com/author/christian_vanbellen",
+              "content_id": "dbt-developer-bloghow-we-reduced-a-6hour-runtime-in-alteryx",
+              "co_authors": [
+                "Arthur Marcon",
+                "Lucas Bergo Dias"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt developer blog post on refactoring an Alteryx workflow into dbt on Snowflake.",
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "Audit_helper in dbt: Bringing data auditing to a higher level",
+              "date": "2023-03-24",
+              "url": "https://docs.getdbt.com/author/christian_vanbellen",
+              "content_id": "dbt-developer-blogaudithelper-in-dbt-bringing-data-auditing",
+              "co_authors": [
+                "Arthur Marcon",
+                "Lucas Bergo Dias"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt developer blog post on using audit_helper to check data during a migration.",
+              "topics": [
+                "data quality & testing",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://docs.getdbt.com/author/christian_vanbellen",
+              "note": "blog: How we reduced a 6-hour runtime in Alteryx to 9 minutes with dbt and Snowflake"
+            },
+            {
+              "url": "https://docs.getdbt.com/author/christian_vanbellen",
+              "note": "blog: Audit_helper in dbt: Bringing data auditing to a higher level"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt migration from legacy ETL to Snowflake: the audit_helper approach",
+          "past_chapter_talks": [],
+          "notes": "Bio on dbt docs author page: Analytics Engineer at Indicium Tech, dbt certified. City not stated; verify."
+        },
+        {
+          "id": "arthur-marcon",
+          "name": "Arthur Marcon",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "How we reduced a 6-hour runtime in Alteryx to 9 minutes with dbt and Snowflake",
+              "date": "2023-04-25",
+              "url": "https://next.docs.getdbt.com/author/arthur_marcon",
+              "content_id": "dbt-developer-bloghow-we-reduced-a-6hour-runtime-in-alteryx",
+              "co_authors": [
+                "Christian van Bellen",
+                "Lucas Bergo Dias"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt developer blog post on refactoring an Alteryx workflow into dbt on Snowflake.",
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "Audit_helper in dbt: Bringing data auditing to a higher level",
+              "date": "2023-03-24",
+              "url": "https://next.docs.getdbt.com/author/arthur_marcon",
+              "content_id": "dbt-developer-blogaudithelper-in-dbt-bringing-data-auditing",
+              "co_authors": [
+                "Christian van Bellen",
+                "Lucas Bergo Dias"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt developer blog post on using audit_helper to check data during a migration.",
+              "topics": [
+                "data quality & testing",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://next.docs.getdbt.com/author/arthur_marcon",
+              "note": "blog: How we reduced a 6-hour runtime in Alteryx to 9 minutes with dbt and Snowflake"
+            },
+            {
+              "url": "https://next.docs.getdbt.com/author/arthur_marcon",
+              "note": "blog: Audit_helper in dbt: Bringing data auditing to a higher level"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt migration from legacy ETL to Snowflake: the audit_helper approach",
+          "past_chapter_talks": [],
+          "notes": "Bio on search result: Analytics Engineer at Indicium. City not stated; verify."
+        },
+        {
+          "id": "lucas-bergo-dias",
+          "name": "Lucas Bergo Dias",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "company_blog_scan"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "How we reduced a 6-hour runtime in Alteryx to 9 minutes with dbt and Snowflake",
+              "date": "2023-04-25",
+              "url": "https://next.docs.getdbt.com/author/lucas_bergodias",
+              "content_id": "dbt-developer-bloghow-we-reduced-a-6hour-runtime-in-alteryx",
+              "co_authors": [
+                "Christian van Bellen",
+                "Arthur Marcon"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt developer blog post on refactoring an Alteryx workflow into dbt on Snowflake.",
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            },
+            {
+              "type": "blog",
+              "event": "dbt Developer Blog",
+              "title": "Audit_helper in dbt: Bringing data auditing to a higher level",
+              "date": "2023-03-24",
+              "url": "https://next.docs.getdbt.com/author/lucas_bergodias",
+              "content_id": "dbt-developer-blogaudithelper-in-dbt-bringing-data-auditing",
+              "co_authors": [
+                "Christian van Bellen",
+                "Arthur Marcon"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt developer blog post on using audit_helper to check data during a migration.",
+              "topics": [
+                "data quality & testing",
+                "dbt migration & adoption"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://next.docs.getdbt.com/author/lucas_bergodias",
+              "note": "blog: How we reduced a 6-hour runtime in Alteryx to 9 minutes with dbt and Snowflake"
+            },
+            {
+              "url": "https://next.docs.getdbt.com/author/lucas_bergodias",
+              "note": "blog: Audit_helper in dbt: Bringing data auditing to a higher level"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt migration from legacy ETL to Snowflake: the audit_helper approach",
+          "past_chapter_talks": [],
+          "notes": "Listed as Lucas Dias in search summary; dbt docs author slug lucas_bergodias. City not stated; verify."
         }
       ],
-      "notes": "employer of a past São Paulo dbt Meetup speaker"
+      "notes": "employer of a past São Paulo dbt Meetup speaker | authors' location is not stated on the pages read."
     },
     {
       "id": "xteam",
@@ -2144,7 +2420,9 @@
       ],
       "local_presence": "not_confirmed",
       "dbt_signal": "weak",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [],
       "other_evidence": [],
       "people": [
@@ -4390,9 +4668,120 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/vitoryago gives the location São Paulo, Brazil"
+        },
+        {
+          "id": "igor-cleto",
+          "name": "Igor Cleto",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "newsletter",
+              "event": "Igor Cleto - Data & AI (Substack)",
+              "title": "dbt 101: Modelagem de Dados + dbt",
+              "date": "2024-12-26",
+              "url": "https://igorcletotech.substack.com/p/modelagem-de-dados-dbt",
+              "content_id": "igor-cleto-data-ai-substackdbt-101-modelagem-de-dados-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "guide to staging, intermediate and marts layers in dbt",
+              "topics": [
+                "dbt best practices",
+                "project structure",
+                "data modeling"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://igorcletotech.substack.com/p/modelagem-de-dados-dbt",
+              "note": "newsletter: dbt 101: Modelagem de Dados + dbt"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "dbt project layers: staging, intermediate and marts",
+          "past_chapter_talks": [],
+          "notes": "Substack author; employer and city not stated."
+        },
+        {
+          "id": "andrea-leonel",
+          "name": "Andrea Leonel",
+          "pronouns": null,
+          "title": "Writer, analytics engineering newsletter",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "newsletter",
+              "event": "Andrea Leonel - Data Analysis & Analytics Engineering (Substack)",
+              "title": "Mastering dbt, analytics engineering and data analysis",
+              "date": null,
+              "url": "https://andrealeonel.substack.com",
+              "content_id": "andrea-leonel-data-analysis-analytics-engineering-substackma",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "newsletter on dbt and analytics engineering",
+              "topics": [
+                "dbt fundamentals",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://andrealeonel.substack.com",
+              "note": "newsletter: Mastering dbt, analytics engineering and data analysis"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "dbt and analytics engineering for analysts",
+          "past_chapter_talks": [],
+          "notes": "Substack on dbt and analytics engineering; no employer, city or post dates seen. Brazil link is only from the Portuguese-language search."
         }
       ],
-      "notes": null
+      "notes": "writers with no employer stated."
     },
     {
       "id": "shopee",
@@ -4851,15 +5240,35 @@
       "id": "nubank",
       "name": "Nubank",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "São Paulo"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "Airflow",
+        "Looker",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Analytics Engineer",
+          "url": "https://job-boards.greenhouse.io/nubank/jobs/7457819",
+          "source": "company careers page (Greenhouse), seen in search result",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search summary: lists dbt among its modern analytics stack tools; São Paulo",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -5055,7 +5464,7 @@
           "notes": "github profile https://github.com/matheuspacheco gives the location São Paulo, Brazil"
         }
       ],
-      "notes": null
+      "notes": "the ad page now says there are no current openings, so dbt text could not be checked on the page."
     },
     {
       "id": "ifood",
@@ -7575,12 +7984,303 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "cit",
+      "name": "CI&T",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "São Paulo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "[Job-30626] Analytics Engineer / DBT Modelling Engineer",
+          "url": "https://jobs.lever.co/ciandt/d0fca56e-909e-4507-bc5a-c7095d478350",
+          "source": "company careers page (Lever), seen in search result",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search summary: DBT Modelling, cross-domain data products, build and maintain DBT models for financial services projects",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "[Job-30586] Analytics Engineer / DBT Modelling Engineer",
+          "url": "https://jobs.lever.co/ciandt/3ccc389e-ea57-4fef-8e31-0ea49ee78c7f",
+          "source": "company careers page (Lever), seen in search result",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "title names dbt modelling",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "both ad pages returned 404 when fetched later, so they may be closed; the search result did not state the job location."
+    },
+    {
+      "id": "infosys",
+      "name": "Infosys",
+      "type": "outsourcing",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "São Paulo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Azure Data Factory"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer with dbt and Snowflake (Infosys Brasil)",
+          "url": "https://digitalcareers.infosys.com/global-careers/company-job/description/reqid/148598BR",
+          "source": "company careers page, seen in search result",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search summary: Snowflake, ADF and dbt; build models and transformations using dbt within Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad page redirected to a 404 when fetched; job city not stated in the result."
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "São Paulo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://thedevconf.com/tdc/2025/sao-paulo/trilha-engenharia-de-dados",
+          "note": "TDC São Paulo 2025 data engineering track session on governance and quality"
+        }
+      ],
+      "people": [
+        {
+          "id": "sergio-zaccarelli",
+          "name": "Sergio Zaccarelli",
+          "pronouns": null,
+          "title": "Cloud Data Consultant",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "TDC São Paulo 2025 (data engineering track)",
+              "title": "Data Value Compass: Desbloqueando o Potencial de Dados para o Negócio com Governança, Qualidade e IA",
+              "date": "2025-09-18",
+              "url": "https://thedevconf.com/tdc/2025/sao-paulo/trilha-engenharia-de-dados",
+              "content_id": "tdc-sao-paulo-2025-data-engineering-trackdata-value-compass",
+              "co_authors": [
+                "Hugo Rozestraten"
+              ],
+              "mentions_dbt": false,
+              "description": "talk on governance and data quality as foundations for innovation",
+              "topics": [
+                "data governance",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://thedevconf.com/tdc/2025/sao-paulo/trilha-engenharia-de-dados",
+              "note": "talk: Data Value Compass: Desbloqueando o Potencial de Dados para o Negócio com Governança, Qualidade e IA"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "data governance and quality as foundations for data products",
+          "past_chapter_talks": [],
+          "notes": "co-presented at TDC São Paulo 2025; employer's local office not verified, so location left unknown."
+        },
+        {
+          "id": "hugo-rozestraten",
+          "name": "Hugo Rozestraten",
+          "pronouns": null,
+          "title": "Principal Data Strategist",
+          "city": "São Paulo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "TDC São Paulo 2025 (data engineering track)",
+              "title": "Data Value Compass: Desbloqueando o Potencial de Dados para o Negócio com Governança, Qualidade e IA",
+              "date": "2025-09-18",
+              "url": "https://thedevconf.com/tdc/2025/sao-paulo/trilha-engenharia-de-dados",
+              "content_id": "tdc-sao-paulo-2025-data-engineering-trackdata-value-compass",
+              "co_authors": [
+                "Sergio Zaccarelli"
+              ],
+              "mentions_dbt": false,
+              "description": "talk on governance and data quality as foundations for innovation",
+              "topics": [
+                "data governance",
+                "data quality & testing"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://thedevconf.com/tdc/2025/sao-paulo/trilha-engenharia-de-dados",
+              "note": "talk: Data Value Compass: Desbloqueando o Potencial de Dados para o Negócio com Governança, Qualidade e IA"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "data governance and quality as foundations for data products",
+          "past_chapter_talks": [],
+          "notes": "co-presented at TDC São Paulo 2025; employer's local office not verified, so location left unknown."
+        }
+      ],
+      "notes": "vendor, no dbt evidence."
+    },
+    {
+      "id": "mulheres-em-dados",
+      "name": "Mulheres em Dados",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "São Paulo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://discord.com/servers/mulheres-em-dados-874446040386928650",
+          "note": "largest women-in-data community in Brazil, online, created 2021; free SQL, Python and Power BI classes"
+        }
+      ],
+      "people": [],
+      "notes": "online community, not São Paulo only; no organiser names verified from a page read."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/sao-paulo-dbt-meetup-group/",
     "past_meetups_derived_from": "enriched/sao-paulo-dbt-meetup-group.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "web search: vaga engenheiro de analytics dbt São Paulo",
+        "url": "https://empregandobrasil.com.br/vagas/fbs-associate-analytics-engineer-sao-paulo-sp/",
+        "yielded": false,
+        "note": "FBS ad returned 410 and no dbt text seen; XP greenhouse page had no dbt"
+      },
+      {
+        "name": "CI&T, Infosys, Nubank job ads",
+        "url": "https://jobs.lever.co/ciandt/",
+        "yielded": true,
+        "note": "ads seen in search results only; fetched pages were 404, redirected or closed"
+      },
+      {
+        "name": "dbt docs author pages (Indicium)",
+        "url": "https://docs.getdbt.com/author/christian_vanbellen",
+        "yielded": true,
+        "note": "three first-time speakers"
+      },
+      {
+        "name": "TDC São Paulo 2025 data engineering track",
+        "url": "https://thedevconf.com/tdc/2025/sao-paulo/trilha-engenharia-de-dados",
+        "yielded": true,
+        "note": "one relevant governance talk"
+      },
+      {
+        "name": "SQL Saturday São Paulo 2026 on Sessionize",
+        "url": "https://sessionize.com/sqlsaturday-sao-paulo-2026/",
+        "yielded": false,
+        "note": "no sessions listed"
+      },
+      {
+        "name": "Databricks DevConnect São Paulo",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-devconnect-presents-databricks-devconnect-i-sao-paulo/",
+        "yielded": false,
+        "note": "no speakers listed"
+      },
+      {
+        "name": "Snowflake World Tour São Paulo speakers",
+        "url": "https://www.snowflake.com/pt_br/world-tour/sao-paulo/speakers/",
+        "yielded": false,
+        "note": "speaker list not in fetched content"
+      },
+      {
+        "name": "dbt Labs partner directory",
+        "url": "https://partners.getdbt.com/english/directory/partner/1731459/brf-consulting",
+        "yielded": false,
+        "note": "only partner found is BRF Consulting, based in Brasília"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -7880,6 +8580,16 @@
       "name": "Databricks Community São Paulo",
       "url": "https://www.meetup.com/databricks-community-sao-paulo/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Mulheres em Dados (Discord)",
+      "url": "https://discord.com/servers/mulheres-em-dados-874446040386928650",
+      "note": "largest women-in-data community in Brazil"
+    },
+    {
+      "name": "WiDS São Paulo (Sympla)",
+      "url": "https://www.sympla.com.br/wids-sp-collaborative---2021__1177975",
+      "note": "WiDS regional events; only a 2021 event page seen"
     }
   ]
 }
