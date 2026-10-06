@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Philadelphia companies using dbt, and people who could speak at or attend the Philadelphia dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Philadelphia (Philadelphia dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: the search tool returned mostly dbt Labs and generic pages for philadelphia queries; builtin.com job listing pages gave the best local signal.",
+      "Lesson: many builtin 'Philadelphia' roles are remote, so check the ad before marking local presence confirmed.",
+      "Lesson: local snowflake and databricks user group pages name speakers with title and company."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,47 +51,52 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Penn Interactive ad url came from a search result and returned 404 on fetch; the dbt detail is from the search summary.",
+      "No dbt-specific first-time speakers or local dbt talks were found; the search tool surfaced few personal blogs."
     ],
     "counts": {
-      "companies": 45,
-      "people": 120,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 53,
-      "unique_content_items": 17,
+      "companies": 52,
+      "people": 125,
+      "job_postings": 5,
+      "companies_with_job_postings": 5,
+      "speaker_evidence_items": 59,
+      "unique_content_items": 22,
       "people_with_linkedin": 37,
       "people_with_contact": 69,
       "people_who_spoke_at_this_chapter": 8,
       "internal_vinted": 0,
       "level": {
-        "working": 106,
-        "leadership": 14
+        "working": 108,
+        "leadership": 17
       },
       "speaker_potential": {
         "high": 10,
-        "medium": 49,
+        "medium": 54,
         "low": 61
       },
       "attendee_potential": {
-        "medium": 120
+        "medium": 125
       },
       "priority_tier": {
         "2": 8,
-        "3": 82,
-        "connector": 30
+        "3": 84,
+        "connector": 33
       },
-      "watchlist_companies": 44,
+      "watchlist_companies": 46,
       "past_meetups": 4,
       "lead_type": {
-        "proven_speaker": 59,
-        "no_public_content": 61
+        "proven_speaker": 63,
+        "no_public_content": 62
       },
-      "people_with_self_stated_pronouns": 0,
+      "people_with_self_stated_pronouns": 1,
       "sourced_via": {
         "chapter_meetup_history": 8,
-        "conference_or_meetup_agenda": 51,
-        "github": 61
+        "conference_or_meetup_agenda": 53,
+        "github": 61,
+        "women_in_data_community": 3,
+        "podcast": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -120,10 +129,14 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 30,
-      "business intelligence": 16,
+      "community": 34,
+      "business intelligence": 17,
       "data engineering": 11,
-      "data warehouse & platforms": 4
+      "data warehouse & platforms": 4,
+      "genai & llm": 2,
+      "domain-specific use cases": 1,
+      "data governance": 1,
+      "team & org design": 1
     }
   },
   "companies": [
@@ -3748,15 +3761,34 @@
       "id": "childrens-hospital-of-philadelphia",
       "name": "Children's Hospital of Philadelphia",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Philadelphia"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Informatica",
+        "Netezza"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://builtin.com/job/analytics-engineer/4158979",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build models for various types of modes of data ingestion using DBT. Perform platform migration for DBT models from Netezza to Snowflake.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -3814,7 +3846,7 @@
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
         }
       ],
-      "notes": null
+      "notes": "ad was removed on 2025-05-08, so it shows past use of dbt."
     },
     {
       "id": "comcast",
@@ -5429,15 +5461,32 @@
       "id": "penn-interactive",
       "name": "Penn Interactive",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Philadelphia"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://builtin.com/job/senior-analytics-engineer/3209449",
+          "source": "builtin.com (seen in search result; page returned 404 when fetched)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "develop dbt models, manage Airflow tasks, mentor team members (search result summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -5478,7 +5527,7 @@
           "notes": "github profile https://github.com/ajkarella gives the location Philadelphia, PA"
         }
       ],
-      "notes": null
+      "notes": "search result described the company as headquartered in Philadelphia; ad page was gone on fetch."
     },
     {
       "id": "oracle",
@@ -6275,7 +6324,9 @@
       ],
       "local_presence": "not_confirmed",
       "dbt_signal": "weak",
-      "stack_signals": [],
+      "stack_signals": [
+        "Snowflake"
+      ],
       "job_postings": [],
       "other_evidence": [],
       "people": [
@@ -6315,9 +6366,64 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/oshenoy-armk gives the location Philadelphia, PA"
+        },
+        {
+          "id": "tim-sceurman",
+          "name": "Tim Sceurman",
+          "pronouns": null,
+          "title": "Director of Cloud Data Operations",
+          "city": "Philadelphia",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Greater Philadelphia User Group, November 2025",
+              "title": "Accelerate Actionable Pricing Intelligence",
+              "date": "2025-11-20",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/",
+              "content_id": "snowflake-greater-philadelphia-user-group-november-2025accel",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "showcase of an assistant for menu item and retail point-of-sale management built on snowflake cortex",
+              "topics": [
+                "genai & llm",
+                "domain-specific use cases"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/",
+              "note": "talk: Accelerate Actionable Pricing Intelligence"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "pricing and menu intelligence on snowflake cortex",
+          "past_chapter_talks": [],
+          "notes": "user group leader for the Philadelphia Snowflake group per the event page."
         }
       ],
-      "notes": null
+      "notes": "no dbt evidence found."
     },
     {
       "id": "cityofphiladelphia",
@@ -6595,12 +6701,496 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "ntt-data",
+      "name": "NTT DATA",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "King of Prussia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "DBT Data Engineer (hybrid)",
+          "url": "https://careers-inc.nttdata.com/job/King-of-Prussia-DBT-Data-Engineer-%28hybrid%29-PA-19406/1405257300/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "DBT SME serves as the senior engineer for data transformation within a modern data stack built on dbt and Snowflake (search result summary)",
+          "job_poster": null,
+          "posted_date": "2026-07-31",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "position marked filled when fetched; office in King of Prussia, PA."
+    },
+    {
+      "id": "insomniac-design",
+      "name": "Insomniac Design",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Philadelphia"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "Kafka",
+        "Airflow",
+        "Snowflake",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://builtin.com/job/senior-data-engineer/10062217",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience with big data tools: Apache Spark, Kafka, Airflow, dbt, Snowflake, Databricks",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote or hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "listed under Philadelphia on builtin but the ad says 2 locations, remote or hybrid."
+    },
+    {
+      "id": "futurefit-ai",
+      "name": "FutureFit AI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Philadelphia"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Data Engineer",
+          "url": "https://builtin.com/job/sr-data-engineer/10489149",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Orchestration and transformation: Airflow, dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "remote-first ad (USA and Canada), listed under Philadelphia on builtin."
+    },
+    {
+      "id": "best-egg",
+      "name": "Best Egg",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wilmington"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/",
+          "note": "Best Egg data platform director spoke at the Snowflake Greater Philadelphia user group."
+        }
+      ],
+      "people": [
+        {
+          "id": "murali-balakrishnan",
+          "name": "Murali Balakrishnan",
+          "pronouns": null,
+          "title": "Director, Data Platform",
+          "city": "Philadelphia",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Greater Philadelphia User Group, November 2025",
+              "title": "Build a Data Catalog Agent in 5 Minutes",
+              "date": "2025-11-20",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/",
+              "content_id": "snowflake-greater-philadelphia-user-group-november-2025build",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "demo of an ai agent to explore data assets and ownership on snowflake",
+              "topics": [
+                "genai & llm",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/",
+              "note": "talk: Build a Data Catalog Agent in 5 Minutes"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "data catalog and ownership with an ai agent on snowflake",
+          "past_chapter_talks": [],
+          "notes": "also listed as an organiser of the user group. location not stated on the page."
+        }
+      ],
+      "notes": "no dbt evidence found."
+    },
+    {
+      "id": "prostate-cancer-clinical-trials-consortium",
+      "name": "Prostate Cancer Clinical Trials Consortium",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Philadelphia"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "R"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "shannon-pileggi",
+          "name": "Shannon Pileggi",
+          "pronouns": "she/her",
+          "title": "Lead Data Scientist",
+          "city": "Philadelphia",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community",
+            "podcast"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "podcast",
+              "event": "Posit Data Science Hangout",
+              "title": "Data Science Hangout with Shannon Pileggi",
+              "date": "2024-08-01",
+              "url": "https://posit.co/data-science-hangout/shannon-pileggi",
+              "content_id": "posit-data-science-hangoutdata-science-hangout-with-shannon",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "live hangout on leading a data science team and community",
+              "topics": [
+                "team & org design",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            },
+            {
+              "type": "organiser",
+              "event": "R-Ladies Philly",
+              "title": "R-Ladies Philly organiser",
+              "date": null,
+              "url": "https://rladies.org/chapters/rladies-philly",
+              "content_id": "rladies-phillyrladies-philly-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a current organiser of the chapter",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://posit.co/data-science-hangout/shannon-pileggi",
+              "note": "podcast: Data Science Hangout with Shannon Pileggi"
+            },
+            {
+              "url": "https://rladies.org/chapters/rladies-philly",
+              "note": "organiser: R-Ladies Philly organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "teaching data skills through community workshops",
+          "past_chapter_talks": [],
+          "notes": "r rather than dbt. location comes from the chapter listing, not a personal profile."
+        }
+      ],
+      "notes": "employer of an R-Ladies Philly organiser; r-focused, no dbt evidence."
+    },
+    {
+      "id": "rladies-philly",
+      "name": "R-Ladies Philly",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Philadelphia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "R"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://rladies.org/chapters/rladies-philly",
+          "note": "active chapter, 2,524 members, events through May 2026, no upcoming events listed."
+        }
+      ],
+      "people": [
+        {
+          "id": "jenny-luong",
+          "name": "Jenny Luong",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Philly",
+          "city": "Philadelphia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies Philly",
+              "title": "R-Ladies Philly organiser",
+              "date": null,
+              "url": "https://rladies.org/chapters/rladies-philly",
+              "content_id": "rladies-phillyrladies-philly-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a current organiser of the chapter",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://rladies.org/chapters/rladies-philly",
+              "note": "organiser: R-Ladies Philly organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women practising data in philadelphia",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "ama-nyamemensah",
+          "name": "Ama Nyame-Mensah",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Philly",
+          "city": "Philadelphia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "workshop",
+              "event": "Free Library of Philadelphia, Intro to Data Visualization (with Shannon Pileggi)",
+              "title": "Intro to Data Visualization",
+              "date": null,
+              "url": "https://libwww.freelibrary.org/calendar/event/164528",
+              "content_id": "free-library-of-philadelphia-intro-to-data-visualization-wit",
+              "co_authors": [
+                "Shannon Pileggi"
+              ],
+              "mentions_dbt": false,
+              "description": "co-led workshop listed on the library calendar",
+              "topics": [
+                "business intelligence",
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://libwww.freelibrary.org/calendar/event/164528",
+              "note": "workshop: Intro to Data Visualization"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women practising data in philadelphia",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "women-in-data community with its own events."
+    },
+    {
+      "id": "snowflake-philadelphia-user-group",
+      "name": "Snowflake Philadelphia User Group",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Philadelphia"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://usergroups.snowflake.com/philadelphia",
+          "note": "events in Nov 2025 and Apr 2026; talks were on snowflake cortex and ai agents, none on dbt."
+        }
+      ],
+      "people": [],
+      "notes": ""
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/philadelphia-dbt-meetup/",
     "past_meetups_derived_from": "enriched/philadelphia-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "builtin.com Philadelphia analytics jobs",
+        "url": "https://builtin.com/jobs/remote/philadelphia/data-analytics/analytics?page=3",
+        "yielded": true,
+        "note": "remote roles tagged Philadelphia that mention dbt (Blueland, Velir, Extend, Machinify, Rightway, Seeq); not recorded because local presence is unclear"
+      },
+      {
+        "name": "builtin.com Philadelphia data engineering jobs",
+        "url": "https://builtin.com/jobs/philadelphia/data-analytics/data-engineering",
+        "yielded": true,
+        "note": "Insomniac Design, FutureFit AI recorded; others remote or already known"
+      },
+      {
+        "name": "Snowflake Greater Philadelphia user group Nov 2025",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/",
+        "yielded": true,
+        "note": "two local speakers, no dbt"
+      },
+      {
+        "name": "R-Ladies Philly",
+        "url": "https://rladies.org/chapters/rladies-philly",
+        "yielded": true,
+        "note": "three organisers"
+      },
+      {
+        "name": "PhillyBricks",
+        "url": "https://usergroups.databricks.com/phillybricks-philadelphia-databricks-user-group/",
+        "yielded": false,
+        "note": "organiser already on file"
+      },
+      {
+        "name": "getdbt Northeast events network page",
+        "url": "https://www.getdbt.com/events/roadshow/join-the-dbt-northeast-events-network",
+        "yielded": false,
+        "note": "404 on fetch"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6770,6 +7360,21 @@
       "name": "Women in Tech",
       "url": "https://www.meetup.com/meetup-group-bpcklrba/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "R-Ladies Philly",
+      "url": "https://www.meetup.com/rladies-philly",
+      "note": "women-in-data community; email philly@rladies.org on chapter page"
+    },
+    {
+      "name": "Snowflake Philadelphia User Group",
+      "url": "https://usergroups.snowflake.com/philadelphia",
+      "note": "in-person events at Victory Brewing and similar"
+    },
+    {
+      "name": "PhillyBricks",
+      "url": "https://usergroups.databricks.com/phillybricks-philadelphia-databricks-user-group/",
+      "note": "79 members, next event 2026-10-13"
     }
   ]
 }

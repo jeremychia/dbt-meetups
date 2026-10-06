@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Vancouver companies using dbt, and people who could speak at or attend the Vancouver dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Vancouver (Vancouver dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: builtinvancouver.org job pages fetch cleanly and show stack, work mode and removal date; most postings found were already removed.",
+      "Lesson: lever.co, workable.com and insightglobal.com job urls from search results returned 404 or 410 on fetch; the search snippet is then the only evidence.",
+      "Lesson: searches for named Vancouver dbt authors, conference speakers and Snowflake user group talks returned nothing usable; the region has few public dbt voices outside the people already on file."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,47 +51,53 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets. Verify before outreach.",
+      "Most job ads were already removed when fetched. They show that a company used dbt, not that a role is open now.",
+      "The Insight Global ad could not be fetched. Its dbt use rests on the search result text only.",
+      "No new first-time or proven speakers were found. Goran Kimovski and Pankaj Agarwal are founders with no public dbt content seen."
     ],
     "counts": {
-      "companies": 46,
-      "people": 146,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 45,
-      "unique_content_items": 18,
+      "companies": 53,
+      "people": 149,
+      "job_postings": 8,
+      "companies_with_job_postings": 8,
+      "speaker_evidence_items": 46,
+      "unique_content_items": 19,
       "people_with_linkedin": 40,
       "people_with_contact": 92,
       "people_who_spoke_at_this_chapter": 2,
       "internal_vinted": 0,
       "level": {
-        "leadership": 7,
+        "leadership": 10,
         "working": 139
       },
       "speaker_potential": {
         "high": 2,
-        "medium": 45,
-        "low": 99
+        "medium": 46,
+        "low": 101
       },
       "attendee_potential": {
-        "medium": 146
+        "medium": 149
       },
       "priority_tier": {
         "2": 2,
-        "3": 107,
-        "connector": 37
+        "3": 109,
+        "connector": 38
       },
-      "watchlist_companies": 45,
+      "watchlist_companies": 44,
       "past_meetups": 1,
       "lead_type": {
         "proven_speaker": 47,
-        "no_public_content": 99
+        "no_public_content": 102
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 2,
         "conference_or_meetup_agenda": 45,
-        "github": 100
+        "other": 2,
+        "github": 100,
+        "women_in_data_community": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -120,7 +130,7 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 38,
+      "community": 39,
       "data warehouse & platforms": 6,
       "data engineering": 5,
       "genai & llm": 2
@@ -131,16 +141,30 @@
       "id": "infostrux",
       "name": "Infostrux",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Vancouver"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "partner_directory",
+          "url": "https://partners.getdbt.com/english/directory/partner/1708621/infostrux-solutions",
+          "note": "listed as a registered dbt partner"
+        },
+        {
+          "type": "press",
+          "url": "https://www.theglobeandmail.com/business/article-infostrux-is-helping-companies-navigate-the-digital-daze-maze",
+          "note": "Vancouver Snowflake partner co-founded in 2021 by Goran Kimovski, Pankaj Agarwal and Milan Mosny"
+        }
+      ],
       "people": [
         {
           "id": "milan-mosny",
@@ -248,9 +272,71 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "goran-kimovski",
+          "name": "Goran Kimovski",
+          "pronouns": null,
+          "title": "Co-founder, Infostrux",
+          "city": "Vancouver",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "how a Snowflake partner runs dbt projects for clients",
+          "past_chapter_talks": [],
+          "notes": "named as co-founder in a search summary; location of the person not checked"
+        },
+        {
+          "id": "pankaj-agarwal",
+          "name": "Pankaj Agarwal",
+          "pronouns": null,
+          "title": "Co-founder, Infostrux",
+          "city": "Vancouver",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "how a Snowflake partner runs dbt projects for clients",
+          "past_chapter_talks": [],
+          "notes": "named as co-founder in a search summary; location of the person not checked"
         }
       ],
-      "notes": "employer of a past Vancouver dbt Meetup speaker"
+      "notes": "employer of a past Vancouver dbt Meetup speaker | Vancouver based Snowflake elite partner."
     },
     {
       "id": "materialize",
@@ -6494,17 +6580,36 @@
     },
     {
       "id": "data-engineer-two-circles",
-      "name": "Data Engineer @ Two Circles",
+      "name": "Two Circles",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Vancouver"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Amazon Redshift",
+        "AWS",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer",
+          "url": "https://builtinvancouver.org/job/lead-data-engineer/10192718",
+          "source": "Built In Vancouver",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Create and maintain data warehouses and associated ETL processes using DBT models in Redshift",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -6547,7 +6652,7 @@
           "notes": "github profile https://github.com/javiermtzo99 gives the location Vancouver, BC, Canada"
         }
       ],
-      "notes": null
+      "notes": "Sports and entertainment marketing firm. Posting removed 2026-07-27. A search result also showed a DBT Developer / Redshift Developer ad, not fetched. The file already holds a record named 'Data Engineer @ Two Circles'."
     },
     {
       "id": "beatdapp",
@@ -7099,10 +7204,27 @@
       "cities": [
         "Vancouver"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "stack_signals": [
+        "Dataform",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer/Analytics Engineer",
+          "url": "https://builtinvancouver.org/job/data-analytics-senior-analytics-engineeranalytics-engineer/4080651",
+          "source": "Built In Vancouver",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": "Dataform named, not dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -7143,7 +7265,7 @@
           "notes": "github profile https://github.com/nserr gives the location Vancouver, BC"
         }
       ],
-      "notes": null
+      "notes": "The analytics engineer ad uses Dataform. Removed 2025-04-24."
     },
     {
       "id": "data-analyst-jr",
@@ -7536,12 +7658,350 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "badalio",
+      "name": "Badal.io",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vancouver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead DBT/Analytics Engineer",
+          "url": "https://builtinvancouver.org/job/lead-dbtanalytics-engineer/2505758",
+          "source": "Built In Vancouver",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake, Airflow and DBT preferred.",
+          "job_poster": null,
+          "posted_date": "2025-05-08",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Posting removed. Listed on Built In Vancouver."
+    },
+    {
+      "id": "form",
+      "name": "FORM",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vancouver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Amazon Redshift",
+        "Tableau",
+        "Python",
+        "AWS"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Developer",
+          "url": "https://jobs.workable.com/jobs/685346d3-c84f-41e2-a5d5-a297c29ccb52.md",
+          "source": "Workable",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience building, testing and documenting production data models with dbt.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "on-site"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "A search result described the same role as Analytics Engineer at CAD 90,000-110,000."
+    },
+    {
+      "id": "dutch-vet",
+      "name": "Dutch Vet",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vancouver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data/Analytics Engineer",
+          "url": "https://builtinvancouver.org/company/dutch-vet/teams",
+          "source": "Built In Vancouver",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake and dbt models, orchestration, data quality, governance, and semantic metrics.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Telemedicine veterinary platform. Also a Lever ad titled Lead Data/AI Engineer, which returned 404 on fetch."
+    },
+    {
+      "id": "soci",
+      "name": "SOCi",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vancouver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "SQLMesh",
+        "Fivetran",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Developer",
+          "url": "https://builtinvancouver.org/job/senior-analytics-developer/8430944",
+          "source": "Built In Vancouver",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficiency building transformations and data models using declarative programming (dbt, Snowflake Dynamic Tables, SQLMesh).",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote, moving to hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt listed among alternatives. Posting removed 2026-03-31."
+    },
+    {
+      "id": "psl-group",
+      "name": "PSL Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vancouver"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Informatica"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Developer",
+          "url": "https://builtinvancouver.org/job/senior-data-developer/6858274",
+          "source": "Built In Vancouver",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Python, SQL, Snowflake, DBT, Airflow, Informatica, Talend, etc.",
+          "job_poster": null,
+          "posted_date": "2025-09-09",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Location shown only as Canada on a Vancouver board."
+    },
+    {
+      "id": "insight-global",
+      "name": "Insight Global",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "North Vancouver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Analytics Engineer Consultant",
+          "url": "https://jobs.insightglobal.com/jobs/find_a_job/british-columbia/north-vancouver/sr-analytics-engineer-consultant/job-561273/",
+          "source": "Insight Global",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "migrating business logic from Looker to dbt and building a scalable analytics foundation in Snowflake (search result text)",
+          "job_poster": null,
+          "posted_date": "2026-08-06",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Recruiter ad for an unnamed client. Contract-to-perm. Page returned 410 on fetch. A second Insight Global ad in Burnaby for a game company mentioning heavy dbt core use was seen only in a search summary."
+    },
+    {
+      "id": "pyladies-vancouver",
+      "name": "PyLadies Vancouver",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vancouver"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Python"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community_page",
+          "url": "https://vancouver.pyladies.com/",
+          "note": "python community founded 2015; no data-specific events seen on the home page"
+        }
+      ],
+      "people": [
+        {
+          "id": "mariatta",
+          "name": "Mariatta",
+          "pronouns": null,
+          "title": "Lead organiser, PyLadies Vancouver",
+          "city": "Vancouver",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Vancouver",
+              "title": "Lead organiser",
+              "date": null,
+              "url": "https://vancouver.pyladies.com/",
+              "content_id": "pyladies-vancouverlead-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "leads the Vancouver python community group",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://vancouver.pyladies.com/",
+              "note": "organiser: Lead organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women python and data speakers in Vancouver",
+          "past_chapter_talks": [],
+          "notes": "listed as lead organiser and CPython core developer; region rests on the organiser role"
+        }
+      ],
+      "notes": "Women in python community. Eliza Sarobhasa, the co-organiser, is already on file."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/vancouver-dbt-meetup/",
     "past_meetups_derived_from": "enriched/vancouver-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Built In Vancouver job pages",
+        "url": "https://builtinvancouver.org/job/lead-dbtanalytics-engineer/2505758",
+        "yielded": true,
+        "note": "Badal.io, Two Circles, SOCi, PSL Group, Dutch Vet and Aritzia pages fetched"
+      },
+      {
+        "name": "Workable job page for FORM",
+        "url": "https://jobs.workable.com/jobs/685346d3-c84f-41e2-a5d5-a297c29ccb52.md",
+        "yielded": true,
+        "note": "dbt named in the requirements"
+      },
+      {
+        "name": "Luma Vancouver Data Engineering Meetup with ClickHouse",
+        "url": "https://luma.com/jr8tc94e",
+        "yielded": false,
+        "note": "speakers are not about dbt or analytics engineering and the page has no date"
+      },
+      {
+        "name": "PyLadies Vancouver",
+        "url": "https://vancouver.pyladies.com/",
+        "yielded": true,
+        "note": "organisers listed; no data topics"
+      },
+      {
+        "name": "Snowflake User Group Vancouver",
+        "url": "https://usergroups.snowflake.com/vancouver",
+        "yielded": true,
+        "note": "organiser Eylon Steiner (already on file); no speakers or dbt talks listed"
+      },
+      {
+        "name": "Sessionize Venkatesh Sekar",
+        "url": "https://sessionize.com/venkatesh-sekar",
+        "yielded": false,
+        "note": "based in Waterloo, not the region"
+      },
+      {
+        "name": "dbt Labs case study searches",
+        "url": "https://www.getdbt.com/dbt-assets/business-case-guide-dbt-cloud",
+        "yielded": false,
+        "note": "no Vancouver customer found"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -7660,6 +8120,16 @@
       "name": "Women in Tech",
       "url": "https://www.meetup.com/meetup-group-bpcklrba/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake User Group Vancouver",
+      "url": "https://usergroups.snowflake.com/vancouver",
+      "note": "134 members; organiser from Infostrux; events on Cortex and Snowflake Summit news, none on dbt"
+    },
+    {
+      "name": "PyLadies Vancouver",
+      "url": "https://vancouver.pyladies.com/",
+      "note": "python community since 2015, organisers Mariatta and Eliza Sarobhasa; no data-specific events seen"
     }
   ]
 }

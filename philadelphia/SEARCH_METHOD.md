@@ -7,21 +7,21 @@ This file holds what is specific to Philadelphia. The method, scoring rules, sch
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-06)
+**At a glance** (version 3, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 45 |
-| People | 120 |
+| Companies | 52 |
+| People | 125 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 59 |
+| Proven speakers | 63 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 91 |
+| Based in the region | 93 |
 | Based elsewhere | 0 |
-| Location unknown | 29 |
+| Location unknown | 32 |
 | With a LinkedIn profile | 37 |
-| Job ads mentioning dbt | 0 |
+| Job ads mentioning dbt | 5 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
 
@@ -39,17 +39,40 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-44 companies and communities were looked at. A company is local when it has people or roles in the region.
+51 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (4)</summary>
+<details><summary><b>Strong dbt use</b> (8)</summary>
 
-dbt Labs (local presence not confirmed), Project Delivery Team (local presence not confirmed), Slalom (local presence not confirmed), Spotify (local presence not confirmed)
+Children's Hospital of Philadelphia, dbt Labs (local presence not confirmed), FutureFit AI (local presence not confirmed), NTT DATA, Penn Interactive, Project Delivery Team (local presence not confirmed), Slalom (local presence not confirmed), Spotify (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Not verified</b> (40)</summary>
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
 
-Apple (local presence not confirmed), Aramark (local presence not confirmed), Children's Hospital of Philadelphia (local presence not confirmed), Cittabase Solutions (local presence not confirmed), CityOfPhiladelphia (local presence not confirmed), Comcast (local presence not confirmed), Data2Vizuals (local presence not confirmed), Databricks (local presence not confirmed), DemandLane (local presence not confirmed), Dolente Consulting LLC (local presence not confirmed), Drexel University (local presence not confirmed), Eigen X (local presence not confirmed), Entelligent (local presence not confirmed), ERM (local presence not confirmed), Freedom Mortgage (local presence not confirmed), Freedompay (local presence not confirmed), goPuff (local presence not confirmed), herodigital (local presence not confirmed), https://linkedin.com/in/seth-kalkstein (local presence not confirmed), Lumenalta (local presence not confirmed), mmtechtsoft (local presence not confirmed), Next-Level Tableau (local presence not confirmed), Old Republic Commercial Risk (local presence not confirmed), Oracle (local presence not confirmed), Penn Interactive (local presence not confirmed), Pinnacle Treatment Centers, Inc. (local presence not confirmed), Projxon (local presence not confirmed), Redis (local presence not confirmed), Rula (local presence not confirmed), Salesforce (local presence not confirmed), Snowflake ❄️ (local presence not confirmed), Spark Therapeutics (local presence not confirmed), TD Bank (local presence not confirmed), Tegra Analytics (local presence not confirmed), The Carlyle Group (local presence not confirmed), The Wharton School: @wharton (local presence not confirmed), TJ McDowell LLC (local presence not confirmed), University of Pennsylvania (local presence not confirmed), US Federal Reserve Bank (local presence not confirmed), ZIP Code Wilmington (local presence not confirmed)
+Insomniac Design (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (39)</summary>
+
+Apple (local presence not confirmed), Aramark (local presence not confirmed), Best Egg (local presence not confirmed), Cittabase Solutions (local presence not confirmed), CityOfPhiladelphia (local presence not confirmed), Comcast (local presence not confirmed), Data2Vizuals (local presence not confirmed), Databricks (local presence not confirmed), DemandLane (local presence not confirmed), Dolente Consulting LLC (local presence not confirmed), Drexel University (local presence not confirmed), Eigen X (local presence not confirmed), Entelligent (local presence not confirmed), ERM (local presence not confirmed), Freedom Mortgage (local presence not confirmed), Freedompay (local presence not confirmed), goPuff (local presence not confirmed), herodigital (local presence not confirmed), https://linkedin.com/in/seth-kalkstein (local presence not confirmed), Lumenalta (local presence not confirmed), mmtechtsoft (local presence not confirmed), Next-Level Tableau (local presence not confirmed), Old Republic Commercial Risk (local presence not confirmed), Oracle (local presence not confirmed), Pinnacle Treatment Centers, Inc. (local presence not confirmed), Projxon (local presence not confirmed), Redis (local presence not confirmed), Rula (local presence not confirmed), Salesforce (local presence not confirmed), Snowflake ❄️ (local presence not confirmed), Spark Therapeutics (local presence not confirmed), TD Bank (local presence not confirmed), Tegra Analytics (local presence not confirmed), The Carlyle Group (local presence not confirmed), The Wharton School: @wharton (local presence not confirmed), TJ McDowell LLC (local presence not confirmed), University of Pennsylvania (local presence not confirmed), US Federal Reserve Bank (local presence not confirmed), ZIP Code Wilmington (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (3)</summary>
+
+Prostate Cancer Clinical Trials Consortium (local presence not confirmed), R-Ladies Philly, Snowflake Philadelphia User Group
+
+</details>
+
+<details><summary><b>Other sources checked</b> (6)</summary>
+
+- [builtin.com Philadelphia analytics jobs](https://builtin.com/jobs/remote/philadelphia/data-analytics/analytics?page=3)
+- [builtin.com Philadelphia data engineering jobs](https://builtin.com/jobs/philadelphia/data-analytics/data-engineering)
+- [Snowflake Greater Philadelphia user group Nov 2025](https://usergroups.snowflake.com/events/details/snowflake-philadelphia-presents-snowflake-greater-philadelphia-user-group-november-20th-2025-event/)
+- [R-Ladies Philly](https://rladies.org/chapters/rladies-philly)
+- [PhillyBricks](https://usergroups.databricks.com/phillybricks-philadelphia-databricks-user-group/) (nothing useful)
+- [getdbt Northeast events network page](https://www.getdbt.com/events/roadshow/join-the-dbt-northeast-events-network) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -71,3 +94,4 @@ To fill after the first research run.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-06 | 1 | First build from the chapter history. |
+| 2026-10-06 | 3 | Research run: 7 companies, 5 dbt job ads and 5 people, no first-time speakers. |

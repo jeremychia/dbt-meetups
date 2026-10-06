@@ -4,12 +4,17 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Riyadh companies using dbt, and people who could speak at or attend the Riyadh dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Riyadh (Riyadh dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: Riyadh dbt job ads sit on aggregator sites (sabbar, metaintro, freehire, hexjobs) that expire or return 410/429 quickly, so record the snippet from the search result at once.",
+      "Lesson: the Snowflake and Databricks user group event pages list speaker names, roles and companies and were the best people source; all four Snowflake Riyadh speakers were already on file.",
+      "Lesson: Arabic queries returned only job-board category pages (naukrigulf, sabbar), no dbt articles or talks.",
+      "Lesson: Saudi scale-ups with data teams (Tabby, HungerStation, Salla) did not show dbt in the ads read; Salla's analytics engineer role is in Jeddah, outside the region."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,44 +52,52 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "The Datamatics Analytics & Transformation Engineer and Deraah Junior Data Engineer ads could not be fetched (410 or 429), so dbt text comes from search snippets only.",
+      "Jennifer Klein's current employer is not known; her KOHO article url was not seen, so the evidence links to her profile as an overview page. KOHO is a Canadian company.",
+      "Kholoud Khateeb is recorded under the existing spelling 'Helath Holding Company' to avoid a duplicate record; the 2023 WiDS Riyadh page names her as Health Holding Company's Data Analytics & Business Intelligence Head."
     ],
     "counts": {
-      "companies": 52,
-      "people": 96,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 11,
-      "unique_content_items": 3,
-      "people_with_linkedin": 37,
-      "people_with_contact": 46,
+      "companies": 57,
+      "people": 99,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 13,
+      "unique_content_items": 5,
+      "people_with_linkedin": 38,
+      "people_with_contact": 47,
       "people_who_spoke_at_this_chapter": 0,
       "internal_vinted": 0,
       "level": {
-        "working": 89,
-        "leadership": 7
+        "working": 90,
+        "leadership": 9
       },
       "speaker_potential": {
-        "medium": 11,
-        "low": 85
+        "medium": 13,
+        "low": 86
       },
       "attendee_potential": {
-        "medium": 96
+        "medium": 99
       },
       "priority_tier": {
-        "3": 92,
-        "connector": 4
+        "3": 93,
+        "connector": 6
       },
-      "watchlist_companies": 51,
+      "watchlist_companies": 54,
       "past_meetups": 1,
       "lead_type": {
         "proven_speaker": 11,
-        "no_public_content": 85
+        "no_public_content": 88
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "conference_or_meetup_agenda": 11,
-        "github": 85
+        "github": 85,
+        "newsletter_or_blog": 1,
+        "linkedin_search": 1,
+        "women_in_data_community": 1,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -117,8 +130,9 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "data warehouse & platforms": 7,
-      "community": 4
+      "data warehouse & platforms": 8,
+      "community": 6,
+      "business intelligence": 1
     }
   },
   "companies": [
@@ -2270,9 +2284,43 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/zephyrfs1d gives the location Riyadh, Saudi Arabia"
+        },
+        {
+          "id": "jennifer-klein",
+          "name": "Jennifer Klein",
+          "pronouns": null,
+          "title": "Senior Data Analyst and Analytics Engineer",
+          "city": "Riyadh",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://sa.linkedin.com/in/jen-klein"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "newsletter_or_blog",
+            "linkedin_search"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "replacing 100+ copy-pasted cohort queries with reusable dbt macros",
+          "past_chapter_talks": [],
+          "notes": "search result shows Riyadh and an SQL, dbt analytics profile. employer not known. the article was written on the KOHO tech blog, date unknown. | a search summary mentions a dbt macros article by her, but the article itself was not found; find it before treating her as a first-time speaker."
         }
       ],
-      "notes": null
+      "notes": "holds people whose current employer is not known."
     },
     {
       "id": "helath-holding-company",
@@ -2283,11 +2331,17 @@
       "cities": [
         "Riyadh"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.widsworldwide.org/events/event/wids-riyadh/",
+          "note": "Health Holding Company's analytics head was a WiDS Riyadh 2023 ambassador"
+        }
+      ],
       "people": [
         {
           "id": "khalid-alkhaldi",
@@ -2325,9 +2379,64 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/7llssh gives the location Riyadh"
+        },
+        {
+          "id": "kholoud-khateeb",
+          "name": "Kholoud Khateeb",
+          "pronouns": null,
+          "title": "Data Analytics & Business Intelligence Head",
+          "city": "Riyadh",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Riyadh 2023",
+              "title": "WiDS Riyadh regional event ambassador",
+              "date": "2023-05-25",
+              "url": "https://www.widsworldwide.org/events/event/wids-riyadh/",
+              "content_id": "wids-riyadh-2023wids-riyadh-regional-event-ambassador",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "one of five named ambassadors of the Riyadh regional women in data science event",
+              "topics": [
+                "community",
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.widsworldwide.org/events/event/wids-riyadh/",
+              "note": "organiser: WiDS Riyadh regional event ambassador"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women in data in Riyadh; business intelligence in healthcare",
+          "past_chapter_talks": [],
+          "notes": "listed as an event ambassador on the WiDS Riyadh 2023 page. in-person event in Riyadh, employer's city not otherwise checked."
         }
       ],
-      "notes": null
+      "notes": "no dbt evidence."
     },
     {
       "id": "first-link",
@@ -3747,16 +3856,44 @@
       "id": "datamatics-technologies",
       "name": "DataMatics Technologies",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Riyadh"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL",
+        "Power BI",
+        "Tableau",
+        "Looker",
+        "Mixpanel",
+        "Amplitude"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics & Transformation Engineer",
+          "url": "https://sabbar.com/en/jobs/c-riyadh-r-analytics-and-transformation-engineer/id-b17d6135-1103-477f-b3af-3d389afef908",
+          "source": "sabbar.com job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Analytics Engineering: dbt and SQL",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board_listing",
+          "url": "https://www.metaintro.com/job/analytics-and-transformation-engineer-at-datamaticstechnologies-2f5f6cc6-245b-5cd1-80c8-360a97d113c5",
+          "note": "same role mirrored on metaintro; two more mirrors seen. fetch returned 429"
+        }
+      ],
       "people": [
         {
           "id": "muhammad-adil",
@@ -3798,7 +3935,7 @@
           "notes": "github profile https://github.com/adiltanoli gives the location Riyadh"
         }
       ],
-      "notes": null
+      "notes": "ad lists dbt as a required skill. a second Datamatics ad (Data Science & Analytics Engineer, posted 2026-08-14) has no dbt."
     },
     {
       "id": "elm",
@@ -4928,12 +5065,272 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "deraah-trading-company",
+      "name": "Deraah Trading Company",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Riyadh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Azure Data Factory",
+        "Apache Airflow",
+        "Microsoft Fabric",
+        "Azure Synapse",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://sabbar.com/en/jobs/c-riyadh-r-data-engineer/id-aa2324b8-cc0a-4347-8ac1-4812f4d0d719",
+          "source": "sabbar.com job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL/ELT data extraction, transformation, and loading processes utilizing Azure Data Factory, dbt, and Apache Airflow",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "full-time, onsite at the Riyadh headquarters. ad page now returns 410, so text is from search snippets."
+    },
+    {
+      "id": "devabundance-recruiter-for-a-riyadh-healthcare-company",
+      "name": "DevAbundance (recruiter for a Riyadh healthcare company)",
+      "type": "recruiter",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Riyadh"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Snowflake",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Snowflake Developer (Saudi Arabia)",
+          "url": "https://www.hexjobs.com/praca/oferta/zewnetrzna/snowflake-developer-saudi-arabia-4429eafb2d9d4d57bbe0d8573ae769f9",
+          "source": "hexjobs.com aggregator",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "building and optimizing ETL pipelines using tools such as dbt and Airflow",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "hiring for an unnamed leading healthcare company based in Riyadh. ad page now returns 410."
+    },
+    {
+      "id": "hungerstation-delivery-hero",
+      "name": "HungerStation (Delivery Hero)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Riyadh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Airflow",
+        "Prefect",
+        "Dagster"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_ad_checked",
+          "url": "https://careers.deliveryhero.com/job/staff-data-engineer-in-riyadh-saudi-arabia-jid-2866",
+          "note": "Staff Data Engineer, Riyadh, onsite; names orchestration tools but not dbt"
+        }
+      ],
+      "people": [],
+      "notes": "no dbt signal from the one ad read."
+    },
+    {
+      "id": "tabby",
+      "name": "Tabby",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Riyadh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_ad_checked",
+          "url": "https://jobs.global.vc/companies/tabby/jobs/71876273-senior-data-engineer-saudi-national",
+          "note": "Senior Data Engineer (Saudi National), Riyadh, onsite; no dbt; closed"
+        }
+      ],
+      "people": [],
+      "notes": "no dbt signal from the one ad read."
+    },
+    {
+      "id": "northern-analytics",
+      "name": "Northern Analytics",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Riyadh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-riyadh-databricks-user-group-ai-big-data-presents-riyadh-databricks-chapter-launch-meet-amp-greet-summit-recap-online/",
+          "note": "Databricks partner that sponsors the Riyadh Databricks User Group"
+        }
+      ],
+      "people": [
+        {
+          "id": "abdulah-abbas",
+          "name": "Abdulah Abbas",
+          "pronouns": null,
+          "title": "Public Relations Director",
+          "city": "Riyadh",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Riyadh Databricks Chapter Launch: Meet & Greet + Summit Recap",
+              "title": "organiser, Riyadh Databricks User Group",
+              "date": "2025-07",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-riyadh-databricks-user-group-ai-big-data-presents-riyadh-databricks-chapter-launch-meet-amp-greet-summit-recap-online/",
+              "content_id": "riyadh-databricks-chapter-launch-meet-greet-summit-recaporga",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "organised the online launch meetup of the local Databricks user group",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-riyadh-databricks-user-group-ai-big-data-presents-riyadh-databricks-chapter-launch-meet-amp-greet-summit-recap-online/",
+              "note": "organiser: organiser, Riyadh Databricks User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to Databricks users and data speakers in Riyadh",
+          "past_chapter_talks": [],
+          "notes": "organiser of the Riyadh Databricks User Group launch event; location from the Riyadh event, not a profile."
+        }
+      ],
+      "notes": "no dbt evidence."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/riyadh-dbt-meetup/",
     "past_meetups_derived_from": "enriched/riyadh-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Snowflake User Group Saudi Arabia, first Riyadh event (May 2025)",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-saudi-arabia-presents-snowflake-user-group-riyadh-snowflake-is-in-town",
+        "yielded": false,
+        "note": "four speakers, all already on file"
+      },
+      {
+        "name": "Snowflake User Group Saudi Arabia, dbt + Snowflake event (Sep 2025)",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-saudi-arabia-presents-lets-hangout-snowflake-enthusiasts-meetup-2",
+        "yielded": false,
+        "note": "dbt session by Evan Appolonio, already on file"
+      },
+      {
+        "name": "Databricks User Group Riyadh launch event",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-riyadh-databricks-user-group-ai-big-data-presents-riyadh-databricks-chapter-launch-meet-amp-greet-summit-recap-online/",
+        "yielded": true,
+        "note": "no speakers; organiser Abdulah Abbas of Northern Analytics, a connector"
+      },
+      {
+        "name": "WiDS Riyadh 2023",
+        "url": "https://www.widsworldwide.org/events/event/wids-riyadh/",
+        "yielded": true,
+        "note": "five ambassadors listed; one with data analytics title recorded"
+      },
+      {
+        "name": "Delivery Hero careers: HungerStation Staff Data Engineer, Riyadh",
+        "url": "https://careers.deliveryhero.com/job/staff-data-engineer-in-riyadh-saudi-arabia-jid-2866",
+        "yielded": false,
+        "note": "no dbt in the ad"
+      },
+      {
+        "name": "Tabby Senior Data Engineer (Saudi National), Riyadh",
+        "url": "https://jobs.global.vc/companies/tabby/jobs/71876273-senior-data-engineer-saudi-national",
+        "yielded": false,
+        "note": "no dbt; closed"
+      },
+      {
+        "name": "Datamatics Data Science & Analytics Engineer, Riyadh (freehire)",
+        "url": "https://freehire.me/jobs/data-science-analytics-engineer-datamatics-global-services-ltd-ag4uqmlw",
+        "yielded": false,
+        "note": "posted 2026-08-14; no dbt in the text"
+      },
+      {
+        "name": "sabbar.com job board, Riyadh data engineer",
+        "url": "https://sabbar.com/en/jobs/c-riyadh-r-data-engineer",
+        "yielded": true,
+        "note": "dbt ads found via search; ad pages return 410"
+      },
+      {
+        "name": "Salla Senior/Staff Analytics Engineer",
+        "url": "https://www.jointaro.com/jobs/salla/seniorstaff-analytics-engineer",
+        "yielded": false,
+        "note": "Jeddah, outside the region; not fetched"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -4963,6 +5360,21 @@
       "name": "Women in Tech Community",
       "url": "https://www.meetup.com/Riyadh-Women-in-Tech-Meetup-Group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake User Group Saudi Arabia",
+      "url": "https://usergroups.snowflake.com/saudi-arabia-1",
+      "note": "Riyadh chapter, led by Alex Bozic (already on file); two events in 2025"
+    },
+    {
+      "name": "Riyadh Databricks User Group",
+      "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-riyadh-databricks-user-group-ai-big-data-presents-riyadh-databricks-chapter-launch-meet-amp-greet-summit-recap-online/",
+      "note": "launched 2025 by Northern Analytics"
+    },
+    {
+      "name": "WiDS Riyadh",
+      "url": "https://www.widsworldwide.org/events/event/wids-riyadh/",
+      "note": "annual women in data science regional event and datathon; last page seen is 2023"
     }
   ]
 }

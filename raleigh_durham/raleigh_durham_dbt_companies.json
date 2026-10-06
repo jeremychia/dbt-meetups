@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Raleigh-Durham companies using dbt, and people who could speak at or attend the Raleigh dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Raleigh-Durham (Raleigh dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Built In city pages tag many remote roles to raleigh; open each ad to check the office city before counting it as local.",
+      "Snowflake and Tableau user group event pages name organisers and speakers with employers, which is the best local people source found.",
+      "Several job aggregator links in search results returned 404 or 410 within days, so the ad text could not be checked."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,48 +51,53 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "No first-time speaker with a public dbt post and a regional location was found in about 25 calls.",
+      "Aggregator ads (alooba, vaia, builtin) can be stale; the CAPTRUST and Infosys ads had no confirmed posting date from the source page.",
+      "Jennifer Jung, Troy Schuh and Drew Froman locations are not confirmed."
     ],
     "counts": {
-      "companies": 43,
-      "people": 118,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 65,
-      "unique_content_items": 36,
+      "companies": 50,
+      "people": 122,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 69,
+      "unique_content_items": 38,
       "people_with_linkedin": 26,
       "people_with_contact": 66,
       "people_who_spoke_at_this_chapter": 1,
       "internal_vinted": 0,
       "level": {
-        "working": 107,
+        "working": 111,
         "leadership": 11
       },
       "speaker_potential": {
         "high": 2,
-        "medium": 63,
+        "medium": 67,
         "low": 53
       },
       "attendee_potential": {
-        "medium": 118
+        "medium": 122
       },
       "priority_tier": {
         "1": 1,
         "3": 82,
         "2": 5,
-        "connector": 30
+        "connector": 34
       },
-      "watchlist_companies": 42,
+      "watchlist_companies": 46,
       "past_meetups": 1,
       "lead_type": {
         "proven_speaker": 65,
-        "no_public_content": 53
+        "no_public_content": 57
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 1,
-        "conference_or_meetup_agenda": 64,
-        "github": 53
+        "conference_or_meetup_agenda": 67,
+        "github": 53,
+        "women_in_data_community": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -121,7 +130,7 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 36,
+      "community": 40,
       "data engineering": 17,
       "business intelligence": 13,
       "data governance": 5,
@@ -6688,12 +6697,490 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "captrust",
+      "name": "CAPTRUST",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Raleigh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer: dbt Data Modeling & Production",
+          "url": "https://talents.vaia.com/companies/captrust/raleigh/analytics-engineer-dbt-data-modeling-production-113358903/",
+          "source": "job aggregator (vaia) mirroring CAPTRUST careers",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "extensive experience with dbt and SQL",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "on-site"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://careers-captrust.icims.com/jobs/2334/analytics-engineer/job",
+          "note": "company careers page link from search; page body did not load the ad text"
+        }
+      ],
+      "people": [],
+      "notes": "ad says the role owns the dbt analytics transformation layer and dbt project stewardship."
+    },
+    {
+      "id": "infosys",
+      "name": "Infosys",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Raleigh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Azure",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "DBT Data Engineer",
+          "url": "https://jobs.alooba.com/us/job/infosys-dbt-data-engineer-854360/",
+          "source": "job aggregator (alooba)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with DBT for complex transformations.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad is for roles at client sites in raleigh nc or richardson tx."
+    },
+    {
+      "id": "cti-consulting",
+      "name": "CTI Consulting",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Durham"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "Oracle",
+        "Informatica",
+        "Snowflake",
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - Oracle Apps 181451",
+          "url": "https://builtin.com/job/data-engineer-oracle-apps-181451/11425684",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Familiarity with modern data stack tools (dbt, Airflow, etc.)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt is a preferred skill only."
+    },
+    {
+      "id": "enact-mortgage-insurance",
+      "name": "Enact Mortgage Insurance",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Raleigh"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "AWS",
+        "Informatica"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://builtin.com/job/data-integration-engineer/8105121",
+          "note": "raleigh data integration engineer ad lists snowflake, aws and informatica; no dbt mentioned"
+        },
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-raleigh-presents-elevating-snowflake-advanced-data-transformation-techniques-for-the-modern-data-stack",
+          "note": "staff organise the snowflake raleigh user group, which hosted a dbt session in march 2025"
+        }
+      ],
+      "people": [
+        {
+          "id": "drew-froman",
+          "name": "Drew Froman",
+          "pronouns": null,
+          "title": "Organiser, Snowflake Raleigh User Group (Enact Mortgage Insurance)",
+          "city": "Raleigh",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake Raleigh User Group",
+              "title": "Elevating Snowflake: advanced data transformation techniques for the modern data stack",
+              "date": "2025-03",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-raleigh-presents-elevating-snowflake-advanced-data-transformation-techniques-for-the-modern-data-stack",
+              "content_id": "snowflake-raleigh-user-groupelevating-snowflake-advanced-dat",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "co-organiser of the dbt and snowflake session with dbt Labs and Slalom speakers",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-raleigh-presents-elevating-snowflake-advanced-data-transformation-techniques-for-the-modern-data-stack",
+              "note": "organiser: Elevating Snowflake: advanced data transformation techniques for the modern data stack"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce local speakers for a dbt meetup in the triangle",
+          "past_chapter_talks": [],
+          "notes": "organiser of the snowflake raleigh user group alongside christopher scott; location not stated on a personal page."
+        }
+      ],
+      "notes": "head office in raleigh per search result; dbt use not shown."
+    },
+    {
+      "id": "deutsche-bank",
+      "name": "Deutsche Bank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cary"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+          "note": "hosted the tableau user group at its cary office in may 2025"
+        }
+      ],
+      "people": [
+        {
+          "id": "jesse-bikman",
+          "name": "Jesse Bikman",
+          "pronouns": null,
+          "title": "Organiser, Raleigh-Durham Tableau User Group (Deutsche Bank)",
+          "city": "Cary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Raleigh-Durham Tableau User Group",
+              "title": "Tableau Encore: Bringing TC25 Magic to the Triangle",
+              "date": "2025-05",
+              "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+              "content_id": "raleighdurham-tableau-user-grouptableau-encore-bringing-tc25",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "organiser of the bi user group meeting held in cary",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+              "note": "organiser: Tableau Encore: Bringing TC25 Magic to the Triangle"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce local speakers for a dbt meetup in the triangle",
+          "past_chapter_talks": [],
+          "notes": "listed as organiser of an in-person event hosted at deutsche bank in cary nc, may 2025."
+        }
+      ],
+      "notes": "no dbt evidence."
+    },
+    {
+      "id": "interworks",
+      "name": "InterWorks",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+          "note": "staff member co-organises the raleigh-durham tableau user group"
+        }
+      ],
+      "people": [
+        {
+          "id": "troy-schuh",
+          "name": "Troy Schuh",
+          "pronouns": null,
+          "title": "Analytics Consultant, InterWorks; organiser, Raleigh-Durham Tableau User Group",
+          "city": "Raleigh-Durham",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Raleigh-Durham Tableau User Group",
+              "title": "Tableau Encore: Bringing TC25 Magic to the Triangle",
+              "date": "2025-05",
+              "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+              "content_id": "raleighdurham-tableau-user-grouptableau-encore-bringing-tc25",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "co-organiser of the bi user group meeting",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+              "note": "organiser: Tableau Encore: Bringing TC25 Magic to the Triangle"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce local speakers for a dbt meetup in the triangle",
+          "past_chapter_talks": [],
+          "notes": "co-organiser listed on the may 2025 event page; location not confirmed."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "virgin-voyages",
+      "name": "Virgin Voyages",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.tableau.com/data-women-north-carolina/",
+          "note": "employee leads data + women north carolina"
+        }
+      ],
+      "people": [
+        {
+          "id": "jennifer-jung",
+          "name": "Jennifer Jung",
+          "pronouns": null,
+          "title": "Business Insights Analyst, Virgin Voyages; leader, Data + Women North Carolina",
+          "city": "North Carolina",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data + Women North Carolina",
+              "title": "Group leader",
+              "date": "2026",
+              "url": "https://usergroups.tableau.com/data-women-north-carolina/",
+              "content_id": "data-women-north-carolinagroup-leader",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "group leader; runs in-person and virtual events across north carolina",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/data-women-north-carolina/",
+              "note": "organiser: Group leader"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce local speakers for a dbt meetup in the triangle",
+          "past_chapter_talks": [],
+          "notes": "one of three leaders of a north carolina women-in-data group; city not stated."
+        }
+      ],
+      "notes": ""
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/raleigh-d/",
     "past_meetups_derived_from": "enriched/raleigh-d.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Built In Raleigh-Durham data engineering jobs",
+        "url": "https://builtin.com/jobs/raleigh-durham/data-analytics/data-engineering",
+        "yielded": true,
+        "note": "lists dbt-tagged roles, but most are remote roles tagged to raleigh; only in-office ones used"
+      },
+      {
+        "name": "Built In Raleigh-Durham senior analytics jobs",
+        "url": "https://builtin.com/jobs/raleigh-durham/data-analytics/analytics/senior?page=3",
+        "yielded": false,
+        "note": "all dbt roles were remote; no local employer confirmed"
+      },
+      {
+        "name": "Snowflake Raleigh user group",
+        "url": "https://usergroups.snowflake.com/raleigh/",
+        "yielded": true,
+        "note": "organisers named; recent events list no dates or speakers"
+      },
+      {
+        "name": "Tableau Raleigh-Durham user group event page",
+        "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+        "yielded": true,
+        "note": "organisers and one speaker, no dbt content"
+      },
+      {
+        "name": "Data + Women North Carolina",
+        "url": "https://usergroups.tableau.com/data-women-north-carolina/",
+        "yielded": true,
+        "note": "three organisers named; events are career and community, not dbt"
+      },
+      {
+        "name": "R-Ladies RTP on Meetup",
+        "url": "https://www.meetup.com/R-Ladies-RTP",
+        "yielded": false,
+        "note": "organisers not named; r-focused, small turnout"
+      },
+      {
+        "name": "WiDS Raleigh at NC State 2025",
+        "url": "https://datascienceacademy.ncsu.edu/wids-raleigh-nc-state-2025-agenda",
+        "yielded": false,
+        "note": "search result only, not fetched; academic and ai themes, no dbt speakers seen"
+      },
+      {
+        "name": "dbt Labs case studies and community spotlight",
+        "url": "https://docs.getdbt.com/community/spotlight",
+        "yielded": false,
+        "note": "no triangle company or person surfaced"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6784,6 +7271,26 @@
       "name": "Women in Tech",
       "url": "https://www.meetup.com/meetup-group-bpcklrba/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake Raleigh User Group",
+      "url": "https://usergroups.snowflake.com/raleigh/",
+      "note": "ran a dbt and snowflake session in March 2025 with dbt Labs"
+    },
+    {
+      "name": "Tableau Raleigh-Durham User Group",
+      "url": "https://usergroups.tableau.com/events/details/tableau-raleigh-durham-tableau-user-group-presents-tableau-encore-bringing-tc25-magic-to-the-triangle",
+      "note": "bi group; organisers include Enact MI, TEKsystems, Deutsche Bank and InterWorks staff"
+    },
+    {
+      "name": "Data + Women North Carolina",
+      "url": "https://usergroups.tableau.com/data-women-north-carolina/",
+      "note": "women-in-data community, launched May 2026"
+    },
+    {
+      "name": "R-Ladies RTP",
+      "url": "https://www.meetup.com/R-Ladies-RTP",
+      "note": "women and non-binary r community in durham"
     }
   ]
 }
