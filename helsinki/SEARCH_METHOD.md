@@ -7,20 +7,20 @@ This file holds what is specific to Helsinki. The method, scoring rules, schema 
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 15 |
-| People | 17 |
+| Companies | 48 |
+| People | 105 |
 | Tier 1 leads | 10 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 17 |
+| Proven speakers | 67 |
 | Spoke at this chapter before | 17 |
-| Based in the region | 0 |
+| Based in the region | 67 |
 | Based elsewhere | 0 |
-| Location unknown | 17 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 38 |
+| With a LinkedIn profile | 13 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-15 companies and communities were looked at. A company is local when it has people or roles in the region.
+47 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (15)</summary>
 
 Aiven (local presence not confirmed), Anora (local presence not confirmed), Breakout Labs (local presence not confirmed), Databricks (local presence not confirmed), dbt Labs (local presence not confirmed), Finnair (local presence not confirmed), Kaito Insight (local presence not confirmed), reconfigured.io (local presence not confirmed), Smartly.io (local presence not confirmed), SOK (local presence not confirmed), Supercell (local presence not confirmed), Supermetrics (local presence not confirmed), SYNQ (local presence not confirmed), Twoday (local presence not confirmed), UPM (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (32)</summary>
+
+adikteev (local presence not confirmed), ALM Partners (local presence not confirmed), Argonteq (local presence not confirmed), Biztory (local presence not confirmed), EKAI (local presence not confirmed), Fennia (local presence not confirmed), Fiskars Group (local presence not confirmed), HappySignals Oy (local presence not confirmed), Inmeta (local presence not confirmed), Karshk Global Consultants Pvt Ltd (local presence not confirmed), Knowit (local presence not confirmed), Knowit Solutions Oy (local presence not confirmed), Kynsilehto Consulting (local presence not confirmed), LTI (local presence not confirmed), Mainframe Industries (local presence not confirmed), Metacore (local presence not confirmed), Metso (local presence not confirmed), Neste (local presence not confirmed), Nortal (local presence not confirmed), Orion Corporation (local presence not confirmed), Salesforce (local presence not confirmed), Sema4.ai (local presence not confirmed), Snowflake (local presence not confirmed), snowharbor (local presence not confirmed), Solita Oy (local presence not confirmed), Tietoevry (local presence not confirmed), True Diamonds Analytics (local presence not confirmed), University of Oulu (local presence not confirmed), VR (local presence not confirmed), Yleisradio (local presence not confirmed), YousicianGit (local presence not confirmed), Zero (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

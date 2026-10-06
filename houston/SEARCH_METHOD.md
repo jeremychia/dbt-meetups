@@ -7,20 +7,20 @@ This file holds what is specific to Houston. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 2 |
-| People | 2 |
+| Companies | 48 |
+| People | 135 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 2 |
+| Proven speakers | 35 |
 | Spoke at this chapter before | 2 |
-| Based in the region | 0 |
+| Based in the region | 121 |
 | Based elsewhere | 0 |
-| Location unknown | 2 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 51 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-2 companies and communities were looked at. A company is local when it has people or roles in the region.
+47 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (2)</summary>
 
 Data Scientist (local presence not confirmed), kipi.bi (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (45)</summary>
+
+10Alytics (local presence not confirmed), Accenture Innovation Hub (local presence not confirmed), Amazon (local presence not confirmed), Amtech Software, Inc. (local presence not confirmed), ApTask (local presence not confirmed), Becton, Dickinson and Co. (local presence not confirmed), Booz Allen Hamilton (local presence not confirmed), Capital Bank (local presence not confirmed), CenterPoint Energy (local presence not confirmed), Chirality Research Inc. (local presence not confirmed), Cognite (local presence not confirmed), Colaberry (local presence not confirmed), Data & AI Engineering (local presence not confirmed), Diversified Energy Corporation (local presence not confirmed), duke energy (local presence not confirmed), Empyrean Benefit Solutions (local presence not confirmed), Entrada AI (local presence not confirmed), EOG Resources (local presence not confirmed), Equinor (local presence not confirmed), Evolve Elevations (local presence not confirmed), Google (local presence not confirmed), IBM (local presence not confirmed), Ideation (local presence not confirmed), KPMG (local presence not confirmed), Lumen (local presence not confirmed), Mexilink (local presence not confirmed), Microsoft TEALS (local presence not confirmed), mikegoldster@gmail.com (local presence not confirmed), Open to work (local presence not confirmed), PathAI (local presence not confirmed), Rice University (local presence not confirmed), ScaleCapacity (local presence not confirmed), sede-x (local presence not confirmed), Seeq (local presence not confirmed), ServiceNow (local presence not confirmed), soundstatellc (local presence not confirmed), SSR Research and Development, Inc. (local presence not confirmed), Sysco (local presence not confirmed), The University of Texas MD Anderson Cancer Center (local presence not confirmed), University at Buffalo (local presence not confirmed), University of Houston (local presence not confirmed), University Of Houston Clear Lake (local presence not confirmed), Vimo (local presence not confirmed), WarrCloud (local presence not confirmed), Yes (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

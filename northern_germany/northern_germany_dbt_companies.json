@@ -4,11 +4,12 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Hamburg/Hanover companies using dbt, and people who could speak at or attend the Northern Germany dbt Meetup.",
-    "version": 1,
+    "version": 2,
     "schema_version": 4,
     "region": "Hamburg/Hanover (Northern Germany dbt Meetup)",
     "method": [
-      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file."
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -45,40 +46,50 @@
       "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
     },
     "caveats": [
-      "Titles and employers of past speakers come from the meetup talk text; verify before outreach."
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
     ],
     "counts": {
-      "companies": 6,
-      "people": 7,
+      "companies": 48,
+      "people": 94,
       "job_postings": 0,
       "companies_with_job_postings": 0,
-      "speaker_evidence_items": 0,
-      "unique_content_items": 0,
-      "people_with_linkedin": 0,
-      "people_with_contact": 0,
+      "speaker_evidence_items": 41,
+      "unique_content_items": 18,
+      "people_with_linkedin": 31,
+      "people_with_contact": 32,
       "people_who_spoke_at_this_chapter": 7,
       "internal_vinted": 0,
       "level": {
-        "working": 7
+        "working": 86,
+        "leadership": 8
       },
       "speaker_potential": {
-        "high": 7
+        "high": 10,
+        "medium": 28,
+        "low": 56
       },
       "attendee_potential": {
-        "medium": 7
+        "medium": 64,
+        "high": 30
       },
       "priority_tier": {
         "2": 3,
+        "connector": 7,
+        "3": 80,
         "1": 4
       },
-      "watchlist_companies": 5,
+      "watchlist_companies": 47,
       "past_meetups": 2,
       "lead_type": {
-        "proven_speaker": 7
+        "proven_speaker": 38,
+        "no_public_content": 56
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
-        "chapter_meetup_history": 7
+        "chapter_meetup_history": 7,
+        "conference_or_meetup_agenda": 34,
+        "github": 56
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -110,7 +121,12 @@
       "domain-specific use cases",
       "data warehouse & platforms"
     ],
-    "topic_counts": {}
+    "topic_counts": {
+      "data warehouse & platforms": 28,
+      "data engineering": 11,
+      "community": 7,
+      "analytics engineering": 6
+    }
   },
   "companies": [
     {
@@ -120,7 +136,8 @@
       "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
-        "Hamburg/Hanover"
+        "Hamburg/Hanover",
+        "Hamburg"
       ],
       "local_presence": "not_confirmed",
       "dbt_signal": "strong",
@@ -146,12 +163,57 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
-          "mentions_dbt": null,
-          "speaker_evidence": [],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Northern Germany dbt Meetup",
+              "title": "Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "content_id": "northern-germany-dbt-meetupnorthern-germany-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Analytics Engineering Northern Germany Meetup Group",
+              "title": "Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "content_id": "analytics-engineering-northern-germany-meetup-groupnorthern",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "note": "talk: Northern Germany dbt Meetup"
+            },
+            {
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "note": "talk: Northern Germany dbt Meetup"
+            }
+          ],
           "confidence": "High",
           "internal_vinted": false,
           "priority_tier": 2,
@@ -165,7 +227,1258 @@
               ]
             }
           ],
-          "notes": null
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "oliver-cramer",
+          "name": "Oliver Cramer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Northern Germany dbt Meetup",
+              "title": "organiser, Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "content_id": "northern-germany-dbt-meetuporganiser-northern-germany-dbt-me",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "note": "organiser: organiser, Northern Germany dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "stephan-durry",
+          "name": "Stephan Durry",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Northern Germany dbt Meetup",
+              "title": "organiser, Northern Germany dbt Meetup",
+              "date": "2025-09-18",
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/308783148/",
+              "content_id": "northern-germany-dbt-meetuporganiser-northern-germany-dbt-me",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/308783148/",
+              "note": "organiser: organiser, Northern Germany dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "christoph-seck",
+          "name": "Christoph Seck",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Microsoft Data Platform Community Hannover - DataMonster e.V",
+              "title": "organiser, Microsoft Data Platform Community Hannover - DataMonster e.V",
+              "date": "2024-03-01",
+              "url": "https://www.meetup.com/pass-rg-hannover-meetup/events/299416695/",
+              "content_id": "microsoft-data-platform-community-hannover-datamonster-evorg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pass-rg-hannover-meetup/events/299416695/",
+              "note": "organiser: organiser, Microsoft Data Platform Community Hannover - DataMonster e.V"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "torsten-glunde",
+          "name": "Torsten Glunde",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Analytics Engineering Northern Germany Meetup Group",
+              "title": "organiser, Analytics Engineering Northern Germany Meetup Group",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "content_id": "analytics-engineering-northern-germany-meetup-grouporganiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "note": "organiser: organiser, Analytics Engineering Northern Germany Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "tanya-fischer",
+          "name": "Tanya Fischer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Hamburg Tableau User Group",
+              "title": "organiser, Hamburg Tableau User Group",
+              "date": "2025-12-10",
+              "url": "https://usergroups.tableau.com/e/mzn726/",
+              "content_id": "hamburg-tableau-user-grouporganiser-hamburg-tableau-user-gro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mzn726/",
+              "note": "organiser: organiser, Hamburg Tableau User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "janos-vad",
+          "name": "Janos Vad",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Hamburg Databricks User Group",
+              "title": "organiser, Hamburg Databricks User Group",
+              "date": "2026-09-17",
+              "url": "https://usergroups.databricks.com/e/m4dk9j/",
+              "content_id": "hamburg-databricks-user-grouporganiser-hamburg-databricks-us",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4dk9j/",
+              "note": "organiser: organiser, Hamburg Databricks User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "henrik-kram",
+          "name": "Henrik Kram",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Hamburg Databricks User Group",
+              "title": "organiser, Hamburg Databricks User Group",
+              "date": "2026-09-17",
+              "url": "https://usergroups.databricks.com/e/m4dk9j/",
+              "content_id": "hamburg-databricks-user-grouporganiser-hamburg-databricks-us",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4dk9j/",
+              "note": "organiser: organiser, Hamburg Databricks User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "pavan-kumar",
+          "name": "Pavan Kumar",
+          "pronouns": null,
+          "title": "Cloud Data Engineer with Master's degree in Scientific Instrumentation. ",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Abbavanna",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Abbavanna gives the location Hamburg, Germany"
+        },
+        {
+          "id": "bercin-ersoz",
+          "name": "Berçin ERSÖZ",
+          "pronouns": null,
+          "title": "Experienced Data Scientist with a strong background in machine learning, deep learning, and business intelligence. Proficient in Python, SQL, and Tableau.",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bercinersoz"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/BercinErsoz",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/BercinErsoz gives the location Hamburg"
+        },
+        {
+          "id": "bianca-niemann",
+          "name": "Bianca Niemann",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bianca-niemann/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/BiancaNiemann",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/BiancaNiemann gives the location Hamburg"
+        },
+        {
+          "id": "andre-petersen",
+          "name": "André Petersen",
+          "pronouns": null,
+          "title": "AI & Data Engineer, Meteorologist, loves racing (games) and vegetable gardening",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Dremet",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Dremet gives the location Hamburg, Germany"
+        },
+        {
+          "id": "graciela-quinones-weiss",
+          "name": "Graciela Quinones Weiss",
+          "pronouns": null,
+          "title": "Physics Engineer taking the Google Data Analytics Professional Certificate in hopes of becoming a Data Analyst/Scientist",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/GracielaQW",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/GracielaQW gives the location Hamburg"
+        },
+        {
+          "id": "isa-kristina-m",
+          "name": "Isa Kristina M",
+          "pronouns": null,
+          "title": "Data Engineer / Data Analyst / KI Specialist",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Hanamoongit",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Hanamoongit gives the location Hamburg"
+        },
+        {
+          "id": "inji-mammadova",
+          "name": "Inji Mammadova",
+          "pronouns": null,
+          "title": "Data Analyst | Customer, E-Commerce & Sales Analytics | Turning data into actionable business insights",
+          "city": "Hannover, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/inji-mammadova-analyst"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/InjiMammadova",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/InjiMammadova gives the location Hannover, Germany"
+        },
+        {
+          "id": "kathrin-halbich",
+          "name": "Kathrin Hälbich",
+          "pronouns": null,
+          "title": "Data Analytics Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Kathrin-92",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Kathrin-92 gives the location Hamburg"
+        },
+        {
+          "id": "rajat-sharma",
+          "name": "Rajat Sharma",
+          "pronouns": null,
+          "title": "Data Engineer & Scientist ",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Rajatsharma07",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Rajatsharma07 gives the location Hamburg"
+        },
+        {
+          "id": "kalpesh-baviskar",
+          "name": "Kalpesh Baviskar",
+          "pronouns": null,
+          "title": "Market Research Analyst | IoT & Technology Intelligence | Learning Python, Data Analytics & Automation",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kalpesh-baviskar"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Spideyweb727",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Spideyweb727 gives the location Hamburg, Germany"
+        },
+        {
+          "id": "vladyslava-ilchuk",
+          "name": "Vladyslava Ilchuk",
+          "pronouns": null,
+          "title": "Junior Data Analyst & Business Intelligence | Python • SQL • Power BI • Tableau • Excel • Google Sheets • AI Tools | Data Analysis & Visualization",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/vladyslava-ilchuk-91346b384"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Vladyslava-Ilchuk",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Vladyslava-Ilchuk gives the location Hamburg, Germany"
+        },
+        {
+          "id": "yannick-wenger",
+          "name": "Yannick Wenger",
+          "pronouns": null,
+          "title": "Finished M.Sc. in physics in 2017.  IT Consultant, Data Engineer, Product Owner",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/YannickWenger",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/YannickWenger gives the location Hamburg"
+        },
+        {
+          "id": "yaroslav-tarasenko",
+          "name": "Yaroslav Tarasenko",
+          "pronouns": null,
+          "title": "Data Analyst specializing in HR & People Analytics | Python/SQL dashboards & predictive models | 5+ years business operations experience | Hamburg",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/YaroslavStack",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/YaroslavStack gives the location Hamburg"
+        },
+        {
+          "id": "euriel-chukwu",
+          "name": "Euriel Chukwu",
+          "pronouns": null,
+          "title": "Data Engineer & Analyst blending AI, product insight, and supply chain experience. Skilled in Python, SQL, ML, dashboards & cross-functional teamwork.",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://linkedin.com/in/euriel-chukwu-0322a3ba"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ceuriel",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ceuriel gives the location Hamburg"
+        },
+        {
+          "id": "dmitrii-utkin",
+          "name": "Dmitrii Utkin",
+          "pronouns": null,
+          "title": "Data engineer and full-stack developer with 10+ years building and shipping production systems.",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/utkindmitrii/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dutking",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dutking gives the location Hamburg, Germany"
+        },
+        {
+          "id": "evgeniya-englert",
+          "name": "Evgeniya Englert",
+          "pronouns": null,
+          "title": "Senior Data Scientist and Strategic Analytics & Insights Lead with 15+ years of experience in digital marketing, business intelligence, ML, cloud technologies.",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/evgeniya-englert/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/evenglert",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/evenglert gives the location Hamburg, Germany"
+        },
+        {
+          "id": "gunes-sen",
+          "name": "Günes Sen",
+          "pronouns": null,
+          "title": "Data engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gunessen",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gunessen gives the location Hamburg"
+        },
+        {
+          "id": "jannis-madison",
+          "name": "Jannis Madison",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jbergbrede",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jbergbrede gives the location Hamburg, Germany"
+        },
+        {
+          "id": "md-nasir-hossain",
+          "name": "Md Nasir Hossain",
+          "pronouns": null,
+          "title": "Data Engineer | Skilled in SQL, Python, Excel | Reliable, Detail-Focused, and Passionate About data  Pypeline and Data-Driven Solution.",
+          "city": "Hannover",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/md-nasir-hossain-599080242"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mdnasirhossain20",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mdnasirhossain20 gives the location Hannover"
+        },
+        {
+          "id": "sunjay-nair",
+          "name": "Sunjay Nair",
+          "pronouns": null,
+          "title": "I'm a Senior Data Engineer with over a decade of experience in designing, developing, and optimizing data pipelines and architectures.",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/nairsunjay",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/nairsunjay gives the location Hamburg"
+        },
+        {
+          "id": "nnaemeka-ndubuisi",
+          "name": "Nnaemeka Ndubuisi",
+          "pronouns": null,
+          "title": "Data Analyst | Environmental Data Science | Python, SQL, Power BI | ETL Pipelines | Geospatial Analytics | Machine Learning",
+          "city": "Hannover, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/nnaemeka-ndubuisi-a11153151/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/nnaemeka-ndubuisi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/nnaemeka-ndubuisi gives the location Hannover, Germany"
+        },
+        {
+          "id": "riccardo-mei",
+          "name": "Riccardo Mei",
+          "pronouns": null,
+          "title": "Data Engineer  ",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/rmei96/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/richim96",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/richim96 gives the location Hamburg"
+        },
+        {
+          "id": "arda-yildirim",
+          "name": "Arda Yildirim",
+          "pronouns": null,
+          "title": "Lead Data Engineer | Cloud Data Architect",
+          "city": "Hannover, Germany",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/yildirimarda",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/yildirimarda gives the location Hannover, Germany"
         }
       ],
       "notes": "employer of a past Northern Germany dbt Meetup speaker"
@@ -193,7 +1506,9 @@
           "city": "Hamburg/Hanover",
           "based_in_region": null,
           "level": "working",
-          "linkedin_urls": [],
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/chad-sanderson"
+          ],
           "has_linkedin": false,
           "linkedin_confidence": "not_searched",
           "profile_urls": [],
@@ -203,12 +1518,57 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
-          "mentions_dbt": null,
-          "speaker_evidence": [],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Northern Germany dbt Meetup",
+              "title": "Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "content_id": "northern-germany-dbt-meetupnorthern-germany-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Analytics Engineering Northern Germany Meetup Group",
+              "title": "Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "content_id": "analytics-engineering-northern-germany-meetup-groupnorthern",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "note": "talk: Northern Germany dbt Meetup"
+            },
+            {
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "note": "talk: Northern Germany dbt Meetup"
+            }
+          ],
           "confidence": "High",
           "internal_vinted": false,
           "priority_tier": 2,
@@ -222,7 +1582,7 @@
               ]
             }
           ],
-          "notes": null
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
         }
       ],
       "notes": "employer of a past Northern Germany dbt Meetup speaker"
@@ -260,12 +1620,57 @@
           },
           "lead_type": "proven_speaker",
           "sourced_via": [
-            "chapter_meetup_history"
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
           ],
-          "mentions_dbt": null,
-          "speaker_evidence": [],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Northern Germany dbt Meetup",
+              "title": "Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "content_id": "northern-germany-dbt-meetupnorthern-germany-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Analytics Engineering Northern Germany Meetup Group",
+              "title": "Northern Germany dbt Meetup",
+              "date": "2024-04-12",
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "content_id": "analytics-engineering-northern-germany-meetup-groupnorthern",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
           "attendee_signal": null,
-          "evidence": [],
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/norther-germany-dbt-meetup/events/299768736/",
+              "note": "talk: Northern Germany dbt Meetup"
+            },
+            {
+              "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/299768803/",
+              "note": "talk: Northern Germany dbt Meetup"
+            }
+          ],
           "confidence": "High",
           "internal_vinted": false,
           "priority_tier": 2,
@@ -280,7 +1685,7 @@
               ]
             }
           ],
-          "notes": null
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
         }
       ],
       "notes": "employer of a past Northern Germany dbt Meetup speaker"
@@ -497,6 +1902,3419 @@
         }
       ],
       "notes": "employer of a past Northern Germany dbt Meetup speaker"
+    },
+    {
+      "id": "accenture",
+      "name": "Accenture",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "julia-remes",
+          "name": "Julia Remes",
+          "pronouns": null,
+          "title": "Data Architecture Specialist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Exploring Governed Data Mesh with Snowflake and Cortex Code use-cases discussion",
+              "date": "2026-03-31",
+              "url": "https://usergroups.snowflake.com/e/m6wcv9/",
+              "content_id": "hamburgexploring-governed-data-mesh-with-snowflake-and-corte",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m6wcv9/",
+              "note": "talk: Exploring Governed Data Mesh with Snowflake and Cortex Code use-cases discussion"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "tim-stemke",
+          "name": "Tim Stemke",
+          "pronouns": null,
+          "title": "Data Architecture Specialist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Inside Apache Iceberg: Architecture, Catalogs, and How Snowflake Brings It to Life",
+              "date": "2025-09-23",
+              "url": "https://usergroups.snowflake.com/e/my4scp/",
+              "content_id": "hamburginside-apache-iceberg-architecture-catalogs-and-how-s",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/my4scp/",
+              "note": "talk: Inside Apache Iceberg: Architecture, Catalogs, and How Snowflake Brings It to Life"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "tobias-krueger",
+          "name": "Tobias Krueger",
+          "pronouns": null,
+          "title": "Data Architecture Manager / Snowflake Data Superhero",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Hamburg September 2024",
+              "date": "2024-09-26",
+              "url": "https://usergroups.snowflake.com/e/m24b7b/",
+              "content_id": "hamburgsnowflake-user-group-hamburg-september-2024",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m24b7b/",
+              "note": "talk: Snowflake User Group Hamburg September 2024"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jochen-jorg",
+          "name": "Jochen Jörg",
+          "pronouns": null,
+          "title": "Principal Solution Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Hamburg Snowflake User Group",
+              "date": "2024-03-14",
+              "url": "https://usergroups.snowflake.com/e/mgpjxs/",
+              "content_id": "hamburghamburg-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mgpjxs/",
+              "note": "talk: Hamburg Snowflake User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "michael-drazek",
+          "name": "Michael Drazek",
+          "pronouns": null,
+          "title": "Solution Engineering Manager",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Hamburg Snowflake User Group",
+              "date": "2024-03-14",
+              "url": "https://usergroups.snowflake.com/e/mgpjxs/",
+              "content_id": "hamburghamburg-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mgpjxs/",
+              "note": "talk: Hamburg Snowflake User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "changbin-song",
+          "name": "Changbin Song",
+          "pronouns": null,
+          "title": "Director of Engineering",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Database Community Event - Berlin",
+              "date": "2024-12-03",
+              "url": "https://usergroups.snowflake.com/e/mcgumw/",
+              "content_id": "hamburgsnowflake-database-community-event-berlin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mcgumw/",
+              "note": "talk: Snowflake Database Community Event - Berlin"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "felix-weigel",
+          "name": "Felix Weigel",
+          "pronouns": null,
+          "title": "Senior Software Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Database Community Event - Berlin",
+              "date": "2024-12-03",
+              "url": "https://usergroups.snowflake.com/e/mcgumw/",
+              "content_id": "hamburgsnowflake-database-community-event-berlin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Geospatial Community Event - Berlin",
+              "date": "2024-04-11",
+              "url": "https://usergroups.snowflake.com/e/m6m25b/",
+              "content_id": "hamburgsnowflake-geospatial-community-event-berlin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mcgumw/",
+              "note": "talk: Snowflake Database Community Event - Berlin"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/m6m25b/",
+              "note": "talk: Snowflake Geospatial Community Event - Berlin"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "ismail-oukid",
+          "name": "Ismail Oukid",
+          "pronouns": null,
+          "title": "Principal Software Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Database Community Event - Berlin",
+              "date": "2024-12-03",
+              "url": "https://usergroups.snowflake.com/e/mcgumw/",
+              "content_id": "hamburgsnowflake-database-community-event-berlin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Geospatial Community Event - Berlin",
+              "date": "2024-04-11",
+              "url": "https://usergroups.snowflake.com/e/m6m25b/",
+              "content_id": "hamburgsnowflake-geospatial-community-event-berlin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mcgumw/",
+              "note": "talk: Snowflake Database Community Event - Berlin"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/m6m25b/",
+              "note": "talk: Snowflake Geospatial Community Event - Berlin"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "fabian-gampfer",
+          "name": "Fabian Gampfer",
+          "pronouns": null,
+          "title": "Principal AI Specialist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Summit Platform Keynote Watchparty",
+              "date": "2024-06-04",
+              "url": "https://usergroups.snowflake.com/e/mg954t/",
+              "content_id": "hamburgsnowflake-summit-platform-keynote-watchparty",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Meeting Essen",
+              "date": "2024-07-04",
+              "url": "https://usergroups.snowflake.com/e/m5zjhz/",
+              "content_id": "hamburgsnowflake-user-group-meeting-essen",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Meeting Essen June 2025",
+              "date": "2025-06-26",
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "content_id": "hamburgsnowflake-user-group-meeting-essen-june-2025",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mg954t/",
+              "note": "talk: Snowflake Summit Platform Keynote Watchparty"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/m5zjhz/",
+              "note": "talk: Snowflake User Group Meeting Essen"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "note": "talk: Snowflake User Group Meeting Essen June 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "enrique-plata",
+          "name": "Enrique Plata",
+          "pronouns": null,
+          "title": "Sr. Cloud Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Meeting Essen June 2025",
+              "date": "2025-06-26",
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "content_id": "hamburgsnowflake-user-group-meeting-essen-june-2025",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "note": "talk: Snowflake User Group Meeting Essen June 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "tier-mobility",
+      "name": "TIER Mobility",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "faisal-elshami",
+          "name": "Faisal El-Shami",
+          "pronouns": null,
+          "title": "Senior Analytics Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Geospatial Community Event - Berlin",
+              "date": "2024-04-11",
+              "url": "https://usergroups.snowflake.com/e/m6m25b/",
+              "content_id": "hamburgsnowflake-geospatial-community-event-berlin",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m6m25b/",
+              "note": "talk: Snowflake Geospatial Community Event - Berlin"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sartorius-gmbh",
+      "name": "Sartorius GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "markus-gohler",
+          "name": "Markus Göhler",
+          "pronouns": null,
+          "title": "Tableau Technical Consultant & Product Owner Snowflake",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Hamburg September 2024",
+              "date": "2024-09-26",
+              "url": "https://usergroups.snowflake.com/e/m24b7b/",
+              "content_id": "hamburgsnowflake-user-group-hamburg-september-2024",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m24b7b/",
+              "note": "talk: Snowflake User Group Hamburg September 2024"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "initions-gmbh",
+      "name": "initions GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "arndt-bils",
+          "name": "Arndt Bils",
+          "pronouns": null,
+          "title": "BI Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Meeting Essen",
+              "date": "2024-07-04",
+              "url": "https://usergroups.snowflake.com/e/m5zjhz/",
+              "content_id": "hamburgsnowflake-user-group-meeting-essen",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m5zjhz/",
+              "note": "talk: Snowflake User Group Meeting Essen"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bayer-ag",
+      "name": "Bayer AG",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christian-ruschak",
+          "name": "Christian Ruschak",
+          "pronouns": null,
+          "title": "IT squad lead BI Solutions & Augmented Analytics",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Meeting Essen June 2025",
+              "date": "2025-06-26",
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "content_id": "hamburgsnowflake-user-group-meeting-essen-june-2025",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "note": "talk: Snowflake User Group Meeting Essen June 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "thoughtspot",
+      "name": "ThoughtSpot",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "oliver-linder",
+          "name": "Oliver Linder",
+          "pronouns": null,
+          "title": "Manager Solution Engineering",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake User Group Meeting Essen June 2025",
+              "date": "2025-06-26",
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "content_id": "hamburgsnowflake-user-group-meeting-essen-june-2025",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m4bbwv/",
+              "note": "talk: Snowflake User Group Meeting Essen June 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "tui",
+      "name": "TUI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bursch-katharina",
+          "name": "Bursch Katharina",
+          "pronouns": null,
+          "title": "Data Analyst",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Usergroup Hamburg and Women on Snowflake - March 2025",
+              "date": "2025-03-20",
+              "url": "https://usergroups.snowflake.com/e/mz9xvg/",
+              "content_id": "hamburgsnowflake-usergroup-hamburg-and-women-on-snowflake-ma",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mz9xvg/",
+              "note": "talk: Snowflake Usergroup Hamburg and Women on Snowflake - March 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "anastasiia-stefanska",
+          "name": "Anastasiia Stefanska",
+          "pronouns": null,
+          "title": "Data Analyst, Snowflake Champion",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg",
+              "title": "Snowflake Usergroup Hamburg and Women on Snowflake - March 2025",
+              "date": "2025-03-20",
+              "url": "https://usergroups.snowflake.com/e/mz9xvg/",
+              "content_id": "hamburgsnowflake-usergroup-hamburg-and-women-on-snowflake-ma",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mz9xvg/",
+              "note": "talk: Snowflake Usergroup Hamburg and Women on Snowflake - March 2025"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michael-dorich",
+          "name": "Michael Dörich",
+          "pronouns": null,
+          "title": "Senior Named Account Executive",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/michael-d%C3%B6rich/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "patrick-steiner",
+          "name": "Patrick Steiner",
+          "pronouns": null,
+          "title": "Senior Manager Field Engineering",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/patrick-steiner-7a32367/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "robin-hubner",
+          "name": "Robin Hübner",
+          "pronouns": null,
+          "title": "Solution Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/robinhuebner/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "pascal-vogel",
+          "name": "Pascal Vogel",
+          "pronouns": null,
+          "title": "Senior Solution Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pascal-vogel/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "andreas-niehaus",
+          "name": "Andreas Niehaus",
+          "pronouns": null,
+          "title": "Senior Solution Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/andreasniehaus/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "obungi",
+      "name": "Obungi",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christopher-jones",
+          "name": "Christopher Jones",
+          "pronouns": null,
+          "title": "Geschäftsführer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christopher-jones-79507315/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "henrik-siesenis",
+          "name": "Henrik Siesenis",
+          "pronouns": null,
+          "title": "Data Analytics Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/henrik-siesenis/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Hamburg Databricks User Group",
+              "title": "Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)",
+              "date": "2026-06-16",
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "content_id": "hamburg-databricks-user-groupdatabricks-user-group-hamburg-d",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/m4uvkr/",
+              "note": "talk: Databricks User Group Hamburg \"Data+AI Summit Special\" by Obungi & Microsoft (6/16/2026)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "peaks-pies",
+      "name": "Peaks & Pies",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "adnan-kashem",
+          "name": "Adnan Kashem",
+          "pronouns": null,
+          "title": "junior Business Intelligence -consultant",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AdnanKashem",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AdnanKashem gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ahead-gmbh",
+      "name": "Ahead GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "max-blum",
+          "name": "Max Blum",
+          "pronouns": null,
+          "title": "Data Engineer |  AI systems & data pipelines  📍 Hamburg, Germany  ",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/max-blum/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Boosteblume",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Boosteblume gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "logproit",
+      "name": "LogProIT",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bushra-kiyani",
+          "name": "Bushra Kiyani",
+          "pronouns": null,
+          "title": "Data engineer & analyst · Python · SQL · ETL pipelines · KPI monitoring · Building reliable data systems that business teams can trust.",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bushra-tariq-kiyani/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/BushraKiyani",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/BushraKiyani gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "enerparc-ag",
+      "name": "Enerparc AG",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christopher-klix",
+          "name": "Christopher Klix",
+          "pronouns": null,
+          "title": "Data Engineer at Enerparc AG",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christopherklix/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ChristopherKlix",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ChristopherKlix gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sab",
+      "name": "SAB",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "stefan-scharr",
+          "name": "Stefan Scharr",
+          "pronouns": null,
+          "title": "Microsoft Certified Trainer, Azure AI Engineer Associate, Azure Data Engineer Associate",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/FindusHH",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/FindusHH gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "infinite-roots",
+      "name": "Infinite Roots",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "houda-ouhmad",
+          "name": "Houda Ouhmad",
+          "pronouns": null,
+          "title": "Data Engineer 🕶️🪄 while (!sleeping {get_new_challenges)}",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/houda-ouhmad"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Houda-Ouhmad",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Houda-Ouhmad gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "exporo-ag",
+      "name": "Exporo AG",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "omole-john",
+          "name": "Omole John",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/JohnOMDev",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/JohnOMDev gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "microsoft-germany",
+      "name": "Microsoft Germany",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christian-wolff",
+          "name": "Christian Wolff",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christian-wolff-6277b596/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/MeQT",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/MeQT gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "plancraft",
+      "name": "Plancraft",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nick-malberg",
+          "name": "Nick Malberg",
+          "pronouns": null,
+          "title": "Data Engineer or Analytics Engineer.    Interested in Data stuff, automations, weird tech and cloud engineering.",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/NickMalberg",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/NickMalberg gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "msg-systems-ag",
+      "name": "msg systems ag",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-lange",
+          "name": "Daniel Lange",
+          "pronouns": null,
+          "title": "25,  DevOps and Data Engineer",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/TheStraySheeps",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/TheStraySheeps gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "technische-universitat-hamburg",
+      "name": "Technische Universität Hamburg",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "md-abdul-hamid",
+          "name": "Md Abdul Hamid",
+          "pronouns": null,
+          "title": "Data Engineer & Analyst | Research Assistant @ TUHH | Python · SQL · Embedded Systems | MSc Information & Communication Systems",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/abdulhamid100",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/abdulhamid100 gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rabotcharge",
+      "name": "rabotcharge",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andreas-buchmuller",
+          "name": "Andreas Buchmüller",
+          "pronouns": null,
+          "title": "Statistician | Data Engineer ",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/abuchmueller"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/abuchmueller",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/abuchmueller gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "hoffarber-solutions-gmbh",
+      "name": "Hoffärber Solutions GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "aleksej-hoffarber",
+          "name": "Aleksej Hoffärber",
+          "pronouns": null,
+          "title": "Revenue Management & CX | Data Science Expert | Data Engineer | Analytics Engineer",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/aleksej-hoffaerber/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/aleksejhoffaerber",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/aleksejhoffaerber gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bonprix",
+      "name": "bonprix",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alireza-bitarafan",
+          "name": "Alireza Bitarafan",
+          "pronouns": null,
+          "title": "M. Sc. of Artificial Intelligence.  Data Engineer.",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/alireza-bt",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/alireza-bt gives the location Hamburg"
+        },
+        {
+          "id": "enxi-hong",
+          "name": "Enxi Hong",
+          "pronouns": null,
+          "title": "Junior Data Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ehongbp",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ehongbp gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "jimdo",
+      "name": "Jimdo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andrii-gizhko",
+          "name": "Andrii Gizhko",
+          "pronouns": null,
+          "title": "Analytics Engineer at Jimdo",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/andriigizhkodr",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/andriigizhkodr gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "scalefreecom",
+      "name": "ScalefreeCOM",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "barbara-schlottfeldt",
+          "name": "Barbara Schlottfeldt",
+          "pronouns": null,
+          "title": "Business Intelligence Developer and Consultant",
+          "city": "Hannover",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/bschlottfeldt",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/bschlottfeldt gives the location Hannover"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "lufthansa-technik",
+      "name": "Lufthansa Technik",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "diego-rodrigues",
+          "name": "Diego Rodrigues",
+          "pronouns": null,
+          "title": "Data Engineer @ Lufthansa Technik",
+          "city": "Hamburg, DE",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/dorodrigues/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/diegopso",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/diegopso gives the location Hamburg, DE"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "octupus",
+      "name": "Octupus",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "dirk-ulbricht",
+          "name": "Dirk Ulbricht",
+          "pronouns": null,
+          "title": "Data Engineer with data science background.",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dullibri",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/ulbrichtdirk",
+              "source": "https://github.com/dullibri profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dullibri gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "the-information-lab-deutschland-gmbh",
+      "name": "The Information Lab Deutschland GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "franziska-schwade",
+          "name": "Franziska Schwade",
+          "pronouns": null,
+          "title": "Data Analytics Consultant | Tableau | Alteryx  | Power BI | SQL | Python",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/franziskaschwade/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fschwade",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fschwade gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "archivedwebnet",
+      "name": "archivedWeb.net",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "helge-holzmann",
+          "name": "Helge Holzmann",
+          "pronouns": null,
+          "title": "Software developer, researcher and consultant with a PhD in CS, former Data Engineer at Internet Archive, working on better access to the archived web.",
+          "city": "Hannover, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/helgeho/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/helgeho",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/helgeho gives the location Hannover, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "scalefree",
+      "name": "Scalefree",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rafael-delgado",
+          "name": "Rafael Delgado",
+          "pronouns": null,
+          "title": "Business Intelligence Consultant",
+          "city": "Hannover, Lower Saxony, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/j-rdelgado",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/j-rdelgado gives the location Hannover, Lower Saxony, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "impossible-cloud",
+      "name": "Impossible Cloud",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "syed-kazim-raza",
+          "name": "Syed Kazim Raza",
+          "pronouns": null,
+          "title": "Data Engineer @ Impossible Cloud",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kazzasticc",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kazzasticc gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "blue-yonder",
+      "name": "Blue Yonder",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "luis-ventura",
+          "name": "Luis Ventura",
+          "pronouns": null,
+          "title": "Staff Data Engineer at BlueYonder. Developer of @mlb-airflow-data-pipeline . PhD in Physics at University of Aveiro 🇵🇹 ",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lbventura",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lbventura gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "scieneers",
+      "name": "scieneers",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marco-fischer",
+          "name": "Marco Fischer",
+          "pronouns": null,
+          "title": "Data Engineer,  Azure PaaS services in data context",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mafis-hh",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mafis-hh gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "tchibo",
+      "name": "tchibo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marcel-schlieer",
+          "name": "Marcel Schließer",
+          "pronouns": null,
+          "title": "Data Engineer  ",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/marcel-schliesser/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/marcelschliesser",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/marcelschliesser gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "xing",
+      "name": "xing",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marco-zuhlke",
+          "name": "Marco Zühlke",
+          "pronouns": null,
+          "title": "Staff Data Engineer",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mzuehlke",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mzuehlke gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "veoneer",
+      "name": "Veoneer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "neeraj-kumar",
+          "name": "Neeraj Kumar",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/neerajkumar12/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/neerajlakhani",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/neerajlakhani gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "softfair",
+      "name": "softfair",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nurce-yagci",
+          "name": "Nurce Yagci",
+          "pronouns": null,
+          "title": "Data Engineer @ softfair",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/nurceyagci-sf",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/nurceyagci-sf gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "karim-mansour",
+          "name": "Karim Mansour",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Hamburg, Germany",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/senegalo",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/senegalo gives the location Hamburg, Germany"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "insurance-company",
+      "name": "Insurance Company",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ralph-scherer",
+          "name": "Ralph Scherer",
+          "pronouns": null,
+          "title": "Working as a data engineer in the insurance industry with a preference for R, Shiny, SQL and LaTeX. ",
+          "city": "Hannover",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/shearer",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/shearer gives the location Hannover"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ginkgo-analytics-gmbh",
+      "name": "Ginkgo Analytics GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tim-leif-treskatis",
+          "name": "Tim Leif Treskatis",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/timtresga",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/timtresga gives the location Hamburg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "the-information-lab-gmbh-deutschland",
+      "name": "The Information Lab GmbH Deutschland",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "volha-fiadotava",
+          "name": "Volha Fiadotava",
+          "pronouns": null,
+          "title": "Data Analytics Consultant | Tableau | Power BI | Alteryx | SQL",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/volha-fiadotava/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/volhafiadotava",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/volhafiadotava gives the location Hamburg"
+        }
+      ],
+      "notes": null
     }
   ],
   "sources": {
@@ -587,6 +5405,21 @@
       "name": "Northern Germany dbt Meetup",
       "url": "https://www.meetup.com/norther-germany-dbt-meetup/",
       "note": "the chapter itself"
+    },
+    {
+      "name": "Analytics Pioneers Hannover",
+      "url": "https://www.meetup.com/analytics-pioneers-hannover/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Microsoft Data Platform Community Hannover - DataMonster e.V",
+      "url": "https://www.meetup.com/pass-rg-hannover-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Analytics Engineering Northern Germany Meetup Group",
+      "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/",
+      "note": "local data group found by groupSearch"
     }
   ]
 }

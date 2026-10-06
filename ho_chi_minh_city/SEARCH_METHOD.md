@@ -7,20 +7,20 @@ This file holds what is specific to Ho Chi Minh City. The method, scoring rules,
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 11 |
-| People | 21 |
+| Companies | 46 |
+| People | 126 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 21 |
-| Spoke at this chapter before | 21 |
-| Based in the region | 0 |
+| Proven speakers | 40 |
+| Spoke at this chapter before | 25 |
+| Based in the region | 91 |
 | Based elsewhere | 0 |
-| Location unknown | 21 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 35 |
+| With a LinkedIn profile | 49 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-10 companies and communities were looked at. A company is local when it has people or roles in the region.
+45 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (10)</summary>
 
 Chotot (local presence not confirmed), Data Analyst & Analytics Engineer (local presence not confirmed), Datum Consulting (local presence not confirmed), DHC Vietnam (local presence not confirmed), Entobel (local presence not confirmed), Holistics (local presence not confirmed), Infinite Lambda (local presence not confirmed), Joon Solutions (local presence not confirmed), Joon Solutions Global (local presence not confirmed), ShopBack Vietnam (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (35)</summary>
+
+Accenture (local presence not confirmed), ai-enthusiasm (local presence not confirmed), Blue Ocean Technology JSC (local presence not confirmed), Cake By VPBank (local presence not confirmed), Data Analyst at FPT Telecom (local presence not confirmed), dienthoaigiakho.vn (local presence not confirmed), Emesoft JSC (local presence not confirmed), esimgohub (local presence not confirmed), FE Credit (local presence not confirmed), FPT Center for Applied Data Science (local presence not confirmed), FPT Software (local presence not confirmed), Funtap (local presence not confirmed), Grab (local presence not confirmed), HCMUT (local presence not confirmed), Ho Chi Minh City Open University (local presence not confirmed), Ho Chi Minh University of science (local presence not confirmed), InnoTech (local presence not confirmed), Jimbo (local presence not confirmed), Larion (local presence not confirmed), Open to Work · AI / Data Engineer (local presence not confirmed), Other (local presence not confirmed), POPS Worldwide (local presence not confirmed), PVA (local presence not confirmed), SalesNow Inc. (local presence not confirmed), Slav (local presence not confirmed), TC JSC (local presence not confirmed), THE ICONIC (local presence not confirmed), Tiki (local presence not confirmed), tran van thanh chuong (local presence not confirmed), University of Information Technology (local presence not confirmed), University of Information Technology- Vietnam National University (local presence not confirmed), University of Science VNU-HCM (local presence not confirmed), VNUHCM - University Of Science (local presence not confirmed), VP Bank (local presence not confirmed), Yes4All LLC (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

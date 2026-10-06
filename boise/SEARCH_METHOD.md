@@ -7,20 +7,20 @@ This file holds what is specific to Boise. The method, scoring rules, schema and
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 2 |
-| People | 2 |
+| Companies | 10 |
+| People | 13 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 2 |
+| Proven speakers | 7 |
 | Spoke at this chapter before | 2 |
-| Based in the region | 0 |
+| Based in the region | 8 |
 | Based elsewhere | 0 |
-| Location unknown | 2 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 5 |
+| With a LinkedIn profile | 1 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-2 companies and communities were looked at. A company is local when it has people or roles in the region.
+9 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (2)</summary>
 
 Clickfunnels.com (local presence not confirmed), Fluensight (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (7)</summary>
+
+Cradlepoint (local presence not confirmed), Data Engineer at Denodo Technologies (local presence not confirmed), Enfuse (local presence not confirmed), LinkedIn (local presence not confirmed), Oxford Economics (local presence not confirmed), P3 Adaptive (local presence not confirmed), Snowflake (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

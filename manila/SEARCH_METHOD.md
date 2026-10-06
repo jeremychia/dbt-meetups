@@ -7,20 +7,20 @@ This file holds what is specific to Manila. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 0 |
-| People | 0 |
+| Companies | 20 |
+| People | 66 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 0 |
+| Proven speakers | 27 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 0 |
+| Based in the region | 63 |
 | Based elsewhere | 0 |
-| Location unknown | 0 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 3 |
+| With a LinkedIn profile | 18 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,13 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-0 companies and communities were looked at. A company is local when it has people or roles in the region.
+19 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Not verified</b> (19)</summary>
+
+accenture (local presence not confirmed), Amazon (local presence not confirmed), Ascendion (local presence not confirmed), Cognizant Softvision (local presence not confirmed), Dayforce (local presence not confirmed), envisso (local presence not confirmed), Eternal Plans, Inc. (local presence not confirmed), foodpanda PH (local presence not confirmed), Google (local presence not confirmed), headhuntr.io (local presence not confirmed), Insight (local presence not confirmed), Kyndryl Philippines Inc. (local presence not confirmed), Macquarie (local presence not confirmed), Nestle (local presence not confirmed), P&G (local presence not confirmed), Philip Morris International (local presence not confirmed), SellerX (local presence not confirmed), UnionDigital Bank (local presence not confirmed), WTW (local presence not confirmed)
+
+</details>
 <!-- companies:end -->
 
 ## 4. Key leads

@@ -7,20 +7,20 @@ This file holds what is specific to Uyo. The method, scoring rules, schema and r
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 3 |
-| People | 3 |
+| Companies | 4 |
+| People | 6 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 3 |
+| Proven speakers | 4 |
 | Spoke at this chapter before | 3 |
-| Based in the region | 0 |
+| Based in the region | 3 |
 | Based elsewhere | 0 |
 | Location unknown | 3 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 2 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

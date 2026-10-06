@@ -7,20 +7,20 @@ This file holds what is specific to Floripa. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 13 |
-| People | 21 |
+| Companies | 39 |
+| People | 81 |
 | Tier 1 leads | 16 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 21 |
+| Proven speakers | 27 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 0 |
+| Based in the region | 60 |
 | Based elsewhere | 0 |
 | Location unknown | 21 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 21 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-12 companies and communities were looked at. A company is local when it has people or roles in the region.
+38 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (12)</summary>
 
 Bayer (local presence not confirmed), Capim (local presence not confirmed), dbt Labs (local presence not confirmed), Effecti (local presence not confirmed), Flatiron Data & AI (local presence not confirmed), Indicium (local presence not confirmed), Inventa (local presence not confirmed), phData (local presence not confirmed), Power Home Remodeling (local presence not confirmed), Shuffle Up (local presence not confirmed), Stone (local presence not confirmed), Warren Investimentos (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (26)</summary>
+
+avanade (local presence not confirmed), Bix Tech Corp. (local presence not confirmed), Conexa Saúde (local presence not confirmed), Data Engineer at Porltess (local presence not confirmed), DP6 (local presence not confirmed), FanDuel (local presence not confirmed), Fundação CERTI (local presence not confirmed), Grupo Boticário (local presence not confirmed), gympass (local presence not confirmed), IBM (local presence not confirmed), Inflection (local presence not confirmed), Infosys (local presence not confirmed), KisSolutions (local presence not confirmed), Market Analysis Brazil (local presence not confirmed), Mercado Libre Inc (local presence not confirmed), Mercado Livre (local presence not confirmed), Picpay (local presence not confirmed), Practia Global a company of Publicis Sapient (local presence not confirmed), recarga (local presence not confirmed), Rodrigo Villalba Data (local presence not confirmed), Select Soluções (local presence not confirmed), Statkraft (local presence not confirmed), Systems Analyst @ CIEESC (local presence not confirmed), TD Business (local presence not confirmed), TRM Labs (local presence not confirmed), VF TECNOLOGIA (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

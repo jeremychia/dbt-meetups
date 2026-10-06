@@ -7,20 +7,20 @@ This file holds what is specific to Washington DC. The method, scoring rules, sc
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 4 |
-| People | 5 |
+| Companies | 48 |
+| People | 143 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 5 |
+| Proven speakers | 44 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 0 |
+| Based in the region | 129 |
 | Based elsewhere | 0 |
-| Location unknown | 5 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 67 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-4 companies and communities were looked at. A company is local when it has people or roles in the region.
+47 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
 Datadog (local presence not confirmed), dbt Labs (local presence not confirmed), Fundrise (local presence not confirmed), Strive Health (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (43)</summary>
+
+# (local presence not confirmed), [Solidcore] (local presence not confirmed), _VOIS (local presence not confirmed), Alexandria university (local presence not confirmed), Alphataraxia (local presence not confirmed), Andalusia Business Solutions (local presence not confirmed), ASDCO (local presence not confirmed), Atreides (local presence not confirmed), Azercell Telecom (local presence not confirmed), CloudFactory / NIH Contractor (local presence not confirmed), Coca-Cola HBC (local presence not confirmed), Cohen Milstein (local presence not confirmed), dbt-labs (local presence not confirmed), Digital Egyptian Pioneers Initiatives-DEPI (local presence not confirmed), DLH Corp (local presence not confirmed), ES Analysis (local presence not confirmed), GDG/WTM Alexandria (local presence not confirmed), George Washington University (local presence not confirmed), https://www.kareemrizk.tech/ (local presence not confirmed), https://www.linkedin.com/in/christopher-lewis-ds/ (local presence not confirmed), IBM (local presence not confirmed), Information Technology Institute (local presence not confirmed), International Spy Museum (local presence not confirmed), John Deere (local presence not confirmed), KADMAR Group (local presence not confirmed), NASA (local presence not confirmed), NubiApp (local presence not confirmed), PBS (local presence not confirmed), Reporting and Data Scientist (local presence not confirmed), Salomon-nd.com (local presence not confirmed), snowflakecorp (local presence not confirmed), Sol Systems (local presence not confirmed), Student, Data Science (M.S.) – The George Washington University (local presence not confirmed), Technomics (local presence not confirmed), Texas Rangers Baseball Club (local presence not confirmed), The Christen Group, Inc. (local presence not confirmed), The Knot Worldwide. (local presence not confirmed), The University of Texas at Arlington (local presence not confirmed), U.S. International Development Finance Corporation (DFC) (local presence not confirmed), University of Texas at Arlington (local presence not confirmed), UTA (local presence not confirmed), Virginia Tech (local presence not confirmed), xorq-labs (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

@@ -7,20 +7,20 @@ This file holds what is specific to Chicago. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 14 |
-| People | 21 |
+| Companies | 69 |
+| People | 174 |
 | Tier 1 leads | 3 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 21 |
+| Proven speakers | 75 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 0 |
+| Based in the region | 142 |
 | Based elsewhere | 0 |
-| Location unknown | 21 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 32 |
+| With a LinkedIn profile | 57 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-13 companies and communities were looked at. A company is local when it has people or roles in the region.
+68 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (13)</summary>
 
 2023 dbt Community Champion (local presence not confirmed), Analytics8 (local presence not confirmed), Chicago Fire (local presence not confirmed), Datafold (local presence not confirmed), dbt Labs (local presence not confirmed), Fi (local presence not confirmed), Fleetio (local presence not confirmed), Jarvus Innovations (local presence not confirmed), Keystone Cooperative (local presence not confirmed), M1 (local presence not confirmed), Ollion (local presence not confirmed), Slalom (local presence not confirmed), SpotOn (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (55)</summary>
+
+Affine (local presence not confirmed), Alas (local presence not confirmed), Atrius | Acuity Inc (local presence not confirmed), Bitwise (local presence not confirmed), Blackhawk Network (local presence not confirmed), Blue.cloud (local presence not confirmed), Cameo (local presence not confirmed), Caterpillar (local presence not confirmed), CC Industries (local presence not confirmed), Central States Funds (local presence not confirmed), ClearStreet (local presence not confirmed), code629 (local presence not confirmed), CVS Health (local presence not confirmed), Databricks (local presence not confirmed), DataMan62 (local presence not confirmed), DePaul University (local presence not confirmed), Discover (local presence not confirmed), Dscout (local presence not confirmed), Egen (local presence not confirmed), Elmhurst University (local presence not confirmed), EY (local presence not confirmed), Fetch (local presence not confirmed), FIS (local presence not confirmed), Foundant (local presence not confirmed), Foxconn (local presence not confirmed), github (local presence not confirmed), Grafana Labs (local presence not confirmed), Grubhub (local presence not confirmed), Guild (local presence not confirmed), https://statumconsulting.com/ (local presence not confirmed), https://teamsparq.com (local presence not confirmed), iD Lab (local presence not confirmed), Illinois Institute of Technology (local presence not confirmed), IMC (local presence not confirmed), Master's Student (local presence not confirmed), Meta (local presence not confirmed), Mustapha Abdelkarim SBA (local presence not confirmed), Northern Illinois University (local presence not confirmed), Options Clearing Corporation (local presence not confirmed), PAK Digital Inc. (local presence not confirmed), Qualus (local presence not confirmed), reality-defender (local presence not confirmed), Self (local presence not confirmed), Shore Capital Partners (local presence not confirmed), StoneX (local presence not confirmed), Streeterval Art (local presence not confirmed), The Emerson Group (local presence not confirmed), The Kraft Heinz Company (local presence not confirmed), Truss Health (local presence not confirmed), University of Chicago (local presence not confirmed), University of Illinois at Chicago (local presence not confirmed), University of Illinois at Urbana-Champaign (local presence not confirmed), University of Illinois Chicago (local presence not confirmed), Uptake Technology (local presence not confirmed), Walgreens (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

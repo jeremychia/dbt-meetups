@@ -7,20 +7,20 @@ This file holds what is specific to Riyadh. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 0 |
-| People | 0 |
+| Companies | 52 |
+| People | 96 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 0 |
+| Proven speakers | 11 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 0 |
+| Based in the region | 89 |
 | Based elsewhere | 0 |
-| Location unknown | 0 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 7 |
+| With a LinkedIn profile | 37 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,13 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-0 companies and communities were looked at. A company is local when it has people or roles in the region.
+51 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Not verified</b> (51)</summary>
+
+2P (local presence not confirmed), Adwat Al Musqabal (local presence not confirmed), AI & Data Analyst (local presence not confirmed), Aisers (local presence not confirmed), Alessa Industries Group (local presence not confirmed), Alhayat National Hospitals (local presence not confirmed), Art Deco Design (local presence not confirmed), Bank Albilad (local presence not confirmed), Bayut (Dubizzle Group) (local presence not confirmed), Confidential (local presence not confirmed), DataMatics Technologies (local presence not confirmed), Edge Curve Agency (local presence not confirmed), Ejada Systems (local presence not confirmed), Ejada Systems Ltd. (local presence not confirmed), Elm (local presence not confirmed), Environmental Horizons Co. (local presence not confirmed), First link (local presence not confirmed), Freelance / Open to Work (local presence not confirmed), HB Brands (local presence not confirmed), Helath Holding Company (local presence not confirmed), https://terravivaa.com/ (local presence not confirmed), Imam Muhammad Ibn Saud University (local presence not confirmed), In516ht (local presence not confirmed), Intelmatix-AI (local presence not confirmed), JAHEZ (local presence not confirmed), Kasamba Inc. (California, USA), Info Systa (Riyadh, KSA) (local presence not confirmed), KSU (local presence not confirmed), Lean Business Services (local presence not confirmed), Ministry of Health (local presence not confirmed), Naqsh (local presence not confirmed), Naseej for Technology (local presence not confirmed), Nittaq For Information Technology (local presence not confirmed), no (local presence not confirmed), NOKIA (local presence not confirmed), Norconsult Telematics (local presence not confirmed), NWC (local presence not confirmed), Principal Buyer (local presence not confirmed), Quant Data & Analytics (local presence not confirmed), Red Sea Global (local presence not confirmed), Riyadh Airports Company (local presence not confirmed), ROSHN (local presence not confirmed), Senior Accountant at Abana Enterprises Group Co. (local presence not confirmed), Snowflake (local presence not confirmed), stc (local presence not confirmed), STC Bank (local presence not confirmed), STCS (local presence not confirmed), Taheiya (local presence not confirmed), Tanmiah (local presence not confirmed), Technical Basis Contracting CO · (local presence not confirmed), Tetco (local presence not confirmed), Udacity (local presence not confirmed)
+
+</details>
 <!-- companies:end -->
 
 ## 4. Key leads

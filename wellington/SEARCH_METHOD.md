@@ -7,20 +7,20 @@ This file holds what is specific to Wellington. The method, scoring rules, schem
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 1 |
-| People | 1 |
+| Companies | 16 |
+| People | 38 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 1 |
+| Proven speakers | 21 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 0 |
+| Based in the region | 29 |
 | Based elsewhere | 0 |
-| Location unknown | 1 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 9 |
+| With a LinkedIn profile | 5 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-1 companies and communities were looked at. A company is local when it has people or roles in the region.
+15 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (1)</summary>
 
 dbt Labs (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (14)</summary>
+
+dbt-labs (local presence not confirmed), Earth Sciences New Zealand (local presence not confirmed), FarmIQ (local presence not confirmed), Fire and Emergency NZ (local presence not confirmed), internetarchive (local presence not confirmed), NZ Post (local presence not confirmed), Oranga Tamariki (local presence not confirmed), Oranga Tamariki-Ministry for Children (local presence not confirmed), Oranga Tamariki/Qrious (local presence not confirmed), Sharesies (local presence not confirmed), Snowflake (local presence not confirmed), Telicent Ltd (@Telicent-io) (local presence not confirmed), TradeMe (local presence not confirmed), Xero (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

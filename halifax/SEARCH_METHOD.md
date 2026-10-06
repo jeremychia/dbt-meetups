@@ -7,20 +7,20 @@ This file holds what is specific to Halifax. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 4 |
-| People | 4 |
+| Companies | 16 |
+| People | 28 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 4 |
+| Proven speakers | 12 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 0 |
+| Based in the region | 20 |
 | Based elsewhere | 0 |
-| Location unknown | 4 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 8 |
+| With a LinkedIn profile | 12 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-4 companies and communities were looked at. A company is local when it has people or roles in the region.
+15 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
 Analytics Engineer (local presence not confirmed), Brooklyn Data Co (local presence not confirmed), Modern (modern.inc) (local presence not confirmed), Vetsource (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (11)</summary>
+
+BDO (local presence not confirmed), Dalhousie University (local presence not confirmed), Dalhousie University, NS, Canada (local presence not confirmed), Data Analyst || Business Intelligence Analyst (local presence not confirmed), databricks (local presence not confirmed), larixsw (local presence not confirmed), Nova Scotia Health (local presence not confirmed), Outshine (local presence not confirmed), Saint Mary's University (local presence not confirmed), Skills For Hire Atlantic (local presence not confirmed), tem (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

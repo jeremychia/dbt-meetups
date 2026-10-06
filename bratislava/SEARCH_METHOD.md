@@ -7,20 +7,20 @@ This file holds what is specific to Bratislava. The method, scoring rules, schem
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 7 |
-| People | 15 |
+| Companies | 17 |
+| People | 36 |
 | Tier 1 leads | 3 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 15 |
+| Proven speakers | 26 |
 | Spoke at this chapter before | 15 |
-| Based in the region | 0 |
+| Based in the region | 16 |
 | Based elsewhere | 0 |
-| Location unknown | 15 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 20 |
+| With a LinkedIn profile | 6 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-7 companies and communities were looked at. A company is local when it has people or roles in the region.
+16 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (7)</summary>
 
 Alma Career (local presence not confirmed), Analytics Tech Lead (Infinite Lambda) (local presence not confirmed), dbt Labs (local presence not confirmed), Infinite Lambda (local presence not confirmed), Muziker (local presence not confirmed), Slido (local presence not confirmed), STRV (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (9)</summary>
+
+Accenture (local presence not confirmed), Data Tailors (local presence not confirmed), GoHealth (local presence not confirmed), Mondelēz International (local presence not confirmed), Oddity (local presence not confirmed), RamfisOrtega (local presence not confirmed), Salesforce (local presence not confirmed), Swiss Re (local presence not confirmed), Takeda (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

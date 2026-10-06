@@ -7,20 +7,20 @@ This file holds what is specific to Perth. The method, scoring rules, schema and
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 0 |
-| People | 0 |
+| Companies | 18 |
+| People | 46 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 0 |
+| Proven speakers | 20 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 0 |
+| Based in the region | 33 |
 | Based elsewhere | 0 |
-| Location unknown | 0 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 13 |
+| With a LinkedIn profile | 10 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,13 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-0 companies and communities were looked at. A company is local when it has people or roles in the region.
+17 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Not verified</b> (17)</summary>
+
+Arkahna (local presence not confirmed), Cognizant (local presence not confirmed), Data Divers (local presence not confirmed), Hanson Construction Materials (local presence not confirmed), Insight (local presence not confirmed), Interworks (local presence not confirmed), INX Software (local presence not confirmed), Mantel Group (local presence not confirmed), Mr (local presence not confirmed), Part Vision (local presence not confirmed), Perenti Group (local presence not confirmed), Snowflake (local presence not confirmed), thelookoutway (local presence not confirmed), Unified Honey (local presence not confirmed), VGW (local presence not confirmed), Western Power (local presence not confirmed), Woodside Energy (local presence not confirmed)
+
+</details>
 <!-- companies:end -->
 
 ## 4. Key leads

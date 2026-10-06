@@ -7,20 +7,20 @@ This file holds what is specific to Bogotá. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 9 |
-| People | 14 |
+| Companies | 58 |
+| People | 118 |
 | Tier 1 leads | 4 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 14 |
+| Proven speakers | 18 |
 | Spoke at this chapter before | 14 |
-| Based in the region | 0 |
+| Based in the region | 104 |
 | Based elsewhere | 0 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 66 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-9 companies and communities were looked at. A company is local when it has people or roles in the region.
+57 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (9)</summary>
 
 Data Engineer (local presence not confirmed), Data Scientist (local presence not confirmed), Factored (local presence not confirmed), Ingeniero de Sistemas / AWS Solutions Architect-Associate (local presence not confirmed), Inisoft (local presence not confirmed), La Haus (local presence not confirmed), Staff Analytics Engineer (local presence not confirmed), Xepelin (local presence not confirmed), Yello (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (48)</summary>
+
++57 319-445-6968 (local presence not confirmed), 100x Investments && Developments (local presence not confirmed), AIS (local presence not confirmed), Arroyo Consulting (local presence not confirmed), Aval Digital Labs (local presence not confirmed), Banco Agrario de Colombia (local presence not confirmed), BBVA (local presence not confirmed), Claro (local presence not confirmed), Cognix (local presence not confirmed), Confidencial (local presence not confirmed), Credibanco (local presence not confirmed), Diana (local presence not confirmed), duppla (local presence not confirmed), Empresas Gasco (local presence not confirmed), EPAM (local presence not confirmed), EPAM Systems (local presence not confirmed), Ex-Uber (local presence not confirmed), factoredai (local presence not confirmed), Falabella de Colombia (local presence not confirmed), Freelance (local presence not confirmed), Freelancer (local presence not confirmed), GLOBANT (local presence not confirmed), Hewlett Packard Enterprise (local presence not confirmed), IntouchCx (local presence not confirmed), ITNOVA (local presence not confirmed), Keyrus (local presence not confirmed), kimberly clark professional (local presence not confirmed), Mercado Libre (local presence not confirmed), Netquest (local presence not confirmed), Nielseniq (NIQ) (local presence not confirmed), None (local presence not confirmed), Open to Remote Opportunities (local presence not confirmed), Oracle (local presence not confirmed), PersonalCompany (local presence not confirmed), picap-inc (local presence not confirmed), planetprint3D (local presence not confirmed), Pontificia Universidad Javeriana (local presence not confirmed), Pontificia Universidad Javeriana (Bogota D.C., Bogota D.C) (local presence not confirmed), Pontificia Universidad Javeriana de Colombia (local presence not confirmed), Puma Data Science (local presence not confirmed), Scotiatech (local presence not confirmed), TaskUs (local presence not confirmed), Tech Consultant (local presence not confirmed), Twitter: @camilooob (local presence not confirmed), Universidad Minuto de Dios (local presence not confirmed), Universidad Nacional de Colombia (local presence not confirmed), Wizeline (local presence not confirmed), WOM Colombia (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

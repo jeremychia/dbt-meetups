@@ -7,20 +7,20 @@ This file holds what is specific to Brisbane. The method, scoring rules, schema 
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 4 |
-| People | 5 |
+| Companies | 31 |
+| People | 63 |
 | Tier 1 leads | 2 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 5 |
+| Proven speakers | 27 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 0 |
+| Based in the region | 46 |
 | Based elsewhere | 0 |
-| Location unknown | 5 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 17 |
+| With a LinkedIn profile | 16 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-4 companies and communities were looked at. A company is local when it has people or roles in the region.
+30 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
 dbt Labs (local presence not confirmed), Morgans Financials (local presence not confirmed), Picklebet (local presence not confirmed), Virgin Australia (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (26)</summary>
+
+biEDW (local presence not confirmed), BizCubed (local presence not confirmed), Cognizant Servian (local presence not confirmed), Compare the Market (local presence not confirmed), CR Digital (local presence not confirmed), Data ChangeMakers (local presence not confirmed), Data Engineer (local presence not confirmed), Domino's (local presence not confirmed), Eagers Automotive (local presence not confirmed), Entain (local presence not confirmed), Flight Centre Travel Group (local presence not confirmed), FlightCentre (local presence not confirmed), FourMoo (local presence not confirmed), Hogolytics (local presence not confirmed), NTT Data (local presence not confirmed), Paradigm BI (local presence not confirmed), Propel Health AI (local presence not confirmed), Queensland University of Technology (local presence not confirmed), Rio Tinto (local presence not confirmed), Sarath Boppudi (local presence not confirmed), SAS (@sassoftware) (local presence not confirmed), Senior Consultant (local presence not confirmed), Snowflake (local presence not confirmed), SSWConsulting (local presence not confirmed), Taaurus (local presence not confirmed), TetraTech (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

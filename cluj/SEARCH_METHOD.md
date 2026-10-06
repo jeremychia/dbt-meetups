@@ -7,20 +7,20 @@ This file holds what is specific to Cluj. The method, scoring rules, schema and 
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 0 |
-| People | 0 |
+| Companies | 6 |
+| People | 22 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 0 |
+| Proven speakers | 14 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 0 |
+| Based in the region | 22 |
 | Based elsewhere | 0 |
 | Location unknown | 0 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 2 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,13 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-0 companies and communities were looked at. A company is local when it has people or roles in the region.
+5 companies and communities were looked at. A company is local when it has people or roles in the region.
+
+<details><summary><b>Not verified</b> (5)</summary>
+
+Flutter Entertainment (local presence not confirmed), PwC Romania (local presence not confirmed), RebelDot (local presence not confirmed), SAG Digital (local presence not confirmed), SITA (local presence not confirmed)
+
+</details>
 <!-- companies:end -->
 
 ## 4. Key leads

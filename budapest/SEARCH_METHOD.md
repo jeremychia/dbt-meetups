@@ -7,20 +7,20 @@ This file holds what is specific to Budapest. The method, scoring rules, schema 
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 9 |
-| People | 14 |
+| Companies | 37 |
+| People | 85 |
 | Tier 1 leads | 2 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 14 |
-| Spoke at this chapter before | 14 |
-| Based in the region | 0 |
+| Proven speakers | 35 |
+| Spoke at this chapter before | 15 |
+| Based in the region | 66 |
 | Based elsewhere | 0 |
-| Location unknown | 14 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 19 |
+| With a LinkedIn profile | 17 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-9 companies and communities were looked at. A company is local when it has people or roles in the region.
+36 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (9)</summary>
 
 Data Vault 2.0 expert (local presence not confirmed), DuckDB Labs (local presence not confirmed), Head of Analytics Engineering (Hiflylabs) (local presence not confirmed), Hiflylabs (local presence not confirmed), Hotjar (local presence not confirmed), Lightdash (local presence not confirmed), Open Source Contributor (local presence not confirmed), Senior Data and Analytics Engineer (local presence not confirmed), Xebia (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (27)</summary>
+
+Accenture (local presence not confirmed), Contract (local presence not confirmed), DATAPAO (local presence not confirmed), Deutsche Telekom IT Solutions Hungary (local presence not confirmed), E-Group ICT Software (local presence not confirmed), Ekata (local presence not confirmed), Epam (local presence not confirmed), Ericsson (local presence not confirmed), ExxonMobil (local presence not confirmed), Freelance (local presence not confirmed), Google Cloud (local presence not confirmed), Howden (local presence not confirmed), IBM (local presence not confirmed), KETA DataSoft Kft. (local presence not confirmed), MOL (local presence not confirmed), onbased (local presence not confirmed), Prezi.com Kft (local presence not confirmed), ProMent Solutions Kft. (local presence not confirmed), Robert Bosch GmbH (local presence not confirmed), rockaBI (local presence not confirmed), Sanofi (local presence not confirmed), Sanofi (Chinoin) (local presence not confirmed), Snowflake (local presence not confirmed), ThermoFisher scientific (local presence not confirmed), TMRW (local presence not confirmed), United Consult (local presence not confirmed), Yext Inc. (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

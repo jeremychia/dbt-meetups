@@ -7,20 +7,20 @@ This file holds what is specific to Dublin. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 6 |
-| People | 8 |
+| Companies | 43 |
+| People | 166 |
 | Tier 1 leads | 7 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 8 |
+| Proven speakers | 67 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 0 |
+| Based in the region | 147 |
 | Based elsewhere | 0 |
-| Location unknown | 8 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 19 |
+| With a LinkedIn profile | 61 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-5 companies and communities were looked at. A company is local when it has people or roles in the region.
+42 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
 dbt Labs (local presence not confirmed), Fivetran (local presence not confirmed), GitLab (local presence not confirmed), Omni (local presence not confirmed), Squarespace (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (37)</summary>
+
+AIB Bank Dublin (local presence not confirmed), archmedian (local presence not confirmed), Arthur Cox (local presence not confirmed), Atadar Services LLC (local presence not confirmed), Bank of Ireland (local presence not confirmed), Briticana (local presence not confirmed), Centra (Musgrave) (local presence not confirmed), Citibank Europe PLC (local presence not confirmed), Data Engineer (local presence not confirmed), Didomi.io (local presence not confirmed), Dublin Business School (local presence not confirmed), Dublin City University (local presence not confirmed), EY (local presence not confirmed), glanbia (local presence not confirmed), Google (local presence not confirmed), Griffith College Dublin (local presence not confirmed), Intercom (local presence not confirmed), Just Eat Takeaway.com (local presence not confirmed), LetsGetChecked (local presence not confirmed), Mastercard (local presence not confirmed), MSc Data Analytics Student (local presence not confirmed), MSc in Data Analytics @ Dublin Business School (local presence not confirmed), Murray Surgical (local presence not confirmed), National College of Ireland (local presence not confirmed), Open to work (local presence not confirmed), Poloniex (local presence not confirmed), PwC (local presence not confirmed), Realtra (local presence not confirmed), School of Medicine, University College Dublin (local presence not confirmed), Shutterstock (local presence not confirmed), Snowflake (local presence not confirmed), SqlDBM (local presence not confirmed), Trinity College Dublin (local presence not confirmed), UCD Michael Smurfit Business School (local presence not confirmed), Vectra AI (local presence not confirmed), Yes (local presence not confirmed), 🎓 MSc Data Analytics Technological University of the Shannon (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

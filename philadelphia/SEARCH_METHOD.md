@@ -7,20 +7,20 @@ This file holds what is specific to Philadelphia. The method, scoring rules, sch
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 4 |
-| People | 8 |
+| Companies | 45 |
+| People | 120 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 8 |
+| Proven speakers | 59 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 0 |
+| Based in the region | 91 |
 | Based elsewhere | 0 |
-| Location unknown | 8 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 29 |
+| With a LinkedIn profile | 36 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-4 companies and communities were looked at. A company is local when it has people or roles in the region.
+44 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
 dbt Labs (local presence not confirmed), Project Delivery Team (local presence not confirmed), Slalom (local presence not confirmed), Spotify (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (40)</summary>
+
+Apple (local presence not confirmed), Aramark (local presence not confirmed), Children's Hospital of Philadelphia (local presence not confirmed), Cittabase Solutions (local presence not confirmed), CityOfPhiladelphia (local presence not confirmed), Comcast (local presence not confirmed), Data2Vizuals (local presence not confirmed), Databricks (local presence not confirmed), DemandLane (local presence not confirmed), Dolente Consulting LLC (local presence not confirmed), Drexel University (local presence not confirmed), Eigen X (local presence not confirmed), Entelligent (local presence not confirmed), ERM (local presence not confirmed), Freedom Mortgage (local presence not confirmed), Freedompay (local presence not confirmed), goPuff (local presence not confirmed), herodigital (local presence not confirmed), https://linkedin.com/in/seth-kalkstein (local presence not confirmed), Lumenalta (local presence not confirmed), mmtechtsoft (local presence not confirmed), Next-Level Tableau (local presence not confirmed), Old Republic Commercial Risk (local presence not confirmed), Oracle (local presence not confirmed), Penn Interactive (local presence not confirmed), Pinnacle Treatment Centers, Inc. (local presence not confirmed), Projxon (local presence not confirmed), Redis (local presence not confirmed), Rula (local presence not confirmed), Salesforce (local presence not confirmed), Snowflake ❄️ (local presence not confirmed), Spark Therapeutics (local presence not confirmed), TD Bank (local presence not confirmed), Tegra Analytics (local presence not confirmed), The Carlyle Group (local presence not confirmed), The Wharton School: @wharton (local presence not confirmed), TJ McDowell LLC (local presence not confirmed), University of Pennsylvania (local presence not confirmed), US Federal Reserve Bank (local presence not confirmed), ZIP Code Wilmington (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

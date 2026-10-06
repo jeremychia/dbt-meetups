@@ -7,20 +7,20 @@ This file holds what is specific to Phoenix. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 2 |
-| People | 2 |
+| Companies | 31 |
+| People | 86 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 2 |
+| Proven speakers | 18 |
 | Spoke at this chapter before | 2 |
-| Based in the region | 0 |
+| Based in the region | 82 |
 | Based elsewhere | 0 |
-| Location unknown | 2 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 4 |
+| With a LinkedIn profile | 26 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-2 companies and communities were looked at. A company is local when it has people or roles in the region.
+30 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (2)</summary>
 
 dbt Labs (local presence not confirmed), Shopify (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (28)</summary>
+
+aaa-ncnu-ie (local presence not confirmed), American Airlines (local presence not confirmed), American Airlines, Inc. (local presence not confirmed), American Express (local presence not confirmed), Arizona State University (local presence not confirmed), ASU - Center for Digital Antiquity—the Digital Archaeological Record (tDAR) (local presence not confirmed), Bellevue University (local presence not confirmed), Blue Marvel Data, LLC & AOR Web Development, LLC (local presence not confirmed), Clearinghouse CDFI (local presence not confirmed), Cognizant (local presence not confirmed), Cognizant Technology Solutions (local presence not confirmed), Cotality (local presence not confirmed), EdPlus, Arizona State University (local presence not confirmed), Ex - Capgemini (local presence not confirmed), Global Federal Credit Union (local presence not confirmed), Grand Canyon University (local presence not confirmed), gSchool, @desertpy, @planetarypy, @pydata-phoenix (local presence not confirmed), Hill's Pet Nutrition/Colgate-Palmolive (local presence not confirmed), lesliespoolmart (local presence not confirmed), Mobivity (local presence not confirmed), Quantum Health (local presence not confirmed), Republic Services (local presence not confirmed), Routeware, inc. (local presence not confirmed), RxMapper (local presence not confirmed), SABIC (local presence not confirmed), Tailwind (local presence not confirmed), X by 2 (local presence not confirmed), Zoro US (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

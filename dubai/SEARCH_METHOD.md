@@ -7,20 +7,20 @@ This file holds what is specific to Dubai. The method, scoring rules, schema and
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 5 |
-| People | 7 |
+| Companies | 72 |
+| People | 153 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 7 |
+| Proven speakers | 56 |
 | Spoke at this chapter before | 7 |
-| Based in the region | 0 |
+| Based in the region | 130 |
 | Based elsewhere | 0 |
-| Location unknown | 7 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 23 |
+| With a LinkedIn profile | 48 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-5 companies and communities were looked at. A company is local when it has people or roles in the region.
+71 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
 Astrolabs (local presence not confirmed), Freelance Data Engineer (local presence not confirmed), Kitopi (local presence not confirmed), Moove (local presence not confirmed), Regional Data Leader (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (66)</summary>
+
+7X (local presence not confirmed), 8Insights (local presence not confirmed), African+Eastern (local presence not confirmed), AI technologies (local presence not confirmed), Aiqual Technology - FZE (local presence not confirmed), Alraedah Digital, Ex-Simpl, Ex-Razorpay (local presence not confirmed), ARK Digitech (local presence not confirmed), Artefact (local presence not confirmed), Aspiring Data Analyst (local presence not confirmed), bayut & dubizzle (local presence not confirmed), Bidfood ME (local presence not confirmed), Bioinformatics Researcher (local presence not confirmed), CareCentra (local presence not confirmed), Choueiri Group (local presence not confirmed), Cloudearly (local presence not confirmed), Credo (local presence not confirmed), Dar Khair General Trading Co. (local presence not confirmed), Data Dune (local presence not confirmed), deliveryhero (local presence not confirmed), DHE (local presence not confirmed), Docib healthcare LLC (local presence not confirmed), DrNutrition (local presence not confirmed), EFG Hermes (local presence not confirmed), EMAAR (local presence not confirmed), Emirates Beton (local presence not confirmed), ENBD (local presence not confirmed), FAB Bank (local presence not confirmed), Federal Competitiveness and Statistics Centre (local presence not confirmed), Glowbyte Consulting (local presence not confirmed), GROWDASH (local presence not confirmed), hanimounla (local presence not confirmed), HiveWorx (local presence not confirmed), In516ht (local presence not confirmed), Innovation Factory (local presence not confirmed), Intellisense Software (local presence not confirmed), JLL (local presence not confirmed), LeadSquared (local presence not confirmed), Life Health Care Group (local presence not confirmed), Majid Al Futtaim (local presence not confirmed), Majid Al-Futtaim (local presence not confirmed), McDermott (local presence not confirmed), Microsoft (local presence not confirmed), MIDDLESEX UNIVERSITY DUBAI (local presence not confirmed), MOHRE (local presence not confirmed), Nagarro (local presence not confirmed), newcastleuniversity-computing @almentor (local presence not confirmed), NextGen Insights (local presence not confirmed), PARKONIC (local presence not confirmed), Publicis Sapient - NEOM (local presence not confirmed), Roads and Transport Authority (local presence not confirmed), Salesforce (local presence not confirmed), Self - Employed (local presence not confirmed), Silver Crown Building Contracting LLC (local presence not confirmed), Silver Fox (local presence not confirmed), Simpson Associates (local presence not confirmed), Skybrisk Technologies (local presence not confirmed), Snowflake (local presence not confirmed), Sodexo (local presence not confirmed), Stylemix (local presence not confirmed), Talabat (local presence not confirmed), The Waste Lab (local presence not confirmed), Tinaz Technologies (local presence not confirmed), ubs (local presence not confirmed), Value Driven Data (local presence not confirmed), Western International Group (local presence not confirmed), Zoom Homes (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

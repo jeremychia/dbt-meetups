@@ -7,20 +7,20 @@ This file holds what is specific to Marseille. The method, scoring rules, schema
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 1 |
-| People | 1 |
+| Companies | 7 |
+| People | 12 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 1 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 0 |
+| Based in the region | 11 |
 | Based elsewhere | 0 |
 | Location unknown | 1 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 6 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-1 companies and communities were looked at. A company is local when it has people or roles in the region.
+6 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (1)</summary>
 
 dbt Labs (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (5)</summary>
+
+Aix Marseille Université (local presence not confirmed), AXA (local presence not confirmed), STMicroelectronics (local presence not confirmed), TnP-Consultants (local presence not confirmed), Vibe.co (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

@@ -7,20 +7,20 @@ This file holds what is specific to Tel Aviv. The method, scoring rules, schema 
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 5 |
-| People | 5 |
+| Companies | 19 |
+| People | 69 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 5 |
+| Proven speakers | 48 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 0 |
+| Based in the region | 62 |
 | Based elsewhere | 0 |
-| Location unknown | 5 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 7 |
+| With a LinkedIn profile | 9 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-5 companies and communities were looked at. A company is local when it has people or roles in the region.
+18 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
 At-Bay (local presence not confirmed), Elementary Data (local presence not confirmed), Elementor (local presence not confirmed), Rapyd (local presence not confirmed), Tipalti (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (13)</summary>
+
+Agora RE (local presence not confirmed), Akamai (local presence not confirmed), Amazon (local presence not confirmed), Cantaio, 8200 (local presence not confirmed), Citi (local presence not confirmed), dreamteamapp & @DataHackIL (local presence not confirmed), Dynamic Yield (local presence not confirmed), Investing.com (local presence not confirmed), MAX (local presence not confirmed), Microsoft (local presence not confirmed), StarkWare (local presence not confirmed), Wix (local presence not confirmed), Wix.com (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

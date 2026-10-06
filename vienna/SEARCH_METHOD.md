@@ -7,20 +7,20 @@ This file holds what is specific to Vienna. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 6 |
-| People | 8 |
+| Companies | 15 |
+| People | 69 |
 | Tier 1 leads | 8 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 8 |
+| Proven speakers | 45 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 0 |
+| Based in the region | 58 |
 | Based elsewhere | 0 |
-| Location unknown | 8 |
-| With a LinkedIn profile | 0 |
+| Location unknown | 11 |
+| With a LinkedIn profile | 10 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-6 companies and communities were looked at. A company is local when it has people or roles in the region.
+14 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (6)</summary>
 
 b.telligent (local presence not confirmed), dbt Labs (local presence not confirmed), GoStudent (local presence not confirmed), MeisterLabs (local presence not confirmed), Microsoft Fabric (local presence not confirmed), sclable (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (8)</summary>
+
+Austrian Academy of Sciences (local presence not confirmed), BearingPoint (local presence not confirmed), eversport (local presence not confirmed), Innovative Decisions, Inc. (local presence not confirmed), Radancy (local presence not confirmed), Sphinx IT (local presence not confirmed), United Tech (local presence not confirmed), Wien Energie GmbH (local presence not confirmed)
 
 </details>
 <!-- companies:end -->

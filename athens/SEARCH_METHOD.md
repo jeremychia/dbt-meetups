@@ -7,20 +7,20 @@ This file holds what is specific to Athens. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 1, 2026-10-06)
+**At a glance** (version 2, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 5 |
-| People | 10 |
+| Companies | 49 |
+| People | 101 |
 | Tier 1 leads | 10 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 10 |
-| Spoke at this chapter before | 10 |
-| Based in the region | 0 |
+| Proven speakers | 24 |
+| Spoke at this chapter before | 11 |
+| Based in the region | 91 |
 | Based elsewhere | 0 |
 | Location unknown | 10 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 35 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->
@@ -39,11 +39,17 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-5 companies and communities were looked at. A company is local when it has people or roles in the region.
+48 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (5)</summary>
 
 Austrian Post (local presence not confirmed), dbt Labs (local presence not confirmed), GWI (local presence not confirmed), Kaizen Gaming (local presence not confirmed), Orfium (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (43)</summary>
+
+Accenture Greece (local presence not confirmed), Agile Actors (local presence not confirmed), Amplifyd (local presence not confirmed), Athens University of Economics and Business (M.Sc. in Business Analytics) (local presence not confirmed), Athens University of Economis and Business (local presence not confirmed), bespot. (local presence not confirmed), CAAP (local presence not confirmed), cite-sa (local presence not confirmed), DCI (local presence not confirmed), efood (local presence not confirmed), Ernst & Young (local presence not confirmed), Finartix (local presence not confirmed), Freelance (local presence not confirmed), Full Beauty Brands (local presence not confirmed), Hack the Box (local presence not confirmed), hackthebox (local presence not confirmed), IBM (local presence not confirmed), JustDataPlease (local presence not confirmed), Kaizen Gaming (Stoiximan/Betano) (local presence not confirmed), Kosmocar (local presence not confirmed), KPMG Greece (local presence not confirmed), Learnworlds (local presence not confirmed), Libra AI Technologies (local presence not confirmed), Mindwave (local presence not confirmed), National Observatory of Athens (local presence not confirmed), Netcompany (local presence not confirmed), Novibet (local presence not confirmed), NTUA (local presence not confirmed), OPAP S.A. (local presence not confirmed), PeopleCert (local presence not confirmed), Performance Technologies (local presence not confirmed), PPC SA (local presence not confirmed), Proxy Foods (local presence not confirmed), PwC Greece (local presence not confirmed), Qventus (local presence not confirmed), Satori (local presence not confirmed), Satori Analytics (local presence not confirmed), Terra Spatium SA (local presence not confirmed), UBITECH (local presence not confirmed), UniSystems (local presence not confirmed), University of Georgia (local presence not confirmed), Upstream (local presence not confirmed), WITSIDE (local presence not confirmed)
 
 </details>
 <!-- companies:end -->
