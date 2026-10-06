@@ -1,0 +1,2390 @@
+{
+  "metadata": {
+    "title": "Barcelona dbt companies and people for the Barcelona dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Barcelona companies using dbt, and people who could speak at or attend the Barcelona dbt Meetup.",
+    "version": 1,
+    "schema_version": 4,
+    "region": "Barcelona (Barcelona dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach."
+    ],
+    "counts": {
+      "companies": 23,
+      "people": 34,
+      "job_postings": 0,
+      "companies_with_job_postings": 0,
+      "speaker_evidence_items": 0,
+      "unique_content_items": 0,
+      "people_with_linkedin": 0,
+      "people_with_contact": 0,
+      "people_who_spoke_at_this_chapter": 34,
+      "internal_vinted": 0,
+      "level": {
+        "leadership": 14,
+        "working": 20
+      },
+      "speaker_potential": {
+        "high": 34
+      },
+      "attendee_potential": {
+        "medium": 34
+      },
+      "priority_tier": {
+        "2": 23,
+        "1": 11
+      },
+      "watchlist_companies": 22,
+      "past_meetups": 14,
+      "lead_type": {
+        "proven_speaker": 34
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 34
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {}
+  },
+  "companies": [
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "drew-banin",
+          "name": "Drew Banin",
+          "pronouns": null,
+          "title": "Co-founder, dbt Labs",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-27",
+              "talk_title": "Q&A with Drew Banin",
+              "topics": [
+                "dbt fundamentals",
+                "dbt product updates",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "benoit-perigaud",
+          "name": "Benoit Perigaud",
+          "pronouns": null,
+          "title": "Staff DX Advocate, dbt Labs",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-26",
+              "talk_title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+              "topics": [
+                "dbt product updates",
+                "tools & ecosystem"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "lifull-connect",
+      "name": "Lifull Connect",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "adela-tort",
+          "name": "Adela Tort",
+          "pronouns": null,
+          "title": "Lifull Connect",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-27",
+              "talk_title": "Adopting dbt in Lifull Connect",
+              "topics": [
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "david-martinez",
+          "name": "David Martinez",
+          "pronouns": null,
+          "title": "Lifull Connect",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-27",
+              "talk_title": "Adopting dbt in Lifull Connect",
+              "topics": [
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "frederick-ayala-gomez",
+          "name": "Frederick Ayala Gomez",
+          "pronouns": null,
+          "title": null,
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-27",
+              "talk_title": "Marketing Pipeline using AWS & dbt",
+              "topics": [
+                "domain-specific use cases",
+                "modern data stack",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "frederick-ayala",
+          "name": "Frederick Ayala",
+          "pronouns": null,
+          "title": null,
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2021-10-27",
+              "talk_title": "Marketing Pipeline using AWS & dbt",
+              "topics": [
+                "domain-specific use cases",
+                "modern data stack",
+                "dbt product features"
+              ]
+            },
+            {
+              "date": "2023-06-22",
+              "talk_title": "The Goblin's Guide to dbt: Pipelines using Athena and AWS",
+              "topics": [
+                "domain-specific use cases",
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sergi-gomez",
+          "name": "Sergi Gómez",
+          "pronouns": null,
+          "title": null,
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-22",
+              "talk_title": "Bringing self-service to the next level with the dbt Semantic Layer",
+              "topics": [
+                "semantic layer",
+                "business intelligence",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "luis-velasco",
+          "name": "Luis Velasco",
+          "pronouns": null,
+          "title": null,
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-22",
+              "talk_title": "Building a polyglot data pipeline with Google Cloud",
+              "topics": [
+                "modern data stack",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "infinite-lambda",
+      "name": "Infinite Lambda",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nina-anderson",
+          "name": "Nina Anderson",
+          "pronouns": null,
+          "title": "Technical Lead, Infinite Lambda",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-07-05",
+              "talk_title": "Carbon analytics with dbt",
+              "topics": [
+                "modern data stack",
+                "industry trends",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "wallbox",
+      "name": "Wallbox",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anna-julia",
+          "name": "Anna Julià",
+          "pronouns": null,
+          "title": "Product Data Analyst & Senior Analytics Engineer, Wallbox",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-07-05",
+              "talk_title": "How to scale a dbt project at a scale level",
+              "topics": [
+                "performance & scale",
+                "orchestration & ci/cd",
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "miguel-llorente",
+          "name": "Miguel Llorente",
+          "pronouns": null,
+          "title": "Product Data Analyst & Senior Analytics Engineer, Wallbox",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-07-05",
+              "talk_title": "How to scale a dbt project at a scale level",
+              "topics": [
+                "performance & scale",
+                "orchestration & ci/cd",
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "landbot",
+      "name": "Landbot",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "patricio-villanueva",
+          "name": "Patricio Villanueva",
+          "pronouns": null,
+          "title": "Data Analyst, Landbot",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-10-13",
+              "talk_title": "Landbot's data pipeline from Fivetran, dbt, and monitoring failure rates",
+              "topics": [
+                "orchestration & ci/cd",
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "spaulding-ridge",
+      "name": "Spaulding Ridge",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "eduardo-varas",
+          "name": "Eduardo Varas",
+          "pronouns": null,
+          "title": "Data Analytics Engineer, Spaulding Ridge",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-10-13",
+              "talk_title": "From BI managed aggregations to Star data model in dbt",
+              "topics": [
+                "data modeling",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "carta-europe",
+      "name": "Carta Europe",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "aleix-cubel-capdevila",
+          "name": "Aleix Cubel Capdevila",
+          "pronouns": null,
+          "title": "Carta Europe",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-26",
+              "talk_title": "From Self-service BI to CI and testing: The dbt journey at Carta",
+              "topics": [
+                "business intelligence",
+                "orchestration & ci/cd",
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "barcelona-supercomputing-center",
+      "name": "Barcelona Supercomputing Center",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alberto-labarga",
+          "name": "Alberto Labarga",
+          "pronouns": null,
+          "title": "Barcelona Supercomputing Center",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-26",
+              "talk_title": "Leveraging an Open Source Stack: Modelling Health Data at Barcelona Supercomputing Center",
+              "topics": [
+                "data modeling",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "synq",
+      "name": "Synq",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mikkel-dengse",
+          "name": "Mikkel Dengsøe",
+          "pronouns": null,
+          "title": "Co-founder, Synq",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-02-01",
+              "talk_title": "Data Alerts are Hard",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "tier-mobility",
+      "name": "Tier Mobility",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-quer-castells",
+          "name": "Daniel Quer Castells",
+          "pronouns": null,
+          "title": "Analytics Engineer, Tier Mobility",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-02-01",
+              "talk_title": "Bringing dbt model costs to a Fraction (and when you really need window functions)",
+              "topics": [
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "tous",
+      "name": "Tous",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "xavier-martin-ferrer",
+          "name": "Xavier Martin Ferrer",
+          "pronouns": null,
+          "title": "Head of Data, Tous",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-25",
+              "talk_title": "Data Modernization at international jewelry brand Tous: Migrating to cloud",
+              "topics": [
+                "dbt migration & adoption",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "euno",
+      "name": "Euno",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sarah-levy",
+          "name": "Sarah Levy",
+          "pronouns": null,
+          "title": "Co-Founder & CEO, Euno",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-25",
+              "talk_title": "Should we build this in Looker or dbt?",
+              "topics": [
+                "tools & ecosystem",
+                "data governance",
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "payfit",
+      "name": "Payfit",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lorena-gonzales",
+          "name": "Lorena Gonzales",
+          "pronouns": null,
+          "title": "Analytics Engineer, Payfit",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-20",
+              "talk_title": "Goodbye Legacy, Hello Lakehouse: Payfit's dbt journey",
+              "topics": [
+                "dbt migration & adoption",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "travelperk",
+      "name": "TravelPerk",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "david-molins",
+          "name": "David Molins",
+          "pronouns": null,
+          "title": "BI Developer & Director Data Operations, TravelPerk",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-20",
+              "talk_title": "How a BI team adopted dbt to improve Looker performance",
+              "topics": [
+                "business intelligence",
+                "performance & scale",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "roger-torrents",
+          "name": "Roger Torrents",
+          "pronouns": null,
+          "title": "BI Developer & Director Data Operations, TravelPerk",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-20",
+              "talk_title": "How a BI team adopted dbt to improve Looker performance",
+              "topics": [
+                "business intelligence",
+                "performance & scale",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "scopely",
+      "name": "Scopely",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "omar-brid",
+          "name": "Omar Brid",
+          "pronouns": null,
+          "title": "Analytics Engineer, Scopely",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-03",
+              "talk_title": "Optimizing Data Workflows in Mobile Gaming: What Went Right (and Wrong) at Monopoly GO!",
+              "topics": [
+                "dbt best practices",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "karla-garcia",
+          "name": "Karla Garcia",
+          "pronouns": null,
+          "title": "Analytics Engineers, Scopely",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-26",
+              "talk_title": "Powering Play: How Game and Data Teams Level Up Together",
+              "topics": [
+                "team & org design",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "marie-truong",
+          "name": "Marie Truong",
+          "pronouns": null,
+          "title": "Analytics Engineers, Scopely",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-26",
+              "talk_title": "Powering Play: How Game and Data Teams Level Up Together",
+              "topics": [
+                "team & org design",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "shalion",
+      "name": "Shalion",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alejo-buxeres",
+          "name": "Alejo Buxeres",
+          "pronouns": null,
+          "title": "Chief Data Officer, Shalion",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-03",
+              "talk_title": "WHEN BI IS THE PRODUCT: Building a scalable dbt model that delivers reliable client insights",
+              "topics": [
+                "performance & scale",
+                "business intelligence",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "wallbox-chargers",
+      "name": "Wallbox Chargers",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "miquel-llorente",
+          "name": "Miquel Llorente",
+          "pronouns": null,
+          "title": "Data Engineer Manager, Wallbox Chargers",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-02-13",
+              "talk_title": "Datalake migration made easy with dbt: Tips from Wallbox",
+              "topics": [
+                "dbt migration & adoption",
+                "performance & scale",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "metaloop",
+      "name": "Metaloop",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bernardo-carvalho",
+          "name": "Bernardo Carvalho",
+          "pronouns": null,
+          "title": "Head of Data, Metaloop",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-02-13",
+              "talk_title": "Measuring operational excellence using dbt tests and ephemeral models",
+              "topics": [
+                "data quality & testing",
+                "performance & scale",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "lovys",
+      "name": "Lovys",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "afonso-moreira",
+          "name": "Afonso Moreira",
+          "pronouns": null,
+          "title": "Head of Data and Co-CEO, Lovys",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-11-06",
+              "talk_title": "Golden Spaghetti",
+              "topics": [
+                "data modeling",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "omni-analytics",
+      "name": "Omni Analytics",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jon-palmer",
+          "name": "Jon Palmer",
+          "pronouns": null,
+          "title": "Managing Architect, Omni Analytics",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-11-06",
+              "talk_title": "Practical tips & use cases for unlocking self-service with dbt, Omni, and AI",
+              "topics": [
+                "business intelligence",
+                "modern data stack",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "dbt",
+      "name": "dbt",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alvaro-martin",
+          "name": "Álvaro Martin",
+          "pronouns": null,
+          "title": "Solution Architect, dbt",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-04-09",
+              "talk_title": "Fusion and dbt News",
+              "topics": [
+                "dbt product updates",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    },
+    {
+      "id": "ifco",
+      "name": "IFCO",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Barcelona"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "carla-regueira",
+          "name": "Carla Regueira",
+          "pronouns": null,
+          "title": "Product Manager, Business Data Analyst, Senior Data Engineer, IFCO",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-04-09",
+              "talk_title": "Scaling data architecture for Big Data and IoT",
+              "topics": [
+                "performance & scale",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "alvaro-picatoste",
+          "name": "Álvaro Picatoste",
+          "pronouns": null,
+          "title": "Product Manager, Business Data Analyst, Senior Data Engineer, IFCO",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-04-09",
+              "talk_title": "Scaling data architecture for Big Data and IoT",
+              "topics": [
+                "performance & scale",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "daniel-diaz",
+          "name": "Daniel Díaz",
+          "pronouns": null,
+          "title": "Product Manager, Business Data Analyst, Senior Data Engineer, IFCO",
+          "city": "Barcelona",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-04-09",
+              "talk_title": "Scaling data architecture for Big Data and IoT",
+              "topics": [
+                "performance & scale",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Barcelona dbt Meetup speaker"
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/barcelona-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/barcelona-dbt-meetup.json",
+    "checked": []
+  },
+  "past_meetups": [
+    {
+      "name": "Barcelona dbt Meetup (Online)",
+      "date": "2021-10-27",
+      "venue": "Online event",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/280933462/",
+      "organisers": [
+        "Rosie Cardoso"
+      ],
+      "attendees": 79,
+      "talks": [
+        {
+          "speaker": "Drew Banin",
+          "company": "Co-founder, dbt Labs",
+          "title": "Q&A with Drew Banin",
+          "topics": [
+            "dbt fundamentals",
+            "dbt product updates",
+            "industry trends"
+          ]
+        },
+        {
+          "speaker": "Adela Tort & David Martinez",
+          "company": "Lifull Connect",
+          "title": "Adopting dbt in Lifull Connect",
+          "topics": [
+            "dbt migration & adoption"
+          ]
+        },
+        {
+          "speaker": "Frederick Ayala Gomez",
+          "company": null,
+          "title": "Marketing Pipeline using AWS & dbt",
+          "topics": [
+            "domain-specific use cases",
+            "modern data stack",
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person)",
+      "date": "2022-07-05",
+      "venue": "Scopely - Sant Gervasi, Carrer de Folgueroles 17-25, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/286343399/",
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 54,
+      "talks": [
+        {
+          "speaker": "Nina Anderson",
+          "company": "Technical Lead, Infinite Lambda",
+          "title": "Carbon analytics with dbt",
+          "topics": [
+            "modern data stack",
+            "industry trends",
+            "dbt product features"
+          ]
+        },
+        {
+          "speaker": "Anna Julià & Miguel Llorente",
+          "company": "Product Data Analyst & Senior Analytics Engineer, Wallbox",
+          "title": "How to scale a dbt project at a scale level",
+          "topics": [
+            "performance & scale",
+            "orchestration & ci/cd",
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person)",
+      "date": "2022-10-13",
+      "venue": "Ironhack Barcelona Tech bootcamps, C/ de Pamplona, 96, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/288465519/",
+      "organisers": [
+        "Sergi Gómez",
+        "Alejo Buxeres",
+        "Guillaume Legoy"
+      ],
+      "attendees": 74,
+      "talks": [
+        {
+          "speaker": "Patricio Villanueva",
+          "company": "Data Analyst, Landbot",
+          "title": "Landbot's data pipeline from Fivetran, dbt, and monitoring failure rates",
+          "topics": [
+            "orchestration & ci/cd",
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Eduardo Varas",
+          "company": "Data Analytics Engineer, Spaulding Ridge",
+          "title": "From BI managed aggregations to Star data model in dbt",
+          "topics": [
+            "data modeling",
+            "dbt migration & adoption"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) 2023",
+      "date": "2023-02-09",
+      "venue": "Spaces 22 Arroba Mar, Carrer de la Marina, 16-18, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/291138340/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Viv Lugo",
+        "Rachael Power"
+      ],
+      "attendees": 83,
+      "talks": [
+        {
+          "speaker": "Hugo",
+          "company": "Head of Data Engineering, Codat",
+          "title": "Using dbt to store predictions and view accuracy metrics for data science over time",
+          "topics": [
+            "data modeling",
+            "orchestration & ci/cd",
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Adriana & Daniel",
+          "company": "Data Engineering Team, Gameloft",
+          "title": "Migrating 1000+ models to dbt at Gameloft",
+          "topics": [
+            "dbt migration & adoption",
+            "performance & scale",
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) June 2023",
+      "date": "2023-06-22",
+      "venue": "Spaces - Barcelona, Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/293443196/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Viv Lugo"
+      ],
+      "attendees": 70,
+      "talks": [
+        {
+          "speaker": "Frederick Ayala",
+          "company": null,
+          "title": "The Goblin's Guide to dbt: Pipelines using Athena and AWS",
+          "topics": [
+            "domain-specific use cases",
+            "modern data stack",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Sergi Gómez",
+          "company": null,
+          "title": "Bringing self-service to the next level with the dbt Semantic Layer",
+          "topics": [
+            "semantic layer",
+            "business intelligence",
+            "data governance"
+          ]
+        },
+        {
+          "speaker": "Luis Velasco",
+          "company": null,
+          "title": "Building a polyglot data pipeline with Google Cloud",
+          "topics": [
+            "modern data stack",
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) October 2023",
+      "date": "2023-10-26",
+      "venue": "Spaces 22 Arroba, C. de Pallars, 193, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/296379110/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Viv Lugo"
+      ],
+      "attendees": 70,
+      "talks": [
+        {
+          "speaker": "Aleix Cubel Capdevila",
+          "company": "Carta Europe",
+          "title": "From Self-service BI to CI and testing: The dbt journey at Carta",
+          "topics": [
+            "business intelligence",
+            "orchestration & ci/cd",
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Alberto Labarga",
+          "company": "Barcelona Supercomputing Center",
+          "title": "Leveraging an Open Source Stack: Modelling Health Data at Barcelona Supercomputing Center",
+          "topics": [
+            "data modeling",
+            "modern data stack"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) February 2024",
+      "date": "2024-02-01",
+      "venue": "Spaces - Barcelona, Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/298459758/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Florent Micand",
+        "Desi Dimitrova"
+      ],
+      "attendees": 76,
+      "talks": [
+        {
+          "speaker": "Mikkel Dengsøe",
+          "company": "Co-founder, Synq",
+          "title": "Data Alerts are Hard",
+          "topics": [
+            "data quality & testing",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Daniel Quer Castells",
+          "company": "Analytics Engineer, Tier Mobility",
+          "title": "Bringing dbt model costs to a Fraction (and when you really need window functions)",
+          "topics": [
+            "performance & scale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dbt Data Stack Chat Barcelona: Tous and Euno - April 2024",
+      "date": "2024-04-25",
+      "venue": "Spaces - Barcelona, Spaces 22 Arroba Mar, Carrer de la Marina, 16-18, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/300144436/",
+      "organisers": [
+        "Ruth Onyekwe"
+      ],
+      "attendees": 59,
+      "talks": [
+        {
+          "speaker": "Xavier Martin Ferrer",
+          "company": "Head of Data, Tous",
+          "title": "Data Modernization at international jewelry brand Tous: Migrating to cloud",
+          "topics": [
+            "dbt migration & adoption",
+            "data modeling"
+          ]
+        },
+        {
+          "speaker": "Sarah Levy",
+          "company": "Co-Founder & CEO, Euno",
+          "title": "Should we build this in Looker or dbt?",
+          "topics": [
+            "tools & ecosystem",
+            "data governance",
+            "business intelligence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) June 2024",
+      "date": "2024-06-20",
+      "venue": "Spaces 22 Arroba, C. de Pallars, 193, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/301415554/",
+      "organisers": [
+        "Ruth Onyekwe"
+      ],
+      "attendees": 46,
+      "talks": [
+        {
+          "speaker": "Lorena Gonzales",
+          "company": "Analytics Engineer, Payfit",
+          "title": "Goodbye Legacy, Hello Lakehouse: Payfit's dbt journey",
+          "topics": [
+            "dbt migration & adoption",
+            "data governance"
+          ]
+        },
+        {
+          "speaker": "David Molins & Roger Torrents",
+          "company": "BI Developer & Director Data Operations, TravelPerk",
+          "title": "How a BI team adopted dbt to improve Looker performance",
+          "topics": [
+            "business intelligence",
+            "performance & scale",
+            "dbt migration & adoption"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) Oct 2024",
+      "date": "2024-10-03",
+      "venue": "Spaces - Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/303347543/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Desi Simeonova"
+      ],
+      "attendees": 72,
+      "talks": [
+        {
+          "speaker": "Omar Brid",
+          "company": "Analytics Engineer, Scopely",
+          "title": "Optimizing Data Workflows in Mobile Gaming: What Went Right (and Wrong) at Monopoly GO!",
+          "topics": [
+            "dbt best practices",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Alejo Buxeres",
+          "company": "Chief Data Officer, Shalion",
+          "title": "WHEN BI IS THE PRODUCT: Building a scalable dbt model that delivers reliable client insights",
+          "topics": [
+            "performance & scale",
+            "business intelligence",
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) Feb 2025",
+      "date": "2025-02-13",
+      "venue": "Spaces - Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/305666991/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Desi Simeonova"
+      ],
+      "attendees": 66,
+      "talks": [
+        {
+          "speaker": "Miquel Llorente",
+          "company": "Data Engineer Manager, Wallbox Chargers",
+          "title": "Datalake migration made easy with dbt: Tips from Wallbox",
+          "topics": [
+            "dbt migration & adoption",
+            "performance & scale",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Bernardo Carvalho",
+          "company": "Head of Data, Metaloop",
+          "title": "Measuring operational excellence using dbt tests and ephemeral models",
+          "topics": [
+            "data quality & testing",
+            "performance & scale",
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dbt Global Circuit: Barcelona dbt Meetup (in-person) June 2025",
+      "date": "2025-06-26",
+      "venue": "Scopely Office, Carrer de Zamora, 70, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/308137133/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Playgami Women"
+      ],
+      "attendees": 90,
+      "talks": [
+        {
+          "speaker": "Benoit Perigaud",
+          "company": "Staff DX Advocate, dbt Labs",
+          "title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+          "topics": [
+            "dbt product updates",
+            "tools & ecosystem"
+          ]
+        },
+        {
+          "speaker": "Karla Garcia & Marie Truong",
+          "company": "Analytics Engineers, Scopely",
+          "title": "Powering Play: How Game and Data Teams Level Up Together",
+          "topics": [
+            "team & org design",
+            "dbt migration & adoption"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) November 2025",
+      "date": "2025-11-06",
+      "venue": "Spaces - Plaza Universitat, Gran Via de les Corts Catalanes, 583, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/311566278/",
+      "organisers": [
+        "Ruth Onyekwe",
+        "Desi Simeonova"
+      ],
+      "attendees": 69,
+      "talks": [
+        {
+          "speaker": "Afonso Moreira",
+          "company": "Head of Data and Co-CEO, Lovys",
+          "title": "Golden Spaghetti",
+          "topics": [
+            "data modeling",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Jon Palmer",
+          "company": "Managing Architect, Omni Analytics",
+          "title": "Practical tips & use cases for unlocking self-service with dbt, Omni, and AI",
+          "topics": [
+            "business intelligence",
+            "modern data stack",
+            "data governance"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Barcelona dbt Meetup (in-person) April 2026",
+      "date": "2026-04-09",
+      "venue": "Pier01 / IFCO Digital Hub, Plaza de Pau Vila 1, Barcelona",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/events/313908423/",
+      "organisers": [
+        "Ruth Onyekwe"
+      ],
+      "attendees": 69,
+      "talks": [
+        {
+          "speaker": "Álvaro Martin",
+          "company": "Solution Architect, dbt",
+          "title": "Fusion and dbt News",
+          "topics": [
+            "dbt product updates",
+            "dbt product features"
+          ]
+        },
+        {
+          "speaker": "Carla Regueira, Álvaro Picatoste, Daniel Díaz",
+          "company": "Product Manager, Business Data Analyst, Senior Data Engineer, IFCO",
+          "title": "Scaling data architecture for Big Data and IoT",
+          "topics": [
+            "performance & scale",
+            "modern data stack"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Barcelona dbt Meetup",
+      "url": "https://www.meetup.com/barcelona-dbt-meetup/",
+      "note": "the chapter itself"
+    }
+  ]
+}

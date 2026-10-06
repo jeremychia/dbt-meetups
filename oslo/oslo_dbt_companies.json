@@ -1,0 +1,2390 @@
+{
+  "metadata": {
+    "title": "Oslo dbt companies and people for the Oslo dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Oslo companies using dbt, and people who could speak at or attend the Oslo dbt Meetup.",
+    "version": 1,
+    "schema_version": 4,
+    "region": "Oslo (Oslo dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach."
+    ],
+    "counts": {
+      "companies": 21,
+      "people": 37,
+      "job_postings": 0,
+      "companies_with_job_postings": 0,
+      "speaker_evidence_items": 0,
+      "unique_content_items": 0,
+      "people_with_linkedin": 0,
+      "people_with_contact": 0,
+      "people_who_spoke_at_this_chapter": 37,
+      "internal_vinted": 0,
+      "level": {
+        "working": 33,
+        "leadership": 4
+      },
+      "speaker_potential": {
+        "high": 37
+      },
+      "attendee_potential": {
+        "medium": 37
+      },
+      "priority_tier": {
+        "2": 28,
+        "1": 9
+      },
+      "watchlist_companies": 20,
+      "past_meetups": 11,
+      "lead_type": {
+        "proven_speaker": 37
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 37
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {}
+  },
+  "companies": [
+    {
+      "id": "elvia",
+      "name": "Elvia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anders-elton",
+          "name": "Anders Elton",
+          "pronouns": null,
+          "title": "Elvia",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-22",
+              "talk_title": "dbt used in a data mesh setup. Experiences from Elvia",
+              "topics": [
+                "data governance",
+                "orchestration & ci/cd"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "coop-norway",
+      "name": "Coop Norway",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "takaaki-yoshikawa",
+          "name": "Takaaki Yoshikawa",
+          "pronouns": null,
+          "title": "Coop Norway",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-03-22",
+              "talk_title": "dbt Experiences - Coop Norway",
+              "topics": [
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "volur",
+      "name": "Völur",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "rebecca-w-seyfarth",
+          "name": "Rebecca W. Seyfarth",
+          "pronouns": null,
+          "title": "Völur",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Data Pipelines in production with dbt, Snowflake and Github actions",
+              "topics": [
+                "orchestration & ci/cd",
+                "data warehouse & platforms"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "marija-babic",
+          "name": "Marija Babić",
+          "pronouns": null,
+          "title": "Völur",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Data Pipelines in production with dbt, Snowflake and Github actions",
+              "topics": [
+                "orchestration & ci/cd",
+                "data warehouse & platforms"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "vigdisirene-steinsund",
+          "name": "Vigdis-Irene Steinsund",
+          "pronouns": null,
+          "title": "Völur",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Data Pipelines in production with dbt, Snowflake and Github actions",
+              "topics": [
+                "orchestration & ci/cd",
+                "data warehouse & platforms"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "nikita-barskov",
+          "name": "Nikita Barskov",
+          "pronouns": null,
+          "title": "Völur",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-03-21",
+              "talk_title": "Data contracts and versioning",
+              "topics": [
+                "data governance",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "nbim",
+      "name": "NBIM",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kjetil-rsokdahl",
+          "name": "Kjetil Røsok-Dahl",
+          "pronouns": null,
+          "title": "NBIM",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Advanced analytics: Our experiences building a cloud-native platform with dbt",
+              "topics": [
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "christian-thorsen",
+          "name": "Christian Thorsen",
+          "pronouns": null,
+          "title": "NBIM",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Advanced analytics: Our experiences building a cloud-native platform with dbt",
+              "topics": [
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "yvind-eraker",
+          "name": "Øyvind Eraker",
+          "pronouns": null,
+          "title": "NBIM",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-25",
+              "talk_title": "Supercharging NBIM's Data Platform, from Data Catalogue to AI Powered Insight",
+              "topics": [
+                "data governance",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "oda",
+      "name": "Oda",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "fredrik-vraalsen",
+          "name": "Fredrik Vraalsen",
+          "pronouns": null,
+          "title": "Oda",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Privacy with dbt in Oda's data platform",
+              "topics": [
+                "data governance"
+              ]
+            },
+            {
+              "date": "2025-05-14",
+              "talk_title": "Real-time recommendations with Risingwave + dbt",
+              "topics": [
+                "orchestration & ci/cd",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "lars-snekkerhaugen",
+          "name": "Lars Snekkerhaugen",
+          "pronouns": null,
+          "title": "Oda",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-05-31",
+              "talk_title": "Privacy with dbt in Oda's data platform",
+              "topics": [
+                "data governance"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "lars-mushom",
+          "name": "Lars Mushom",
+          "pronouns": null,
+          "title": "Data Engineer & Machine Learning Engineer, Oda",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-14",
+              "talk_title": "Real-time recommendations with Risingwave + dbt",
+              "topics": [
+                "orchestration & ci/cd",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mikkel-dengs",
+          "name": "Mikkel Dengsø",
+          "pronouns": null,
+          "title": null,
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-08-30",
+              "talk_title": "Data alerts and error handling",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "zsombor-foldesi",
+          "name": "Zsombor Foldesi",
+          "pronouns": null,
+          "title": null,
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-08-30",
+              "talk_title": "How Python on Databricks gives antigravity to dbt",
+              "topics": [
+                "dbt product features",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "amedia",
+      "name": "Amedia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bard-romstad",
+          "name": "Bård Romstad",
+          "pronouns": null,
+          "title": "Amedia",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-08-30",
+              "talk_title": "Dealing with large datasets (500m+ rows/daily in Amedia) using dbt",
+              "topics": [
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "lars-haugseth",
+          "name": "Lars Haugseth",
+          "pronouns": null,
+          "title": "Amedia",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-03-21",
+              "talk_title": "Parallel dbt runs at scale",
+              "topics": [
+                "dbt best practices",
+                "orchestration & ci/cd"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ernesto-ongaro",
+          "name": "Ernesto Ongaro",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-09",
+              "talk_title": "Features, updates and news from Coalesce",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "favrit-as",
+      "name": "Favrit AS",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tim-laser",
+          "name": "Tim Laser",
+          "pronouns": null,
+          "title": "Data Engineer, Favrit AS",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-09",
+              "talk_title": "Build trust with the power of dbt testing",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "glitni",
+      "name": "Glitni",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "runar-alvseike",
+          "name": "Runar Alvseike",
+          "pronouns": null,
+          "title": "Data Engineer, Glitni",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-09",
+              "talk_title": "How to get going with dbt in practice",
+              "topics": [
+                "dbt best practices",
+                "career development"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "sindre-grindheim",
+          "name": "Sindre Grindheim",
+          "pronouns": null,
+          "title": "Glitni",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-04",
+              "talk_title": "dbt package creation using pre-commit hooks, unit testing and commitzen",
+              "topics": [
+                "dbt best practices",
+                "orchestration & ci/cd"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "noman-bashir",
+          "name": "Noman Bashir",
+          "pronouns": null,
+          "title": "Data Scientist, Telenor; Data Engineer, Glitni",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-06-03",
+              "talk_title": "From AI-project to end-to-end data pipeline in dbt",
+              "topics": [
+                "genai & llm",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "anton-lindahl",
+          "name": "Anton Lindahl",
+          "pronouns": null,
+          "title": "Data Scientist, Telenor; Data Engineer, Glitni",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-06-03",
+              "talk_title": "From AI-project to end-to-end data pipeline in dbt",
+              "topics": [
+                "genai & llm",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "sync",
+      "name": "Sync",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ed-orozco",
+          "name": "Ed Orozco",
+          "pronouns": null,
+          "title": "Sync",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-03-21",
+              "talk_title": "Design mental models for large-scale dbt projects",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "petr-janda",
+          "name": "Petr Janda",
+          "pronouns": null,
+          "title": "SYNC",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-24",
+              "talk_title": "A new approach to dbt testing & observability with Data Products",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "norges-bank-investment-management",
+      "name": "Norges Bank Investment Management",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sigve-svenkerud",
+          "name": "Sigve Svenkerud",
+          "pronouns": null,
+          "title": "Data Engineer, Norges Bank Investment Management",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-06",
+              "talk_title": "How Slim CI/CD increases productivity and robustness",
+              "topics": [
+                "orchestration & ci/cd",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-core-dbt-labs",
+      "name": "dbt Core / dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kshitij-aranke",
+          "name": "Kshitij Aranke",
+          "pronouns": null,
+          "title": "Senior Software Engineer, dbt Core / dbt Labs",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-06",
+              "talk_title": "dbt 1.8 roundup and Q&A",
+              "topics": [
+                "dbt product updates",
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "telenor",
+      "name": "Telenor",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "keunsoo-park",
+          "name": "Keunsoo Park",
+          "pronouns": null,
+          "title": "Telenor",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-24",
+              "talk_title": "How Telenor is adapting DataOps through dbt",
+              "topics": [
+                "orchestration & ci/cd",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "nav",
+      "name": "NAV",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "caroline-winther",
+          "name": "Caroline Winther",
+          "pronouns": null,
+          "title": "NAV",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-24",
+              "talk_title": "Data spaghetti to data buffet - How we use dbt at Nav to make data more flexible and user friendly while improving DX",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "brynjar-morka-mhlum",
+          "name": "Brynjar Morka Mæhlum",
+          "pronouns": null,
+          "title": "NAV",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-24",
+              "talk_title": "Data spaghetti to data buffet - How we use dbt at Nav to make data more flexible and user friendly while improving DX",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "remarkable",
+      "name": "reMarkable",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "seamus-beirne",
+          "name": "Séamus Beirne",
+          "pronouns": null,
+          "title": "reMarkable",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-04",
+              "talk_title": "Leveraging DuckDB for data quality control in BigQuery pipelines",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "rasmus-nes",
+          "name": "Rasmus Nes",
+          "pronouns": null,
+          "title": "reMarkable",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-04",
+              "talk_title": "Leveraging DuckDB for data quality control in BigQuery pipelines",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "storebrand",
+      "name": "Storebrand",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "olav-oma",
+          "name": "Olav Oma",
+          "pronouns": null,
+          "title": "Storebrand",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-12-04",
+              "talk_title": "Activating distributed data ownership: Scaling a common data practice across multiple financial service verticals",
+              "topics": [
+                "team & org design",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-labs-previously-sdf-labs",
+      "name": "dbt Labs (previously SDF Labs)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "elias-defaria",
+          "name": "Elias Defaria",
+          "pronouns": null,
+          "title": "Product Manager, dbt Labs (previously SDF Labs)",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-14",
+              "talk_title": "The new dbt engine and what to expect",
+              "topics": [
+                "dbt product updates"
+              ]
+            },
+            {
+              "date": "2025-09-25",
+              "talk_title": "Chat and Q&A with Elias DeFaria",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "sparebank-1-alliance",
+      "name": "Sparebank 1 Alliance",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "arv-hakon-breistl",
+          "name": "Arv Håkon Breistøl",
+          "pronouns": null,
+          "title": "Product Lead; Developer, Sparebank 1 Alliance",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-14",
+              "talk_title": "dbt Cloud in Sparebank 1 Alliance",
+              "topics": [
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "erlend-barstad",
+          "name": "Erlend Barstad",
+          "pronouns": null,
+          "title": "Product Lead; Developer, Sparebank 1 Alliance",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-14",
+              "talk_title": "dbt Cloud in Sparebank 1 Alliance",
+              "topics": [
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "synq",
+      "name": "SYNQ",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mikkel-dengse",
+          "name": "Mikkel Dengsøe",
+          "pronouns": null,
+          "title": "SYNQ",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-25",
+              "talk_title": "Using AI with the dbt MCP for data modelling and testing",
+              "topics": [
+                "genai & llm",
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    },
+    {
+      "id": "bulder",
+      "name": "Bulder",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Oslo"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "thomas-eide-jebsen",
+          "name": "Thomas Eide Jebsen",
+          "pronouns": null,
+          "title": "Head of Data Science, Bulder",
+          "city": "Oslo",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-06-03",
+              "talk_title": "Bulders data journey: Data platform from scratch to AI ready with modern tooling",
+              "topics": [
+                "modern data stack",
+                "genai & llm"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Oslo dbt Meetup speaker"
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/oslo-dbt-group/",
+    "past_meetups_derived_from": "enriched/oslo-dbt-group.json",
+    "checked": []
+  },
+  "past_meetups": [
+    {
+      "name": "Oslo dbt Meetup",
+      "date": "2023-03-22",
+      "venue": "Computashuset, Akersgata 35, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/291178126/",
+      "organisers": [
+        "Anders Elton",
+        "Oda Scheen Kiese"
+      ],
+      "attendees": 72,
+      "talks": [
+        {
+          "speaker": "Anders Elton",
+          "company": "Elvia",
+          "title": "dbt used in a data mesh setup. Experiences from Elvia",
+          "topics": [
+            "data governance",
+            "orchestration & ci/cd"
+          ]
+        },
+        {
+          "speaker": "Takaaki Yoshikawa",
+          "company": "Coop Norway",
+          "title": "dbt Experiences - Coop Norway",
+          "topics": [
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt Meetup : Starring ODA, NBIM, Völur",
+      "date": "2023-05-31",
+      "venue": "Rebel, Universitetsgata 2, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/292700101/",
+      "organisers": [
+        "Trøyel",
+        "Runar Alvseike"
+      ],
+      "attendees": 103,
+      "talks": [
+        {
+          "speaker": "Rebecca W. Seyfarth, Marija Babić, Vigdis-Irene Steinsund",
+          "company": "Völur",
+          "title": "Data Pipelines in production with dbt, Snowflake and Github actions",
+          "topics": [
+            "orchestration & ci/cd",
+            "data warehouse & platforms"
+          ]
+        },
+        {
+          "speaker": "Kjetil Røsok-Dahl, Christian Thorsen",
+          "company": "NBIM",
+          "title": "Advanced analytics: Our experiences building a cloud-native platform with dbt",
+          "topics": [
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Fredrik Vraalsen, Lars Snekkerhaugen",
+          "company": "Oda",
+          "title": "Privacy with dbt in Oda's data platform",
+          "topics": [
+            "data governance"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt Meetup",
+      "date": "2023-08-30",
+      "venue": "Computashuset, Akersgata 35, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/295147151/",
+      "organisers": [
+        "Anders Elton"
+      ],
+      "attendees": 99,
+      "talks": [
+        {
+          "speaker": "Mikkel Dengsø",
+          "company": null,
+          "title": "Data alerts and error handling",
+          "topics": [
+            "data quality & testing",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Zsombor Foldesi",
+          "company": null,
+          "title": "How Python on Databricks gives antigravity to dbt",
+          "topics": [
+            "dbt product features",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Bård Romstad",
+          "company": "Amedia",
+          "title": "Dealing with large datasets (500m+ rows/daily in Amedia) using dbt",
+          "topics": [
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt Meetup November",
+      "date": "2023-11-09",
+      "venue": "Rebel, Universitetsgata 2, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/296379900/",
+      "organisers": [
+        "Trøyel",
+        "Runar Alvseike"
+      ],
+      "attendees": 100,
+      "talks": [
+        {
+          "speaker": "Ernesto Ongaro",
+          "company": "dbt Labs",
+          "title": "Features, updates and news from Coalesce",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Tim Laser",
+          "company": "Data Engineer, Favrit AS",
+          "title": "Build trust with the power of dbt testing",
+          "topics": [
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Runar Alvseike",
+          "company": "Data Engineer, Glitni",
+          "title": "How to get going with dbt in practice",
+          "topics": [
+            "dbt best practices",
+            "career development"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt meetup March!",
+      "date": "2024-03-21",
+      "venue": "Akersgata 34, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/299198668/",
+      "organisers": [
+        "Anders Elton"
+      ],
+      "attendees": 86,
+      "talks": [
+        {
+          "speaker": "Lars Haugseth",
+          "company": "Amedia",
+          "title": "Parallel dbt runs at scale",
+          "topics": [
+            "dbt best practices",
+            "orchestration & ci/cd"
+          ]
+        },
+        {
+          "speaker": "Ed Orozco",
+          "company": "Sync",
+          "title": "Design mental models for large-scale dbt projects",
+          "topics": [
+            "data modeling",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Nikita Barskov",
+          "company": "Völur",
+          "title": "Data contracts and versioning",
+          "topics": [
+            "data governance",
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt meetup June 2024",
+      "date": "2024-06-06",
+      "venue": "Rebel, Universitetsgata 2, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/300284490/",
+      "organisers": [
+        "Runar Alvseike",
+        "Trøyel"
+      ],
+      "attendees": 106,
+      "talks": [
+        {
+          "speaker": "Sigve Svenkerud",
+          "company": "Data Engineer, Norges Bank Investment Management",
+          "title": "How Slim CI/CD increases productivity and robustness",
+          "topics": [
+            "orchestration & ci/cd",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Kshitij Aranke",
+          "company": "Senior Software Engineer, dbt Core / dbt Labs",
+          "title": "dbt 1.8 roundup and Q&A",
+          "topics": [
+            "dbt product updates",
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt Meetup",
+      "date": "2024-09-24",
+      "venue": "Telenor, Snarøyveien 30, Fornebu, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/302864235/",
+      "organisers": [
+        "Anders Elton"
+      ],
+      "attendees": 100,
+      "talks": [
+        {
+          "speaker": "Keunsoo Park",
+          "company": "Telenor",
+          "title": "How Telenor is adapting DataOps through dbt",
+          "topics": [
+            "orchestration & ci/cd",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Caroline Winther, Brynjar Morka Mæhlum",
+          "company": "NAV",
+          "title": "Data spaghetti to data buffet - How we use dbt at Nav to make data more flexible and user friendly while improving DX",
+          "topics": [
+            "data modeling",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Petr Janda",
+          "company": "SYNC",
+          "title": "A new approach to dbt testing & observability with Data Products",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt meetup December 2024",
+      "date": "2024-12-04",
+      "venue": "Rebel, Universitetsgata 2, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/304530691/",
+      "organisers": [
+        "Trøyel",
+        "Runar Alvseike"
+      ],
+      "attendees": 113,
+      "talks": [
+        {
+          "speaker": "Séamus Beirne, Rasmus Nes",
+          "company": "reMarkable",
+          "title": "Leveraging DuckDB for data quality control in BigQuery pipelines",
+          "topics": [
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Sindre Grindheim",
+          "company": "Glitni",
+          "title": "dbt package creation using pre-commit hooks, unit testing and commitzen",
+          "topics": [
+            "dbt best practices",
+            "orchestration & ci/cd"
+          ]
+        },
+        {
+          "speaker": "Olav Oma",
+          "company": "Storebrand",
+          "title": "Activating distributed data ownership: Scaling a common data practice across multiple financial service verticals",
+          "topics": [
+            "team & org design",
+            "data governance"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt meetup May 2025",
+      "date": "2025-05-14",
+      "venue": "Rebel, Universitetsgata 2, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/306456952/",
+      "organisers": [
+        "Trøyel",
+        "Runar Alvseike"
+      ],
+      "attendees": 80,
+      "talks": [
+        {
+          "speaker": "Fredrik Vraalsen, Lars Mushom",
+          "company": "Data Engineer & Machine Learning Engineer, Oda",
+          "title": "Real-time recommendations with Risingwave + dbt",
+          "topics": [
+            "orchestration & ci/cd",
+            "data modeling"
+          ]
+        },
+        {
+          "speaker": "Elias Defaria",
+          "company": "Product Manager, dbt Labs (previously SDF Labs)",
+          "title": "The new dbt engine and what to expect",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Arv Håkon Breistøl, Erlend Barstad",
+          "company": "Product Lead; Developer, Sparebank 1 Alliance",
+          "title": "dbt Cloud in Sparebank 1 Alliance",
+          "topics": [
+            "dbt product features"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt meetup September 2025",
+      "date": "2025-09-25",
+      "venue": "Sundtkvartalet, Lakkegata 53, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/310878562/",
+      "organisers": [
+        "Trøyel",
+        "Runar Alvseike"
+      ],
+      "attendees": 87,
+      "talks": [
+        {
+          "speaker": "Elias DeFaria",
+          "company": "dbt Labs (previously CTO, SDF Labs)",
+          "title": "Chat and Q&A with Elias DeFaria",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Mikkel Dengsøe",
+          "company": "SYNQ",
+          "title": "Using AI with the dbt MCP for data modelling and testing",
+          "topics": [
+            "genai & llm",
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Øyvind Eraker",
+          "company": "NBIM",
+          "title": "Supercharging NBIM's Data Platform, from Data Catalogue to AI Powered Insight",
+          "topics": [
+            "data governance",
+            "genai & llm"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Oslo dbt meetup June 2026",
+      "date": "2026-06-03",
+      "venue": "Sundtkvartalet, Lakkegata 53, Oslo",
+      "url": "https://www.meetup.com/oslo-dbt-group/events/314640513/",
+      "organisers": [
+        "Trøyel",
+        "Runar Alvseike"
+      ],
+      "attendees": 98,
+      "talks": [
+        {
+          "speaker": "Noman Bashir, Anton Lindahl",
+          "company": "Data Scientist, Telenor; Data Engineer, Glitni",
+          "title": "From AI-project to end-to-end data pipeline in dbt",
+          "topics": [
+            "genai & llm",
+            "data modeling"
+          ]
+        },
+        {
+          "speaker": "Thomas Eide Jebsen",
+          "company": "Head of Data Science, Bulder",
+          "title": "Bulders data journey: Data platform from scratch to AI ready with modern tooling",
+          "topics": [
+            "modern data stack",
+            "genai & llm"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Oslo dbt Meetup",
+      "url": "https://www.meetup.com/oslo-dbt-group/",
+      "note": "the chapter itself"
+    }
+  ]
+}

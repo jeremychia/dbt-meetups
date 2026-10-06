@@ -1,0 +1,1467 @@
+{
+  "metadata": {
+    "title": "Ho Chi Minh City dbt companies and people for the Ho Chi Minh City dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Ho Chi Minh City companies using dbt, and people who could speak at or attend the Ho Chi Minh City dbt Meetup.",
+    "version": 1,
+    "schema_version": 4,
+    "region": "Ho Chi Minh City (Ho Chi Minh City dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach."
+    ],
+    "counts": {
+      "companies": 11,
+      "people": 21,
+      "job_postings": 0,
+      "companies_with_job_postings": 0,
+      "speaker_evidence_items": 0,
+      "unique_content_items": 0,
+      "people_with_linkedin": 0,
+      "people_with_contact": 0,
+      "people_who_spoke_at_this_chapter": 21,
+      "internal_vinted": 0,
+      "level": {
+        "leadership": 9,
+        "working": 12
+      },
+      "speaker_potential": {
+        "high": 21
+      },
+      "attendee_potential": {
+        "medium": 21
+      },
+      "priority_tier": {
+        "2": 16,
+        "1": 5
+      },
+      "watchlist_companies": 10,
+      "past_meetups": 10,
+      "lead_type": {
+        "proven_speaker": 21
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 21
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {}
+  },
+  "companies": [
+    {
+      "id": "joon-solutions",
+      "name": "Joon Solutions",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hoang-elliot",
+          "name": "Hoang Elliot",
+          "pronouns": null,
+          "title": "Lead Analytic Engineer, Joon Solutions",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-08-19",
+              "talk_title": "Analytics Engineer & dbt",
+              "topics": [
+                "dbt fundamentals",
+                "analytics engineering",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "bao-nguyen",
+          "name": "Bao Nguyen",
+          "pronouns": null,
+          "title": "Analytics Engineer, Joon Solutions",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-01-05",
+              "talk_title": "Setting up dbt CLI (On-Premise)",
+              "topics": [
+                "dbt product features",
+                "team & org design",
+                "dbt fundamentals"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "hoang-tran",
+          "name": "Hoang Tran",
+          "pronouns": null,
+          "title": "Infinite Lambda, Hydrolix, Unilever, Joon Solutions",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-12",
+              "talk_title": "Data Quality panel discussion",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "dung-to",
+          "name": "Dung To",
+          "pronouns": null,
+          "title": "Infinite Lambda, Hydrolix, Unilever, Joon Solutions",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-12",
+              "talk_title": "Data Quality panel discussion",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "nam-nguyen",
+          "name": "Nam Nguyen",
+          "pronouns": null,
+          "title": "Infinite Lambda, Hydrolix, Unilever, Joon Solutions",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-10-12",
+              "talk_title": "Data Quality panel discussion",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "holistics",
+      "name": "Holistics",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "huy-nguyen",
+          "name": "Huy Nguyen",
+          "pronouns": null,
+          "title": "CTO and Co-founder, Holistics",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-08-19",
+              "talk_title": "Making sense of the modern data landscape",
+              "topics": [
+                "industry trends",
+                "modern data stack",
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "chotot",
+      "name": "Chotot",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "thien-pham",
+          "name": "Thien Pham",
+          "pronouns": null,
+          "title": "Senior Data Science Manager, Chotot",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-12-17",
+              "talk_title": "Building data driven organization: lesson learned",
+              "topics": [
+                "dbt migration & adoption",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "infinite-lambda",
+      "name": "Infinite Lambda",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "thu-huynh",
+          "name": "Thu Huynh",
+          "pronouns": null,
+          "title": "Tech Lead / Analytics Engineer, Infinite Lambda",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-12-17",
+              "talk_title": "Is your dbt project following good practices? A check using dbt evaluator package",
+              "topics": [
+                "tools & ecosystem",
+                "dbt best practices",
+                "project structure"
+              ]
+            },
+            {
+              "date": "2024-10-12",
+              "talk_title": "Data Quality panel discussion",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "minh-ngo",
+          "name": "Minh Ngo",
+          "pronouns": null,
+          "title": "Analytics Tech Lead, Infinite Lambda",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-13",
+              "talk_title": "Collecting and managing dbt test results: a pragmatic approach to handling dbt warnings",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "nhat-nguyen",
+          "name": "Nhat Nguyen",
+          "pronouns": null,
+          "title": "Senior Analytics Engineer, Infinite Lambda",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-27",
+              "talk_title": "Improving DevX in dbt with CI/CD & Co-pilot",
+              "topics": [
+                "orchestration & ci/cd",
+                "tools & ecosystem",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "joon-solutions-global",
+      "name": "Joon Solutions Global",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "anh-dao",
+          "name": "Anh Dao",
+          "pronouns": null,
+          "title": "Senior Analytics Engineer, Joon Solutions Global",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-24",
+              "talk_title": "Why dbt & How dbt Can Make Data Transformation Seamless",
+              "topics": [
+                "dbt fundamentals",
+                "team & org design",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "dhc-vietnam",
+      "name": "DHC Vietnam",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "huu-do",
+          "name": "Huu Do",
+          "pronouns": null,
+          "title": "Head of IT, DHC Vietnam",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-24",
+              "talk_title": "Panel Discussion: dbt Cloud Adoption Journey at DHC",
+              "topics": [
+                "dbt product features",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "y-huynh",
+          "name": "Y Huynh",
+          "pronouns": null,
+          "title": null,
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-01-18",
+              "talk_title": "The Rise of dbt / Using dbt for Data Transformation at Yeah1",
+              "topics": [
+                "dbt fundamentals",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "uyen-bui",
+          "name": "Uyen Bui",
+          "pronouns": null,
+          "title": null,
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-01-18",
+              "talk_title": "Incremental Models: Strategies and Optimization on BigQuery",
+              "topics": [
+                "data modeling",
+                "performance & scale",
+                "dbt fundamentals"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "entobel",
+      "name": "Entobel",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bruno-rassat",
+          "name": "Bruno Rassat",
+          "pronouns": null,
+          "title": "Data Lead, Entobel",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-13",
+              "talk_title": "Harnessing the simplicity of dbt and BigQuery to make your data talk for free",
+              "topics": [
+                "data modeling",
+                "team & org design",
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "shopback-vietnam",
+      "name": "ShopBack Vietnam",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "phuc-tran",
+          "name": "Phuc Tran",
+          "pronouns": null,
+          "title": "Senior Data Engineers, ShopBack Vietnam",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-07-06",
+              "talk_title": "dbt on Open-Source Lakehouse Architecture",
+              "topics": [
+                "modern data stack",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "hai-nguyen",
+          "name": "Hai Nguyen",
+          "pronouns": null,
+          "title": "Senior Data Engineers, ShopBack Vietnam",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-07-06",
+              "talk_title": "dbt on Open-Source Lakehouse Architecture",
+              "topics": [
+                "modern data stack",
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "datum-consulting",
+      "name": "Datum Consulting",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hung-to",
+          "name": "Hung To",
+          "pronouns": null,
+          "title": "Head of Data & AI/Data Engineer, Datum Consulting",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-27",
+              "talk_title": "Streamlining Enterprise Incident Analysis with GenAI",
+              "topics": [
+                "data quality & testing",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "tai-le",
+          "name": "Tai Le",
+          "pronouns": null,
+          "title": "Head of Data & AI/Data Engineer, Datum Consulting",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-27",
+              "talk_title": "Streamlining Enterprise Incident Analysis with GenAI",
+              "topics": [
+                "data quality & testing",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    },
+    {
+      "id": "data-analyst-analytics-engineer",
+      "name": "Data Analyst & Analytics Engineer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chau-vo",
+          "name": "Chau Vo",
+          "pronouns": null,
+          "title": "Data Analyst & Analytics Engineer",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-06-20",
+              "talk_title": "What It Takes to Be an Analytics Engineer",
+              "topics": [
+                "career development",
+                "analytics engineering",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "duc-che",
+          "name": "Duc Che",
+          "pronouns": null,
+          "title": "Data Analyst & Analytics Engineer",
+          "city": "Ho Chi Minh City",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-06-20",
+              "talk_title": "What It Takes to Be an Analytics Engineer",
+              "topics": [
+                "career development",
+                "analytics engineering",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Ho Chi Minh City dbt Meetup speaker"
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/ho-chi-minh-city-dbt-meetup.json",
+    "checked": []
+  },
+  "past_meetups": [
+    {
+      "name": "HCM City dbt Meetup (in-person)",
+      "date": "2022-08-19",
+      "venue": "Dreamplex Ngo Quang Huy, 42 Ngô Quang Huy, District 2, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/287285331/",
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 88,
+      "talks": [
+        {
+          "speaker": "Hoang Elliot",
+          "company": "Lead Analytic Engineer, Joon Solutions",
+          "title": "Analytics Engineer & dbt",
+          "topics": [
+            "dbt fundamentals",
+            "analytics engineering",
+            "team & org design"
+          ]
+        },
+        {
+          "speaker": "Huy Nguyen",
+          "company": "CTO and Co-founder, Holistics",
+          "title": "Making sense of the modern data landscape",
+          "topics": [
+            "industry trends",
+            "modern data stack",
+            "business intelligence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCM City dbt Meetup #2 (in-person)",
+      "date": "2022-12-17",
+      "venue": "Chotot Office, UOA Tower, District 7, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/289923709/",
+      "organisers": [
+        "Giang Đỗ (Terry)",
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 70,
+      "talks": [
+        {
+          "speaker": "Thien Pham",
+          "company": "Senior Data Science Manager, Chotot",
+          "title": "Building data driven organization: lesson learned",
+          "topics": [
+            "dbt migration & adoption",
+            "data governance"
+          ]
+        },
+        {
+          "speaker": "Thu Huynh",
+          "company": "Tech Lead / Analytics Engineer, Infinite Lambda",
+          "title": "Is your dbt project following good practices? A check using dbt evaluator package",
+          "topics": [
+            "tools & ecosystem",
+            "dbt best practices",
+            "project structure"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Setting up dbt CLI (On Premise)",
+      "date": "2023-01-05",
+      "venue": "3 Đường số 46, District 2, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/290591356/",
+      "organisers": [
+        "Giang Đỗ (Terry)",
+        "Marco Sollie"
+      ],
+      "attendees": 8,
+      "talks": [
+        {
+          "speaker": "Bao Nguyen",
+          "company": "Analytics Engineer, Joon Solutions",
+          "title": "Setting up dbt CLI (On-Premise)",
+          "topics": [
+            "dbt product features",
+            "team & org design",
+            "dbt fundamentals"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ha Noi dbt Meetup #3 (in-person)",
+      "date": "2023-06-24",
+      "venue": "DHC Vietnam, 15 Phạm Hùng, Hà Nội",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/294087984/",
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 11,
+      "talks": [
+        {
+          "speaker": "Anh Dao",
+          "company": "Senior Analytics Engineer, Joon Solutions Global",
+          "title": "Why dbt & How dbt Can Make Data Transformation Seamless",
+          "topics": [
+            "dbt fundamentals",
+            "team & org design",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Huu Do",
+          "company": "Head of IT, DHC Vietnam",
+          "title": "Panel Discussion: dbt Cloud Adoption Journey at DHC",
+          "topics": [
+            "dbt product features",
+            "dbt migration & adoption"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCMC dbt Meet Up",
+      "date": "2024-01-18",
+      "venue": "THINK Training Space, 116 Đ. Nguyễn Văn Thủ, District 1, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/298143095/",
+      "organisers": [
+        "Marco Sollie",
+        "Giang Đỗ (Terry)"
+      ],
+      "attendees": 60,
+      "talks": [
+        {
+          "speaker": "Y Huynh",
+          "company": null,
+          "title": "The Rise of dbt / Using dbt for Data Transformation at Yeah1",
+          "topics": [
+            "dbt fundamentals",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Uyen Bui",
+          "company": null,
+          "title": "Incremental Models: Strategies and Optimization on BigQuery",
+          "topics": [
+            "data modeling",
+            "performance & scale",
+            "dbt fundamentals"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCMC dbt Meetup #5",
+      "date": "2024-04-13",
+      "venue": "Holistics Vietnam office, 457 Nguyễn Đình Chiểu, District 3, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/299768498/",
+      "organisers": [
+        "Chau Le"
+      ],
+      "attendees": 104,
+      "talks": [
+        {
+          "speaker": "Minh Ngo",
+          "company": "Analytics Tech Lead, Infinite Lambda",
+          "title": "Collecting and managing dbt test results: a pragmatic approach to handling dbt warnings",
+          "topics": [
+            "data quality & testing",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Bruno Rassat",
+          "company": "Data Lead, Entobel",
+          "title": "Harnessing the simplicity of dbt and BigQuery to make your data talk for free",
+          "topics": [
+            "data modeling",
+            "team & org design",
+            "business intelligence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCMC dbt Meetup #6",
+      "date": "2024-07-06",
+      "venue": "Family Garden 2, 28 Đ. Thảo Điền, District 2, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/301614922/",
+      "organisers": [
+        "Giang Đỗ (Terry)",
+        "Chau Le",
+        "Marco Sollie"
+      ],
+      "attendees": 114,
+      "talks": [
+        {
+          "speaker": "Phuc Tran & Hai Nguyen",
+          "company": "Senior Data Engineers, ShopBack Vietnam",
+          "title": "dbt on Open-Source Lakehouse Architecture",
+          "topics": [
+            "modern data stack",
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCMC dbt Meetup #7",
+      "date": "2024-10-12",
+      "venue": "C-Space Coworking Office, 62 Võ Văn Tần, District 3, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/303482650/",
+      "organisers": [
+        "Geri Plamenova",
+        "Chau Le",
+        "Marco Sollie"
+      ],
+      "attendees": 142,
+      "talks": [
+        {
+          "speaker": "Thu Huynh, Hoang Tran, Dung To, Nam Nguyen",
+          "company": "Infinite Lambda, Hydrolix, Unilever, Joon Solutions",
+          "title": "Data Quality panel discussion",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCMC dbt Meetup #8",
+      "date": "2025-09-27",
+      "venue": "C-Space Coworking Office, 62 Võ Văn Tần, District 3, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/310746878/",
+      "organisers": [
+        "Geri Plamenova",
+        "Chau Le",
+        "Giang Đỗ (Terry)"
+      ],
+      "attendees": 83,
+      "talks": [
+        {
+          "speaker": "Nhat Nguyen",
+          "company": "Senior Analytics Engineer, Infinite Lambda",
+          "title": "Improving DevX in dbt with CI/CD & Co-pilot",
+          "topics": [
+            "orchestration & ci/cd",
+            "tools & ecosystem",
+            "team & org design"
+          ]
+        },
+        {
+          "speaker": "Hung To & Tai Le",
+          "company": "Head of Data & AI/Data Engineer, Datum Consulting",
+          "title": "Streamlining Enterprise Incident Analysis with GenAI",
+          "topics": [
+            "data quality & testing",
+            "modern data stack"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HCMC dbt Meetup #9",
+      "date": "2026-06-20",
+      "venue": "Foundry AI Academy, Binh Thanh District, Ho Chi Minh City",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/events/314891180/",
+      "organisers": [
+        "Geri Plamenova",
+        "Chau Le",
+        "Giang Đỗ (Terry)"
+      ],
+      "attendees": 60,
+      "talks": [
+        {
+          "speaker": "Chau Vo & Duc Che",
+          "company": "Data Analyst & Analytics Engineer",
+          "title": "What It Takes to Be an Analytics Engineer",
+          "topics": [
+            "career development",
+            "analytics engineering",
+            "team & org design"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Ho Chi Minh City dbt Meetup",
+      "url": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/",
+      "note": "the chapter itself"
+    }
+  ]
+}

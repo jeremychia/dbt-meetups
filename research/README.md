@@ -30,6 +30,55 @@ This is the one method behind every `<folder>/<city>_dbt_companies.json` researc
 | Asia-Pacific | Sydney | [sydney](../sydney/SEARCH_METHOD.md) |
 | Asia-Pacific | Taipei | [taipei](../taipei/SEARCH_METHOD.md) |
 | Asia-Pacific | Tokyo | [tokyo](../tokyo/SEARCH_METHOD.md) |
+| Europe | Athens (built from chapter history) | [athens](../athens/SEARCH_METHOD.md) |
+| Europe | Barcelona (built from chapter history) | [barcelona](../barcelona/SEARCH_METHOD.md) |
+| Europe | Bratislava (built from chapter history) | [bratislava](../bratislava/SEARCH_METHOD.md) |
+| Europe | Budapest (built from chapter history) | [budapest](../budapest/SEARCH_METHOD.md) |
+| Europe | Cluj (built from chapter history) | [cluj](../cluj/SEARCH_METHOD.md) |
+| Europe | Dublin (built from chapter history) | [dublin](../dublin/SEARCH_METHOD.md) |
+| Europe | Helsinki (built from chapter history) | [helsinki](../helsinki/SEARCH_METHOD.md) |
+| Europe | Madrid (built from chapter history) | [madrid](../madrid/SEARCH_METHOD.md) |
+| Europe | Marseille (built from chapter history) | [marseille](../marseille/SEARCH_METHOD.md) |
+| Europe | Milan (built from chapter history) | [milan](../milan/SEARCH_METHOD.md) |
+| Europe | Northern Germany (built from chapter history) | [northern_germany](../northern_germany/SEARCH_METHOD.md) |
+| Europe | Oslo (built from chapter history) | [oslo](../oslo/SEARCH_METHOD.md) |
+| Europe | Prague (built from chapter history) | [prague](../prague/SEARCH_METHOD.md) |
+| Europe | Switzerland (built from chapter history) | [switzerland](../switzerland/SEARCH_METHOD.md) |
+| Europe | Vienna (built from chapter history) | [vienna](../vienna/SEARCH_METHOD.md) |
+| North America | Austin (built from chapter history) | [austin](../austin/SEARCH_METHOD.md) |
+| North America | Boise (built from chapter history) | [boise](../boise/SEARCH_METHOD.md) |
+| North America | Chicago (built from chapter history) | [chicago](../chicago/SEARCH_METHOD.md) |
+| North America | Dallas (built from chapter history) | [dallas](../dallas/SEARCH_METHOD.md) |
+| North America | Denver (built from chapter history) | [denver](../denver/SEARCH_METHOD.md) |
+| North America | Detroit (built from chapter history) | [detroit](../detroit/SEARCH_METHOD.md) |
+| North America | Halifax (built from chapter history) | [halifax](../halifax/SEARCH_METHOD.md) |
+| North America | Houston (built from chapter history) | [houston](../houston/SEARCH_METHOD.md) |
+| North America | Los Angeles (built from chapter history) | [los_angeles](../los_angeles/SEARCH_METHOD.md) |
+| North America | Minneapolis (built from chapter history) | [minneapolis](../minneapolis/SEARCH_METHOD.md) |
+| North America | Philadelphia (built from chapter history) | [philadelphia](../philadelphia/SEARCH_METHOD.md) |
+| North America | Phoenix (built from chapter history) | [phoenix](../phoenix/SEARCH_METHOD.md) |
+| North America | Portland (built from chapter history) | [portland](../portland/SEARCH_METHOD.md) |
+| North America | Raleigh (built from chapter history) | [raleigh_durham](../raleigh_durham/SEARCH_METHOD.md) |
+| North America | Vancouver (built from chapter history) | [vancouver](../vancouver/SEARCH_METHOD.md) |
+| North America | Washington DC (built from chapter history) | [washington_dc](../washington_dc/SEARCH_METHOD.md) |
+| Latin America | Bogotá (built from chapter history) | [bogota](../bogota/SEARCH_METHOD.md) |
+| Latin America | Buenos Aires (built from chapter history) | [buenos_aires](../buenos_aires/SEARCH_METHOD.md) |
+| Latin America | Floripa (built from chapter history) | [florianopolis](../florianopolis/SEARCH_METHOD.md) |
+| Latin America | Medellín (built from chapter history) | [medellin](../medellin/SEARCH_METHOD.md) |
+| Latin America | São Paulo (built from chapter history) | [sao_paulo](../sao_paulo/SEARCH_METHOD.md) |
+| Asia-Pacific | Bangalore (built from chapter history) | [bangalore](../bangalore/SEARCH_METHOD.md) |
+| Asia-Pacific | Brisbane (built from chapter history) | [brisbane](../brisbane/SEARCH_METHOD.md) |
+| Asia-Pacific | China (built from chapter history) | [china](../china/SEARCH_METHOD.md) |
+| Asia-Pacific | Ho Chi Minh City (built from chapter history) | [ho_chi_minh_city](../ho_chi_minh_city/SEARCH_METHOD.md) |
+| Asia-Pacific | Manila (built from chapter history) | [manila](../manila/SEARCH_METHOD.md) |
+| Asia-Pacific | Perth (built from chapter history) | [perth](../perth/SEARCH_METHOD.md) |
+| Asia-Pacific | Wellington (built from chapter history) | [wellington](../wellington/SEARCH_METHOD.md) |
+| Middle East & Africa | Abuja (built from chapter history) | [abuja](../abuja/SEARCH_METHOD.md) |
+| Middle East & Africa | Dubai (built from chapter history) | [dubai](../dubai/SEARCH_METHOD.md) |
+| Middle East & Africa | Lagos (built from chapter history) | [lagos](../lagos/SEARCH_METHOD.md) |
+| Middle East & Africa | Riyadh (built from chapter history) | [riyadh](../riyadh/SEARCH_METHOD.md) |
+| Middle East & Africa | Tel Aviv (built from chapter history) | [tel_aviv](../tel_aviv/SEARCH_METHOD.md) |
+| Middle East & Africa | Uyo (built from chapter history) | [uyo](../uyo/SEARCH_METHOD.md) |
 
 ## 1. What the research is for
 
