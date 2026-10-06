@@ -20,7 +20,7 @@ This file holds what is specific to Barcelona. The method, scoring rules, schema
 | Based in the region | 116 |
 | Based elsewhere | 0 |
 | Location unknown | 57 |
-| With a LinkedIn profile | 53 |
+| With a LinkedIn profile | 54 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 14 |
 <!-- at-a-glance:end -->

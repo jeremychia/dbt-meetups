@@ -20,7 +20,7 @@ This file holds what is specific to São Paulo. The method, scoring rules, schem
 | Based in the region | 110 |
 | Based elsewhere | 0 |
 | Location unknown | 33 |
-| With a LinkedIn profile | 63 |
+| With a LinkedIn profile | 66 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

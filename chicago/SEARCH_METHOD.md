@@ -20,7 +20,7 @@ This file holds what is specific to Chicago. The method, scoring rules, schema a
 | Based in the region | 142 |
 | Based elsewhere | 0 |
 | Location unknown | 32 |
-| With a LinkedIn profile | 57 |
+| With a LinkedIn profile | 58 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->

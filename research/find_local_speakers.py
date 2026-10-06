@@ -89,12 +89,17 @@ def meetup(lat, lon, since):
 
 def bevy_people(page):
     """speaker and host records that a bevy event page keeps in its page data."""
+    def text(raw):
+        try:
+            return json.loads(f'"{raw}"')
+        except ValueError:  # a truncated escape inside a name
+            return raw
     out = []
     for m in re.finditer(r'"first_name":"([^"]*)","last_name":"([^"]*)","company":"([^"]*)"', page):
         rec = page[m.end():m.end() + 3000].split('"first_name":')[0]
-        field = lambda k: (lambda x: json.loads(f'"{x.group(1)}"') if x else None)(re.search(rf'"{k}":"([^"]*)"', rec))
+        field = lambda k: (lambda x: text(x.group(1)) if x else None)(re.search(rf'"{k}":"([^"]*)"', rec))
         li = field("personal_linkedin_page")
-        out.append({"name": json.loads(f'"{m.group(1)} {m.group(2)}"').strip(), "company": json.loads(f'"{m.group(3)}"') or None, "title": field("title") or None,
+        out.append({"name": text(f"{m.group(1)} {m.group(2)}").strip(), "company": text(m.group(3)) or None, "title": field("title") or None,
                     "role": field("role") or "speaker", "links": [li if "linkedin.com" in li else f"https://www.linkedin.com/in/{li.strip('/').removeprefix('in/')}/"] if li else []})
     return list({p["name"]: p for p in out}.values())
 

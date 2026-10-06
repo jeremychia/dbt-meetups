@@ -20,7 +20,7 @@ This file holds what is specific to Switzerland. The method, scoring rules, sche
 | Based in the region | 78 |
 | Based elsewhere | 0 |
 | Location unknown | 28 |
-| With a LinkedIn profile | 13 |
+| With a LinkedIn profile | 14 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

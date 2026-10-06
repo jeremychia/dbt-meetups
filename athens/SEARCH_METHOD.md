@@ -12,14 +12,14 @@ This file holds what is specific to Athens. The method, scoring rules, schema an
 | | Count |
 |---|---|
 | Companies | 49 |
-| People | 101 |
+| People | 100 |
 | Tier 1 leads | 10 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 24 |
-| Spoke at this chapter before | 11 |
+| Proven speakers | 23 |
+| Spoke at this chapter before | 10 |
 | Based in the region | 91 |
 | Based elsewhere | 0 |
-| Location unknown | 10 |
+| Location unknown | 9 |
 | With a LinkedIn profile | 35 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 3 |

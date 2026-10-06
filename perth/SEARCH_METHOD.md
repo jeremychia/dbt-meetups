@@ -20,7 +20,7 @@ This file holds what is specific to Perth. The method, scoring rules, schema and
 | Based in the region | 33 |
 | Based elsewhere | 0 |
 | Location unknown | 13 |
-| With a LinkedIn profile | 10 |
+| With a LinkedIn profile | 14 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

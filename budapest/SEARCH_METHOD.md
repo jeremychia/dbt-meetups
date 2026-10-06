@@ -12,15 +12,15 @@ This file holds what is specific to Budapest. The method, scoring rules, schema 
 | | Count |
 |---|---|
 | Companies | 37 |
-| People | 85 |
+| People | 84 |
 | Tier 1 leads | 2 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 35 |
-| Spoke at this chapter before | 15 |
+| Proven speakers | 34 |
+| Spoke at this chapter before | 14 |
 | Based in the region | 66 |
 | Based elsewhere | 0 |
-| Location unknown | 19 |
-| With a LinkedIn profile | 17 |
+| Location unknown | 18 |
+| With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

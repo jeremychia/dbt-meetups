@@ -12,15 +12,15 @@ This file holds what is specific to Lagos. The method, scoring rules, schema and
 | | Count |
 |---|---|
 | Companies | 108 |
-| People | 187 |
-| Tier 1 leads | 14 |
+| People | 186 |
+| Tier 1 leads | 13 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 87 |
-| Spoke at this chapter before | 38 |
+| Proven speakers | 86 |
+| Spoke at this chapter before | 37 |
 | Based in the region | 132 |
 | Based elsewhere | 0 |
-| Location unknown | 55 |
-| With a LinkedIn profile | 80 |
+| Location unknown | 54 |
+| With a LinkedIn profile | 84 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->

@@ -20,7 +20,7 @@ This file holds what is specific to Prague. The method, scoring rules, schema an
 | Based in the region | 49 |
 | Based elsewhere | 0 |
 | Location unknown | 29 |
-| With a LinkedIn profile | 25 |
+| With a LinkedIn profile | 27 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

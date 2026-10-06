@@ -20,7 +20,7 @@ This file holds what is specific to Vienna. The method, scoring rules, schema an
 | Based in the region | 58 |
 | Based elsewhere | 0 |
 | Location unknown | 11 |
-| With a LinkedIn profile | 10 |
+| With a LinkedIn profile | 11 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

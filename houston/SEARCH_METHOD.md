@@ -20,7 +20,7 @@ This file holds what is specific to Houston. The method, scoring rules, schema a
 | Based in the region | 121 |
 | Based elsewhere | 0 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 51 |
+| With a LinkedIn profile | 52 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->

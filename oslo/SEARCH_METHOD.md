@@ -12,14 +12,14 @@ This file holds what is specific to Oslo. The method, scoring rules, schema and 
 | | Count |
 |---|---|
 | Companies | 64 |
-| People | 148 |
-| Tier 1 leads | 9 |
+| People | 146 |
+| Tier 1 leads | 8 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 80 |
-| Spoke at this chapter before | 39 |
+| Proven speakers | 79 |
+| Spoke at this chapter before | 37 |
 | Based in the region | 105 |
 | Based elsewhere | 0 |
-| Location unknown | 43 |
+| Location unknown | 41 |
 | With a LinkedIn profile | 14 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 11 |
