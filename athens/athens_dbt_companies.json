@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Athens companies using dbt, and people who could speak at or attend the Athens dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Athens (Athens dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: Workable and Built In pages fetch cleanly and show the dbt line; remotefront and the learnworlds and aijobs pages returned 429, 404 or redirects.",
+      "Lesson: the Databricks Athens user group agenda is the best source of local data speakers outside the dbt meetup.",
+      "Lesson: web search for Greek-language dbt content found almost nothing; local dbt voices are mostly already on file."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,48 +51,54 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Removed ads (D ONE, GWI, Growe Talents) were readable on Built In but are no longer open.",
+      "Remote-Greece ads (EnablerMinds, Growe Talents) do not confirm an Athens office.",
+      "The Learnworlds analytics engineer ad appeared in results but its page returned 404, so it is not recorded."
     ],
     "counts": {
-      "companies": 49,
-      "people": 100,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 14,
-      "unique_content_items": 7,
-      "people_with_linkedin": 35,
-      "people_with_contact": 58,
+      "companies": 53,
+      "people": 103,
+      "job_postings": 7,
+      "companies_with_job_postings": 7,
+      "speaker_evidence_items": 16,
+      "unique_content_items": 9,
+      "people_with_linkedin": 36,
+      "people_with_contact": 59,
       "people_who_spoke_at_this_chapter": 10,
       "internal_vinted": 0,
       "level": {
-        "leadership": 7,
+        "leadership": 10,
         "working": 93
       },
       "speaker_potential": {
-        "high": 10,
-        "low": 77,
+        "high": 12,
+        "low": 78,
         "medium": 13
       },
       "attendee_potential": {
         "medium": 96,
-        "high": 4
+        "high": 7
       },
       "priority_tier": {
-        "1": 10,
+        "1": 12,
         "3": 77,
+        "2": 1,
         "connector": 13
       },
-      "watchlist_companies": 48,
+      "watchlist_companies": 47,
       "past_meetups": 3,
       "lead_type": {
-        "proven_speaker": 23,
-        "no_public_content": 77
+        "proven_speaker": 25,
+        "no_public_content": 78
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 10,
-        "conference_or_meetup_agenda": 14,
-        "github": 77
+        "conference_or_meetup_agenda": 16,
+        "github": 77,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -121,7 +131,10 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 14
+      "community": 14,
+      "data governance": 2,
+      "data warehouse & platforms": 1,
+      "dbt best practices": 1
     }
   },
   "companies": [
@@ -129,16 +142,47 @@
       "id": "kaizen-gaming",
       "name": "Kaizen Gaming",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Athens"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "SQL",
+        "Dagster",
+        "GitLab"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://pitchmeai.com/jobs/kaizen-gaming/analytics-engineer-atsmta6y37glj2y2f7cho",
+          "source": "pitchmeai job aggregator",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design, build, and maintain scalable data models and transformation pipelines using Databricks, SQL, and dbt.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "on-site"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.getdbt.com/case-studies/kaizen-gaming",
+          "note": "dbt Labs case study: 60% faster pipelines on Databricks"
+        },
+        {
+          "type": "talk",
+          "url": "https://events.databricks.com/Usergroup-Athens-March-2026",
+          "note": "Databricks Athens user group, 11 March 2026, hosted at Kaizen Campus, Marousi"
+        }
+      ],
       "people": [
         {
           "id": "yannis-lazaridis",
@@ -225,9 +269,119 @@
             }
           ],
           "notes": null
+        },
+        {
+          "id": "nikos-pavlopoulos",
+          "name": "Nikos Pavlopoulos",
+          "pronouns": null,
+          "title": "Analytics Engineering Team Lead",
+          "city": "Athens",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Athens, March 2026",
+              "title": "The Paradox of Analytics on PII Data",
+              "date": "2026-03-11",
+              "url": "https://events.databricks.com/Usergroup-Athens-March-2026",
+              "content_id": "databricks-user-group-athens-march-2026the-paradox-of-analyt",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "co-presented with Theodosis Tsaklanos; dynamic governance layer on Databricks",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://events.databricks.com/Usergroup-Athens-March-2026",
+              "note": "talk: The Paradox of Analytics on PII Data"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "row and column level data protection for dashboards built on dbt models",
+          "past_chapter_talks": [],
+          "notes": "Location is medium: in-person talk in Marousi and employer has an Athens office."
+        },
+        {
+          "id": "christos-chatzis",
+          "name": "Christos Chatzis",
+          "pronouns": null,
+          "title": "Sr Technology Manager",
+          "city": "Athens",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Sessionize session submission (same title as the March 2026 Databricks Athens talk)",
+              "title": "The Paradox of Analytics on PII Data",
+              "date": null,
+              "url": "https://sessionize.com/s/christos-chatzis/the-paradox-of-analytics-on-pii-data/181799",
+              "content_id": "sessionize-session-submission-same-title-as-the-march-2026-d",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "row and column security on Databricks with dbt for transformations",
+              "topics": [
+                "data governance",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://sessionize.com/s/christos-chatzis/the-paradox-of-analytics-on-pii-data/181799",
+              "note": "talk: The Paradox of Analytics on PII Data"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "using dbt with runtime access policies for sensitive data",
+          "past_chapter_talks": [],
+          "notes": "Sessionize profile states Athens, Greece. Session text says dbt is used for transformations."
         }
       ],
-      "notes": "employer of a past Athens dbt Meetup speaker"
+      "notes": "employer of a past Athens dbt Meetup speaker | Ad is about one month old per the aggregator."
     },
     {
       "id": "orfium",
@@ -635,15 +789,34 @@
       "id": "gwi",
       "name": "GWI",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Athens"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
-      "job_postings": [],
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow",
+        "Spark"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://builtin.com/job/data-engineer/4662872",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "data transformation tools like dbt (or comparable frameworks)",
+          "job_poster": null,
+          "posted_date": "2025-07-04",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -724,9 +897,42 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/kritonp gives the location Athens"
+        },
+        {
+          "id": "georgios-ntanakas",
+          "name": "Georgios Ntanakas",
+          "pronouns": null,
+          "title": "Director of Data Engineering",
+          "city": "Athens",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/georgios-ntanakas/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "running a data platform and data team with dbt at a global research company",
+          "past_chapter_talks": [],
+          "notes": "Sessionize profile lists dbt, data platform and data team as speaking topics. No sessions listed."
         }
       ],
-      "notes": "employer of a past Athens dbt Meetup speaker"
+      "notes": "employer of a past Athens dbt Meetup speaker | Ad removed 2025-07-04 (date is the removal date). A Data Analytics Engineer ad at GWI Athens does not mention dbt."
     },
     {
       "id": "independent-no-company",
@@ -3719,15 +3925,36 @@
       "id": "hack-the-box",
       "name": "Hack the Box",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Athens"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL",
+        "Looker",
+        "Tableau",
+        "BigQuery",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://jobs.workable.com/jobs/0e236e48-2806-40ab-b9d0-dcef580c0528.md",
+          "source": "Workable",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build and optimise data models (using SQL & dbt) to support business reporting and analysis needs.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -3770,7 +3997,7 @@
           "notes": "github profile https://github.com/asterios-pantousas gives the location Athens, Greece"
         }
       ],
-      "notes": null
+      "notes": "Office in Palaio Faliro. Hybrid within 55 km of Athens."
     },
     {
       "id": "full-beauty-brands",
@@ -5180,12 +5407,195 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "up-hellas",
+      "name": "Up Hellas",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Athens"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL",
+        "Airflow",
+        "ClickHouse",
+        "Apache Superset",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://jobs.workable.com/jobs/d1476746-8dfc-4f34-8ca6-351b9d64f1c1.md",
+          "source": "Workable",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design, develop, and maintain dbt (Data Build Tool) transformations to ensure clean, well-structured, and efficient data models.",
+          "job_poster": null,
+          "posted_date": "2026-07-07",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt is a named duty in the ad. Posted date taken from a search result summary."
+    },
+    {
+      "id": "d-one",
+      "name": "D ONE",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Athens"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Azure Data Factory",
+        "Palantir Foundry"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://builtin.com/job/senior-data-engineer-athens-greece/7275383",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Designing, building, and maintaining modern data pipelines using tools such as Azure Data Factory, Databricks, Palantir Foundry, or dbt",
+          "job_poster": null,
+          "posted_date": "2025-11-26",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt is one of several alternatives. Ad was removed 2025-11-26 (date is the removal date)."
+    },
+    {
+      "id": "enablerminds",
+      "name": "EnablerMinds",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Greece (remote)"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Azure Databricks",
+        "Synapse",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Mid-Senior Data Analytics Engineer",
+          "url": "https://www.jobfind.gr/JobAd/View/GR/Theseis_Ergasias/542F70B5-BA16-44CF-98DE-FA6DE110B5FF",
+          "source": "jobfind.gr",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with DBT (Data Build Tool) for transformation and modelling.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Full remote in Greece. dbt is a nice-to-have."
+    },
+    {
+      "id": "growe-talents",
+      "name": "Growe Talents",
+      "type": "recruiter",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Greece (remote)"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Athena",
+        "Terraform"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://builtinlondon.uk/job/data-engineer/10576793",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Develop and maintain data transformations in dbt, building reusable, testable, and well-documented data models",
+          "job_poster": null,
+          "posted_date": "2026-09-04",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Recruiter ad hiring remotely in Greece; removed 2026-09-04 (date is the removal date)."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/athens-dbt-meetup/",
     "past_meetups_derived_from": "enriched/athens-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Workable job pages (Up Hellas, Hack The Box, Performance Technologies, Epignosis)",
+        "url": "https://jobs.workable.com/jobs/d1476746-8dfc-4f34-8ca6-351b9d64f1c1.md",
+        "yielded": true,
+        "note": "two dbt ads in Athens; two ads without dbt"
+      },
+      {
+        "name": "Built In job pages (D ONE, GWI)",
+        "url": "https://builtin.com/job/senior-data-engineer-athens-greece/7275383",
+        "yielded": true,
+        "note": "removed ads, still readable"
+      },
+      {
+        "name": "Databricks Athens user group agenda, March 2026",
+        "url": "https://events.databricks.com/Usergroup-Athens-March-2026",
+        "yielded": true,
+        "note": "agenda seen in search result; page itself redirects"
+      },
+      {
+        "name": "Sessionize speaker profiles",
+        "url": "https://sessionize.com/georgios-ntanakas",
+        "yielded": true,
+        "note": "gave location and dbt speaking topic"
+      },
+      {
+        "name": "Women in Tech Athens (WomenTech Network)",
+        "url": "https://www.womentech.net/en-gb/events/women-in-tech-athens",
+        "yielded": false,
+        "note": "403 on fetch; speakers are Ocado Technology staff, no dbt link"
+      },
+      {
+        "name": "Greek-language searches for dbt jobs and talks",
+        "url": "https://www.jobfind.gr/JobAd/View/GR/Theseis_Ergasias/542F70B5-BA16-44CF-98DE-FA6DE110B5FF",
+        "yielded": true,
+        "note": "found one remote Greece ad; Greek queries otherwise returned little"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -5329,6 +5739,11 @@
       "name": "Databricks User Group Greece",
       "url": "https://www.meetup.com/athens-open-source-intelligence-meetup-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Databricks User Groups Athens",
+      "url": "https://events.databricks.com/Usergroup-Athens-March-2026",
+      "note": "hosted at Kaizen Campus, Marousi; not open to partners or vendors"
     }
   ]
 }

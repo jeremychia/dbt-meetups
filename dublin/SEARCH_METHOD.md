@@ -7,21 +7,21 @@ This file holds what is specific to Dublin. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-06)
+**At a glance** (version 3, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 43 |
-| People | 166 |
+| Companies | 54 |
+| People | 172 |
 | Tier 1 leads | 7 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 67 |
+| Proven speakers | 73 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 147 |
+| Based in the region | 153 |
 | Based elsewhere | 0 |
 | Location unknown | 19 |
 | With a LinkedIn profile | 62 |
-| Job ads mentioning dbt | 0 |
+| Job ads mentioning dbt | 11 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
 
@@ -39,17 +39,46 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-42 companies and communities were looked at. A company is local when it has people or roles in the region.
+53 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (5)</summary>
+<details><summary><b>Strong dbt use</b> (10)</summary>
 
-dbt Labs (local presence not confirmed), Fivetran (local presence not confirmed), GitLab (local presence not confirmed), Omni (local presence not confirmed), Squarespace (local presence not confirmed)
+Ardanis, CarGurus, dbt Labs, Fivetran (local presence not confirmed), GitLab (local presence not confirmed), Intercom, N-iX (local presence not confirmed), Omni (local presence not confirmed), Shutterstock, Squarespace (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Not verified</b> (37)</summary>
+<details><summary><b>Some dbt signal</b> (3)</summary>
 
-AIB Bank Dublin (local presence not confirmed), archmedian (local presence not confirmed), Arthur Cox (local presence not confirmed), Atadar Services LLC (local presence not confirmed), Bank of Ireland (local presence not confirmed), Briticana (local presence not confirmed), Centra (Musgrave) (local presence not confirmed), Citibank Europe PLC (local presence not confirmed), Data Engineer (local presence not confirmed), Didomi.io (local presence not confirmed), Dublin Business School (local presence not confirmed), Dublin City University (local presence not confirmed), EY (local presence not confirmed), glanbia (local presence not confirmed), Google (local presence not confirmed), Griffith College Dublin (local presence not confirmed), Intercom (local presence not confirmed), Just Eat Takeaway.com (local presence not confirmed), LetsGetChecked (local presence not confirmed), Mastercard (local presence not confirmed), MSc Data Analytics Student (local presence not confirmed), MSc in Data Analytics @ Dublin Business School (local presence not confirmed), Murray Surgical (local presence not confirmed), National College of Ireland (local presence not confirmed), Open to work (local presence not confirmed), Poloniex (local presence not confirmed), PwC (local presence not confirmed), Realtra (local presence not confirmed), School of Medicine, University College Dublin (local presence not confirmed), Shutterstock (local presence not confirmed), Snowflake (local presence not confirmed), SqlDBM (local presence not confirmed), Trinity College Dublin (local presence not confirmed), UCD Michael Smurfit Business School (local presence not confirmed), Vectra AI (local presence not confirmed), Yes (local presence not confirmed), 🎓 MSc Data Analytics Technological University of the Shannon (local presence not confirmed)
+CarTrawler, Davy, Workhuman
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+Optum
+
+</details>
+
+<details><summary><b>Not verified</b> (36)</summary>
+
+AIB Bank Dublin (local presence not confirmed), archmedian (local presence not confirmed), Arthur Cox (local presence not confirmed), Atadar Services LLC (local presence not confirmed), Bank of Ireland, BearingPoint Ireland, Briticana (local presence not confirmed), Centra (Musgrave) (local presence not confirmed), Citibank Europe PLC (local presence not confirmed), Data Engineer (local presence not confirmed), Didomi.io (local presence not confirmed), Dublin Business School (local presence not confirmed), Dublin City University (local presence not confirmed), EY (local presence not confirmed), glanbia (local presence not confirmed), Google (local presence not confirmed), Griffith College Dublin (local presence not confirmed), Just Eat Takeaway.com (local presence not confirmed), LetsGetChecked (local presence not confirmed), Mastercard (local presence not confirmed), MSc Data Analytics Student (local presence not confirmed), MSc in Data Analytics @ Dublin Business School (local presence not confirmed), Murray Surgical (local presence not confirmed), National College of Ireland (local presence not confirmed), Open to work (local presence not confirmed), Poloniex (local presence not confirmed), PwC (local presence not confirmed), Realtra (local presence not confirmed), School of Medicine, University College Dublin (local presence not confirmed), Snowflake (local presence not confirmed), SqlDBM (local presence not confirmed), Trinity College Dublin (local presence not confirmed), UCD Michael Smurfit Business School (local presence not confirmed), Vectra AI (local presence not confirmed), Yes (local presence not confirmed), 🎓 MSc Data Analytics Technological University of the Shannon (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Uses a different stack</b> (3)</summary>
+
+Coimisiún na Meán, DAMA Ireland, Snowflake Ireland User Group
+
+</details>
+
+<details><summary><b>Other sources checked</b> (6)</summary>
+
+- [Built In Dublin dbt Labs jobs](https://builtindublin.ie/company/dbt-labs/jobs) (nothing useful)
+- [Built In Dublin data and analytics jobs search](https://builtindublin.ie/jobs/data-analytics/search/dbt)
+- [Snowflake Ireland user group events](https://usergroups.snowflake.com/ireland)
+- [DAMA Ireland Women in Data & AI](https://www.dama-uk.org/events/dama-ireland-event-women-in-data-ai)
+- [MotherDuck DuckDB meetup Dublin 2024](https://motherduck.com/events/duckdb-meetup-dublin-2024.md) (nothing useful)
+- [PyCon Ireland 2025 on Sessionize](https://sessionize.com/pycon-ireland-2025/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -71,3 +100,4 @@ To fill after the first research run.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-06 | 1 | First build from the chapter history. |
+| 2026-10-06 | 3 | Research run: 11 companies, 11 dbt job ads and 6 people, no first-time speakers. |

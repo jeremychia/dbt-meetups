@@ -4,12 +4,18 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Ho Chi Minh City companies using dbt, and people who could speak at or attend the Ho Chi Minh City dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Ho Chi Minh City (Ho Chi Minh City dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "itviec's dbt skill page lists only one open job in Vietnam, so job boards are thin here.",
+      "theirstack lists 63 dbt companies in Vietnam, 10 per page; later pages are worth fetching.",
+      "Globant posts dbt ads open to Ho Chi Minh City remote hires.",
+      "Holistics career pages returned 404 on fetch; try holistics.io/careers or a job board copy.",
+      "Web searches for Vietnamese dbt blogs return only generic explainers; no local author found."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +53,54 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "No first-time speakers found; no local dbt blog authors surfaced.",
+      "AhaMove topdev ad was expired when fetched.",
+      "Aggregator-only companies have unverified city and dbt use.",
+      "Kim Ung's location is not stated in the search result."
     ],
     "counts": {
-      "companies": 46,
-      "people": 126,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 31,
-      "unique_content_items": 19,
-      "people_with_linkedin": 49,
-      "people_with_contact": 64,
+      "companies": 59,
+      "people": 127,
+      "job_postings": 4,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 32,
+      "unique_content_items": 20,
+      "people_with_linkedin": 50,
+      "people_with_contact": 65,
       "people_who_spoke_at_this_chapter": 25,
       "internal_vinted": 0,
       "level": {
         "leadership": 13,
-        "working": 113
+        "working": 114
       },
       "speaker_potential": {
         "high": 26,
-        "medium": 17,
+        "medium": 18,
         "low": 83
       },
       "attendee_potential": {
-        "medium": 68,
+        "medium": 69,
         "high": 58
       },
       "priority_tier": {
         "2": 17,
         "1": 5,
         "3": 99,
-        "connector": 5
+        "connector": 6
       },
-      "watchlist_companies": 45,
+      "watchlist_companies": 53,
       "past_meetups": 10,
       "lead_type": {
         "proven_speaker": 40,
-        "no_public_content": 86
+        "no_public_content": 87
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 21,
         "conference_or_meetup_agenda": 28,
-        "github": 86
+        "github": 86,
+        "women_in_data_community": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -124,7 +135,7 @@
     "topic_counts": {
       "data engineering": 18,
       "analytics engineering": 8,
-      "community": 5
+      "community": 6
     }
   },
   "companies": [
@@ -6232,13 +6243,22 @@
       "watchlist": true,
       "excluded_from_outreach": false,
       "cities": [
-        "Ho Chi Minh City"
+        "Ho Chi Minh City",
+        "Vietnam"
       ],
       "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
       "people": [
         {
           "id": "oan-kim-tam",
@@ -6278,7 +6298,7 @@
           "notes": "github profile https://github.com/tamdev001 gives the location Ho Chi Minh City"
         }
       ],
-      "notes": null
+      "notes": "dbt use from an aggregator only; city and ad not verified."
     },
     {
       "id": "university-of-information-technology",
@@ -6560,12 +6580,522 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "globant",
+      "name": "Globant",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "GCP",
+        "Airflow",
+        "Terraform",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (BigQuery, dbt)",
+          "url": "https://career.globant.com/job/DataEngineerBigQuerydbt/78442",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "End-to-end architecture, design and modeling using GCP and DBT Cloud; DBT, Airflow, Terraform, Bash and SQL skills",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote (Ho Chi Minh City), hybrid (Hanoi, Danang)"
+        },
+        {
+          "title": "Data Analytics",
+          "url": "https://career.globant.com/job/DataAnalytics/78027",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Develop and maintain dbt models for transforming raw data into curated datasets; dbt tests, documentation, snapshots, environment management",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote (Ho Chi Minh City), hybrid (Hanoi)"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board_listing",
+          "url": "https://career.globant.com/job/DataEngineerSnowflakeVietnam/78860",
+          "note": "Data Engineer (Snowflake), Vietnam; seen in search result, dbt mention not checked"
+        }
+      ],
+      "people": [],
+      "notes": "Ho Chi Minh City listed as a remote full-time location on both ads; the office is in Hanoi and Danang."
+    },
+    {
+      "id": "mservice-momo",
+      "name": "M_Service (MoMo)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "lakehouse",
+        "GCP",
+        "AWS"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior/Lead - Data Engineering",
+          "url": "https://itviec.com/it-jobs/senior-lead-data-engineering-m_service-momo-5443",
+          "source": "itviec",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with dbt or data quality and testing frameworks (nice-to-have); skill tag DBT",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "at office"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board_listing",
+          "url": "https://topdev.vn/amp/detail-jobs/data-engineer-momo-3-2010757",
+          "note": "MoMo data engineer ad on topdev, seen in search result; dbt mention not checked"
+        }
+      ],
+      "people": [],
+      "notes": "office in Phu My Hung, Ho Chi Minh City. itviec shows 1 dbt-tagged job in Vietnam, this one."
+    },
+    {
+      "id": "ahamove",
+      "name": "AhaMove",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Cloud Composer",
+        "Airbyte",
+        "lakehouse"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://topdev.vn/detail-jobs/hcm-data-engineer-ahamove-2031415",
+          "source": "topdev",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experience with data pipeline and workflow management tools: Airflow, Cloud Composer, dbt, Airbyte",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board_listing",
+          "url": "https://itviec.com/it-jobs/data-engineer-team-lead-python-sql-data-analysis-ahamove-3222",
+          "note": "Data Engineer Team Lead ad on itviec, seen in search result; dbt mention not checked"
+        },
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "theirstack lists AhaMove among companies using dbt in Vietnam"
+        }
+      ],
+      "people": [],
+      "notes": "the topdev ad is marked expired when fetched; a search snippet describes a current version on ahamove.com that redirects to careers.ahamove.com."
+    },
+    {
+      "id": "gft-technologies",
+      "name": "GFT Technologies",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Apache Airflow",
+        "Superset"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_listing",
+          "url": "https://jobs.gft.com/Vietnam/job/Ho-Chi-Minh-City-Senior-Data-Engineer-%28Apache-Airflow%2C-dbt%2C-Superset%29-700000/1252426201",
+          "note": "ad titled Senior Data Engineer (Apache Airflow, dbt, Superset), Ho Chi Minh City; page says the position is filled, so not recorded as an open job"
+        }
+      ],
+      "people": [],
+      "notes": "dbt shown in the ad title only; the page body was not readable."
+    },
+    {
+      "id": "zalo",
+      "name": "Zalo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "renova-cloud",
+      "name": "Renova Cloud",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "crossian",
+      "name": "Crossian",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "home-credit-vietnam",
+      "name": "Home Credit Vietnam",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "nccplus-vietnam",
+      "name": "NCCPLUS VIETNAM",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "relia-software",
+      "name": "Relia Software",
+      "type": "outsourcing",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "pvcombank",
+      "name": "PVcomBank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "gemcommerce",
+      "name": "GemCommerce",
+      "type": "other",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vietnam"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_aggregator",
+          "url": "https://theirstack.com/en/technology/dbt/vn",
+          "note": "listed by theirstack as a Vietnam company using dbt (page 1 of 63); no city or ad seen"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use from an aggregator only; city and ad not verified."
+    },
+    {
+      "id": "wids-hanoi-ho-chi-minh-city",
+      "name": "WiDS Hanoi & Ho Chi Minh City",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Ho Chi Minh City"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community",
+          "url": "https://vn.linkedin.com/in/kim-ung",
+          "note": "search result shows Kim Ung as ambassador for WiDS Hanoi & Ho Chi Minh City 2025-2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "kim-ung",
+          "name": "Kim Ung",
+          "pronouns": null,
+          "title": "Ambassador, WiDS Hanoi & Ho Chi Minh City 2025-2026",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://vn.linkedin.com/in/kim-ung"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Hanoi & Ho Chi Minh City 2025-2026",
+              "title": "WiDS ambassador",
+              "date": null,
+              "url": "https://vn.linkedin.com/in/kim-ung",
+              "content_id": "wids-hanoi-ho-chi-minh-city-20252026wids-ambassador",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "ambassador who hosts and plans local WiDS events and meetups",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://vn.linkedin.com/in/kim-ung",
+              "note": "organiser: WiDS ambassador"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to women speakers in data across Hanoi and Ho Chi Minh City",
+          "past_chapter_talks": [],
+          "notes": "location not stated in the result; organiser role covers both cities."
+        }
+      ],
+      "notes": "women in data science community; no event dates found."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/ho-chi-minh-city-dbt-meetup/",
     "past_meetups_derived_from": "enriched/ho-chi-minh-city-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "itviec dbt skill page",
+        "url": "https://itviec.com/it-jobs/dbt",
+        "yielded": true,
+        "note": "1 dbt job in Vietnam (MoMo)"
+      },
+      {
+        "name": "itviec analytics engineer page",
+        "url": "https://itviec.com/it-jobs/analytics-engineer",
+        "yielded": false,
+        "note": "1 result, not dbt"
+      },
+      {
+        "name": "Globant careers",
+        "url": "https://career.globant.com/job/DataEngineerBigQuerydbt/78442",
+        "yielded": true,
+        "note": "two dbt ads open to Ho Chi Minh City remote"
+      },
+      {
+        "name": "theirstack dbt Vietnam",
+        "url": "https://theirstack.com/en/technology/dbt/vn",
+        "yielded": true,
+        "note": "63 Vietnam companies using dbt, only 10 shown"
+      },
+      {
+        "name": "topdev search",
+        "url": "https://topdev.vn/jobs/search?keyword=dbt&region_ids=79",
+        "yielded": false,
+        "note": "keyword filter ignored, unrelated jobs returned"
+      },
+      {
+        "name": "cake.me dbt jobs",
+        "url": "https://www.cake.me/jobs/dbt/in-Ho%20Chi%20Minh%20City-Vietnam",
+        "yielded": false,
+        "note": "403"
+      },
+      {
+        "name": "Holistics careers",
+        "url": "https://careers.holistics.io/job-openings/analytics-engineer-solutions-enablement",
+        "yielded": false,
+        "note": "404 when fetched; ads seen in search results, dbt text not verified"
+      },
+      {
+        "name": "Vietnam Data Summit coverage",
+        "url": "https://vietnamnet.vn/en/first-vietnam-data-summit-to-take-place-this-month-2029127.html",
+        "yielded": false,
+        "note": "2019 and 2022 events only"
+      },
+      {
+        "name": "Vietnamese-language dbt searches",
+        "url": "",
+        "yielded": false,
+        "note": "only generic dbt explainers returned"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6862,6 +7392,21 @@
       "name": "Ho Chi Minh City Data Meetup Group",
       "url": "https://www.meetup.com/ho-chi-minh-city-data-meetup-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "dbt Slack #local-vietnam",
+      "url": "",
+      "note": "named in a search summary, not opened"
+    },
+    {
+      "name": "WiDS Hanoi & Ho Chi Minh City",
+      "url": "https://vn.linkedin.com/in/kim-ung",
+      "note": "women in data science ambassador"
+    },
+    {
+      "name": "HCMC AI Meetup",
+      "url": "https://www.createwith.com/event/ho-chi-minh-city-hcmc-ai-meetup-nov-2025",
+      "note": "AI-focused, not dbt"
     }
   ]
 }

@@ -4,12 +4,17 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Madrid companies using dbt, and people who could speak at or attend the Madrid dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Madrid (Madrid dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: tecnoempleo.com skill filter page (te=dbt) lists Madrid dbt-tagged roles with company and date on one page; it worked with one fetch.",
+      "Lesson: jobfluent, wearedevelopers, medium and aijobs returned 403 or redirects; builtin.com and company ATS pages (atomico) fetched fine.",
+      "Lesson: guild.host and pretalx event pages give speaker, employer and abstract; PyData Madrid publishes events on guild.host.",
+      "Lesson: spanish-language searches for personal dbt blogs returned mostly tutorials and freelancer profiles, almost no Madrid authors."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +52,54 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Tecnoempleo job rows come from one listing page, so the job url is the listing page, not the individual ad; only the first four rows mention dbt.",
+      "Coverflex and the Jobandtalent entry-level ad were seen only in search results, not fetched.",
+      "Alvaro Ponce's location is medium evidence: in-person talk at a Madrid meetup hosted at the Moeve offices in Madrid.",
+      "Madrid chapter past speakers were not researched."
     ],
     "counts": {
-      "companies": 62,
-      "people": 134,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 23,
-      "unique_content_items": 9,
-      "people_with_linkedin": 70,
-      "people_with_contact": 103,
+      "companies": 71,
+      "people": 135,
+      "job_postings": 10,
+      "companies_with_job_postings": 9,
+      "speaker_evidence_items": 25,
+      "unique_content_items": 11,
+      "people_with_linkedin": 71,
+      "people_with_contact": 104,
       "people_who_spoke_at_this_chapter": 13,
       "internal_vinted": 0,
       "level": {
-        "working": 129,
+        "working": 130,
         "leadership": 5
       },
       "speaker_potential": {
-        "high": 13,
+        "high": 14,
         "low": 98,
         "medium": 23
       },
       "attendee_potential": {
         "medium": 130,
-        "high": 4
+        "high": 5
       },
       "priority_tier": {
         "2": 11,
-        "1": 2,
+        "1": 3,
         "3": 99,
         "connector": 22
       },
-      "watchlist_companies": 61,
+      "watchlist_companies": 60,
       "past_meetups": 7,
       "lead_type": {
-        "proven_speaker": 35,
+        "proven_speaker": 36,
         "no_public_content": 99
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 12,
         "github": 99,
-        "conference_or_meetup_agenda": 23
+        "conference_or_meetup_agenda": 24
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -123,8 +133,10 @@
     ],
     "topic_counts": {
       "community": 22,
+      "data warehouse & platforms": 2,
+      "dbt best practices": 2,
+      "orchestration & ci/cd": 2,
       "data modeling": 1,
-      "data warehouse & platforms": 1,
       "data engineering": 1
     }
   },
@@ -5693,15 +5705,33 @@
       "id": "accenture",
       "name": "Accenture",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Madrid"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL",
+        "Oracle"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - DBT",
+          "url": "https://es.jooble.org/jdp/-6852779488440171836",
+          "source": "Jooble (search result, page not fetched)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "strong experience in DBT, SQL and Oracle (from search result summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -5788,7 +5818,7 @@
           "notes": "github profile https://github.com/juanmadvalle gives the location Madrid, Spain"
         }
       ],
-      "notes": null
+      "notes": "the jooble link-to-ad match comes from a search summary only."
     },
     {
       "id": "cnmc",
@@ -7056,12 +7086,486 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "jobandtalent",
+      "name": "Jobandtalent",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "dbt Fusion",
+        "BigQuery",
+        "Looker",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "HQ - Senior Analytics Engineer",
+          "url": "https://careers.atomico.com/companies/jobandtalent/jobs/76875720-hq-senior-analytics-engineer",
+          "source": "Atomico portfolio careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "We've recently completed our migration from Redshift to BigQuery, and we're adopting dbt Fusion.",
+          "job_poster": null,
+          "posted_date": "2026-04-30",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "HQ - Analytics Engineer (EMEA Remote)",
+          "url": "https://careers.atomico.com/companies/jobandtalent/jobs/63883495-hq-analytics-engineer-emea-remote",
+          "source": "Atomico portfolio careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "building and maintaining data transformations using dbt and Redshift SQL (from search result summary, page not fetched)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote or Madrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Madrid-based; analytics engineering team inside the HQ data team."
+    },
+    {
+      "id": "moeve",
+      "name": "Moeve",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Core",
+        "AWS Athena"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://guild.host/events/dataops-basado-en-dbt-lgcu2f",
+          "note": "PyData Madrid, 2026-01-29, hosted at Moeve offices in Madrid: how Moeve structured DataOps with dbt"
+        },
+        {
+          "type": "talk",
+          "url": "https://pretalx.com/pycones-2025/speaker/DBAFPU/",
+          "note": "PyConES 2025: dbt Core and Athena DataOps talk"
+        }
+      ],
+      "people": [
+        {
+          "id": "alvaro-ponce-cabrera",
+          "name": "Álvaro Ponce Cabrera",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Madrid",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/álvaro-ponce-cabrera-17879b90/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "PyData Madrid",
+              "title": "DataOps basado en dbt (Moeve)",
+              "date": "2026-01-29",
+              "url": "https://guild.host/events/dataops-basado-en-dbt-lgcu2f",
+              "content_id": "pydata-madriddataops-basado-en-dbt-moeve",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "how Moeve structured its DataOps system with dbt",
+              "topics": [
+                "dbt best practices",
+                "orchestration & ci/cd"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "PyConES 2025",
+              "title": "DataOps en acción: orquestando la transformación de datos con dbtCore y Athena",
+              "date": "2025-10-19",
+              "url": "https://pretalx.com/pycones-2025/speaker/DBAFPU/",
+              "content_id": "pycones-2025dataops-en-accion-orquestando-la-transformacion",
+              "co_authors": [
+                "Ricardo Bravo"
+              ],
+              "mentions_dbt": true,
+              "description": "dbt Core with Athena, CI/CD validation and macros for upserts",
+              "topics": [
+                "dbt best practices",
+                "orchestration & ci/cd",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://guild.host/events/dataops-basado-en-dbt-lgcu2f",
+              "note": "talk: DataOps basado en dbt (Moeve)"
+            },
+            {
+              "url": "https://pretalx.com/pycones-2025/speaker/DBAFPU/",
+              "note": "talk: DataOps en acción: orquestando la transformación de datos con dbtCore y Athena"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "running dbt Core with CI/CD and macros for upserts on a serverless Athena stack",
+          "past_chapter_talks": [],
+          "notes": "Location is medium evidence: in-person talk at Madrid meetup hosted at Moeve's Madrid offices. LinkedIn url seen on the PyConES speaker page."
+        }
+      ],
+      "notes": "Energy company; formerly known under another name, now Moeve."
+    },
+    {
+      "id": "spaulding-ridge",
+      "name": "Spaulding Ridge",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://builtin.com/job/data-engineer/7950976",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Model data as an Analytics Engineer in tools like dbt to create business logic from raw data.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad reposted about one month before the fetch."
+    },
+    {
+      "id": "clarity-ai",
+      "name": "Clarity AI",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Operations Engineer Specialist",
+          "url": "https://builtin.com/job/data-operations-engineer-specialist/4637132",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Creating dynamic data assets required for different use cases using DBT and Airflow for analytic consumption",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote/hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://medium.com/clarityai-engineering/dbt-101-aaa411ca2c9a",
+          "note": "engineering blog post 'DBT 101'; page returned 403, author and date not read"
+        }
+      ],
+      "people": [],
+      "notes": "the ad was removed on 2025-05-05; the office list includes Madrid per the company site result."
+    },
+    {
+      "id": "hays",
+      "name": "Hays",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "AWS",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://www.tecnoempleo.com/ofertas-trabajo/?te=dbt&pr=,155,",
+          "source": "Tecnoempleo dbt skill page (listing page)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "AWS dbt SQL",
+          "job_poster": null,
+          "posted_date": "2026-10-02",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "recruiter ad; end client not named."
+    },
+    {
+      "id": "devoteam",
+      "name": "Devoteam",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Data enginner SNOWFLAKE",
+          "url": "https://www.tecnoempleo.com/ofertas-trabajo/?te=dbt&pr=,155,",
+          "source": "Tecnoempleo dbt skill page (listing page)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SNOWFLAKE DBT SQL",
+          "job_poster": null,
+          "posted_date": "2026-10-01",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "two further Devoteam AWS data engineer ads on the same page did not list dbt."
+    },
+    {
+      "id": "serem",
+      "name": "Serem",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer Snowflake / DBT",
+          "url": "https://www.tecnoempleo.com/ofertas-trabajo/?te=dbt&pr=,155,",
+          "source": "Tecnoempleo dbt skill page (listing page)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Data Engineer Snowflake / DBT",
+          "job_poster": null,
+          "posted_date": "2026-10-05",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "ust",
+      "name": "UST",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Apache Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Platform Engineer",
+          "url": "https://www.tecnoempleo.com/ofertas-trabajo/?te=dbt&pr=,155,",
+          "source": "Tecnoempleo dbt skill page (listing page)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Snowflake dbt Apache Airflow",
+          "job_poster": null,
+          "posted_date": "2026-09-30",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "coverflex",
+      "name": "Coverflex",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Madrid"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Python",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://jobfluent.com/jobs/data-engineer-madrid-160618",
+          "source": "Jobfluent (search result, page not fetched)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "stack includes BigQuery, DBT, Python, GCP (from search result summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "on-site"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "seen only in a search summary; company attribution unverified against the page."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/madrid-dbt-meetup/",
     "past_meetups_derived_from": "enriched/madrid-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Tecnoempleo dbt skill page",
+        "url": "https://www.tecnoempleo.com/ofertas-trabajo/?te=dbt&pr=,155,",
+        "yielded": true,
+        "note": "4 Madrid roles mentioning dbt (Hays, Devoteam, Serem, UST)"
+      },
+      {
+        "name": "Jobandtalent careers on Atomico",
+        "url": "https://careers.atomico.com/companies/jobandtalent/jobs/76875720-hq-senior-analytics-engineer",
+        "yielded": true,
+        "note": "senior analytics engineer, Madrid, dbt Fusion"
+      },
+      {
+        "name": "Built In Spaulding Ridge ad",
+        "url": "https://builtin.com/job/data-engineer/7950976",
+        "yielded": true,
+        "note": "data engineer, Madrid, dbt named"
+      },
+      {
+        "name": "Built In Clarity AI ad",
+        "url": "https://builtin.com/job/data-operations-engineer-specialist/4637132",
+        "yielded": true,
+        "note": "ad removed May 2025, mentions dbt and Airflow"
+      },
+      {
+        "name": "PyData Madrid event on guild.host",
+        "url": "https://guild.host/events/dataops-basado-en-dbt-lgcu2f",
+        "yielded": true,
+        "note": "Jan 2026 dbt DataOps talk by Moeve"
+      },
+      {
+        "name": "PyConES 2025 speaker page",
+        "url": "https://pretalx.com/pycones-2025/speaker/DBAFPU/",
+        "yielded": true,
+        "note": "dbt Core and Athena talk"
+      },
+      {
+        "name": "PyData Madrid Nov 2023 event",
+        "url": "https://www.meetup.com/es-es/pydata-madrid/events/297212407/",
+        "yielded": false,
+        "note": "data quality talks, older than 2 years, not dbt"
+      },
+      {
+        "name": "DataSaturday Madrid 2025 sessionize",
+        "url": "https://sessionize.com/datasaturday-madrid-2025-sqlsatmadrid/",
+        "yielded": false,
+        "note": "call for speakers page, no sessions listed"
+      },
+      {
+        "name": "datos.gob.es R-Ladies Madrid interview",
+        "url": "https://datos.gob.es/gl/entrevistas/entrevista-ines-huertas-leticia-martin-fuertes-y-elen-irazabal-r-ladies",
+        "yielded": true,
+        "note": "2021 interview with organisers; too old to record as people"
+      },
+      {
+        "name": "SICPA job ad",
+        "url": "https://jobs.sicpa.com/job/Madrid-Data-&-Analytics-Engineer/1372728733",
+        "yielded": false,
+        "note": "position filled, no dbt text"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -7328,6 +7832,21 @@
       "name": "Fabric User Group Esp",
       "url": "https://www.meetup.com/fabricusergroupesp/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "PyData Madrid",
+      "url": "https://guild.host/events/dataops-basado-en-dbt-lgcu2f",
+      "note": "runs events with dbt talks; now announces on guild.host"
+    },
+    {
+      "name": "R-Ladies Madrid",
+      "url": "https://datos.gob.es/gl/entrevistas/entrevista-ines-huertas-leticia-martin-fuertes-y-elen-irazabal-r-ladies",
+      "note": "women-in-data community, monthly workshops per a 2021 interview; current activity not verified"
+    },
+    {
+      "name": "DataSaturday Madrid 2026",
+      "url": "https://sessionize.com/datasaturday-madrid-2026-sqlsatmadrid/",
+      "note": "call for speakers page; event 5-7 Nov 2026 at Universidad CEU San Pablo per search result"
     }
   ]
 }

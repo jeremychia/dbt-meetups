@@ -7,21 +7,21 @@ This file holds what is specific to Athens. The method, scoring rules, schema an
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-06)
+**At a glance** (version 3, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 49 |
-| People | 100 |
-| Tier 1 leads | 10 |
+| Companies | 53 |
+| People | 103 |
+| Tier 1 leads | 12 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 23 |
+| Proven speakers | 25 |
 | Spoke at this chapter before | 10 |
-| Based in the region | 91 |
+| Based in the region | 94 |
 | Based elsewhere | 0 |
 | Location unknown | 9 |
-| With a LinkedIn profile | 35 |
-| Job ads mentioning dbt | 0 |
+| With a LinkedIn profile | 36 |
+| Job ads mentioning dbt | 7 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->
 
@@ -39,17 +39,40 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-48 companies and communities were looked at. A company is local when it has people or roles in the region.
+52 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Strong dbt use</b> (5)</summary>
+<details><summary><b>Strong dbt use</b> (7)</summary>
 
-Austrian Post (local presence not confirmed), dbt Labs (local presence not confirmed), GWI (local presence not confirmed), Kaizen Gaming (local presence not confirmed), Orfium (local presence not confirmed)
+Austrian Post (local presence not confirmed), dbt Labs (local presence not confirmed), GWI, Hack the Box, Kaizen Gaming, Orfium (local presence not confirmed), Up Hellas
 
 </details>
 
-<details><summary><b>Not verified</b> (43)</summary>
+<details><summary><b>Some dbt signal</b> (2)</summary>
 
-Accenture Greece (local presence not confirmed), Agile Actors (local presence not confirmed), Amplifyd (local presence not confirmed), Athens University of Economics and Business (M.Sc. in Business Analytics) (local presence not confirmed), Athens University of Economis and Business (local presence not confirmed), bespot. (local presence not confirmed), CAAP (local presence not confirmed), cite-sa (local presence not confirmed), DCI (local presence not confirmed), efood (local presence not confirmed), Ernst & Young (local presence not confirmed), Finartix (local presence not confirmed), Freelance (local presence not confirmed), Full Beauty Brands (local presence not confirmed), Hack the Box (local presence not confirmed), hackthebox (local presence not confirmed), IBM (local presence not confirmed), JustDataPlease (local presence not confirmed), Kaizen Gaming (Stoiximan/Betano) (local presence not confirmed), Kosmocar (local presence not confirmed), KPMG Greece (local presence not confirmed), Learnworlds (local presence not confirmed), Libra AI Technologies (local presence not confirmed), Mindwave (local presence not confirmed), National Observatory of Athens (local presence not confirmed), Netcompany (local presence not confirmed), Novibet (local presence not confirmed), NTUA (local presence not confirmed), OPAP S.A. (local presence not confirmed), PeopleCert (local presence not confirmed), Performance Technologies (local presence not confirmed), PPC SA (local presence not confirmed), Proxy Foods (local presence not confirmed), PwC Greece (local presence not confirmed), Qventus (local presence not confirmed), Satori (local presence not confirmed), Satori Analytics (local presence not confirmed), Terra Spatium SA (local presence not confirmed), UBITECH (local presence not confirmed), UniSystems (local presence not confirmed), University of Georgia (local presence not confirmed), Upstream (local presence not confirmed), WITSIDE (local presence not confirmed)
+D ONE, Growe Talents (local presence not confirmed)
+
+</details>
+
+<details><summary><b>dbt as a nice-to-have</b> (1)</summary>
+
+EnablerMinds (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Not verified</b> (42)</summary>
+
+Accenture Greece (local presence not confirmed), Agile Actors (local presence not confirmed), Amplifyd (local presence not confirmed), Athens University of Economics and Business (M.Sc. in Business Analytics) (local presence not confirmed), Athens University of Economis and Business (local presence not confirmed), bespot. (local presence not confirmed), CAAP (local presence not confirmed), cite-sa (local presence not confirmed), DCI (local presence not confirmed), efood (local presence not confirmed), Ernst & Young (local presence not confirmed), Finartix (local presence not confirmed), Freelance (local presence not confirmed), Full Beauty Brands (local presence not confirmed), hackthebox (local presence not confirmed), IBM (local presence not confirmed), JustDataPlease (local presence not confirmed), Kaizen Gaming (Stoiximan/Betano) (local presence not confirmed), Kosmocar (local presence not confirmed), KPMG Greece (local presence not confirmed), Learnworlds (local presence not confirmed), Libra AI Technologies (local presence not confirmed), Mindwave (local presence not confirmed), National Observatory of Athens (local presence not confirmed), Netcompany (local presence not confirmed), Novibet (local presence not confirmed), NTUA (local presence not confirmed), OPAP S.A. (local presence not confirmed), PeopleCert (local presence not confirmed), Performance Technologies (local presence not confirmed), PPC SA (local presence not confirmed), Proxy Foods (local presence not confirmed), PwC Greece (local presence not confirmed), Qventus (local presence not confirmed), Satori (local presence not confirmed), Satori Analytics (local presence not confirmed), Terra Spatium SA (local presence not confirmed), UBITECH (local presence not confirmed), UniSystems (local presence not confirmed), University of Georgia (local presence not confirmed), Upstream (local presence not confirmed), WITSIDE (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Other sources checked</b> (6)</summary>
+
+- [Workable job pages (Up Hellas, Hack The Box, Performance Technologies, Epignosis)](https://jobs.workable.com/jobs/d1476746-8dfc-4f34-8ca6-351b9d64f1c1.md)
+- [Built In job pages (D ONE, GWI)](https://builtin.com/job/senior-data-engineer-athens-greece/7275383)
+- [Databricks Athens user group agenda, March 2026](https://events.databricks.com/Usergroup-Athens-March-2026)
+- [Sessionize speaker profiles](https://sessionize.com/georgios-ntanakas)
+- [Women in Tech Athens (WomenTech Network)](https://www.womentech.net/en-gb/events/women-in-tech-athens) (nothing useful)
+- [Greek-language searches for dbt jobs and talks](https://www.jobfind.gr/JobAd/View/GR/Theseis_Ergasias/542F70B5-BA16-44CF-98DE-FA6DE110B5FF)
 
 </details>
 <!-- companies:end -->
@@ -71,3 +94,4 @@ To fill after the first research run.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-06 | 1 | First build from the chapter history. |
+| 2026-10-06 | 3 | Research run: 4 companies, 7 dbt job ads and 3 people, no first-time speakers. |
