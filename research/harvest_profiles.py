@@ -126,14 +126,17 @@ def page_text(url, cache):
 
 
 def github_social(login):
-    """the accounts a github user lists on their profile, including the x username field."""
+    """the accounts a github user lists on their profile, including the x username field. None when the call failed,
+    so a rate-limited lookup is retried on the next run instead of being cached as a profile with no accounts."""
     try:
-        out = subprocess.run(["gh", "api", f"users/{login}/social_accounts"], capture_output=True, text=True, timeout=30).stdout
-        user = subprocess.run(["gh", "api", f"users/{login}"], capture_output=True, text=True, timeout=30).stdout
-        x = (json.loads(user or "{}") or {}).get("twitter_username")
-        return [a["url"] for a in json.loads(out or "[]")] + ([f"https://x.com/{x}"] if x else [])
-    except Exception:
-        return []
+        out = subprocess.run(["gh", "api", f"users/{login}/social_accounts"], capture_output=True, text=True, timeout=30)
+        user = subprocess.run(["gh", "api", f"users/{login}"], capture_output=True, text=True, timeout=30)
+        if out.returncode or user.returncode:
+            return [] if "Not Found" in out.stdout + user.stdout else None
+        x = (json.loads(user.stdout or "{}") or {}).get("twitter_username")
+        return [a["url"] for a in json.loads(out.stdout or "[]")] + ([f"https://x.com/{x}"] if x else [])
+    except (ValueError, subprocess.TimeoutExpired, KeyError, TypeError):
+        return None
 
 
 def profile_api(url):
@@ -287,9 +290,14 @@ def fetch(cache):
         list(pool.map(lambda u: page_text(u, cache), sorted(jobs)))
         own = sorted({u for f, p in people() for u in own_pages(p, cache)})
         list(pool.map(lambda u: page_text(u, cache), own))
-    for login in gh:
-        gh[login] = github_social(login)
-    json.dump(gh, open(os.path.join(cache, "github.json"), "w"))
+    known_path = os.path.join(cache, "github.json")
+    known = json.load(open(known_path)) if os.path.exists(known_path) else {}
+    new = [login for login in gh if known.get(login) is None]  # each login costs two api calls of 5,000 an hour, so look each up once
+    for login in new:
+        known[login] = github_social(login)
+    gh = {login: known.get(login) for login in gh}
+    json.dump({k: v for k, v in known.items() if v is not None}, open(known_path, "w"))
+    print(f"github: {len(new)} accounts looked up, {len(gh) - len(new)} reused from the cache", flush=True)
     print(f"fetched {len(jobs)} pages, {len(own)} own pages and {len(gh)} github accounts into {cache}")
 
 
