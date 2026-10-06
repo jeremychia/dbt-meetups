@@ -145,7 +145,12 @@ def github(places):
     logins = set()
     for q in github_queries(places):
         for page in range(1, 11):  # search returns at most 1000 results
-            r = subprocess.run(["gh", "api", "-X", "GET", "search/users", "-f", f"q={q}", "-f", "per_page=100", "-f", f"page={page}"], capture_output=True, text=True)
+            for attempt in range(4):  # a burst of searches trips github's secondary limit; wait it out rather than count zero
+                r = subprocess.run(["gh", "api", "-X", "GET", "search/users", "-f", f"q={q}", "-f", "per_page=100", "-f", f"page={page}"], capture_output=True, text=True)
+                if r.returncode == 0:
+                    break
+                print(f"github search limited, retrying: {(r.stderr or r.stdout).strip()[:80]}", file=sys.stderr)
+                subprocess.run(["sleep", "60"])
             try:
                 items = json.loads(r.stdout or "{}").get("items") or []
             except ValueError:
@@ -158,7 +163,7 @@ def github(places):
     def profile(login):
         return login, get_gh(f"users/{login}"), get_gh(f"users/{login}/social_accounts")
 
-    with concurrent.futures.ThreadPoolExecutor(8) as pool:
+    with concurrent.futures.ThreadPoolExecutor(3) as pool:
         users = list(pool.map(profile, sorted(logins)))
     out = []
     for login, u, accounts in users:
@@ -174,11 +179,18 @@ def github(places):
 
 
 def get_gh(path):
-    r = subprocess.run(["gh", "api", path], capture_output=True, text=True)
-    try:
-        return json.loads(r.stdout or "{}")
-    except ValueError:
-        return {}
+    for attempt in range(4):  # parallel calls trip github's secondary limit; a failed call must not read as an empty profile
+        r = subprocess.run(["gh", "api", path], capture_output=True, text=True)
+        if r.returncode == 0:
+            try:
+                return json.loads(r.stdout or "{}")
+            except ValueError:
+                return {}
+        if "Not Found" in r.stdout + r.stderr:
+            return {}
+        subprocess.run(["sleep", str(30 * (attempt + 1))])
+    print(f"github call failed after retries: {path}", file=sys.stderr)
+    return {}
 
 
 def main():
