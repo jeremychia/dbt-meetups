@@ -7,20 +7,20 @@ This file holds what is specific to Kuala Lumpur and Malaysia. The method, scori
 - **First built:** 2026-09-23
 
 <!-- at-a-glance:start -->
-**At a glance** (version 9, 2026-10-05)
+**At a glance** (version 10, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 120 |
-| People | 92 |
+| Companies | 123 |
+| People | 99 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 8 |
 | Proven speakers | 32 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 79 |
+| Based in the region | 86 |
 | Based elsewhere | 5 |
 | Location unknown | 8 |
-| With a LinkedIn profile | 67 |
+| With a LinkedIn profile | 70 |
 | Job ads mentioning dbt | 92 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -90,7 +90,7 @@ Almost nobody in Malaysia publishes about dbt. So the search starts from public 
 - **Many large firms are on the watchlist.** 55 of the 94 companies are watchlisted, mostly large Malaysian firms checked without finding dbt. They are kept so they are not researched again. Grab, Shopee, Lazada and Xendit have their data teams mostly in Singapore, Indonesia or China.
 
 <!-- companies:start -->
-117 companies and communities were looked at. A company is local when it has people or roles in the region.
+120 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (19)</summary>
 
@@ -110,9 +110,9 @@ Concentrix (KL), K3 Advisory Group (incl. Quantuma), ONL Biz Solutions, Reap (KL
 
 </details>
 
-<details><summary><b>Not verified</b> (52)</summary>
+<details><summary><b>Not verified</b> (55)</summary>
 
-Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Boost Credit (local presence not confirmed), Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), DHL IT Services (local presence not confirmed), Fasset (KL), Fave, Fuku, FWD Technology and Innovation (local presence not confirmed), iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MMA Cloud Services (local presence not confirmed), MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), MONASH UNIVERSITY (local presence not confirmed), Multimedia University (local presence not confirmed), My current organization @datopian (local presence not confirmed), Norah Labs (local presence not confirmed), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), PayNet (local presence not confirmed), Petronas / Petronas Digital, PETRONAS Digital (local presence not confirmed), Prudential (local presence not confirmed), RBC Shared Services Malaysia, Roche (KL), Royal Melbourne Institute of Technology (local presence not confirmed), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), SV Solution Centric (local presence not confirmed), The Center of Applied Data Science (local presence not confirmed), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), Unemployed (local presence not confirmed), Universiti Teknologi MARA (local presence not confirmed), Wise (KL office)
+Ant International (KL), Astro, Media Prima, Sunway, Sime Darby, 99 Speedmart, Hap Seng, Atome (Advance Intelligence Group) (local presence not confirmed), Axiata (local presence not confirmed), Axiata / ADA, Maxis, U Mobile, Telekom Malaysia, Boost / Boost Bank, AEON Bank, Boost Credit (local presence not confirmed), Carsome, CelcomDigi, Consultancies checked, no Malaysian dbt evidence (Thoughtworks MY, Aimpoint Digital, Infinite Lambda, Tiger Analytics, Artefact, phData, Tasman, Fusionex, Mesiniaga, Revolution Analytics, Datamics, NCS, Bizfinity) (local presence not confirmed), Data Council Kuala Lumpur (DCKL), DHL IT Services (local presence not confirmed), EY (local presence not confirmed), Fasset (KL), Fave, Fuku, FWD Technology and Innovation (local presence not confirmed), iPrice Group, KAF Digital Bank, Lalamove (local presence not confirmed), Lance Data, Maybank, CIMB, RHB, Public Bank, Hong Leong, AmBank, Bank Negara Malaysia, Mindvalley, MMA Cloud Services (local presence not confirmed), MNC service centres checked (HSBC KL, Shell Business Operations, Dyson MY, Accenture MY, Deloitte MY), MONASH UNIVERSITY (local presence not confirmed), Multimedia University (local presence not confirmed), My current organization @datopian (local presence not confirmed), Norah Labs (local presence not confirmed), OCBC Malaysia, One Credit, Other Malaysian startups checked (EasyStore, Kakitangan/Deel, Bukku, Aspirasi, Hiredly, GoGet, Supahands, RinggitPlus, Loanstreet, Carro/myTukar, Pos Malaysia, Aerodyne, Tapway, Kaodim, Speedhome, Fashion Valet), PayNet (local presence not confirmed), Petronas / Petronas Digital, PETRONAS Digital (local presence not confirmed), Prudential (local presence not confirmed), RBC Shared Services Malaysia, Roche (KL), Royal Melbourne Institute of Technology (local presence not confirmed), S P Setia, SD Guthrie, Setel (Petronas), Shopee MY, Lazada MY, Ninja Van MY, J&T (local presence not confirmed), Software AG (local presence not confirmed), StarHub (PJ), StoreHub (incl. Beep), SV Solution Centric (local presence not confirmed), The Center of Applied Data Science (local presence not confirmed), Touch 'n Go / TNG Digital, Turing Enterprises Inc. (local presence not confirmed), UKM (local presence not confirmed), Unemployed (local presence not confirmed), Universiti Teknologi MARA (local presence not confirmed), Wise (KL office), Zalora (local presence not confirmed)
 
 </details>
 

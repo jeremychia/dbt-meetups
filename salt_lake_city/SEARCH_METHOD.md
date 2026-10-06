@@ -7,20 +7,20 @@ This file holds what is specific to Salt Lake City and the Wasatch Front. The me
 - **First built:** 2026-10-05
 
 <!-- at-a-glance:start -->
-**At a glance** (version 4, 2026-10-05)
+**At a glance** (version 5, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 102 |
-| People | 142 |
+| Companies | 130 |
+| People | 209 |
 | Tier 1 leads | 6 |
 | First-time speakers (publish, no talk yet) | 1 |
 | Proven speakers | 82 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 95 |
+| Based in the region | 162 |
 | Based elsewhere | 2 |
 | Location unknown | 45 |
-| With a LinkedIn profile | 90 |
+| With a LinkedIn profile | 113 |
 | Job ads mentioning dbt | 19 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -55,7 +55,7 @@ This file holds what is specific to Salt Lake City and the Wasatch Front. The me
 - **Local data startups:** Buster (AI agents for dbt, Y Combinator W24) and Aero (Snowflake cost tool) are both dbt-adjacent.
 
 <!-- companies:start -->
-100 companies and communities were looked at. A company is local when it has people or roles in the region.
+128 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (8)</summary>
 
@@ -69,9 +69,9 @@ Affirm (local presence not confirmed), ConsultNet, Engine (local presence not co
 
 </details>
 
-<details><summary><b>Not verified</b> (79)</summary>
+<details><summary><b>Not verified</b> (107)</summary>
 
-3M (local presence not confirmed), Adobe (local presence not confirmed), Alianza (local presence not confirmed), Analyst (local presence not confirmed), Aptive Environmental (local presence not confirmed), Astrodata (local presence not confirmed), Autodesk (local presence not confirmed), Avantlink (local presence not confirmed), BENlabs (local presence not confirmed), Big Fish Games (local presence not confirmed), Bunked (local presence not confirmed), Capital One (local presence not confirmed), CareXM (local presence not confirmed), CDW (local presence not confirmed), CHG Healthcare, Clicklease LLC (local presence not confirmed), Cotiviti, Inc. (local presence not confirmed), Crumbl HQ, Databricks (local presence not confirmed), Domo, doxy.me (local presence not confirmed), Employer not found, Ensign College (local presence not confirmed), Entrata (local presence not confirmed), Etsy (local presence not confirmed), Extra Space Storage (local presence not confirmed), FirstEnergy (local presence not confirmed), Fivetran (local presence not confirmed), Goldman Sachs (local presence not confirmed), Google (local presence not confirmed), Highland Analytics (local presence not confirmed), Imagine Learning (local presence not confirmed), Imply (local presence not confirmed), JourneyTeam (local presence not confirmed), KUBRA (local presence not confirmed), Lendio (local presence not confirmed), LexisNexis Risk Solutions (local presence not confirmed), LGCY Power (local presence not confirmed), Life Line Screening (local presence not confirmed), Lucid (local presence not confirmed), Lynd Bacon & Assoc. Ltd. DBA Loma Buena Associates (local presence not confirmed), Macabacus (local presence not confirmed), MarketDial (local presence not confirmed), MinIO (local presence not confirmed), MotherDuck (local presence not confirmed), nearmap (local presence not confirmed), O.C. Tanner (local presence not confirmed), OODA Health (local presence not confirmed), Paradime (local presence not confirmed), Pattern (local presence not confirmed), PCF-BI (local presence not confirmed), Penske Logistics (local presence not confirmed), PepsiCo (local presence not confirmed), Pittsburgh Pirates (local presence not confirmed), PointClickCare (local presence not confirmed), Purple (local presence not confirmed), Redo (local presence not confirmed), SchoolAI (local presence not confirmed), SelectHealth (local presence not confirmed), Snowflake (local presence not confirmed), Sotheby's (local presence not confirmed), Streamkap (local presence not confirmed), Swire Coca-Cola (local presence not confirmed), Ternary Data, Thumbtack (local presence not confirmed), torusco (local presence not confirmed), University of Utah, Utah Data Engineering Meetup, Utah Snowflake User Group, Vasion (local presence not confirmed), VEOX (local presence not confirmed), Vivint, Voxel51 (local presence not confirmed), Weave, WFRCAnalytics (local presence not confirmed), www.neo4j.com (local presence not confirmed), Xcelerate (local presence not confirmed), Y2 Analytics (local presence not confirmed), Zions Bancorporation (local presence not confirmed)
+3M (local presence not confirmed), Adobe (local presence not confirmed), Alianza (local presence not confirmed), Analyst (local presence not confirmed), Aptive Environmental (local presence not confirmed), ASI (local presence not confirmed), Astrodata (local presence not confirmed), Autodesk (local presence not confirmed), Avantlink (local presence not confirmed), Axios-HQ (local presence not confirmed), BENlabs (local presence not confirmed), Big Fish Games (local presence not confirmed), Brigham Young University (local presence not confirmed), Bunked (local presence not confirmed), BYUIDSS (local presence not confirmed), Capital One (local presence not confirmed), CareLife (local presence not confirmed), CareXM (local presence not confirmed), CDW (local presence not confirmed), CHG Healthcare, Clicklease LLC (local presence not confirmed), Cotiviti, Inc. (local presence not confirmed), CrossCountry Consulting (local presence not confirmed), Crumbl HQ, Databricks (local presence not confirmed), Deseret Book (local presence not confirmed), Dickinson College (local presence not confirmed), Domo, doxy.me (local presence not confirmed), Elevate PFS (local presence not confirmed), Employer not found, Ensign College (local presence not confirmed), Entrata (local presence not confirmed), Etsy (local presence not confirmed), Extra Space Storage (local presence not confirmed), FirstEnergy (local presence not confirmed), Fivetran (local presence not confirmed), Goldman Sachs (local presence not confirmed), Google (local presence not confirmed), Highland Analytics (local presence not confirmed), Imagine Learning (local presence not confirmed), Imply (local presence not confirmed), In Project LLC (local presence not confirmed), Institute of Outdoor Recreation and Tourism at Utah State University (local presence not confirmed), JourneyTeam (local presence not confirmed), KUBRA (local presence not confirmed), Leavitt Group Enterprises (local presence not confirmed), Lendio (local presence not confirmed), LexisNexis Risk Solutions (local presence not confirmed), LGCY Power (local presence not confirmed), Life Line Screening (local presence not confirmed), Lockheed Martian (local presence not confirmed), Lucid (local presence not confirmed), Lumio HX (local presence not confirmed), Lynd Bacon & Assoc. Ltd. DBA Loma Buena Associates (local presence not confirmed), Macabacus (local presence not confirmed), MarketDial (local presence not confirmed), Melody-Global (local presence not confirmed), MinIO (local presence not confirmed), MotherDuck (local presence not confirmed), MScienceLLC (local presence not confirmed), N/A (local presence not confirmed), nearmap (local presence not confirmed), O.C. Tanner (local presence not confirmed), OODA Health (local presence not confirmed), Open to Work! (local presence not confirmed), Paradime (local presence not confirmed), Pattern (local presence not confirmed), PCF-BI (local presence not confirmed), Penske Logistics (local presence not confirmed), PepsiCo (local presence not confirmed), Pillpack (local presence not confirmed), Pittsburgh Pirates (local presence not confirmed), PointClickCare (local presence not confirmed), Purple (local presence not confirmed), Redo (local presence not confirmed), Reef Capital Partners (local presence not confirmed), RevGen Partners (local presence not confirmed), SchoolAI (local presence not confirmed), SelectHealth (local presence not confirmed), Snowflake (local presence not confirmed), Sofi (local presence not confirmed), Sotheby's (local presence not confirmed), Streamkap (local presence not confirmed), Strider (local presence not confirmed), Swire Coca-Cola (local presence not confirmed), TaxHawk, Inc. (local presence not confirmed), Ternary Data, Thumbtack (local presence not confirmed), Topgolf (local presence not confirmed), torusco (local presence not confirmed), TripleTen (local presence not confirmed), Trustyy (local presence not confirmed), University of Utah, Utah Data Engineering Meetup, Utah Snowflake User Group, UtahCommunityCreditUnion (local presence not confirmed), Vasion (local presence not confirmed), VEOX (local presence not confirmed), Vivint, Voxel51 (local presence not confirmed), Weave, WFRCAnalytics (local presence not confirmed), www.neo4j.com (local presence not confirmed), Xcelerate (local presence not confirmed), Y2 Analytics (local presence not confirmed), Zions Bancorporation (local presence not confirmed)
 
 </details>
 
