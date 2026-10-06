@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Wellington companies using dbt, and people who could speak at or attend the Wellington dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Wellington (Wellington dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: Snowflake and Databricks user group event pages list speaker, role and employer, and were the best source of local people.",
+      "Lesson: Seek and ZipRecruiter return 403 to fetch and recruiter pages expire quickly, so job ads came from search snippets.",
+      "Lesson: no Wellington blog authors on dbt turned up, so no first-time speakers were found."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,47 +51,53 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Job ad details come from search snippets; the Kiwibank, Potentia and Trade Me pages could not be read in full.",
+      "A Senior Analytics Engineer 12-month contract (Wellington and Auckland) with dbt text showed on a Trade Me Jobs category page; the employer was not named, so it is not recorded.",
+      "Xero Dataverse senior data engineer ad uses dbt but is listed in Auckland and is closed, so it is evidence only."
     ],
     "counts": {
-      "companies": 16,
-      "people": 38,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 20,
-      "unique_content_items": 6,
+      "companies": 22,
+      "people": 44,
+      "job_postings": 5,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 26,
+      "unique_content_items": 11,
       "people_with_linkedin": 5,
       "people_with_contact": 19,
       "people_who_spoke_at_this_chapter": 1,
       "internal_vinted": 0,
       "level": {
-        "working": 32,
-        "leadership": 6
+        "working": 35,
+        "leadership": 9
       },
       "speaker_potential": {
         "high": 1,
-        "medium": 20,
+        "medium": 26,
         "low": 17
       },
       "attendee_potential": {
-        "medium": 38
+        "medium": 44
       },
       "priority_tier": {
         "1": 1,
         "3": 25,
-        "connector": 12
+        "connector": 15,
+        "2": 3
       },
-      "watchlist_companies": 15,
+      "watchlist_companies": 18,
       "past_meetups": 1,
       "lead_type": {
-        "proven_speaker": 21,
+        "proven_speaker": 27,
         "no_public_content": 17
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 1,
-        "conference_or_meetup_agenda": 20,
-        "github": 17
+        "conference_or_meetup_agenda": 23,
+        "github": 17,
+        "other": 3
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -120,8 +130,8 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 12,
-      "data warehouse & platforms": 8
+      "community": 15,
+      "data warehouse & platforms": 11
     }
   },
   "companies": [
@@ -295,15 +305,35 @@
       "id": "xero",
       "name": "Xero",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
-        "Wellington"
+        "Wellington",
+        "Auckland"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Prefect",
+        "AWS"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Dataverse Team",
+          "url": "https://jobs.accel.com/companies/xero/jobs/68965184-senior-data-engineer",
+          "source": "Accel job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Engineering robust data pipelines and processes using dbt and Snowflake to support complex analytics.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -361,7 +391,7 @@
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
         }
       ],
-      "notes": null
+      "notes": "this ad is listed in Auckland and closed; Wellington presence comes from the speaker already on file"
     },
     {
       "id": "snowflake",
@@ -372,11 +402,19 @@
       "cities": [
         "Wellington"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
-      "stack_signals": [],
+      "stack_signals": [
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.snowflake.com/wellington/",
+          "note": "Snowflake User Group Wellington, 524 members"
+        }
+      ],
       "people": [
         {
           "id": "regan-murphy",
@@ -491,9 +529,117 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "caroline-morris",
+          "name": "Caroline Morris",
+          "pronouns": null,
+          "title": "Marketing Manager",
+          "city": "Wellington",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Group Wellington",
+              "title": "Snowflake User Group Wellington",
+              "date": "2025-04-29",
+              "url": "https://usergroups.snowflake.com/wellington/",
+              "content_id": "snowflake-user-group-wellingtonsnowflake-user-group-wellingt",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser or host of a Wellington user group event",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/wellington/",
+              "note": "organiser: Snowflake User Group Wellington"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to local Snowflake and Databricks users",
+          "past_chapter_talks": [],
+          "notes": "vendor employee; leader and organiser of the Snowflake Wellington group"
+        },
+        {
+          "id": "adon-byron",
+          "name": "Adon Byron",
+          "pronouns": null,
+          "title": "Head of Enterprise",
+          "city": "Wellington",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Wellington User Group and Snowflake Summit '26 Recap",
+              "title": "Wellington User Group and Snowflake Summit '26 Recap",
+              "date": "2026-07-01",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-and-snowflake-summit-26-recap/",
+              "content_id": "wellington-user-group-and-snowflake-summit-26-recapwellingto",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser or host of a Wellington user group event",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-and-snowflake-summit-26-recap/",
+              "note": "organiser: Wellington User Group and Snowflake Summit '26 Recap"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to local Snowflake and Databricks users",
+          "past_chapter_talks": [],
+          "notes": "vendor employee; host of the July 2026 event"
         }
       ],
-      "notes": null
+      "notes": "vendor staff run the local group"
     },
     {
       "id": "fire-and-emergency-nz",
@@ -2254,12 +2400,483 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "kiwibank",
+      "name": "Kiwibank",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wellington"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer, Data Platform (Data Enablement team)",
+          "url": "https://www.ziprecruiter.nz/jobs/579055768-data-engineer-data-platform-at-kiwibank",
+          "source": "ZipRecruiter NZ (search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "requires SQL, dbt, Snowflake, Python and Airflow; git, data modelling, ELT, automated testing, CI/CD",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        },
+        {
+          "title": "Data Engineer (Kiwibank)",
+          "url": "https://jobs.weekday.works/kiwibank-data-engineer",
+          "source": "Weekday job board (search result, page now gone)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "SQL, dbt, Snowflake, Python, Airflow in Wellington Central",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://theirstack.com/en/technology/dbt/nz",
+          "note": "listed among NZ companies using dbt"
+        }
+      ],
+      "people": [],
+      "notes": "core banking data platform rebuild; the ad text was seen in search snippets only"
+    },
+    {
+      "id": "potentia",
+      "name": "Potentia",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wellington"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer (12-month fixed term, greenfield Snowflake platform)",
+          "url": "https://potentia.co.nz/job/58681789-senior-data-engineer",
+          "source": "Potentia (search result, page expired)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "build a greenfield Snowflake platform combining data with dbt, up to NZ$130,000",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        },
+        {
+          "title": "Data Engineer (2-year fixed term, greenfield Snowflake platform)",
+          "url": "https://www.potentia.co.nz/job/58102044-data-engineer",
+          "source": "Potentia (search result, page expired)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "greenfield Snowflake platform using modern tools like dbt, Wellington",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "recruiter for an unnamed end client; both ads have expired"
+    },
+    {
+      "id": "accident-compensation-corporation",
+      "name": "Accident Compensation Corporation",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wellington"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+          "note": "BI consultant spoke at Snowflake Wellington User Group, 29 Apr 2025"
+        }
+      ],
+      "people": [
+        {
+          "id": "tama-mcconnell",
+          "name": "Tama McConnell",
+          "pronouns": null,
+          "title": "BI Consultant",
+          "city": "Wellington",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Wellington User Group, 29 Apr 2025",
+              "title": "Customer Data Journey",
+              "date": "2025-04-29",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+              "content_id": "snowflake-wellington-user-group-29-apr-2025customer-data-jou",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "spoke at the Snowflake Wellington User Group",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+              "note": "talk: Customer Data Journey"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how the team builds and models its data on Snowflake, from a local user's view",
+          "past_chapter_talks": [],
+          "notes": "location from in-person talk at a Wellington event and a Wellington employer office; verify"
+        }
+      ],
+      "notes": "dbt use not verified"
+    },
+    {
+      "id": "wellington-city-council",
+      "name": "Wellington City Council",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wellington"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+          "note": "principal data analyst spoke at Snowflake Wellington User Group, 29 Apr 2025"
+        }
+      ],
+      "people": [
+        {
+          "id": "nick-pinfold",
+          "name": "Nick Pinfold",
+          "pronouns": null,
+          "title": "Principal Data Analyst",
+          "city": "Wellington",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Wellington User Group, 29 Apr 2025",
+              "title": "Quick Tip",
+              "date": "2025-04-29",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+              "content_id": "snowflake-wellington-user-group-29-apr-2025quick-tip",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "spoke at the Snowflake Wellington User Group",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+              "note": "talk: Quick Tip"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how the team builds and models its data on Snowflake, from a local user's view",
+          "past_chapter_talks": [],
+          "notes": "location from in-person talk at a Wellington event and a Wellington employer office; verify"
+        }
+      ],
+      "notes": "dbt use not verified"
+    },
+    {
+      "id": "partstrader",
+      "name": "PartsTrader",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wellington"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+          "note": "senior data engineer spoke at Snowflake Wellington User Group, 29 Apr 2025"
+        }
+      ],
+      "people": [
+        {
+          "id": "philippa-speirs",
+          "name": "Philippa Speirs",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Wellington",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Snowflake Wellington User Group, 29 Apr 2025",
+              "title": "Quick Tip",
+              "date": "2025-04-29",
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+              "content_id": "snowflake-wellington-user-group-29-apr-2025quick-tip",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "spoke at the Snowflake Wellington User Group",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/events/details/snowflake-wellington-presents-wellington-user-group-2",
+              "note": "talk: Quick Tip"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how the team builds and models its data on Snowflake, from a local user's view",
+          "past_chapter_talks": [],
+          "notes": "location from in-person talk in Wellington; employer office not confirmed; verify"
+        }
+      ],
+      "notes": "dbt use not verified; office location not checked"
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Wellington"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-wellington-databricks-user-group-presents-wellington-databricks-community-march-2026-meetup/",
+          "note": "runs quarterly Wellington meetups, 26 Mar and 1 Jul 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "tristana-bessler",
+          "name": "Tristana Bessler",
+          "pronouns": null,
+          "title": "Public Sector Lead",
+          "city": "Wellington",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Wellington Databricks Community Meetup, 26 Mar 2026",
+              "title": "Wellington Databricks Community Meetup, 26 Mar 2026",
+              "date": "2026-03-26",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-wellington-databricks-user-group-presents-wellington-databricks-community-march-2026-meetup/",
+              "content_id": "wellington-databricks-community-meetup-26-mar-2026wellington",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser or host of a Wellington user group event",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-wellington-databricks-user-group-presents-wellington-databricks-community-march-2026-meetup/",
+              "note": "organiser: Wellington Databricks Community Meetup, 26 Mar 2026"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to local Snowflake and Databricks users",
+          "past_chapter_talks": [],
+          "notes": "vendor employee; organiser of the Wellington Databricks meetups"
+        }
+      ],
+      "notes": "vendor staff run the local group; Barry Hodges is already on file"
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/wellington-dbt-meetup/",
     "past_meetups_derived_from": "enriched/wellington-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Snowflake User Group Wellington",
+        "url": "https://usergroups.snowflake.com/wellington/",
+        "yielded": true,
+        "note": "three event pages gave speakers and hosts"
+      },
+      {
+        "name": "Databricks Wellington meetups",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-new-zealand-databricks-user-group-presents-databricks-wellington-meet-up/",
+        "yielded": true,
+        "note": "organisers only, no speakers listed"
+      },
+      {
+        "name": "dbt Zero to dbt workshop Wellington",
+        "url": "https://www.getdbt.com/events/zertodbt-wellington",
+        "yielded": true,
+        "note": "7 Oct 2025, no instructor named"
+      },
+      {
+        "name": "WiDS NZ 2024 speakers",
+        "url": "https://ecs.wgtn.ac.nz/Events/WiDSNZ2024/Speakers",
+        "yielded": false,
+        "note": "data science line-up, no dbt or analytics engineering talks, no talk titles"
+      },
+      {
+        "name": "TheirStack dbt in New Zealand",
+        "url": "https://theirstack.com/en/technology/dbt/nz",
+        "yielded": true,
+        "note": "63 NZ companies listed as dbt users; first 10 read"
+      },
+      {
+        "name": "Seek NZ",
+        "url": "https://nz.seek.com/Analytics-Engineer-jobs-in-information-communication-technology/database-development-administration",
+        "yielded": false,
+        "note": "403 on fetch, search snippets only"
+      },
+      {
+        "name": "Potentia job pages",
+        "url": "https://potentia.co.nz/job/58681789-senior-data-engineer",
+        "yielded": false,
+        "note": "listings expired (job not found)"
+      },
+      {
+        "name": "Trade Me Jobs IT",
+        "url": "https://www.trademe.co.nz/jobs/it/data-warehousing-bi/listing-5885304396.htm",
+        "yielded": true,
+        "note": "redirected to category page showing one dbt role"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -2308,6 +2925,16 @@
       "name": "Official Wellington Databricks User Group",
       "url": "https://www.meetup.com/wellington-databricks-user-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake User Group Wellington",
+      "url": "https://usergroups.snowflake.com/wellington/",
+      "note": "524 members, run by Snowflake marketing"
+    },
+    {
+      "name": "New Zealand Databricks User Group",
+      "url": "https://usergroups.databricks.com/new-zealand-databricks-user-group/",
+      "note": "Wellington-based, quarterly meetups"
     }
   ]
 }

@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Hamburg/Hanover companies using dbt, and people who could speak at or attend the Northern Germany dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Hamburg/Hanover (Northern Germany dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: german job aggregators mostly return 403, 404 or 410 on fetch, so dbt job ads rest on search summaries.",
+      "Lesson: Luma event pages for the Hamburg data engineering meetup list speakers with employers, but the pages carry no dates in the fetched text.",
+      "Lesson: web search found no personal dbt blogs by Hamburg authors; author boxes on company blogs were not reached."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +51,55 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "ZEAL, Eraneos and ABOUT YOU ad text comes from search summaries because the pages could not be fetched.",
+      "Meetup speaker talk dates are unknown, so their relevance in the last 2 years is unconfirmed.",
+      "No first-time speakers were found; no linkedin urls were collected."
     ],
     "counts": {
-      "companies": 48,
-      "people": 94,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 41,
-      "unique_content_items": 18,
+      "companies": 58,
+      "people": 102,
+      "job_postings": 5,
+      "companies_with_job_postings": 5,
+      "speaker_evidence_items": 49,
+      "unique_content_items": 23,
       "people_with_linkedin": 38,
       "people_with_contact": 44,
       "people_who_spoke_at_this_chapter": 7,
       "internal_vinted": 0,
       "level": {
-        "working": 86,
-        "leadership": 8
+        "working": 92,
+        "leadership": 10
       },
       "speaker_potential": {
         "high": 10,
-        "medium": 28,
+        "medium": 36,
         "low": 56
       },
       "attendee_potential": {
-        "medium": 64,
+        "medium": 72,
         "high": 30
       },
       "priority_tier": {
-        "2": 3,
-        "connector": 7,
+        "2": 5,
+        "connector": 13,
         "3": 80,
         "1": 4
       },
-      "watchlist_companies": 47,
+      "watchlist_companies": 49,
       "past_meetups": 2,
       "lead_type": {
-        "proven_speaker": 38,
+        "proven_speaker": 46,
         "no_public_content": 56
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 7,
-        "conference_or_meetup_agenda": 34,
-        "github": 56
+        "conference_or_meetup_agenda": 37,
+        "github": 56,
+        "women_in_data_community": 4,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -123,9 +133,13 @@
     ],
     "topic_counts": {
       "data warehouse & platforms": 28,
+      "community": 13,
       "data engineering": 11,
-      "community": 7,
-      "analytics engineering": 6
+      "analytics engineering": 6,
+      "data governance": 1,
+      "tools & ecosystem": 1,
+      "genai & llm": 1,
+      "developer workflow": 1
     }
   },
   "companies": [
@@ -5387,12 +5401,789 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "zeal-network-se",
+      "name": "ZEAL Network SE",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (m/w/x)",
+          "url": "https://mynejo.com/job/analytics-engineer~85c2dd0c-6814-4404-9d5c-40a666a47b24",
+          "source": "job aggregator (mynejo)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "requires hands-on experience with dbt, SQL and modern data warehouses (from search result summary; page not fetched)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid, home office option"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "lottery operator (lotto24, tipp24); ad seen only in a search summary"
+    },
+    {
+      "id": "plusyou-gmbh",
+      "name": "plusYou GmbH",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "(Senior) Data/Analytics Engineer (m/w/d)",
+          "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/14068-k18924.2504-S",
+          "source": "Bundesagentur fuer Arbeit",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "hands-on experience with dbt for developing and managing version-controlled data transformations (listed as nice to have)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad says plusYou is recruiting for a partner tech company; works in Google BigQuery"
+    },
+    {
+      "id": "eraneos",
+      "name": "Eraneos",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (all genders)",
+          "url": "https://eraneos.jobs.personio.de/job/2567559",
+          "source": "company careers page (personio)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "building data transformation pipelines with dbt; dbt experience from multiple projects or 6+ months required (from search result summaries; page returned 404 when fetched)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "headquartered in Hamburg with offices in Munich and Duesseldorf; also a Senior Analytics Engineer ad at https://aijobs.net/job/senior-analytics-engineer-all-genders-hamburg-munchen-dusseldorf-remote-262646/"
+    },
+    {
+      "id": "about-you",
+      "name": "ABOUT YOU",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Dagster",
+        "BigQuery",
+        "AWS ECS"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - Finance Tech (all genders)",
+          "url": "https://www.ziprecruiter.de/jobs/561267693-senior-data-engineer-finance-tech-all-genders-bei-about-you-se-co-kg",
+          "source": "job aggregator (ziprecruiter)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "deep practical experience with Dagster, dbt, Google BigQuery and AWS ECS (from search result summary; page returned 403)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "a further Senior Data Engineer - Data Foundations ad is at https://www.ziprecruiter.de/jobs/573695295-senior-data-engineer-data-foundations-all-genders-bei-about-you"
+    },
+    {
+      "id": "a2a-experts",
+      "name": "a2a Experts",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hannover"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "ANÜ Data Engineer SPIKE (m/w/d) - ART Finance",
+          "url": "https://www.freelancermap.de/projekt/anue-data-engineer-spike-m-w-d-art-finance",
+          "source": "freelancermap",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Konzeption und Umsetzung komplexer Datenmodelle und Datenstrecken in Snowflake und dbt; Tiefgehende Kenntnisse in dbt required",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "about 92% remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "contract role in Hannover for an unnamed end client; recruiter, not the dbt user"
+    },
+    {
+      "id": "data-insight-consultancy-gmbh",
+      "name": "Data Insight Consultancy GmbH",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mengyu-shi",
+          "name": "Mengyu Shi",
+          "pronouns": null,
+          "title": "speaker (Data Insight Consultancy GmbH)",
+          "city": "Hamburg",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Engineering Meet-up Hamburg",
+              "title": "Attributes, Not Grants: Tag-Based PII Governance on Databricks at Scale",
+              "date": null,
+              "url": "https://luma.com/2uas6141",
+              "content_id": "data-engineering-meetup-hamburgattributes-not-grants-tagbase",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk at the Hamburg data engineering meetup, listed on the event page",
+              "topics": [
+                "data governance",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/2uas6141",
+              "note": "talk: Attributes, Not Grants: Tag-Based PII Governance on Databricks at Scale"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "tag-based pii governance on databricks, and how it maps to dbt projects",
+          "past_chapter_talks": [],
+          "notes": "location not stated beyond speaking at a Hamburg event"
+        }
+      ],
+      "notes": "speaker employer at the Hamburg data engineering meetup; no dbt evidence"
+    },
+    {
+      "id": "dataflowz",
+      "name": "Dataflowz",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "AI agents"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mischa-ungermann",
+          "name": "Mischa Ungermann",
+          "pronouns": null,
+          "title": "speaker (Dataflowz)",
+          "city": "Hamburg",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Data Engineering Meet-up Hamburg",
+              "title": "Handing software-dev agents to non-software-dev data people",
+              "date": null,
+              "url": "https://luma.com/2uas6141",
+              "content_id": "data-engineering-meetup-hamburghanding-softwaredev-agents-to",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "talk at the Hamburg data engineering meetup, listed on the event page",
+              "topics": [
+                "genai & llm",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/2uas6141",
+              "note": "talk: Handing software-dev agents to non-software-dev data people"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "coding agents for analytics engineers who are not software developers",
+          "past_chapter_talks": [],
+          "notes": "location not stated beyond speaking at a Hamburg event"
+        }
+      ],
+      "notes": "speaker employer at the Hamburg data engineering meetup; no dbt evidence"
+    },
+    {
+      "id": "data-engineering-meetup-hamburg",
+      "name": "Data Engineering Meet-up Hamburg",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://luma.com/2uas6141",
+          "note": "event page with three speakers"
+        },
+        {
+          "type": "talk",
+          "url": "https://allai.events/event/data-engineering-meet-up-hamburg",
+          "note": "event listing, 10 Sep 2026, 24 attendees"
+        }
+      ],
+      "people": [
+        {
+          "id": "ralph-van-roode",
+          "name": "Ralph van Roode",
+          "pronouns": null,
+          "title": "host, Data Engineering Meet-up Hamburg",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Engineering Meet-up Hamburg",
+              "title": null,
+              "date": null,
+              "url": "https://luma.com/2uas6141",
+              "content_id": "data-engineering-meetup-hamburg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the meetup on its event pages",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/2uas6141",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "how a small data meetup finds speakers",
+          "past_chapter_talks": [],
+          "notes": "employer not found"
+        }
+      ],
+      "notes": "meetup at Deep Tech Campus, 3-4 events a year, talks of 20-30 minutes"
+    },
+    {
+      "id": "pyladies-hamburg",
+      "name": "PyLadies Hamburg",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "organiser",
+          "url": "https://hamburg.pyladies.com/",
+          "note": "organiser list and group description"
+        }
+      ],
+      "people": [
+        {
+          "id": "avare-stewart",
+          "name": "Avaré Stewart",
+          "pronouns": null,
+          "title": "Senior Data Scientist, EOS DID",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Hamburg",
+              "title": null,
+              "date": null,
+              "url": "https://hamburg.pyladies.com/",
+              "content_id": "pyladies-hamburg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed organiser",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://hamburg.pyladies.com/",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "gesa-stupperich",
+          "name": "Gesa Stupperich",
+          "pronouns": null,
+          "title": "Software Developer, ThoughtWorks",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Hamburg",
+              "title": null,
+              "date": null,
+              "url": "https://hamburg.pyladies.com/",
+              "content_id": "pyladies-hamburg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed organiser",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://hamburg.pyladies.com/",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "tereza-iofciu",
+          "name": "Tereza Iofciu",
+          "pronouns": null,
+          "title": "Head Data Science Coach, neufische",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Hamburg",
+              "title": null,
+              "date": null,
+              "url": "https://hamburg.pyladies.com/",
+              "content_id": "pyladies-hamburg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "founder of the group",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://hamburg.pyladies.com/",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "career paths into analytics engineering",
+          "past_chapter_talks": [],
+          "notes": null
+        },
+        {
+          "id": "annemarie-paul",
+          "name": "Annemarie Paul",
+          "pronouns": null,
+          "title": "Senior data scientist; Women in AI city lead",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Hamburg",
+              "title": null,
+              "date": null,
+              "url": "https://hamburg.pyladies.com/",
+              "content_id": "pyladies-hamburg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed organiser; Women in AI city lead",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://hamburg.pyladies.com/",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "",
+          "past_chapter_talks": [],
+          "notes": "employer not stated on the page"
+        }
+      ],
+      "notes": "monthly talks and workshops on python and data; actively seeks speakers"
+    },
+    {
+      "id": "hamburg-data-science-machine-learning-meetup",
+      "name": "Hamburg Data Science + Machine Learning Meetup",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Hamburg"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "organiser",
+          "url": "https://meetup.com/de-DE/hamburg-data-science-meetup",
+          "note": "group page"
+        }
+      ],
+      "people": [
+        {
+          "id": "marc-papper",
+          "name": "Marc Päpper",
+          "pronouns": null,
+          "title": "organiser, Hamburg Data Science + Machine Learning Meetup",
+          "city": "Hamburg",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Hamburg Data Science + Machine Learning Meetup",
+              "title": null,
+              "date": null,
+              "url": "https://meetup.com/de-DE/hamburg-data-science-meetup",
+              "content_id": "hamburg-data-science-machine-learning-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "named organiser; invites speakers and company hosts",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://meetup.com/de-DE/hamburg-data-science-meetup",
+              "note": "organiser: None"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "",
+          "past_chapter_talks": [],
+          "notes": null
+        }
+      ],
+      "notes": "about 3,700 members, 10+ events a year, hosted at companies such as cronn, Adobe, Google and Statista"
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/norther-germany-dbt-meetup/",
     "past_meetups_derived_from": "enriched/norther-germany-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Bundesagentur fuer Arbeit job page (plusYou)",
+        "url": "https://www.arbeitsagentur.de/jobsuche/jobdetail/14068-k18924.2504-S",
+        "yielded": true,
+        "note": "dbt as nice to have"
+      },
+      {
+        "name": "freelancermap (a2a Experts)",
+        "url": "https://www.freelancermap.de/projekt/anue-data-engineer-spike-m-w-d-art-finance",
+        "yielded": true,
+        "note": "dbt mandatory, Hannover"
+      },
+      {
+        "name": "stepstone dbt in Hamburg",
+        "url": "https://www.stepstone.de/jobs/dbt/in-hamburg",
+        "yielded": false,
+        "note": "fetch timed out; search summary says 9 dbt jobs within 30 km"
+      },
+      {
+        "name": "arbeitnow, mynejo, personio, ziprecruiter, devjobs, remotely",
+        "url": "https://www.arbeitnow.com/",
+        "yielded": false,
+        "note": "job pages returned 403, 404 or 410 when fetched; only search summaries seen"
+      },
+      {
+        "name": "Data Engineering Meet-up Hamburg (Luma)",
+        "url": "https://luma.com/2uas6141",
+        "yielded": true,
+        "note": "three speakers"
+      },
+      {
+        "name": "Hamburg Databricks User Group event, 23 Apr 2026",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-hamburg-databricks-user-group-presents-hamburg-user-group-at-stroer-4232026/",
+        "yielded": false,
+        "note": "databricks talks, no dbt; organisers already on file"
+      },
+      {
+        "name": "PyLadies Hamburg",
+        "url": "https://hamburg.pyladies.com/",
+        "yielded": true,
+        "note": "four organisers"
+      },
+      {
+        "name": "Hamburg Data Science + ML Meetup",
+        "url": "https://meetup.com/de-DE/hamburg-data-science-meetup",
+        "yielded": true,
+        "note": "organiser only"
+      },
+      {
+        "name": "Analytics Engineering Northern Germany inaugural meetup, Dec 2022",
+        "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/events/289984447/",
+        "yielded": false,
+        "note": "all speakers already on file"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -5492,6 +6283,26 @@
       "name": "Analytics Engineering Northern Germany Meetup Group",
       "url": "https://www.meetup.com/analytics-engineering-north-germany-meetup-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Data Engineering Meet-up Hamburg",
+      "url": "https://luma.com/2uas6141",
+      "note": "3-4 events a year at Deep Tech Campus"
+    },
+    {
+      "name": "PyLadies Hamburg",
+      "url": "https://meetup.com/PyLadies-Hamburg",
+      "note": "monthly, third Tuesday"
+    },
+    {
+      "name": "Hamburg Data Science + Machine Learning Meetup",
+      "url": "https://meetup.com/de-DE/hamburg-data-science-meetup",
+      "note": "largest local data group"
+    },
+    {
+      "name": "Hamburg Databricks User Group",
+      "url": "https://usergroups.databricks.com/hamburg-databricks-user-group/",
+      "note": "databricks-focused"
     }
   ]
 }

@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Dallas companies using dbt, and people who could speak at or attend the Dallas dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Dallas (Dallas dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: dallas dbt job ads are mostly posted by recruiters and staffing firms, and the hiring company is rarely named.",
+      "Lesson: builtin.com, robert half, motion recruitment and the planet group pages gave dbt ad text; insight global, dice and careerbuilder pages returned 404, 410 or empty content.",
+      "Lesson: searches for dallas-based dbt authors returned almost nothing new; the existing 171 people already cover the snowflake and data user groups."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +51,55 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Hiring companies behind recruiter ads are not named, so no local employer could be added from them.",
+      "The robert half page was a search listing page; the dbt quote came from one role on it and the posting date is as the page showed it.",
+      "Graham Wetzler's employer is not stated and his only post found is from 2023; the post url was not seen, so the author page is used.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach."
     ],
     "counts": {
-      "companies": 65,
-      "people": 171,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 74,
-      "unique_content_items": 42,
+      "companies": 69,
+      "people": 172,
+      "job_postings": 4,
+      "companies_with_job_postings": 4,
+      "speaker_evidence_items": 75,
+      "unique_content_items": 43,
       "people_with_linkedin": 97,
       "people_with_contact": 129,
       "people_who_spoke_at_this_chapter": 3,
       "internal_vinted": 0,
       "level": {
         "leadership": 22,
-        "working": 149
+        "working": 150
       },
       "speaker_potential": {
         "high": 8,
-        "medium": 63,
+        "medium": 64,
         "low": 100
       },
       "attendee_potential": {
         "medium": 170,
-        "high": 1
+        "high": 2
       },
       "priority_tier": {
-        "2": 6,
+        "2": 7,
         "1": 2,
         "3": 136,
         "connector": 27
       },
-      "watchlist_companies": 64,
+      "watchlist_companies": 62,
       "past_meetups": 2,
       "lead_type": {
         "proven_speaker": 71,
-        "no_public_content": 100
+        "no_public_content": 100,
+        "emerging_voice": 1
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 3,
         "conference_or_meetup_agenda": 68,
-        "github": 100
+        "github": 100,
+        "newsletter_or_blog": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -127,7 +137,9 @@
       "data engineering": 21,
       "genai & llm": 7,
       "business intelligence": 3,
-      "data governance": 2
+      "data governance": 2,
+      "tools & ecosystem": 1,
+      "developer workflow": 1
     }
   },
   "companies": [
@@ -135,16 +147,26 @@
       "id": "dbt-labs",
       "name": "dbt Labs",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
-        "Dallas"
+        "Dallas",
+        "Allen"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.getdbt.com/events/dbt-labs-snowflake-hands-on-lab-dallas",
+          "note": "hands-on lab with snowflake, 2026-08-27, armor brewing in allen, tx (at capacity)"
+        }
+      ],
       "people": [
         {
           "id": "brandon-thomson",
@@ -232,7 +254,7 @@
           "notes": null
         }
       ],
-      "notes": "employer of a past Dallas dbt Meetup speaker"
+      "notes": "employer of a past Dallas dbt Meetup speaker | in-person dbt event in the region."
     },
     {
       "id": "data-signify",
@@ -307,9 +329,12 @@
       "cities": [
         "Dallas"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt",
+        "DuckDB"
+      ],
       "job_postings": [],
       "other_evidence": [],
       "people": [
@@ -4436,9 +4461,64 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/venkat-k27 gives the location Dallas"
+        },
+        {
+          "id": "graham-wetzler",
+          "name": "Graham Wetzler",
+          "pronouns": null,
+          "title": "Senior Analytics Engineer (remote)",
+          "city": "Dallas-Fort Worth",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "emerging_voice",
+          "sourced_via": [
+            "newsletter_or_blog"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "blog",
+              "event": "MotherDuck blog",
+              "title": "Solving Advent of Code with DuckDB and dbt",
+              "date": "2023-02-09",
+              "url": "https://motherduck.com/authors/graham-wetzler.md",
+              "content_id": "motherduck-blogsolving-advent-of-code-with-duckdb-and-dbt",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "tackles 10 days of advent of code with duckdb and the dbt-duckdb adapter",
+              "topics": [
+                "tools & ecosystem",
+                "developer workflow"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://motherduck.com/authors/graham-wetzler.md",
+              "note": "blog: Solving Advent of Code with DuckDB and dbt"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "running dbt on duckdb for local development and small projects",
+          "past_chapter_talks": [],
+          "notes": "location from his motherduck author bio; only post found is from 2023."
         }
       ],
-      "notes": null
+      "notes": "employer not stated."
     },
     {
       "id": "dataiku",
@@ -4519,16 +4599,24 @@
       "id": "snowflake",
       "name": "Snowflake",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Dallas"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/dallas-ft-worth",
+          "note": "dallas/fort worth user group, about 3,465 members; summit 2026 highlights panel with Joyce Avila, Mandeep Singh, Meka Madu and moderator Aran Sakzenian"
+        }
+      ],
       "people": [
         {
           "id": "aran-sakzenian",
@@ -5407,7 +5495,7 @@
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
         }
       ],
-      "notes": null
+      "notes": "runs the largest local data user group."
     },
     {
       "id": "american-airlines",
@@ -9391,12 +9479,200 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "the-planet-group",
+      "name": "The Planet Group",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Dallas"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Power BI",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer - Power BI, SQL & dbt",
+          "url": "https://careers.theplanetgroup.com/?p=11507",
+          "source": "company careers page (via search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design, build, and maintain scalable dimensional data models using dbt; 2+ years of hands-on experience with dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-20",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "staffing firm; contract role at 65-70 usd per hour; end client not named. page returned 404 when fetched, text taken from the search result."
+    },
+    {
+      "id": "motion-recruitment",
+      "name": "Motion Recruitment",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Dallas"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer | DBT Specialist",
+          "url": "https://motionrecruitment.com/tech-jobs/dallas/direct-hire/senior-data-engineer-dbt-specialist/886415",
+          "source": "recruiter job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "building, rebuilding and owning of internal DBT project (models, tests, macros, docs, exposures)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "direct-hire role listed for dallas; hiring company not named."
+    },
+    {
+      "id": "robert-half",
+      "name": "Robert Half",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Dallas",
+        "Arlington"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Python",
+        "AWS Lambda",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "AWS Data Engineer",
+          "url": "https://www.roberthalf.com/us/en/job/arlington-tx/data-analytics-engineer-dbt-snowflake/04030-9504377966-usen",
+          "source": "recruiter job board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Code and build data pipelines using Python, dbt, and AWS Lambda.",
+          "job_poster": null,
+          "posted_date": "2026-09-12",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "url is a listing page for dbt snowflake roles in the arlington area; only one role on it names dbt."
+    },
+    {
+      "id": "insight-global",
+      "name": "Insight Global",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Dallas"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Kimball"
+      ],
+      "job_postings": [
+        {
+          "title": "Remote Data Engineer (data marts, dbt, Kimball)",
+          "url": "https://insightglobal.dejobs.org/dallas-tx/remote-data-engineer/AA1D4A70238145338F8B789903C861F6/job",
+          "source": "recruiter job board (via search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "build and enhance data marts with proficiency in DBT and Kimball data methodology",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "page content was empty when fetched; text taken from the search result summary."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/dallas-dbt-meetup/",
     "past_meetups_derived_from": "enriched/dallas-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Motion Recruitment dbt specialist ad",
+        "url": "https://motionrecruitment.com/tech-jobs/dallas/direct-hire/senior-data-engineer-dbt-specialist/886415",
+        "yielded": true,
+        "note": "dallas, 100% remote, dbt project owner role"
+      },
+      {
+        "name": "The Planet Group careers",
+        "url": "https://careers.theplanetgroup.com/?p=11507",
+        "yielded": true,
+        "note": "fetch gave 404; details came from the search result text"
+      },
+      {
+        "name": "Robert Half dbt Snowflake listing",
+        "url": "https://www.roberthalf.com/us/en/job/arlington-tx/data-analytics-engineer-dbt-snowflake/04030-9504377966-usen",
+        "yielded": true,
+        "note": "one role names dbt"
+      },
+      {
+        "name": "Built In Dallas-Fort Worth data and analytics jobs",
+        "url": "https://builtin.com/jobs/dallas-fort-worth/data-analytics",
+        "yielded": false,
+        "note": "one wells fargo analytic engineering role; dbt mention not confirmed"
+      },
+      {
+        "name": "Snowflake Dallas Ft Worth user group event",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-dallas-ft-worth-presents-dallas-build-meetup/",
+        "yielded": false,
+        "note": "speakers already on file"
+      },
+      {
+        "name": "dbt Labs Snowflake hands-on lab Dallas",
+        "url": "https://www.getdbt.com/events/dbt-labs-snowflake-hands-on-lab-dallas",
+        "yielded": true,
+        "note": "2026-08-27 in allen, tx; at capacity"
+      },
+      {
+        "name": "R-Ladies Dallas article",
+        "url": "https://www.r-bloggers.com/2022/07/virtual-events-opened-new-horizons-for-r-ladies-dallas/",
+        "yielded": false,
+        "note": "organiser reported in indiana; r-focused, not dbt"
+      },
+      {
+        "name": "MotherDuck author page",
+        "url": "https://motherduck.com/authors/graham-wetzler.md",
+        "yielded": true,
+        "note": "dallas-fort worth analytics engineer, dbt-duckdb post"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -9516,6 +9792,21 @@
       "name": "Women in Tech",
       "url": "https://www.meetup.com/meetup-group-bpcklrba/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake User Group Dallas/Fort Worth",
+      "url": "https://usergroups.snowflake.com/dallas-ft-worth",
+      "note": "about 3,465 members; summit 2026 highlights panel on its calendar"
+    },
+    {
+      "name": "WiDS Dallas at UT Dallas",
+      "url": "https://widsdallasattexaswomans.splashthat.com/",
+      "note": "annual women in data science event; organisers listed as Latifur Khan and Bhavani Thuraisingham on a 2022 flyer"
+    },
+    {
+      "name": "R-Ladies Dallas",
+      "url": "https://www.r-bloggers.com/2022/07/virtual-events-opened-new-horizons-for-r-ladies-dallas/",
+      "note": "r community, virtual since 2020; activity after 2022 not checked"
     }
   ]
 }

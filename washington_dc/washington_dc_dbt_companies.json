@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Washington DC (metro) companies using dbt, and people who could speak at or attend the Washington DC dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Washington DC (metro) (Washington DC dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: builtin.com Washington DC pages (data-engineering and analytics/senior) list roles tagged dbt in one fetch, but they mix in remote roles that show DC as a location.",
+      "Lesson: web search returns almost no DC-specific blog authors or meetup line-ups for dbt; meetup.com past-event pages return empty when fetched.",
+      "Lesson: ziprecruiter, indeed and metaintro return 403 or 429 to fetches."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,47 +51,53 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages/snippets and should be verified before outreach.",
+      "Built In lists remote roles under Washington, DC, so local presence for CoreWeave and the remote-listed employers is not confirmed.",
+      "No first-time or proven speakers with evidence of living in the region were found; the three people are community organisers.",
+      "The Total Wine job page returned 404 on fetch, so its dbt wording comes from a search snippet only."
     ],
     "counts": {
-      "companies": 48,
-      "people": 143,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 42,
-      "unique_content_items": 19,
+      "companies": 57,
+      "people": 146,
+      "job_postings": 7,
+      "companies_with_job_postings": 7,
+      "speaker_evidence_items": 45,
+      "unique_content_items": 21,
       "people_with_linkedin": 71,
       "people_with_contact": 109,
       "people_who_spoke_at_this_chapter": 5,
       "internal_vinted": 0,
       "level": {
         "leadership": 7,
-        "working": 136
+        "working": 139
       },
       "speaker_potential": {
         "high": 7,
-        "medium": 37,
+        "medium": 40,
         "low": 99
       },
       "attendee_potential": {
-        "medium": 143
+        "medium": 146
       },
       "priority_tier": {
         "2": 5,
         "3": 108,
-        "connector": 30
+        "connector": 33
       },
-      "watchlist_companies": 47,
+      "watchlist_companies": 52,
       "past_meetups": 6,
       "lead_type": {
         "proven_speaker": 44,
-        "no_public_content": 99
+        "no_public_content": 102
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 5,
         "conference_or_meetup_agenda": 39,
-        "github": 100
+        "github": 100,
+        "other": 1,
+        "women_in_data_community": 2
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -120,10 +130,11 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 30,
+      "community": 33,
       "data engineering": 10,
       "genai & llm": 8,
-      "business intelligence": 2
+      "business intelligence": 2,
+      "data warehouse & platforms": 1
     }
   },
   "companies": [
@@ -7450,12 +7461,518 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "peregrine-technologies",
+      "name": "Peregrine Technologies",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "BigQuery",
+        "Airflow",
+        "Prefect"
+      ],
+      "job_postings": [
+        {
+          "title": "Manager, BI + Analytics Engineer",
+          "url": "https://job-boards.greenhouse.io/peregrinetechnologies/jobs/4682485005",
+          "source": "company careers page (Greenhouse)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficiency in dbt, modern data warehouses (Snowflake/BigQuery), and orchestration tools.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office four days per week"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "role is in Washington, DC; dbt is a stated requirement."
+    },
+    {
+      "id": "coreweave",
+      "name": "CoreWeave",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://builtin.com/job/senior-analytics-engineer/11379397",
+          "source": "Built In Washington DC",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "5+ years of hands-on experience modeling analytics-ready data using dbt with SQL and/or Python",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office, 4 locations"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "listed under Washington, DC among 4 locations on Built In; DC office not confirmed."
+    },
+    {
+      "id": "total-wine-more",
+      "name": "Total Wine & More",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bethesda"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Sr. Analytics Engineer",
+          "url": "https://careers.totalwine.com/job/23255051/sr-analytics-engineer",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "designing, building, and maintaining robust, modular, and scalable data models using tools like dbt (search snippet)",
+          "job_poster": null,
+          "posted_date": "2026-05-20",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office, Bethesda MD"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt listed as one example tool; page returned 404 on fetch so wording is from a search snippet."
+    },
+    {
+      "id": "zendesk",
+      "name": "Zendesk",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Manager, Growth Analytics",
+          "url": "https://builtin.com/job/senior-manager-growth-analytics/11023329",
+          "source": "Built In Washington DC",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Built In tags the role as mentioning dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "shown under Washington, DC on Built In; likely remote-eligible."
+    },
+    {
+      "id": "alteryx",
+      "name": "Alteryx",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Manager, Product Telemetry & Analytics",
+          "url": "https://builtin.com/job/senior-manager-product-telemetry-analytics/11118087",
+          "source": "Built In Washington DC",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Built In tags the role as mentioning dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "shown under Washington, DC on Built In; likely remote-eligible."
+    },
+    {
+      "id": "function-health",
+      "name": "Function Health",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://builtin.com/job/data-engineer/11321593",
+          "source": "Built In Washington DC",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "skills include dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "remote role listed under Washington, DC."
+    },
+    {
+      "id": "bridgeway-benefit-technologies",
+      "name": "Bridgeway Benefit Technologies",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer (BI)",
+          "url": "https://builtin.com/job/data-engineer-bi/11365331",
+          "source": "Built In Washington DC",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "skills include dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "remote role listed under Washington, DC."
+    },
+    {
+      "id": "snowflake-user-group-dc-maryland-virginia-dmv",
+      "name": "Snowflake User Group DC, Maryland & Virginia (DMV)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://usergroups.snowflake.com/v0/dc-maryland-virginia-dmv/",
+          "note": "166 members; organiser listed; no event line-ups visible"
+        }
+      ],
+      "people": [
+        {
+          "id": "chenna-nayudu",
+          "name": "Chenna Nayudu",
+          "pronouns": null,
+          "title": "Principal Software Engineer, T. Rowe Price; organiser of Snowflake User Group DMV",
+          "city": "Washington DC area",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Snowflake User Group DMV",
+              "title": "Group organiser",
+              "date": null,
+              "url": "https://usergroups.snowflake.com/v0/dc-maryland-virginia-dmv/",
+              "content_id": "snowflake-user-group-dmvgroup-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser and group leader of the DMV Snowflake user group",
+              "topics": [
+                "community",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/v0/dc-maryland-virginia-dmv/",
+              "note": "organiser: Group organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from the DMV Snowflake community",
+          "past_chapter_talks": [],
+          "notes": "organiser role at a regional user group; city of residence not stated."
+        }
+      ],
+      "notes": "route to Snowflake users in the region."
+    },
+    {
+      "id": "rladies-washington-dc",
+      "name": "R-Ladies Washington DC",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Washington DC"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "R"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://rladies.org/chapters/rladies-dc/",
+          "note": "inactive chapter, 2,850 members, last events 2024 online"
+        }
+      ],
+      "people": [
+        {
+          "id": "arati-krishnamoorthy",
+          "name": "Arati Krishnamoorthy",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Washington DC",
+          "city": "Washington DC",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies Washington DC",
+              "title": "Chapter organiser",
+              "date": null,
+              "url": "https://rladies.org/chapters/rladies-dc/",
+              "content_id": "rladies-washington-dcchapter-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as current organiser of the chapter",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://rladies.org/chapters/rladies-dc/",
+              "note": "organiser: Chapter organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce women speakers from the DC data community",
+          "past_chapter_talks": [],
+          "notes": "current organiser of an inactive chapter; residence not stated."
+        },
+        {
+          "id": "parker-dority",
+          "name": "Parker Dority",
+          "pronouns": null,
+          "title": "Organiser, R-Ladies Washington DC",
+          "city": "Washington DC",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies Washington DC",
+              "title": "Chapter organiser",
+              "date": null,
+              "url": "https://rladies.org/chapters/rladies-dc/",
+              "content_id": "rladies-washington-dcchapter-organiser",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as current organiser of the chapter",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://rladies.org/chapters/rladies-dc/",
+              "note": "organiser: Chapter organiser"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce women speakers from the DC data community",
+          "past_chapter_talks": [],
+          "notes": "current organiser of an inactive chapter; residence not stated."
+        }
+      ],
+      "notes": "women-in-data community; inactive."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/dc-dbt-meetup/",
     "past_meetups_derived_from": "enriched/dc-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Built In DC: data engineering jobs mentioning dbt",
+        "url": "https://builtin.com/jobs/washington-dc/data-analytics/data-engineering?page=2",
+        "yielded": true,
+        "note": "five remote or hybrid roles tagged dbt; none shown as DC-based employers"
+      },
+      {
+        "name": "Built In DC: senior analytics jobs",
+        "url": "https://builtin.com/jobs/washington-dc/data-analytics/analytics/senior",
+        "yielded": true,
+        "note": "CoreWeave analytics engineer role"
+      },
+      {
+        "name": "Peregrine Technologies on Greenhouse",
+        "url": "https://job-boards.greenhouse.io/peregrinetechnologies/jobs/4682485005",
+        "yielded": true,
+        "note": "in-office DC role requiring dbt"
+      },
+      {
+        "name": "Data Engineer's DC on Sessionize",
+        "url": "https://sessionize.com/data-engineers-dc",
+        "yielded": false,
+        "note": "no names listed"
+      },
+      {
+        "name": "Data Engineers DC past events on meetup.com",
+        "url": "https://www.meetup.com/data-engineers/events/?type=past",
+        "yielded": false,
+        "note": "page returned no events"
+      },
+      {
+        "name": "Snowflake User Group DMV",
+        "url": "https://usergroups.snowflake.com/v0/dc-maryland-virginia-dmv/",
+        "yielded": true,
+        "note": "organiser named; no event line-ups"
+      },
+      {
+        "name": "R-Ladies Washington DC",
+        "url": "https://rladies.org/chapters/rladies-dc/",
+        "yielded": true,
+        "note": "inactive chapter, organisers named"
+      },
+      {
+        "name": "dbt Summit speaker pages (Derek Andres, William Guicheney)",
+        "url": "https://www.getdbt.com/dbt-summit/speakers",
+        "yielded": false,
+        "note": "no DC location shown"
+      },
+      {
+        "name": "Indeed and ZipRecruiter DC dbt pages",
+        "url": "https://www.indeed.com/q-analytics-engineer-l-washington,-dc-jobs.html",
+        "yielded": false,
+        "note": "403 on fetch"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -7671,6 +8188,21 @@
       "name": "Women in Tech",
       "url": "https://www.meetup.com/meetup-group-bpcklrba/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake User Group DC, Maryland & Virginia (DMV)",
+      "url": "https://usergroups.snowflake.com/v0/dc-maryland-virginia-dmv/",
+      "note": "166 members; organiser Chenna Nayudu"
+    },
+    {
+      "name": "Data Engineer's DC",
+      "url": "https://sessionize.com/data-engineers-dc",
+      "note": "open call for speakers; meetup group meetup.com/data-engineers"
+    },
+    {
+      "name": "R-Ladies Washington DC",
+      "url": "https://rladies.org/chapters/rladies-dc/",
+      "note": "inactive; last events 2024, online"
     }
   ]
 }
