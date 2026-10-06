@@ -7,21 +7,21 @@ This file holds what is specific to Perth. The method, scoring rules, schema and
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 2, 2026-10-06)
+**At a glance** (version 3, 2026-10-06)
 
 | | Count |
 |---|---|
-| Companies | 18 |
-| People | 46 |
+| Companies | 22 |
+| People | 51 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 20 |
+| Proven speakers | 23 |
 | Spoke at this chapter before | 0 |
 | Based in the region | 33 |
 | Based elsewhere | 0 |
-| Location unknown | 13 |
+| Location unknown | 18 |
 | With a LinkedIn profile | 14 |
-| Job ads mentioning dbt | 0 |
+| Job ads mentioning dbt | 1 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
 
@@ -39,11 +39,38 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-17 companies and communities were looked at. A company is local when it has people or roles in the region.
+21 companies and communities were looked at. A company is local when it has people or roles in the region.
 
-<details><summary><b>Not verified</b> (17)</summary>
+<details><summary><b>Strong dbt use</b> (1)</summary>
 
-Arkahna (local presence not confirmed), Cognizant (local presence not confirmed), Data Divers (local presence not confirmed), Hanson Construction Materials (local presence not confirmed), Insight (local presence not confirmed), Interworks (local presence not confirmed), INX Software (local presence not confirmed), Mantel Group (local presence not confirmed), Mr (local presence not confirmed), Part Vision (local presence not confirmed), Perenti Group (local presence not confirmed), Snowflake (local presence not confirmed), thelookoutway (local presence not confirmed), Unified Honey (local presence not confirmed), VGW (local presence not confirmed), Western Power (local presence not confirmed), Woodside Energy (local presence not confirmed)
+dbt Labs
+
+</details>
+
+<details><summary><b>Some dbt signal</b> (2)</summary>
+
+Cognizant, DR Analytics Recruitment
+
+</details>
+
+<details><summary><b>Not verified</b> (18)</summary>
+
+Akkodis (local presence not confirmed), Arkahna (local presence not confirmed), Data Divers (local presence not confirmed), Hanson Construction Materials (local presence not confirmed), Insight (local presence not confirmed), Interworks (local presence not confirmed), INX Software (local presence not confirmed), Mantel Group (local presence not confirmed), Mr (local presence not confirmed), Part Vision (local presence not confirmed), Perenti Group (local presence not confirmed), Simformatica (local presence not confirmed), Snowflake, thelookoutway (local presence not confirmed), Unified Honey (local presence not confirmed), VGW (local presence not confirmed), Western Power (local presence not confirmed), Woodside Energy (local presence not confirmed)
+
+</details>
+
+<details><summary><b>Other sources checked</b> (10)</summary>
+
+- [Seek Perth dbt and Snowflake listings](https://au.seek.com/Snowflake-jobs/in-Perth-WA) (nothing useful)
+- [DR Analytics Recruitment job](https://dr-analytics-recruitment.app.loxo.co/job/MzgzOTAtcGN6bWZmb28xc3JpMDVnYQ==)
+- [dbt hands-on lab Perth](https://www.getdbt.com/events/dbt-hands-on-lab-perth)
+- [DataEngBytes Perth 2024](https://sessionize.com/dataengbytes-perth-2024) (nothing useful)
+- [Snowflake User Group Perth STUG meet up Sep 2024](https://usergroups.snowflake.com/events/details/snowflake-perth-presents-stug-meet-up-2)
+- [Snowflake User Group Perth BUILD meetup Nov 2023](https://usergroups.snowflake.com/events/details/snowflake-perth-presents-stug-presents-perth-build-meetup)
+- [Perth Databricks User Group April 2026](https://www.meetup.com/en-AU/perth-databricks-meetup/events/314176765/) (nothing useful)
+- [Perth Databricks User Group July 2026](https://www.meetup.com/perth-databricks-meetup/events/315581364/) (nothing useful)
+- [Perth Data Engineering Meetup](https://meetup.com/perth-data-engineering-meetup) (nothing useful)
+- [Analytics Engineering Jobs board](https://analyticsengineeringjobs.com/) (nothing useful)
 
 </details>
 <!-- companies:end -->
@@ -65,3 +92,4 @@ To fill after the first research run.
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-06 | 1 | First build from the chapter history. |
+| 2026-10-06 | 3 | Research run: 4 companies, 1 dbt job ads and 5 people, no first-time speakers. |

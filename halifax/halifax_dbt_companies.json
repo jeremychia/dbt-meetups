@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Halifax companies using dbt, and people who could speak at or attend the Halifax dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Halifax (Halifax dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: web search for dbt plus Halifax returns mostly national job-board aggregators; few Halifax-specific dbt ads surface.",
+      "Lesson: digitalnovascotia.com (local job and event portal) returned 429 on every fetch, so its job board and event pages could not be read.",
+      "Lesson: a search summary claiming a Halifax dbt data quality meetup at Slalom was wrong; the underlying result was a Houston event, so it was discarded."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,47 +51,52 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "The Dalhousie dbt job ad was read from a search summary only; the Wellfound page returned 410 so the exact wording was not seen.",
+      "The RBC Halifax ad does not mention dbt in the summary seen; RBC roles in Toronto do. Treat RBC as weak.",
+      "Connie Zheng is listed as a WiMLDS Halifax chapter leader on the chapter page; her current employer may have changed."
     ],
     "counts": {
-      "companies": 16,
-      "people": 28,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 8,
-      "unique_content_items": 4,
+      "companies": 18,
+      "people": 29,
+      "job_postings": 2,
+      "companies_with_job_postings": 2,
+      "speaker_evidence_items": 9,
+      "unique_content_items": 5,
       "people_with_linkedin": 12,
       "people_with_contact": 20,
       "people_who_spoke_at_this_chapter": 4,
       "internal_vinted": 0,
       "level": {
-        "working": 23,
+        "working": 24,
         "leadership": 5
       },
       "speaker_potential": {
         "high": 4,
-        "medium": 8,
+        "medium": 9,
         "low": 16
       },
       "attendee_potential": {
-        "medium": 28
+        "medium": 29
       },
       "priority_tier": {
         "2": 4,
         "3": 20,
-        "connector": 4
+        "connector": 5
       },
       "watchlist_companies": 15,
       "past_meetups": 5,
       "lead_type": {
         "proven_speaker": 12,
-        "no_public_content": 16
+        "no_public_content": 17
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 4,
         "conference_or_meetup_agenda": 8,
-        "github": 16
+        "github": 16,
+        "women_in_data_community": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -120,9 +129,9 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
+      "community": 5,
       "data warehouse & platforms": 4,
-      "data engineering": 4,
-      "community": 4
+      "data engineering": 4
     }
   },
   "companies": [
@@ -1403,15 +1412,35 @@
       "id": "dalhousie-university",
       "name": "Dalhousie University",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Halifax"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "Microsoft Fabric",
+        "Python",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://wellfound.com/jobs/4645312-junior-data-engineer",
+          "source": "Wellfound (via search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "requires skills in Python, SQL, ETL, Spark, ELT, DBT, Microsoft Fabric, and Fabric Data Factory",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -1452,7 +1481,7 @@
           "notes": "github profile https://github.com/christianelliott gives the location Halifax, NS, Canada"
         }
       ],
-      "notes": null
+      "notes": "Office of Planning & Institutional Effectiveness; 2-year term; reports to Senior Director, Data Transformation and Governance. Ad text seen in a search summary only."
     },
     {
       "id": "dalhousie-university-ns-canada",
@@ -1675,12 +1704,163 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "royal-bank-of-canada-rbc",
+      "name": "Royal Bank of Canada (RBC)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax",
+        "Bedford"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Python",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - GFT Halifax",
+          "url": "https://www.careerbeacon.com/en/job-4/3295279/rbc/senior-data-engineer-gft-halifax",
+          "source": "CareerBeacon",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": null,
+          "job_poster": null,
+          "posted_date": "2026-06-03",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Halifax-area data engineering ad at 120 Western Parkway, Bedford; Snowflake nice-to-have. RBC ads in Toronto mention dbt, so the Halifax team may use it."
+    },
+    {
+      "id": "halifax-women-in-machine-learning-data-science-wimlds",
+      "name": "Halifax Women in Machine Learning & Data Science (WiMLDS)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "organiser",
+          "url": "https://wimlds.org/?p=4156",
+          "note": "chapter leaders: Jennifer LaPlante, Connie Zheng, Sreejata Chatterjee"
+        }
+      ],
+      "people": [
+        {
+          "id": "connie-zheng",
+          "name": "Connie Zheng",
+          "pronouns": null,
+          "title": "WiMLDS Halifax chapter leader; IT Consultant at IBM",
+          "city": "Halifax",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Halifax WiMLDS",
+              "title": "Chapter leader",
+              "date": null,
+              "url": "https://wimlds.org/?p=4156",
+              "content_id": "halifax-wimldschapter-leader",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "named as a chapter leader of Halifax WiMLDS",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://wimlds.org/?p=4156",
+              "note": "organiser: Chapter leader"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from the Halifax women-in-data community",
+          "past_chapter_talks": [],
+          "notes": "title from the chapter page; employer may be out of date"
+        }
+      ],
+      "notes": "Women-in-data community with regular meetups at VOLTA; talk topics are ML and agents."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/halifax-dbt-meetup/",
     "past_meetups_derived_from": "enriched/halifax-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Halifax Databricks User Group",
+        "url": "https://usergroups.databricks.com/halifax-databricks-user-group/",
+        "yielded": false,
+        "note": "only organiser Alain Mercier, already on file; no speakers listed"
+      },
+      {
+        "name": "WiMLDS Halifax chapter page",
+        "url": "https://wimlds.org/?p=4156",
+        "yielded": true,
+        "note": "chapter leaders named"
+      },
+      {
+        "name": "Digital Nova Scotia job portal",
+        "url": "https://digitalnovascotia.com/job-posts",
+        "yielded": false,
+        "note": "429 on every fetch"
+      },
+      {
+        "name": "CareerBeacon RBC Senior Data Engineer GFT Halifax",
+        "url": "https://www.careerbeacon.com/en/job-4/3295279/rbc/senior-data-engineer-gft-halifax",
+        "yielded": true,
+        "note": "appeared in search results; no dbt in the summary"
+      },
+      {
+        "name": "NTT DATA Halifax Data Engineer",
+        "url": "https://careers-inc.nttdata.com/job/Halifax-Data-Engineer-NS/1253635400",
+        "yielded": false,
+        "note": "ad filled, no dbt text"
+      },
+      {
+        "name": "Wellfound Dalhousie Junior Data Engineer",
+        "url": "https://wellfound.com/jobs/4645312-junior-data-engineer",
+        "yielded": false,
+        "note": "410 on fetch; skills seen in search summary"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -1814,6 +1994,16 @@
       "name": "Women in Tech Canada - Maritimes Chapter",
       "url": "https://www.meetup.com/women-in-tech-canada-maritimes-chapter/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Halifax Women in Machine Learning & Data Science",
+      "url": "https://digitalnovascotia.com/organizer/halifax-women-in-machine-learning-data-science/",
+      "note": "runs regular meetups at VOLTA, Halifax; talks seen are ML and agents, not dbt"
+    },
+    {
+      "name": "Halifax Databricks User Group",
+      "url": "https://usergroups.databricks.com/halifax-databricks-user-group/",
+      "note": "in-person networking events"
     }
   ]
 }

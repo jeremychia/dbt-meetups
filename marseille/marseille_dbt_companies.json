@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Marseille companies using dbt, and people who could speak at or attend the Marseille dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Marseille (Marseille dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: WebSearch snippets from Hellowork, Collective, Free-Work and Welcome to the Jungle surface Marseille dbt ads, but Hellowork, Alten and Welcome to the Jungle job pages returned 410 or 403 on fetch.",
+      "Lesson: Malt freelance profile pages dominate searches for 'analytics engineer dbt Marseille' but are not speaker evidence.",
+      "Lesson: no dbt, analytics engineering or data engineering meetup or women-in-data chapter was found for Marseille; the Aix-Marseille AI meetup is the nearest local data community."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,44 +51,53 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "The CMA CGM ad was seen as a search snippet only; the Hellowork page returned 410 when fetched, so the ad may be closed. Posting date 2026-06-26 comes from the snippet.",
+      "The HN Services ad is for an unnamed client in Aix-en-Provence (banking sector per a snippet); HN Services' own local office is not confirmed.",
+      "The Gojob ad was marked as published over 2 years ago on the job board, so it may be stale.",
+      "No new first-time or proven speakers were found; the only new person is a community organiser.",
+      "An Alten ad for a senior analyst/engineer with GCP and dbt was seen, but its location could not be confirmed (page returned 403), so Alten is not recorded."
     ],
     "counts": {
-      "companies": 7,
-      "people": 12,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 0,
-      "unique_content_items": 0,
+      "companies": 12,
+      "people": 13,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 1,
+      "unique_content_items": 1,
       "people_with_linkedin": 6,
       "people_with_contact": 7,
       "people_who_spoke_at_this_chapter": 1,
       "internal_vinted": 0,
       "level": {
         "leadership": 1,
-        "working": 11
+        "working": 12
       },
       "speaker_potential": {
         "high": 1,
-        "low": 11
+        "low": 11,
+        "medium": 1
       },
       "attendee_potential": {
-        "medium": 12
+        "medium": 13
       },
       "priority_tier": {
         "1": 1,
-        "3": 11
+        "3": 11,
+        "connector": 1
       },
-      "watchlist_companies": 6,
+      "watchlist_companies": 8,
       "past_meetups": 1,
       "lead_type": {
         "proven_speaker": 1,
-        "no_public_content": 11
+        "no_public_content": 12
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 1,
-        "github": 11
+        "github": 11,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -116,7 +129,10 @@
       "domain-specific use cases",
       "data warehouse & platforms"
     ],
-    "topic_counts": {}
+    "topic_counts": {
+      "community": 1,
+      "industry trends": 1
+    }
   },
   "companies": [
     {
@@ -713,12 +729,273 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "cma-cgm",
+      "name": "CMA CGM",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Marseille"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "AWS",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - CDD H/F (Europe Data Team)",
+          "url": "https://www.hellowork.com/fr-fr/emplois/80652742.html",
+          "source": "Hellowork (via search snippet)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "use and enforce standards with Airflow and dbt",
+          "job_poster": null,
+          "posted_date": "2026-06-26",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote/onsite, freelance"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "careers_page",
+          "url": "https://jobs.cmacgm-group.com/job/Marseille-Regional-Marketing-Data-Analyst/1281482401",
+          "note": "CMA CGM careers site lists Marseille data analyst roles; Europe Data Team builds data platforms and products."
+        }
+      ],
+      "people": [],
+      "notes": "Marseille headquarters. Ad names Snowflake, AWS, dbt and Airflow. The ad's end client was inferred from search snippets, so confirm the Hellowork ad is CMA CGM's."
+    },
+    {
+      "id": "gojob",
+      "name": "Gojob",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Aix-en-Provence"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow",
+        "Airbyte",
+        "Looker Studio"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://welovedevs.com/app/job/data-analytics-engineer-aix-en-provence",
+          "source": "WeLoveDevs",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Construire et maintenir les connecteurs et modèles de données; stack includes dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid, 2 days on site"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Ad says the data team has a Head of Data, 2 analytics engineers and 1 data engineer. The ad was marked as over 2 years old, so check it is still current."
+    },
+    {
+      "id": "hn-services",
+      "name": "HN Services",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Aix-en-Provence"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "GCP",
+        "Composer"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer H/F (client in Aix-en-Provence)",
+          "url": "https://tietalent.com/en/jobs/p-534889370/aix-data-engineer-hf",
+          "source": "TieTalent (via search snippet)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "mastery of tools including dbt, Composer, BigQuery, Python, SQL",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Consultancy hiring for a client in Aix-en-Provence. The client is not named."
+    },
+    {
+      "id": "boondmanager",
+      "name": "BoondManager",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Marseille"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_listing",
+          "url": "https://www.welcometothejungle.com/fr/pages/emploi-data-engineer-marseille-13001",
+          "note": "lists 'Senior Data Analytics Engineer / BI - 100% remote' under Boond; page text did not mention dbt and the ad could not be fetched."
+        }
+      ],
+      "people": [],
+      "notes": "Check the ad for dbt. Listed under Marseille data engineer jobs but the role is fully remote."
+    },
+    {
+      "id": "intelligence-artificielle-aixmarseille",
+      "name": "Intelligence Artificielle Aix-Marseille",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Marseille",
+        "Aix-en-Provence"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community_page",
+          "url": "https://www.meetup.com/intelligence-artificielle-aix-marseille/",
+          "note": "AI and data meetup with about 1,000 members; 12 past events in Marseille and Aix."
+        }
+      ],
+      "people": [
+        {
+          "id": "arnaud-cuzzolin",
+          "name": "Arnaud Cuzzolin",
+          "pronouns": null,
+          "title": "Organiser, Intelligence Artificielle Aix-Marseille",
+          "city": "Marseille",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Intelligence Artificielle Aix-Marseille meetups",
+              "title": "Organiser of the Aix-Marseille AI meetup",
+              "date": null,
+              "url": "https://www.meetup.com/intelligence-artificielle-aix-marseille/",
+              "content_id": "intelligence-artificielle-aixmarseille-meetupsorganiser-of-t",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Super organiser of a Marseille and Aix AI meetup with about 1,000 members.",
+              "topics": [
+                "community",
+                "industry trends"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/intelligence-artificielle-aix-marseille/",
+              "note": "organiser: Organiser of the Aix-Marseille AI meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce local data and AI speakers and co-promote a dbt meetup",
+          "past_chapter_talks": [],
+          "notes": "Named as super organiser on the group's Meetup page. His own location was not shown."
+        }
+      ],
+      "notes": "AI-focused community; useful as a co-promotion and speaker-introduction route."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/marseille-dbt-meetup/",
     "past_meetups_derived_from": "enriched/marseille-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Welcome to the Jungle: data engineer jobs Marseille",
+        "url": "https://www.welcometothejungle.com/fr/pages/emploi-data-engineer-marseille-13001",
+        "yielded": false,
+        "note": "Boond, AXA, Matera listed; no dbt mention on the page."
+      },
+      {
+        "name": "Engineering.jobs: data analytics, Provence-Alpes-Cote d'Azur",
+        "url": "https://fr.engineering.jobs/fr/emplois/data-analytics/provence-alpes-cote-dazur",
+        "yielded": false,
+        "note": "three roles, none mention dbt."
+      },
+      {
+        "name": "Free-Work: senior data engineer",
+        "url": "https://www.free-work.com/fr/tech-it/job-mission/data-engineer/senior-data-engineer-132",
+        "yielded": false,
+        "note": "dbt ads are in Paris and Lille, none in Marseille."
+      },
+      {
+        "name": "WeLoveDevs: Data Analytics Engineer Aix-en-Provence",
+        "url": "https://welovedevs.com/app/job/data-analytics-engineer-aix-en-provence",
+        "yielded": true,
+        "note": "Gojob ad listing dbt in the stack."
+      },
+      {
+        "name": "TieTalent: HN Services Data Engineer Aix",
+        "url": "https://tietalent.com/en/jobs/p-534889370/aix-data-engineer-hf",
+        "yielded": false,
+        "note": "fetch returned only the TieTalent product page; ad text came from the search snippet."
+      },
+      {
+        "name": "Meetup: Intelligence Artificielle Aix-Marseille",
+        "url": "https://www.meetup.com/intelligence-artificielle-aix-marseille/",
+        "yielded": true,
+        "note": "organiser named; AI-focused events, no dbt talks."
+      },
+      {
+        "name": "CMA CGM careers search (via web search)",
+        "url": "https://jobs.cmacgm-group.com/CMACGM/job/Marseille-APPRENTICESHIP-Financial-Data-Analyst/1193943601",
+        "yielded": false,
+        "note": "analyst, intern and apprentice roles in Marseille; no dbt text seen."
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -757,6 +1034,11 @@
       "name": "Toulon Data Mining Meetup",
       "url": "https://www.meetup.com/Toulon-Data-Mining-Meetup/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Intelligence Artificielle Aix-Marseille (Meetup)",
+      "url": "https://www.meetup.com/intelligence-artificielle-aix-marseille/",
+      "note": "about 1,000 members; meetups in Marseille and Aix; sponsored by Klanik; closest local data and AI audience."
     }
   ]
 }

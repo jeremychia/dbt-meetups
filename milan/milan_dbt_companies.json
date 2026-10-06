@@ -4,12 +4,17 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Milan companies using dbt, and people who could speak at or attend the Milan dbt Meetup Group.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Milan (Milan dbt Meetup Group)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: theirstack.com lists Italian companies that use dbt but gives no job titles or cities.",
+      "Lesson: Milan dbt events are run by Snowflake Italia User Group and Data Reply; speakers there were already on file.",
+      "Lesson: many job-board links (lever, mollie careers, overseasjobs) returned 404 on fetch; a mirror page (tcv portfolio jobs) gave the full text.",
+      "Lesson: blog and newsletter searches in English and Italian found no new individual authors in the Milan region."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,13 +52,17 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles and cities come from public pages and snippets; verify before outreach.",
+      "Prima and Shopfully ads were not readable on fetch; dbt signal for Prima comes from a search snippet, Shopfully has no dbt evidence yet.",
+      "Amplifon, JAKALA, Arcaplanet and The Information Lab Italy come only from a theirstack list of companies using dbt in Italy; local presence and ads not checked.",
+      "No new people were recorded: no individual in the region with dbt content or a recent talk was found that is not already on file."
     ],
     "counts": {
-      "companies": 50,
+      "companies": 58,
       "people": 121,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
+      "job_postings": 4,
+      "companies_with_job_postings": 4,
       "speaker_evidence_items": 47,
       "unique_content_items": 13,
       "people_with_linkedin": 30,
@@ -78,7 +87,7 @@
         "3": 87,
         "connector": 28
       },
-      "watchlist_companies": 49,
+      "watchlist_companies": 52,
       "past_meetups": 1,
       "lead_type": {
         "proven_speaker": 51,
@@ -231,16 +240,24 @@
       "id": "data-reply",
       "name": "Data Reply",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Milan"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
+      "stack_signals": [
+        "dbt"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.reply.com/it/newsroom/events/data-transformation-e-data-quality-in-azione",
+          "note": "27 November 2025 Milan event with dbt Labs on data transformation and data quality; no speaker names listed."
+        }
+      ],
       "people": [
         {
           "id": "clemente-cetera",
@@ -360,22 +377,31 @@
           "notes": "github profile https://github.com/giuliotalarico gives the location Milan"
         }
       ],
-      "notes": "employer of a past Milan dbt Meetup Group speaker"
+      "notes": "employer of a past Milan dbt Meetup Group speaker | existing record; extra event evidence only."
     },
     {
       "id": "snowflake",
       "name": "Snowflake",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Milan"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
       "job_postings": [],
-      "other_evidence": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-milano-presents-the-data-engineers-survival-toolkit-dbt-amp-data-metrics-fuctions",
+          "note": "Snowflake Milano user group dbt and data metric functions event, 2 October 2025."
+        }
+      ],
       "people": [
         {
           "id": "davide-mauri",
@@ -494,7 +520,7 @@
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
         }
       ],
-      "notes": null
+      "notes": "existing record; extra event evidence only."
     },
     {
       "id": "eutelsat",
@@ -6621,12 +6647,313 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "mollie",
+      "name": "Mollie",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Milan"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow",
+        "sqlfluff",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://portfoliojobs.tcv.com/companies/mollie/jobs/40783027-analytics-engineer",
+          "source": "TCV portfolio jobs board (mirror of Mollie ad)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "a selection of the latest and greatest tools (BigQuery, dbt, Airflow, sqlfluff, Looker) at your disposal",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board_snippet",
+          "url": "https://jobs.mollie.com/vacancies/aeii",
+          "note": "search snippet for an Analytics Engineer II role in Milan building dbt and Looker models; page returned 404 on fetch."
+        }
+      ],
+      "people": [],
+      "notes": "ad is closed (6+ months old); company hired in Milan."
+    },
+    {
+      "id": "prima-assicurazioni",
+      "name": "Prima Assicurazioni",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Milan"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "SQL",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://jobs.eu.lever.co/prima/a0ff0ae8-330d-431f-afb2-a6e3112aa889",
+          "source": "company careers page (Lever)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ETL management tools (dbt preferred) and/or frameworks like Spark (from search snippet; page returned 404)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "directory",
+          "url": "https://theirstack.com/en/technology/dbt/it",
+          "note": "listed as an Italian company using dbt."
+        }
+      ],
+      "people": [],
+      "notes": "Claims-domain analytics engineer ad in the Milan area; dbt listed as preferred."
+    },
+    {
+      "id": "shopfully",
+      "name": "Shopfully",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Milan"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analytics Engineer",
+          "url": "https://job-boards.greenhouse.io/shopfully/jobs/7484886",
+          "source": "company careers page (Greenhouse)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": null,
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid, Italy"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "directory",
+          "url": "https://theirstack.com/en/technology/dbt/it",
+          "note": "listed as an Italian company using dbt."
+        }
+      ],
+      "people": [],
+      "notes": "ad text not readable on fetch; dbt signal comes from the directory only."
+    },
+    {
+      "id": "veliu",
+      "name": "Veliu",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Milan"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Founding Data and ML Engineer",
+          "url": "https://builtin.com/job/founding-data-and-ml-engineer/8311901",
+          "source": "BuiltIn",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "dbt listed among top skills (board summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Milan ad; dbt listed as a top skill."
+    },
+    {
+      "id": "amplifon",
+      "name": "Amplifon",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Milan"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "directory",
+          "url": "https://theirstack.com/en/technology/dbt/it",
+          "note": "listed as an Italian company using dbt."
+        }
+      ],
+      "people": [],
+      "notes": "headquartered in Milan per search snippets; no dbt ad found."
+    },
+    {
+      "id": "jakala",
+      "name": "JAKALA",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Milan"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "directory",
+          "url": "https://theirstack.com/en/technology/dbt/it",
+          "note": "listed as an Italian company using dbt."
+        },
+        {
+          "type": "news",
+          "url": "https://www.lapresse.it/economia/2025/02/11/ai-innovazione-strategia-jakala-compra-il-65-di-quantyca/",
+          "note": "Jakala bought 65% of Quantyca, which is already on file."
+        }
+      ],
+      "people": [],
+      "notes": "owner of Quantyca."
+    },
+    {
+      "id": "arcaplanet",
+      "name": "Arcaplanet",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "directory",
+          "url": "https://theirstack.com/en/technology/dbt/it",
+          "note": "listed as an Italian company using dbt."
+        }
+      ],
+      "people": [],
+      "notes": "directory only."
+    },
+    {
+      "id": "the-information-lab-italy",
+      "name": "The Information Lab Italy",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "directory",
+          "url": "https://theirstack.com/en/technology/dbt/it",
+          "note": "listed as an Italian company using dbt."
+        }
+      ],
+      "people": [],
+      "notes": "directory only."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/milan-dbt-meetup-group/",
     "past_meetups_derived_from": "enriched/milan-dbt-meetup-group.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "TheirStack dbt companies in Italy",
+        "url": "https://theirstack.com/en/technology/dbt/it",
+        "yielded": true,
+        "note": "10 Italian companies listed as using dbt; no cities."
+      },
+      {
+        "name": "TCV portfolio jobs, Mollie",
+        "url": "https://portfoliojobs.tcv.com/companies/mollie/jobs/40783027-analytics-engineer",
+        "yielded": true,
+        "note": "Milan analytics engineer ad naming dbt; ad closed."
+      },
+      {
+        "name": "BuiltIn Italy data jobs",
+        "url": "https://builtin.com/jobs/eu/italy/data-analytics/search/data-engineer?page=2",
+        "yielded": true,
+        "note": "one Milan ad with dbt (Veliu)."
+      },
+      {
+        "name": "Snowflake Milano user group",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-milano-presents-snowflakesummit-vibes-innovating-sql-satellites-amp-community/",
+        "yielded": false,
+        "note": "speakers already on file."
+      },
+      {
+        "name": "Data Reply dbt event",
+        "url": "https://www.reply.com/it/newsroom/events/data-transformation-e-data-quality-in-azione",
+        "yielded": false,
+        "note": "no speaker names listed."
+      },
+      {
+        "name": "PyData Milano call for speakers",
+        "url": "https://sessionize.com/pydata-milano-meetup",
+        "yielded": false,
+        "note": "no named organisers or dbt speakers."
+      },
+      {
+        "name": "Shopfully Greenhouse",
+        "url": "https://job-boards.greenhouse.io/shopfully/jobs/7484886",
+        "yielded": false,
+        "note": "no dbt text found."
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6700,6 +7027,21 @@
       "name": "Women in Tech Milano",
       "url": "https://www.meetup.com/women-in-tech-milano/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake Italia User Group, Milano",
+      "url": "https://usergroups.snowflake.com/events/details/snowflake-milano-presents-the-data-engineers-survival-toolkit-dbt-amp-data-metrics-fuctions",
+      "note": "runs dbt sessions in Milan (2 October 2025 event)."
+    },
+    {
+      "name": "PyData Milano",
+      "url": "https://sessionize.com/pydata-milano-meetup",
+      "note": "monthly in-person meetups from 21 October 2026; call for speakers open."
+    },
+    {
+      "name": "R-Ladies Milan",
+      "url": "https://meetup.com/rladies-milan",
+      "note": "women-in-data community; organisers not identified."
     }
   ]
 }
