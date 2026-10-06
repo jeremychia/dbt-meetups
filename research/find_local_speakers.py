@@ -53,17 +53,20 @@ def meetup(lat, lon, since):
         for e in ((d.get("groupSearch") or {}).get("edges") or []):
             if DATA_GROUP.search(e["node"]["name"]):
                 groups[e["node"]["urlname"]] = e["node"]["name"]
-    events = []
-    for urlname in groups:
-        after = None
+    def past(urlname):
+        found, after = [], None
         for _ in range(10):
             d = post("query($u:String!,$a:String){groupByUrlname(urlname:$u){events(status:PAST,first:100,after:$a){pageInfo{hasNextPage endCursor} "
                      "edges{node{id title dateTime eventUrl eventType venue{city} eventHosts{member{name}}}}}}}", {"u": urlname, "a": after})
             ev = ((d.get("groupByUrlname") or {}).get("events") or {})
-            events += [(urlname, e["node"]) for e in ev.get("edges") or [] if e["node"]["dateTime"][:10] >= since]
+            found += [(urlname, e["node"]) for e in ev.get("edges") or [] if e["node"]["dateTime"][:10] >= since]
             if not (ev.get("pageInfo") or {}).get("hasNextPage"):
                 break
             after = ev["pageInfo"]["endCursor"]
+        return found
+
+    with concurrent.futures.ThreadPoolExecutor(6) as pool:
+        events = [e for found in pool.map(past, groups) for e in found]
 
     def speaker(item):
         urlname, e = item
@@ -108,36 +111,63 @@ def bevy(places, since):
             if not d.get("next"):
                 break
             page += 1
-    for host, cid, title in chapters:
-        for e in get_json(f"https://{host}/api/event_slim/for_chapter/{cid}/?status=Completed&page_size=200").get("results") or []:
-            if (e.get("start_date") or "")[:10] < since:
-                continue
-            page = subprocess.run(["curl", "-sL", "-m", "30", "-A", UA, e["static_url"]], capture_output=True, text=True).stdout
-            for p in bevy_people(page):
-                out.append({"source": "bevy", "group": title, "event": e["title"], "date": e["start_date"][:10], "url": e["static_url"],
-                            "in_person": not e.get("is_virtual_event"), **p})
+    events = [(title, e) for host, cid, title in chapters
+              for e in get_json(f"https://{host}/api/event_slim/for_chapter/{cid}/?status=Completed&page_size=200").get("results") or []
+              if (e.get("start_date") or "")[:10] >= since]
+
+    def people_on(item):
+        title, e = item
+        return title, e, bevy_people(subprocess.run(["curl", "-sL", "-m", "30", "-A", UA, e["static_url"]], capture_output=True, text=True).stdout)
+
+    with concurrent.futures.ThreadPoolExecutor(8) as pool:
+        for title, e, found in pool.map(people_on, events):
+            out += [{"source": "bevy", "group": title, "event": e["title"], "date": e["start_date"][:10], "url": e["static_url"],
+                     "in_person": not e.get("is_virtual_event"), **p} for p in found]
     return out, chapters
+
+
+def github_queries(places):
+    """github ORs repeated location qualifiers and OR-joined keywords, so a whole region fits in a few queries of at most 256 characters."""
+    roles = " OR ".join(GITHUB_ROLES)
+    queries, chunk = [], []
+    for place in places:
+        q = f'{roles} ' + " ".join(f'location:"{p}"' for p in chunk + [place])
+        if len(q) > 250 and chunk:
+            queries.append(f'{roles} ' + " ".join(f'location:"{p}"' for p in chunk)); chunk = [place]
+        else:
+            chunk.append(place)
+    if chunk:
+        queries.append(f'{roles} ' + " ".join(f'location:"{p}"' for p in chunk))
+    return queries
 
 
 def github(places):
     logins = set()
-    for place in places:
-        for role in GITHUB_ROLES:
-            r = subprocess.run(["gh", "api", "-X", "GET", "search/users", "-f", f'q={role} location:"{place}"', "-f", "per_page=50"], capture_output=True, text=True)
+    for q in github_queries(places):
+        for page in range(1, 11):  # search returns at most 1000 results
+            r = subprocess.run(["gh", "api", "-X", "GET", "search/users", "-f", f"q={q}", "-f", "per_page=100", "-f", f"page={page}"], capture_output=True, text=True)
             try:
-                logins |= {i["login"] for i in json.loads(r.stdout or "{}").get("items") or []}
+                items = json.loads(r.stdout or "{}").get("items") or []
             except ValueError:
-                pass
+                items = []
+            logins |= {i["login"] for i in items}
             subprocess.run(["sleep", "2.2"])  # search allows 30 calls a minute
+            if len(items) < 100:
+                break
+
+    def profile(login):
+        return login, get_gh(f"users/{login}"), get_gh(f"users/{login}/social_accounts")
+
+    with concurrent.futures.ThreadPoolExecutor(8) as pool:
+        users = list(pool.map(profile, sorted(logins)))
     out = []
-    for login in sorted(logins):
-        u = get_gh(f"users/{login}")
+    for login, u, accounts in users:
         bio = (u.get("bio") or "").replace("\r", " ").replace("\n", " ")
         if u.get("type") != "User" or not u.get("name") or len(norm(u["name"]).split()) < 2 or GENERATED_BIO in bio.lower():
             continue
         if not DATA_ROLE.search(bio + " " + (u.get("company") or "")):
             continue
-        social = [a["url"] for a in get_gh(f"users/{login}/social_accounts") or []] + ([f"https://x.com/{u['twitter_username']}"] if u.get("twitter_username") else [])
+        social = [a["url"] for a in (accounts if isinstance(accounts, list) else [])] + ([f"https://x.com/{u['twitter_username']}"] if u.get("twitter_username") else [])
         out.append({"source": "github", "name": u["name"].strip(), "company": (u.get("company") or "").lstrip("@").strip() or None, "title": bio[:160] or None,
                     "location": u.get("location"), "url": u["html_url"], "links": social, "role": "practitioner"})
     return out
