@@ -4,12 +4,17 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Prague companies using dbt, and people who could speak at or attend the Prague dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Prague (Prague dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: jobs.cz keyword filter for dbt is noisy (returns therapy and analyst ads); each ad has to be opened and checked for the word dbt.",
+      "Lesson: jobs.cz ad pages redirect to a company subdomain and often return only the page header; siemens careers site returned the full text.",
+      "Lesson: search results for Prague dbt people are mostly linkedin snippets, which cannot be read; no first-time speaker was confirmed.",
+      "Lesson: aijobs.net, startupjobs.cz and nexer ad links from search were expired or redirected."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,35 +52,39 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Only 3 dbt job ads were read and confirmed; most jobs.cz hits could not be read in full.",
+      "Sky ad was already removed in July 2025; kept as evidence of past dbt use only.",
+      "No new first-time or proven speakers with in-region evidence were confirmed in about 30 calls."
     ],
     "counts": {
-      "companies": 45,
-      "people": 78,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 32,
-      "unique_content_items": 12,
+      "companies": 51,
+      "people": 80,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 34,
+      "unique_content_items": 13,
       "people_with_linkedin": 27,
       "people_with_contact": 49,
       "people_who_spoke_at_this_chapter": 13,
       "internal_vinted": 0,
       "level": {
-        "working": 67,
+        "working": 69,
         "leadership": 11
       },
       "speaker_potential": {
         "high": 15,
-        "medium": 27,
+        "medium": 29,
         "low": 36
       },
       "attendee_potential": {
-        "medium": 50,
+        "medium": 52,
         "high": 28
       },
       "priority_tier": {
         "2": 8,
-        "connector": 13,
+        "connector": 15,
         "3": 51,
         "1": 6
       },
@@ -83,13 +92,14 @@
       "past_meetups": 4,
       "lead_type": {
         "proven_speaker": 42,
-        "no_public_content": 36
+        "no_public_content": 38
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 13,
         "conference_or_meetup_agenda": 29,
-        "github": 36
+        "github": 36,
+        "women_in_data_community": 2
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -122,8 +132,8 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
+      "community": 15,
       "data warehouse & platforms": 15,
-      "community": 13,
       "data engineering": 9,
       "business intelligence": 4,
       "genai & llm": 2,
@@ -4627,12 +4637,372 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "zasilkovna-packeta-group",
+      "name": "Zásilkovna (Packeta Group)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.jobs.cz/rpd/2001408338/",
+          "source": "jobs.cz",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Znalost dbt nebo podobného transformačního frameworku",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "full-time, Praha - Libeň"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt listed under advantages."
+    },
+    {
+      "id": "siemens-sro",
+      "name": "Siemens s.r.o.",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Apache Airflow",
+        "SSIS"
+      ],
+      "job_postings": [
+        {
+          "title": "Marketing Data Engineer - (m/f/d)",
+          "url": "https://jobs.siemens.com/cs_CZ/externaljobs/JobDetail/514655",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficiency in working with data processing tools such as Apache Airflow, dbt or SSIS is a requirement.",
+          "job_poster": null,
+          "posted_date": "2026-07-20",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://www.jobs.cz/prace/praha/?q%5B%5D=dbt",
+          "note": "jobs.cz lists Marketing Data Engineer and Marketing Data Analyst in Praha - Stodulky under the dbt filter; analyst ad text not read"
+        }
+      ],
+      "people": [],
+      "notes": "dbt is one of several alternative tools."
+    },
+    {
+      "id": "sky",
+      "name": "Sky",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Jinja",
+        "BigQuery",
+        "Looker",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst",
+          "url": "https://builtin.com/job/data-analyst/6485791",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Skills or experience in DBT and Jinja, BigQuery, big data, Python, or data visualization tools like Looker and Tableau would be an advantage.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad removed 2025-07-25."
+    },
+    {
+      "id": "keboola",
+      "name": "Keboola",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Keboola"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://keboola.com/blog/7-reasons-why-we-integrated-dbt-into-keboola",
+          "note": "keboola integrated dbt into its transformation layer"
+        },
+        {
+          "type": "webinar",
+          "url": "https://www.keboola.com/webinars/workshop-dbt-for-experts",
+          "note": "dbt for experts workshop, 2023-03-07, host Martin Fisher"
+        },
+        {
+          "type": "webinar",
+          "url": "https://www.keboola.com/webinars/workshop-dbt-for-beginners",
+          "note": "dbt for beginners workshop"
+        }
+      ],
+      "people": [],
+      "notes": "data platform vendor with a Prague engineering team per search snippet; strong dbt content."
+    },
+    {
+      "id": "tmobile-czech-republic",
+      "name": "T-Mobile Czech Republic",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "GCP"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://cz.linkedin.com/in/martina-zapletal",
+          "note": "search snippet of a profile describing dbt and GCP adoption at T-Mobile Czech Republic; person not recorded because the snippet was not read"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use seen only in a search snippet."
+    },
+    {
+      "id": "wids-prague",
+      "name": "WiDS Prague",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://luma.com/wids-prague-conference",
+          "note": "past women in data science conference organised by Deepnote; talks on NLP and product data analysis"
+        }
+      ],
+      "people": [
+        {
+          "id": "tereza-vankova",
+          "name": "Tereza Vankova",
+          "pronouns": null,
+          "title": "Host, WiDS Prague conference",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Prague conference",
+              "title": "WiDS Prague conference host",
+              "date": null,
+              "url": "https://luma.com/wids-prague-conference",
+              "content_id": "wids-prague-conferencewids-prague-conference-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a host of the conference",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/wids-prague-conference",
+              "note": "organiser: WiDS Prague conference host"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce women speakers in prague data",
+          "past_chapter_talks": [],
+          "notes": "listed as host on the luma event page; employer not shown"
+        },
+        {
+          "id": "lubomir-kovarik",
+          "name": "Lubomir Kovarik",
+          "pronouns": null,
+          "title": "Host, WiDS Prague conference",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Prague conference",
+              "title": "WiDS Prague conference host",
+              "date": null,
+              "url": "https://luma.com/wids-prague-conference",
+              "content_id": "wids-prague-conferencewids-prague-conference-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a host of the conference",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/wids-prague-conference",
+              "note": "organiser: WiDS Prague conference host"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from prague data science events",
+          "past_chapter_talks": [],
+          "notes": "listed as host on the luma event page; employer not shown"
+        }
+      ],
+      "notes": "data science focus, little dbt overlap."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/prague-dbt-meetup-group/",
     "past_meetups_derived_from": "enriched/prague-dbt-meetup-group.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "jobs.cz dbt filter",
+        "url": "https://www.jobs.cz/prace/praha/?q%5B%5D=dbt",
+        "yielded": true,
+        "note": "noisy; one ad confirmed to mention dbt (Zasilkovna)"
+      },
+      {
+        "name": "Siemens careers",
+        "url": "https://jobs.siemens.com/cs_CZ/externaljobs/JobDetail/514655",
+        "yielded": true,
+        "note": "dbt named among tools in a Prague ad"
+      },
+      {
+        "name": "builtin.com Sky ad",
+        "url": "https://builtin.com/job/data-analyst/6485791",
+        "yielded": true,
+        "note": "removed ad, dbt as an advantage"
+      },
+      {
+        "name": "startupjobs.cz",
+        "url": "https://www.startupjobs.cz/nabidky?q=dbt",
+        "yielded": false,
+        "note": "no ads rendered; linked dbt ad expired"
+      },
+      {
+        "name": "Databricks Meetup, FIT CTU 2026-04-21",
+        "url": "https://fit.cvut.cz/en/life-at-fit/fit-live/events/24631-databricks-meetup",
+        "yielded": false,
+        "note": "all three speakers already on file"
+      },
+      {
+        "name": "Analytics Pioneers Prague meetup",
+        "url": "https://www.meetup.com/de-de/analytics-pioneers-prague/",
+        "yielded": false,
+        "note": "digital analytics, online, no dbt"
+      },
+      {
+        "name": "Data Point Prague 2026 sessionize",
+        "url": "https://sessionize.com/data-point-prague-2026/",
+        "yielded": false,
+        "note": "call for speakers page only, no agenda"
+      },
+      {
+        "name": "WiDS Prague conference on Luma",
+        "url": "https://luma.com/wids-prague-conference",
+        "yielded": true,
+        "note": "hosts and speakers listed, mostly data science, undated"
+      },
+      {
+        "name": "Keboola dbt workshop",
+        "url": "https://www.keboola.com/webinars/workshop-dbt-for-experts",
+        "yielded": true,
+        "note": "2023 webinar, speaker location not shown"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -4839,6 +5209,16 @@
       "name": "Snowflake Prague User Group",
       "url": "https://www.meetup.com/snowflake-prague-user-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "WiDS Prague (organised by Deepnote)",
+      "url": "https://www.widsworldwide.org/events/event/wids-prague/",
+      "note": "women in data science regional event"
+    },
+    {
+      "name": "PyLadies Prague",
+      "url": "https://ep2024.europython.eu/pyladies-social",
+      "note": "only seen on europython pages; no local event page read"
     }
   ]
 }

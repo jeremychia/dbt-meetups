@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Budapest companies using dbt, and people who could speak at or attend the Budapest dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Budapest (Budapest dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: web search results for Budapest are dominated by job boards; blog and author searches in English and Hungarian returned almost nothing.",
+      "Lesson: budapestdata.hu speaker pages fetch well; the detailed schedule and sessionize pages do not.",
+      "Lesson: cvonline.hu and allianz ad links were dead on fetch; search snippets only."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +51,54 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets. Verify before outreach.",
+      "Balázs Máté's talk was seen only as a search snippet; event, date and location are unconfirmed.",
+      "Instructure and Allianz ads may be closed.",
+      "No first-time speakers (people with writing but no talk) were found."
     ],
     "counts": {
-      "companies": 37,
-      "people": 84,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 21,
-      "unique_content_items": 9,
-      "people_with_linkedin": 19,
-      "people_with_contact": 54,
+      "companies": 43,
+      "people": 88,
+      "job_postings": 6,
+      "companies_with_job_postings": 6,
+      "speaker_evidence_items": 24,
+      "unique_content_items": 12,
+      "people_with_linkedin": 21,
+      "people_with_contact": 56,
       "people_who_spoke_at_this_chapter": 14,
       "internal_vinted": 0,
       "level": {
         "leadership": 8,
-        "working": 76
+        "working": 80
       },
       "speaker_potential": {
-        "high": 14,
-        "low": 50,
-        "medium": 20
+        "high": 15,
+        "low": 51,
+        "medium": 22
       },
       "attendee_potential": {
-        "medium": 83,
+        "medium": 87,
         "high": 1
       },
       "priority_tier": {
-        "2": 12,
+        "2": 15,
         "1": 2,
-        "3": 55,
+        "3": 56,
         "connector": 15
       },
       "watchlist_companies": 36,
       "past_meetups": 7,
       "lead_type": {
-        "proven_speaker": 34,
-        "no_public_content": 50
+        "proven_speaker": 37,
+        "no_public_content": 51
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 14,
         "github": 50,
-        "conference_or_meetup_agenda": 21
+        "conference_or_meetup_agenda": 23,
+        "linkedin_search": 2
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -123,7 +132,11 @@
     ],
     "topic_counts": {
       "community": 18,
-      "data warehouse & platforms": 3
+      "data warehouse & platforms": 5,
+      "data governance": 2,
+      "orchestration & ci/cd": 1,
+      "performance & scale": 1,
+      "dbt best practices": 1
     }
   },
   "companies": [
@@ -131,16 +144,44 @@
       "id": "hiflylabs",
       "name": "Hiflylabs",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Budapest"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Fivetran",
+        "Looker",
+        "AWS",
+        "GCP",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://builtin.com/job/senior-analytics-engineer/7034346",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Some of these are standard AWS or GCP platform services, some are even more modern ones, like Snowflake, dbt, Fivetran, or Looker.",
+          "job_poster": null,
+          "posted_date": "2025-12-03",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote or in-office"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://partners.getdbt.com/english/directory/partner/1540724/hiflylabs",
+          "note": "dbt Labs partner directory entry for Hiflylabs, Budapest (page content did not load; seen in search result)"
+        }
+      ],
       "people": [
         {
           "id": "andras-zimmer",
@@ -418,7 +459,7 @@
           "notes": "github profile https://github.com/mihaly-bodnar gives the location Budapest"
         }
       ],
-      "notes": "employer of a past Budapest dbt Meetup speaker"
+      "notes": "employer of a past Budapest dbt Meetup speaker | already on file; added a dbt job ad."
     },
     {
       "id": "lightdash",
@@ -1275,15 +1316,37 @@
       "id": "deutsche-telekom-it-solutions-hungary",
       "name": "Deutsche Telekom IT Solutions Hungary",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
-        "Budapest"
+        "Budapest",
+        "Debrecen",
+        "Pécs",
+        "Szeged"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Terraform",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Snowflake Data Engineer (REF4498U)",
+          "url": "https://jobs.smartrecruiters.com/DeutscheTelekomITSolutions/744000074011541-senior-snowflake-data-engineer-ref4498u-",
+          "source": "SmartRecruiters company page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficient in SQL for Snowflake, dbt, and data modeling (star/snowflake schema, views, materialized views)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote only within Hungary"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -1347,7 +1410,7 @@
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
         }
       ],
-      "notes": null
+      "notes": "already on file; added a dbt job ad that lists dbt in requirements."
     },
     {
       "id": "independent-no-company",
@@ -1358,7 +1421,7 @@
       "cities": [
         "Budapest"
       ],
-      "local_presence": "not_confirmed",
+      "local_presence": "confirmed",
       "dbt_signal": "weak",
       "stack_signals": [],
       "job_postings": [],
@@ -3190,9 +3253,42 @@
           "suggested_talk_angle": null,
           "past_chapter_talks": [],
           "notes": "github profile https://github.com/yana0330-kel gives the location Budapest"
+        },
+        {
+          "id": "istvan-mikko-szabo",
+          "name": "Istvan Mikko Szabo",
+          "pronouns": null,
+          "title": "Principal Analytics Engineer",
+          "city": "Hungary",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://hu.linkedin.com/in/istvanmikkoszabo"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "linkedin_search"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "analytics engineering career and dbt certification",
+          "past_chapter_talks": [],
+          "notes": "search snippet shows dbt Fundamentals certification and 'Hungary'; no public content found."
         }
       ],
-      "notes": null
+      "notes": "people whose employer is not shown."
     },
     {
       "id": "ericsson",
@@ -4582,12 +4678,445 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "bitrise",
+      "name": "Bitrise",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow",
+        "AWS",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://portfoliojobs.partechpartners.com/companies/bitrise/jobs/48158324-senior-data-engineer",
+          "source": "Partech portfolio jobs board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Being confident using dbt, Airflow, BigQuery, and cloud technologies like AWS or GCP.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote (candidates in Hungary)"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://hu.linkedin.com/in/balazsmate",
+          "note": "search snippet: Bitrise runs dbt in production with 1,200+ models on BigQuery and an 8-person data team; speaker named as Balázs Máté. Original talk page not found."
+        }
+      ],
+      "people": [
+        {
+          "id": "balazs-mate",
+          "name": "Balázs Máté",
+          "pronouns": null,
+          "title": "Staff Data Engineer",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://hu.linkedin.com/in/balazsmate"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "linkedin_search"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "unknown",
+              "title": "How Bitrise runs dbt in production: fast, cheap CI beyond Slim CI",
+              "date": null,
+              "url": "https://hu.linkedin.com/in/balazsmate",
+              "content_id": "unknownhow-bitrise-runs-dbt-in-production-fast-cheap-ci-beyo",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "search snippet describes a talk on dbt CI at scale on BigQuery; event not identified",
+              "topics": [
+                "orchestration & ci/cd",
+                "performance & scale",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://hu.linkedin.com/in/balazsmate",
+              "note": "talk: How Bitrise runs dbt in production: fast, cheap CI beyond Slim CI"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how bitrise runs dbt ci fast and cheap on a 1,200-model bigquery project",
+          "past_chapter_talks": [],
+          "notes": "location only 'Hungary' in snippets; talk event, date and url not found. verify before outreach."
+        }
+      ],
+      "notes": "company founded in Budapest. the job ad is 6+ months old and may be closed."
+    },
+    {
+      "id": "instructure",
+      "name": "Instructure",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "AWS",
+        "Python",
+        "Spark",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (Enterprise Systems)",
+          "url": "https://api.huntr.co/job/6644601f9515e00053777a73",
+          "source": "huntr job mirror",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "designing, developing, and extending dbt code to extend the Enterprise Dimensional Model",
+          "job_poster": null,
+          "posted_date": "2024-05",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad dates from May 2024 and is probably closed; the page was seen only as a search snippet."
+    },
+    {
+      "id": "allianz-technology-se-hungary",
+      "name": "Allianz Technology SE Hungary",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Oracle"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://internal-careers.allianz.com/job/Budapest-Data-Engineer-1087/1387521333/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search snippet: preparing Oracle systems for migration to dbt and Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "posting is closed ('no longer available'); dbt text came from a search snippet only."
+    },
+    {
+      "id": "bluebird",
+      "name": "Bluebird",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "medallion architecture"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer – Analytics & BI",
+          "url": "https://bluebird.hu/it-allasok-es-it-projektek/data-engineer-analytics-bi-allas-14296/",
+          "source": "bluebird.hu",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Work with medallion architecture and tools such as dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "flexible hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "it recruiter; the end client is not named. dbt is listed as optional."
+    },
+    {
+      "id": "generali-biztosito",
+      "name": "Generali Biztosító",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+          "note": "speaker page, Budapest Data+AI Forum 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "vincze-peter",
+          "name": "Vincze Péter",
+          "pronouns": null,
+          "title": "(title not shown)",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest Data+AI Forum 2026",
+              "title": "Adatplatform megújítás a Generali Biztosítónál",
+              "date": "2026-05",
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "content_id": "budapest-dataai-forum-2026adatplatform-megujitas-a-generali",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "data platform renewal at Generali Biztosító",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "note": "talk: Adatplatform megújítás a Generali Biztosítónál"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "platform renewal and data governance at a large insurer",
+          "past_chapter_talks": [],
+          "notes": "location from an in-person talk at a Budapest conference and a Hungarian employer; verify."
+        }
+      ],
+      "notes": "no dbt evidence; kept for the speaker."
+    },
+    {
+      "id": "4ig-nyrt",
+      "name": "4iG Nyrt",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+          "note": "speaker page, Budapest Data+AI Forum 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "gergely-szucs",
+          "name": "Gergely Szűcs",
+          "pronouns": null,
+          "title": "(title not shown)",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest Data+AI Forum 2026",
+              "title": "Adatvagyon konszolidáció egy folyamatosan változó cégstruktúrában",
+              "date": "2026-05",
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "content_id": "budapest-dataai-forum-2026adatvagyon-konszolidacio-egy-folya",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "data asset consolidation in a changing company structure",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "note": "talk: Adatvagyon konszolidáció egy folyamatosan változó cégstruktúrában"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "consolidating data assets when the company structure keeps changing",
+          "past_chapter_talks": [],
+          "notes": "location from an in-person talk at a Budapest conference and a Hungarian employer; verify."
+        }
+      ],
+      "notes": "no dbt evidence; kept for the speaker."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/budapest-dbt-meetup/",
     "past_meetups_derived_from": "enriched/budapest-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Hiflylabs ad on builtin.com",
+        "url": "https://builtin.com/job/senior-analytics-engineer/7034346",
+        "yielded": true,
+        "note": "dbt in ad text"
+      },
+      {
+        "name": "Deutsche Telekom IT Solutions SmartRecruiters ad",
+        "url": "https://jobs.smartrecruiters.com/DeutscheTelekomITSolutions/744000074011541-senior-snowflake-data-engineer-ref4498u-",
+        "yielded": true,
+        "note": "dbt required"
+      },
+      {
+        "name": "Bluebird ad",
+        "url": "https://bluebird.hu/it-allasok-es-it-projektek/data-engineer-analytics-bi-allas-14296/",
+        "yielded": true,
+        "note": "dbt optional"
+      },
+      {
+        "name": "Budapest Data+AI Forum 2026 data speakers",
+        "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+        "yielded": true,
+        "note": "two new local speakers on governance and platforms; no dbt talks"
+      },
+      {
+        "name": "Budapest Data+AI Forum detailed schedule and program",
+        "url": "https://budapestdata.hu/en/dai2026/detailed-schedule/",
+        "yielded": false,
+        "note": "fetch returned navigation only"
+      },
+      {
+        "name": "Budapest BI Forum 2025 call for speakers",
+        "url": "https://sessionize.com/budapestbi25",
+        "yielded": false,
+        "note": "no speaker list"
+      },
+      {
+        "name": "Budapest Data Meetup, dbt ecosystem event 2023",
+        "url": "https://www.meetup.com/budapest-data-meetup/events/295733306/",
+        "yielded": false,
+        "note": "online, 2023, speakers not Budapest-based and already older than 2 years"
+      },
+      {
+        "name": "WiDS Budapest 2025 (Corvinus)",
+        "url": "https://www.uni-corvinus.hu/post/event/women-in-data-science-budapest-is-back/?lang=en",
+        "yielded": false,
+        "note": "academic data science line-up, not dbt-relevant; speakers Petra Viola (Google) and Anikó Hannák (Zurich)"
+      },
+      {
+        "name": "Allianz careers ad",
+        "url": "https://internal-careers.allianz.com/job/Budapest-Data-Engineer-1087/1387521333/",
+        "yielded": false,
+        "note": "posting removed"
+      },
+      {
+        "name": "cvonline.hu ads",
+        "url": "https://www.cvonline.hu/en/allas/analytics-engineering-chapter-lead-1848724",
+        "yielded": false,
+        "note": "404 on fetch"
+      },
+      {
+        "name": "GitHub balazs-mate",
+        "url": "https://github.com/balazs-mate",
+        "yielded": false,
+        "note": "no location, no dbt content"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -4845,6 +5374,21 @@
       "name": "Budapest Power BI Meetup Group",
       "url": "https://www.meetup.com/budapest-power-bi-meetup/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women Techmakers Budapest",
+      "url": "https://meetup.com/wtmbudapest",
+      "note": "seen in search result; not read"
+    },
+    {
+      "name": "WiDS Budapest (Corvinus University)",
+      "url": "https://widsbudapest.org/",
+      "note": "annual event; organiser is the university"
+    },
+    {
+      "name": "Data Natives, Budapest",
+      "url": "https://www.meetup.com/big-data-budapest/",
+      "note": "1,491 members per search snippet"
     }
   ]
 }

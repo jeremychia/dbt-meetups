@@ -4,12 +4,16 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Bogotá companies using dbt, and people who could speak at or attend the Bogotá dbt Meetup.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Bogotá (Bogotá dbt Meetup)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: Cazvid and Built In mirror closed ads with full text; the Greenhouse and Lever originals had expired.",
+      "Lesson: WebSearch finds no Bogotá dbt bloggers or talks in Spanish or English; job ads were the only productive source.",
+      "Lesson: Juan Manuel Perafan (dbt spotlight, Coalesce speaker) is Colombian but lives in the Netherlands, so he is not a regional lead."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,49 +51,55 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "No first-time or proven speakers were found in the region beyond people already on file.",
+      "Most ads are closed; dbt_signal reflects the ad text, not current hiring.",
+      "Sprocket International Group (Senior Analytics Engineer, requires dbt) is in Medellín, outside the region, so it is not recorded.",
+      "Two fetches ran in one message once, against the one-call rule."
     ],
     "counts": {
-      "companies": 58,
-      "people": 118,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 4,
-      "unique_content_items": 2,
+      "companies": 65,
+      "people": 119,
+      "job_postings": 7,
+      "companies_with_job_postings": 6,
+      "speaker_evidence_items": 5,
+      "unique_content_items": 3,
       "people_with_linkedin": 66,
       "people_with_contact": 85,
       "people_who_spoke_at_this_chapter": 14,
       "internal_vinted": 0,
       "level": {
         "working": 113,
-        "leadership": 5
+        "leadership": 6
       },
       "speaker_potential": {
         "high": 14,
         "low": 100,
-        "medium": 4
+        "medium": 5
       },
       "attendee_potential": {
-        "medium": 115,
+        "medium": 116,
         "high": 3
       },
       "priority_tier": {
         "2": 10,
         "3": 100,
         "1": 4,
-        "connector": 4
+        "connector": 5
       },
-      "watchlist_companies": 57,
+      "watchlist_companies": 60,
       "past_meetups": 7,
       "lead_type": {
         "proven_speaker": 18,
-        "no_public_content": 100
+        "no_public_content": 101
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 14,
         "github": 100,
-        "conference_or_meetup_agenda": 4
+        "conference_or_meetup_agenda": 4,
+        "other": 1
       }
     },
     "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
@@ -122,7 +132,8 @@
       "data warehouse & platforms"
     ],
     "topic_counts": {
-      "community": 4
+      "community": 5,
+      "data engineering": 1
     }
   },
   "companies": [
@@ -3097,15 +3108,45 @@
       "id": "wizeline",
       "name": "Wizeline",
       "type": "employer",
-      "watchlist": true,
+      "watchlist": false,
       "excluded_from_outreach": false,
       "cities": [
         "Bogotá"
       ],
-      "local_presence": "not_confirmed",
-      "dbt_signal": "weak",
-      "stack_signals": [],
-      "job_postings": [],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Mid Data Engineer",
+          "url": "https://builtin.com/job/mid-data-engineer-bogot-and-medell-n/8038701",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Develop and maintain robust data models in Snowflake using dbt, adhering to best practices",
+          "job_poster": null,
+          "posted_date": "2026-03-05",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        },
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://builtin.com/job/senior-data-engineer-bogot-and-medell-n/8029090",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Mastery of dbt (data build tool) for data modeling, transformation, testing, and documentation.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
       "other_evidence": [],
       "people": [
         {
@@ -3190,7 +3231,7 @@
           "notes": "github profile https://github.com/alexbonella gives the location Bogota"
         }
       ],
-      "notes": null
+      "notes": "two ads for Bogotá and Medellín, both removed by 2026-03-05 (date is when the ad came down)."
     },
     {
       "id": "freelance",
@@ -5909,12 +5950,331 @@
         }
       ],
       "notes": null
+    },
+    {
+      "id": "rappi",
+      "name": "Rappi",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bogotá"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Airflow",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://cazvid.com/es/empleo/data-engineer-2608b1cd",
+          "source": "Cazvid",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Experiencia implementando dbt (data build tool) para transformación y pruebas de calidad de datos",
+          "job_poster": null,
+          "posted_date": "2026-07-17",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://www.snowflake.com/en/news/press-releases/snowflake-launches-in-colombia/",
+          "note": "Snowflake launch in Colombia names Rappi as a Snowflake customer."
+        }
+      ],
+      "people": [],
+      "notes": "ad lists dbt as a valued extra; ad closed by 2026-09-15. A search summary also tied Rappi data roles to dbt, not verified on the page."
+    },
+    {
+      "id": "perficient",
+      "name": "Perficient",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bogotá"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Data Engineer Snowflake DBT",
+          "url": "https://cazvid.com/es/empleo/lead-data-engineer-snowflake-dbt-008b7ad2",
+          "source": "Cazvid",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build and optimize data pipelines using Snowflake, dbt, Python/SQL, and Azure tools.",
+          "job_poster": null,
+          "posted_date": "2026-07-28",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "not specified"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad closed 2026-09-26."
+    },
+    {
+      "id": "bark",
+      "name": "BARK",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Colombia (remote)"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Looker"
+      ],
+      "job_postings": [
+        {
+          "title": "Lead Analytics Engineer, Business Intelligence (Colombia)",
+          "url": "https://builtin.com/job/lead-analytics-engineer-business-intelligence-colombia/7726991",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Own part of the data-modeling roadmap and enforce modular dbt development patterns.",
+          "job_poster": null,
+          "posted_date": "2025-12-18",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "remote role open to Colombia, hired through Deel; not tied to Bogotá. Ad removed."
+    },
+    {
+      "id": "allshore-talent",
+      "name": "Allshore Talent",
+      "type": "outsourcing",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bogotá"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Sigma"
+      ],
+      "job_postings": [
+        {
+          "title": "dbt Developer (Snowflake and Sigma), LATAM",
+          "url": "https://www.jointaro.com/jobs/allshore-talent/dbt-developer-snowflake-and-sigma-latam",
+          "source": "Taro",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "role requires expertise in dbt, Snowflake and Sigma (from search result summary; page itself did not load)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "staffing firm; remote LATAM ad listing Bogotá among locations. The Recruitee page returned 404."
+    },
+    {
+      "id": "artefact",
+      "name": "Artefact",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bogotá"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer Colombia",
+          "url": "https://job-boards.greenhouse.io/artefactlinkedin/jobs/7324491002",
+          "source": "company careers page (Greenhouse)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": "",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "analytics engineer ad in Bogotá; dbt is not mentioned in the text."
+    },
+    {
+      "id": "nubank",
+      "name": "Nubank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bogotá"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "a search result showed a Senior Analytics Engineer role in Bogotá (hybrid) but the page now shows no openings, so dbt use is not verified."
+    },
+    {
+      "id": "databricks-user-group-bogota",
+      "name": "Databricks User Group Bogotá",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bogotá"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-bogota-databricks-user-group-presents-databricks-bootcamp-kickoff-spark-your-data-journey/",
+          "note": "Databricks Bootcamp Kickoff, 17 confirmations; year not shown on page."
+        }
+      ],
+      "people": [
+        {
+          "id": "miguel-diaz",
+          "name": "Miguel Diaz",
+          "pronouns": null,
+          "title": "CEO, Talento para TI",
+          "city": "Bogotá",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Databricks User Group Bogotá",
+              "title": "Databricks Bootcamp Kickoff: Spark Your Data Journey",
+              "date": null,
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-bogota-databricks-user-group-presents-databricks-bootcamp-kickoff-spark-your-data-journey/",
+              "content_id": "databricks-user-group-bogotadatabricks-bootcamp-kickoff-spar",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as organiser of the Bogotá Databricks User Group kickoff event",
+              "topics": [
+                "community",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-bogota-databricks-user-group-presents-databricks-bootcamp-kickoff-spark-your-data-journey/",
+              "note": "organiser: Databricks Bootcamp Kickoff: Spark Your Data Journey"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to the Bogotá Databricks and data community",
+          "past_chapter_talks": [],
+          "notes": "organiser of the Bogotá Databricks User Group event; region is from the group's location, event year not shown."
+        }
+      ],
+      "notes": "local data community; could co-host or share the meetup."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/bogota-dbt-meetup/",
     "past_meetups_derived_from": "enriched/bogota-dbt-meetup.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "Greenhouse (Artefact)",
+        "url": "https://job-boards.greenhouse.io/artefactlinkedin/jobs/7324491002",
+        "yielded": true,
+        "note": "Bogotá analytics engineer ad, no dbt"
+      },
+      {
+        "name": "Cazvid job pages",
+        "url": "https://cazvid.com/es/empleo/data-engineer-2608b1cd",
+        "yielded": true,
+        "note": "Rappi and Perficient ads with dbt text"
+      },
+      {
+        "name": "Built In",
+        "url": "https://builtin.com/job/mid-data-engineer-bogot-and-medell-n/8038701",
+        "yielded": true,
+        "note": "Wizeline and BARK ads with dbt text"
+      },
+      {
+        "name": "Computrabajo and elempleo.com",
+        "url": "https://co.computrabajo.com/",
+        "yielded": false,
+        "note": "pages returned empty or 410, no dbt filter found"
+      },
+      {
+        "name": "Hello Data Colomb.IA 2025 agenda",
+        "url": "https://impactotic.co/micrositios-tic/inteligencia-artificial/hello-data-colomb-ia-2025-el-evento-de-ia-y-analitica-en-bogota/",
+        "yielded": false,
+        "note": "executive and AI talks, nothing on dbt"
+      },
+      {
+        "name": "WiDS Bogotá / Data Science Fem",
+        "url": "https://www.widsworldwide.org/?p=11562",
+        "yielded": false,
+        "note": "no named Bogotá organisers"
+      },
+      {
+        "name": "dbt Labs Spanish webinar",
+        "url": "https://www.getdbt.com/resources/webinars/una-introduccion-a-la-transformacion-de-datos-con-dbt-cloud",
+        "yielded": false,
+        "note": "dbt Labs staff, not local"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -6152,6 +6512,21 @@
       "name": "PyLadies Bogotá",
       "url": "https://www.meetup.com/pyladies-co-bogota/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "dbt Slack #local-colombia",
+      "url": "https://meetup.com/bogota-dbt-meetup",
+      "note": "named on the Bogotá dbt Meetup page"
+    },
+    {
+      "name": "Colombia.AI / Machine Learning & Data Science Bogotá",
+      "url": "https://meetup.com/machine-learning-data-science-bogota",
+      "note": "largest local data and AI group, 5,300+ members"
+    },
+    {
+      "name": "Databricks User Group Bogotá",
+      "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-bogota-databricks-user-group-presents-databricks-bootcamp-kickoff-spark-your-data-journey/",
+      "note": "organised by Talento para TI"
     }
   ]
 }

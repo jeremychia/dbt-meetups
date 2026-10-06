@@ -4,12 +4,17 @@
     "generated_at": "2026-10-06",
     "prepared_for": "Jeremy Chia (dbt meetups)",
     "purpose": "Find Bratislava companies using dbt, and people who could speak at or attend the Bratislava dbt Meetup Group.",
-    "version": 2,
+    "version": 3,
     "schema_version": 4,
     "region": "Bratislava (Bratislava dbt Meetup Group)",
     "method": [
       "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
-      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: profesia.sk, startup.jobs and careers.ey.com return 403 or expired pages to fetches, so job ads could only be recorded from search snippets.",
+      "Lesson: ics.science.upjs.sk and kosiceitvalley.sk list Kosice in the Cloud speakers with employer and abstract, and they cover dbt talks in Slovakia.",
+      "Lesson: Slovak-language searches for dbt returned almost nothing new; English queries with a company name worked better.",
+      "Lesson: the Databricks user group pages returned 404 on fetch, so the Bratislava event date rests on a search snippet."
     ],
     "field_definitions": {
       "metadata.region": "the meetup chapter this dataset serves",
@@ -47,48 +52,52 @@
     },
     "caveats": [
       "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
-      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives."
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "Job ads were not opened (403, expired or 404), so dbt_signal rests on search snippets and is medium at most.",
+      "Andrea Hronska Huzvarova spoke in Kosice, which is far outside the Bratislava region, so her location is unknown.",
+      "The Databricks Bratislava event date (12 May, taken as 2026) comes from a search snippet only."
     ],
     "counts": {
-      "companies": 17,
-      "people": 36,
-      "job_postings": 0,
-      "companies_with_job_postings": 0,
-      "speaker_evidence_items": 29,
-      "unique_content_items": 10,
+      "companies": 23,
+      "people": 40,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 33,
+      "unique_content_items": 14,
       "people_with_linkedin": 8,
       "people_with_contact": 15,
       "people_who_spoke_at_this_chapter": 15,
       "internal_vinted": 0,
       "level": {
         "leadership": 8,
-        "working": 28
+        "working": 32
       },
       "speaker_potential": {
-        "high": 18,
-        "medium": 8,
+        "high": 19,
+        "medium": 11,
         "low": 10
       },
       "attendee_potential": {
-        "medium": 35,
+        "medium": 39,
         "high": 1
       },
       "priority_tier": {
-        "2": 12,
+        "2": 15,
         "1": 3,
-        "connector": 6,
+        "connector": 7,
         "3": 15
       },
-      "watchlist_companies": 16,
+      "watchlist_companies": 18,
       "past_meetups": 6,
       "lead_type": {
-        "proven_speaker": 26,
-        "no_public_content": 10
+        "proven_speaker": 29,
+        "no_public_content": 11
       },
       "people_with_self_stated_pronouns": 0,
       "sourced_via": {
         "chapter_meetup_history": 15,
-        "conference_or_meetup_agenda": 22,
+        "conference_or_meetup_agenda": 26,
         "github": 10
       }
     },
@@ -124,7 +133,12 @@
     "topic_counts": {
       "analytics engineering": 13,
       "business intelligence": 10,
-      "community": 6
+      "community": 7,
+      "data warehouse & platforms": 2,
+      "data quality & testing": 1,
+      "dbt best practices": 1,
+      "dbt migration & adoption": 1,
+      "data modeling": 1
     }
   },
   "companies": [
@@ -495,9 +509,38 @@
       ],
       "local_presence": "not_confirmed",
       "dbt_signal": "strong",
-      "stack_signals": [],
-      "job_postings": [],
-      "other_evidence": [],
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "EU I Analytics Engineer",
+          "url": "https://builtin.com/job/eu-i-analytics-engineer/7998588",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Possesses experience with dbt, Snowflake, and Fivetran.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://ics.science.upjs.sk/adui/?p=3387",
+          "note": "Infinite Lambda co-organised Kosice in the Cloud vol. 8, with a dbt testing talk"
+        },
+        {
+          "type": "job_board",
+          "url": "https://www.profesia.sk/hu/allas/infinite-lambda-limited/O4105337",
+          "note": "Infinite Lambda advertises on profesia.sk, so it hires in Slovakia"
+        }
+      ],
       "people": [
         {
           "id": "tomas-janotik",
@@ -778,9 +821,64 @@
             }
           ],
           "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "andrea-hronska-huzvarova",
+          "name": "Andrea Hronska Huzvarova",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Kosice in the Cloud vol. 8",
+              "title": "Test Smarter, Not Harder: Practical dbt Testing for Analytics Teams",
+              "date": "2026-03-25",
+              "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+              "content_id": "kosice-in-the-cloud-vol-8test-smarter-not-harder-practical-d",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "hands-on walkthrough of custom dbt tests and packages on a sample project",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+              "note": "talk: Test Smarter, Not Harder: Practical dbt Testing for Analytics Teams"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "practical dbt testing beyond basic checks, with dbt-utils and dbt-expectations",
+          "past_chapter_talks": [],
+          "notes": "spoke in Kosice; home city not stated."
         }
       ],
-      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker | ad does not name a city; company description lists Slovakia among its teams."
     },
     {
       "id": "dbt-labs",
@@ -2536,12 +2634,412 @@
       "other_evidence": [],
       "people": [],
       "notes": null
+    },
+    {
+      "id": "kanadevia-inova",
+      "name": "Kanadevia Inova",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Streamlit",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://startup.jobs/data-engineer-kanadevia-inova-8924589",
+          "source": "startup.jobs",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "strong hands-on familiarity with Snowflake, SQL, and DBT operational workflows",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid, 2 days home office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad seen in a search snippet only; the page returned 403."
+    },
+    {
+      "id": "ey",
+      "name": "EY",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://careers.ey.com/ey/job/Bratislava-Junior-Data-Engineer-811-02/1406129733/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "practical experience or strong theoretical understanding of Databricks and dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://www.profesia.sk/praca/ey-ernst-young/O5306376?search_id=4bf0869e-c61b-4105-b46a-7b1779b91fdd",
+          "note": "same ad on profesia.sk; 403 on fetch"
+        }
+      ],
+      "people": [],
+      "notes": "careers page now says the job is no longer available."
+    },
+    {
+      "id": "adastra",
+      "name": "Adastra",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+          "note": "co-organised the first Databricks user group Bratislava event"
+        }
+      ],
+      "people": [
+        {
+          "id": "luboslav-gabal",
+          "name": "Luboslav Gabal",
+          "pronouns": null,
+          "title": "Adastra",
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Bratislava, first event",
+              "title": "Transitioning from legacy ecosystems to Databricks Lakehouse",
+              "date": "2026-05-12",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "content_id": "databricks-user-group-bratislava-first-eventtransitioning-fr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "migration talk at the first Bratislava Databricks user group",
+              "topics": [
+                "dbt migration & adoption",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "note": "talk: Transitioning from legacy ecosystems to Databricks Lakehouse"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "moving from legacy warehouses to a lakehouse, and where dbt fits",
+          "past_chapter_talks": [],
+          "notes": "in-person talk at a local event plus a local employer office (README section 6, medium)."
+        }
+      ],
+      "notes": "no dbt evidence found; a data consultancy with a Slovak office (ADASTRA Slovakia ads)."
+    },
+    {
+      "id": "multitude",
+      "name": "Multitude",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+          "note": "employee spoke at the Bratislava Databricks user group"
+        }
+      ],
+      "people": [
+        {
+          "id": "peter-karas",
+          "name": "Peter Karas",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Bratislava, first event",
+              "title": "Beyond the Diagram: The Concrete Decisions Behind Each Medallion Layer",
+              "date": "2026-05-12",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "content_id": "databricks-user-group-bratislava-first-eventbeyond-the-diagr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "layer-by-layer modelling decisions in a medallion architecture",
+              "topics": [
+                "data modeling",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "note": "talk: Beyond the Diagram: The Concrete Decisions Behind Each Medallion Layer"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "concrete design decisions in each medallion layer",
+          "past_chapter_talks": [],
+          "notes": "title and city not seen; spoke in Bratislava."
+        }
+      ],
+      "notes": "no dbt evidence found."
+    },
+    {
+      "id": "kosice-it-valley",
+      "name": "Kosice IT Valley",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kosice"
+      ],
+      "local_presence": "none",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://ics.science.upjs.sk/adui/?p=3387",
+          "note": "runs Kosice in the Cloud, which hosts dbt talks"
+        }
+      ],
+      "people": [
+        {
+          "id": "dominik-simco",
+          "name": "Dominik Simco",
+          "pronouns": null,
+          "title": "Technical Talent Acquisition and Community Expert",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Kosice in the Cloud vol. 8",
+              "title": "Host and moderator",
+              "date": "2026-03",
+              "url": "https://ics.science.upjs.sk/adui/?p=3387",
+              "content_id": "kosice-in-the-cloud-vol-8host-and-moderator",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "hosted the meetup that included a dbt testing talk",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://ics.science.upjs.sk/adui/?p=3387",
+              "note": "host: Host and moderator"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to Slovak data speakers",
+          "past_chapter_talks": [],
+          "notes": "host and moderator of Kosice in the Cloud vol. 8; city not stated."
+        }
+      ],
+      "notes": "outside the Bratislava region; useful for introductions to Slovak speakers."
+    },
+    {
+      "id": "aj-ty-v-it",
+      "name": "Aj Ty v IT",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community_page",
+          "url": "https://slovakwomenintech.ajtyvit.sk/en/about-the-conference/",
+          "note": "organises Slovak Women in Tech and the Women in IT Awards in Bratislava"
+        }
+      ],
+      "people": [],
+      "notes": "women in IT community; not data specific."
     }
   ],
   "sources": {
     "chapter_past_events": "https://www.meetup.com/bratislava-dbt-meetup-group/",
     "past_meetups_derived_from": "enriched/bratislava-dbt-meetup-group.json",
-    "checked": []
+    "checked": [
+      {
+        "name": "profesia.sk search results",
+        "url": "https://www.profesia.sk/en/work/data-engineer/",
+        "yielded": false,
+        "note": "ad pages return 403; only snippets seen (EY junior data engineer mentions dbt)"
+      },
+      {
+        "name": "careers.ey.com junior data engineer Bratislava",
+        "url": "https://careers.ey.com/ey/job/Bratislava-Junior-Data-Engineer-811-02/1406129733/",
+        "yielded": true,
+        "note": "ad no longer available; snippet says Databricks and dbt"
+      },
+      {
+        "name": "startup.jobs Kanadevia Inova",
+        "url": "https://startup.jobs/data-engineer-kanadevia-inova-8924589",
+        "yielded": true,
+        "note": "fetch blocked; search snippet shows dbt, Snowflake, Streamlit, Power BI"
+      },
+      {
+        "name": "builtin.com Infinite Lambda EU Analytics Engineer",
+        "url": "https://builtin.com/job/eu-i-analytics-engineer/7998588",
+        "yielded": true,
+        "note": "dbt required; ad removed 2026-03-27; locations not named"
+      },
+      {
+        "name": "Kosice in the Cloud vol. 8",
+        "url": "https://ics.science.upjs.sk/adui/?p=3387",
+        "yielded": true,
+        "note": "dbt testing talk by Infinite Lambda analytics engineer"
+      },
+      {
+        "name": "Kosice IT Valley event page",
+        "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+        "yielded": true,
+        "note": "date, speakers and moderator"
+      },
+      {
+        "name": "dev.events Slovakia data meetups",
+        "url": "https://dev.events/meetups/EU/SK/data",
+        "yielded": false,
+        "note": "only online events listed"
+      },
+      {
+        "name": "Databricks user group Bratislava first event (search result)",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+        "yielded": true,
+        "note": "organisers and two speakers seen in snippet; page itself 404"
+      },
+      {
+        "name": "Slovak Women in Tech conference",
+        "url": "https://slovakwomenintech.ajtyvit.sk/en/about-the-conference/",
+        "yielded": true,
+        "note": "women in tech community; 2025 conference not held, awards held instead"
+      },
+      {
+        "name": "Medium, dev.to, substack and github searches for Bratislava dbt authors",
+        "url": "https://github.com/dbt-labs/dbt-utils",
+        "yielded": false,
+        "note": "no Slovak authors found"
+      }
+    ]
   },
   "past_meetups": [
     {
@@ -2781,6 +3279,21 @@
       "name": "Bratislava Databricks User Group",
       "url": "https://www.meetup.com/bratislava-databricks-user-group/",
       "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Databricks User Group Bratislava",
+      "url": "https://usergroups.databricks.com/databricks-user-group-bratislava/",
+      "note": "first in-person event 12 May with Adastra, 52 RSVPs"
+    },
+    {
+      "name": "Kosice in the Cloud",
+      "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+      "note": "Kosice meetup series with dbt talks; outside the region but a source of speakers"
+    },
+    {
+      "name": "Slovak Women in Tech (Aj Ty v IT)",
+      "url": "https://slovakwomenintech.ajtyvit.sk/en/about-the-conference/",
+      "note": "women in IT conference since 2022 and Women in IT Awards in Bratislava"
     }
   ]
 }
