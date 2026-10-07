@@ -17,10 +17,10 @@ This file holds what is specific to Dublin. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 73 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 153 |
+| Based in the region | 156 |
 | Based elsewhere | 0 |
-| Location unknown | 19 |
-| With a LinkedIn profile | 62 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 74 |
 | Job ads mentioning dbt | 11 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

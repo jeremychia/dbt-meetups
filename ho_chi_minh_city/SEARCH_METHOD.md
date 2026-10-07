@@ -12,15 +12,15 @@ This file holds what is specific to Ho Chi Minh City. The method, scoring rules,
 | | Count |
 |---|---|
 | Companies | 59 |
-| People | 127 |
+| People | 126 |
 | Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 40 |
+| Proven speakers | 39 |
 | Spoke at this chapter before | 25 |
-| Based in the region | 91 |
+| Based in the region | 95 |
 | Based elsewhere | 0 |
-| Location unknown | 36 |
-| With a LinkedIn profile | 50 |
+| Location unknown | 31 |
+| With a LinkedIn profile | 61 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->

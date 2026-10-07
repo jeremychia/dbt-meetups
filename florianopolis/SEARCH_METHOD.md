@@ -18,9 +18,9 @@ This file holds what is specific to Floripa. The method, scoring rules, schema a
 | Proven speakers | 27 |
 | Spoke at this chapter before | 21 |
 | Based in the region | 61 |
-| Based elsewhere | 0 |
-| Location unknown | 21 |
-| With a LinkedIn profile | 22 |
+| Based elsewhere | 3 |
+| Location unknown | 18 |
+| With a LinkedIn profile | 30 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Helsinki. The method, scoring rules, schema 
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 67 |
 | Spoke at this chapter before | 17 |
-| Based in the region | 70 |
-| Based elsewhere | 0 |
-| Location unknown | 41 |
-| With a LinkedIn profile | 13 |
+| Based in the region | 80 |
+| Based elsewhere | 1 |
+| Location unknown | 30 |
+| With a LinkedIn profile | 34 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->
