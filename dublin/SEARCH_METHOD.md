@@ -20,7 +20,7 @@ This file holds what is specific to Dublin. The method, scoring rules, schema an
 | Based in the region | 156 |
 | Based elsewhere | 0 |
 | Location unknown | 16 |
-| With a LinkedIn profile | 74 |
+| With a LinkedIn profile | 75 |
 | Job ads mentioning dbt | 11 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

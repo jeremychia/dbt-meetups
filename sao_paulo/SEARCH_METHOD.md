@@ -17,10 +17,10 @@ This file holds what is specific to São Paulo. The method, scoring rules, schem
 | First-time speakers (publish, no talk yet) | 5 |
 | Proven speakers | 46 |
 | Spoke at this chapter before | 22 |
-| Based in the region | 110 |
-| Based elsewhere | 0 |
-| Location unknown | 40 |
-| With a LinkedIn profile | 68 |
+| Based in the region | 112 |
+| Based elsewhere | 1 |
+| Location unknown | 37 |
+| With a LinkedIn profile | 72 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

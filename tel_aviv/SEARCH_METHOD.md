@@ -20,7 +20,7 @@ This file holds what is specific to Tel Aviv. The method, scoring rules, schema 
 | Based in the region | 67 |
 | Based elsewhere | 0 |
 | Location unknown | 18 |
-| With a LinkedIn profile | 11 |
+| With a LinkedIn profile | 16 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
