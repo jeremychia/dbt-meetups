@@ -20,7 +20,7 @@ This file holds what is specific to Salt Lake City and the Wasatch Front. The me
 | Based in the region | 162 |
 | Based elsewhere | 2 |
 | Location unknown | 45 |
-| With a LinkedIn profile | 113 |
+| With a LinkedIn profile | 121 |
 | Job ads mentioning dbt | 19 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Portland. The method, scoring rules, schema 
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 33 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 76 |
-| Based elsewhere | 0 |
+| Based in the region | 70 |
+| Based elsewhere | 6 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 11 |
+| With a LinkedIn profile | 18 |
 | Job ads mentioning dbt | 1 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Riyadh. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 11 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 92 |
-| Based elsewhere | 0 |
-| Location unknown | 7 |
-| With a LinkedIn profile | 38 |
+| Based in the region | 93 |
+| Based elsewhere | 1 |
+| Location unknown | 5 |
+| With a LinkedIn profile | 48 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

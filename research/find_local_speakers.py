@@ -1,7 +1,7 @@
 """Lists local speaker and practitioner candidates for a city from sources web search misses, without searching.
 
 usage, from the repo root:
-  python3 research/find_local_speakers.py <city folder> <out.json> --lat 40.76 --lon -111.89 --places "Salt Lake City,Lehi,Provo" [--since 2024-01-01]
+  python3 research/find_local_speakers.py <city folder> <out.json> --lat 40.76 --lon -111.89 --places "Salt Lake City,Lehi,Provo" [--since 2024-01-01] [--exclude "Maine,ME"]
 
 - meetup: every data group within 50 km (groupSearch), and the named speaker of each past event since --since. meetup's
   speakerDetails field names the speaker even when the event text does not. hosts are listed as possible connectors.
@@ -151,8 +151,9 @@ USER_SEARCH = """query($q:String!,$after:String){search(type:USER,query:$q,first
 nodes{... on User{login name bio company location url twitterUsername socialAccounts(first:10){nodes{url}}}}}}"""
 
 
-def github(places):
+def github(places, exclude=()):
     """one graphql call returns 100 users with their profile and listed accounts, so a region costs a handful of calls, not two per user."""
+    other = re.compile(r"\b(" + "|".join(map(re.escape, exclude)) + r")\b", re.I) if exclude else None
     users = {}
     for q in github_queries(places):
         after = None
@@ -181,6 +182,8 @@ def github(places):
             continue
         if not DATA_ROLE.search(bio + " " + (u.get("company") or "")):
             continue
+        if other and other.search(u.get("location") or ""):  # github matches location words, so "Portland" also finds Portland, Maine
+            continue
         social = [a["url"] for a in ((u.get("socialAccounts") or {}).get("nodes") or [])] + ([f"https://x.com/{u['twitterUsername']}"] if u.get("twitterUsername") else [])
         out.append({"source": "github", "name": u["name"].strip(), "company": (u.get("company") or "").lstrip("@").strip() or None, "title": bio[:160] or None,
                     "location": u.get("location"), "url": u["url"], "links": social, "role": "practitioner"})
@@ -193,6 +196,7 @@ def main():
     ap.add_argument("--lat", type=float, required=True); ap.add_argument("--lon", type=float, required=True)
     ap.add_argument("--places", required=True, help="comma-separated towns in the region, as github and bevy spell them")
     ap.add_argument("--since", default="2024-01-01")
+    ap.add_argument("--exclude", default="", help="comma-separated words that mark another place with the same town name, such as \"Maine,ME,Road\"")
     a = ap.parse_args()
     places = [p.strip() for p in a.places.split(",") if p.strip()]
     f = glob.glob(f"{a.city}/*_dbt_companies.json")[0]
@@ -201,7 +205,7 @@ def main():
     print(f"meetup: {len(groups)} data groups, {len(m)} speakers and hosts", file=sys.stderr)
     b, chapters = bevy(places, a.since)
     print(f"bevy: {len(chapters)} chapters ({', '.join(t for _, _, t in chapters)}), {len(b)} speakers and hosts", file=sys.stderr)
-    g = github(places)
+    g = github(places, [x.strip() for x in a.exclude.split(",") if x.strip()])
     print(f"github: {len(g)} data people", file=sys.stderr)
     rows = m + b + g
     for r in rows:

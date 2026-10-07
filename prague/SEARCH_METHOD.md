@@ -12,15 +12,15 @@ This file holds what is specific to Prague. The method, scoring rules, schema an
 | | Count |
 |---|---|
 | Companies | 51 |
-| People | 80 |
-| Tier 1 leads | 6 |
+| People | 79 |
+| Tier 1 leads | 5 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 42 |
+| Proven speakers | 41 |
 | Spoke at this chapter before | 13 |
-| Based in the region | 49 |
+| Based in the region | 52 |
 | Based elsewhere | 0 |
-| Location unknown | 31 |
-| With a LinkedIn profile | 27 |
+| Location unknown | 27 |
+| With a LinkedIn profile | 38 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
