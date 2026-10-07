@@ -20,7 +20,7 @@ This file holds what is specific to Ho Chi Minh City. The method, scoring rules,
 | Based in the region | 95 |
 | Based elsewhere | 0 |
 | Location unknown | 31 |
-| With a LinkedIn profile | 61 |
+| With a LinkedIn profile | 62 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->
