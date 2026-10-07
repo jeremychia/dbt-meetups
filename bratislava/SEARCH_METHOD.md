@@ -17,10 +17,10 @@ This file holds what is specific to Bratislava. The method, scoring rules, schem
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 29 |
 | Spoke at this chapter before | 15 |
-| Based in the region | 17 |
-| Based elsewhere | 0 |
-| Location unknown | 23 |
-| With a LinkedIn profile | 8 |
+| Based in the region | 19 |
+| Based elsewhere | 3 |
+| Location unknown | 18 |
+| With a LinkedIn profile | 17 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

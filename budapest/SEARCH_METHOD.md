@@ -18,9 +18,9 @@ This file holds what is specific to Budapest. The method, scoring rules, schema 
 | Proven speakers | 37 |
 | Spoke at this chapter before | 14 |
 | Based in the region | 68 |
-| Based elsewhere | 0 |
-| Location unknown | 20 |
-| With a LinkedIn profile | 21 |
+| Based elsewhere | 2 |
+| Location unknown | 18 |
+| With a LinkedIn profile | 23 |
 | Job ads mentioning dbt | 6 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

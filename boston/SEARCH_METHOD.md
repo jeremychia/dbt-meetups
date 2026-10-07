@@ -20,7 +20,7 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 | Based in the region | 476 |
 | Based elsewhere | 4 |
 | Location unknown | 13 |
-| With a LinkedIn profile | 224 |
+| With a LinkedIn profile | 286 |
 | Job ads mentioning dbt | 79 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->

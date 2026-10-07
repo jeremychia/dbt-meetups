@@ -17,10 +17,10 @@ This file holds what is specific to Athens. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 25 |
 | Spoke at this chapter before | 10 |
-| Based in the region | 94 |
-| Based elsewhere | 0 |
-| Location unknown | 9 |
-| With a LinkedIn profile | 36 |
+| Based in the region | 95 |
+| Based elsewhere | 1 |
+| Location unknown | 7 |
+| With a LinkedIn profile | 52 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->

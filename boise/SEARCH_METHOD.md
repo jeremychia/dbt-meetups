@@ -17,10 +17,10 @@ This file holds what is specific to Boise. The method, scoring rules, schema and
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 8 |
 | Spoke at this chapter before | 2 |
-| Based in the region | 9 |
+| Based in the region | 11 |
 | Based elsewhere | 0 |
-| Location unknown | 6 |
-| With a LinkedIn profile | 1 |
+| Location unknown | 4 |
+| With a LinkedIn profile | 8 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

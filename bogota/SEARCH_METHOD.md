@@ -20,7 +20,7 @@ This file holds what is specific to Bogotá. The method, scoring rules, schema a
 | Based in the region | 105 |
 | Based elsewhere | 0 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 66 |
+| With a LinkedIn profile | 70 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

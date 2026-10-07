@@ -18,9 +18,9 @@ This file holds what is specific to Abuja. The method, scoring rules, schema and
 | Proven speakers | 21 |
 | Spoke at this chapter before | 6 |
 | Based in the region | 76 |
-| Based elsewhere | 0 |
-| Location unknown | 15 |
-| With a LinkedIn profile | 45 |
+| Based elsewhere | 1 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 48 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->
