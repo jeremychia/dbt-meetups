@@ -17,10 +17,10 @@ This file holds what is specific to Wellington. The method, scoring rules, schem
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 27 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 35 |
+| Based in the region | 38 |
 | Based elsewhere | 0 |
-| Location unknown | 9 |
-| With a LinkedIn profile | 5 |
+| Location unknown | 6 |
+| With a LinkedIn profile | 16 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Washington DC. The method, scoring rules, sc
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 44 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 129 |
-| Based elsewhere | 0 |
-| Location unknown | 17 |
-| With a LinkedIn profile | 71 |
+| Based in the region | 130 |
+| Based elsewhere | 1 |
+| Location unknown | 15 |
+| With a LinkedIn profile | 78 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

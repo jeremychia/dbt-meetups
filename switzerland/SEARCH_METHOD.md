@@ -17,10 +17,10 @@ This file holds what is specific to Switzerland. The method, scoring rules, sche
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 74 |
 | Spoke at this chapter before | 10 |
-| Based in the region | 80 |
-| Based elsewhere | 1 |
-| Location unknown | 31 |
-| With a LinkedIn profile | 19 |
+| Based in the region | 84 |
+| Based elsewhere | 3 |
+| Location unknown | 25 |
+| With a LinkedIn profile | 35 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

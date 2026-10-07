@@ -17,10 +17,10 @@ This file holds what is specific to Uyo. The method, scoring rules, schema and r
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 4 |
 | Spoke at this chapter before | 3 |
-| Based in the region | 5 |
+| Based in the region | 6 |
 | Based elsewhere | 0 |
-| Location unknown | 3 |
-| With a LinkedIn profile | 2 |
+| Location unknown | 2 |
+| With a LinkedIn profile | 4 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

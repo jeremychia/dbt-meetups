@@ -17,10 +17,10 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 8 |
 | Proven speakers | 77 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 400 |
+| Based in the region | 401 |
 | Based elsewhere | 3 |
-| Location unknown | 7 |
-| With a LinkedIn profile | 215 |
+| Location unknown | 6 |
+| With a LinkedIn profile | 239 |
 | Job ads mentioning dbt | 83 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
