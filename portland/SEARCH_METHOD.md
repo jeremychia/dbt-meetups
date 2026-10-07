@@ -20,7 +20,7 @@ This file holds what is specific to Portland. The method, scoring rules, schema 
 | Based in the region | 70 |
 | Based elsewhere | 6 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 18 |
+| With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 1 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

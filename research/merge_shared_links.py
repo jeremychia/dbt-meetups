@@ -62,6 +62,8 @@ def resolve(path):
                         p["linkedin_urls"] = [u for u in p["linkedin_urls"] if "li:" + re.sub(r"^.*linkedin\.com/in/", "", u).split("?")[0].strip("/").lower() != k]
                         p["profile_urls"] = [u for u in p["profile_urls"] if "pu:" + u["url"].lower().rstrip("/") != k]
                         p["has_linkedin"] = bool(p["linkedin_urls"])
+                        if not p["has_linkedin"] and p.get("linkedin_confidence") in ("high", "medium"):
+                            p["linkedin_confidence"] = "low"
             d["metadata"]["counts"] = standard_counts(d)
             open(path, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
             print(f"{path}: {k[3:]} kept on {a['name']}, removed from {b['name']}")

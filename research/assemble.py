@@ -145,6 +145,8 @@ def merge(base, raw_companies):
                     existing["lead_type"] = "proven_speaker"  # a talk on record makes anyone a proven speaker
                 existing["evidence"] = merge_lists(existing["evidence"], p["evidence"], lambda e: e["url"])
                 existing["linkedin_urls"] = list(dict.fromkeys(existing["linkedin_urls"] + p["linkedin_urls"]))
+                if existing["linkedin_urls"] and not existing["has_linkedin"]:
+                    existing["has_linkedin"], existing["linkedin_confidence"] = True, p["linkedin_confidence"]
                 existing["profile_urls"] = merge_lists(existing["profile_urls"], p["profile_urls"], lambda u: u["url"])
                 existing["sourced_via"] = list(dict.fromkeys(existing["sourced_via"] + p["sourced_via"]))
                 if p["notes"] and p["notes"] not in (existing["notes"] or ""):

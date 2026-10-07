@@ -45,6 +45,7 @@ def check(path):
             keys(p, PERSON, p["id"])
             assert p["id"] not in people_ids, ("duplicate person", p["id"]); people_ids.add(p["id"])
             assert len({u["url"].lower().rstrip("/") for u in p["profile_urls"]}) == len(p["profile_urls"]), ("duplicate profile entry", p["id"])
+            assert p["has_linkedin"] == bool(p["linkedin_urls"]) and (p["linkedin_urls"] or p["linkedin_confidence"] not in ("high", "medium")), ("linkedin match without a link", p["id"])
             for u in p["profile_urls"]:
                 assert set(u) == {"type", "url", "source"} and u["type"] in PROFILE_TYPES and u["url"].startswith("http"), (p["id"], u)
                 assert owner.setdefault(u["url"], p["id"]) == p["id"], ("profile shared by two people; merge them or drop the link", u["url"], owner[u["url"]], p["id"])
