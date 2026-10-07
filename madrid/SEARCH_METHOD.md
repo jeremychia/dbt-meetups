@@ -17,10 +17,10 @@ This file holds what is specific to Madrid. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 36 |
 | Spoke at this chapter before | 13 |
-| Based in the region | 122 |
+| Based in the region | 123 |
 | Based elsewhere | 0 |
-| Location unknown | 13 |
-| With a LinkedIn profile | 71 |
+| Location unknown | 12 |
+| With a LinkedIn profile | 74 |
 | Job ads mentioning dbt | 10 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

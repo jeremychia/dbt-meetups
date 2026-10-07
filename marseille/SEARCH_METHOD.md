@@ -20,7 +20,7 @@ This file holds what is specific to Marseille. The method, scoring rules, schema
 | Based in the region | 11 |
 | Based elsewhere | 0 |
 | Location unknown | 2 |
-| With a LinkedIn profile | 6 |
+| With a LinkedIn profile | 7 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

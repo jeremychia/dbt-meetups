@@ -20,7 +20,7 @@ This file holds what is specific to Los Angeles. The method, scoring rules, sche
 | Based in the region | 117 |
 | Based elsewhere | 0 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 47 |
+| With a LinkedIn profile | 62 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

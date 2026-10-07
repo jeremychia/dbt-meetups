@@ -18,9 +18,9 @@ This file holds what is specific to Milan. The method, scoring rules, schema and
 | Proven speakers | 51 |
 | Spoke at this chapter before | 4 |
 | Based in the region | 98 |
-| Based elsewhere | 0 |
-| Location unknown | 23 |
-| With a LinkedIn profile | 30 |
+| Based elsewhere | 5 |
+| Location unknown | 18 |
+| With a LinkedIn profile | 42 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

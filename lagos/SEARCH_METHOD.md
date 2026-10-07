@@ -17,10 +17,10 @@ This file holds what is specific to Lagos. The method, scoring rules, schema and
 | First-time speakers (publish, no talk yet) | 2 |
 | Proven speakers | 86 |
 | Spoke at this chapter before | 37 |
-| Based in the region | 133 |
-| Based elsewhere | 0 |
-| Location unknown | 56 |
-| With a LinkedIn profile | 87 |
+| Based in the region | 136 |
+| Based elsewhere | 4 |
+| Location unknown | 49 |
+| With a LinkedIn profile | 99 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->

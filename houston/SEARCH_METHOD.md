@@ -17,10 +17,10 @@ This file holds what is specific to Houston. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 41 |
 | Spoke at this chapter before | 2 |
-| Based in the region | 122 |
-| Based elsewhere | 0 |
-| Location unknown | 19 |
-| With a LinkedIn profile | 53 |
+| Based in the region | 123 |
+| Based elsewhere | 2 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 66 |
 | Job ads mentioning dbt | 12 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->

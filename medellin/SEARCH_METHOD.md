@@ -20,7 +20,7 @@ This file holds what is specific to Medellín. The method, scoring rules, schema
 | Based in the region | 97 |
 | Based elsewhere | 0 |
 | Location unknown | 7 |
-| With a LinkedIn profile | 48 |
+| With a LinkedIn profile | 51 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->
