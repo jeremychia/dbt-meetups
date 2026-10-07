@@ -17,10 +17,10 @@ This file holds what is specific to Minneapolis. The method, scoring rules, sche
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 33 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 84 |
+| Based in the region | 85 |
 | Based elsewhere | 0 |
-| Location unknown | 5 |
-| With a LinkedIn profile | 18 |
+| Location unknown | 4 |
+| With a LinkedIn profile | 25 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->

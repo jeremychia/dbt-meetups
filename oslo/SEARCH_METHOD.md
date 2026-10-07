@@ -17,10 +17,10 @@ This file holds what is specific to Oslo. The method, scoring rules, schema and 
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 83 |
 | Spoke at this chapter before | 37 |
-| Based in the region | 106 |
-| Based elsewhere | 0 |
-| Location unknown | 50 |
-| With a LinkedIn profile | 15 |
+| Based in the region | 115 |
+| Based elsewhere | 2 |
+| Location unknown | 39 |
+| With a LinkedIn profile | 34 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 11 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Philadelphia. The method, scoring rules, sch
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 63 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 93 |
+| Based in the region | 95 |
 | Based elsewhere | 0 |
-| Location unknown | 32 |
-| With a LinkedIn profile | 37 |
+| Location unknown | 30 |
+| With a LinkedIn profile | 40 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->
