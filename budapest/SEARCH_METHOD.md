@@ -20,7 +20,7 @@ This file holds what is specific to Budapest. The method, scoring rules, schema 
 | Based in the region | 68 |
 | Based elsewhere | 2 |
 | Location unknown | 18 |
-| With a LinkedIn profile | 23 |
+| With a LinkedIn profile | 24 |
 | Job ads mentioning dbt | 6 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

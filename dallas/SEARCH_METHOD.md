@@ -17,10 +17,10 @@ This file holds what is specific to Dallas. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 1 |
 | Proven speakers | 71 |
 | Spoke at this chapter before | 3 |
-| Based in the region | 128 |
+| Based in the region | 133 |
 | Based elsewhere | 0 |
-| Location unknown | 44 |
-| With a LinkedIn profile | 97 |
+| Location unknown | 39 |
+| With a LinkedIn profile | 115 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

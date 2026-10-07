@@ -20,7 +20,7 @@ This file holds what is specific to Cluj. The method, scoring rules, schema and 
 | Based in the region | 22 |
 | Based elsewhere | 0 |
 | Location unknown | 1 |
-| With a LinkedIn profile | 2 |
+| With a LinkedIn profile | 4 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

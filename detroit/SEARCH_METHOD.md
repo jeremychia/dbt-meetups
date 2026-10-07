@@ -17,10 +17,10 @@ This file holds what is specific to Detroit. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 28 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 39 |
-| Based elsewhere | 0 |
-| Location unknown | 17 |
-| With a LinkedIn profile | 16 |
+| Based in the region | 41 |
+| Based elsewhere | 3 |
+| Location unknown | 12 |
+| With a LinkedIn profile | 21 |
 | Job ads mentioning dbt | 12 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

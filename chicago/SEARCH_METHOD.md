@@ -17,10 +17,10 @@ This file holds what is specific to Chicago. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 76 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 142 |
-| Based elsewhere | 0 |
-| Location unknown | 36 |
-| With a LinkedIn profile | 58 |
+| Based in the region | 147 |
+| Based elsewhere | 1 |
+| Location unknown | 30 |
+| With a LinkedIn profile | 74 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->

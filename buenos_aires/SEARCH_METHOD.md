@@ -17,10 +17,10 @@ This file holds what is specific to Buenos Aires. The method, scoring rules, sch
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 17 |
 | Spoke at this chapter before | 3 |
-| Based in the region | 111 |
+| Based in the region | 112 |
 | Based elsewhere | 0 |
-| Location unknown | 4 |
-| With a LinkedIn profile | 67 |
+| Location unknown | 3 |
+| With a LinkedIn profile | 70 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

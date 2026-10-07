@@ -20,7 +20,7 @@ This file holds what is specific to China. The method, scoring rules, schema and
 | Based in the region | 0 |
 | Based elsewhere | 0 |
 | Location unknown | 3 |
-| With a LinkedIn profile | 0 |
+| With a LinkedIn profile | 1 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->
