@@ -12,12 +12,12 @@ This file holds what is specific to Philadelphia. The method, scoring rules, sch
 | | Count |
 |---|---|
 | Companies | 52 |
-| People | 125 |
+| People | 124 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 63 |
+| Proven speakers | 62 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 97 |
+| Based in the region | 96 |
 | Based elsewhere | 0 |
 | Location unknown | 28 |
 | With a LinkedIn profile | 59 |

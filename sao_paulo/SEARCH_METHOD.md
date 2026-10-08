@@ -12,12 +12,12 @@ This file holds what is specific to São Paulo. The method, scoring rules, schem
 | | Count |
 |---|---|
 | Companies | 81 |
-| People | 150 |
+| People | 149 |
 | Tier 1 leads | 13 |
 | First-time speakers (publish, no talk yet) | 5 |
-| Proven speakers | 46 |
+| Proven speakers | 45 |
 | Spoke at this chapter before | 22 |
-| Based in the region | 113 |
+| Based in the region | 112 |
 | Based elsewhere | 2 |
 | Location unknown | 35 |
 | With a LinkedIn profile | 80 |

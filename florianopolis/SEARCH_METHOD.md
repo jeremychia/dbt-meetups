@@ -12,12 +12,12 @@ This file holds what is specific to Floripa. The method, scoring rules, schema a
 | | Count |
 |---|---|
 | Companies | 41 |
-| People | 82 |
+| People | 81 |
 | Tier 1 leads | 16 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 27 |
+| Proven speakers | 26 |
 | Spoke at this chapter before | 21 |
-| Based in the region | 61 |
+| Based in the region | 60 |
 | Based elsewhere | 3 |
 | Location unknown | 18 |
 | With a LinkedIn profile | 30 |

@@ -11,16 +11,16 @@ This file holds what is specific to Abuja. The method, scoring rules, schema and
 
 | | Count |
 |---|---|
-| Companies | 39 |
-| People | 91 |
+| Companies | 38 |
+| People | 90 |
 | Tier 1 leads | 3 |
 | First-time speakers (publish, no talk yet) | 1 |
 | Proven speakers | 21 |
 | Spoke at this chapter before | 6 |
-| Based in the region | 76 |
+| Based in the region | 75 |
 | Based elsewhere | 1 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 48 |
+| With a LinkedIn profile | 47 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,7 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-38 companies and communities were looked at. A company is local when it has people or roles in the region.
+37 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
@@ -53,9 +53,9 @@ Helium Health (local presence not confirmed), Kuda (local presence not confirmed
 
 </details>
 
-<details><summary><b>Not verified</b> (28)</summary>
+<details><summary><b>Not verified</b> (27)</summary>
 
-7seer LTD (local presence not confirmed), Abuja Data School (local presence not confirmed), Business intelligence (local presence not confirmed), BuyPower ltd (local presence not confirmed), Central Bank of Nigeria (local presence not confirmed), Centre for Integrated Health Program (local presence not confirmed), Chikat Solutions & Technologies Ltd (local presence not confirmed), Code Campus (local presence not confirmed), csrlab, @pjamb (local presence not confirmed), Farad Analytics (local presence not confirmed), Freelance (local presence not confirmed), Freelance | Open to Opportunities (local presence not confirmed), Freelancer (local presence not confirmed), Hasob Integrated Services Ltd (local presence not confirmed), HISP Nigeria (local presence not confirmed), Moniepoint Group (local presence not confirmed), National Directorate of Employment (local presence not confirmed), None (local presence not confirmed), phis3project (local presence not confirmed), Prainic Constructions, Nigeria ltd. (local presence not confirmed), Remote (local presence not confirmed), Sanekonsult (local presence not confirmed), TRCK (local presence not confirmed), Unity Bank Plc (local presence not confirmed), Vephla Data School (local presence not confirmed), Vephla University (local presence not confirmed), www.lantid.com (local presence not confirmed), ZAKVORA TECHNOLOGIES LIMITED (local presence not confirmed)
+7seer LTD (local presence not confirmed), Abuja Data School (local presence not confirmed), Business intelligence (local presence not confirmed), BuyPower ltd (local presence not confirmed), Central Bank of Nigeria (local presence not confirmed), Centre for Integrated Health Program (local presence not confirmed), Chikat Solutions & Technologies Ltd (local presence not confirmed), Code Campus (local presence not confirmed), csrlab, @pjamb (local presence not confirmed), Farad Analytics (local presence not confirmed), Freelance (local presence not confirmed), Freelance | Open to Opportunities (local presence not confirmed), Freelancer (local presence not confirmed), Hasob Integrated Services Ltd (local presence not confirmed), HISP Nigeria (local presence not confirmed), Moniepoint Group (local presence not confirmed), National Directorate of Employment (local presence not confirmed), None (local presence not confirmed), phis3project (local presence not confirmed), Prainic Constructions, Nigeria ltd. (local presence not confirmed), Remote (local presence not confirmed), Sanekonsult (local presence not confirmed), TRCK (local presence not confirmed), Unity Bank Plc (local presence not confirmed), Vephla Data School (local presence not confirmed), Vephla University (local presence not confirmed), www.lantid.com (local presence not confirmed)
 
 </details>
 
