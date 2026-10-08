@@ -17,8 +17,8 @@ This file holds what is specific to Athens. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 25 |
 | Spoke at this chapter before | 10 |
-| Based in the region | 96 |
-| Based elsewhere | 1 |
+| Based in the region | 92 |
+| Based elsewhere | 5 |
 | Location unknown | 6 |
 | With a LinkedIn profile | 53 |
 | Job ads mentioning dbt | 7 |

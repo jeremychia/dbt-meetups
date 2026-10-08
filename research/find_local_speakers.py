@@ -23,6 +23,7 @@ DATA_ROLE = re.compile(r"\b(dbt|analytics engineer|analytics|data engineer|data 
                        r"\bbi\b|looker|snowflake|tableau|power bi|data warehouse|data scientist)\b", re.I)
 GENERATED_BIO = "data engineer by day, homelab tinkerer by night"  # a batch of generated github accounts shares this bio
 BEVY = ["usergroups.snowflake.com", "usergroups.tableau.com", "usergroups.databricks.com", "gdg.community.dev"]
+EMAIL = re.compile(r"\s*[\w.+-]+@[\w-]+\.[a-z][\w.]*", re.I)  # github bios often give a personal email, which the city files must not hold
 GITHUB_ROLES = ["dbt", '"analytics engineer"', '"data engineer"', "analytics", '"business intelligence"', "snowflake"]
 
 
@@ -177,7 +178,7 @@ def github(places, exclude=()):
             after = found["pageInfo"]["endCursor"]
     out = []
     for login, u in sorted(users.items()):
-        bio = (u.get("bio") or "").replace("\r", " ").replace("\n", " ")
+        bio = EMAIL.sub("", (u.get("bio") or "").replace("\r", " ").replace("\n", " ")).strip()
         if not u.get("name") or len(norm(u["name"]).split()) < 2 or GENERATED_BIO in bio.lower():
             continue
         if not DATA_ROLE.search(bio + " " + (u.get("company") or "")):
@@ -185,8 +186,8 @@ def github(places, exclude=()):
         if other and other.search(u.get("location") or ""):  # github matches location words, so "Portland" also finds Portland, Maine
             continue
         social = [a["url"] for a in ((u.get("socialAccounts") or {}).get("nodes") or [])] + ([f"https://x.com/{u['twitterUsername']}"] if u.get("twitterUsername") else [])
-        out.append({"source": "github", "name": u["name"].strip(), "company": (u.get("company") or "").lstrip("@").strip() or None, "title": bio[:160] or None,
-                    "location": u.get("location"), "url": u["url"], "links": social, "role": "practitioner"})
+        out.append({"source": "github", "name": u["name"].strip(), "company": EMAIL.sub("", u.get("company") or "").lstrip("@").strip() or None, "title": bio[:160] or None,
+                    "location": EMAIL.sub("", u.get("location") or "").strip(" ;,") or None, "url": u["url"], "links": social, "role": "practitioner"})
     return out
 
 

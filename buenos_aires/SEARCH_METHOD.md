@@ -11,7 +11,7 @@ This file holds what is specific to Buenos Aires. The method, scoring rules, sch
 
 | | Count |
 |---|---|
-| Companies | 56 |
+| Companies | 55 |
 | People | 115 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
@@ -39,7 +39,7 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-55 companies and communities were looked at. A company is local when it has people or roles in the region.
+54 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
@@ -53,9 +53,9 @@ Allshore Talent (local presence not confirmed), Infinite Lambda (local presence 
 
 </details>
 
-<details><summary><b>Not verified</b> (47)</summary>
+<details><summary><b>Not verified</b> (46)</summary>
 
-AdCentral (local presence not confirmed), Algeiba (local presence not confirmed), Argentine Football Association (local presence not confirmed), Ball and Stats (local presence not confirmed), Beyond Media Agency (local presence not confirmed), BPlay (local presence not confirmed), Data Engineer (local presence not confirmed), Diegoomuller7@gmail.com (local presence not confirmed), Draftea (local presence not confirmed), Endava (local presence not confirmed), Ex-Tenaris (Product Engineer → Data Analytics) (local presence not confirmed), EY (local presence not confirmed), Factored (local presence not confirmed), Felix A. Medoro - Ideas en Verde (local presence not confirmed), Freelance (local presence not confirmed), Freelancer (local presence not confirmed), Getronics (local presence not confirmed), Globant (local presence not confirmed), GoFundMe (local presence not confirmed), Interseller (local presence not confirmed), jll (local presence not confirmed), Leapfin (local presence not confirmed), Luno (local presence not confirmed), Mercado Libre (local presence not confirmed), Mercantil Andina (local presence not confirmed), Ministerio de Educación de CABA (local presence not confirmed), Mirgor (local presence not confirmed), Movistar (local presence not confirmed), Pan American Energy (local presence not confirmed), PedidosYa (local presence not confirmed), Publicis Groupe (local presence not confirmed), ReactoData (local presence not confirmed), Ready Set (local presence not confirmed), Recarga Pay (local presence not confirmed), Reelgood (local presence not confirmed), S3 (local presence not confirmed), SEIDOR (local presence not confirmed), SEIDOR Analytics (local presence not confirmed), Sentora (local presence not confirmed), Servicio Meteorológico Nacional (local presence not confirmed), SunnyData (local presence not confirmed), The Walt Disney Company (local presence not confirmed), Universidad Tecnológica Nacional (local presence not confirmed), Vordentech (local presence not confirmed), Wollen Labs (local presence not confirmed), YPF (local presence not confirmed), ✦ · ───────── · 🌟 · ───────── · ✦ (local presence not confirmed)
+AdCentral (local presence not confirmed), Algeiba (local presence not confirmed), Argentine Football Association (local presence not confirmed), Ball and Stats (local presence not confirmed), Beyond Media Agency (local presence not confirmed), BPlay (local presence not confirmed), Data Engineer (local presence not confirmed), Draftea (local presence not confirmed), Endava (local presence not confirmed), Ex-Tenaris (Product Engineer → Data Analytics) (local presence not confirmed), EY (local presence not confirmed), Factored (local presence not confirmed), Felix A. Medoro - Ideas en Verde (local presence not confirmed), Freelance (local presence not confirmed), Freelancer (local presence not confirmed), Getronics (local presence not confirmed), Globant (local presence not confirmed), GoFundMe (local presence not confirmed), Interseller (local presence not confirmed), jll (local presence not confirmed), Leapfin (local presence not confirmed), Luno (local presence not confirmed), Mercado Libre (local presence not confirmed), Mercantil Andina (local presence not confirmed), Ministerio de Educación de CABA (local presence not confirmed), Mirgor (local presence not confirmed), Movistar (local presence not confirmed), Pan American Energy (local presence not confirmed), PedidosYa (local presence not confirmed), Publicis Groupe (local presence not confirmed), ReactoData (local presence not confirmed), Ready Set (local presence not confirmed), Recarga Pay (local presence not confirmed), Reelgood (local presence not confirmed), S3 (local presence not confirmed), SEIDOR (local presence not confirmed), SEIDOR Analytics (local presence not confirmed), Sentora (local presence not confirmed), Servicio Meteorológico Nacional (local presence not confirmed), SunnyData (local presence not confirmed), The Walt Disney Company (local presence not confirmed), Universidad Tecnológica Nacional (local presence not confirmed), Vordentech (local presence not confirmed), Wollen Labs (local presence not confirmed), YPF (local presence not confirmed), ✦ · ───────── · 🌟 · ───────── · ✦ (local presence not confirmed)
 
 </details>
 

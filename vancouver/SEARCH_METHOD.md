@@ -17,8 +17,8 @@ This file holds what is specific to Vancouver. The method, scoring rules, schema
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 47 |
 | Spoke at this chapter before | 2 |
-| Based in the region | 139 |
-| Based elsewhere | 0 |
+| Based in the region | 132 |
+| Based elsewhere | 7 |
 | Location unknown | 10 |
 | With a LinkedIn profile | 53 |
 | Job ads mentioning dbt | 8 |

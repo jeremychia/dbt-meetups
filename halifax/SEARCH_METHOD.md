@@ -17,8 +17,8 @@ This file holds what is specific to Halifax. The method, scoring rules, schema a
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 12 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 20 |
-| Based elsewhere | 0 |
+| Based in the region | 19 |
+| Based elsewhere | 1 |
 | Location unknown | 9 |
 | With a LinkedIn profile | 12 |
 | Job ads mentioning dbt | 2 |

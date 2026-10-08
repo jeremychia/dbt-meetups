@@ -19,6 +19,7 @@ PERSON = ["id","name","pronouns","title","city","based_in_region","level","linke
           "confidence","internal_vinted","priority_tier","suggested_talk_angle","past_chapter_talks","notes"]
 EVID = ["type","event","title","date","url","content_id","co_authors","mentions_dbt","description","topics",
         "suggested_talk_angle","url_precision","confidence"]
+EMAIL = re.compile(r"[\w.+-]+@(?!(rladies|fosstodon)\.)[\w-]+\.[a-z]{2,}", re.I)  # group addresses and mastodon handles are not personal
 PROFILE_TYPES = {"github","meetup","zenn","qiita","velog","medium","devto","substack","ithome","sessionize","x","bluesky","website","note"}
 MESSAGING_TYPES = {"meetup","x","bluesky"}  # profiles an organiser can send a message through, with linkedin
 
@@ -45,6 +46,7 @@ def check(path):
             keys(p, PERSON, p["id"])
             assert p["id"] not in people_ids, ("duplicate person", p["id"]); people_ids.add(p["id"])
             assert len({u["url"].lower().rstrip("/") for u in p["profile_urls"]}) == len(p["profile_urls"]), ("duplicate profile entry", p["id"])
+            assert not any(EMAIL.search(p.get(k) or "") for k in ("name", "title", "city", "notes")) and not EMAIL.search(c["name"]), ("personal email in a record", p["id"])
             assert p["has_linkedin"] == bool(p["linkedin_urls"]) and (p["linkedin_urls"] or p["linkedin_confidence"] not in ("high", "medium")), ("linkedin match without a link", p["id"])
             for u in p["profile_urls"]:
                 assert set(u) == {"type", "url", "source"} and u["type"] in PROFILE_TYPES and u["url"].startswith("http"), (p["id"], u)

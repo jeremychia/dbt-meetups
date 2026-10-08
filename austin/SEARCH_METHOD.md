@@ -17,8 +17,8 @@ This file holds what is specific to Austin. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 49 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 128 |
-| Based elsewhere | 4 |
+| Based in the region | 127 |
+| Based elsewhere | 5 |
 | Location unknown | 19 |
 | With a LinkedIn profile | 72 |
 | Job ads mentioning dbt | 9 |

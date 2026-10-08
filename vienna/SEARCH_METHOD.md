@@ -17,8 +17,8 @@ This file holds what is specific to Vienna. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 47 |
 | Spoke at this chapter before | 8 |
-| Based in the region | 60 |
-| Based elsewhere | 0 |
+| Based in the region | 59 |
+| Based elsewhere | 1 |
 | Location unknown | 14 |
 | With a LinkedIn profile | 18 |
 | Job ads mentioning dbt | 7 |
