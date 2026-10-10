@@ -5,24 +5,39 @@ patch: {"<person id>": {"linkedin_url": "...", "evidence": "result title and loc
          "based_in_region": true|false|null, "city": "..."}}
 a non-linkedin profile replaces linkedin_url with "profile": {"type": "<validate.PROFILE_TYPES>", "url": "...", "source": "<page or result that ties it to the person>"}.
 a person searched without a match is {"confidence": "low"}, which marks them searched.
+a turned-down match is {"reject": {"url": "...", "reason": "..."}}: it is recorded in research/rejected_matches.json and marks the person searched.
 a known location is never overwritten; a person who already has the link is skipped.
+a match listed in rejected_matches.json, or one placing someone outside the region their record places them in, is not applied.
 """
 
-import json, sys
+import json, os, sys
 from collections import Counter
 from validate import PROFILE_TYPES, reachable
+from rejected import load_rejected, is_rejected, add_rejected
 
 path, patch_path = sys.argv[1], sys.argv[2]
 raw = open(path).read()
 d = json.loads(raw)
 patch = json.load(open(patch_path))
 people = {p["id"]: (p, c) for c in d["companies"] for p in c["people"]}
-applied, profiled, located, missed, problems = 0, 0, 0, 0, []
+folder = os.path.basename(os.path.dirname(os.path.abspath(path)))
+rejected = load_rejected()
+applied, profiled, located, missed, problems, turned_down = 0, 0, 0, 0, [], []
 for pid, f in patch.items():
     if pid not in people:
         problems.append(f"unknown person id {pid}")
         continue
     p, c = people[pid]
+    if "reject" in f:
+        add_rejected(rejected, folder, pid, f["reject"]["url"], f["reject"]["reason"])
+        f = {"confidence": "low"}
+    url = f.get("linkedin_url") or (f.get("profile") or {}).get("url")
+    if url and is_rejected(rejected, folder, pid, url):
+        turned_down.append(f"{pid}: {url} is in rejected_matches.json")
+        f = {"confidence": "low"}
+    elif url and f.get("based_in_region") is False and p["based_in_region"] is True:
+        turned_down.append(f"{pid}: the result places them outside the region the record gives; check by hand")
+        f = {"confidence": "low"}
     if f.get("confidence") == "low" and not f.get("linkedin_url") and not f.get("profile"):
         if p["linkedin_confidence"] == "not_searched":
             p["linkedin_confidence"] = "low"
@@ -63,6 +78,8 @@ for pid, f in patch.items():
         located += 1
 if problems:
     print("not applied:\n- " + "\n- ".join(problems))
+if turned_down:
+    print("turned down:\n- " + "\n- ".join(turned_down))
 allp = [p for c in d["companies"] for p in c["people"]]
 m = d["metadata"]["counts"]
 m["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)

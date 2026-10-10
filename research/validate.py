@@ -6,6 +6,7 @@ usage, from the repo root: python3 research/validate.py [<file> ...]
 import json, os, re, sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline"))
 from enrich import TOPIC_VOCABULARY as V
+from rejected import load_rejected, is_rejected
 
 TOP = ["metadata","companies","sources","past_meetups","community_channels"]
 META = ["title","generated_at","prepared_for","purpose","version","schema_version","region","method",
@@ -39,6 +40,7 @@ def check(path):
     keys(d, TOP, "top"); keys(d["metadata"], META, "metadata")
     assert d["metadata"]["topic_vocabulary"] == V, "vocabulary out of date"
     people_ids, owner = set(), {}
+    folder, rejected = os.path.basename(os.path.dirname(os.path.abspath(path))), load_rejected()
     for c in d["companies"]:
         keys(c, COMPANY, c["id"])
         for j in c["job_postings"]: keys(j, JOB, j["url"])
@@ -48,6 +50,7 @@ def check(path):
             assert len({u["url"].lower().rstrip("/") for u in p["profile_urls"]}) == len(p["profile_urls"]), ("duplicate profile entry", p["id"])
             assert not any(EMAIL.search(p.get(k) or "") for k in ("name", "title", "city", "notes")) and not EMAIL.search(c["name"]), ("personal email in a record", p["id"])
             assert p["has_linkedin"] == bool(p["linkedin_urls"]) and (p["linkedin_urls"] or p["linkedin_confidence"] not in ("high", "medium")), ("linkedin match without a link", p["id"])
+            assert not any(is_rejected(rejected, folder, p["id"], u) for u in p["linkedin_urls"] + [x["url"] for x in p["profile_urls"]]), ("profile listed in rejected_matches.json", p["id"])
             for u in p["profile_urls"]:
                 assert set(u) == {"type", "url", "source"} and u["type"] in PROFILE_TYPES and u["url"].startswith("http"), (p["id"], u)
                 assert owner.setdefault(u["url"], p["id"]) == p["id"], ("profile shared by two people; merge them or drop the link", u["url"], owner[u["url"]], p["id"])
