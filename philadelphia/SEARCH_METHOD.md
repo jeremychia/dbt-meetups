@@ -20,7 +20,7 @@ This file holds what is specific to Philadelphia. The method, scoring rules, sch
 | Based in the region | 96 |
 | Based elsewhere | 0 |
 | Location unknown | 28 |
-| With a LinkedIn profile | 59 |
+| With a LinkedIn profile | 60 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

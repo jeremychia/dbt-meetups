@@ -19,10 +19,10 @@ This file holds what is specific to Paris. The method, scoring rules, schema and
 | First-time speakers (publish, no talk yet) | 26 |
 | Proven speakers | 143 |
 | Spoke at this chapter before | 17 |
-| Based in the region | 174 |
-| Based elsewhere | 11 |
-| Location unknown | 21 |
-| With a LinkedIn profile | 160 |
+| Based in the region | 175 |
+| Based elsewhere | 12 |
+| Location unknown | 19 |
+| With a LinkedIn profile | 162 |
 | Job ads mentioning dbt | 160 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->

@@ -20,7 +20,7 @@ This file holds what is specific to Phoenix. The method, scoring rules, schema a
 | Based in the region | 84 |
 | Based elsewhere | 0 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 38 |
+| With a LinkedIn profile | 39 |
 | Job ads mentioning dbt | 6 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->
