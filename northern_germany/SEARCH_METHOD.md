@@ -17,10 +17,10 @@ This file holds what is specific to Northern Germany. The method, scoring rules,
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 46 |
 | Spoke at this chapter before | 7 |
-| Based in the region | 73 |
-| Based elsewhere | 5 |
-| Location unknown | 24 |
-| With a LinkedIn profile | 60 |
+| Based in the region | 74 |
+| Based elsewhere | 6 |
+| Location unknown | 22 |
+| With a LinkedIn profile | 63 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

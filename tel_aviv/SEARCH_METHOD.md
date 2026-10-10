@@ -17,10 +17,10 @@ This file holds what is specific to Tel Aviv. The method, scoring rules, schema 
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 58 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 67 |
+| Based in the region | 68 |
 | Based elsewhere | 0 |
-| Location unknown | 18 |
-| With a LinkedIn profile | 16 |
+| Location unknown | 17 |
+| With a LinkedIn profile | 23 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

@@ -20,7 +20,7 @@ This file holds what is specific to Montreal. The method, scoring rules, schema 
 | Based in the region | 57 |
 | Based elsewhere | 1 |
 | Location unknown | 15 |
-| With a LinkedIn profile | 49 |
+| With a LinkedIn profile | 51 |
 | Job ads mentioning dbt | 43 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

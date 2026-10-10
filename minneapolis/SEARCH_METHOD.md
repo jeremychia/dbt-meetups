@@ -20,7 +20,7 @@ This file holds what is specific to Minneapolis. The method, scoring rules, sche
 | Based in the region | 85 |
 | Based elsewhere | 0 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 25 |
+| With a LinkedIn profile | 27 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->
