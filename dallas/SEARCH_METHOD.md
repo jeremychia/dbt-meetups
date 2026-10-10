@@ -20,7 +20,7 @@ This file holds what is specific to Dallas. The method, scoring rules, schema an
 | Based in the region | 133 |
 | Based elsewhere | 0 |
 | Location unknown | 39 |
-| With a LinkedIn profile | 115 |
+| With a LinkedIn profile | 116 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

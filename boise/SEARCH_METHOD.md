@@ -20,7 +20,7 @@ This file holds what is specific to Boise. The method, scoring rules, schema and
 | Based in the region | 11 |
 | Based elsewhere | 0 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 8 |
+| With a LinkedIn profile | 9 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

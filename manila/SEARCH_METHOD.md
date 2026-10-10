@@ -17,10 +17,10 @@ This file holds what is specific to Manila. The method, scoring rules, schema an
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 28 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 63 |
+| Based in the region | 64 |
 | Based elsewhere | 0 |
-| Location unknown | 5 |
-| With a LinkedIn profile | 20 |
+| Location unknown | 4 |
+| With a LinkedIn profile | 21 |
 | Job ads mentioning dbt | 6 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

@@ -17,10 +17,10 @@ This file holds what is specific to Barcelona. The method, scoring rules, schema
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 76 |
 | Spoke at this chapter before | 34 |
-| Based in the region | 124 |
+| Based in the region | 125 |
 | Based elsewhere | 4 |
-| Location unknown | 48 |
-| With a LinkedIn profile | 86 |
+| Location unknown | 47 |
+| With a LinkedIn profile | 87 |
 | Job ads mentioning dbt | 9 |
 | Past chapter meetups | 14 |
 <!-- at-a-glance:end -->

@@ -18,9 +18,9 @@ This file holds what is specific to Dubai. The method, scoring rules, schema and
 | Proven speakers | 58 |
 | Spoke at this chapter before | 7 |
 | Based in the region | 136 |
-| Based elsewhere | 4 |
-| Location unknown | 15 |
-| With a LinkedIn profile | 70 |
+| Based elsewhere | 5 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 72 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

@@ -20,7 +20,7 @@ This file holds what is specific to Detroit. The method, scoring rules, schema a
 | Based in the region | 41 |
 | Based elsewhere | 3 |
 | Location unknown | 12 |
-| With a LinkedIn profile | 23 |
+| With a LinkedIn profile | 25 |
 | Job ads mentioning dbt | 12 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

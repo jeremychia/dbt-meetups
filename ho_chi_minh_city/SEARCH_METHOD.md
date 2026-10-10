@@ -17,10 +17,10 @@ This file holds what is specific to Ho Chi Minh City. The method, scoring rules,
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 39 |
 | Spoke at this chapter before | 25 |
-| Based in the region | 95 |
+| Based in the region | 97 |
 | Based elsewhere | 0 |
-| Location unknown | 31 |
-| With a LinkedIn profile | 62 |
+| Location unknown | 29 |
+| With a LinkedIn profile | 65 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 10 |
 <!-- at-a-glance:end -->

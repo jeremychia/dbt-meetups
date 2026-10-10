@@ -17,10 +17,10 @@ This file holds what is specific to Brisbane. The method, scoring rules, schema 
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 29 |
 | Spoke at this chapter before | 5 |
-| Based in the region | 48 |
+| Based in the region | 50 |
 | Based elsewhere | 1 |
-| Location unknown | 16 |
-| With a LinkedIn profile | 24 |
+| Location unknown | 14 |
+| With a LinkedIn profile | 26 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->

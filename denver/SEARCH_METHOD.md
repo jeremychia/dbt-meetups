@@ -20,7 +20,7 @@ This file holds what is specific to Denver. The method, scoring rules, schema an
 | Based in the region | 115 |
 | Based elsewhere | 0 |
 | Location unknown | 13 |
-| With a LinkedIn profile | 54 |
+| With a LinkedIn profile | 56 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

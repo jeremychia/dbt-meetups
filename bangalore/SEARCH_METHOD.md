@@ -17,10 +17,10 @@ This file holds what is specific to Bangalore. The method, scoring rules, schema
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 86 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 147 |
+| Based in the region | 148 |
 | Based elsewhere | 3 |
-| Location unknown | 39 |
-| With a LinkedIn profile | 103 |
+| Location unknown | 38 |
+| With a LinkedIn profile | 104 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
