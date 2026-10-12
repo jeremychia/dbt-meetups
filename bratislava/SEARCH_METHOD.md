@@ -7,19 +7,19 @@ This file holds what is specific to Bratislava. The method, scoring rules, schem
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
 | Companies | 23 |
-| People | 40 |
+| People | 42 |
 | Tier 1 leads | 3 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 29 |
+| Proven speakers | 31 |
 | Spoke at this chapter before | 15 |
 | Based in the region | 19 |
 | Based elsewhere | 4 |
-| Location unknown | 17 |
+| Location unknown | 19 |
 | With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 6 |

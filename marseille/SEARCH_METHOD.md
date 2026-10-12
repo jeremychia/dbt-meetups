@@ -7,20 +7,20 @@ This file holds what is specific to Marseille. The method, scoring rules, schema
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
-| Companies | 12 |
-| People | 13 |
+| Companies | 13 |
+| People | 18 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 1 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 11 |
+| Based in the region | 16 |
 | Based elsewhere | 0 |
 | Location unknown | 2 |
-| With a LinkedIn profile | 7 |
+| With a LinkedIn profile | 10 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,7 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-11 companies and communities were looked at. A company is local when it has people or roles in the region.
+12 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (3)</summary>
 
@@ -53,9 +53,9 @@ Gojob
 
 </details>
 
-<details><summary><b>Not verified</b> (6)</summary>
+<details><summary><b>Not verified</b> (7)</summary>
 
-Aix Marseille Université (local presence not confirmed), AXA (local presence not confirmed), BoondManager (local presence not confirmed), STMicroelectronics (local presence not confirmed), TnP-Consultants (local presence not confirmed), Vibe.co (local presence not confirmed)
+Aix Marseille Université (local presence not confirmed), AXA (local presence not confirmed), BoondManager (local presence not confirmed), Magora (local presence not confirmed), STMicroelectronics (local presence not confirmed), TnP-Consultants (local presence not confirmed), Vibe.co (local presence not confirmed)
 
 </details>
 

@@ -7,17 +7,17 @@ This file holds what is specific to Cluj. The method, scoring rules, schema and 
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
 | Companies | 14 |
-| People | 23 |
+| People | 24 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 15 |
+| Proven speakers | 16 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 22 |
+| Based in the region | 23 |
 | Based elsewhere | 0 |
 | Location unknown | 1 |
 | With a LinkedIn profile | 5 |

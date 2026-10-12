@@ -7,7 +7,7 @@ This file holds what is specific to Uyo. The method, scoring rules, schema and r
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|

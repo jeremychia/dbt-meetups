@@ -7,20 +7,20 @@ This file holds what is specific to Detroit. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
-| Companies | 38 |
-| People | 56 |
+| Companies | 44 |
+| People | 64 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 28 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 41 |
+| Based in the region | 49 |
 | Based elsewhere | 3 |
 | Location unknown | 12 |
-| With a LinkedIn profile | 28 |
+| With a LinkedIn profile | 32 |
 | Job ads mentioning dbt | 12 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,7 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-37 companies and communities were looked at. A company is local when it has people or roles in the region.
+43 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (8)</summary>
 
@@ -53,9 +53,9 @@ SailPoint (local presence not confirmed)
 
 </details>
 
-<details><summary><b>Not verified</b> (25)</summary>
+<details><summary><b>Not verified</b> (31)</summary>
 
-Ally Financial (local presence not confirmed), Application Perfection Ltd (local presence not confirmed), BTD (local presence not confirmed), CardioSounds (local presence not confirmed), CEI (local presence not confirmed), CityOfDetroit (local presence not confirmed), Concentrix (local presence not confirmed), Databricks (local presence not confirmed), Detroit Trading Company (local presence not confirmed), Freelance (local presence not confirmed), General Motors (local presence not confirmed), Ilitch Sports & Entertainment (local presence not confirmed), Johnson & Johnson (local presence not confirmed), Laboredge (local presence not confirmed), Marvel Technologies Inc (local presence not confirmed), Microsoft (local presence not confirmed), Publicis Sapient (local presence not confirmed), Quicken Loans (local presence not confirmed), Salesforce (local presence not confirmed), Somerville Analytics LLC (local presence not confirmed), TABLEAU (local presence not confirmed), TileCorporation (local presence not confirmed), University of Michigan (local presence not confirmed), University of Michigan, School of Public Health (local presence not confirmed), XPO LOGISTICS LTL (local presence not confirmed)
+Ally Financial (local presence not confirmed), Application Perfection Ltd (local presence not confirmed), BTD (local presence not confirmed), CardioSounds (local presence not confirmed), CEI (local presence not confirmed), CityOfDetroit (local presence not confirmed), CNS Healthcare (local presence not confirmed), Concentrix (local presence not confirmed), Databricks (local presence not confirmed), Detroit Trading Company (local presence not confirmed), Exeliq Consulting Inc. (local presence not confirmed), FORD (local presence not confirmed), Ford Motor Company (local presence not confirmed), Freelance (local presence not confirmed), General Motors (local presence not confirmed), Henry Ford Health (local presence not confirmed), Ilitch Sports & Entertainment (local presence not confirmed), Johnson & Johnson (local presence not confirmed), Laboredge (local presence not confirmed), Marvel Technologies Inc (local presence not confirmed), Microsoft (local presence not confirmed), Publicis Sapient (local presence not confirmed), Quicken Loans (local presence not confirmed), Salesforce (local presence not confirmed), Somerville Analytics LLC (local presence not confirmed), TABLEAU (local presence not confirmed), TileCorporation (local presence not confirmed), Trinity Health (local presence not confirmed), University of Michigan (local presence not confirmed), University of Michigan, School of Public Health (local presence not confirmed), XPO LOGISTICS LTL (local presence not confirmed)
 
 </details>
 

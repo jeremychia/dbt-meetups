@@ -106,7 +106,7 @@ def bevy_people(page):
 
 
 def bevy(places, since):
-    wanted = {norm(p) for p in places}
+    wanted = {norm(p) for p in places} - {""}  # a name in another script normalises to nothing, which would match every chapter without a city
     out, chapters = [], []
     for host in BEVY:
         page = 1

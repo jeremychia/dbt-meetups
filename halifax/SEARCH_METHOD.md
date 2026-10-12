@@ -7,20 +7,20 @@ This file holds what is specific to Halifax. The method, scoring rules, schema a
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
-| Companies | 18 |
-| People | 29 |
+| Companies | 19 |
+| People | 31 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 12 |
 | Spoke at this chapter before | 4 |
-| Based in the region | 19 |
+| Based in the region | 21 |
 | Based elsewhere | 1 |
 | Location unknown | 9 |
-| With a LinkedIn profile | 13 |
+| With a LinkedIn profile | 14 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->
@@ -39,7 +39,7 @@ Nothing recorded yet.
 No company research yet. The list below is generated from the data.
 
 <!-- companies:start -->
-17 companies and communities were looked at. A company is local when it has people or roles in the region.
+18 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (4)</summary>
 
@@ -53,9 +53,9 @@ Dalhousie University
 
 </details>
 
-<details><summary><b>Not verified</b> (11)</summary>
+<details><summary><b>Not verified</b> (12)</summary>
 
-BDO (local presence not confirmed), Dalhousie University, NS, Canada (local presence not confirmed), Data Analyst || Business Intelligence Analyst (local presence not confirmed), databricks (local presence not confirmed), larixsw (local presence not confirmed), Nova Scotia Health (local presence not confirmed), Outshine (local presence not confirmed), Royal Bank of Canada (RBC), Saint Mary's University (local presence not confirmed), Skills For Hire Atlantic (local presence not confirmed), tem (local presence not confirmed)
+BDO (local presence not confirmed), Dalhousie University, NS, Canada (local presence not confirmed), Data Analyst || Business Intelligence Analyst (local presence not confirmed), databricks (local presence not confirmed), Halifax International Airport Authority (local presence not confirmed), larixsw (local presence not confirmed), Nova Scotia Health (local presence not confirmed), Outshine (local presence not confirmed), Royal Bank of Canada (RBC), Saint Mary's University (local presence not confirmed), Skills For Hire Atlantic (local presence not confirmed), tem (local presence not confirmed)
 
 </details>
 

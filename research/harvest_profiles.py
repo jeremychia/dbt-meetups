@@ -24,6 +24,7 @@ links from the person's own GitHub social accounts are high confidence; links fr
 import concurrent.futures, glob, hashlib, html, json, os, re, subprocess, sys, unicodedata, urllib.parse, urllib.request
 from collections import Counter
 from validate import reachable
+from rejected import load_rejected, is_rejected
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 SKIP = ("linkedin.com", "medium.com")  # medium answers 429 to scripted fetches
@@ -326,7 +327,7 @@ def candidates(cache, everyone=False):
     for f, p in people():
         for u in evidence_urls(p):
             on_page.setdefault(u, {})[p["id"]] = p
-    parsed, found = {}, {}
+    parsed, found, rejected = {}, {}, load_rejected()
     for f, p in people():
         tok, hs = tokens(p["name"]), handles(p)
         hits = {}  # type -> {url: (source, confidence, rule)}
@@ -377,9 +378,10 @@ def candidates(cache, everyone=False):
                 if rule:
                     hits.setdefault(kind, {}).setdefault(canon, (u, "medium", rule))
         out = {k: (url, *v) for k, urls in hits.items() if len(urls) == 1 for url, v in urls.items()}
-        if not everyone:  # a link already on file is not new
+        if not everyone:  # a link already on file is not new, and a rejected one is never offered again
             have = {classify(u)[2] for u in p["linkedin_urls"] + [x["url"] for x in p["profile_urls"]] if classify(u)}
-            out = {k: v for k, v in out.items() if v[0] not in have}
+            folder = os.path.basename(os.path.dirname(os.path.abspath(f)))
+            out = {k: v for k, v in out.items() if v[0] not in have and not is_rejected(rejected, folder, p["id"], v[0])}
         if not everyone:
             if p["has_linkedin"]:
                 out.pop("linkedin", None)

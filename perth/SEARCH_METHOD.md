@@ -7,20 +7,20 @@ This file holds what is specific to Perth. The method, scoring rules, schema and
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
 | Companies | 22 |
-| People | 51 |
+| People | 55 |
 | Tier 1 leads | 0 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 23 |
+| Proven speakers | 27 |
 | Spoke at this chapter before | 0 |
 | Based in the region | 36 |
 | Based elsewhere | 2 |
-| Location unknown | 13 |
-| With a LinkedIn profile | 24 |
+| Location unknown | 17 |
+| With a LinkedIn profile | 26 |
 | Job ads mentioning dbt | 1 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

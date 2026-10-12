@@ -7,17 +7,17 @@ This file holds what is specific to Wellington. The method, scoring rules, schem
 - **First built:** 2026-10-06
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-06)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
 | Companies | 22 |
-| People | 44 |
+| People | 52 |
 | Tier 1 leads | 1 |
 | First-time speakers (publish, no talk yet) | 0 |
-| Proven speakers | 27 |
+| Proven speakers | 35 |
 | Spoke at this chapter before | 1 |
-| Based in the region | 37 |
+| Based in the region | 45 |
 | Based elsewhere | 1 |
 | Location unknown | 6 |
 | With a LinkedIn profile | 16 |

@@ -7,20 +7,20 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 - **First built:** 2026-10-01
 
 <!-- at-a-glance:start -->
-**At a glance** (version 3, 2026-10-01)
+**At a glance** (version 4, 2026-10-12)
 
 | | Count |
 |---|---|
-| Companies | 71 |
-| People | 69 |
-| Tier 1 leads | 20 |
+| Companies | 145 |
+| People | 160 |
+| Tier 1 leads | 19 |
 | First-time speakers (publish, no talk yet) | 8 |
-| Proven speakers | 51 |
+| Proven speakers | 59 |
 | Spoke at this chapter before | 20 |
-| Based in the region | 52 |
+| Based in the region | 136 |
 | Based elsewhere | 3 |
-| Location unknown | 14 |
-| With a LinkedIn profile | 18 |
+| Location unknown | 21 |
+| With a LinkedIn profile | 55 |
 | Job ads mentioning dbt | 38 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
@@ -87,7 +87,7 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **Confirmed dbt users:** Toss Securities runs its batch pipelines on dbt, and the job ads add 24 companies that name dbt.
 
 <!-- companies:start -->
-69 companies and communities were looked at. A company is local when it has people or roles in the region.
+143 companies and communities were looked at. A company is local when it has people or roles in the region.
 
 <details><summary><b>Strong dbt use</b> (27)</summary>
 
@@ -107,9 +107,9 @@ AITRICS, Asta, Bagelcode (베이글코드), CJ Olive Young (CJ올리브영), Cou
 
 </details>
 
-<details><summary><b>Not verified</b> (9)</summary>
+<details><summary><b>Not verified</b> (83)</summary>
 
-ABLY, Bucketplace (Ohouse), Dataknows, Datarize, DK BMC, Loplat, Nexon Korea, NSUSLAB, The Pinkfong Company
+Autocrypt (local presence not confirmed), TossBank (local presence not confirmed), ABLY, AWS (local presence not confirmed), BNK Securities (local presence not confirmed), Bucketplace (Ohouse), conalog (local presence not confirmed), COSMAXBIO (local presence not confirmed), Coupang Pay (local presence not confirmed), daangn (local presence not confirmed), Data Engineer @dramancompany (local presence not confirmed), DataBridge (local presence not confirmed), Dataknows, Datarize, DieEnde (local presence not confirmed), DK BMC, Dplanex (local presence not confirmed), dramancompany (local presence not confirmed), EchoMarketing (local presence not confirmed), Energy Sector / Power System SI (local presence not confirmed), engineer (local presence not confirmed), flex-team (local presence not confirmed), Freelancer (local presence not confirmed), Grip (local presence not confirmed), GSK plc. (local presence not confirmed), Hongik University (local presence not confirmed), http://nuriggum.com/ (local presence not confirmed), Hyundai AutoEver (local presence not confirmed), Hyundai Motor Group (local presence not confirmed), ICT in HMG (local presence not confirmed), Imagoworks Inc. (local presence not confirmed), ImpactAI (local presence not confirmed), imwebme (아임웹) (local presence not confirmed), Interpark (local presence not confirmed), Ishowdrip (local presence not confirmed), Kakao (local presence not confirmed), Kakao Corp (local presence not confirmed), Kakao Enterprise (local presence not confirmed), kakaopaysec (local presence not confirmed), KB Data Systems (local presence not confirmed), KD Navien/KMU (local presence not confirmed), Kwangwoon Univ. (local presence not confirmed), laplacetec (local presence not confirmed), LG CNS (local presence not confirmed), LG Electronics (local presence not confirmed), LGE (local presence not confirmed), LG전자 (local presence not confirmed), LILAB @CAU_AIGS (local presence not confirmed), line (local presence not confirmed), Loplat, MyMusicTaste (local presence not confirmed), N/A (local presence not confirmed), NAVER (local presence not confirmed), NAVER corp. (local presence not confirmed), naver-innovation (local presence not confirmed), NCSOFT @NC-AI (local presence not confirmed), neubility-inc (local presence not confirmed), Nexon Korea, note-ai-inc (local presence not confirmed), NSUSLAB, OneTechStop (local presence not confirmed), PFC Technologies (local presence not confirmed), playwings (local presence not confirmed), ROAI (local presence not confirmed), Salesforce (local presence not confirmed), Samsung Electronics (local presence not confirmed), Samsung SDS (local presence not confirmed), Sejong.Univ.DataScience (local presence not confirmed), sktaiflow (local presence not confirmed), socar-inc (local presence not confirmed), storelink (local presence not confirmed), teamdable (local presence not confirmed), TeamSparta Inc. (local presence not confirmed), The Bosoka Company (local presence not confirmed), The Pinkfong Company, Toss (local presence not confirmed), Toss Securites (local presence not confirmed), tosspayments (local presence not confirmed), TwelveLabs (local presence not confirmed), wooribank (local presence not confirmed), Woowa Bros. (local presence not confirmed), Yeji-X (local presence not confirmed), Yogiyo (local presence not confirmed)
 
 </details>
 

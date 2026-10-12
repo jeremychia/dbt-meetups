@@ -1,10 +1,10 @@
 """Turns find_local_speakers.py candidates into an assemble.py raw file, without lookups.
 
 usage, from the repo root:
-  python3 research/add_local_people.py <candidates.json> <city folder> "<town>,<town>" <raw out.json> [--github-only] [--github-cap 100]
+  python3 research/add_local_people.py <candidates.json> <city folder> "<town>,<town>" <raw out.json> [--github-only] [--github-cap 100] [--since 2024-01-01]
   python3 research/assemble.py <raw out.json> <city file> --base <city file>
 
-- speakers at in-person data talks since 2024 become proven speakers with an unverified location: a talk at a local event
+- speakers at in-person data talks since --since (default 2024-01-01) become proven speakers with an unverified location: a talk at a local event
   does not show where someone lives. a free-text speaker field is split into people, titles and self-stated pronouns.
 - organisers of local data groups become connectors.
 - github data people whose location names one of the towns become tier 3 attendee leads, ranked by how close their bio is
@@ -15,6 +15,7 @@ import json,re,sys,unicodedata
 CAND,city,places,OUT=sys.argv[1],sys.argv[2],[p.strip() for p in sys.argv[3].split(',')],sys.argv[4]
 gh_only='--github-only' in sys.argv
 CAP=int(sys.argv[sys.argv.index('--github-cap')+1]) if '--github-cap' in sys.argv else 100
+SINCE=sys.argv[sys.argv.index('--since')+1] if '--since' in sys.argv else '2024-01-01'
 TALK=re.compile(r"\b(data|analytics|dbt|sql|model(l)?ing|warehous|lakehouse|pipeline|\bbi\b|dashboard|tableau|power ?bi|snowflake|databricks|governance|quality|semantic|etl|elt|airflow|dagster|duckdb|iceberg|spark|kafka|stream|metrics|looker|bigquery|redshift|fabric|catalog|lineage)",re.I)
 CORE=re.compile(r"\b(dbt|analytics engineer|model(l)?ing|semantic|data quality|governance|warehous|lakehouse)",re.I)
 GROUP=re.compile(r"\b(data|analytics|dbt|sql|snowflake|databricks|tableau|power ?bi|fabric|pydata|pyladies|r-?ladies|women in (data|tech)|wids|big data|postgres|data engineering)",re.I)
@@ -64,8 +65,8 @@ for r in d['candidates']:
         gh.setdefault(r['name'],r)
     elif gh_only: continue
     elif r['role']=='host':
-        if GROUP.search(r['group']) and not NOTGROUP.search(r['group']) and r['date']>='2024-01-01' and not ORG.search(r['name']): ho.setdefault(r['name'],r)
-    elif r.get('in_person') and r['date']>='2024-01-01' and TALK.search(r['event']) and not NOTGROUP.search(r['group']):
+        if GROUP.search(r['group']) and not NOTGROUP.search(r['group']) and r['date']>=SINCE and not ORG.search(r['name']): ho.setdefault(r['name'],r)
+    elif r.get('in_person') and r['date']>=SINCE and TALK.search(r['event']) and not NOTGROUP.search(r['group']):
         sp.setdefault(r['name'],[]).append(r)
 
 GH_WEIGHTS=[(re.compile(r'\bdbt\b',re.I),5),(re.compile(r'analytics engineer',re.I),4),(re.compile(r'snowflake|looker|bigquery|redshift|warehouse|data model',re.I),2),(re.compile(r'business intelligence|\bbi\b|tableau|power ?bi',re.I),2),(re.compile(r'data engineer',re.I),2),(re.compile(r'analyst|data architect|data platform',re.I),1)]
