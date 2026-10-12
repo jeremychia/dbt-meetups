@@ -125,18 +125,37 @@ def page_text(url, cache):
     return text
 
 
-def github_social(login):
-    """the accounts a github user lists on their profile, including the x username field. None when the call failed,
-    so a rate-limited lookup is retried on the next run instead of being cached as a profile with no accounts."""
-    try:
-        out = subprocess.run(["gh", "api", f"users/{login}/social_accounts"], capture_output=True, text=True, timeout=30)
-        user = subprocess.run(["gh", "api", f"users/{login}"], capture_output=True, text=True, timeout=30)
-        if out.returncode or user.returncode:
-            return [] if "Not Found" in out.stdout + user.stdout else None
-        x = (json.loads(user.stdout or "{}") or {}).get("twitter_username")
-        return [a["url"] for a in json.loads(out.stdout or "[]")] + ([f"https://x.com/{x}"] if x else [])
-    except (ValueError, subprocess.TimeoutExpired, KeyError, TypeError):
-        return None
+GITHUB_USERS = "{%s}"
+GITHUB_USER = 'u%d: user(login: %s) { socialAccounts(first: 10) { nodes { url } } twitterUsername websiteUrl bio }'
+LINK_IN_TEXT = re.compile(r"(?:https?://)?(?:[a-z]{2,3}\.|www\.)?(?:linkedin\.com/in/[^\s,;)\"'<>|]+|(?:x|twitter)\.com/[A-Za-z0-9_]+|bsky\.app/profile/[^\s,;)\"'<>|]+)", re.I)
+
+
+def github_accounts(logins):
+    """{login: [urls]} for the accounts each github user lists: linked accounts, the x username, the website field and
+    profile links written in the bio, all in the user's own words. one graphql call covers 50 users. a login missing
+    from the result failed and is retried on the next run instead of being cached as a profile with no accounts."""
+    out = {}
+    for i in range(0, len(logins), 50):
+        batch = logins[i:i + 50]
+        query = GITHUB_USERS % " ".join(GITHUB_USER % (j, json.dumps(login)) for j, login in enumerate(batch))
+        for attempt in range(4):
+            r = subprocess.run(["gh", "api", "graphql", "-f", f"query={query}"], capture_output=True, text=True)
+            try:
+                data = (json.loads(r.stdout or "{}").get("data") or {})
+            except ValueError:
+                data = {}
+            if data:
+                break
+            subprocess.run(["sleep", "60"])
+        for j, login in enumerate(batch):
+            if f"u{j}" not in data:
+                continue
+            u = data[f"u{j}"] or {}  # null: the account no longer exists
+            urls = [a["url"] for a in ((u.get("socialAccounts") or {}).get("nodes") or [])]
+            urls += [f"https://x.com/{u['twitterUsername']}"] if u.get("twitterUsername") else []
+            urls += [s if s.startswith("http") else "https://" + s for s in LINK_IN_TEXT.findall(" ".join([u.get("websiteUrl") or "", u.get("bio") or ""]))]
+            out[login] = list(dict.fromkeys(urls))
+    return out
 
 
 def profile_api(url):
@@ -292,9 +311,8 @@ def fetch(cache):
         list(pool.map(lambda u: page_text(u, cache), own))
     known_path = os.path.join(cache, "github.json")
     known = json.load(open(known_path)) if os.path.exists(known_path) else {}
-    new = [login for login in gh if known.get(login) is None]  # each login costs two api calls of 5,000 an hour, so look each up once
-    for login in new:
-        known[login] = github_social(login)
+    new = [login for login in gh if known.get(login) is None]  # look each login up once
+    known.update(github_accounts(new))
     gh = {login: known.get(login) for login in gh}
     json.dump({k: v for k, v in known.items() if v is not None}, open(known_path, "w"))
     print(f"github: {len(new)} accounts looked up, {len(gh) - len(new)} reused from the cache", flush=True)

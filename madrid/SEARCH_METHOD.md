@@ -20,7 +20,7 @@ This file holds what is specific to Madrid. The method, scoring rules, schema an
 | Based in the region | 123 |
 | Based elsewhere | 0 |
 | Location unknown | 12 |
-| With a LinkedIn profile | 74 |
+| With a LinkedIn profile | 76 |
 | Job ads mentioning dbt | 10 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->
