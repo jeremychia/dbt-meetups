@@ -20,7 +20,7 @@ This file holds what is specific to Oslo. The method, scoring rules, schema and 
 | Based in the region | 115 |
 | Based elsewhere | 2 |
 | Location unknown | 39 |
-| With a LinkedIn profile | 35 |
+| With a LinkedIn profile | 43 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 11 |
 <!-- at-a-glance:end -->

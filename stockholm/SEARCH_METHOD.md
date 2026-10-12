@@ -20,7 +20,7 @@ This file holds what is specific to Stockholm. The method, scoring rules, schema
 | Based in the region | 222 |
 | Based elsewhere | 8 |
 | Location unknown | 11 |
-| With a LinkedIn profile | 124 |
+| With a LinkedIn profile | 134 |
 | Job ads mentioning dbt | 66 |
 | Past chapter meetups | 7 |
 <!-- at-a-glance:end -->

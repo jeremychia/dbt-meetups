@@ -20,7 +20,7 @@ This file holds what is specific to Riyadh. The method, scoring rules, schema an
 | Based in the region | 93 |
 | Based elsewhere | 1 |
 | Location unknown | 5 |
-| With a LinkedIn profile | 48 |
+| With a LinkedIn profile | 62 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

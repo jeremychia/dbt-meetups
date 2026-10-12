@@ -21,7 +21,7 @@ This file holds what is specific to Vilnius. The method, scoring rules, schema a
 | Based in the region | 62 |
 | Based elsewhere | 2 |
 | Location unknown | 56 |
-| With a LinkedIn profile | 110 |
+| With a LinkedIn profile | 111 |
 | Job ads mentioning dbt | 62 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

@@ -20,7 +20,7 @@ This file holds what is specific to Washington DC. The method, scoring rules, sc
 | Based in the region | 130 |
 | Based elsewhere | 1 |
 | Location unknown | 15 |
-| With a LinkedIn profile | 78 |
+| With a LinkedIn profile | 85 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

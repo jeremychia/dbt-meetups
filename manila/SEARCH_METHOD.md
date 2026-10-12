@@ -20,7 +20,7 @@ This file holds what is specific to Manila. The method, scoring rules, schema an
 | Based in the region | 64 |
 | Based elsewhere | 0 |
 | Location unknown | 4 |
-| With a LinkedIn profile | 21 |
+| With a LinkedIn profile | 22 |
 | Job ads mentioning dbt | 6 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

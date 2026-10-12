@@ -20,7 +20,7 @@ This file holds what is specific to Vancouver. The method, scoring rules, schema
 | Based in the region | 132 |
 | Based elsewhere | 7 |
 | Location unknown | 10 |
-| With a LinkedIn profile | 53 |
+| With a LinkedIn profile | 65 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

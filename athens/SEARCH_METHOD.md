@@ -20,7 +20,7 @@ This file holds what is specific to Athens. The method, scoring rules, schema an
 | Based in the region | 92 |
 | Based elsewhere | 5 |
 | Location unknown | 6 |
-| With a LinkedIn profile | 53 |
+| With a LinkedIn profile | 60 |
 | Job ads mentioning dbt | 7 |
 | Past chapter meetups | 3 |
 <!-- at-a-glance:end -->

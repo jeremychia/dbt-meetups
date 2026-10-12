@@ -20,7 +20,7 @@ This file holds what is specific to Austin. The method, scoring rules, schema an
 | Based in the region | 128 |
 | Based elsewhere | 5 |
 | Location unknown | 18 |
-| With a LinkedIn profile | 75 |
+| With a LinkedIn profile | 84 |
 | Job ads mentioning dbt | 9 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->

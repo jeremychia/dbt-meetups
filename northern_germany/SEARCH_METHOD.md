@@ -20,7 +20,7 @@ This file holds what is specific to Northern Germany. The method, scoring rules,
 | Based in the region | 74 |
 | Based elsewhere | 6 |
 | Location unknown | 22 |
-| With a LinkedIn profile | 63 |
+| With a LinkedIn profile | 70 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 2 |
 <!-- at-a-glance:end -->

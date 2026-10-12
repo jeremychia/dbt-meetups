@@ -20,7 +20,7 @@ This file holds what is specific to Floripa. The method, scoring rules, schema a
 | Based in the region | 60 |
 | Based elsewhere | 3 |
 | Location unknown | 18 |
-| With a LinkedIn profile | 30 |
+| With a LinkedIn profile | 40 |
 | Job ads mentioning dbt | 0 |
 | Past chapter meetups | 8 |
 <!-- at-a-glance:end -->

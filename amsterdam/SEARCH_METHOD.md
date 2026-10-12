@@ -20,7 +20,7 @@ This file holds what is specific to Amsterdam. The method, scoring rules, schema
 | Based in the region | 80 |
 | Based elsewhere | 7 |
 | Location unknown | 29 |
-| With a LinkedIn profile | 77 |
+| With a LinkedIn profile | 81 |
 | Job ads mentioning dbt | 12 |
 | Past chapter meetups | 16 |
 <!-- at-a-glance:end -->

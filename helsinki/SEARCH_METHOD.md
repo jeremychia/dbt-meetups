@@ -20,7 +20,7 @@ This file holds what is specific to Helsinki. The method, scoring rules, schema 
 | Based in the region | 82 |
 | Based elsewhere | 1 |
 | Location unknown | 28 |
-| With a LinkedIn profile | 36 |
+| With a LinkedIn profile | 40 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

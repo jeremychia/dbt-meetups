@@ -20,7 +20,7 @@ This file holds what is specific to Bangalore. The method, scoring rules, schema
 | Based in the region | 148 |
 | Based elsewhere | 3 |
 | Location unknown | 38 |
-| With a LinkedIn profile | 104 |
+| With a LinkedIn profile | 113 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

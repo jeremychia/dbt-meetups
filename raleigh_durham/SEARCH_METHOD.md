@@ -20,7 +20,7 @@ This file holds what is specific to Raleigh. The method, scoring rules, schema a
 | Based in the region | 91 |
 | Based elsewhere | 1 |
 | Location unknown | 30 |
-| With a LinkedIn profile | 54 |
+| With a LinkedIn profile | 62 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

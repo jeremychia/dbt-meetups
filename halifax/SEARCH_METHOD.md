@@ -20,7 +20,7 @@ This file holds what is specific to Halifax. The method, scoring rules, schema a
 | Based in the region | 19 |
 | Based elsewhere | 1 |
 | Location unknown | 9 |
-| With a LinkedIn profile | 12 |
+| With a LinkedIn profile | 13 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->

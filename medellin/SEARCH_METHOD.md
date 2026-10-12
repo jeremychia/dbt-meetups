@@ -12,15 +12,15 @@ This file holds what is specific to Medellín. The method, scoring rules, schema
 | | Count |
 |---|---|
 | Companies | 46 |
-| People | 104 |
+| People | 103 |
 | Tier 1 leads | 2 |
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 12 |
 | Spoke at this chapter before | 7 |
-| Based in the region | 97 |
+| Based in the region | 96 |
 | Based elsewhere | 0 |
 | Location unknown | 7 |
-| With a LinkedIn profile | 52 |
+| With a LinkedIn profile | 60 |
 | Job ads mentioning dbt | 5 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->

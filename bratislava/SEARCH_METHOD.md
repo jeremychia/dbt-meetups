@@ -20,7 +20,7 @@ This file holds what is specific to Bratislava. The method, scoring rules, schem
 | Based in the region | 19 |
 | Based elsewhere | 4 |
 | Location unknown | 17 |
-| With a LinkedIn profile | 18 |
+| With a LinkedIn profile | 19 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 6 |
 <!-- at-a-glance:end -->

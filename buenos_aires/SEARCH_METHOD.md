@@ -20,7 +20,7 @@ This file holds what is specific to Buenos Aires. The method, scoring rules, sch
 | Based in the region | 112 |
 | Based elsewhere | 0 |
 | Location unknown | 3 |
-| With a LinkedIn profile | 70 |
+| With a LinkedIn profile | 82 |
 | Job ads mentioning dbt | 8 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

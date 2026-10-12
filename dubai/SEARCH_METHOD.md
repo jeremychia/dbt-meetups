@@ -20,7 +20,7 @@ This file holds what is specific to Dubai. The method, scoring rules, schema and
 | Based in the region | 136 |
 | Based elsewhere | 5 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 72 |
+| With a LinkedIn profile | 82 |
 | Job ads mentioning dbt | 3 |
 | Past chapter meetups | 4 |
 <!-- at-a-glance:end -->

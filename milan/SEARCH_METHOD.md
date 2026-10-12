@@ -20,7 +20,7 @@ This file holds what is specific to Milan. The method, scoring rules, schema and
 | Based in the region | 97 |
 | Based elsewhere | 7 |
 | Location unknown | 17 |
-| With a LinkedIn profile | 47 |
+| With a LinkedIn profile | 53 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 1 |
 <!-- at-a-glance:end -->

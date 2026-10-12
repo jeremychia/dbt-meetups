@@ -20,7 +20,7 @@ This file holds what is specific to Brisbane. The method, scoring rules, schema 
 | Based in the region | 50 |
 | Based elsewhere | 1 |
 | Location unknown | 14 |
-| With a LinkedIn profile | 26 |
+| With a LinkedIn profile | 29 |
 | Job ads mentioning dbt | 2 |
 | Past chapter meetups | 5 |
 <!-- at-a-glance:end -->

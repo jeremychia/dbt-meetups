@@ -20,7 +20,7 @@ This file holds what is specific to Lagos. The method, scoring rules, schema and
 | Based in the region | 140 |
 | Based elsewhere | 5 |
 | Location unknown | 44 |
-| With a LinkedIn profile | 105 |
+| With a LinkedIn profile | 111 |
 | Job ads mentioning dbt | 4 |
 | Past chapter meetups | 13 |
 <!-- at-a-glance:end -->
