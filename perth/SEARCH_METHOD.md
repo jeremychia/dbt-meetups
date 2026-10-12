@@ -17,10 +17,10 @@ This file holds what is specific to Perth. The method, scoring rules, schema and
 | First-time speakers (publish, no talk yet) | 0 |
 | Proven speakers | 27 |
 | Spoke at this chapter before | 0 |
-| Based in the region | 36 |
+| Based in the region | 37 |
 | Based elsewhere | 2 |
-| Location unknown | 17 |
-| With a LinkedIn profile | 26 |
+| Location unknown | 16 |
+| With a LinkedIn profile | 27 |
 | Job ads mentioning dbt | 1 |
 | Past chapter meetups | 0 |
 <!-- at-a-glance:end -->

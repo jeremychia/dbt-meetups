@@ -17,10 +17,10 @@ This file holds what is specific to Seoul. The method, scoring rules, schema and
 | First-time speakers (publish, no talk yet) | 8 |
 | Proven speakers | 59 |
 | Spoke at this chapter before | 20 |
-| Based in the region | 136 |
+| Based in the region | 137 |
 | Based elsewhere | 3 |
-| Location unknown | 21 |
-| With a LinkedIn profile | 55 |
+| Location unknown | 20 |
+| With a LinkedIn profile | 61 |
 | Job ads mentioning dbt | 38 |
 | Past chapter meetups | 12 |
 <!-- at-a-glance:end -->
