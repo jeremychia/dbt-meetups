@@ -22,6 +22,12 @@ do not repeat the employer queries. search the talk instead:
 2. WebFetch the best speaker page, agenda entry, event write-up, slides page, video page or post by the person, and look for a profile link next to the name or in the description.
 3. WebSearch `"<name>" <chapter city>`, allowed_domains ["linkedin.com"], and accept only a result tied to the talk, the event, the community or the employer.
 
+## xing (germany, austria and switzerland)
+for a person in a german-speaking chapter still missing after the linkedin steps:
+1. WebSearch `"<name>" <employer>`, allowed_domains ["xing.com"].
+2. if nothing, WebSearch `"<name>" <city>`, allowed_domains ["xing.com"], and accept only a result tied to the employer, talk or community.
+take only a `xing.com/profile/<name>` url, never a company or jobs page, and never fetch xing.com. record it as a profile of type `xing`.
+
 ## names that are not a full latin name
 - a handle (in parentheses, or the whole name): search `"<handle>"` with the employer or community. look for that exact username on x.com, github.com, zenn.dev, qiita.com, connpass.com, note.com, ithelp.ithome.com.tw or medium.
 - a chinese, japanese or korean name: search it with the employer or community, then its romanisation if the record gives one.

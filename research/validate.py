@@ -21,8 +21,8 @@ PERSON = ["id","name","pronouns","title","city","based_in_region","level","linke
 EVID = ["type","event","title","date","url","content_id","co_authors","mentions_dbt","description","topics",
         "suggested_talk_angle","url_precision","confidence"]
 EMAIL = re.compile(r"[\w.+-]+@(?!(rladies|fosstodon)\.)[\w-]+\.[a-z]{2,}", re.I)  # group addresses and mastodon handles are not personal
-PROFILE_TYPES = {"github","meetup","zenn","qiita","velog","medium","devto","substack","ithome","sessionize","x","bluesky","website","note"}
-MESSAGING_TYPES = {"meetup","x","bluesky"}  # profiles an organiser can send a message through, with linkedin
+PROFILE_TYPES = {"github","meetup","zenn","qiita","velog","medium","devto","substack","ithome","sessionize","x","bluesky","website","note","xing"}
+MESSAGING_TYPES = {"meetup","x","bluesky","xing"}  # profiles an organiser can send a message through, with linkedin
 
 
 def reachable(p):

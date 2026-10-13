@@ -33,6 +33,7 @@ PROFILE = [  # type, pattern, canonical url
     ("linkedin", re.compile(r"(?:[a-z]{2,3}\.)?linkedin\.com/in/([A-Za-z0-9\-_%.]+)", re.I), "https://www.linkedin.com/in/{}/"),
     ("x", re.compile(r"(?:www\.)?(?:x|twitter)\.com/(?!intent|share|home|search|hashtag|i/)@?([A-Za-z0-9_]{2,15})(?![A-Za-z0-9_/])", re.I), "https://x.com/{}"),
     ("bluesky", re.compile(r"bsky\.app/profile/([A-Za-z0-9.\-]+)", re.I), "https://bsky.app/profile/{}"),
+    ("xing", re.compile(r"xing\.com/profile/([A-Za-z0-9_\-]+)", re.I), "https://www.xing.com/profile/{}"),
     ("sessionize", re.compile(r"sessionize\.com/(?!api|app|s/)([A-Za-z0-9\-_.]+)/?(?![A-Za-z0-9\-_./])", re.I), "https://sessionize.com/{}"),
     ("github", re.compile(r"github\.com/(?!orgs|sponsors|topics|features|about)([A-Za-z0-9\-]+)/?(?![A-Za-z0-9\-_./])", re.I), "https://github.com/{}"),
 ]
@@ -128,7 +129,7 @@ def page_text(url, cache):
 
 GITHUB_USERS = "{%s}"
 GITHUB_USER = 'u%d: user(login: %s) { socialAccounts(first: 10) { nodes { url } } twitterUsername websiteUrl bio }'
-LINK_IN_TEXT = re.compile(r"(?:https?://)?(?:[a-z]{2,3}\.|www\.)?(?:linkedin\.com/in/[^\s,;)\"'<>|]+|(?:x|twitter)\.com/[A-Za-z0-9_]+|bsky\.app/profile/[^\s,;)\"'<>|]+)", re.I)
+LINK_IN_TEXT = re.compile(r"(?:https?://)?(?:[a-z]{2,3}\.|www\.)?(?:linkedin\.com/in/[^\s,;)\"'<>|]+|xing\.com/profile/[A-Za-z0-9_\-]+|(?:x|twitter)\.com/[A-Za-z0-9_]+|bsky\.app/profile/[^\s,;)\"'<>|]+)", re.I)
 
 
 def github_accounts(logins):
@@ -351,7 +352,7 @@ def candidates(cache, everyone=False):
                 continue
             if u not in parsed:
                 text = page_text(u, cache)
-                parsed[u] = links_on(text) if re.search(r"linkedin\.com/in/|x\.com/|twitter\.com/|bsky\.app|sessionize\.com/|github\.com/|personal_linkedin_page|linkedin_handle", text) else ("", [])
+                parsed[u] = links_on(text) if re.search(r"linkedin\.com/in/|xing\.com/profile/|x\.com/|twitter\.com/|bsky\.app|sessionize\.com/|github\.com/|personal_linkedin_page|linkedin_handle", text) else ("", [])
             plain, links = parsed[u]
             if not links:
                 continue
