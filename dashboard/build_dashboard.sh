@@ -1,5 +1,6 @@
 #!/bin/bash
-# Regenerates dashboard_data.json and world_path.txt, then embeds both into index.html.
+# Regenerates dashboard_data.json and world_path.txt, then embeds both into index.html
+# (index.template.html is a complete HTML document, so no wrapping is needed).
 # Run this after enriched/*.json or speaker-identities.json change.
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -18,7 +19,8 @@ with open('world_path.txt') as f:
 with open('index.template.html') as f:
     html = f.read()
 
-html = html.replace('__DATA_JSON__', json.dumps(data, ensure_ascii=False))
+# escape "</" so a string in the data can't close the <script> tag
+html = html.replace('__DATA_JSON__', json.dumps(data, ensure_ascii=False).replace('</', '<\\/'))
 html = html.replace('__WORLD_PATH__', world_path)
 
 with open('index.html', 'w') as f:
