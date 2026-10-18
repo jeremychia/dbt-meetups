@@ -1,11 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>dbt Meetup Community Dashboard</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23FF694B'/><path d='M8 10h3v12H8V10zm5-2h3v14h-3V8zm5 4h3v10h-3v-10z' fill='%23fff'/></svg>">
 <style>
+  /* Dark tokens are the default and are defined once; the light theme only overrides what differs. */
   .viz-root {
     --surface-1:      #0f0f0f;
     --surface-2:      #1a1a1a;
     --border:         #3a3a3a;
+    --control-border: #707070; /* form controls: >= 3:1 against both surfaces */
     --text-primary:   #ffffff;
     --text-secondary: #d0d0d0;
     --text-muted:     #a0a0a0;
@@ -20,58 +26,23 @@
     --accent-highlight: #5ab3ff;
     --map-land: #2a2a2a;
     --map-ocean: #0a0a0a;
+    --map-marker-stroke: #e6e6e6;
+    /* sequential ramp, low -> high count; light-on-dark here */
+    --ramp-0: #6c93c9; --ramp-1: #8aaede; --ramp-2: #a8c6ee;
+    --ramp-3: #c4daf6; --ramp-4: #dceafb; --ramp-5: #f1f7fe;
     --positive: #22e6a5;
     --negative: #ff7f7f;
-  }
-  @media (prefers-color-scheme: dark) {
-    .viz-root {
-      --surface-1:      #0f0f0f;
-      --surface-2:      #1a1a1a;
-      --border:         #3a3a3a;
-      --text-primary:   #ffffff;
-      --text-secondary: #d0d0d0;
-      --text-muted:     #a0a0a0;
-      --series-1: #5ab3ff;
-      --series-2: #22e6a5;
-      --series-3: #ffc947;
-      --series-4: #33ff33;
-      --series-5: #c9a6ff;
-      --series-6: #ff7f7f;
-      --series-7: #ff7fc7;
-      --series-8: #ff9447;
-      --map-land: #2a2a2a;
-      --map-ocean: #0a0a0a;
-      --positive: #1ae67e;
-      --negative: #ff6b6b;
-    }
-  }
-  :root[data-theme="dark"] .viz-root {
-    --surface-1:      #0f0f0f;
-    --surface-2:      #1a1a1a;
-    --border:         #3a3a3a;
-    --text-primary:   #ffffff;
-    --text-secondary: #d0d0d0;
-    --text-muted:     #a0a0a0;
-    --series-1: #5ab3ff;
-    --series-2: #22e6a5;
-    --series-3: #ffc947;
-    --series-4: #33ff33;
-    --series-5: #c9a6ff;
-    --series-6: #ff7f7f;
-    --series-7: #ff7fc7;
-    --series-8: #ff9447;
-    --map-land: #2a2a2a;
-    --map-ocean: #0a0a0a;
-    --positive: #22e6a5;
-    --negative: #ff7f7f;
+    --chip-active-text: var(--positive);
+    --chip-risk-text: var(--series-3);
   }
   :root[data-theme="light"] .viz-root {
     --surface-1:      #fafaf8;
     --surface-2:      #f0ede7;
     --border:         #ddd7cc;
+    --control-border: #7f7f7f;
     --text-primary:   #1a1a1a;
     --text-secondary: #4a4a4a;
-    --text-muted:     #707070;
+    --text-muted:     #5f5f5f;
     --series-1: #0052cc; /* dbt engineering practices - deep saturated blue */
     --series-2: #008b5c; /* dbt product - deep teal */
     --series-3: #d68a00; /* platform & architecture - deep orange */
@@ -80,10 +51,17 @@
     --series-6: #cc2222; /* people & organization - deep red */
     --series-7: #d63384; /* analytics & bi - deep magenta */
     --series-8: #cc5511; /* emerging & trends - deep coral */
+    --accent-highlight: #0052cc;
     --map-land: #e8e6df;
     --map-ocean: #f5f5f5;
-    --positive: #008b5c;
+    --map-marker-stroke: #1a1a1a;
+    /* dark-on-light here: more events = darker */
+    --ramp-0: #6da7ec; --ramp-1: #3987e5; --ramp-2: #2468bd;
+    --ramp-3: #1c5cab; --ramp-4: #104281; --ramp-5: #08285a;
+    --positive: #00704a;
     --negative: #cc2222;
+    --chip-active-text: #005636;
+    --chip-risk-text: #7a5000;
   }
 
   * { box-sizing: border-box; }
@@ -98,6 +76,29 @@
   }
   .wrap { max-width: 1180px; margin: 0 auto; }
 
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .skip-link {
+    position: absolute; left: 12px; top: -48px; z-index: 100; padding: 8px 14px; border-radius: 8px;
+    background: var(--surface-2); color: var(--text-primary); border: 2px solid var(--accent-highlight);
+    font-size: 13px; font-weight: 600; text-decoration: none;
+  }
+  .skip-link:focus { top: 12px; }
+  /* reset so a <button> can stand in for a clickable div without changing its look */
+  .btn-reset {
+    font: inherit; color: inherit; background: none; border: 0; margin: 0;
+    text-align: left; appearance: none; -webkit-appearance: none;
+  }
+  button, a, select, input, [tabindex] { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline: 2px solid var(--accent-highlight); outline-offset: 2px; }
+  [tabindex="-1"]:focus { outline: none; }
+  svg [tabindex]:focus-visible { outline-offset: 1px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  }
+
   header.page-head { margin-bottom: 20px; }
   header.page-head h1 { font-size: 24px; margin: 0 0 4px; font-weight: 700; }
   header.page-head p { margin: 0; color: var(--text-secondary); font-size: 13.5px; max-width: 720px; line-height: 1.5; }
@@ -107,16 +108,7 @@
     border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; flex-shrink: 0;
   }
   .github-link:hover { color: var(--text-primary); border-color: var(--text-secondary); }
-
-  /* persona quick-links */
-  .persona-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
-  .persona-chip {
-    font-size: 12.5px; color: var(--text-secondary); background: var(--surface-2);
-    border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px;
-    text-decoration: none;
-  }
-  .persona-chip:hover { color: var(--text-primary); border-color: var(--text-secondary); }
-  .persona-chip strong { color: var(--text-primary); }
+  .github-link.external-link { border-style: dashed; }
 
   /* chapter picker bar - top of page, drives everything below */
   .picker-bar {
@@ -131,6 +123,15 @@
   .range-control input[type=range] { width: 140px; }
   .range-control .range-label { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 
+  /* DOM order is picker, tabs, stats, content (so the tabs are reached before the tiles
+     with the keyboard); the visual order stays picker, stats, tabs, content. */
+  main#main-content { display: flex; flex-direction: column; }
+  main#main-content > * { order: 3; }
+  main#main-content > .picker-bar { order: 0; }
+  main#main-content > .stats-block { order: 1; }
+  main#main-content > .group-nav { order: 2; }
+  main#main-content > .sr-only { order: 4; }
+  .stat-row-caption { font-size: 11.5px; color: var(--text-muted); margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
   .stat-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -138,6 +139,7 @@
     margin-bottom: 28px;
   }
   .stat-tile {
+    display: block; width: 100%; cursor: pointer;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -145,10 +147,9 @@
     transition: border-color 0.12s, background 0.12s;
   }
   .stat-tile:hover, .stat-tile:focus-visible { border-color: var(--text-secondary); background: var(--surface-1); }
-  .stat-tile:focus-visible { outline: 2px solid var(--accent-highlight); outline-offset: 1px; }
   .stat-tile .stat-value { font-size: 24px; font-weight: 700; line-height: 1.1; display: flex; align-items: baseline; gap: 6px; }
   .stat-tile .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; display: flex; align-items: center; gap: 5px; }
-  .stat-tile .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+  .stat-tile .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; display: block; }
 
   .action-dot {
     width: 8px; height: 8px; border-radius: 50%; background: var(--series-3); flex-shrink: 0;
@@ -157,7 +158,7 @@
   .action-callout { margin-bottom: 16px; border-color: color-mix(in srgb, var(--series-3) 35%, var(--border)); }
   .action-callout-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .action-callout-row {
-    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%;
     padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; cursor: pointer;
   }
   .action-callout-row:last-child { border-bottom: none; }
@@ -168,8 +169,18 @@
   .delta.neg { color: var(--negative); }
   .delta.flat { color: var(--text-muted); }
 
+  /* active chart-filter chips + chapter benchmark card (top of Overview) */
+  .active-filters { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; font-size: 12.5px; color: var(--text-secondary); }
+  .active-filters .af-chip {
+    font-size: 12px; color: var(--text-primary); background: var(--surface-2); border: 1px solid var(--control-border);
+    border-radius: 999px; padding: 3px 10px; cursor: pointer;
+  }
+  .active-filters .af-chip:hover { border-color: var(--text-primary); }
+  .benchmark { margin-bottom: 28px; }
+  .benchmark .bm-title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; }
+
   section { margin-bottom: 36px; }
-  section h2 {
+  section h3 {
     font-size: 16px; font-weight: 700; margin: 0 0 4px;
     display: flex; align-items: center; gap: 8px;
   }
@@ -193,18 +204,11 @@
   .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   @media (max-width: 860px) { .three-col { grid-template-columns: 1fr; } }
 
-  /* category bar (part-to-whole, ordered horizontal bars per skill guidance over donut) */
-  .cat-bar-row { display: flex; align-items: center; gap: 10px; margin: 9px 0; }
-  .cat-bar-label { width: 190px; flex-shrink: 0; font-size: 13px; color: var(--text-primary); text-align: right; }
-  .cat-bar-track { flex: 1; background: var(--surface-1); border-radius: 4px; height: 18px; position: relative; overflow: hidden; }
-  .cat-bar-fill { height: 100%; border-radius: 4px; }
-  .cat-bar-value { width: 80px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-
   /* topic mix: two 100%-stacked comparison bars */
   .stack-row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
   .stack-row-label { width: 120px; flex-shrink: 0; font-size: 12.5px; color: var(--text-secondary); text-align: right; }
   .stack-bar { flex: 1; display: flex; height: 28px; border-radius: 6px; overflow: hidden; background: var(--surface-1); }
-  .stack-seg { height: 100%; cursor: pointer; transition: filter 0.1s; }
+  .stack-seg { height: 100%; transition: filter 0.1s; }
   .stack-seg:hover { filter: brightness(1.15); }
   .stack-seg + .stack-seg { border-left: 2px solid var(--surface-2); }
 
@@ -213,16 +217,17 @@
   .donut-svg { flex-shrink: 0; }
   .donut-seg { cursor: pointer; transition: opacity 0.1s; }
   .donut-seg:hover { opacity: 0.8; }
+  .donut-seg:focus-visible { stroke: var(--text-primary); stroke-width: 2; outline: none; }
   .donut-center-value { font-size: 22px; font-weight: 700; fill: var(--text-primary); }
   .donut-center-label { font-size: 11px; fill: var(--text-secondary); }
-  .donut-legend { flex: 1; min-width: 220px; }
+  .donut-legend { flex: 1 1 220px; min-width: 0; }
   .donut-legend-row {
-    display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12.5px; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12.5px; cursor: pointer; width: 100%;
     border-radius: 6px; padding-left: 6px;
   }
   .donut-legend-row:hover { background: var(--surface-1); }
   .donut-legend-row .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-  .donut-legend-row .name { flex: 1; }
+  .donut-legend-row .name { flex: 1; min-width: 0; }
   .donut-legend-row .val { color: var(--text-secondary); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   /* topic sample talks */
@@ -233,10 +238,10 @@
   .topic-sample-item .ts-meta { color: var(--text-secondary); font-size: 11.5px; margin-top: 2px; }
   .sample-sort-row { display: flex; gap: 6px; margin-bottom: 8px; }
   .sample-sort-btn {
-    font-size: 11px; color: var(--text-secondary); background: var(--surface-1); border: 1px solid var(--border);
+    font-size: 11px; color: var(--text-secondary); background: var(--surface-1); border: 1px solid var(--control-border);
     border-radius: 6px; padding: 3px 9px; cursor: pointer;
   }
-  .sample-sort-btn.active { color: var(--text-primary); border-color: var(--text-secondary); font-weight: 600; }
+  .sample-sort-btn.active { color: var(--text-primary); border-color: var(--text-secondary); font-weight: 600; box-shadow: inset 0 -2px 0 currentColor; }
 
   /* chapter comparison table */
   table.cmp {
@@ -247,9 +252,12 @@
     text-align: left; font-weight: 600; color: var(--text-secondary);
     font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em;
     padding: 6px 10px; border-bottom: 1px solid var(--border);
-    cursor: pointer; user-select: none; white-space: nowrap;
+    user-select: none; white-space: nowrap;
   }
-  table.cmp th:hover { color: var(--text-primary); }
+  table.cmp th button {
+    cursor: pointer; text-transform: inherit; letter-spacing: inherit; font-weight: inherit; padding: 0;
+  }
+  table.cmp th button:hover { color: var(--text-primary); }
   table.cmp th.sorted::after { content: " \25BC"; font-size: 9px; }
   table.cmp th.sorted.asc::after { content: " \25B2"; }
   table.cmp td {
@@ -257,6 +265,8 @@
     font-variant-numeric: tabular-nums;
     color: var(--text-primary);
   }
+  table.cmp td .chapter-link { cursor: pointer; font-weight: inherit; }
+  table.cmp td .chapter-link:hover { text-decoration: underline; }
   table.cmp tbody tr:hover { background: var(--surface-1); }
   table.cmp tbody tr.highlight-row { background: color-mix(in srgb, var(--accent-highlight) 12%, transparent); }
   table.cmp tbody tr.highlight-row td:first-child { font-weight: 700; }
@@ -267,12 +277,10 @@
     display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 999px;
     background: var(--surface-1); border: 1px solid var(--border); color: var(--text-secondary);
   }
-  .chip.status-active { background: color-mix(in srgb, var(--positive) 25%, transparent); color: var(--positive); border-color: transparent; }
-  .chip.status-at-risk { background: color-mix(in srgb, var(--series-3) 25%, transparent); color: var(--series-3); border-color: transparent; }
+  .chip.status-active { background: color-mix(in srgb, var(--positive) 25%, transparent); color: var(--chip-active-text); border-color: transparent; }
+  .chip.status-at-risk { background: color-mix(in srgb, var(--series-3) 25%, transparent); color: var(--chip-risk-text); border-color: transparent; }
+  :root[data-theme="light"] .chip.status-at-risk { background: color-mix(in srgb, var(--series-3) 20%, transparent); }
   .chip.status-dormant { background: var(--surface-1); color: var(--text-muted); }
-  @media (prefers-color-scheme: dark) { .chip.status-at-risk { background: color-mix(in srgb, var(--series-3) 25%, transparent); color: var(--series-3); } }
-  :root[data-theme="dark"] .chip.status-at-risk { background: color-mix(in srgb, var(--series-3) 25%, transparent); color: var(--series-3); }
-  :root[data-theme="light"] .chip.status-at-risk { background: color-mix(in srgb, var(--series-3) 20%, transparent); color: var(--series-3); }
   .badge-mine {
     display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px;
     background: var(--series-1); color: var(--surface-1); margin-left: 6px; vertical-align: middle;
@@ -280,11 +288,11 @@
 
   .search-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
   input.search-input {
-    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface-1); border: 1px solid var(--control-border); border-radius: 8px;
     padding: 7px 12px; font-size: 13px; color: var(--text-primary); flex: 1; min-width: 200px;
   }
   select.chapter-select, select.filter-select {
-    background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface-1); border: 1px solid var(--control-border); border-radius: 8px;
     padding: 7px 12px; font-size: 13px; color: var(--text-primary);
   }
 
@@ -302,16 +310,18 @@
   .mini-bar-chart-label { font-size: 9.5px; fill: var(--text-secondary); }
   .mini-bar-chart-bar { fill: var(--series-1); }
   .mini-bar-chart-bar:hover { fill: var(--accent-highlight); }
+  .mini-bar-chart-bar:focus-visible { stroke: var(--text-primary); stroke-width: 2; outline: none; }
   .mini-bar-chart-value { font-size: 9px; fill: var(--text-muted); }
+  .growth-hit:focus-visible { fill: color-mix(in srgb, var(--accent-highlight) 15%, transparent); stroke: var(--accent-highlight); stroke-width: 1.5; outline: none; }
 
   /* speaker list */
   .speaker-row {
     padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
   }
   .speaker-row:last-child { border-bottom: none; }
-  .speaker-row-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-  .speaker-name { font-weight: 600; }
-  .speaker-chapters { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+  .speaker-row-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; width: 100%; }
+  .speaker-name { font-weight: 600; display: block; }
+  .speaker-chapters { color: var(--text-secondary); font-size: 12px; margin-top: 2px; display: block; }
   .speaker-count { font-variant-numeric: tabular-nums; color: var(--text-secondary); font-size: 12.5px; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
   .speaker-caret { color: var(--text-muted); font-size: 10px; transition: transform 0.15s; }
   .speaker-row.expanded .speaker-caret { transform: rotate(90deg); }
@@ -328,12 +338,12 @@
   }
   .event-row:last-child { border-bottom: none; }
   .event-row-head {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: space-between; align-items: center; width: 100%;
     padding: 10px 4px; cursor: pointer;
   }
   .event-row-head:hover { background: var(--surface-1); }
-  .event-row-head .event-title { font-weight: 600; }
-  .event-row-head .event-meta { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+  .event-row-head .event-title { font-weight: 600; display: block; }
+  .event-row-head .event-meta { color: var(--text-secondary); font-size: 12px; margin-top: 2px; display: block; }
   .event-row-head .event-caret { color: var(--text-muted); font-size: 11px; transition: transform 0.15s; flex-shrink: 0; margin-left: 8px; }
   .event-row.expanded .event-caret { transform: rotate(90deg); }
   .event-row-body { display: none; padding: 4px 4px 14px 4px; }
@@ -348,12 +358,12 @@
   /* event calendar */
   .calendar-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .calendar-nav strong { font-size: 14px; min-width: 130px; text-align: center; }
-  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
   .calendar-weekday { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; text-align: center; padding-bottom: 4px; }
   .calendar-cell {
     aspect-ratio: 1; border-radius: 6px; background: var(--surface-1); border: 1px solid transparent;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-    padding: 4px 2px; font-size: 11px; color: var(--text-muted);
+    padding: 4px 2px; font-size: 11px; color: var(--text-muted); min-width: 0;
   }
   .calendar-cell.empty { background: transparent; }
   .calendar-cell.has-events {
@@ -365,7 +375,17 @@
   .calendar-cell .cal-daynum { font-weight: 600; font-size: 12px; }
   .calendar-cell .cal-dots { display: flex; gap: 2px; margin-top: 3px; flex-wrap: wrap; justify-content: center; }
   .calendar-cell .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-highlight); }
-  .calendar-cell .cal-count { font-size: 9.5px; color: var(--text-secondary); margin-top: 2px; }
+  .calendar-cell .cal-count { font-size: 9.5px; color: var(--text-secondary); margin-top: 2px; display: block; }
+  @media (max-width: 520px) {
+    .calendar-cell { padding: 2px 0; }
+    .calendar-cell .cal-count { display: none; }
+    .calendar-cell .cal-dot { width: 4px; height: 4px; }
+    .viz-root { padding-left: 12px; padding-right: 12px; }
+  }
+  .donut-wrap > * { min-width: 0; }
+  .donut-svg { max-width: 100%; height: auto; }
+  .search-row, .calendar-nav { flex-wrap: wrap; }
+  .search-row .table-toggle { margin-left: 0; }
   #calendar-day-detail { margin-top: 16px; }
   #calendar-day-detail:empty { margin-top: 0; }
 
@@ -379,22 +399,25 @@
   .talk-result mark { background: color-mix(in srgb, var(--accent-highlight) 35%, transparent); color: inherit; border-radius: 2px; }
 
   .legend-row { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px; font-size: 12px; color: var(--text-secondary); }
-  .legend-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  button.legend-item { cursor: pointer; }
   .legend-item.muted { opacity: 0.4; }
   .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 
   .table-toggle {
-    font-size: 12px; color: var(--text-secondary); background: none; border: 1px solid var(--border);
-    border-radius: 6px; padding: 4px 10px; cursor: pointer; margin-left: auto;
+    font-size: 12px; color: var(--text-secondary); background: none; border: 1px solid var(--control-border);
+    border-radius: 6px; padding: 4px 10px; min-height: 32px; cursor: pointer; margin-left: auto;
   }
   .table-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
-  .table-toggle.active { color: var(--text-primary); border-color: var(--text-secondary); background: var(--surface-1); }
+  .table-toggle.active { color: var(--text-primary); border-color: var(--text-secondary); background: var(--surface-1); box-shadow: inset 0 -2px 0 currentColor; }
   .hidden { display: none !important; }
 
   /* map controls */
+  #world-map { cursor: grab; }
+  .chapter-marker { cursor: pointer; }
   .map-controls { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 4px; z-index: 5; }
   .map-btn {
-    width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-1);
+    width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--control-border); background: var(--surface-1);
     color: var(--text-primary); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
   .map-btn:hover { background: var(--surface-2); }
@@ -415,10 +438,10 @@
   .group-nav button {
     font: inherit; font-size: 13px; font-weight: 600; color: var(--text-secondary);
     background: none; border: none; cursor: pointer;
-    text-decoration: none; padding: 6px 12px; border-radius: 7px;
+    text-decoration: none; padding: 8px 12px; min-height: 36px; border-radius: 7px;
   }
   .group-nav button:hover { color: var(--text-primary); background: var(--surface-2); }
-  .group-nav button.active { color: var(--text-primary); background: var(--surface-2); }
+  .group-nav button.active { color: var(--text-primary); background: var(--surface-2); box-shadow: inset 0 -2px 0 currentColor; }
   .content-group { margin-bottom: 12px; }
   .content-group.hidden { display: none; }
   .group-head { margin-bottom: 20px; }
@@ -440,77 +463,93 @@
   }
   .theme-toggle button {
     background: none; border: none; color: var(--text-secondary); cursor: pointer;
-    font-size: 14px; padding: 4px 8px; border-radius: 6px; transition: all 0.2s;
+    font-size: 14px; padding: 4px 8px; min-width: 36px; min-height: 36px; border-radius: 6px; transition: all 0.2s;
     font-weight: 500;
   }
   .theme-toggle button:hover { color: var(--text-primary); background: var(--surface-2); }
-  .theme-toggle button.active { color: var(--text-primary); background: var(--surface-2); }
+  .theme-toggle button.active { color: var(--text-primary); background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--text-secondary); }
 </style>
-
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <div class="viz-root">
   <div class="wrap">
     <header class="page-head">
       <div class="flex-between">
         <h1>dbt Meetup Community Dashboard</h1>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="theme-toggle">
-            <span style="font-size: 11.5px; color: var(--text-muted);">Theme:</span>
-            <button id="theme-dark" class="active" title="Dark mode">🌙</button>
-            <button id="theme-light" title="Light mode">☀️</button>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div class="theme-toggle" role="group" aria-label="Theme">
+            <span style="font-size: 11.5px; color: var(--text-muted);" aria-hidden="true">Theme:</span>
+            <button type="button" id="theme-dark" class="active" title="Dark mode" aria-label="Dark theme" aria-pressed="true"><span aria-hidden="true">🌙</span></button>
+            <button type="button" id="theme-light" title="Light mode" aria-label="Light theme" aria-pressed="false"><span aria-hidden="true">☀️</span></button>
           </div>
+          <a class="github-link external-link" id="organiser-link" href="organiser/index.html">Organiser cockpit <span aria-hidden="true">↗</span><span class="sr-only">(separate page: speaker and attendee leads for each chapter)</span></a>
           <a class="github-link" href="https://github.com/jeremychia/dbt-meetups" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
             GitHub
           </a>
         </div>
       </div>
-      <p>Cross-chapter data from every dbt Meetup chapter's event history. Pick your chapter below to benchmark it against the rest of the community, or jump straight to the section relevant to you.</p>
+      <p>Cross-chapter data from every dbt Meetup chapter's event history. Pick your chapter to benchmark it against the community.</p>
     </header>
 
-    <div class="persona-row">
-      <a class="persona-chip" href="#" data-page="group-chapters"><strong>Community organiser</strong> — chapter health, at-risk status</a>
-      <a class="persona-chip" href="#" data-page="group-overview"><strong>Community manager</strong> — topic mix, growth trends</a>
-      <a class="persona-chip" href="#" data-page="group-talks"><strong>Just here for trivia</strong> — speakers, talk search, when we meet</a>
-      <a class="persona-chip" href="organiser/"><strong>Organiser cockpit</strong> — speaker and attendee leads for each chapter</a>
-    </div>
-
+    <main id="main-content" tabindex="-1">
     <div class="picker-bar">
       <label for="my-chapter-select">Your chapter</label>
       <select class="chapter-select" id="my-chapter-select">
         <option value="">Select your chapter…</option>
       </select>
-      <button class="table-toggle hidden" id="clear-chapter-select" style="margin-left:0;">Clear</button>
+      <button type="button" class="table-toggle hidden" id="clear-chapter-select" style="margin-left:0;">Clear</button>
       <div class="range-control">
         <span class="range-label" id="range-label">Last 12 months</span>
-        <input type="range" id="date-range-slider" min="3" max="96" step="1" value="12">
+        <input type="range" id="date-range-slider" min="3" max="96" step="1" value="12" aria-label="Trailing window length in months" aria-valuetext="Last 12 months">
       </div>
       <div class="picker-sub" id="dataset-disclaimer"></div>
     </div>
 
-    <div class="stat-row" id="stat-row"></div>
-
-    <nav class="group-nav">
+    <nav class="group-nav" aria-label="Dashboard sections">
       <button type="button" data-page="group-overview">Overview</button>
       <button type="button" data-page="group-chapters">Chapters</button>
       <button type="button" data-page="group-talks">Talks &amp; Speakers</button>
     </nav>
 
+    <div class="stats-block" role="group" aria-labelledby="stat-row-caption">
+      <p class="stat-row-caption" id="stat-row-caption">Trailing window · last 12 months</p>
+      <div class="stat-row" id="stat-row"></div>
+    </div>
+    <div class="sr-only" id="stat-status" role="status" aria-live="polite" aria-atomic="true"></div>
+
     <div class="content-group" id="group-overview">
       <div class="group-head">
-        <h2 class="group-title">Overview</h2>
-        <p>Community-wide trends — what's being talked about, how fast the community is growing, and where it meets.</p>
+        <h2 class="group-title" tabindex="-1">Overview</h2>
+        <p>Community-wide trends: topics, growth and where we meet.</p>
+      </div>
+
+      <div class="active-filters hidden" id="active-filters" role="group" aria-label="Active chart filters">
+        <span>Filtered by:</span>
+        <span id="active-filters-chips" style="display:contents;"></span>
+        <button type="button" class="table-toggle" id="clear-all-filters" style="margin-left:0;">Clear</button>
+      </div>
+
+      <div class="card benchmark hidden" id="chapter-benchmark">
+        <div class="flex-between">
+          <div class="bm-title"><strong id="benchmark-title"></strong><span id="benchmark-status"></span></div>
+          <button type="button" class="table-toggle" id="benchmark-detail-btn">Full chapter detail</button>
+        </div>
+        <p class="section-sub" style="margin:4px 0 6px;">Topic mix vs. its region and the whole community (all-time).</p>
+        <div id="benchmark-topic-bars" style="position:relative;"></div>
       </div>
 
       <section>
         <div class="flex-between">
-          <h2>What the community is talking about</h2>
+          <h3>What the community is talking about</h3>
         </div>
-        <p class="section-sub">Every talk is tagged with topics, then rolled up into one of 8 categories by its primary topic. Click a slice or legend row to see which topics it contains and sample talks, so you can validate the classification yourself. Cross-filtered by your chapter selection and any year/weekday/day-of-month/start-hour filter set below.</p>
-        <details class="method-note"><summary>How this is computed</summary>Each talk's topic list comes from AI-assisted enrichment of the meetup description; the first topic listed is treated as the "primary" topic and mapped to one of 8 categories via a fixed lookup table. A talk is counted once, under its primary category only.</details>
+        <p class="section-sub">Every talk is tagged with topics, then rolled into one of <span class="n-categories">8</span> categories by its primary topic. Click a slice or legend row to see its topics and sample talks. All-time; narrowed by your chapter and any chart filter below, not by the window slider.</p>
+        <details class="method-note"><summary>How this is computed</summary>Each talk's topic list comes from AI-assisted enrichment of the meetup description; the first topic listed is treated as the "primary" topic and mapped to one of <span class="n-categories">8</span> categories via a fixed lookup table. A talk is counted once, under its primary category only.</details>
         <div class="two-col">
           <div class="card">
             <div class="donut-wrap">
-              <svg id="category-donut" class="donut-svg" width="280" height="280" viewBox="0 0 280 280"></svg>
+              <svg id="category-donut" class="donut-svg" width="280" height="280" viewBox="0 0 280 280" role="group" aria-label="Donut chart of talks by category"></svg>
               <div class="donut-legend" id="category-legend"></div>
             </div>
           </div>
@@ -523,8 +562,8 @@
                 <div class="flex-between">
                   <span style="font-size:12px; color:var(--text-secondary);">Sample talks</span>
                   <div class="sample-sort-row">
-                    <button class="sample-sort-btn active" data-sort="recent">Most recent</button>
-                    <button class="sample-sort-btn" data-sort="attendees">Most attended</button>
+                    <button type="button" class="sample-sort-btn active" data-sort="recent" aria-pressed="true">Most recent</button>
+                    <button type="button" class="sample-sort-btn" data-sort="attendees" aria-pressed="false">Most attended</button>
                   </div>
                 </div>
                 <div id="topic-samples-list"></div>
@@ -536,35 +575,35 @@
 
       <section>
         <div class="flex-between">
-          <h2>Growth over time</h2>
+          <h3>Growth over time</h3>
           <div class="legend-row" id="growth-legend" style="margin-top:0;"></div>
         </div>
-        <p class="section-sub" id="growth-sub">Events per year, split by region. Select a chapter above to overlay its own trend on top.</p>
+        <p class="section-sub" id="growth-sub">Events per year, split by region (all-time; not affected by the window slider). Select a chapter above to overlay its own trend.</p>
         <div class="card">
           <div class="line-chart-wrap">
-            <svg id="growth-chart" viewBox="0 0 900 350" style="width:100%; height:auto; display:block;"></svg>
+            <svg id="growth-chart" viewBox="0 0 900 350" role="group" aria-label="Line chart of events per year by region" style="width:100%; height:auto; display:block;"></svg>
             <div class="line-chart-tooltip" id="growth-tooltip"></div>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>When the community meets</h2>
-        <p class="section-sub">Which day of the week, day of the month, and hour meetups tend to start, across all in-person events with a recorded time. Click a bar to filter it (and the growth chart above) by that value; click again to clear.</p>
+        <h3>When the community meets</h3>
+        <p class="section-sub">Which weekday, day of the month and hour meetups start, across all in-person events with a recorded time (all-time). Select a bar to filter it and the charts above; select it again to clear.</p>
         <div class="three-col">
           <div class="card" style="position:relative;">
             <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Day of week</div>
-            <svg id="weekday-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+            <svg id="weekday-chart" viewBox="0 0 280 160" role="group" aria-label="Bar chart of events by day of week" style="width:100%; height:auto;"></svg>
             <div class="line-chart-tooltip mini-bar-tooltip"></div>
           </div>
           <div class="card" style="position:relative;">
             <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Day of month</div>
-            <svg id="daymonth-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+            <svg id="daymonth-chart" viewBox="0 0 280 160" role="group" aria-label="Bar chart of events by day of month" style="width:100%; height:auto;"></svg>
             <div class="line-chart-tooltip mini-bar-tooltip"></div>
           </div>
           <div class="card" style="position:relative;">
             <div style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">Start hour (local time)</div>
-            <svg id="starthour-chart" viewBox="0 0 280 160" style="width:100%; height:auto;"></svg>
+            <svg id="starthour-chart" viewBox="0 0 280 160" role="group" aria-label="Bar chart of events by start hour" style="width:100%; height:auto;"></svg>
             <div class="line-chart-tooltip mini-bar-tooltip"></div>
           </div>
         </div>
@@ -572,20 +611,20 @@
 
       <section>
         <div class="flex-between">
-          <h2>Where the community meets</h2>
+          <h3>Where the community meets</h3>
           <div class="legend-row" id="map-legend" style="margin-top:0;"></div>
         </div>
-        <p class="section-sub">Every chapter plotted by location; marker size and color intensity scale with total events held. Scroll or use the +/− controls to zoom, drag to pan, and click a marker to select that chapter everywhere on this page.</p>
+        <p class="section-sub">Every chapter plotted by location (all-time); marker size and colour scale with total events held. Scroll or use +/− to zoom, drag or use arrow keys to pan, and select a marker to pick that chapter everywhere on this page.</p>
         <div class="card">
           <div class="search-row" id="map-region-jump" style="margin-bottom:12px;"></div>
           <div style="position:relative;">
-            <svg id="world-map" viewBox="0 0 960 500" style="width:100%; height:auto; display:block; cursor:grab;"></svg>
+            <svg id="world-map" viewBox="0 0 960 500" tabindex="0" role="group" aria-label="World map of dbt meetup chapters. Arrow keys pan, plus and minus zoom." style="width:100%; height:auto; display:block;"></svg>
             <div class="map-controls">
-              <button class="map-btn" id="map-zoom-in">+</button>
-              <button class="map-btn" id="map-zoom-out">−</button>
-              <button class="map-btn" id="map-zoom-reset" title="Reset view">⟲</button>
+              <button type="button" class="map-btn" id="map-zoom-in" aria-label="Zoom in">+</button>
+              <button type="button" class="map-btn" id="map-zoom-out" aria-label="Zoom out">−</button>
+              <button type="button" class="map-btn" id="map-zoom-reset" title="Reset view" aria-label="Reset map view">⟲</button>
             </div>
-            <div class="map-hint">Scroll to zoom · drag to pan · click a chapter to select it</div>
+            <div class="map-hint">Scroll to zoom · drag or arrow keys to pan · click a chapter to select it</div>
             <div id="map-tooltip" style="position:absolute; display:none; pointer-events:none; background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12.5px; box-shadow:0 4px 16px rgba(0,0,0,0.15); z-index:10; white-space:nowrap;"></div>
           </div>
         </div>
@@ -593,18 +632,18 @@
 
       <section>
         <div class="flex-between">
-          <h2>Event calendar</h2>
-          <select class="filter-select" id="calendar-chapter-filter">
+          <h3>Event calendar</h3>
+          <select class="filter-select" id="calendar-chapter-filter" aria-label="Filter calendar by chapter">
             <option value="">All chapters</option>
           </select>
         </div>
-        <p class="section-sub">Every historical event across every chapter, by month. Click a day with events to see what happened.</p>
+        <p class="section-sub">Every historical event across every chapter, by month (all-time). Select a day with events to see what happened.</p>
         <div class="card">
           <div class="calendar-nav">
-            <button class="table-toggle" id="calendar-prev" style="margin-left:0;">‹ Prev</button>
-            <strong id="calendar-month-label"></strong>
-            <button class="table-toggle" id="calendar-next" style="margin-left:0;">Next ›</button>
-            <button class="table-toggle" id="calendar-today">Latest</button>
+            <button type="button" class="table-toggle" id="calendar-prev" style="margin-left:0;">‹ Prev</button>
+            <strong id="calendar-month-label" aria-live="polite"></strong>
+            <button type="button" class="table-toggle" id="calendar-next" style="margin-left:0;">Next ›</button>
+            <button type="button" class="table-toggle" id="calendar-today">Latest</button>
           </div>
           <div class="calendar-grid" id="calendar-grid"></div>
           <div id="calendar-day-detail"></div>
@@ -614,13 +653,13 @@
 
     <div class="content-group" id="group-chapters">
       <div class="group-head">
-        <h2 class="group-title">Chapters</h2>
-        <p>Compare every chapter side by side, then drill into any one of them for its topic mix, stats, and full event history.</p>
+        <h2 class="group-title" tabindex="-1">Chapters</h2>
+        <p>Compare chapters side by side, then open one for its topic mix, stats and event history.</p>
       </div>
 
       <div class="card action-callout hidden" id="at-risk-callout">
         <div class="action-callout-head">
-          <span class="action-dot"></span>
+          <span class="action-dot" aria-hidden="true"></span>
           <strong>Chapters at risk</strong>
           <span class="section-sub" style="margin:0;">— active, but no event in the last 9 months. Worth a nudge before they go dormant.</span>
         </div>
@@ -629,32 +668,32 @@
 
       <section>
         <div class="flex-between">
-          <h2>Chapter comparison</h2>
-          <select class="filter-select" id="region-filter">
+          <h3>Chapter comparison</h3>
+          <select class="filter-select" id="region-filter" aria-label="Filter chapters by region">
             <option value="">All regions</option>
           </select>
         </div>
-        <p class="section-sub">Every chapter, sortable by any column. Click a header to sort; click a row (or use the picker above) to see that chapter's detail below and pin it to the top of the table.</p>
+        <p class="section-sub">Every chapter, sortable by any column. Use a header to sort; click a row or chapter name (or use the picker above) to see that chapter's detail below and pin it to the top.</p>
         <details class="method-note">
           <summary>What counts as active / at-risk / dormant</summary>
           <strong>Active</strong>: at least one event in the trailing 12 months. <strong>At-risk</strong>: active, but no event in the last 9 months (trending toward dormant). <strong>Dormant</strong>: no event in the trailing 12 months.
         </details>
         <div class="card">
           <div class="search-row">
-            <input class="search-input" id="chapter-search" placeholder="Search chapters…" />
-            <button class="table-toggle" id="toggle-dormant">Show dormant chapters</button>
+            <input class="search-input" id="chapter-search" type="search" placeholder="Search chapters…" aria-label="Search chapters" />
+            <button type="button" class="table-toggle" id="toggle-dormant" aria-pressed="false">Show dormant chapters</button>
           </div>
-          <div style="overflow-x:auto;">
+          <div style="overflow-x:auto;" tabindex="0" role="region" aria-label="Chapter comparison table (scrollable)">
             <table class="cmp" id="chapter-table">
               <thead><tr>
-                <th data-key="slug">Chapter</th>
-                <th data-key="status">Status</th>
-                <th data-key="total_events">Events</th>
-                <th data-key="total_talks">Talks</th>
-                <th data-key="avg_talks_per_event">Talks/Event</th>
-                <th data-key="avg_attendees">Avg Attendees</th>
-                <th data-key="unique_speakers">Unique Speakers</th>
-                <th data-key="last_event_date">Last Event</th>
+                <th data-key="slug" aria-sort="none"><button type="button" class="btn-reset">Chapter</button></th>
+                <th data-key="status" aria-sort="none"><button type="button" class="btn-reset">Status</button></th>
+                <th data-key="total_events" aria-sort="none"><button type="button" class="btn-reset">Events</button></th>
+                <th data-key="total_talks" aria-sort="none"><button type="button" class="btn-reset">Talks</button></th>
+                <th data-key="avg_talks_per_event" aria-sort="none"><button type="button" class="btn-reset">Talks/Event</button></th>
+                <th data-key="avg_attendees" aria-sort="none"><button type="button" class="btn-reset">Avg Attendees</button></th>
+                <th data-key="unique_speakers" aria-sort="none"><button type="button" class="btn-reset">Unique Speakers</button></th>
+                <th data-key="last_event_date" aria-sort="none"><button type="button" class="btn-reset">Last Event</button></th>
               </tr></thead>
               <tbody id="chapter-tbody"></tbody>
             </table>
@@ -663,7 +702,7 @@
       </section>
 
       <section>
-        <h2 id="chapter-detail-title">Chapter detail</h2>
+        <h3 id="chapter-detail-title" tabindex="-1">Chapter detail</h3>
         <p class="section-sub" id="chapter-detail-sub"></p>
         <div class="card hidden" id="chapter-cockpit-card">
           <div class="flex-between" style="margin-bottom:10px;">
@@ -687,46 +726,47 @@
 
     <div class="content-group" id="group-talks">
       <div class="group-head">
-        <h2 class="group-title">Talks &amp; speakers</h2>
-        <p>Search individual talks by keyword, or find speakers who've presented at multiple chapters.</p>
+        <h2 class="group-title" tabindex="-1">Talks &amp; speakers</h2>
+        <p>Search talks, or find speakers who've presented at several chapters.</p>
       </div>
 
       <section>
         <div class="flex-between">
           <div>
-            <h2>Explore talks</h2>
-            <p class="section-sub">Search by title, description, speaker, or topic, or filter to one of the 26 topics directly — useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
+            <h3>Explore talks</h3>
+            <p class="section-sub">Search by title, description, speaker, or topic, or filter to one of the <span id="n-topics">26</span> topics directly — useful for finding prior art before you pitch a talk, or scouting speakers who've covered a specific subject.</p>
           </div>
         </div>
         <div class="card">
           <div class="search-row">
-            <input class="search-input" id="talk-search" placeholder="Search talk titles, descriptions, speakers, topics…" />
-            <select class="chapter-select" id="talk-chapter-filter">
+            <input class="search-input" id="talk-search" type="search" placeholder="Search talk titles, descriptions, speakers, topics…" aria-label="Search talks" />
+            <select class="chapter-select" id="talk-chapter-filter" aria-label="Filter talks by chapter">
               <option value="">All chapters</option>
             </select>
-            <select class="filter-select" id="talk-topic-filter">
+            <select class="filter-select" id="talk-topic-filter" aria-label="Filter talks by topic">
               <option value="">All topics</option>
             </select>
-            <select class="filter-select" id="talk-sort">
+            <select class="filter-select" id="talk-sort" aria-label="Sort talks">
               <option value="date-desc">Newest first</option>
               <option value="date-asc">Oldest first</option>
               <option value="attendees-desc">Most attended</option>
               <option value="speaker-asc">Speaker A–Z</option>
             </select>
           </div>
-          <div class="section-sub" id="talk-results-count" style="margin-bottom:10px;"></div>
+          <div class="section-sub" id="talk-results-count" aria-live="polite" aria-atomic="true" style="margin-bottom:10px;"></div>
           <div id="talk-results-list"></div>
         </div>
       </section>
 
       <section>
-        <h2>Speakers who travel the circuit</h2>
+        <h3>Speakers who travel the circuit</h3>
         <p class="section-sub">Speakers who have presented at more than one chapter (name-deduplicated for typos/diacritics). A shortlist for when you're short a speaker — someone who has already spoken at 3+ chapters knows the format. Click a speaker to see their talks.</p>
         <div class="card" id="speaker-list"></div>
       </section>
     </div>
 
     <div class="footnote" id="footnote"></div>
+    </main>
   </div>
 </div>
 
@@ -864,14 +904,76 @@ function filteredEventPool(excludeDimension, ignoreChapter) {
 
 function setTimeFilter(dim, value) {
   timeFilters[dim] = timeFilters[dim] === value ? null : value;
-  renderGrowthChart();
-  renderTimingCharts();
-  renderCategoryDonut();
+  refreshTimeViews();
+}
+
+function clearTimeFilters() {
+  Object.keys(timeFilters).forEach(k => timeFilters[k] = null);
+  refreshTimeViews();
+}
+
+function refreshTimeViews() {
+  withFocus(() => {
+    renderGrowthChart();
+    renderTimingCharts();
+    renderCategoryDonut();
+    renderActiveFilters();
+  });
 }
 
 function anyTimeFilterActive() {
   return Object.values(timeFilters).some(v => v !== null);
 }
+
+const FILTER_LABELS = { year: 'Year', weekday: 'Weekday', dayOfMonth: 'Day of month', startHour: 'Start hour' };
+function renderActiveFilters() {
+  const wrap = document.getElementById('active-filters');
+  const active = Object.entries(timeFilters).filter(([, v]) => v !== null);
+  wrap.classList.toggle('hidden', !active.length);
+  document.getElementById('active-filters-chips').innerHTML = active.map(([dim, v]) => {
+    const shown = dim === 'startHour' ? `${v}:00` : v;
+    return `<button type="button" class="af-chip" data-dim="${dim}" data-val="${E(v)}" data-fk="af-${dim}" aria-label="Remove filter ${FILTER_LABELS[dim]} ${E(shown)}">${FILTER_LABELS[dim]}: ${E(shown)} <span aria-hidden="true">✕</span></button>`;
+  }).join('');
+  document.querySelectorAll('#active-filters-chips .af-chip').forEach(b => {
+    b.addEventListener('click', () => setTimeFilter(b.dataset.dim, b.dataset.val));
+  });
+}
+
+// ---- shared helpers: escaping, safe URLs, keyboard activation, focus restore
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+const E = escapeHtml;
+// Only http(s) URLs are allowed in href attributes; anything else becomes "#".
+function safeUrl(u) {
+  try {
+    const x = new URL(String(u), window.location.href);
+    return (x.protocol === 'http:' || x.protocol === 'https:') ? escapeHtml(x.href) : '#';
+  } catch (err) { return '#'; }
+}
+function activateOnKey(el, fn) {
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(e); }
+  });
+}
+// Re-renders recreate their controls; put focus back on the same control
+// (matched by its data-fk attribute) so keyboard users don't lose their place.
+function withFocus(fn) {
+  const a = document.activeElement;
+  const fk = a && a.getAttribute ? a.getAttribute('data-fk') : null;
+  fn();
+  if (fk) {
+    const el = Array.from(document.querySelectorAll('[data-fk]')).find(n => n.getAttribute('data-fk') === fk);
+    if (el && el !== document.activeElement) el.focus({ preventScroll: true });
+  }
+}
+function hideTooltips() {
+  document.querySelectorAll('.line-chart-tooltip').forEach(t => { t.style.display = 'none'; });
+  const mt = document.getElementById('map-tooltip');
+  if (mt) mt.style.display = 'none';
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideTooltips(); });
 
 function fmt(n) { return n === null || n === undefined ? '—' : n.toLocaleString(); }
 function fmtDelta(pct) {
@@ -885,12 +987,34 @@ function setSelectedChapter(slug) {
   selectedChapter = slug || null;
   document.getElementById('my-chapter-select').value = selectedChapter || '';
   document.getElementById('clear-chapter-select').classList.toggle('hidden', !selectedChapter);
-  renderChapterTable();
-  renderChapterDetail();
-  renderGrowthChart();
-  renderTimingCharts();
-  renderCategoryDonut();
-  renderStatRow();
+  withFocus(() => {
+    renderChapterTable();
+    renderChapterDetail();
+    renderBenchmark();
+    renderGrowthChart();
+    renderTimingCharts();
+    renderCategoryDonut();
+    renderStatRow(true);
+    updateMapSelection();
+    // Talks tab follows the chapter picker (it can still be changed there).
+    document.getElementById('talk-chapter-filter').value = selectedChapter || '';
+    renderTalkResults();
+    updateOrganiserLink();
+  });
+}
+
+// Organiser cockpit opens on the selected chapter when it has a page there.
+// Dashboard slugs differ from the cockpit's city keys for a few chapters;
+// an unknown key just falls back to the cockpit's last-viewed chapter.
+const ORGANISER_KEYS = {
+  'analytics-engineering-belgium': 'belgium', 'dc': 'washington_dc', 'norther-germany': 'northern_germany',
+  'nyc': 'new_york', 'oslo-dbt-group': 'oslo', 'raleigh-d': 'raleigh_durham', 'swiss': 'switzerland', 'vilnius': 'lithuania',
+};
+function updateOrganiserLink() {
+  const a = document.getElementById('organiser-link');
+  if (!a) return;
+  const key = selectedChapter ? (ORGANISER_KEYS[selectedChapter] || selectedChapter.replace(/-/g, '_')) : '';
+  a.setAttribute('href', 'organiser/index.html' + (key ? '#' + encodeURIComponent(key) : ''));
 }
 function titleCase(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -977,7 +1101,7 @@ function computeWindowStats(months) {
     priorActiveChapters: priorActiveChapterSlugs.size,
     uniqueSpeakers: speakerSet.size,
     priorUniqueSpeakers: priorSpeakerSet.size,
-    windowStart, today,
+    windowStart, priorStart, today,
   };
 }
 
@@ -985,27 +1109,46 @@ function pctChange(current, prior) {
   return prior ? Math.round(1000 * (current - prior) / prior) / 10 : null;
 }
 
-function renderStatRow() {
+let statSummaryTimer = null;
+function announceStats() {
+  clearTimeout(statSummaryTimer);
+  statSummaryTimer = setTimeout(() => {
+    const parts = Array.from(document.querySelectorAll('#stat-row .stat-tile')).map(t => t.getAttribute('aria-label'));
+    document.getElementById('stat-status').textContent =
+      `${document.getElementById('stat-row-caption').textContent}. ${parts.join('. ')}.`;
+  }, 500);
+}
+
+function renderStatRow(announce) {
   const s = DATA.summary;
   const c = selectedChapter ? DATA.chapters[selectedChapter] : null;
   const w = computeWindowStats(trailingMonths);
+  // A % change is only meaningful when the whole prior period lies inside the
+  // dataset; at long windows it would start before the first event.
+  const priorInData = w.priorStart.slice(0, 7) >= s.date_range[0];
+  const pop = (cur, prior) => priorInData ? pctChange(cur, prior) : null;
 
   const eventsAllTime = c ? c.total_events : s.total_events;
   const talksAllTime = c ? c.total_talks : s.total_talks;
-  const eventsPop = pctChange(w.events, w.priorEvents);
-  const talksPop = pctChange(w.talks, w.priorTalks);
-  const attendeesPop = pctChange(w.attendeesSum, w.priorAttendeesSum);
-  const speakersPop = pctChange(w.uniqueSpeakers, w.priorUniqueSpeakers);
+  const eventsPop = pop(w.events, w.priorEvents);
+  const talksPop = pop(w.talks, w.priorTalks);
+  const attendeesPop = pop(w.attendeesSum, w.priorAttendeesSum);
+  const speakersPop = pop(w.uniqueSpeakers, w.priorUniqueSpeakers);
   const avgTalksPerEvent = w.events ? Math.round(100 * w.talks / w.events) / 100 : null;
-  const dormantChapters = c ? null : s.total_chapters - w.activeChapters;
-  const activeChaptersPop = pctChange(w.activeChapters, w.priorActiveChapters);
+  // Dormant uses the fixed 12-month definition (same as the chapter table);
+  // the slider only moves the active count and the deltas.
+  const dormantChapters = c ? null : s.dormant_chapters;
+  const activeChaptersPop = pop(w.activeChapters, w.priorActiveChapters);
   const windowLabel = trailingMonths >= 24 ? `last ${Math.round(trailingMonths / 12)}yr` : `last ${trailingMonths}mo`;
+  const windowLong = trailingMonths >= 24 ? `last ${Math.round(trailingMonths / 12)} years` : `last ${trailingMonths} months`;
+  document.getElementById('stat-row-caption').textContent =
+    `Trailing window · ${windowLong}` + (priorInData ? '' : ' (no % change: the comparison period starts before the data does)');
 
   const tiles = [
     {
       label: 'Chapters',
       value: fmt(c ? 1 : s.total_chapters),
-      sub: c ? chapterName(c.slug) : `${fmt(w.activeChapters)} active (${windowLabel}) · ${fmt(dormantChapters)} dormant ${fmtDelta(activeChaptersPop)}${s.at_risk_chapters ? ` · ${s.at_risk_chapters} at risk` : ''}`,
+      sub: c ? E(chapterName(c.slug)) : `${fmt(w.activeChapters)} active (${windowLabel}) ${fmtDelta(activeChaptersPop)} · ${fmt(dormantChapters)} dormant (no event in 12mo)${s.at_risk_chapters ? ` · ${s.at_risk_chapters} at risk` : ''}`,
       page: 'group-chapters',
     },
     {
@@ -1029,25 +1172,26 @@ function renderStatRow() {
     {
       label: `Unique speakers (${windowLabel})`,
       value: fmt(w.uniqueSpeakers) + ' ' + fmtDelta(speakersPop),
-      sub: `${fmt(c ? c.unique_speakers : s.total_unique_speakers)} all-time`,
+      sub: `${fmt(c ? c.unique_speakers : s.total_unique_speakers)} all-time · approx.`,
       page: 'group-talks',
     },
   ];
+  const plain = (h) => String(h).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
   document.getElementById('stat-row').innerHTML = tiles.map(t => `
-    <div class="stat-tile" data-page="${t.page}" style="cursor:pointer;" tabindex="0" role="button">
-      <div class="stat-value">${t.value}</div>
-      <div class="stat-label">${t.label}</div>
-      <div class="stat-sub">${t.sub}</div>
-    </div>
+    <button type="button" class="stat-tile btn-reset" data-page="${t.page}" aria-label="${E(plain(t.label) + ': ' + plain(t.value) + '. Opens ' + t.page.replace('group-', '') + ' tab')}">
+      <span class="stat-value">${t.value}</span>
+      <span class="stat-label">${t.label}</span>
+      <span class="stat-sub">${t.sub}</span>
+    </button>
   `).join('');
   document.querySelectorAll('#stat-row .stat-tile').forEach(el => {
-    el.addEventListener('click', () => showPage(el.dataset.page));
-    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showPage(el.dataset.page); } });
+    el.addEventListener('click', () => showPage(el.dataset.page, true, true));
   });
 
   document.getElementById('dataset-disclaimer').textContent =
     `Dataset covers events from ${s.date_range[0]} to ${s.date_range[1]}, generated ${DATA.generated}. ` +
     `% changes compare the selected window to the equal-length period immediately before it (e.g. last 12mo vs. the 12mo before that).`;
+  if (announce) announceStats();
 }
 
 function renderCategoryDonut() {
@@ -1061,11 +1205,13 @@ function renderCategoryDonut() {
   const colorMap = Object.fromEntries(CATEGORY_ORDER);
   const byOrder = CATEGORY_ORDER.map(([name]) => [name, counts[name] || 0])
     .sort((a,b) => b[1]-a[1]);
+  const donut = document.getElementById('category-donut');
 
   const cx = 110, cy = 110, r = 90, innerR = 55;
 
   if (!total) {
-    document.getElementById('category-donut').innerHTML = `
+    donut.setAttribute('aria-label', 'Donut chart of talks by category: no talks match the current filters');
+    donut.innerHTML = `
       <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border)" stroke-width="${r - innerR}"></circle>
       <text x="${cx}" y="${cy - 4}" text-anchor="middle" class="donut-center-value">0</text>
       <text x="${cx}" y="${cy + 14}" text-anchor="middle" class="donut-center-label">talks</text>
@@ -1075,12 +1221,16 @@ function renderCategoryDonut() {
     return;
   }
 
+  donut.setAttribute('aria-label', `Donut chart of ${total} talks by category: ` +
+    byOrder.filter(([, n]) => n).map(([name, n]) => `${name} ${n} (${Math.round(100 * n / total)}%)`).join(', '));
+
   let angle = -Math.PI / 2;
   let segsHtml = '';
   byOrder.forEach(([name, count]) => {
     if (!count) return;
     const frac = count / total;
-    const sweep = frac * Math.PI * 2;
+    // a single full-circle slice has identical start and end points, which an arc cannot draw
+    const sweep = Math.min(frac, 0.99999) * Math.PI * 2;
     const x0 = cx + r * Math.cos(angle), y0 = cy + r * Math.sin(angle);
     const x1 = cx + r * Math.cos(angle + sweep), y1 = cy + r * Math.sin(angle + sweep);
     const ix0 = cx + innerR * Math.cos(angle), iy0 = cy + innerR * Math.sin(angle);
@@ -1088,13 +1238,13 @@ function renderCategoryDonut() {
     const large = sweep > Math.PI ? 1 : 0;
     const d = `M${ix0.toFixed(2)},${iy0.toFixed(2)} L${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 ${large} 1 ${x1.toFixed(2)},${y1.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${innerR},${innerR} 0 ${large} 0 ${ix0.toFixed(2)},${iy0.toFixed(2)} Z`;
     const dimmed = selectedCategory && selectedCategory !== name;
-    segsHtml += `<path d="${d}" fill="${colorMap[name]}" class="donut-seg" data-cat="${name}" opacity="${dimmed ? 0.3 : 1}"></path>`;
+    segsHtml += `<path d="${d}" fill="${colorMap[name]}" class="donut-seg" data-cat="${name}" data-fk="donut-${name}" tabindex="0" role="button" aria-pressed="${selectedCategory === name}" aria-label="${name}: ${count} talks (${Math.round(100 * frac)}%), show sample talks" opacity="${dimmed ? 0.3 : 1}"></path>`;
     angle += sweep;
   });
 
   const centerValue = selectedCategory ? (counts[selectedCategory] || 0) : total;
 
-  document.getElementById('category-donut').innerHTML = `
+  donut.innerHTML = `
     ${segsHtml}
     <text x="${cx}" y="${cy - 4}" text-anchor="middle" class="donut-center-value">${centerValue}</text>
     <text x="${cx}" y="${cy + 14}" text-anchor="middle" class="donut-center-label">talks</text>
@@ -1104,20 +1254,20 @@ function renderCategoryDonut() {
     const pct = Math.round(100 * count / total);
     const dimmed = selectedCategory && selectedCategory !== name;
     return `
-      <div class="donut-legend-row" data-cat="${name}" style="${dimmed ? 'opacity:0.4;' : ''}">
+      <button type="button" class="donut-legend-row btn-reset" data-cat="${name}" data-fk="legend-${name}" aria-pressed="${selectedCategory === name}" style="${dimmed ? 'opacity:0.4;' : ''}">
         <span class="swatch" style="background:${colorMap[name]};"></span>
         <span class="name">${name}</span>
         <span class="val">${count} (${pct}%)</span>
-      </div>`;
+      </button>`;
   }).join('');
 
+  const toggle = (cat) => {
+    selectedCategory = selectedCategory === cat ? null : cat;
+    withFocus(renderCategoryDonut);
+  };
   document.querySelectorAll('.donut-seg, .donut-legend-row').forEach(el => {
-    el.addEventListener('click', () => {
-      const cat = el.dataset.cat;
-      selectedCategory = selectedCategory === cat ? null : cat;
-      renderCategoryDonut();
-      renderTopicSamples();
-    });
+    el.addEventListener('click', () => toggle(el.dataset.cat));
+    if (el.classList.contains('donut-seg')) activateOnKey(el, () => toggle(el.dataset.cat));
   });
 
   renderTopicSamples();
@@ -1136,8 +1286,12 @@ function renderTopicSamples() {
   document.getElementById('topic-samples-title').textContent = selectedCategory;
   const topics = DATA.category_topics[selectedCategory] || [];
   document.getElementById('topic-samples-definition').innerHTML =
-    `Includes talks tagged with: ${topics.map(t => `<span class="chip">${t}</span>`).join(' ')}`;
-  document.querySelectorAll('.sample-sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === sampleSort));
+    `Includes talks tagged with: ${topics.map(t => `<span class="chip">${E(t)}</span>`).join(' ')}`;
+  document.querySelectorAll('.sample-sort-btn').forEach(b => {
+    const on = b.dataset.sort === sampleSort;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', String(on));
+  });
 
   let talks = (DATA.topic_sample_talks[selectedCategory] || []).slice();
   if (sampleSort === 'attendees') {
@@ -1148,9 +1302,9 @@ function renderTopicSamples() {
 
   document.getElementById('topic-samples-list').innerHTML = talks.map(t => `
     <div class="topic-sample-item">
-      <div class="ts-title">${t.title || 'Untitled talk'}</div>
-      <div class="ts-meta">${t.speaker || 'Unknown speaker'} · ${chapterName(t.chapter)} · ${t.date || '—'}${t.attendees != null ? ` · ${t.attendees} attendees` : ''}${t.event_url ? ` · <a class="event-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}</div>
-      ${t.description ? `<div class="talk-desc" style="margin-top:4px;">${t.description}</div>` : ''}
+      <div class="ts-title">${E(t.title || 'Untitled talk')}</div>
+      <div class="ts-meta">${E(t.speaker || 'Unknown speaker')} · ${E(chapterName(t.chapter))} · ${E(t.date || '—')}${t.attendees != null ? ` · ${E(t.attendees)} attendees` : ''}${t.event_url ? ` · <a class="event-link" href="${safeUrl(t.event_url)}" target="_blank" rel="noopener">event →</a>` : ''}</div>
+      ${t.description ? `<div class="talk-desc" style="margin-top:4px;">${E(t.description)}</div>` : ''}
     </div>
   `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px;">No sample talks recorded.</div>';
 }
@@ -1251,52 +1405,62 @@ function renderGrowthChart() {
     rect.setAttribute('height', plotH);
     rect.setAttribute('fill', 'transparent');
     rect.style.cursor = 'pointer';
-    rect.addEventListener('mouseenter', () => {
+    rect.setAttribute('class', 'growth-hit');
+    rect.setAttribute('tabindex', '0');
+    rect.setAttribute('role', 'button');
+    rect.setAttribute('data-fk', `growth-${y}`);
+    rect.setAttribute('aria-pressed', String(timeFilters.year === y));
+    const yearTotal = visibleRegions.reduce((a, r) => a + seriesByRegion[r][i], 0);
+    rect.setAttribute('aria-label', `${y}: ${yearTotal} events, filter by this year`);
+    const showTip = () => {
       crosshair.style.display = 'block';
       crosshair.setAttribute('x1', xFor(i).toFixed(1));
       crosshair.setAttribute('x2', xFor(i).toFixed(1));
-      const regionLines = visibleRegions.map(r => `${r}: ${seriesByRegion[r][i]}`).join('<br>');
+      const regionLines = visibleRegions.map(r => `${E(r)}: ${seriesByRegion[r][i]}`).join('<br>');
       const chapterV = chapterSeries ? chapterSeries[i] : null;
       tooltip.style.display = 'block';
-      tooltip.innerHTML = `<strong>${y}</strong><br>${regionLines}${chapterV !== null ? `<br>${chapterLabel}: ${chapterV} events` : ''}`;
+      tooltip.innerHTML = `<strong>${E(y)}</strong><br>${regionLines}${chapterV !== null ? `<br>${E(chapterLabel)}: ${chapterV} events` : ''}`;
       const rectBox = svg.getBoundingClientRect();
       const px = (xFor(i) / W) * rectBox.width;
       tooltip.style.left = Math.min(px + 10, rectBox.width - 180) + 'px';
       tooltip.style.top = '10px';
-    });
-    rect.addEventListener('mouseleave', () => {
+    };
+    const hideTip = () => {
       crosshair.style.display = 'none';
       tooltip.style.display = 'none';
-    });
+    };
+    rect.addEventListener('mouseenter', showTip);
+    rect.addEventListener('focus', showTip);
+    rect.addEventListener('mouseleave', hideTip);
+    rect.addEventListener('blur', hideTip);
     rect.addEventListener('click', () => setTimeFilter('year', y));
+    activateOnKey(rect, () => setTimeFilter('year', y));
     overlay.appendChild(rect);
   });
   svg.appendChild(overlay);
+  svg.setAttribute('aria-label', `Line chart of events per year by region, ${years[0]} to ${years[years.length - 1]}. ` +
+    visibleRegions.map(r => `${r}: ${seriesByRegion[r].reduce((a, v) => a + v, 0)} events`).join(', ') +
+    '. Each year is a button that filters the other charts.');
 
   document.getElementById('growth-legend').innerHTML = regionNames.map(region => `
-    <div class="legend-item ${hiddenRegions.has(region) ? 'muted' : ''}" data-region="${region}">
-      <span class="legend-swatch" style="background:${REGION_COLORS[region] || 'var(--series-1)'};"></span>${region}
-    </div>
-  `).join('') + (chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--text-primary);"></span>${chapterLabel}</div>` : '') +
+    <button type="button" class="legend-item btn-reset ${hiddenRegions.has(region) ? 'muted' : ''}" data-region="${E(region)}" data-fk="region-${E(region)}" aria-pressed="${!hiddenRegions.has(region)}">
+      <span class="legend-swatch" style="background:${REGION_COLORS[region] || 'var(--series-1)'};"></span>${E(region)}
+    </button>
+  `).join('') + (chapterSeries ? `<div class="legend-item"><span class="legend-swatch" style="background:var(--text-primary);"></span>${E(chapterLabel)}</div>` : '') +
     (anyTimeFilterActive() ? `<button class="table-toggle" id="clear-time-filters" style="margin-left:0;">Clear filters</button>` : '');
 
   document.querySelectorAll('#growth-legend .legend-item[data-region]').forEach(el => {
     el.addEventListener('click', () => {
       const r = el.dataset.region;
       if (hiddenRegions.has(r)) hiddenRegions.delete(r); else hiddenRegions.add(r);
-      renderGrowthChart();
+      withFocus(renderGrowthChart);
     });
   });
   const clearBtn = document.getElementById('clear-time-filters');
-  if (clearBtn) clearBtn.addEventListener('click', () => {
-    Object.keys(timeFilters).forEach(k => timeFilters[k] = null);
-    renderGrowthChart();
-    renderTimingCharts();
-    renderCategoryDonut();
-  });
+  if (clearBtn) clearBtn.addEventListener('click', clearTimeFilters);
 }
 
-function renderMiniBarChart(svgId, dimension, entries, labelFn) {
+function renderMiniBarChart(svgId, dimension, entries, labelFn, nameFn) {
   const svg = document.getElementById(svgId);
   const tooltip = svg.parentElement.querySelector('.mini-bar-tooltip');
   const W = 280, H = 160, padL = 26, padR = 8, padT = 8, padB = 24;
@@ -1320,16 +1484,19 @@ function renderMiniBarChart(svgId, dimension, entries, labelFn) {
     const x = padL + i * barW;
     const y = padT + plotH - h;
     const isSelected = timeFilters[dimension] === k;
-    barsHtml += `<rect x="${(x + barW * 0.12).toFixed(1)}" y="${y.toFixed(1)}" width="${(barW * 0.76).toFixed(1)}" height="${h.toFixed(1)}" class="mini-bar-chart-bar" rx="2" data-key="${k}" data-label="${labelFn(k)}" data-value="${v}" opacity="${isSelected ? 1 : (timeFilters[dimension] ? 0.4 : 1)}" style="cursor:pointer; ${isSelected ? 'stroke:var(--text-primary); stroke-width:1.5;' : ''}"></rect>`;
+    barsHtml += `<rect x="${(x + barW * 0.12).toFixed(1)}" y="${y.toFixed(1)}" width="${(barW * 0.76).toFixed(1)}" height="${h.toFixed(1)}" class="mini-bar-chart-bar" rx="2" tabindex="0" role="button" data-fk="${svgId}-${k}" aria-pressed="${isSelected}" aria-label="${nameFn(k)}: ${v} events, filter by this" data-key="${k}" data-label="${labelFn(k)}" data-value="${v}" opacity="${isSelected ? 1 : (timeFilters[dimension] ? 0.4 : 1)}" style="cursor:pointer; ${isSelected ? 'stroke:var(--text-primary); stroke-width:1.5;' : ''}"></rect>`;
     if (entries.length <= 12 || i % 5 === 0 || i === entries.length - 1) {
       barsHtml += `<text x="${(x + barW/2).toFixed(1)}" y="${H - 8}" text-anchor="middle" class="mini-bar-chart-label">${labelFn(k)}</text>`;
     }
   });
 
   svg.innerHTML = gridHtml + barsHtml;
+  const busiest = entries.reduce((a, b) => (b[1] > a[1] ? b : a), entries[0]);
+  if (!svg.dataset.baseLabel) svg.dataset.baseLabel = svg.getAttribute('aria-label');
+  svg.setAttribute('aria-label', `${svg.dataset.baseLabel}. Busiest: ${nameFn(busiest[0])} with ${busiest[1]} events. Each bar is a button that filters the charts.`);
 
   svg.querySelectorAll('.mini-bar-chart-bar').forEach(el => {
-    el.addEventListener('mouseenter', () => {
+    const showTip = () => {
       if (!tooltip) return;
       tooltip.style.display = 'block';
       tooltip.innerHTML = `<strong>${el.dataset.label}</strong>: ${el.dataset.value} events`;
@@ -1337,9 +1504,14 @@ function renderMiniBarChart(svgId, dimension, entries, labelFn) {
       const cx = (parseFloat(el.getAttribute('x')) + parseFloat(el.getAttribute('width'))/2) / W * rectBox.width;
       tooltip.style.left = Math.min(Math.max(cx - 40, 0), rectBox.width - 120) + 'px';
       tooltip.style.top = '0px';
-    });
-    el.addEventListener('mouseleave', () => { if (tooltip) tooltip.style.display = 'none'; });
+    };
+    const hideTip = () => { if (tooltip) tooltip.style.display = 'none'; };
+    el.addEventListener('mouseenter', showTip);
+    el.addEventListener('focus', showTip);
+    el.addEventListener('mouseleave', hideTip);
+    el.addEventListener('blur', hideTip);
     el.addEventListener('click', () => setTimeFilter(dimension, el.dataset.key));
+    activateOnKey(el, () => setTimeFilter(dimension, el.dataset.key));
   });
 }
 
@@ -1352,13 +1524,14 @@ function renderTimingCharts() {
   const dayOfMonthCounts = Array.from({length: 31}, (_, i) => String(i + 1)).map(d => [d, dayOfMonthPool.filter(e => e.dayOfMonth === d).length]);
   const startHourCounts = Array.from({length: 24}, (_, i) => String(i)).map(h => [h, startHourPool.filter(e => e.startHour === h).length]);
 
-  renderMiniBarChart('weekday-chart', 'weekday', weekdayCounts, k => k.slice(0, 3));
-  renderMiniBarChart('daymonth-chart', 'dayOfMonth', dayOfMonthCounts, k => k);
-  renderMiniBarChart('starthour-chart', 'startHour', startHourCounts, k => `${k}:00`);
+  renderMiniBarChart('weekday-chart', 'weekday', weekdayCounts, k => k.slice(0, 3), k => k);
+  renderMiniBarChart('daymonth-chart', 'dayOfMonth', dayOfMonthCounts, k => k, k => `Day ${k} of the month`);
+  renderMiniBarChart('starthour-chart', 'startHour', startHourCounts, k => `${k}:00`, k => `Start hour ${k}:00`);
 }
 
 // sequential blue ramp, light -> dark, per dataviz skill palette (one hue for magnitude)
-const SEQUENTIAL_RAMP = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#1c5cab', '#104281'];
+// (theme-aware: the actual colours are the --ramp-N CSS variables)
+const SEQUENTIAL_RAMP = [0, 1, 2, 3, 4, 5].map(i => `var(--ramp-${i})`);
 
 function projectLonLat(lon, lat) {
   const x = (lon + 180) / 360 * 960;
@@ -1367,11 +1540,14 @@ function projectLonLat(lon, lat) {
 }
 
 let mapZoom = 1, mapPanX = 0, mapPanY = 0;
-let mapDragging = false, mapDragStart = null;
+let mapDragging = false;
 
 function applyMapTransform() {
   const g = document.getElementById('map-viewport');
   if (g) g.setAttribute('transform', `translate(${mapPanX},${mapPanY}) scale(${mapZoom})`);
+  // once zoomed in, a touch drag should pan the map rather than scroll the page
+  const mapSvg = document.getElementById('world-map');
+  if (mapSvg) mapSvg.style.touchAction = mapZoom > 1 ? 'none' : '';
   // Position each marker at its zoomed/panned map coordinate, but counter-
   // scale it by 1/zoom so its radius stays visually constant instead of
   // growing with the map.
@@ -1417,8 +1593,9 @@ function renderMap() {
     markersHtml += `
       <g class="marker-wrap" data-cx="${x.toFixed(1)}" data-cy="${y.toFixed(1)}">
         <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}"
-          fill="${color}" fill-opacity="0.82" stroke="${isSelected ? 'var(--text-primary)' : 'var(--surface-1)'}" stroke-width="${isSelected ? 2.5 : 1.5}"
-          class="chapter-marker" data-slug="${c.slug}" style="cursor:pointer;"></circle>
+          fill="${color}" fill-opacity="0.9" stroke="${isSelected ? 'var(--accent-highlight)' : 'var(--map-marker-stroke)'}" stroke-width="${isSelected ? 3.5 : 1.25}"
+          class="chapter-marker" data-slug="${E(c.slug)}" data-fk="marker-${E(c.slug)}" tabindex="0" role="button" aria-pressed="${isSelected}"
+          aria-label="${E(chapterName(c.slug))}: ${c.total_events} events, select this chapter"></circle>
       </g>`;
   });
 
@@ -1431,20 +1608,26 @@ function renderMap() {
   `;
   applyMapTransform();
 
+  svg.setAttribute('aria-label', `World map of ${chapters.length} dbt meetup chapters; marker size and colour show total events (up to ${maxEvents}). Arrow keys pan, plus and minus zoom; each marker is a button that selects the chapter.`);
   svg.querySelectorAll('.chapter-marker').forEach(el => {
     const slug = el.dataset.slug;
     const c = DATA.chapters[slug];
-    el.addEventListener('mouseenter', (e) => {
+    const showTip = () => {
       tooltip.style.display = 'block';
-      tooltip.innerHTML = `<strong>${chapterName(c.slug)}</strong><br>${c.city}, ${c.country}<br>${c.total_events} events · ${c.total_talks} talks · avg ${fmt(c.avg_attendees)} attendees`;
+      tooltip.innerHTML = `<strong>${E(chapterName(c.slug))}</strong><br>${E(c.city)}, ${E(c.country)}<br>${c.total_events} events · ${c.total_talks} talks · avg ${fmt(c.avg_attendees)} attendees`;
       const rect = wrapEl.getBoundingClientRect();
       const cx = ((parseFloat(el.getAttribute('cx')) * mapZoom + mapPanX) / 960) * rect.width;
       const cy = ((parseFloat(el.getAttribute('cy')) * mapZoom + mapPanY) / 500) * rect.height;
       tooltip.style.left = Math.min(cx + 12, rect.width - 200) + 'px';
       tooltip.style.top = Math.max(cy - 40, 0) + 'px';
-    });
+    };
+    const pick = () => setSelectedChapter(slug === selectedChapter ? null : slug);
+    el.addEventListener('mouseenter', showTip);
+    el.addEventListener('focus', showTip);
     el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
-    el.addEventListener('click', (e) => { e.stopPropagation(); setSelectedChapter(slug === selectedChapter ? null : slug); });
+    el.addEventListener('blur', () => { tooltip.style.display = 'none'; });
+    el.addEventListener('click', (e) => { e.stopPropagation(); pick(); });
+    activateOnKey(el, pick);
   });
 
   const legendSteps = [
@@ -1453,7 +1636,7 @@ function renderMap() {
     [maxEvents, SEQUENTIAL_RAMP[5]],
   ];
   document.getElementById('map-legend').innerHTML = legendSteps.map(([v, color]) => `
-    <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>~${v} events</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:${color}; outline:1px solid var(--control-border);"></span>~${v} events</div>
   `).join('');
 
   renderMapRegionJump(chapters, wrapEl);
@@ -1463,8 +1646,8 @@ function renderMap() {
 function renderMapRegionJump(chapters, wrapEl) {
   const el = document.getElementById('map-region-jump');
   const regions = [...new Set(chapters.map(c => c.region_group).filter(Boolean))].sort();
-  el.innerHTML = `<button class="table-toggle" id="map-zoom-world" style="margin-left:0;">World</button>` +
-    regions.map(r => `<button class="table-toggle" data-region-jump="${r}">${r}</button>`).join('');
+  el.innerHTML = `<button type="button" class="table-toggle" id="map-zoom-world" style="margin-left:0;">World</button>` +
+    regions.map(r => `<button type="button" class="table-toggle" data-region-jump="${E(r)}">${E(r)}</button>`).join('');
   el.querySelectorAll('button').forEach(btn => btn.style.marginLeft = '0');
 
   document.getElementById('map-zoom-world').addEventListener('click', () => {
@@ -1487,6 +1670,15 @@ function renderMapRegionJump(chapters, wrapEl) {
       clampMapPan();
       applyMapTransform();
     });
+  });
+}
+
+function updateMapSelection() {
+  document.querySelectorAll('#world-map .chapter-marker').forEach(el => {
+    const sel = el.dataset.slug === selectedChapter;
+    el.setAttribute('stroke', sel ? 'var(--accent-highlight)' : 'var(--map-marker-stroke)');
+    el.setAttribute('stroke-width', sel ? 3.5 : 1.25);
+    el.setAttribute('aria-pressed', String(sel));
   });
 }
 
@@ -1514,22 +1706,57 @@ function setupMapInteraction(svg, wrapEl, tooltip) {
     e.preventDefault();
     zoomAt(e.deltaY < 0 ? 1.2 : 1 / 1.2, e.clientX, e.clientY);
   };
-  svg.onmousedown = (e) => {
-    mapDragging = true;
-    mapDragStart = { x: e.clientX, y: e.clientY, panX: mapPanX, panY: mapPanY };
-    svg.style.cursor = 'grabbing';
+  // Pointer events cover mouse, touch and pen. Capture only starts once the
+  // pointer has moved a few pixels, so a plain tap still reaches the marker.
+  let pointer = null;
+  svg.onpointerdown = (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    pointer = { id: e.pointerId, x: e.clientX, y: e.clientY, panX: mapPanX, panY: mapPanY, moved: false };
   };
-  window.addEventListener('mousemove', (e) => {
-    if (!mapDragging) return;
+  svg.onpointermove = (e) => {
+    if (!pointer || e.pointerId !== pointer.id) return;
+    const dxPx = e.clientX - pointer.x, dyPx = e.clientY - pointer.y;
+    if (!pointer.moved) {
+      if (Math.hypot(dxPx, dyPx) < 4) return;
+      pointer.moved = true;
+      mapDragging = true;
+      try { svg.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      svg.style.cursor = 'grabbing';
+    }
     const rect = wrapEl.getBoundingClientRect();
-    const dx = (e.clientX - mapDragStart.x) / rect.width * 960;
-    const dy = (e.clientY - mapDragStart.y) / rect.height * 500;
-    mapPanX = mapDragStart.panX + dx;
-    mapPanY = mapDragStart.panY + dy;
+    mapPanX = pointer.panX + dxPx / rect.width * 960;
+    mapPanY = pointer.panY + dyPx / rect.height * 500;
     clampMapPan();
     applyMapTransform();
-  });
-  window.addEventListener('mouseup', () => { mapDragging = false; svg.style.cursor = 'grab'; });
+  };
+  const endDrag = (e) => {
+    if (!pointer || e.pointerId !== pointer.id) return;
+    pointer = null;
+    mapDragging = false;
+    svg.style.cursor = 'grab';
+  };
+  svg.onpointerup = endDrag;
+  svg.onpointercancel = endDrag;
+
+  // Keyboard: arrows pan, +/- zoom, 0 resets (when the map or a marker has focus).
+  svg.onkeydown = (e) => {
+    const step = 60;
+    const box = wrapEl.getBoundingClientRect();
+    const midX = box.left + box.width / 2, midY = box.top + box.height / 2;
+    switch (e.key) {
+      case 'ArrowLeft': mapPanX += step; break;
+      case 'ArrowRight': mapPanX -= step; break;
+      case 'ArrowUp': mapPanY += step; break;
+      case 'ArrowDown': mapPanY -= step; break;
+      case '+': case '=': zoomAt(1.4, midX, midY); e.preventDefault(); return;
+      case '-': case '_': zoomAt(1 / 1.4, midX, midY); e.preventDefault(); return;
+      case '0': mapZoom = 1; mapPanX = 0; mapPanY = 0; applyMapTransform(); e.preventDefault(); return;
+      default: return;
+    }
+    e.preventDefault();
+    clampMapPan();
+    applyMapTransform();
+  };
 
   document.getElementById('map-zoom-in').onclick = () => zoomAt(1.4, wrapEl.getBoundingClientRect().left + wrapEl.clientWidth/2, wrapEl.getBoundingClientRect().top + wrapEl.clientHeight/2);
   document.getElementById('map-zoom-out').onclick = () => zoomAt(1/1.4, wrapEl.getBoundingClientRect().left + wrapEl.clientWidth/2, wrapEl.getBoundingClientRect().top + wrapEl.clientHeight/2);
@@ -1600,19 +1827,63 @@ function renderCalendar() {
     const hasEvents = evs.length > 0;
     const isSelected = dateStr === calendarSelectedDate;
     const dots = evs.slice(0, 4).map(() => '<span class="cal-dot"></span>').join('');
-    html += `
-      <div class="calendar-cell${hasEvents ? ' has-events' : ''}${isSelected ? ' selected-day' : ''}" data-date="${dateStr}">
+    const countText = `${evs.length} event${evs.length === 1 ? '' : 's'}`;
+    if (hasEvents) {
+      html += `
+      <button type="button" class="calendar-cell btn-reset has-events${isSelected ? ' selected-day' : ''}" data-date="${dateStr}" data-fk="cal-${dateStr}" aria-pressed="${isSelected}" aria-label="${monthNames[calendarMonth]} ${day}, ${calendarYear}: ${countText}">
         <span class="cal-daynum">${day}</span>
-        ${hasEvents ? `<div class="cal-dots">${dots}</div><div class="cal-count">${evs.length} event${evs.length === 1 ? '' : 's'}</div>` : ''}
+        <span class="cal-dots">${dots}</span><span class="cal-count">${countText}</span>
+      </button>`;
+    } else {
+      html += `
+      <div class="calendar-cell" data-date="${dateStr}">
+        <span class="cal-daynum">${day}</span>
       </div>`;
+    }
   }
   document.getElementById('calendar-grid').innerHTML = html;
 
   document.querySelectorAll('.calendar-cell.has-events').forEach(cell => {
     cell.addEventListener('click', () => {
       calendarSelectedDate = cell.dataset.date === calendarSelectedDate ? null : cell.dataset.date;
-      renderCalendar();
-      renderCalendarDayDetail();
+      withFocus(() => {
+        renderCalendar();
+        renderCalendarDayDetail();
+      });
+    });
+  });
+}
+
+// Shared by the calendar day detail and the chapter event history.
+function eventRowHtml(ev, idx, titleText, metaText) {
+  const talksHtml = (ev.talks || []).map(t => `
+    <div class="event-talk">
+      <div class="talk-title">${E(t.title || 'Untitled talk')}</div>
+      ${t.speaker ? `<div class="talk-speaker">${E(t.speaker)}</div>` : ''}
+      <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${E(topic)}</span>`).join('')}</div>
+    </div>
+  `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px; padding:6px 0;">No talk details recorded for this event.</div>';
+
+  return `
+    <div class="event-row" data-idx="${idx}">
+      <button type="button" class="event-row-head btn-reset" aria-expanded="false">
+        <span>
+          <span class="event-title">${E(titleText)}</span>
+          <span class="event-meta">${E(metaText)}</span>
+        </span>
+        <span class="event-caret" aria-hidden="true">▶</span>
+      </button>
+      <div class="event-row-body">
+        ${talksHtml}
+        ${ev.event_url ? `<a class="event-link" href="${safeUrl(ev.event_url)}" target="_blank" rel="noopener">View on Meetup.com →</a>` : ''}
+      </div>
+    </div>`;
+}
+function wireExpanders(container, selector) {
+  container.querySelectorAll(selector).forEach(head => {
+    head.addEventListener('click', () => {
+      const open = head.parentElement.classList.toggle('expanded');
+      head.setAttribute('aria-expanded', String(open));
     });
   });
 }
@@ -1624,33 +1895,13 @@ function renderCalendarDayDetail() {
   if (!evs.length) { el.innerHTML = ''; return; }
 
   el.innerHTML = `<div class="card" style="background:var(--surface-1);">` + evs.map((ev, idx) => {
-    const talksHtml = (ev.talks || []).map(t => `
-      <div class="event-talk">
-        <div class="talk-title">${t.title || 'Untitled talk'}</div>
-        ${t.speaker ? `<div class="talk-speaker">${t.speaker}</div>` : ''}
-        <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${topic}</span>`).join('')}</div>
-      </div>
-    `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px; padding:6px 0;">No talk details recorded for this event.</div>';
-
-    return `
-      <div class="event-row" data-idx="cal-${idx}">
-        <div class="event-row-head">
-          <div>
-            <div class="event-title">${chapterName(ev.chapter)} — ${ev.event_name || calendarSelectedDate}</div>
-            <div class="event-meta">${ev.location || 'Unknown location'} · ${ev.attendees != null ? ev.attendees + ' attendees' : 'attendance unknown'} · ${(ev.talks || []).length} talk${(ev.talks||[]).length === 1 ? '' : 's'}</div>
-          </div>
-          <div class="event-caret">▶</div>
-        </div>
-        <div class="event-row-body">
-          ${talksHtml}
-          ${ev.event_url ? `<a class="event-link" href="${ev.event_url}" target="_blank" rel="noopener">View on Meetup.com →</a>` : ''}
-        </div>
-      </div>`;
+    const n = (ev.talks || []).length;
+    return eventRowHtml(ev, `cal-${idx}`,
+      `${chapterName(ev.chapter)} — ${ev.event_name || calendarSelectedDate}`,
+      `${ev.location || 'Unknown location'} · ${ev.attendees != null ? ev.attendees + ' attendees' : 'attendance unknown'} · ${n} talk${n === 1 ? '' : 's'}`);
   }).join('') + `</div>`;
 
-  el.querySelectorAll('.event-row-head').forEach(head => {
-    head.addEventListener('click', () => head.parentElement.classList.toggle('expanded'));
-  });
+  wireExpanders(el, '.event-row-head');
 }
 
 function populateCalendarChapterFilter() {
@@ -1658,7 +1909,7 @@ function populateCalendarChapterFilter() {
   const chapters = Object.values(DATA.chapters).filter(c => c.total_events > 0)
     .sort((a,b) => chapterName(a.slug).localeCompare(chapterName(b.slug)));
   sel.innerHTML = '<option value="">All chapters</option>' + chapters.map(c =>
-    `<option value="${c.slug}">${chapterName(c.slug)}</option>`
+    `<option value="${E(c.slug)}">${E(chapterName(c.slug))}</option>`
   ).join('');
   sel.addEventListener('change', () => {
     calendarChapterFilter = sel.value;
@@ -1701,7 +1952,7 @@ function populateChapterSelect() {
   const chapters = Object.values(DATA.chapters).filter(c => c.total_events > 0)
     .sort((a,b) => chapterName(a.slug).localeCompare(chapterName(b.slug)));
   sel.innerHTML = '<option value="">Select your chapter…</option>' + chapters.map(c =>
-    `<option value="${c.slug}" ${c.slug === selectedChapter ? 'selected' : ''}>${chapterName(c.slug)}</option>`
+    `<option value="${E(c.slug)}" ${c.slug === selectedChapter ? 'selected' : ''}>${E(chapterName(c.slug))}</option>`
   ).join('');
   sel.addEventListener('change', () => setSelectedChapter(sel.value));
 }
@@ -1709,7 +1960,7 @@ function populateChapterSelect() {
 function populateRegionFilter() {
   const sel = document.getElementById('region-filter');
   const regions = [...new Set(Object.values(DATA.chapters).map(c => c.region_group).filter(Boolean))].sort();
-  sel.innerHTML = '<option value="">All regions</option>' + regions.map(r => `<option value="${r}">${r}</option>`).join('');
+  sel.innerHTML = '<option value="">All regions</option>' + regions.map(r => `<option value="${E(r)}">${E(r)}</option>`).join('');
   sel.addEventListener('change', () => { regionFilter = sel.value; renderChapterTable(); });
 }
 
@@ -1725,10 +1976,10 @@ function renderAtRiskCallout() {
   }
   callout.classList.remove('hidden');
   document.getElementById('at-risk-list').innerHTML = atRisk.map(c => `
-    <div class="action-callout-row" data-slug="${c.slug}">
-      <span>${chapterName(c.slug)}</span>
-      <span class="ac-meta">last event ${c.last_event_date || '—'}</span>
-    </div>
+    <button type="button" class="action-callout-row btn-reset" data-slug="${E(c.slug)}" data-fk="atrisk-${E(c.slug)}">
+      <span>${E(chapterName(c.slug))}</span>
+      <span class="ac-meta">last event ${E(c.last_event_date || '—')}</span>
+    </button>
   `).join('');
   document.querySelectorAll('#at-risk-list .action-callout-row').forEach(el => {
     el.addEventListener('click', () => setSelectedChapter(el.dataset.slug));
@@ -1755,7 +2006,8 @@ function renderChapterTable() {
     return sortAsc ? av - bv : bv - av;
   });
 
-  const pinned = rows.find(c => c.slug === selectedChapter);
+  // The selected chapter is always shown, even when it is dormant or filtered out.
+  const pinned = rows.find(c => c.slug === selectedChapter) || (selectedChapter ? DATA.chapters[selectedChapter] : null);
   rows = rows.filter(c => c.slug !== selectedChapter);
   if (pinned) rows.unshift(pinned);
 
@@ -1765,15 +2017,15 @@ function renderChapterTable() {
     const isMine = c.slug === selectedChapter;
     const barWidth = c.avg_attendees ? Math.round(100 * c.avg_attendees / maxAttendees) : 0;
     return `
-      <tr class="${isMine ? 'highlight-row' : ''}" data-slug="${c.slug}" style="cursor:pointer;">
-        <td>${chapterName(c.slug)}${isMine ? '<span class="badge-mine">selected</span>' : ''}</td>
+      <tr class="${isMine ? 'highlight-row' : ''}" data-slug="${E(c.slug)}" style="cursor:pointer;">
+        <td><button type="button" class="chapter-link btn-reset" data-fk="chapter-${E(c.slug)}" aria-pressed="${isMine}">${E(chapterName(c.slug))}</button>${isMine ? '<span class="badge-mine">selected</span>' : ''}</td>
         <td>${statusChip(c)}</td>
         <td>${fmt(c.total_events)}</td>
         <td>${fmt(c.total_talks)}</td>
         <td>${c.avg_talks_per_event}</td>
         <td><div class="mini-bar-cell"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${barWidth}%;"></div></div>${fmt(c.avg_attendees)}</div></td>
         <td>${fmt(c.unique_speakers)}</td>
-        <td>${c.last_event_date || '—'}</td>
+        <td>${E(c.last_event_date || '—')}</td>
       </tr>`;
   }).join('');
 
@@ -1784,6 +2036,7 @@ function renderChapterTable() {
   document.querySelectorAll('table.cmp th').forEach(th => {
     th.classList.toggle('sorted', th.dataset.key === sortKey);
     th.classList.toggle('asc', th.dataset.key === sortKey && sortAsc);
+    th.setAttribute('aria-sort', th.dataset.key === sortKey ? (sortAsc ? 'ascending' : 'descending') : 'none');
   });
 }
 
@@ -1801,7 +2054,7 @@ function renderChapterDetail() {
   document.getElementById('chapter-detail-title').textContent = `Chapter detail — ${chapterName(c.slug)}`;
   document.getElementById('chapter-detail-sub').innerHTML =
     (c.total_events > 0
-      ? `Active from ${c.first_event_date} to ${c.last_event_date}. ${c.online_events} online / ${c.in_person_events} in-person events.`
+      ? `Active from ${E(c.first_event_date)} to ${E(c.last_event_date)}. ${c.online_events} online / ${c.in_person_events} in-person events.`
       : 'No events recorded yet for this chapter.') + ' ' + statusChip(c);
 
   cockpitCard.classList.remove('hidden');
@@ -1840,8 +2093,9 @@ function renderChapterDetail() {
 // directly rather than via separate per-category rows with a text
 // "(avg X%)" aside. Region row is omitted if the chapter has no
 // region_group or the region has no categorized talks.
-function renderTopicMixStackedBars(c) {
-  const el = document.getElementById('chapter-topic-bars');
+function renderTopicMixStackedBars(c, targetId) {
+  targetId = targetId || 'chapter-topic-bars';
+  const el = document.getElementById(targetId);
   const colorMap = Object.fromEntries(CATEGORY_ORDER);
   const chTotal = c.top_categories.reduce((a, [,v]) => a + v, 0);
   if (!chTotal) {
@@ -1861,33 +2115,39 @@ function renderTopicMixStackedBars(c) {
       const count = byCat[name] || 0;
       if (!count) return '';
       const pct = 100 * count / total;
-      return `<div class="stack-seg" style="width:${pct}%; background:${colorMap[name]};" data-cat="${name}" data-count="${count}" data-pct="${Math.round(pct)}" data-row="${rowLabel}"></div>`;
+      return `<div class="stack-seg" style="width:${pct}%; background:${colorMap[name]};" data-cat="${name}" data-count="${count}" data-pct="${Math.round(pct)}" data-row="${E(rowLabel)}"></div>`;
     }).join('');
   }
+  function barLabel(byCat, total, rowLabel) {
+    return `${rowLabel} topic mix: ` + CATEGORY_ORDER.filter(([name]) => byCat[name])
+      .map(([name]) => `${name} ${Math.round(100 * byCat[name] / total)}%`).join(', ');
+  }
+  const tipId = `${targetId}-tooltip`;
+  const chName = chapterName(c.slug);
 
   el.innerHTML = `
     <div class="stack-row">
-      <div class="stack-row-label">${chapterName(c.slug)}</div>
-      <div class="stack-bar">${stackedBar(chByCat, chTotal, chapterName(c.slug))}</div>
+      <div class="stack-row-label">${E(chName)}</div>
+      <div class="stack-bar" role="img" aria-label="${E(barLabel(chByCat, chTotal, chName))}">${stackedBar(chByCat, chTotal, chName)}</div>
     </div>
     ${regionTotal ? `
     <div class="stack-row">
-      <div class="stack-row-label">${c.region_group} avg</div>
-      <div class="stack-bar">${stackedBar(regionByCat, regionTotal, c.region_group + ' avg')}</div>
+      <div class="stack-row-label">${E(c.region_group)} avg</div>
+      <div class="stack-bar" role="img" aria-label="${E(barLabel(regionByCat, regionTotal, c.region_group + ' average'))}">${stackedBar(regionByCat, regionTotal, c.region_group + ' avg')}</div>
     </div>` : ''}
     <div class="stack-row">
       <div class="stack-row-label">Community avg</div>
-      <div class="stack-bar">${stackedBar(commByCat, communityTotal, 'Community avg')}</div>
+      <div class="stack-bar" role="img" aria-label="${E(barLabel(commByCat, communityTotal, 'Community average'))}">${stackedBar(commByCat, communityTotal, 'Community avg')}</div>
     </div>
     <div class="legend-row" style="margin-top:14px;">
       ${CATEGORY_ORDER.filter(([name]) => chByCat[name] || commByCat[name]).map(([name, color]) => `
         <div class="legend-item"><span class="legend-swatch" style="background:${color};"></span>${name}</div>
       `).join('')}
     </div>
-    <div class="line-chart-tooltip" id="topic-mix-tooltip"></div>
+    <div class="line-chart-tooltip" id="${tipId}"></div>
   `;
 
-  const tooltip = document.getElementById('topic-mix-tooltip');
+  const tooltip = document.getElementById(tipId);
   el.querySelectorAll('.stack-seg').forEach(seg => {
     seg.addEventListener('mouseenter', (e) => {
       tooltip.style.display = 'block';
@@ -1902,6 +2162,16 @@ function renderTopicMixStackedBars(c) {
   });
 }
 
+function renderBenchmark() {
+  const card = document.getElementById('chapter-benchmark');
+  const c = selectedChapter ? DATA.chapters[selectedChapter] : null;
+  if (!c) { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  document.getElementById('benchmark-title').textContent = `${chapterName(c.slug)} vs. region and community`;
+  document.getElementById('benchmark-status').innerHTML = statusChip(c);
+  renderTopicMixStackedBars(c, 'benchmark-topic-bars');
+}
+
 function renderChapterEventsList(c) {
   const events = c.events_detail || [];
   const container = document.getElementById('chapter-events-list');
@@ -1910,40 +2180,14 @@ function renderChapterEventsList(c) {
     return;
   }
   container.innerHTML = events.map((ev, idx) => {
-    const talksHtml = (ev.talks || []).map(t => `
-      <div class="event-talk">
-        <div class="talk-title">${t.title || 'Untitled talk'}</div>
-        ${t.speaker ? `<div class="talk-speaker">${t.speaker}</div>` : ''}
-        <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${topic}</span>`).join('')}</div>
-      </div>
-    `).join('') || '<div style="color:var(--text-secondary); font-size:12.5px; padding:6px 0;">No talk details recorded for this event.</div>';
-
-    return `
-      <div class="event-row" data-idx="${idx}">
-        <div class="event-row-head">
-          <div>
-            <div class="event-title">${ev.event_name || ev.date || 'Untitled event'}</div>
-            <div class="event-meta">${ev.date || '—'} · ${ev.location || 'Unknown location'} · ${ev.attendees != null ? ev.attendees + ' attendees' : 'attendance unknown'} · ${(ev.talks || []).length} talk${(ev.talks||[]).length === 1 ? '' : 's'}</div>
-          </div>
-          <div class="event-caret">▶</div>
-        </div>
-        <div class="event-row-body">
-          ${talksHtml}
-          ${ev.event_url ? `<a class="event-link" href="${ev.event_url}" target="_blank" rel="noopener">View on Meetup.com →</a>` : ''}
-        </div>
-      </div>`;
+    const n = (ev.talks || []).length;
+    return eventRowHtml(ev, idx, ev.event_name || ev.date || 'Untitled event',
+      `${ev.date || '—'} · ${ev.location || 'Unknown location'} · ${ev.attendees != null ? ev.attendees + ' attendees' : 'attendance unknown'} · ${n} talk${n === 1 ? '' : 's'}`);
   }).join('');
 
-  container.querySelectorAll('.event-row-head').forEach(head => {
-    head.addEventListener('click', () => {
-      head.parentElement.classList.toggle('expanded');
-    });
-  });
+  wireExpanders(container, '.event-row-head');
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
 function highlight(text, query) {
   if (!text) return '';
   const escaped = escapeHtml(text);
@@ -1957,7 +2201,7 @@ function populateTalkChapterFilter() {
   const slugs = [...new Set(DATA.all_talks.map(t => t.chapter))]
     .sort((a, b) => chapterName(a).localeCompare(chapterName(b)));
   sel.innerHTML = '<option value="">All chapters</option>' + slugs.map(s =>
-    `<option value="${s}">${chapterName(s)}</option>`
+    `<option value="${E(s)}">${E(chapterName(s))}</option>`
   ).join('');
   sel.addEventListener('change', renderTalkResults);
 }
@@ -1966,7 +2210,7 @@ function populateTalkTopicFilter() {
   const sel = document.getElementById('talk-topic-filter');
   const topics = DATA.topic_distribution.map(([name]) => name).sort();
   sel.innerHTML = '<option value="">All topics</option>' + topics.map(t =>
-    `<option value="${t}">${t}</option>`
+    `<option value="${E(t)}">${E(t)}</option>`
   ).join('');
   sel.addEventListener('change', renderTalkResults);
 }
@@ -1997,17 +2241,18 @@ function renderTalkResults() {
     }
   });
 
-  const MAX_RESULTS = 30;
-
-  if (!query && !chapterFilter && !topicFilter) {
-    countEl.textContent = `${DATA.all_talks.length} talks total — search by title, description, speaker, or topic to browse.`;
-    listEl.innerHTML = '';
-    return;
-  }
-
+  // With no query or filter, show the 10 first rows of the current sort
+  // (newest first by default) instead of an empty list.
+  const isDefault = !query && !chapterFilter && !topicFilter;
+  const MAX_RESULTS = isDefault ? 10 : 30;
   const shown = results.slice(0, MAX_RESULTS);
-  countEl.textContent = `${results.length} matching talk${results.length === 1 ? '' : 's'}` +
-    (results.length > MAX_RESULTS ? ` (showing first ${MAX_RESULTS})` : '');
+  if (isDefault) {
+    const sortName = document.getElementById('talk-sort').selectedOptions[0].textContent.toLowerCase();
+    countEl.textContent = `Showing ${shown.length} of ${results.length} talks (${sortName}) — search or filter to browse the rest.`;
+  } else {
+    countEl.textContent = `${results.length} matching talk${results.length === 1 ? '' : 's'}` +
+      (results.length > MAX_RESULTS ? ` (showing first ${MAX_RESULTS})` : '');
+  }
 
   if (!shown.length) {
     listEl.innerHTML = '<div style="color:var(--text-secondary); font-size:13px; padding:8px 4px;">No talks match.</div>';
@@ -2019,8 +2264,8 @@ function renderTalkResults() {
       <div class="talk-title">${highlight(t.title || 'Untitled talk', query)}</div>
       <div class="talk-meta">
         ${highlight(t.speaker || 'Unknown speaker', query)}${t.speaker_title ? ' · ' + highlight(t.speaker_title, query) : ''}
-        · ${chapterName(t.chapter)} · ${t.date || '—'}${t.attendees != null ? ` · ${t.attendees} attendees` : ''}
-        ${t.event_url ? ` · <a class="event-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}
+        · ${E(chapterName(t.chapter))} · ${E(t.date || '—')}${t.attendees != null ? ` · ${E(t.attendees)} attendees` : ''}
+        ${t.event_url ? ` · <a class="event-link" href="${safeUrl(t.event_url)}" target="_blank" rel="noopener">event →</a>` : ''}
       </div>
       ${t.description ? `<div class="talk-desc">${highlight(t.description, query)}</div>` : ''}
       <div class="talk-topics">${(t.topics || []).map(topic => `<span class="chip">${highlight(topic, query)}</span>`).join('')}</div>
@@ -2039,33 +2284,31 @@ function renderSpeakerList() {
 
     const talksHtml = talks.map(t => `
       <div class="speaker-talk-item">
-        <div>${t.title || 'Untitled talk'}</div>
-        <div class="st-meta">${chapterName(t.chapter)} · ${t.date || '—'}${t.event_url ? ` · <a class="speaker-link" href="${t.event_url}" target="_blank" rel="noopener">event →</a>` : ''}</div>
+        <div>${E(t.title || 'Untitled talk')}</div>
+        <div class="st-meta">${E(chapterName(t.chapter))} · ${E(t.date || '—')}${t.event_url ? ` · <a class="speaker-link" href="${safeUrl(t.event_url)}" target="_blank" rel="noopener">event →</a>` : ''}</div>
       </div>
     `).join('') || '<div style="color:var(--text-secondary); font-size:12px;">No talk details recorded.</div>';
 
     return `
       <div class="speaker-row" data-idx="${idx}">
-        <div class="speaker-row-head">
-          <div>
-            <div class="speaker-name">${sp.name}</div>
-            <div class="speaker-chapters">${sp.chapters.map(chapterName).join(', ')}</div>
-          </div>
-          <div class="speaker-count">${sp.chapter_count} chapters · ${sp.talk_count} talks <span class="speaker-caret">▶</span></div>
-        </div>
+        <button type="button" class="speaker-row-head btn-reset" aria-expanded="false">
+          <span>
+            <span class="speaker-name">${E(sp.name)}</span>
+            <span class="speaker-chapters">${sp.chapters.map(ch => E(chapterName(ch))).join(', ')}</span>
+          </span>
+          <span class="speaker-count">${sp.chapter_count} chapters · ${sp.talk_count} talks <span class="speaker-caret" aria-hidden="true">▶</span></span>
+        </button>
         <div class="speaker-talks-body">${talksHtml}</div>
       </div>`;
   }).join('');
 
-  document.querySelectorAll('.speaker-row-head').forEach(head => {
-    head.addEventListener('click', () => head.parentElement.classList.toggle('expanded'));
-  });
+  wireExpanders(document.getElementById('speaker-list'), '.speaker-row-head');
 }
 
 function attachSortHandlers() {
-  document.querySelectorAll('table.cmp th').forEach(th => {
-    th.addEventListener('click', () => {
-      const key = th.dataset.key;
+  document.querySelectorAll('table.cmp th button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.parentElement.dataset.key;
       if (sortKey === key) { sortAsc = !sortAsc; }
       else { sortKey = key; sortAsc = false; }
       renderChapterTable();
@@ -2080,6 +2323,7 @@ document.getElementById('talk-sort').addEventListener('change', (e) => { talkSor
 document.getElementById('toggle-dormant').addEventListener('click', (e) => {
   showDormant = !showDormant;
   e.target.classList.toggle('active', showDormant);
+  e.target.setAttribute('aria-pressed', String(showDormant));
   e.target.textContent = showDormant ? 'Hide dormant chapters' : 'Show dormant chapters';
   renderChapterTable();
 });
@@ -2090,7 +2334,8 @@ document.getElementById('date-range-slider').addEventListener('input', (e) => {
   trailingMonths = parseInt(e.target.value, 10);
   const label = trailingMonths >= 24 ? `Last ${Math.round(trailingMonths/12)} years` : `Last ${trailingMonths} months`;
   document.getElementById('range-label').textContent = label;
-  renderStatRow();
+  e.target.setAttribute('aria-valuetext', label);
+  renderStatRow(true);
 });
 
 // Theme toggle
@@ -2100,6 +2345,8 @@ function setTheme(theme) {
     localStorage.setItem('theme', theme);
     document.getElementById('theme-dark').classList.toggle('active', theme === 'dark');
     document.getElementById('theme-light').classList.toggle('active', theme === 'light');
+    document.getElementById('theme-dark').setAttribute('aria-pressed', String(theme === 'dark'));
+    document.getElementById('theme-light').setAttribute('aria-pressed', String(theme === 'light'));
   }
 }
 document.getElementById('theme-dark').addEventListener('click', () => setTheme('dark'));
@@ -2117,29 +2364,45 @@ if (savedTheme) {
 document.getElementById('footnote').innerHTML =
   `Generated ${DATA.generated} from <code>enriched/*.json</code> and <code>speaker-identities.json</code>. ` +
   `Topic categories per <code>past-meetups.md</code> §"topic categories". ` +
-  `${DATA.summary.dormant_chapters} chapters have had no event in the trailing 12 months and are excluded from rankings by default — toggle "Show dormant chapters" to include them.`;
+  `${DATA.summary.dormant_chapters} chapters have had no event in the trailing 12 months and are excluded from rankings by default — toggle "Show dormant chapters" to include them. ` +
+  `Unique-speaker counts are approximate: speaker names are split from the event text and only the repeat-speaker list is identity-merged, so typos or variants can inflate windowed counts.`;
+document.querySelectorAll('.n-categories').forEach(n => { n.textContent = Object.keys(DATA.category_topics).length; });
+document.getElementById('n-topics').textContent = DATA.topic_distribution.length;
 
 const PAGE_IDS = ['group-overview', 'group-chapters', 'group-talks'];
 
-function showPage(pageId, updateHash) {
+function showPage(pageId, updateHash, moveFocus) {
   if (!PAGE_IDS.includes(pageId)) pageId = PAGE_IDS[0];
   PAGE_IDS.forEach(id => {
     document.getElementById(id).classList.toggle('hidden', id !== pageId);
   });
   document.querySelectorAll('.group-nav button').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.page === pageId);
+    const on = btn.dataset.page === pageId;
+    btn.classList.toggle('active', on);
+    if (on) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
   });
   if (updateHash !== false && window.location.hash.slice(1) !== pageId) {
     window.location.hash = pageId;
   }
   window.scrollTo({ top: 0 });
+  if (moveFocus) {
+    const title = document.querySelector(`#${pageId} .group-title`);
+    if (title) title.focus({ preventScroll: true });
+  }
 }
 
-document.querySelectorAll('.group-nav button, .persona-chip[data-page]').forEach(el => {
+document.querySelectorAll('.group-nav button').forEach(el => {
   el.addEventListener('click', (e) => {
     e.preventDefault();
-    showPage(el.dataset.page);
+    showPage(el.dataset.page, true, true);
   });
+});
+document.getElementById('clear-all-filters').addEventListener('click', clearTimeFilters);
+document.getElementById('benchmark-detail-btn').addEventListener('click', () => {
+  showPage('group-chapters', true, false);
+  const title = document.getElementById('chapter-detail-title');
+  title.scrollIntoView();
+  title.focus({ preventScroll: true });
 });
 window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1), false));
 
@@ -2159,6 +2422,8 @@ attachSortHandlers();
 renderAtRiskCallout();
 renderChapterTable();
 renderChapterDetail();
+renderBenchmark();
+renderActiveFilters();
 populateTalkChapterFilter();
 populateTalkTopicFilter();
 renderTalkResults();
@@ -2170,3 +2435,5 @@ renderCalendar();
 renderCalendarDayDetail();
 showPage(window.location.hash.slice(1) || 'group-overview', false);
 </script>
+</body>
+</html>

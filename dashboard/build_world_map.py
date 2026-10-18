@@ -174,7 +174,15 @@ for geom in geoms:
             for frag in fragments:
                 if len(frag) < 2:
                     continue
-                frag = [(rewrap(lon), lat) for lon, lat in frag]
+                if all(abs(lon - frag[0][0]) < 1e-9 for lon, _ in frag):
+                    continue  # a sliver lying exactly on the seam has no area
+                # Shift the whole fragment by one multiple of 360 chosen from
+                # its interior, so points lying exactly on the seam land on
+                # the same side as the rest of the fragment (-180 on the far
+                # side, +180 on the near side) instead of snapping to +180,
+                # which drew a horizontal line across the whole map.
+                n = (sum(lon for lon, _ in frag) / len(frag) + 180) // 360
+                frag = [(lon - 360 * n, lat) for lon, lat in frag]
                 on_seam = abs(frag[0][0]) == 180 and abs(frag[-1][0]) == 180
                 if on_seam and frag[0] != frag[-1] and frag[0][0] == frag[-1][0]:
                     # Both ends sit on the same seam meridian at different
