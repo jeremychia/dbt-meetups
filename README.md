@@ -48,6 +48,29 @@ pipeline/run_pipeline.sh
 
 > **Tip:** `pipeline/run_pipeline.sh` sets up `.venv/` itself if you skip the install step. See `pipeline/README.md` for the full flag list, such as `SKIP_SCRAPE=1` or `DBT_MEETUPS_DATA_DIR=...` to test against a copy of the data.
 
+### Preview the dashboard
+
+`dashboard/index.html` is a single self-contained file, so you can open it directly:
+
+```sh
+open dashboard/index.html          # macOS; use xdg-open on Linux
+```
+
+Or serve it, which matches how GitHub Pages delivers it and lets the organiser page at `/organiser/` load:
+
+```sh
+python3 -m http.server 8000 --directory dashboard
+# then visit http://localhost:8000/
+```
+
+Edit `dashboard/index.template.html`, never `index.html`. `index.html` is generated, and the next build overwrites it. After editing the template, re-embed the data and reload the page:
+
+```sh
+dashboard/build_dashboard.sh
+```
+
+That script rebuilds `dashboard_data.json` and `world_path.txt` first, then embeds both into `index.html`. If you only changed the template and want to leave the data file alone, run just the embed step from `build_dashboard.sh`.
+
 ## Organiser cockpit
 
 A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), linked from the dashboard, for finding people to speak at or attend a chapter's next meetup. It combines every `<region>_dbt_companies.json` in the repo, 25 cities in all. Europe: Amsterdam, Belgium, Berlin, Copenhagen, Düsseldorf, London, Munich, Paris, Sofia, Stockholm and Vilnius. North America: Atlanta, Boston, Montreal, New York, San Francisco, Seattle and Toronto. Asia-Pacific: Kuala Lumpur, Melbourne, Seoul, Singapore, Sydney, Taipei and Tokyo. Kuala Lumpur and Sofia have no dbt chapter yet. Cities are grouped by area at the top of the page, and the page reopens on the last city you viewed. Each chapter and view has its own link to share, such as `/organiser/#berlin/speakers`.
