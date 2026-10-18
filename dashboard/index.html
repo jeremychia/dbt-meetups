@@ -123,6 +123,14 @@
   .range-control input[type=range] { width: 140px; }
   .range-control .range-label { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 
+  /* DOM order is picker, tabs, stats, content (so the tabs are reached before the tiles
+     with the keyboard); the visual order stays picker, stats, tabs, content. */
+  main#main-content { display: flex; flex-direction: column; }
+  main#main-content > * { order: 3; }
+  main#main-content > .picker-bar { order: 0; }
+  main#main-content > .stats-block { order: 1; }
+  main#main-content > .group-nav { order: 2; }
+  main#main-content > .sr-only { order: 4; }
   .stat-row-caption { font-size: 11.5px; color: var(--text-muted); margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
   .stat-row {
     display: grid;
@@ -499,17 +507,17 @@
       <div class="picker-sub" id="dataset-disclaimer"></div>
     </div>
 
-    <div role="group" aria-labelledby="stat-row-caption">
-      <p class="stat-row-caption" id="stat-row-caption">Trailing window · last 12 months</p>
-      <div class="stat-row" id="stat-row"></div>
-    </div>
-    <div class="sr-only" id="stat-status" role="status" aria-live="polite" aria-atomic="true"></div>
-
     <nav class="group-nav" aria-label="Dashboard sections">
       <button type="button" data-page="group-overview">Overview</button>
       <button type="button" data-page="group-chapters">Chapters</button>
       <button type="button" data-page="group-talks">Talks &amp; Speakers</button>
     </nav>
+
+    <div class="stats-block" role="group" aria-labelledby="stat-row-caption">
+      <p class="stat-row-caption" id="stat-row-caption">Trailing window · last 12 months</p>
+      <div class="stat-row" id="stat-row"></div>
+    </div>
+    <div class="sr-only" id="stat-status" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <div class="content-group" id="group-overview">
       <div class="group-head">
