@@ -483,7 +483,7 @@
             <button type="button" id="theme-dark" class="active" title="Dark mode" aria-label="Dark theme" aria-pressed="true"><span aria-hidden="true">🌙</span></button>
             <button type="button" id="theme-light" title="Light mode" aria-label="Light theme" aria-pressed="false"><span aria-hidden="true">☀️</span></button>
           </div>
-          <a class="github-link external-link" href="organiser/">Organiser cockpit <span aria-hidden="true">↗</span><span class="sr-only">(separate page: speaker and attendee leads for each chapter)</span></a>
+          <a class="github-link external-link" id="organiser-link" href="organiser/index.html">Organiser cockpit <span aria-hidden="true">↗</span><span class="sr-only">(separate page: speaker and attendee leads for each chapter)</span></a>
           <a class="github-link" href="https://github.com/jeremychia/dbt-meetups" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>
             GitHub
@@ -996,7 +996,25 @@ function setSelectedChapter(slug) {
     renderCategoryDonut();
     renderStatRow(true);
     updateMapSelection();
+    // Talks tab follows the chapter picker (it can still be changed there).
+    document.getElementById('talk-chapter-filter').value = selectedChapter || '';
+    renderTalkResults();
+    updateOrganiserLink();
   });
+}
+
+// Organiser cockpit opens on the selected chapter when it has a page there.
+// Dashboard slugs differ from the cockpit's city keys for a few chapters;
+// an unknown key just falls back to the cockpit's last-viewed chapter.
+const ORGANISER_KEYS = {
+  'analytics-engineering-belgium': 'belgium', 'dc': 'washington_dc', 'norther-germany': 'northern_germany',
+  'nyc': 'new_york', 'oslo-dbt-group': 'oslo', 'raleigh-d': 'raleigh_durham', 'swiss': 'switzerland', 'vilnius': 'lithuania',
+};
+function updateOrganiserLink() {
+  const a = document.getElementById('organiser-link');
+  if (!a) return;
+  const key = selectedChapter ? (ORGANISER_KEYS[selectedChapter] || selectedChapter.replace(/-/g, '_')) : '';
+  a.setAttribute('href', 'organiser/index.html' + (key ? '#' + encodeURIComponent(key) : ''));
 }
 function titleCase(slug) {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
