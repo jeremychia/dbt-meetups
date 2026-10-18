@@ -2006,7 +2006,8 @@ function renderChapterTable() {
     return sortAsc ? av - bv : bv - av;
   });
 
-  const pinned = rows.find(c => c.slug === selectedChapter);
+  // The selected chapter is always shown, even when it is dormant or filtered out.
+  const pinned = rows.find(c => c.slug === selectedChapter) || (selectedChapter ? DATA.chapters[selectedChapter] : null);
   rows = rows.filter(c => c.slug !== selectedChapter);
   if (pinned) rows.unshift(pinned);
 
