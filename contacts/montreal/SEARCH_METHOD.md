@@ -1,6 +1,6 @@
 # Montreal: city notes
 
-This file holds what is specific to Montreal. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Montreal. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Montreal dbt Meetup](https://www.meetup.com/montreal-dbt-meetup/), data in `montreal_dbt_companies.json`
 - **Region:** Greater Montreal.
@@ -27,7 +27,7 @@ This file holds what is specific to Montreal. The method, scoring rules, schema 
 
 ## 1. Where to look in Montreal
 
-Two research runs built the file. The first build (2026-09-24) used about 18 web searches and a job ad scan. The extension (2026-10-01) looked for more speakers, especially first-time speakers. It used about 17 web searches before the session limit, then direct page fetches. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+Two research runs built the file. The first build (2026-09-24) used about 18 web searches and a job ad scan. The extension (2026-10-01) looked for more speakers, especially first-time speakers. It used about 17 web searches before the session limit, then direct page fetches. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 Much of the local content is in French. French posts and talks are recorded as they are, with an English description.
 
@@ -37,7 +37,7 @@ Much of the local content is in French. French posts and talks are recorded as t
   - **First build:** the June 2025, January 2026, April 2026 and June 2026 agendas.
   - **Extension:** older event pages from July 2023 to April 2025 gave 17 new speakers. Pages follow the slug pattern `snowflake-montreal-presents-<season>-<year>`, for example [winter 2024](https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-hiver-winter-2024).
   - **[Fall 2026](https://usergroups.snowflake.com/events/details/snowflake-montreal-presents-snowflake-montreal-user-group-meetup-automne-fall-2026/):** talks by Oliver Benning, Lamia Goeffon and João Vitor de Camargo.
-- **Chapter history:** every named speaker in [`../enriched/montreal-dbt-meetup.json`](../enriched/montreal-dbt-meetup.json) was added as a person. That file holds 6 meetups, from 2021-10-29 to 2026-08-06. 15 people in the file have spoken at the chapter. Montreal Analytics ran the 2021 to 2023 events. Solution BI hosted October 2024. Maxa and Solution BI ran the August 2026 relaunch, a networking evening with no talks.
+- **Chapter history:** every named speaker in [`../enriched/montreal-dbt-meetup.json`](../../enriched/montreal-dbt-meetup.json) was added as a person. That file holds 6 meetups, from 2021-10-29 to 2026-08-06. 15 people in the file have spoken at the chapter. Montreal Analytics ran the 2021 to 2023 events. Solution BI hosted October 2024. Maxa and Solution BI ran the August 2026 relaunch, a networking evening with no talks.
 - **Meetup `gql2` with `curl`:** works with no browser. Query by group name so results do not depend on a shared browser tab. It read [MTL Data](https://www.meetup.com/mtldata/), [Data Driven Montréal](https://www.meetup.com/datadrivenmontreal/), [Montréal-Python](https://www.meetup.com/montreal-python/), [GDG Montreal](https://www.meetup.com/gdg-montreal/) and [GDG Cloud Montreal](https://www.meetup.com/gdg-cloud-montreal/). GDG Montreal gave Jihoo Park (Warner Bros. Games Montréal) and its organisers. GDG Cloud Montreal gave its organiser.
 
 ### Company and consultancy blogs
@@ -64,7 +64,7 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **LinkedIn Jobs (first build):** a logged-out scan for "dbt" in the Montreal area. Up to 150 ads were checked for the whole word "dbt". 40 ads at 18 companies mention it. Many ads are in French.
 - **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 35 Montreal employers were tried. An AlayaCare Staff Data Developer ad in Montreal requires strong dbt skills, which raised it to strong. Cohere lists dbt as a plus for a role open in Montreal. Super.com ads say the data team are long-time dbt users, but they name Canada, not Montreal.
 - **Meetup venues:** Sid Lee hosts every [Snowflake Montreal User Group](https://www.meetup.com/snowflake-montreal-user-group/) meetup. Zinnia hosted [MTL Data](https://www.meetup.com/mtldata/) in April 2024.
-- **Location pass (page fetches):** no one qualified under the [central location rules](../research/README.md#6-location-rules). Most chapter talks were from 2021 to 2023, too old for in-person evidence. The bios on event pages state no city. Audrey Leduc spoke in person in October 2024, but KOHO's Montreal office could not be confirmed.
+- **Location pass (page fetches):** no one qualified under the [central location rules](../../research/README.md#6-location-rules). Most chapter talks were from 2021 to 2023, too old for in-person evidence. The bios on event pages state no city. Audrey Leduc spoke in person in October 2024, but KOHO's Montreal office could not be confirmed.
 - **LinkedIn pass (search results only):** 12 people searched and 3 placed. [Hassan Al-Rabea](https://www.linkedin.com/in/hassan-al-rabea/) and [Audrey Leduc](https://www.linkedin.com/in/audreyleduc/) are in Montreal. [Kristi Gourlay](https://www.linkedin.com/in/kristi-gourlay/) is in Toronto. Results that gave only "Canada" or "United States", or did not tie the profile to the recorded employer, were skipped.
 
 ## 2. What didn't work here
@@ -237,7 +237,7 @@ GDG Cloud Montreal, GDG Montreal / Women Techmakers Montreal, Vooban (local pres
   - **Women Techmakers Montreal IWD speakers:** the 2024 and 2025 pages name no speakers. Ask Stefania Pecore or Mimoh Solanki for the line-ups.
   - **First-time speakers outside Maxa and agileDSS:** for example at Lightspeed, Workleap, AlayaCare and Poka.
 - **People to locate:** 53 people are still `not_searched` on LinkedIn. Start with the 17 unknown locations.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `montreal/montreal_dbt_companies.json`, the chapter `montreal-dbt-meetup`, `../enriched/montreal-dbt-meetup.json` and the region "Greater Montreal". Search in English and French, and record French content with an English description. Plan one Maxa speaker per event. Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `montreal/montreal_dbt_companies.json`, the chapter `montreal-dbt-meetup`, `../enriched/montreal-dbt-meetup.json` and the region "Greater Montreal". Search in English and French, and record French content with an English description. Plan one Maxa speaker per event. Budget about 25 web searches.
 
 ## Change log
 

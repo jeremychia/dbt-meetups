@@ -85,6 +85,10 @@ A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), 
 
 Every city's research sits in its own folder under [`contacts/`](contacts/), for example `contacts/berlin_planning/berlin_dbt_companies.json` next to that city's `SEARCH_METHOD.md` and any planning notes. The scripts in `research/` and `dashboard/build_organiser_data.py` read `contacts/*/*_dbt_companies.json`.
 
+### Where the planning lives
+
+Vision notes, co-organiser profiles and event-planning templates for a chapter sit in [`planning/<chapter>/`](planning/), apart from the contact data. Today that is [`planning/berlin/`](planning/berlin/) and [`planning/baltics/`](planning/baltics/). Nothing reads these files, so a new chapter just adds a folder. The Berlin contact data is still in `contacts/berlin_planning/` because that folder name is what `research/rejected_matches.json` and the research scripts refer to.
+
 ### Rebuild after the research changes
 
 Run this after editing any `<region>_dbt_companies.json`, then commit the result. It is separate from the Meetup pipeline.

@@ -1,6 +1,6 @@
 # Boston: city notes
 
-This file holds what is specific to Boston. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Boston. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Boston dbt Meetup](https://www.meetup.com/boston-dbt-meetup/), data in `boston_dbt_companies.json`
 - **Region:** Greater Boston. Boston, Cambridge and Burlington count. Commuter towns are local for this chapter, so Providence counts too.
@@ -27,7 +27,7 @@ This file holds what is specific to Boston. The method, scoring rules, schema an
 
 ## 1. Where to look in Boston
 
-The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 ### Chapter history
 
@@ -229,7 +229,7 @@ Arbor Biotechnologies (local presence not confirmed), AWS User Group Women in AI
   - **WiDS x BU panel:** the November 2025 panellists are not named on the WiDS site. Ask the ambassador, Ming Hua Tsai.
   - **LinkedIn Jobs:** re-run the guest scan (keywords=dbt, Boston), keeping ads with the whole word dbt.
 - **People to locate:** the 7 unknown locations in section 5, starting with William Kuan and Athena Casarotto.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `boston/boston_dbt_companies.json`, the chapter `boston-dbt-meetup`, `../enriched/boston-dbt-meetup.json` and the region "Greater Boston (Boston, Cambridge, Burlington and nearby), with commuter towns such as Providence". Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `boston/boston_dbt_companies.json`, the chapter `boston-dbt-meetup`, `../enriched/boston-dbt-meetup.json` and the region "Greater Boston (Boston, Cambridge, Burlington and nearby), with commuter towns such as Providence". Budget about 25 web searches.
 
 ## Change log
 

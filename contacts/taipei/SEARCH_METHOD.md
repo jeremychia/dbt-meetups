@@ -1,6 +1,6 @@
 # Taipei: city notes
 
-This file holds what is specific to Taipei. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Taipei. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Taipei dbt Meetup](https://www.meetup.com/taipei-dbt-meetup/), data in `taipei_dbt_companies.json`
 - **Region:** the Taipei metro area. That is Taipei, New Taipei and Keelung, so Hsintien and Yungho count. Taoyuan counts too, as a commuter town. Hsinchu does not.
@@ -62,7 +62,7 @@ Much of the content is in Chinese. Posts and talks are recorded under their own 
 - **Medium-confidence matches:** an in-person talk in the last 2 years at an employer with a Taipei office gave medium confidence. So did a Meetup member with the same name in Taipei, Yungho or Hsintien.
 - **Location pass yield:** 23 people placed, 22 in the region and 1 outside it.
 - **LinkedIn search results:** 15 people were searched. It placed 1, Katy Yuan, in the San Francisco Bay Area.
-- **Result:** 23 people are in the region, 2 are outside it and 44 are unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
+- **Result:** 23 people are in the region, 2 are outside it and 44 are unknown. The evidence rules are in [location rules](../../research/README.md#6-location-rules).
 
 ### Women-in-data communities
 
@@ -227,7 +227,7 @@ AILogora (local presence not confirmed), Chung-Hua Institution for Economic Rese
   - **PyLadies Taiwan and Girls in Tech Taiwan:** no current event page was found.
   - **Women Who Code Taipei:** Women Who Code closed in 2024. Taipei Women in Tech carries on its alumni.
 - **People from the women-in-data pass:** the 18 people added have no LinkedIn search.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `taipei/taipei_dbt_companies.json`, the Taipei dbt Meetup, `../enriched/taipei-dbt-meetup.json` and the Taipei metro area (Taipei, New Taipei and Keelung, plus Taoyuan; not Hsinchu). Add: "Search in Traditional Chinese and English. Show each name as published, and give each an ASCII id: the handle plus `-ithome`, or Hanyu Pinyin."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `taipei/taipei_dbt_companies.json`, the Taipei dbt Meetup, `../enriched/taipei-dbt-meetup.json` and the Taipei metro area (Taipei, New Taipei and Keelung, plus Taoyuan; not Hsinchu). Add: "Search in Traditional Chinese and English. Show each name as published, and give each an ASCII id: the handle plus `-ithome`, or Hanyu Pinyin."
 
 ## Change log
 

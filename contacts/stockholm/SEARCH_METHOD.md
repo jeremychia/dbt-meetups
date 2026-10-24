@@ -1,6 +1,6 @@
 # Stockholm: city notes
 
-This file holds what is specific to Stockholm. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Stockholm. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Stockholm dbt Meetup](https://www.meetup.com/stockholm-dbt-meetup/), data in `stockholm_dbt_companies.json`
 - **Region:** the Stockholm metro area. Commuter towns count as local, so Uppsala is in the region.
@@ -200,7 +200,7 @@ Embark Studios (local presence not confirmed), TELETID (local presence not confi
   - **Searched twice on LinkedIn, no profile link:** Mauro Luzzatto, Guillaume Fetter, Linus Wågberg and Erik Lehto.
   - **Never searched on LinkedIn:** Mike Burke and Isabella Renzetti.
   - **LinkedIn profile found, location still unknown:** Akanksha Bhagwanani.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `stockholm/stockholm_dbt_companies.json`, the Stockholm dbt Meetup, `../enriched/stockholm-dbt-meetup.json` and the region above. Add: "The city has no first-time speakers yet, so search Substack, Medium and company blogs for Stockholm authors first."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `stockholm/stockholm_dbt_companies.json`, the Stockholm dbt Meetup, `../enriched/stockholm-dbt-meetup.json` and the region above. Add: "The city has no first-time speakers yet, so search Substack, Medium and company blogs for Stockholm authors first."
 
 ## Change log
 

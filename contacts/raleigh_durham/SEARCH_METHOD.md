@@ -1,6 +1,6 @@
 # Raleigh: city notes
 
-This file holds what is specific to Raleigh. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Raleigh. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Raleigh dbt Meetup](https://www.meetup.com/raleigh-d/), data in `raleigh_durham_dbt_companies.json`
 - **Region:** Raleigh-Durham and towns within about an hour.
@@ -89,7 +89,7 @@ To fill after the first research run.
 
 ## 6. Next run
 
-- **Sources to try first:** a research run with the [central replication prompt](../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
+- **Sources to try first:** a research run with the [central replication prompt](../../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
 
 ## Change log
 

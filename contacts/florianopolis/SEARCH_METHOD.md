@@ -1,6 +1,6 @@
 # Floripa: city notes
 
-This file holds what is specific to Floripa. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Floripa. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Floripa dbt Meetup](https://www.meetup.com/florianopolis-dbt-meetup/), data in `florianopolis_dbt_companies.json`
 - **Region:** Florianópolis and towns within about an hour.
@@ -73,7 +73,7 @@ avanade (local presence not confirmed), Bix Tech Corp. (local presence not confi
 
 ## 6. Next run
 
-- **Sources to try first:** a research run with the [central replication prompt](../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
+- **Sources to try first:** a research run with the [central replication prompt](../../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
 
 ## Change log
 

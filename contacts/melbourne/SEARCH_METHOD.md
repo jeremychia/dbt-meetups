@@ -1,6 +1,6 @@
 # Melbourne: city notes
 
-This file holds what is specific to Melbourne. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Melbourne. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Melbourne dbt Meetup](https://www.meetup.com/melbourne-dbt-meetup/), data in `melbourne_dbt_companies.json`
 - **Region:** Greater Melbourne, including Docklands and Port Melbourne. Sydney and Adelaide do not count.
@@ -59,7 +59,7 @@ One research run used about 18 web searches, plus a logged-out LinkedIn Jobs sca
 - **Recent in-person talks:** 3 people spoke in person in Melbourne in the last 2 years, at employers with a Melbourne office. All 3 are placed at medium confidence.
 - **GitHub profiles:** Tristan Handy's profile gives Philadelphia.
 - **LinkedIn search results:** 5 people were searched. It placed 3 in Melbourne and 1 in Adelaide.
-- **Yield:** 8 people placed across both passes, and 2 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
+- **Yield:** 8 people placed across both passes, and 2 still unknown. The evidence rules are in [location rules](../../research/README.md#6-location-rules).
 
 ### Women-in-data communities
 
@@ -206,7 +206,7 @@ Bilue (local presence not confirmed), Confluent (local presence not confirmed), 
 - **People to locate:**
   - **Evan Williams:** the LinkedIn result shows only Mantel's Sydney head office.
   - **Pat Kearns:** works at dbt Labs and is labelled.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `melbourne/melbourne_dbt_companies.json`, the Melbourne dbt Meetup, `../enriched/melbourne-dbt-meetup.json` and Greater Melbourne. Add: "Count Docklands as Melbourne, and never place someone from a head-office location alone."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `melbourne/melbourne_dbt_companies.json`, the Melbourne dbt Meetup, `../enriched/melbourne-dbt-meetup.json` and Greater Melbourne. Add: "Count Docklands as Melbourne, and never place someone from a head-office location alone."
 
 ## Change log
 

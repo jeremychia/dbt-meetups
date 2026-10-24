@@ -1,6 +1,6 @@
 # Paris: city notes
 
-This file holds what is specific to Paris. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Paris. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Paris dbt Meetup](https://www.meetup.com/paris-dbt-meetup/), data in `paris_dbt_companies.json`
 - **Region:** Paris and Île-de-France.
@@ -309,7 +309,7 @@ Tier 1 is stricter here than the central rule. The first build proposed 52 tier-
   - **Women-in-data events:** new Paris Data Ladies and Women in Big Data Paris events with named speakers.
 - **People to locate:** 15 people have no known location, including Willis Nana, whose LinkedIn result had nothing tying it to the recorded talk. The 4 tier-1 leads among them are Grégoire Naud, Paul Colinmaire, Thales Loiola Ravelli and Martin-Pierre Roset.
 - **Data conventions:** `metadata.region` is "Paris (Paris dbt Meetup)". `sources.checked` lists every source checked, with a `yielded` flag. `past_meetups` is copied from `../enriched/paris-dbt-meetup.json`. Person `content_id`s have the form `<event-slug>-<title-slug>`.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `paris/paris_dbt_companies.json`, the Paris dbt Meetup, `../enriched/paris-dbt-meetup.json` and the region Paris / Île-de-France. Add: "Content is often in French, so search in French too and record French titles as they are, with an English description. Tier 1 = Paris or unknown location plus a dbt item from 2024 onwards, or a first-time speaker under the shared rule. Back up the old file as `paris_dbt_companies.v<N>.json`."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `paris/paris_dbt_companies.json`, the Paris dbt Meetup, `../enriched/paris-dbt-meetup.json` and the region Paris / Île-de-France. Add: "Content is often in French, so search in French too and record French titles as they are, with an English description. Tier 1 = Paris or unknown location plus a dbt item from 2024 onwards, or a first-time speaker under the shared rule. Back up the old file as `paris_dbt_companies.v<N>.json`."
 
 ## Change log
 

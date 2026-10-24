@@ -1,6 +1,6 @@
 # Seoul: city notes
 
-This file holds what is specific to Seoul. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Seoul. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Seoul dbt Meetup](https://www.meetup.com/seoul-dbt-meetup/), data in `seoul_dbt_companies.json`
 - **Region:** the Seoul Capital Area. That is Seoul, Incheon and Gyeonggi, so Bucheon and Seongnam (Pangyo) count. Sejong does not.
@@ -56,7 +56,7 @@ Search in English and Korean. Korean names are romanised family name first, unle
 - **velog and GitHub:** the velog profile API gave bios and GitHub links. GitHub HTML profile pages still show the location after the API's rate limit.
 - **Recent chapter talks:** an in-person talk in the last 2 years at an employer with a Seoul office gave medium confidence.
 - **LinkedIn search results:** placed 1 person, Jean-Christophe Gnansounou (Cartier, Seoul). A tied profile came back for only 1 of the 11 people searched.
-- **Yield:** 15 people placed across both passes, and 12 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
+- **Yield:** 15 people placed across both passes, and 12 still unknown. The evidence rules are in [location rules](../../research/README.md#6-location-rules).
 
 ### Women-in-data communities
 
@@ -206,7 +206,7 @@ AWSKRUG data group, AWSKRUG Women In Cloud, Channel Corp, Devsisters, Musinsa, P
 - **People to locate:**
   - **LinkedIn:** search the past speakers still unknown and not yet searched: Louis Lee and Wynn Park.
   - **GitHub:** check the accounts linked from Seokjin Han's and zuckerfrei's velog bios.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `seoul/seoul_dbt_companies.json`, the Seoul dbt Meetup, `../enriched/seoul-dbt-meetup.json` and the Seoul Capital Area. Add: "Search in English and Korean. Romanise Korean names family name first unless the person shows a preferred spelling, and give each an ASCII id."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `seoul/seoul_dbt_companies.json`, the Seoul dbt Meetup, `../enriched/seoul-dbt-meetup.json` and the Seoul Capital Area. Add: "Search in English and Korean. Romanise Korean names family name first unless the person shows a preferred spelling, and give each an ASCII id."
 
 ## Change log
 

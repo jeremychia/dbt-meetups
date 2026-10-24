@@ -1,6 +1,6 @@
 # Singapore: city notes
 
-This file holds what is specific to Singapore. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Singapore. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Singapore dbt Meetup](https://www.meetup.com/singapore-dbt-meetup/), data in `singapore_dbt_companies.json`
 - **Region:** Singapore. Kuala Lumpur, Ho Chi Minh City and Sydney do not count.
@@ -59,7 +59,7 @@ This file holds what is specific to Singapore. The method, scoring rules, schema
 - **Meetup `gql2`:** gave every past chapter event with hosts, RSVPs and member cities. An RSVP to the event where the person spoke gave high confidence.
 - **Recent chapter talks:** an in-person chapter talk in the last 2 years, at an employer with a Singapore office, gave medium confidence.
 - **LinkedIn search results:** 15 people were searched. It placed 5 in Singapore and 1 in Sydney. 3 LinkedIn URLs were carried over from the Kuala Lumpur file.
-- **Yield:** 17 people placed across both passes, and 14 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
+- **Yield:** 17 people placed across both passes, and 14 still unknown. The evidence rules are in [location rules](../../research/README.md#6-location-rules).
 
 ### Women-in-data communities
 
@@ -228,7 +228,7 @@ Databricks, Dataiku, DataScience SG, PyLadies Singapore, R Ladies Singapore, Wom
 - **People to locate:**
   - **Past speakers:** 14 people are still unknown, mostly past chapter speakers from 2023 and 2024. LinkedIn found no profile with a matching title for Aezo Teo, Houren Chen, Shuguang Xiang, Adam Bagaskarta and Jia Ler Chew. Try the Grab or ShopBack author pages.
   - **Auxten Wang:** gave 2 in-person Singapore talks in 2026. Confirm whether ClickHouse has a Singapore office.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `singapore/singapore_dbt_companies.json`, the Singapore dbt Meetup, `../enriched/singapore-dbt-meetup.json` and Singapore. Add: "Tag recruiters as type "recruiter". Ask whether each data speaker uses dbt before raising that speaker to tier 1."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `singapore/singapore_dbt_companies.json`, the Singapore dbt Meetup, `../enriched/singapore-dbt-meetup.json` and Singapore. Add: "Tag recruiters as type "recruiter". Ask whether each data speaker uses dbt before raising that speaker to tier 1."
 
 ## Change log
 

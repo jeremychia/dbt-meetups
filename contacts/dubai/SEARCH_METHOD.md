@@ -1,6 +1,6 @@
 # Dubai: city notes
 
-This file holds what is specific to Dubai. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Dubai. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Dubai dbt Meetup](https://www.meetup.com/dubai-dbt-meetup/), data in `dubai_dbt_companies.json`
 - **Region:** Dubai and towns within about an hour.
@@ -89,7 +89,7 @@ To fill after the first research run.
 
 ## 6. Next run
 
-- **Sources to try first:** a research run with the [central replication prompt](../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
+- **Sources to try first:** a research run with the [central replication prompt](../../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
 
 ## Change log
 

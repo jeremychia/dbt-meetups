@@ -1,12 +1,12 @@
 # Berlin: city notes
 
-This file holds what is specific to Berlin. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Berlin. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Berlin dbt Meetup](https://www.meetup.com/berlin-dbt-meetup/), data in `berlin_dbt_companies.json`
 - **Region:** the Berlin metro area. Commuter towns within about an hour count, such as Potsdam.
 - **First built:** 2026-09-23
 - **Starting point:** the Berlin search starts from **public content**: blog posts, talks, case studies, podcasts and other meetups' line-ups. It adds job ads as a second signal. The Lithuania search, by contrast, started from job ads.
-- **Reference file:** this file's `metadata.field_definitions` is the reference copy for every city ([§4](../research/README.md#4-shared-schema-version-3)).
+- **Reference file:** this file's `metadata.field_definitions` is the reference copy for every city ([§4](../../research/README.md#4-shared-schema-version-3)).
 
 <!-- at-a-glance:start -->
 **At a glance** (version 8, 2026-10-01)
@@ -226,7 +226,7 @@ d-fine, Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
 - [ ] **Check tier-1 first-time speakers raised by the rule,** in case a post doesn't mention dbt.
 - [ ] **Treat Vinted people as backup speakers.** They are flagged `internal_vinted: true`.
 - [ ] **Note labelled dbt Labs and Fivetran staff** in the cockpit.
-- [ ] **Run the line-up balance check** in [event-planning-template.md](event-planning-template.md).
+- [ ] **Run the line-up balance check** in [event-planning-template.md](../../planning/berlin/event-planning-template.md).
 
 ## 6. Next run
 
@@ -241,7 +241,7 @@ d-fine, Data Berlin (newsletter & meetup), idealo, Thoughtworks, Zalando
   - **Unknown locations:** 51 people. Work in tier order, with past chapter speakers first within a tier.
   - **LinkedIn:** search tier 1–2 people with `linkedin_confidence` of not_searched or low, and re-check medium ones.
   - **Notes:** re-check people with notes like "verify" or "may have left".
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with folder `berlin_planning`, chapter "Berlin dbt Meetup", enriched file `enriched/berlin-dbt-meetup.json` and region "Berlin metro, including commuter towns within about an hour such as Potsdam". Add: "Fetch databerlin.net/skills/dbt with source 'Data Berlin job board'; check Data Berlin on Luma and meetup.com; check Berlin Buzzwords, PyCon DE & PyData and applydata."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with folder `berlin_planning`, chapter "Berlin dbt Meetup", enriched file `enriched/berlin-dbt-meetup.json` and region "Berlin metro, including commuter towns within about an hour such as Potsdam". Add: "Fetch databerlin.net/skills/dbt with source 'Data Berlin job board'; check Data Berlin on Luma and meetup.com; check Berlin Buzzwords, PyCon DE & PyData and applydata."
 
 ## Change log
 

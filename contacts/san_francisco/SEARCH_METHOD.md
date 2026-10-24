@@ -1,6 +1,6 @@
 # San Francisco: city notes
 
-This file holds what is specific to San Francisco. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to San Francisco. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [San Francisco dbt Meetup](https://www.meetup.com/san-francisco-dbt-meetup/), data in `san_francisco_dbt_companies.json`
 - **Region:** the nine SF Bay Area counties. San Francisco, the Peninsula (San Mateo, Menlo Park, Portola Valley) and the South Bay (Sunnyvale) count. Commuter towns are local for this chapter, so Santa Cruz counts too. San Diego and Irvine do not.
@@ -27,7 +27,7 @@ This file holds what is specific to San Francisco. The method, scoring rules, sc
 
 ## 1. Where to look in San Francisco
 
-The first build had about 20 web searches before the shared session limit ran out. The rest came from about 50 page fetches and the GitHub API. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+The first build had about 20 web searches before the shared session limit ran out. The rest came from about 50 page fetches and the GitHub API. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 ### Chapter history and conferences
 
@@ -209,7 +209,7 @@ Bay Area WiMLDS, Data Transfer Initiative (local presence not confirmed), IBM (l
   - **Women-in-data communities not reachable:** the [Girls in Tech](https://girlsintech.org/) site timed out. Data + Women San Francisco has no working page; find its new address on the Tableau user group directory.
   - **Dori Wilson:** confirm the move from Chime to Recce before outreach.
 - **People to locate:** the 26 unknown locations. Find GitHub logins for the unknown-location people at Hex, Omni, LangChain, DoorDash, Zipline, Sigma and Okta.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `san_francisco/san_francisco_dbt_companies.json`, the chapter `san-francisco-dbt-meetup`, `../enriched/san-francisco-dbt-meetup.json` and the region "the nine SF Bay Area counties, with commuter towns such as Santa Cruz". Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `san_francisco/san_francisco_dbt_companies.json`, the chapter `san-francisco-dbt-meetup`, `../enriched/san-francisco-dbt-meetup.json` and the region "the nine SF Bay Area counties, with commuter towns such as Santa Cruz". Budget about 25 web searches.
 
 ## Change log
 

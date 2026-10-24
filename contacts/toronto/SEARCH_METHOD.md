@@ -1,6 +1,6 @@
 # Toronto: city notes
 
-This file holds what is specific to Toronto. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Toronto. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Toronto dbt Meetup](https://www.meetup.com/toronto-dbt-meetup/), data in `toronto_dbt_companies.json`
 - **Region:** the Greater Toronto Area, including the Waterloo region.
@@ -27,7 +27,7 @@ This file holds what is specific to Toronto. The method, scoring rules, schema a
 
 ## 1. Where to look in Toronto
 
-Two research runs built the file. The first build (2026-09-24) used about 18 web searches and a job ad scan. The extension (2026-10-01) used about 20 web searches, then direct page fetches once the session limit was reached. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+Two research runs built the file. The first build (2026-09-24) used about 18 web searches and a job ad scan. The extension (2026-10-01) used about 20 web searches, then direct page fetches once the session limit was reached. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 ### User groups and meetups
 
@@ -39,7 +39,7 @@ Two research runs built the file. The first build (2026-09-24) used about 18 web
   - **[Toronto Apache Kafka Ecosystem Meetup](https://www.meetup.com/toronto-kafka/):** Geotab data platform talks in September 2026.
   - **[Toronto Data Engineering Meetup with ClickHouse](https://luma.com/8p8unbnw):** 2026 speakers from FiveOneFour and Evidence.
 - **[Data Engineers in Toronto](https://www.meetup.com/data-engineers-in-toronto/):** organiser only. The group runs online talks centred on Microsoft Fabric.
-- **Chapter history:** every named speaker in [`../enriched/toronto-dbt-meetup.json`](../enriched/toronto-dbt-meetup.json) was added as a person. That file holds 4 meetups, from 2025-09-17 to 2026-08-19. The first was a social with no talks. 4 people in the file have spoken at the chapter. A speaker listed by first name only, "Michelle" (November 2025), was skipped.
+- **Chapter history:** every named speaker in [`../enriched/toronto-dbt-meetup.json`](../../enriched/toronto-dbt-meetup.json) was added as a person. That file holds 4 meetups, from 2025-09-17 to 2026-08-19. The first was a social with no talks. 4 people in the file have spoken at the chapter. A speaker listed by first name only, "Michelle" (November 2025), was skipped.
 
 ### Conferences
 
@@ -69,7 +69,7 @@ Speakers come from women-focused groups' own events. Nobody's gender is recorded
 - **Company job boards (open JSON):** the Greenhouse, Lever and Ashby APIs return every open ad with its full text. About 40 Toronto employers were tried. Super.com ads say the data team are long-time dbt users, which raised it to strong. Instacart has remote Analytics Engineer roles open to Ontario that require dbt. 1Password, PointClickCare (Mississauga) and Docebo list dbt among other tools. Cohere lists it as a plus.
 - **[HN Who is hiring](https://hn.algolia.com/api/v1/search?query=dbt%20canada&tags=comment):** the Algolia API, searched for dbt with Toronto, Ontario, Canada or Waterloo. Posts were kept when they place the role in Toronto. Gave Borrowell and Squaredance, both from 2023. Most Canadian posts are remote with no Toronto office.
 - **Meetup venues:** the Toronto Modern Data Stack meetup, now Toronto Enterprise AI, was hosted by Cohere in February 2024 and by Georgian with Dagster in October 2024.
-- **Location pass (page fetches):** 6 people placed under the [central location rules](../research/README.md#6-location-rules), 4 in the region and 2 elsewhere.
+- **Location pass (page fetches):** 6 people placed under the [central location rules](../../research/README.md#6-location-rules), 4 in the region and 2 elsewhere.
   - **Daria Sukhareva:** a Tableau Public profile linked from kwwhat.com.
   - **Archie Sarre Wood:** a GitHub profile.
   - **Nicole Kim and Jessie Lamontagne:** in-person chapter talks in August 2026, at a Toronto-based employer.
@@ -249,7 +249,7 @@ AWS User Group Women in Tech Ontario, PyLadies Toronto, Toronto Womxn in Data Sc
   - **Women-in-data panels with no published names:** the Women in Big Data Toronto "Lead with Data" panel (March 2025) and the GDG Toronto IWD 2025 panel. Ask the organisers for the panellists.
   - **Waterloo:** no Waterloo group had dbt talks, so try Waterloo company blogs.
 - **People to locate:** 66 people are still `not_searched` on LinkedIn. Start with tier 1 and tier 2, and the 5 unknown locations.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `toronto/toronto_dbt_companies.json`, the chapter `toronto-dbt-meetup`, `../enriched/toronto-dbt-meetup.json` and the region "the Greater Toronto Area, including the Waterloo region". Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `toronto/toronto_dbt_companies.json`, the chapter `toronto-dbt-meetup`, `../enriched/toronto-dbt-meetup.json` and the region "the Greater Toronto Area, including the Waterloo region". Budget about 25 web searches.
 
 ## Change log
 

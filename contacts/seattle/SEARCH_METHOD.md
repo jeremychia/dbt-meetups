@@ -1,6 +1,6 @@
 # Seattle: city notes
 
-This file holds what is specific to Seattle. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Seattle. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Seattle dbt Meetup](https://www.meetup.com/seattle-dbt-meetup/), data in `seattle_dbt_companies.json`
 - **Region:** the Seattle metro. Seattle, Bellevue, Redmond, Bothell and Mercer Island count. Commuter towns are local for this chapter, so Olympia and Mount Vernon count too.
@@ -27,7 +27,7 @@ This file holds what is specific to Seattle. The method, scoring rules, schema a
 
 ## 1. Where to look in Seattle
 
-The first build covered conferences, other local meetups, women-in-data communities, company blogs and job ads. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+The first build covered conferences, other local meetups, women-in-data communities, company blogs and job ads. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 ### Chapter history and conferences
 
@@ -243,7 +243,7 @@ Advancing Analytics (local presence not confirmed), Chicory AI (local presence n
   - **Power BI Women:** most speakers are named by first name only. Open the event pages in a browser to find surnames and employers.
   - **Eastside job ads** (Bellevue, Redmond, Kirkland): re-run the LinkedIn Jobs guest scan with a working location filter, plus Lever, Greenhouse and Ashby `site:` searches.
 - **People to locate:** the 12 unknown locations in section 5, starting with Brandyn Lee and Irina Virnik.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `seattle/seattle_dbt_companies.json`, the chapter `seattle-dbt-meetup`, `../enriched/seattle-dbt-meetup.json` and the region "the Seattle metro (Seattle, Bellevue, Redmond and nearby), with commuter towns such as Olympia and Mount Vernon". Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `seattle/seattle_dbt_companies.json`, the chapter `seattle-dbt-meetup`, `../enriched/seattle-dbt-meetup.json` and the region "the Seattle metro (Seattle, Bellevue, Redmond and nearby), with commuter towns such as Olympia and Mount Vernon". Budget about 25 web searches.
 
 ## Change log
 

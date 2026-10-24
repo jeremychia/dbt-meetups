@@ -1,6 +1,6 @@
 # Sydney: city notes
 
-This file holds what is specific to Sydney. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Sydney. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Sydney dbt Meetup](https://www.meetup.com/sydney-dbt-meetup/), data in `sydney_dbt_companies.json`
 - **Region:** Greater Sydney. Newcastle, Adelaide and Melbourne do not count. Docklands, Victoria is part of Melbourne.
@@ -61,7 +61,7 @@ The first build had three parts: local meetups and communities, conferences and 
 
 - **In-person conference talks:** placed 4 people at medium confidence. 3 spoke at the in-person Coalesce on the Road Sydney, at employers with a confirmed Sydney office: Mantel (580 George St) and Rezdy (320 Pitt St). 1 spoke at DataEngBytes Sydney 2026, for IAG, which is headquartered in Sydney.
 - **LinkedIn search results:** 12 people were searched. It placed 6 in Greater Sydney and 1 in Adelaide. One more result put Kevin Dang (EdgeRed) in Docklands, which is Melbourne.
-- **Yield:** 12 people placed across both passes, and 37 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
+- **Yield:** 12 people placed across both passes, and 37 still unknown. The evidence rules are in [location rules](../../research/README.md#6-location-rules).
 
 ### Women-in-data communities
 
@@ -254,7 +254,7 @@ Posit (local presence not confirmed), The Bridge Forum (Women in Tech: Connect &
 - **People to locate:**
   - **Past speakers:** 37 people are still unknown, mostly chapter speakers from 2019 to 2022.
   - **No usable LinkedIn result:** Sangzhuoyang Yu, Pip Sidaway, Lavanya Kommuri and Mike Robins. Arunkumar Kamalakarapandian's result says only "Australia".
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `sydney/sydney_dbt_companies.json`, the Sydney dbt Meetup, `../enriched/sydney-dbt-meetup.json` and Greater Sydney. Add: "Count Docklands as Melbourne and Newcastle as outside the region."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `sydney/sydney_dbt_companies.json`, the Sydney dbt Meetup, `../enriched/sydney-dbt-meetup.json` and Greater Sydney. Add: "Count Docklands as Melbourne and Newcastle as outside the region."
 
 ## Change log
 

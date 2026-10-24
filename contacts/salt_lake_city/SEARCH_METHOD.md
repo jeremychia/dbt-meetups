@@ -1,6 +1,6 @@
 # Salt Lake City: city notes
 
-This file holds what is specific to Salt Lake City and the Wasatch Front. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Salt Lake City and the Wasatch Front. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Salt Lake City dbt Meetup](https://www.meetup.com/salt-lake-city-dbt-meetup/), 55 members and no local event yet. Its only events were two dbt Labs online sessions posted to every group. The goal is the people and companies who could start a first local meetup: speakers, co-organisers, venues and co-hosts. Data in `salt_lake_city_dbt_companies.json`.
 - **Region:** Salt Lake City and the Wasatch Front within about an hour: Ogden, Layton, Sandy, Draper, Lehi, American Fork, Orem, Provo and Park City. Logan and St. George do not count.
@@ -165,7 +165,7 @@ Posit (local presence not confirmed), Utah Geek Events
   - Meetup `speakerDetails` and the Snowflake user group API for events since this run.
   - LinkedIn searches for analytics engineers at Recursion, Podium, Lucid and Pluralsight.
 - **People to locate:** Brandon Thomson, Pooja Crahen and Jake Van Hecke.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with this city's file, the chapter, `enriched/salt-lake-city-dbt-meetup.json` and the region above.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with this city's file, the chapter, `enriched/salt-lake-city-dbt-meetup.json` and the region above.
 
 ## Change log
 

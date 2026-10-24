@@ -1,6 +1,6 @@
 # Cluj: city notes
 
-This file holds what is specific to Cluj. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Cluj. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Cluj dbt Meetup](https://www.meetup.com/cluj-dbt-meetup/), data in `cluj_dbt_companies.json`
 - **Region:** Cluj-Napoca and towns within about an hour.
@@ -96,7 +96,7 @@ To fill after the first research run.
 
 ## 6. Next run
 
-- **Sources to try first:** a research run with the [central replication prompt](../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
+- **Sources to try first:** a research run with the [central replication prompt](../../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
 
 ## Change log
 

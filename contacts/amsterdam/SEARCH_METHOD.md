@@ -1,6 +1,6 @@
 # Amsterdam: city notes
 
-This file holds what is specific to Amsterdam. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Amsterdam. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Netherlands dbt Meetup](https://www.meetup.com/amsterdam-dbt-meetup/), data in `amsterdam_dbt_companies.json`
 - **Region:** the Netherlands. Amsterdam, Utrecht, Eindhoven and 's-Hertogenbosch all count.
@@ -207,7 +207,7 @@ Cargill (local presence not confirmed), Data + Women Amsterdam, Ilionx, Odido (l
   - **Women-in-data groups:** new editions of Xebia Women in Data, and the Power BI or SQL sessions at Dutch Women in Tech and Rotterdam Women in Tech. Nothing was reachable for Women Techmakers, WiDS or She Loves Data in the Netherlands, so check again only if a chapter appears.
   - **PyData Amsterdam 2024:** retry the programme. The group is also moving to [Luma](https://luma.com/pydataamsterdam).
 - **People to locate:** 19 people have no known location. They include tier-1 leads Oliver Ramsay, Liam McCarty and Jon Su, and most chapter speakers from 2023 and 2024. The PyData, Data & Drinks and PyLadies event pages link most speakers' LinkedIn profiles, so find those people through search results.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `amsterdam/amsterdam_dbt_companies.json`, the Netherlands dbt Meetup, `../enriched/amsterdam-dbt-meetup.json` and the region the Netherlands.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `amsterdam/amsterdam_dbt_companies.json`, the Netherlands dbt Meetup, `../enriched/amsterdam-dbt-meetup.json` and the region the Netherlands.
 
 ## Change log
 

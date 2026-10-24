@@ -1,6 +1,6 @@
 # London: city notes
 
-This file holds what is specific to London. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to London. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [London dbt Meetup](https://www.meetup.com/london-dbt-meetup/), data in `london_dbt_companies.json`
 - **Region:** Greater London. Commuter towns are local for this chapter, so Oxford and Brighton count too.
@@ -61,7 +61,7 @@ This file holds what is specific to London. The method, scoring rules, schema an
 
 ### Chapter history and locations
 
-- **Chapter history:** every named speaker in [`../enriched/london-dbt-meetup.json`](../enriched/london-dbt-meetup.json) was added as a person. That file holds 22 meetups, from 2019-04-04 to 2026-05-27. 33 people in the file have spoken at the chapter. Four people found by the research were already past speakers with newer talks: Gordon Curzon, Holly Foster, Pablo Fernandez and Ash Sultan.
+- **Chapter history:** every named speaker in [`../enriched/london-dbt-meetup.json`](../../enriched/london-dbt-meetup.json) was added as a person. That file holds 22 meetups, from 2019-04-04 to 2026-05-27. 33 people in the file have spoken at the chapter. Four people found by the research were already past speakers with newer talks: Gordon Curzon, Holly Foster, Pablo Fernandez and Ash Sultan.
 - **GitHub profiles:** the company field ties a profile to the person, and the location field places them. Most of the 13 people placed from public pages came from GitHub. Four more came from recent in-person talks at an employer with a London office.
 - **LinkedIn search results:** 12 people searched and 3 placed, all in London: [Gordon Curzon](https://www.linkedin.com/in/gordon-curzon-714a1713/), [Pearl Prakash](https://www.linkedin.com/in/pearl-prakash/) and [Christelle Xu](https://www.linkedin.com/in/christellexu/).
 
@@ -208,7 +208,7 @@ B&Q (local presence not confirmed), Financial Conduct Authority, OakNorth, Quant
   - **Women-in-data sources:** new Women in Data UK podcast episodes through the posts API, and new Data + Women London events. Find Anitha's full name through OakNorth. The IWD 2025 GDG London site did not respond, so retry it.
   - **Beyond the host:** look past The Information Lab for first-time speakers, so the line-up does not depend on the host.
 - **People to locate:** 17 people have no known location, and 96 are still `not_searched` on LinkedIn. Start with the unknown locations.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `london/london_dbt_companies.json`, the London dbt Meetup, `../enriched/london-dbt-meetup.json` and the region Greater London, with Oxford and Brighton counted as local.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `london/london_dbt_companies.json`, the London dbt Meetup, `../enriched/london-dbt-meetup.json` and the region Greater London, with Oxford and Brighton counted as local.
 
 ## Change log
 

@@ -1,6 +1,6 @@
 # Sofia: city notes
 
-This file holds what is specific to Sofia and Bulgaria. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Sofia and Bulgaria. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** none yet. The goal is the people and companies who could start a first Sofia dbt Meetup: speakers, co-organisers, venues and co-hosts. Data in `sofia_dbt_companies.json`.
 - **Region:** Sofia and the commuter towns within about an hour, such as Pernik, Bozhurishte, Elin Pelin and Samokov. Plovdiv is about two hours away and does not count.
@@ -199,7 +199,7 @@ Data Stack Conf (Sofia), INSPIRIT
   - **Data Science Society:** ask for women speakers from past meetups and datathons.
 - **People to locate:** Ivan Krumov, Dimitar Hadzhiev, Martines Angeliev, Peter Mendev and Yordan Darakchiev.
 - **LinkedIn profiles still missing:** everyone except Margarita Naumova and Denis Alekov. Run the LinkedIn pass in its own session.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `sofia/sofia_dbt_companies.json`, no chapter or enriched file yet, and the region above. Add: "There is no chapter yet, so look for co-organisers, venues and co-hosts as well as speakers. Start from the dev.bg dbt search and read each ad's location from the search card."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `sofia/sofia_dbt_companies.json`, no chapter or enriched file yet, and the region above. Add: "There is no chapter yet, so look for co-organisers, venues and co-hosts as well as speakers. Start from the dev.bg dbt search and read each ad's location from the search card."
 
 ## Change log
 

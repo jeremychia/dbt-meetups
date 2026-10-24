@@ -1,6 +1,6 @@
 # Copenhagen: city notes
 
-This file holds what is specific to Copenhagen. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Copenhagen. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Copenhagen dbt Meetup](https://www.meetup.com/copenhagen-dbt-meetup/), data in `copenhagen_dbt_companies.json`
 - **Region:** the Copenhagen metro area, including Ballerup and Hørsholm. Commuter towns are local for this chapter, so Aarhus counts too. The rest of Denmark counts as outside.
@@ -204,7 +204,7 @@ Copenhagen Data Engineering, Employer not identified (local presence not confirm
   - **Chapter history:** after 2026-10-21, refresh the chapter history so vol. 11 is included.
   - **dbt Slack:** check the [#local-denmark](https://slack.getdbt.com/) channel by hand.
 - **People to locate:** 12 people have no known location, mostly chapter speakers and dbt Labs staff. The Snowflake User Group Denmark pages link many LinkedIn profiles, so find those people through search results.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `copenhagen/copenhagen_dbt_companies.json`, the Copenhagen dbt Meetup, `../enriched/copenhagen-dbt-meetup.json` and the region the Copenhagen metro area, with Aarhus counted as local.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `copenhagen/copenhagen_dbt_companies.json`, the Copenhagen dbt Meetup, `../enriched/copenhagen-dbt-meetup.json` and the region the Copenhagen metro area, with Aarhus counted as local.
 
 ## Change log
 

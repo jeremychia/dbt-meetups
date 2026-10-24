@@ -1,6 +1,6 @@
 # Tokyo: city notes
 
-This file holds what is specific to Tokyo. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Tokyo. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Tokyo dbt Meetup](https://www.meetup.com/tokyo-dbt-meetup/), data in `tokyo_dbt_companies.json`
 - **Region:** Greater Tokyo. That includes Saitama and Chiba, so a GitHub location of Kawagoe or Saitama counts. Kyoto, Okinawa and Fukushima do not.
@@ -61,7 +61,7 @@ Most of the content is in Japanese. Titles are kept as written, with an English 
 - **Recent chapter talks:** an in-person talk at a Tokyo dbt Meetup since 2025, at an employer with a Tokyo office, gave medium confidence. Venues come from `past_meetups`.
 - **Company contact pages:** the [estie](https://www.estie.co.jp/company) and [Mitsumore](https://meetsmore.com/company) pages confirmed both Tokyo offices.
 - **LinkedIn search results:** placed 2 people in Greater Tokyo and 2 elsewhere (Naha and Seattle).
-- **Yield:** 22 people placed across both passes, and 24 still unknown. The evidence rules are in [location rules](../research/README.md#6-location-rules).
+- **Yield:** 22 people placed across both passes, and 24 still unknown. The evidence rules are in [location rules](../../research/README.md#6-location-rules).
 
 ### Women-in-data communities
 
@@ -270,7 +270,7 @@ Canva Japan, CCCMK Holdings / V Point Marketing (local presence not confirmed), 
 - **People to locate:**
   - **Past speakers:** 24 people are still unknown, mostly past chapter speakers from 2022 to 2024. detaneeee, ReQ_HY and fujidev were searched on LinkedIn with no match. Search LinkedIn for the past speakers not yet searched, such as Hiroki Ishitada and Junya Morita.
   - **Motoyuki Oki:** add by hand. The LinkedIn result shows a data engineer at the Digital Agency in Tokyo. It failed the matching rule only because the employer is recorded as independent.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `tokyo/tokyo_dbt_companies.json`, the Tokyo dbt Meetup, `../enriched/tokyo-dbt-meetup.json` and Greater Tokyo. Add: "Search in Japanese. Add a handle to any name written only in Japanese script."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `tokyo/tokyo_dbt_companies.json`, the Tokyo dbt Meetup, `../enriched/tokyo-dbt-meetup.json` and Greater Tokyo. Add: "Search in Japanese. Add a handle to any name written only in Japanese script."
 
 ## Change log
 

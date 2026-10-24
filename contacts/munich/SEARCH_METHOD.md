@@ -1,6 +1,6 @@
 # Munich: city notes
 
-This file holds what is specific to Munich. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Munich. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Munich dbt Meetup](https://www.meetup.com/munich-dbt-meetup/), data in `munich_dbt_companies.json`
 - **Region:** the Munich metro area. Ingolstadt and Haar count as local. Karlsruhe, Ulm, Würzburg and Zürich are outside.
@@ -238,7 +238,7 @@ Aiven (local presence not confirmed)
 - **People to locate:** 17 people have no known location.
   - **Searched once on LinkedIn, no match:** Benita Zeug, John Held, Lennart Werner, Viola Oduola, Giuliano Gaub, Hiroshi Hamano, Almuth Hattwich, Niels Warnecke, Tobias Walter and Kimia Karamzadeh.
   - **Never searched on LinkedIn:** Christopher Gutknecht, Michal Lapinski, Pradeep Srikakolapu, Tim Hiebenthal, Allan Mitchell, Geethu Uday and Polina Galkin. Start with Christopher Gutknecht.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `munich/munich_dbt_companies.json`, the Munich dbt Meetup, `../enriched/munich-dbt-meetup.json` and the region above. Add: "Use the Munich Snowflake User Group event API for its line-ups."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `munich/munich_dbt_companies.json`, the Munich dbt Meetup, `../enriched/munich-dbt-meetup.json` and the region above. Add: "Use the Munich Snowflake User Group event API for its line-ups."
 
 ## Change log
 

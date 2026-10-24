@@ -1,6 +1,6 @@
 # Kuala Lumpur: city notes
 
-This file holds what is specific to Kuala Lumpur and Malaysia. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Kuala Lumpur and Malaysia. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** none yet. The goal is speakers and co-organisers for a first Kuala Lumpur dbt Meetup. Data in `kuala_lumpur_dbt_companies.json`, which the organiser page reads under the chapter key `kuala_lumpur`, goal `speakers`.
 - **Region:** Malaysia, with Kuala Lumpur and the Klang Valley first. People in Penang and Putrajaya count as in the region.
@@ -214,7 +214,7 @@ AWS Malaysia, AWS User Groups Malaysia, BentoML (local presence not confirmed), 
 - **People from the women-in-data pass:** the 9 people added have no LinkedIn search and no known location.
 - **People to locate:** 3 people have no known location: Ng Ser Jie (MoneyLion), Michael Rorig (Ikano Retail) and David Lexa (Xendit).
 - **LinkedIn profiles still missing:** Wei Jian, Syakeer Rahman, Ng Ser Jie and Michael Rorig. Try other name spellings, or ask Lee Boon Keong or DCKL for introductions.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `kuala_lumpur/kuala_lumpur_dbt_companies.json`, no chapter or enriched file yet, and the region above. Add: "There is no chapter yet, so look for co-organisers as well as speakers. Read Data Council KL event pages on Luma from inside a browser tab. Scan LinkedIn Jobs with location=Malaysia, plus freehire.me and Indeed Malaysia."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `kuala_lumpur/kuala_lumpur_dbt_companies.json`, no chapter or enriched file yet, and the region above. Add: "There is no chapter yet, so look for co-organisers as well as speakers. Read Data Council KL event pages on Luma from inside a browser tab. Scan LinkedIn Jobs with location=Malaysia, plus freehire.me and Indeed Malaysia."
 
 ## Change log
 

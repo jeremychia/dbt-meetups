@@ -1,6 +1,6 @@
 # Atlanta: city notes
 
-This file holds what is specific to Atlanta. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Atlanta. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Atlanta dbt Meetup](https://www.meetup.com/atlanta-dbt-meetup-group/), data in `atlanta_dbt_companies.json`
 - **Region:** the Atlanta metro. Atlanta, Sandy Springs, Buckhead and Alpharetta count.
@@ -27,7 +27,7 @@ This file holds what is specific to Atlanta. The method, scoring rules, schema a
 
 ## 1. Where to look in Atlanta
 
-The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan. The 2026-10-01 extension used about 22 more searches and about 30 page fetches, mostly of user-group and conference pages. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+The first build used about 18 web searches, plus a logged-out LinkedIn Jobs scan. The 2026-10-01 extension used about 22 more searches and about 30 page fetches, mostly of user-group and conference pages. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 Atlanta's live data community is on the Bevy event platform (Snowflake and Tableau user groups) and in TAG societies, not on Meetup. TAG is the Technology Association of Georgia.
 
@@ -244,7 +244,7 @@ Blue Cross Blue Shield (local presence not confirmed), Emory University, Kennesa
   - **Medium publications:** confirm the names for Mailchimp, Cox, Home Depot, Calendly, Salesloft and Greenlight, and read their feeds.
   - **GitHub and Bevy:** GitHub user search (`dbt location:Atlanta`) for new first-time speakers, and the Bevy pages for Snowflake and Tableau Atlanta.
 - **People to locate:** the 13 unknown locations in section 5. Stewart Bryson's talk links are not in the file yet.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `atlanta/atlanta_dbt_companies.json`, the chapter `atlanta-dbt-meetup-group`, `../enriched/atlanta-dbt-meetup-group.json` and the region "the Atlanta metro (Atlanta, Sandy Springs, Alpharetta and nearby)". Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `atlanta/atlanta_dbt_companies.json`, the chapter `atlanta-dbt-meetup-group`, `../enriched/atlanta-dbt-meetup-group.json` and the region "the Atlanta metro (Atlanta, Sandy Springs, Alpharetta and nearby)". Budget about 25 web searches.
 
 ## Change log
 

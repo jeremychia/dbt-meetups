@@ -1,6 +1,6 @@
 # Vilnius: city notes
 
-This file holds what is specific to Vilnius. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Vilnius. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Baltic dbt Meetup](https://www.meetup.com/vilnius-dbt-meetup/), data in `lithuania_dbt_companies.json`
 - **Region:** Lithuania, mainly Vilnius and Kaunas.
@@ -216,7 +216,7 @@ PyLadies Lithuania, Women Go Tech
   - **People gaps:** for every company with `dbt_signal` "strong" and fewer than 3 people, look for analytics engineers, data engineers, data analysts and BI developers. Re-check people with confidence "Low" or notes like "may have left".
 - **People to locate:** 49 people have no known location, mostly people found through the job-ad company search with only a LinkedIn profile as evidence. The tier-1/2 leads among them are Simas Janušas, Aurimas Griciunas, Dovilė Bakšytė and Rytis Jonas Zolubas.
 - **Data conventions:** person ids were `pNNN` until v3. Each person's old id is kept in `notes` as "(v3 id: pNNN)".
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `baltics/lithuania_dbt_companies.json`, the Baltic dbt Meetup (Vilnius), `../enriched/vilnius-dbt-meetup.json` and the region Lithuania. Add: "Search in English and Lithuanian. Flag Vinted people as `internal_vinted` rather than treating them as outreach targets. Commit the old file first; git history keeps old versions, so don't save a `.v<N>.json` copy."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `baltics/lithuania_dbt_companies.json`, the Baltic dbt Meetup (Vilnius), `../enriched/vilnius-dbt-meetup.json` and the region Lithuania. Add: "Search in English and Lithuanian. Flag Vinted people as `internal_vinted` rather than treating them as outreach targets. Commit the old file first; git history keeps old versions, so don't save a `.v<N>.json` copy."
 
 ## Change log
 

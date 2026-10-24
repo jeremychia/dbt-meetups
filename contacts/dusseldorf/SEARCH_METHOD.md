@@ -1,6 +1,6 @@
 # Düsseldorf: city notes
 
-This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Düsseldorf and the Rhein-Ruhr area. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Rhein-Ruhr dbt Meetup](https://www.meetup.com/rhein-ruhr-dbt-meetup/), data in `dusseldorf_dbt_companies.json`
 - **Region:** Düsseldorf, Cologne, Essen, Dortmund, Bonn and nearby towns. Commuter towns count as local, so Münster is in the region. Leipzig is outside.
@@ -249,7 +249,7 @@ Data Platform Usergroup Rheinland, Data Saturday Rheinland, Datamonsters Ruhrgeb
   - **Tier 3:** Andreas Schiffer, Benjamin Kirsche, Christopher König, Frank Geisler, Moritz Bauer, Sebastian Grünwald and Stephan Dahlmann.
   - **Connector:** Oliver Engels.
   - **First to search:** Alex Rupp, as a past chapter speaker.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `dusseldorf/dusseldorf_dbt_companies.json`, the Rhein-Ruhr dbt Meetup, `../enriched/rhein-ruhr-dbt-meetup.json` and the region above. Add: "Most NRW dbt searches return job ads, so prefer direct fetches."
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `dusseldorf/dusseldorf_dbt_companies.json`, the Rhein-Ruhr dbt Meetup, `../enriched/rhein-ruhr-dbt-meetup.json` and the region above. Add: "Most NRW dbt searches return job ads, so prefer direct fetches."
 
 ## Change log
 

@@ -1,6 +1,6 @@
 # New York: city notes
 
-This file holds what is specific to New York. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to New York. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [New York dbt Meetup](https://www.meetup.com/nyc-dbt-meetup/), data in `new_york_dbt_companies.json`
 - **Region:** the NYC metro area.
@@ -27,7 +27,7 @@ This file holds what is specific to New York. The method, scoring rules, schema 
 
 ## 1. Where to look in New York
 
-One research run covered New York. It used about 22 web searches before the session limit stopped it. Everything after that came from direct page fetches. Leads are scored by the [central scoring rules](../research/README.md#3-scoring-rules).
+One research run covered New York. It used about 22 web searches before the session limit stopped it. Everything after that came from direct page fetches. Leads are scored by the [central scoring rules](../../research/README.md#3-scoring-rules).
 
 ### dbt conference pages
 
@@ -37,7 +37,7 @@ One research run covered New York. It used about 22 web searches before the sess
 
 ### Meetups
 
-- **Chapter history:** every named speaker in [`../enriched/nyc-dbt-meetup.json`](../enriched/nyc-dbt-meetup.json) was added as a person. That file holds 30 meetups, from 2019-07-31 to 2026-09-30. 65 people in the file have spoken at the chapter.
+- **Chapter history:** every named speaker in [`../enriched/nyc-dbt-meetup.json`](../../enriched/nyc-dbt-meetup.json) was added as a person. That file holds 30 meetups, from 2019-07-31 to 2026-09-30. 65 people in the file have spoken at the chapter.
 - **Meetup `gql2`:** `groupSearch` near Manhattan, with a latitude, longitude and radius, listed about 45 New York data groups. Each group's 2024 to 2026 events took one more call, with no browser. Event queries also return host profiles with a city.
 - **[NYC Apache Airflow Meetup](https://www.meetup.com/nyc-apache-airflow-meetup/):** 30 events from 2024 to 2026, including one dbt talk on the Cosmos package.
 - **[ClickHouse New York User Group](https://www.meetup.com/clickhouse-new-york-user-group/):** speakers from Ramp, Clay, Hex, Evidence, Braze and Datavations.
@@ -72,7 +72,7 @@ One research run covered New York. It used about 22 web searches before the sess
 
 ### Locations
 
-- **Location pass (page fetches):** 26 people placed, 20 in the region and 6 elsewhere, under the [central location rules](../research/README.md#6-location-rules). Meetup host profiles of the person's own event gave 5. GitHub profiles with a matching employer gave 11, because the company field ties a profile to the person and the location field places it. In-person chapter talks since late 2024, at an employer with a New York office, gave 10.
+- **Location pass (page fetches):** 26 people placed, 20 in the region and 6 elsewhere, under the [central location rules](../../research/README.md#6-location-rules). Meetup host profiles of the person's own event gave 5. GitHub profiles with a matching employer gave 11, because the company field ties a profile to the person and the location field places it. In-person chapter talks since late 2024, at an employer with a New York office, gave 10.
 - **LinkedIn pass (search results only):** 12 people searched and 6 placed. Alfe Hossain and Gisela Chen are in New York. Darcy Norman, Fernando Bolaños, Emily Ng and Dane Slutzky are elsewhere.
 
 ## 2. What didn't work here
@@ -232,7 +232,7 @@ Amazon (local presence not confirmed), Fitch Ratings (local presence not confirm
   - **Lesbians Who Tech Summit:** check the 2026 agenda after the 5-7 October summit for data talks.
   - **Job ads:** `site:` searches on Lever, Greenhouse and Ashby with "dbt New York".
 - **People to locate:** 108 people are still `not_searched` on LinkedIn. Start with the dbt Summit speakers whose location is unknown. Re-check old profiles at Ramp and JetBlue.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `new_york/new_york_dbt_companies.json`, the chapter `nyc-dbt-meetup`, `../enriched/nyc-dbt-meetup.json` and the region "the NYC metro area". Cap Brooklyn Data at one speaker per event. Budget about 25 web searches.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `new_york/new_york_dbt_companies.json`, the chapter `nyc-dbt-meetup`, `../enriched/nyc-dbt-meetup.json` and the region "the NYC metro area". Cap Brooklyn Data at one speaker per event. Budget about 25 web searches.
 
 ## Change log
 

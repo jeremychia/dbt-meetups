@@ -1,6 +1,6 @@
 # Barcelona: city notes
 
-This file holds what is specific to Barcelona. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Barcelona. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Barcelona dbt Meetup](https://www.meetup.com/barcelona-dbt-meetup/), data in `barcelona_dbt_companies.json`
 - **Region:** Barcelona and towns within about an hour.
@@ -90,7 +90,7 @@ Barcelona Data Engineering Community
 
 ## 6. Next run
 
-- **Sources to try first:** a research run with the [central replication prompt](../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
+- **Sources to try first:** a research run with the [central replication prompt](../../research/README.md#9-replication-prompt) for companies, dbt job ads and first-time speakers.
 
 ## Change log
 

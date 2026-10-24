@@ -1,6 +1,6 @@
 # Belgium: city notes
 
-This file holds what is specific to Belgium. The method, scoring rules, schema and replication prompt are in the [central search method](../research/README.md).
+This file holds what is specific to Belgium. The method, scoring rules, schema and replication prompt are in the [central search method](../../research/README.md).
 
 - **Chapter:** [Belgium dbt Meetup](https://www.meetup.com/analytics-engineering-belgium/), data in `belgium_dbt_companies.json`
 - **Region:** Belgium. Brussels, Antwerp, Ghent, Leuven, Mechelen, Hasselt and Ottignies-Louvain-la-Neuve all count.
@@ -211,7 +211,7 @@ WiDS Belgium
 - **People from the women-in-data pass:** the 14 people added have no LinkedIn search. The WiDS Belgium pages link LinkedIn profiles, which a LinkedIn pass can confirm.
   - **Data Professionals - Belgium:** its [quarterly data drinks](https://www.meetup.com/data-professionals-belgium/) in Brussels were not scanned for speakers.
 - **People to locate:** 23 people have no known location. They include tier-1 leads Arthur Chionh and Johannes Lootens, and most chapter speakers from 2023 and 2024.
-- **Prompt:** use the [central replication prompt](../research/README.md#9-replication-prompt) with `belgium/belgium_dbt_companies.json`, the Belgium dbt Meetup, `../enriched/analytics-engineering-belgium.json` and the region Belgium.
+- **Prompt:** use the [central replication prompt](../../research/README.md#9-replication-prompt) with `belgium/belgium_dbt_companies.json`, the Belgium dbt Meetup, `../enriched/analytics-engineering-belgium.json` and the region Belgium.
 
 ## Change log
 
