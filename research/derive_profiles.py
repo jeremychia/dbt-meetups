@@ -14,25 +14,67 @@ a profile counts when the evidence url itself names its author or owner:
   organisation) whose name matches the person; its linked LinkedIn account is added too.
 """
 
-import glob, json, re, subprocess, unicodedata
+import glob
+import json
+import os
+import re
+import subprocess
+import unicodedata
 from validate import reachable
 
 AUTHOR = [
-    (re.compile(r"https?://zenn\.dev/([A-Za-z0-9_]+)/(?:articles|books|scraps)/"), "zenn", "https://zenn.dev/{}"),
-    (re.compile(r"https?://qiita\.com/([A-Za-z0-9_-]+)/items/"), "qiita", "https://qiita.com/{}"),
-    (re.compile(r"https?://note\.com/([A-Za-z0-9_]+)/n/"), "note", "https://note.com/{}"),
+    (
+        re.compile(r"https?://zenn\.dev/([A-Za-z0-9_]+)/(?:articles|books|scraps)/"),
+        "zenn",
+        "https://zenn.dev/{}",
+    ),
+    (
+        re.compile(r"https?://qiita\.com/([A-Za-z0-9_-]+)/items/"),
+        "qiita",
+        "https://qiita.com/{}",
+    ),
+    (
+        re.compile(r"https?://note\.com/([A-Za-z0-9_]+)/n/"),
+        "note",
+        "https://note.com/{}",
+    ),
     (re.compile(r"https?://velog\.io/@([^/]+)/"), "velog", "https://velog.io/@{}"),
-    (re.compile(r"https?://medium\.com/@([^/?#]+)"), "medium", "https://medium.com/@{}"),
-    (re.compile(r"https?://dev\.to/([A-Za-z0-9_]+)/[^/]+"), "devto", "https://dev.to/{}"),
-    (re.compile(r"https?://(?:www\.)?meetup\.com/members/(\d+)"), "meetup", "https://www.meetup.com/members/{}/"),
-    (re.compile(r"https?://sessionize\.com/([a-z0-9-]+)/?$"), "sessionize", "https://sessionize.com/{}"),
+    (
+        re.compile(r"https?://medium\.com/@([^/?#]+)"),
+        "medium",
+        "https://medium.com/@{}",
+    ),
+    (
+        re.compile(r"https?://dev\.to/([A-Za-z0-9_]+)/[^/]+"),
+        "devto",
+        "https://dev.to/{}",
+    ),
+    (
+        re.compile(r"https?://(?:www\.)?meetup\.com/members/(\d+)"),
+        "meetup",
+        "https://www.meetup.com/members/{}/",
+    ),
+    (
+        re.compile(r"https?://sessionize\.com/([a-z0-9-]+)/?$"),
+        "sessionize",
+        "https://sessionize.com/{}",
+    ),
 ]
-GITHUB = re.compile(r"https?://(?:www\.)?github\.com/([A-Za-z0-9-]+)(?:/|$)|https?://api\.github\.com/users/([A-Za-z0-9-]+)")
+GITHUB = re.compile(
+    r"https?://(?:www\.)?github\.com/([A-Za-z0-9-]+)(?:/|$)|https?://api\.github\.com/users/([A-Za-z0-9-]+)"
+)
 NOT_USERS = {"orgs", "topics", "sponsors", "features", "about", "marketplace", "apps"}
 
 
 def norm(s):
-    return re.sub(r"[^a-z0-9 ]", " ", unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower())
+    return re.sub(
+        r"[^a-z0-9 ]",
+        " ",
+        unicodedata.normalize("NFKD", s or "")
+        .encode("ascii", "ignore")
+        .decode()
+        .lower(),
+    )
 
 
 def name_matches(person_name, github_name, login):
@@ -48,33 +90,75 @@ _gh = {}
 
 def github_user(login):
     if login not in _gh:
-        out = subprocess.run(["gh", "api", f"users/{login}"], capture_output=True, text=True).stdout
+        out = subprocess.run(
+            ["gh", "api", f"users/{login}"], capture_output=True, text=True
+        ).stdout
         user = json.loads(out) if out.strip().startswith("{") else {}
         social = []
         if user.get("type") == "User":
-            s = subprocess.run(["gh", "api", f"users/{login}/social_accounts"], capture_output=True, text=True).stdout
+            s = subprocess.run(
+                ["gh", "api", f"users/{login}/social_accounts"],
+                capture_output=True,
+                text=True,
+            ).stdout
             social = json.loads(s) if s.strip().startswith("[") else []
         _gh[login] = (user, social)
     return _gh[login]
 
 
-COMPANY_WORDS = {"tech", "data", "blog", "dev", "jp", "inc", "engineering", "team", "official", "digital", "media"}
+COMPANY_WORDS = {
+    "tech",
+    "data",
+    "blog",
+    "dev",
+    "jp",
+    "inc",
+    "engineering",
+    "team",
+    "official",
+    "digital",
+    "media",
+}
 
 
 def company_page(slug, company):
     """the username is the employer's name, as in zenn.dev/pixiv for pixiv or zenn.dev/cybozu_data for Cybozu: a company publication.
-    a personal account with a company prefix, such as qiita.com/nttd-maruyamat, is not."""
-    stem = "".join(w for w in re.split(r"[_\-.]", slug.lower()) if w not in COMPANY_WORDS)
-    emp = [t for t in norm(company).split() if len(t) >= 3 and t not in {"the", "inc", "group", "holdings", "formerly"}]
-    return bool(stem) and (stem in "".join(norm(company).split()) or any((stem.startswith(t) or stem.endswith(t)) and len(stem) - len(t) <= 4 for t in emp))
+    a personal account with a company prefix, such as qiita.com/nttd-maruyamat, is not.
+    """
+    stem = "".join(
+        w for w in re.split(r"[_\-.]", slug.lower()) if w not in COMPANY_WORDS
+    )
+    emp = [
+        t
+        for t in norm(company).split()
+        if len(t) >= 3 and t not in {"the", "inc", "group", "holdings", "formerly"}
+    ]
+    return bool(stem) and (
+        stem in "".join(norm(company).split())
+        or any(
+            (stem.startswith(t) or stem.endswith(t)) and len(stem) - len(t) <= 4
+            for t in emp
+        )
+    )
 
 
 def own_author(kind, slug, p):
     """a medium post is often someone else writing about the talk, so its author counts only when the username fits the person."""
     if kind != "medium":
         return True
-    from harvest_profiles import handles, matches_name, same_handle, slug_fits_name, tokens
-    return slug_fits_name(slug, p) or matches_name(slug, tokens(p["name"])) or any(same_handle(slug, h) for h in handles(p))
+    from harvest_profiles import (
+        handles,
+        matches_name,
+        same_handle,
+        slug_fits_name,
+        tokens,
+    )
+
+    return (
+        slug_fits_name(slug, p)
+        or matches_name(slug, tokens(p["name"]))
+        or any(same_handle(slug, h) for h in handles(p))
+    )
 
 
 _zenn = {}
@@ -82,11 +166,17 @@ _zenn = {}
 
 def zenn_author(article_url):
     """the author of a zenn article; a company publication keeps its articles under the company's name."""
-    m = re.match(r"https?://zenn\.dev/[A-Za-z0-9_]+/articles/([A-Za-z0-9_-]+)", article_url)
+    m = re.match(
+        r"https?://zenn\.dev/[A-Za-z0-9_]+/articles/([A-Za-z0-9_-]+)", article_url
+    )
     if not m:
         return {}
     if m.group(1) not in _zenn:
-        out = subprocess.run(["curl", "-s", "-m", "20", f"https://zenn.dev/api/articles/{m.group(1)}"], capture_output=True, text=True).stdout
+        out = subprocess.run(
+            ["curl", "-s", "-m", "20", f"https://zenn.dev/api/articles/{m.group(1)}"],
+            capture_output=True,
+            text=True,
+        ).stdout
         try:
             _zenn[m.group(1)] = (json.loads(out).get("article") or {}).get("user") or {}
         except ValueError:
@@ -97,20 +187,30 @@ def zenn_author(article_url):
 def is_person(user, p):
     """the zenn user is the person: the username is their handle, or the display name holds their name."""
     from harvest_profiles import handles, matches_name, same_handle, tokens
+
     native = re.sub(r"\s*\(.*?\)", "", p["name"]).strip()
     shown = user.get("name") or ""
-    return bool(user.get("username")) and (any(same_handle(user["username"], h) for h in handles(p)) or same_handle(user["username"], native)
-                                           or matches_name(shown, tokens(p["name"])) or (len(native) > 1 and native in shown))
+    return bool(user.get("username")) and (
+        any(same_handle(user["username"], h) for h in handles(p))
+        or same_handle(user["username"], native)
+        or matches_name(shown, tokens(p["name"]))
+        or (len(native) > 1 and native in shown)
+    )
 
 
 def author_pages(p):
-    return {template.format(m.group(1)) for u in (e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"])
-            for pattern, kind, template in AUTHOR for m in [pattern.search(u)] if m}
+    return {
+        template.format(m.group(1))
+        for u in (e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"])
+        for pattern, kind, template in AUTHOR
+        for m in [pattern.search(u)]
+        if m
+    }
 
 
 def main():
     added = {}
-    files = sorted(glob.glob("*/*_dbt_companies.json"))
+    files = sorted(glob.glob("contacts/*/*_dbt_companies.json"))
     # a page that several people's evidence points to is a company publication or an event, not one person's profile
     owners = {}
     for f in files:
@@ -126,43 +226,82 @@ def main():
         for c in d["companies"]:
             for p in c["people"]:
                 have = {u["url"].lower().rstrip("/") for u in p["profile_urls"]}
-                urls = [e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"]]
+                urls = [
+                    e.get("url") or "" for e in p["speaker_evidence"] + p["evidence"]
+                ]
                 for u in urls:
                     for pattern, kind, template in AUTHOR:
                         m = pattern.search(u)
                         if m:
                             url = template.format(m.group(1))
-                            if kind == "zenn":  # the article's own author decides, since a publication's name sits in the same place
+                            if (
+                                kind == "zenn"
+                            ):  # the article's own author decides, since a publication's name sits in the same place
                                 user = zenn_author(u)
-                                url = f"https://zenn.dev/{user['username']}" if is_person(user, p) else None
-                            if url and url.lower().rstrip("/") not in have and url not in shared and not company_page(url.rsplit("/", 1)[-1], c["name"]) and own_author(kind, url.rstrip("/").rsplit("/", 1)[-1].lstrip("@"), p):
-                                p["profile_urls"].append({"type": kind, "url": url, "source": u})
+                                url = (
+                                    f"https://zenn.dev/{user['username']}"
+                                    if is_person(user, p)
+                                    else None
+                                )
+                            if (
+                                url
+                                and url.lower().rstrip("/") not in have
+                                and url not in shared
+                                and not company_page(url.rsplit("/", 1)[-1], c["name"])
+                                and own_author(
+                                    kind,
+                                    url.rstrip("/").rsplit("/", 1)[-1].lstrip("@"),
+                                    p,
+                                )
+                            ):
+                                p["profile_urls"].append(
+                                    {"type": kind, "url": url, "source": u}
+                                )
                                 have.add(url.lower().rstrip("/"))
                                 n += 1
                     m = GITHUB.search(u)
                     login = m and (m.group(1) or m.group(2))
                     if login and login.lower() not in NOT_USERS:
                         user, social = github_user(login)
-                        if user.get("type") == "User" and name_matches(p["name"], user.get("name"), login):
+                        if user.get("type") == "User" and name_matches(
+                            p["name"], user.get("name"), login
+                        ):
                             url = user["html_url"]
                             if url.lower().rstrip("/") not in have:
-                                p["profile_urls"].append({"type": "github", "url": url, "source": u})
+                                p["profile_urls"].append(
+                                    {"type": "github", "url": url, "source": u}
+                                )
                                 have.add(url.lower().rstrip("/"))
                                 n += 1
                             for a in social:
                                 li = a.get("url", "")
-                                if "linkedin.com/in/" in li and li not in p["linkedin_urls"]:
+                                if (
+                                    "linkedin.com/in/" in li
+                                    and li not in p["linkedin_urls"]
+                                ):
                                     p["linkedin_urls"].append(li)
                                     p["has_linkedin"] = True
                                     p["linkedin_confidence"] = "high"
-                                    p["evidence"].append({"url": li, "note": f"linkedin profile linked from github.com/{login} social accounts"})
+                                    p["evidence"].append(
+                                        {
+                                            "url": li,
+                                            "note": f"linkedin profile linked from github.com/{login} social accounts",
+                                        }
+                                    )
         allp = [p for c in d["companies"] for p in c["people"]]
-        d["metadata"]["counts"]["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
+        d["metadata"]["counts"]["people_with_linkedin"] = sum(
+            p["has_linkedin"] for p in allp
+        )
         d["metadata"]["counts"]["people_with_contact"] = sum(map(reachable, allp))
-        open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
+        open(f, "w").write(
+            json.dumps(d, ensure_ascii=False, indent=2)
+            + ("\n" if raw.endswith("\n") else "")
+        )
         added[f] = (n, d["metadata"]["counts"]["people_with_contact"], len(allp))
     for f, (n, contact, total) in added.items():
-        print(f"{f.split('/')[0]:16} +{n:3} profiles  reachable {contact}/{total}")
+        print(
+            f"{os.path.basename(os.path.dirname(f)):16} +{n:3} profiles  reachable {contact}/{total}"
+        )
 
 
 if __name__ == "__main__":

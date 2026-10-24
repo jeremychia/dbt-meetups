@@ -1,0 +1,2119 @@
+{
+  "metadata": {
+    "title": "Halifax dbt companies and people for the Halifax dbt Meetup",
+    "generated_at": "2026-10-12",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Halifax companies using dbt, and people who could speak at or attend the Halifax dbt Meetup.",
+    "version": 4,
+    "schema_version": 4,
+    "region": "Halifax (Halifax dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: web search for dbt plus Halifax returns mostly national job-board aggregators; few Halifax-specific dbt ads surface.",
+      "Lesson: digitalnovascotia.com (local job and event portal) returned 429 on every fetch, so its job board and event pages could not be read.",
+      "Lesson: a search summary claiming a Halifax dbt data quality meetup at Slalom was wrong; the underlying result was a Houston event, so it was discarded.",
+      "v4 (2026-10-12): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "The Dalhousie dbt job ad was read from a search summary only; the Wellfound page returned 410 so the exact wording was not seen.",
+      "The RBC Halifax ad does not mention dbt in the summary seen; RBC roles in Toronto do. Treat RBC as weak.",
+      "Connie Zheng is listed as a WiMLDS Halifax chapter leader on the chapter page; her current employer may have changed."
+    ],
+    "counts": {
+      "companies": 19,
+      "people": 31,
+      "job_postings": 2,
+      "companies_with_job_postings": 2,
+      "speaker_evidence_items": 9,
+      "unique_content_items": 5,
+      "people_with_linkedin": 14,
+      "people_with_contact": 23,
+      "people_who_spoke_at_this_chapter": 4,
+      "internal_vinted": 0,
+      "level": {
+        "working": 26,
+        "leadership": 5
+      },
+      "speaker_potential": {
+        "high": 4,
+        "medium": 9,
+        "low": 18
+      },
+      "attendee_potential": {
+        "medium": 31
+      },
+      "priority_tier": {
+        "2": 4,
+        "3": 22,
+        "connector": 5
+      },
+      "watchlist_companies": 16,
+      "past_meetups": 5,
+      "lead_type": {
+        "proven_speaker": 12,
+        "no_public_content": 19
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 4,
+        "conference_or_meetup_agenda": 8,
+        "github": 18,
+        "women_in_data_community": 1
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 5,
+      "data warehouse & platforms": 4,
+      "data engineering": 4
+    }
+  },
+  "companies": [
+    {
+      "id": "vetsource",
+      "name": "Vetsource",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "esther-fraser",
+          "name": "Esther Fraser",
+          "pronouns": null,
+          "title": "Data Analyst & Analytics Engineer, Vetsource",
+          "city": "Halifax",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/302331096/",
+              "source": "https://www.meetup.com/events/299012565/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-02-20",
+              "talk_title": "Adopting ELT: Who transforms what?",
+              "topics": [
+                "dbt fundamentals",
+                "orchestration & ci/cd",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Halifax dbt Meetup speaker"
+    },
+    {
+      "id": "brooklyn-data-co",
+      "name": "Brooklyn Data Co",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michelle-forrest",
+          "name": "Michelle Forrest",
+          "pronouns": null,
+          "title": "Associate Director of Data Solutions, Brooklyn Data Co",
+          "city": "Halifax",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/206581802/",
+              "source": "only member named Michelle Forrest among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-06-26",
+              "talk_title": "Data Governance",
+              "topics": [
+                "data governance",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Halifax dbt Meetup speaker"
+    },
+    {
+      "id": "modern-moderninc",
+      "name": "Modern (modern.inc)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "saadat-qadri",
+          "name": "Saadat Qadri",
+          "pronouns": null,
+          "title": "Analytics professional, Modern (modern.inc)",
+          "city": "Halifax",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/38726222/",
+              "source": "https://www.meetup.com/events/302670740/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-08-21",
+              "talk_title": "Canonical Models - The Missing Piece of the Analytics Development Life Cycle",
+              "topics": [
+                "data modeling",
+                "data governance",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Halifax dbt Meetup speaker"
+    },
+    {
+      "id": "analytics-engineer",
+      "name": "Analytics Engineer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "adam-duval",
+          "name": "Adam Duval",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Halifax",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/360688844/",
+              "source": "https://www.meetup.com/events/303881712/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-11-20",
+              "talk_title": "Data on Autopilot: An Overview of Devops with dbt",
+              "topics": [
+                "orchestration & ci/cd",
+                "dbt best practices",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Halifax dbt Meetup speaker"
+    },
+    {
+      "id": "databricks",
+      "name": "databricks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "vincent-fortier",
+          "name": "Vincent Fortier",
+          "pronouns": null,
+          "title": "Manager, Field Engineering - Public Sector Canada",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/vfortier/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Halifax Databricks User Group",
+              "title": "Halifax Databricks user group",
+              "date": "2026-04-28",
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "content_id": "halifax-databricks-user-grouphalifax-databricks-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "note": "talk: Halifax Databricks user group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "alain-mercier",
+          "name": "Alain Mercier",
+          "pronouns": null,
+          "title": "Directeur de comptes",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alain-mercier-05884944/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Halifax Databricks User Group",
+              "title": "Halifax Databricks user group",
+              "date": "2026-04-28",
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "content_id": "halifax-databricks-user-grouphalifax-databricks-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "note": "talk: Halifax Databricks user group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "nova-scotia-health",
+      "name": "Nova Scotia Health",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "conor-newcombe",
+          "name": "Conor Newcombe",
+          "pronouns": null,
+          "title": "Analytics Lead (AI/MLOps) at Nova Scotia Health",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/conor-newcombe/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Halifax Databricks User Group",
+              "title": "Halifax Databricks user group",
+              "date": "2026-04-28",
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "content_id": "halifax-databricks-user-grouphalifax-databricks-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "note": "talk: Halifax Databricks user group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bdo",
+      "name": "BDO",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "federico-cetraro",
+          "name": "Federico Cetraro",
+          "pronouns": null,
+          "title": "eam & Technical Lead · Former University Professor · Driving AI Transformation",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/federico-adrian-cetraro/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Halifax Databricks User Group",
+              "title": "Halifax Databricks user group",
+              "date": "2026-04-28",
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "content_id": "halifax-databricks-user-grouphalifax-databricks-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mgqp5a/",
+              "note": "talk: Halifax Databricks user group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jennifer-la",
+          "name": "Jennifer La",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Halifax Women in Machine Learning & Data Science",
+              "title": "organiser, Halifax Women in Machine Learning & Data Science",
+              "date": "2024-03-07",
+              "url": "https://www.meetup.com/halifax-women-in-machine-learning-and-data-science/events/299472987/",
+              "content_id": "halifax-women-in-machine-learning-data-scienceorganiser-hali",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/halifax-women-in-machine-learning-and-data-science/events/299472987/",
+              "note": "organiser: organiser, Halifax Women in Machine Learning & Data Science"
+            },
+            {
+              "url": "https://www.meetup.com/halifax-women-in-machine-learning-and-data-science/events/289449938/",
+              "note": "organiser: organiser, Halifax Women in Machine Learning & Data Science"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "sreejata-chatterjee",
+          "name": "Sreejata Chatterjee",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/22577171/",
+              "source": "https://www.meetup.com/events/299472987/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Halifax Women in Machine Learning & Data Science",
+              "title": "organiser, Halifax Women in Machine Learning & Data Science",
+              "date": "2024-03-07",
+              "url": "https://www.meetup.com/halifax-women-in-machine-learning-and-data-science/events/299472987/",
+              "content_id": "halifax-women-in-machine-learning-data-scienceorganiser-hali",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/halifax-women-in-machine-learning-and-data-science/events/299472987/",
+              "note": "organiser: organiser, Halifax Women in Machine Learning & Data Science"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "richard-mintz",
+          "name": "Richard Mintz",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/216996116/",
+              "source": "https://www.meetup.com/events/315274329/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Maritimes Fabric Users Group",
+              "title": "organiser, Maritimes Fabric Users Group",
+              "date": "2026-07-15",
+              "url": "https://www.meetup.com/maritimes-fabric-users-group/events/315274329/",
+              "content_id": "maritimes-fabric-users-grouporganiser-maritimes-fabric-users",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/maritimes-fabric-users-group/events/315274329/",
+              "note": "organiser: organiser, Maritimes Fabric Users Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "aadi-manchanda",
+          "name": "Aadi Manchanda",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/258223817/",
+              "source": "https://www.meetup.com/events/313066767/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Canada - Maritimes Chapter",
+              "title": "organiser, Women in Tech Canada - Maritimes Chapter",
+              "date": "2026-03-05",
+              "url": "https://www.meetup.com/women-in-tech-canada-maritimes-chapter/events/313066767/",
+              "content_id": "women-in-tech-canada-maritimes-chapterorganiser-women-in-tec",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-canada-maritimes-chapter/events/313066767/",
+              "note": "organiser: organiser, Women in Tech Canada - Maritimes Chapter"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "sourabh-joshi",
+          "name": "Sourabh Joshi",
+          "pronouns": null,
+          "title": "Dedicated and results-oriented Data Analyst. Expertise in streamlining audits, implementing data analytics solutions, and driving informed decision-making.",
+          "city": "Halifax, NS",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/5ourabh",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/5ourabh gives the location Halifax, NS"
+        },
+        {
+          "id": "ovaiz-ali",
+          "name": "Ovaiz Ali",
+          "pronouns": null,
+          "title": "Dalhousie'25 | MACS | Data Engineer | Data Scientist | Machine Learning | Deep Learning",
+          "city": "Halifax, Nova Scotia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/OvaizAli",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/ovaizali123",
+              "source": "https://github.com/OvaizAli profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/OvaizAli gives the location Halifax, Nova Scotia"
+        },
+        {
+          "id": "poonam-kota",
+          "name": "Poonam Kota",
+          "pronouns": null,
+          "title": "I am a seasoned Sr. research analyst with 6+ years of experience in the healthcare research & data analytics domain. ",
+          "city": "Halifax, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/poonamkota"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Poonamkota",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Poonamkota gives the location Halifax, Canada"
+        },
+        {
+          "id": "ravneet-singh",
+          "name": "Ravneet Singh",
+          "pronouns": null,
+          "title": "👋 Hello!   I’m Ravneet Singh, a passionate and results-driven analyst with expertise in leveraging advanced analytics to optimize business strategies.",
+          "city": "Halifax, Nova Scotia, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ravneetsingh20/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Ravneet-singh2000",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Ravneet-singh2000 gives the location Halifax, Nova Scotia, Canada"
+        },
+        {
+          "id": "jeff-kowalski",
+          "name": "Jeff Kowalski",
+          "pronouns": null,
+          "title": "Data Engineer at Nova Scotia Health",
+          "city": "Halifax, NS",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rjkowalski",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rjkowalski gives the location Halifax, NS"
+        },
+        {
+          "id": "stephanie-isiguzoro",
+          "name": "Stephanie Isiguzoro",
+          "pronouns": null,
+          "title": "Digital marketing analyst with a background in SEO and outreach, focused on data analysis and performance measurement. Skilled in SQL, Excel, and data analytics",
+          "city": "Halifax, Nova Scotia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/stephanieisiguzoro/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/stephanieisiguzoro",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/stephanieisiguzoro gives the location Halifax, Nova Scotia"
+        },
+        {
+          "id": "md-maruf-uzzaman",
+          "name": "Md Maruf Uzzaman",
+          "pronouns": null,
+          "title": "Data Engineer | Azure • Databricks • PySpark • Snowflake • SQL | Building cloud data platforms & reliable ETL/ELT pipelines | RBC",
+          "city": "Halifax, NS | Open to Remote Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/md-maruf-uzzaman-675b84143/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/zamanmaruf",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/zamanmaruf gives the location Halifax, NS | Open to Remote Canada"
+        },
+        {
+          "id": "zohaib-nasir",
+          "name": "Zohaib Nasir",
+          "pronouns": null,
+          "title": "Data scientist/analyst with extensive experience in data-driven decision-making, predictive analytics, and business intelligence. ",
+          "city": "Halifax, Nova Scotia, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/zohaib-nasir-mba-cbap-mban-pursuant-337b2155/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/zohaibnasir1",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/zohaibnasir1 gives the location Halifax, Nova Scotia, Canada"
+        },
+        {
+          "id": "snehal-kasture",
+          "name": "Snehal Kasture",
+          "pronouns": null,
+          "title": "Business Analyst  | Functional Consultant    Salesforce | SAP | Analytics | AI |     6.8+ Years  Deloitte | Infosys | Accenture",
+          "city": "Dartmouth",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/snehalkasture7"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/snek7",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/snek7 gives the location Dartmouth"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "skills-for-hire-atlantic",
+      "name": "Skills For Hire Atlantic",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ajoke-aishat-oshinayaakande",
+          "name": "AJOKE AISHAT OSHINAYAAKANDE",
+          "pronouns": null,
+          "title": "Business Intelligence Analyst | Data Analyst| Financial Analyst| Data Scientist |Client Relationship Management",
+          "city": "Halifax Nova Scotia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ajoke-aishat-o/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AjokeAishat712747",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AjokeAishat712747 gives the location Halifax Nova Scotia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "data-analyst-business-intelligence-analyst",
+      "name": "Data Analyst || Business Intelligence Analyst",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sri-divya-anisetty",
+          "name": "Sri Divya Anisetty",
+          "pronouns": null,
+          "title": "Data Engineer, Analyst, Business Intelligence and Analyst, Test Engineer",
+          "city": "Halifax",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/sri-divya-anisetty-b311a727/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/SDivyaAnisetty",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/SDivyaAnisetty gives the location Halifax"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "outshine",
+      "name": "Outshine",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "laura-whalen",
+          "name": "Laura Whalen",
+          "pronouns": null,
+          "title": "Analytics Engineer @ Outshine",
+          "city": "Halifax, Nova Scotia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/whalenmlaura",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/whalenmlaura gives the location Halifax, Nova Scotia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "dalhousie-university",
+      "name": "Dalhousie University",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "Microsoft Fabric",
+        "Python",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://wellfound.com/jobs/4645312-junior-data-engineer",
+          "source": "Wellfound (via search result)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "requires skills in Python, SQL, ETL, Spark, ELT, DBT, Microsoft Fabric, and Fabric Data Factory",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chris-elliott",
+          "name": "Chris Elliott",
+          "pronouns": null,
+          "title": "Data Engineer @ Dalhousie Analytics",
+          "city": "Halifax, NS, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/christianelliott",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/christianelliott gives the location Halifax, NS, Canada"
+        }
+      ],
+      "notes": "Office of Planning & Institutional Effectiveness; 2-year term; reports to Senior Director, Data Transformation and Governance. Ad text seen in a search summary only."
+    },
+    {
+      "id": "dalhousie-university-ns-canada",
+      "name": "Dalhousie University, NS, Canada",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "carl-helmick",
+          "name": "Carl Helmick",
+          "pronouns": null,
+          "title": "Data Engineer, System Admin, Lab Manager",
+          "city": "Halifax, NS, Canada",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/carl-helmick/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/hfxcarl",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/hfxcarl gives the location Halifax, NS, Canada"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "saint-marys-university",
+      "name": "Saint Mary's University",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jongwon-shinn",
+          "name": "Jongwon Shinn",
+          "pronouns": null,
+          "title": "Data engineer",
+          "city": "Halifax, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/shinn1726",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/shinn1726 gives the location Halifax, Canada"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "tem",
+      "name": "tem",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "simon-baines",
+          "name": "Simon Baines",
+          "pronouns": null,
+          "title": "I'm an Analytics Engineer! I like data.",
+          "city": "Halifax, UK",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/simon-baines-tem",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/simon-baines-tem gives the location Halifax, UK"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "larixsw",
+      "name": "larixsw",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "john-yorke",
+          "name": "John Yorke",
+          "pronouns": null,
+          "title": "Software & Data Engineer | SMU CS Alumni",
+          "city": "Halifax, NS, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/yorkeJohn",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/yorkeJohn gives the location Halifax, NS, Canada"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "royal-bank-of-canada-rbc",
+      "name": "Royal Bank of Canada (RBC)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax",
+        "Bedford"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake",
+        "Python",
+        "SQL"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer - GFT Halifax",
+          "url": "https://www.careerbeacon.com/en/job-4/3295279/rbc/senior-data-engineer-gft-halifax",
+          "source": "CareerBeacon",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": false,
+          "dbt_snippet": null,
+          "job_poster": null,
+          "posted_date": "2026-06-03",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Halifax-area data engineering ad at 120 Western Parkway, Bedford; Snowflake nice-to-have. RBC ads in Toronto mention dbt, so the Halifax team may use it."
+    },
+    {
+      "id": "halifax-women-in-machine-learning-data-science-wimlds",
+      "name": "Halifax Women in Machine Learning & Data Science (WiMLDS)",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "organiser",
+          "url": "https://wimlds.org/?p=4156",
+          "note": "chapter leaders: Jennifer LaPlante, Connie Zheng, Sreejata Chatterjee"
+        }
+      ],
+      "people": [
+        {
+          "id": "connie-zheng",
+          "name": "Connie Zheng",
+          "pronouns": null,
+          "title": "WiMLDS Halifax chapter leader; IT Consultant at IBM",
+          "city": "Halifax",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/zhengconnie/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Halifax WiMLDS",
+              "title": "Chapter leader",
+              "date": null,
+              "url": "https://wimlds.org/?p=4156",
+              "content_id": "halifax-wimldschapter-leader",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "named as a chapter leader of Halifax WiMLDS",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://wimlds.org/?p=4156",
+              "note": "organiser: Chapter leader"
+            },
+            {
+              "url": "https://www.linkedin.com/in/zhengconnie/",
+              "note": "linkedin profile linked from https://wimlds.org/?p=4156 (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from the Halifax women-in-data community",
+          "past_chapter_talks": [],
+          "notes": "title from the chapter page; employer may be out of date"
+        }
+      ],
+      "notes": "Women-in-data community with regular meetups at VOLTA; talk topics are ML and agents."
+    },
+    {
+      "id": "halifax-international-airport-authority",
+      "name": "Halifax International Airport Authority",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Halifax"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "will-hipson",
+          "name": "Will Hipson",
+          "pronouns": null,
+          "title": "PhD. Data Engineer at Halifax International Airport Authority, Nova Scotia.",
+          "city": "Dartmouth, Nova Scotia, Canada",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/whipson",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/whipson3",
+              "source": "https://github.com/whipson profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/whipson gives the location Dartmouth, Nova Scotia, Canada"
+        }
+      ],
+      "notes": null
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/halifax-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/halifax-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Halifax Databricks User Group",
+        "url": "https://usergroups.databricks.com/halifax-databricks-user-group/",
+        "yielded": false,
+        "note": "only organiser Alain Mercier, already on file; no speakers listed"
+      },
+      {
+        "name": "WiMLDS Halifax chapter page",
+        "url": "https://wimlds.org/?p=4156",
+        "yielded": true,
+        "note": "chapter leaders named"
+      },
+      {
+        "name": "Digital Nova Scotia job portal",
+        "url": "https://digitalnovascotia.com/job-posts",
+        "yielded": false,
+        "note": "429 on every fetch"
+      },
+      {
+        "name": "CareerBeacon RBC Senior Data Engineer GFT Halifax",
+        "url": "https://www.careerbeacon.com/en/job-4/3295279/rbc/senior-data-engineer-gft-halifax",
+        "yielded": true,
+        "note": "appeared in search results; no dbt in the summary"
+      },
+      {
+        "name": "NTT DATA Halifax Data Engineer",
+        "url": "https://careers-inc.nttdata.com/job/Halifax-Data-Engineer-NS/1253635400",
+        "yielded": false,
+        "note": "ad filled, no dbt text"
+      },
+      {
+        "name": "Wellfound Dalhousie Junior Data Engineer",
+        "url": "https://wellfound.com/jobs/4645312-junior-data-engineer",
+        "yielded": false,
+        "note": "410 on fetch; skills seen in search summary"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Halifax dbt meetup Q1",
+      "date": "2024-02-20",
+      "venue": "CoWork Halifax, 6156 Quinpool Rd, Halifax, NS",
+      "url": "https://www.meetup.com/halifax-dbt-meetup/events/299012565/",
+      "organisers": [
+        "Esther Fraser"
+      ],
+      "attendees": 19,
+      "talks": [
+        {
+          "speaker": "Esther Fraser",
+          "company": "Data Analyst & Analytics Engineer, Vetsource",
+          "title": "Adopting ELT: Who transforms what?",
+          "topics": [
+            "dbt fundamentals",
+            "orchestration & ci/cd",
+            "team & org design"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Halifax dbt meetup Q2",
+      "date": "2024-06-26",
+      "venue": "CoWork Halifax, 6156 Quinpool Rd, Halifax, NS",
+      "url": "https://www.meetup.com/halifax-dbt-meetup/events/301272205/",
+      "organisers": [
+        "Esther Fraser"
+      ],
+      "attendees": 27,
+      "talks": [
+        {
+          "speaker": "Michelle Forrest",
+          "company": "Associate Director of Data Solutions, Brooklyn Data Co",
+          "title": "Data Governance",
+          "topics": [
+            "data governance",
+            "dbt best practices"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Halifax dbt Meetup Q3",
+      "date": "2024-08-21",
+      "venue": "CoWork Halifax, 6156 Quinpool Rd, Halifax, NS",
+      "url": "https://www.meetup.com/halifax-dbt-meetup/events/302670740/",
+      "organisers": [
+        "Esther Fraser",
+        "Saadat Qadri",
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 17,
+      "talks": [
+        {
+          "speaker": "Saadat Qadri",
+          "company": "Analytics professional, Modern (modern.inc)",
+          "title": "Canonical Models - The Missing Piece of the Analytics Development Life Cycle",
+          "topics": [
+            "data modeling",
+            "data governance",
+            "dbt best practices"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dbt Coalesce Watch Party & Conference Recap",
+      "date": "2024-10-23",
+      "venue": "CoWork Halifax, 6156 Quinpool Rd, Halifax, NS",
+      "url": "https://www.meetup.com/halifax-dbt-meetup/events/303881577/",
+      "organisers": [
+        "Esther Fraser"
+      ],
+      "attendees": 4,
+      "talks": [
+        {
+          "speaker": null,
+          "company": null,
+          "title": "Late-stage transformations: Utilizing dbt Semantic Layer Metrics (Coalesce 2024 recording)",
+          "topics": [
+            "semantic layer"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Halifax dbt Meetup Q4",
+      "date": "2024-11-20",
+      "venue": "CoWork Halifax, 6156 Quinpool Rd, Halifax, NS",
+      "url": "https://www.meetup.com/halifax-dbt-meetup/events/303881712/",
+      "organisers": [
+        "Saadat Qadri",
+        "Esther Fraser"
+      ],
+      "attendees": 18,
+      "talks": [
+        {
+          "speaker": "Adam Duval",
+          "company": "Analytics Engineer",
+          "title": "Data on Autopilot: An Overview of Devops with dbt",
+          "topics": [
+            "orchestration & ci/cd",
+            "dbt best practices",
+            "performance & scale"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Halifax dbt Meetup",
+      "url": "https://www.meetup.com/halifax-dbt-meetup/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "Halifax Women in Machine Learning & Data Science",
+      "url": "https://www.meetup.com/Halifax-Women-in-Machine-Learning-and-Data-Science/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Maritimes Fabric Users Group",
+      "url": "https://www.meetup.com/maritimes-fabric-users-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women in Tech Canada - Maritimes Chapter",
+      "url": "https://www.meetup.com/women-in-tech-canada-maritimes-chapter/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Halifax Women in Machine Learning & Data Science",
+      "url": "https://digitalnovascotia.com/organizer/halifax-women-in-machine-learning-data-science/",
+      "note": "runs regular meetups at VOLTA, Halifax; talks seen are ML and agents, not dbt"
+    },
+    {
+      "name": "Halifax Databricks User Group",
+      "url": "https://usergroups.databricks.com/halifax-databricks-user-group/",
+      "note": "in-person networking events"
+    }
+  ]
+}

@@ -81,6 +81,10 @@ A page at [`/organiser/`](https://jeremychia.github.io/dbt-meetups/organiser/), 
 - **Vinted colleagues are labelled**, since the source files mark them as not for outreach. A checkbox hides them.
 - **dbt Labs and Fivetran staff are labelled**, and a checkbox hides them.
 
+### Where the contact data lives
+
+Every city's research sits in its own folder under [`contacts/`](contacts/), for example `contacts/berlin_planning/berlin_dbt_companies.json` next to that city's `SEARCH_METHOD.md` and any planning notes. The scripts in `research/` and `dashboard/build_organiser_data.py` read `contacts/*/*_dbt_companies.json`.
+
 ### Rebuild after the research changes
 
 Run this after editing any `<region>_dbt_companies.json`, then commit the result. It is separate from the Meetup pipeline.
@@ -93,7 +97,7 @@ dashboard/build_organiser.sh
 
 ### Add a chapter
 
-1. Build the research with the [central search method](research/README.md) and its scripts. The result is `<folder>/<region>_dbt_companies.json`, in the [shared schema](research/README.md#4-shared-schema-version-3), plus city notes in `<folder>/SEARCH_METHOD.md` from the [template](research/city-method-template.md).
+1. Build the research with the [central search method](research/README.md) and its scripts. The result is `contacts/<folder>/<region>_dbt_companies.json`, in the [shared schema](research/README.md#4-shared-schema-version-3), plus city notes in `<folder>/SEARCH_METHOD.md` from the [template](research/city-method-template.md).
 2. Add a line to `CHAPTERS` in `dashboard/build_organiser_data.py`, giving its label, goal (`speakers`, `attendees` or `both`) and area (`Europe`, `North America` or `Asia-Pacific`). The area decides where the city sits in the picker. Without a line, the chapter still loads, with goal `both` under `Other`.
 3. Run `dashboard/build_organiser.sh`.
 

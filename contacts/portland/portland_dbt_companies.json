@@ -1,0 +1,4735 @@
+{
+  "metadata": {
+    "title": "Portland dbt companies and people for the Portland dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Portland companies using dbt, and people who could speak at or attend the Portland dbt Meetup.",
+    "version": 3,
+    "schema_version": 4,
+    "region": "Portland (Portland dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: builtin.com Portland listing pages returned no results when fetched, so job ads came only from search snippets.",
+      "Lesson: the Databricks user group site lists speakers, titles and companies per event and is the best source of local talks.",
+      "Lesson: searches for dbt plus Portland mostly return dialectical behaviour therapy pages or national tutorials."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets. Verify before outreach.",
+      "Freshpaint ad is fully remote US-only and the company is headquartered in San Francisco, so local presence is not confirmed.",
+      "Mark Norland's region is medium confidence: organiser of an in-person Beaverton meetup, but no profile states a city.",
+      "Karynn Jennings is listed for a talk on 2026-10-20 that has not happened yet, so she was not recorded as a proven speaker."
+    ],
+    "counts": {
+      "companies": 30,
+      "people": 80,
+      "job_postings": 1,
+      "companies_with_job_postings": 1,
+      "speaker_evidence_items": 33,
+      "unique_content_items": 16,
+      "people_with_linkedin": 26,
+      "people_with_contact": 62,
+      "people_who_spoke_at_this_chapter": 1,
+      "internal_vinted": 0,
+      "level": {
+        "working": 78,
+        "leadership": 2
+      },
+      "speaker_potential": {
+        "high": 1,
+        "medium": 33,
+        "low": 46
+      },
+      "attendee_potential": {
+        "medium": 80
+      },
+      "priority_tier": {
+        "1": 1,
+        "3": 49,
+        "connector": 30
+      },
+      "watchlist_companies": 29,
+      "past_meetups": 1,
+      "lead_type": {
+        "proven_speaker": 33,
+        "no_public_content": 47
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 1,
+        "conference_or_meetup_agenda": 33,
+        "github": 47
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 30,
+      "data engineering": 3,
+      "business intelligence": 1,
+      "analytics engineering": 1,
+      "genai & llm": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "paige-berry",
+          "name": "Paige Berry",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": "Portland",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/199016605/",
+              "source": "only member named Paige A. C. Berry among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-06-26",
+              "talk_title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Portland dbt Meetup speaker"
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "robin-abramson",
+          "name": "Robin Abramson",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/394819067/",
+              "source": "only member named Robin Abramson among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Portland SQL Server User Group",
+              "title": "Storytelling with Financial Data using Power BI",
+              "date": "2024-01-17",
+              "url": "https://www.meetup.com/portland-sql-server-user-group/events/298570271/",
+              "content_id": "portland-sql-server-user-groupstorytelling-with-financial-da",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-sql-server-user-group/events/298570271/",
+              "note": "talk: Storytelling with Financial Data using Power BI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "stephen-rich",
+          "name": "Stephen Rich",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/13145531/",
+              "source": "only member named Stephen Rich among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Portland SQL Server User Group",
+              "title": "An Introduction to Source Control and CICD for SQL Databases",
+              "date": "2024-04-17",
+              "url": "https://www.meetup.com/portland-sql-server-user-group/events/300476696/",
+              "content_id": "portland-sql-server-user-groupan-introduction-to-source-cont",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-sql-server-user-group/events/300476696/",
+              "note": "talk: An Introduction to Source Control and CICD for SQL Databases"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "sandeep-pawar",
+          "name": "Sandeep Pawar",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/sanpawar/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Portland Fabric User Group",
+              "title": "OSU Special Event: The Future of Analytics, BI, and AI",
+              "date": "2026-06-04",
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/314836302/",
+              "content_id": "portland-fabric-user-grouposu-special-event-the-future-of-an",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/314836302/",
+              "note": "talk: OSU Special Event: The Future of Analytics, BI, and AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "mark-n",
+          "name": "Mark N",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Data + AI Meetup",
+              "title": "organiser, Portland Data + AI Meetup",
+              "date": "2025-08-27",
+              "url": "https://www.meetup.com/portland-data-ai-meetup/events/310656597/",
+              "content_id": "portland-data-ai-meetuporganiser-portland-data-ai-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-data-ai-meetup/events/310656597/",
+              "note": "organiser: organiser, Portland Data + AI Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "steve-moody",
+          "name": "Steve Moody",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/stevemoody/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/SteveMoodyData",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/198437836/",
+              "source": "https://www.meetup.com/events/314308147/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "github"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Data + AI Meetup",
+              "title": "organiser, Portland Data + AI Meetup",
+              "date": "2026-05-19",
+              "url": "https://www.meetup.com/portland-data-ai-meetup/events/314308147/",
+              "content_id": "portland-data-ai-meetuporganiser-portland-data-ai-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-data-ai-meetup/events/314308147/",
+              "note": "organiser: organiser, Portland Data + AI Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group | github profile https://github.com/SteveMoodyData gives the location Portland, OR"
+        },
+        {
+          "id": "michael-wall",
+          "name": "Michael Wall",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/221193469/",
+              "source": "https://www.meetup.com/events/298553740/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Oregon Data Community",
+              "title": "organiser, Oregon Data Community",
+              "date": "2024-01-17",
+              "url": "https://www.meetup.com/oregonsql/events/298553740/",
+              "content_id": "oregon-data-communityorganiser-oregon-data-community",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/oregonsql/events/298553740/",
+              "note": "organiser: organiser, Oregon Data Community"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jessica-aguilar",
+          "name": "Jessica Aguilar",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/242793197/",
+              "source": "https://www.meetup.com/events/298553740/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Oregon Data Community",
+              "title": "organiser, Oregon Data Community",
+              "date": "2024-01-17",
+              "url": "https://www.meetup.com/oregonsql/events/298553740/",
+              "content_id": "oregon-data-communityorganiser-oregon-data-community",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/oregonsql/events/298553740/",
+              "note": "organiser: organiser, Oregon Data Community"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "paul-turley",
+          "name": "Paul Turley",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/195423516/",
+              "source": "https://www.meetup.com/events/312887112/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Oregon Data Community",
+              "title": "organiser, Oregon Data Community",
+              "date": "2026-01-21",
+              "url": "https://www.meetup.com/oregonsql/events/312887112/",
+              "content_id": "oregon-data-communityorganiser-oregon-data-community",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/oregonsql/events/312887112/",
+              "note": "organiser: organiser, Oregon Data Community"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "gregory-petrossian",
+          "name": "Gregory Petrossian",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/240236976/",
+              "source": "https://www.meetup.com/events/303062355/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Azure Data User Group",
+              "title": "organiser, Portland Azure Data User Group",
+              "date": "2024-10-16",
+              "url": "https://www.meetup.com/portland-azure-user-group/events/303062355/",
+              "content_id": "portland-azure-data-user-grouporganiser-portland-azure-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-azure-user-group/events/303062355/",
+              "note": "organiser: organiser, Portland Azure Data User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "scott-thompson",
+          "name": "Scott Thompson",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/209948135/",
+              "source": "https://www.meetup.com/events/313316292/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Azure Data User Group",
+              "title": "organiser, Portland Azure Data User Group",
+              "date": "2026-03-12",
+              "url": "https://www.meetup.com/portland-azure-user-group/events/313316292/",
+              "content_id": "portland-azure-data-user-grouporganiser-portland-azure-data",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-azure-user-group/events/313316292/",
+              "note": "organiser: organiser, Portland Azure Data User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "adam-breindel",
+          "name": "Adam Breindel",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/4424908/",
+              "source": "https://www.meetup.com/events/299037170/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData PDX",
+              "title": "organiser, PyData PDX",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/pydata-pdx/events/299037170/",
+              "content_id": "pydata-pdxorganiser-pydata-pdx",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-pdx/events/299037170/",
+              "note": "organiser: organiser, PyData PDX"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "shubham-gupta",
+          "name": "Shubham Gupta",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/121897612/",
+              "source": "https://www.meetup.com/events/313193714/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Engineering Happy Hour Portland",
+              "title": "organiser, Data Engineering Happy Hour Portland",
+              "date": "2026-02-19",
+              "url": "https://www.meetup.com/data-engineering-happy-hour-portland/events/313193714/",
+              "content_id": "data-engineering-happy-hour-portlandorganiser-data-engineeri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-engineering-happy-hour-portland/events/313193714/",
+              "note": "organiser: organiser, Data Engineering Happy Hour Portland"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "daniel-adayev",
+          "name": "Daniel Adayev",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/475649112/",
+              "source": "https://www.meetup.com/events/313193714/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Engineering Happy Hour Portland",
+              "title": "organiser, Data Engineering Happy Hour Portland",
+              "date": "2026-02-19",
+              "url": "https://www.meetup.com/data-engineering-happy-hour-portland/events/313193714/",
+              "content_id": "data-engineering-happy-hour-portlandorganiser-data-engineeri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-engineering-happy-hour-portland/events/313193714/",
+              "note": "organiser: organiser, Data Engineering Happy Hour Portland"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "bruce-irvin",
+          "name": "Bruce Irvin",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/305694104/",
+              "source": "https://www.meetup.com/events/315250582/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Engineering Happy Hour Portland",
+              "title": "organiser, Data Engineering Happy Hour Portland",
+              "date": "2026-06-25",
+              "url": "https://www.meetup.com/data-engineering-happy-hour-portland/events/315250582/",
+              "content_id": "data-engineering-happy-hour-portlandorganiser-data-engineeri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-engineering-happy-hour-portland/events/315250582/",
+              "note": "organiser: organiser, Data Engineering Happy Hour Portland"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "andie-hendrick",
+          "name": "Andie Hendrick",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/256160599/",
+              "source": "https://www.meetup.com/events/308398301/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies PDX",
+              "title": "organiser, R-Ladies PDX",
+              "date": "2025-06-20",
+              "url": "https://www.meetup.com/rladies-pdx/events/308398301/",
+              "content_id": "rladies-pdxorganiser-rladies-pdx",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-pdx/events/308398301/",
+              "note": "organiser: organiser, R-Ladies PDX"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "arilene-novak",
+          "name": "Arilene Novak",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/467904578/",
+              "source": "https://www.meetup.com/events/308398301/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies PDX",
+              "title": "organiser, R-Ladies PDX",
+              "date": "2025-06-20",
+              "url": "https://www.meetup.com/rladies-pdx/events/308398301/",
+              "content_id": "rladies-pdxorganiser-rladies-pdx",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-pdx/events/308398301/",
+              "note": "organiser: organiser, R-Ladies PDX"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "melissa-santos",
+          "name": "Melissa Santos",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/11944960/",
+              "source": "https://www.meetup.com/events/316026203/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies PDX",
+              "title": "organiser, R-Ladies PDX",
+              "date": "2026-09-14",
+              "url": "https://www.meetup.com/rladies-pdx/events/316026203/",
+              "content_id": "rladies-pdxorganiser-rladies-pdx",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-pdx/events/316026203/",
+              "note": "organiser: organiser, R-Ladies PDX"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "nelly-akhmadikina",
+          "name": "Nelly Akhmadikina",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/277456139/",
+              "source": "https://www.meetup.com/events/316026203/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies PDX",
+              "title": "organiser, R-Ladies PDX",
+              "date": "2026-09-14",
+              "url": "https://www.meetup.com/rladies-pdx/events/316026203/",
+              "content_id": "rladies-pdxorganiser-rladies-pdx",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-pdx/events/316026203/",
+              "note": "organiser: organiser, R-Ladies PDX"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "joanna-gough",
+          "name": "Joanna Gough",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/474666175/",
+              "source": "https://www.meetup.com/events/313763961/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland AI/ML/Data Developer Group",
+              "title": "organiser, Portland AI/ML/Data Developer Group",
+              "date": "2026-03-14",
+              "url": "https://www.meetup.com/aittg-portland/events/313763961/",
+              "content_id": "portland-aimldata-developer-grouporganiser-portland-aimldata",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/aittg-portland/events/313763961/",
+              "note": "organiser: organiser, Portland AI/ML/Data Developer Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "stephen-osserman",
+          "name": "Stephen Osserman",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/186251417/",
+              "source": "https://www.meetup.com/events/299641680/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PDX Data Visualization",
+              "title": "organiser, PDX Data Visualization",
+              "date": "2024-03-12",
+              "url": "https://www.meetup.com/pdx-data-visualization/events/299641680/",
+              "content_id": "pdx-data-visualizationorganiser-pdx-data-visualization",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pdx-data-visualization/events/299641680/",
+              "note": "organiser: organiser, PDX Data Visualization"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "heather-bree",
+          "name": "Heather Bree",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/11311858/",
+              "source": "https://www.meetup.com/events/307951595/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PDX Data Visualization",
+              "title": "organiser, PDX Data Visualization",
+              "date": "2025-05-23",
+              "url": "https://www.meetup.com/pdx-data-visualization/events/307951595/",
+              "content_id": "pdx-data-visualizationorganiser-pdx-data-visualization",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pdx-data-visualization/events/307951595/",
+              "note": "organiser: organiser, PDX Data Visualization"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "tina-gaut",
+          "name": "Tina Gaut",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/345717333/",
+              "source": "https://www.meetup.com/events/298209866/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Fabric User Group",
+              "title": "organiser, Portland Fabric User Group",
+              "date": "2024-01-24",
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/298209866/",
+              "content_id": "portland-fabric-user-grouporganiser-portland-fabric-user-gro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/298209866/",
+              "note": "organiser: organiser, Portland Fabric User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "steve-mika",
+          "name": "Steve Mika",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/353830661/",
+              "source": "https://www.meetup.com/events/298764898/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Fabric User Group",
+              "title": "organiser, Portland Fabric User Group",
+              "date": "2024-02-29",
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/298764898/",
+              "content_id": "portland-fabric-user-grouporganiser-portland-fabric-user-gro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/298764898/",
+              "note": "organiser: organiser, Portland Fabric User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "ray-boone",
+          "name": "Ray Boone",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/239024606/",
+              "source": "https://www.meetup.com/events/302439138/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Fabric User Group",
+              "title": "organiser, Portland Fabric User Group",
+              "date": "2024-10-01",
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/302439138/",
+              "content_id": "portland-fabric-user-grouporganiser-portland-fabric-user-gro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/302439138/",
+              "note": "organiser: organiser, Portland Fabric User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "seth-byrnes",
+          "name": "Seth Byrnes",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/358060228/",
+              "source": "https://www.meetup.com/events/312438607/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Fabric User Group",
+              "title": "organiser, Portland Fabric User Group",
+              "date": "2026-01-28",
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/312438607/",
+              "content_id": "portland-fabric-user-grouporganiser-portland-fabric-user-gro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/312438607/",
+              "note": "organiser: organiser, Portland Fabric User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "chrysanthemum-hayes",
+          "name": "Chrysanthemum Hayes",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/421244984/",
+              "source": "https://www.meetup.com/events/314836302/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Fabric User Group",
+              "title": "organiser, Portland Fabric User Group",
+              "date": "2026-06-04",
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/314836302/",
+              "content_id": "portland-fabric-user-grouporganiser-portland-fabric-user-gro",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/events/314836302/",
+              "note": "organiser: organiser, Portland Fabric User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "vishal-kumar",
+          "name": "Vishal Kumar",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/197078094/",
+              "source": "https://www.meetup.com/events/297983943/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Analytics Club",
+              "title": "organiser, Portland Analytics Club",
+              "date": "2024-01-05",
+              "url": "https://www.meetup.com/ac-pdx/events/297983943/",
+              "content_id": "portland-analytics-cluborganiser-portland-analytics-club",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/ac-pdx/events/297983943/",
+              "note": "organiser: organiser, Portland Analytics Club"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "thakur-mrinalini",
+          "name": "Thakur Mrinalini",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/362914097/",
+              "source": "https://www.meetup.com/events/297142671/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data - NorthWest",
+              "title": "organiser, Women in Big Data - NorthWest",
+              "date": "2024-01-25",
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/297142671/",
+              "content_id": "women-in-big-data-northwestorganiser-women-in-big-data-north",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/297142671/",
+              "note": "organiser: organiser, Women in Big Data - NorthWest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "surekha-reddy",
+          "name": "Surekha Reddy",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/358862338/",
+              "source": "https://www.meetup.com/events/299041479/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data - NorthWest",
+              "title": "organiser, Women in Big Data - NorthWest",
+              "date": "2024-02-07",
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/299041479/",
+              "content_id": "women-in-big-data-northwestorganiser-women-in-big-data-north",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/299041479/",
+              "note": "organiser: organiser, Women in Big Data - NorthWest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "shweta-m",
+          "name": "Shweta M",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data - NorthWest",
+              "title": "organiser, Women in Big Data - NorthWest",
+              "date": "2024-09-25",
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/302717797/",
+              "content_id": "women-in-big-data-northwestorganiser-women-in-big-data-north",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/302717797/",
+              "note": "organiser: organiser, Women in Big Data - NorthWest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "shweta-malik",
+          "name": "Shweta Malik",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/193237142/",
+              "source": "https://www.meetup.com/events/310769916/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Big Data - NorthWest",
+              "title": "organiser, Women in Big Data - NorthWest",
+              "date": "2025-10-15",
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/310769916/",
+              "content_id": "women-in-big-data-northwestorganiser-women-in-big-data-north",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-big-data-northwest/events/310769916/",
+              "note": "organiser: organiser, Women in Big Data - NorthWest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "chris-williams",
+          "name": "Chris Williams",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/chris-williams-pdx/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Tableau User Group",
+              "title": "organiser, Portland Tableau User Group",
+              "date": "2025-06-26",
+              "url": "https://usergroups.tableau.com/e/mnqs7k/",
+              "content_id": "portland-tableau-user-grouporganiser-portland-tableau-user-g",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mnqs7k/",
+              "note": "organiser: organiser, Portland Tableau User Group"
+            },
+            {
+              "url": "https://www.linkedin.com/in/chris-williams-pdx/",
+              "note": "linkedin search result: Chris Williams - Precision Analytics Group; Tableau Ambassador (record event is a Tableau user group); pdx in url"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "derek-larson",
+          "name": "Derek Larson",
+          "pronouns": null,
+          "title": "Data Analyst with a background in Supply Chain management. Completed a Data Analytics Boot Camp from University of Oregon.",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/DerekLarson77",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/DerekLarson77 gives the location Portland, Oregon"
+        },
+        {
+          "id": "drew-white",
+          "name": "Drew White",
+          "pronouns": null,
+          "title": "Data Engineer living in the Portland, OR area with a drive to continue my growth through learning and collaboration.",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/drew-riley-white/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Drewrwhite",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Drewrwhite gives the location Portland, OR"
+        },
+        {
+          "id": "seve-garza",
+          "name": "Seve Garza",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Portland",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/SeveGarza",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/SeveGarza gives the location Portland"
+        },
+        {
+          "id": "alana-csaposs",
+          "name": "Alana Csaposs",
+          "pronouns": null,
+          "title": "Prospective data analyst with extensive history of analytics experience, enthusiasm for research, and passion for inclusive practices.",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/alanacsaposs",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/alanacsaposs gives the location Portland, OR"
+        },
+        {
+          "id": "benjamin-fondell",
+          "name": "Benjamin Fondell",
+          "pronouns": null,
+          "title": "Senior Data Engineer.",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/benpauldev",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/benpauldev gives the location Portland, Oregon"
+        },
+        {
+          "id": "bess-campbell",
+          "name": "Bess Campbell",
+          "pronouns": null,
+          "title": "👩🏼‍💻  Senior Data Engineer           ",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bess-campbell/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/besscampbell",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/bess-campbell/",
+              "note": "linkedin profile linked from https://github.com/besscampbell profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/besscampbell gives the location Portland, OR"
+        },
+        {
+          "id": "casey-cushing",
+          "name": "Casey Cushing",
+          "pronouns": null,
+          "title": "Data Analyst and Data Engineer   ",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ccdatapdx",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/12340360/",
+              "source": "only member named Casey Cushing among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ccdatapdx gives the location Portland, OR"
+        },
+        {
+          "id": "daniel-young",
+          "name": "Daniel Young",
+          "pronouns": null,
+          "title": "Analytics Engineer at ProKarma in Portland Oregon",
+          "city": "Portland Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dyoung-pk",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dyoung-pk gives the location Portland Oregon"
+        },
+        {
+          "id": "kristin-akervall",
+          "name": "Kristin Akervall",
+          "pronouns": null,
+          "title": "Leader  |  Data Analyst  |  Researcher  |     15+ year career working in higher-ed, public- and private-sectors  |   MS, Business Analytics;  CAS, Data Science",
+          "city": "Portland, Oregon Metro Area",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kakervall/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/k-akervall",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/kakervall/",
+              "note": "linkedin profile linked from https://github.com/k-akervall profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/k-akervall gives the location Portland, Oregon Metro Area"
+        },
+        {
+          "id": "brandon-kirlin",
+          "name": "Brandon Kirlin",
+          "pronouns": null,
+          "title": "Energy Efficiency Consultant and Data Engineer",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/brandonkirlin/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kirlinb",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/brandonkirlin/",
+              "note": "linkedin profile linked from https://github.com/kirlinb profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kirlinb gives the location Portland, OR"
+        },
+        {
+          "id": "liuhui-zhao",
+          "name": "Liuhui Zhao",
+          "pronouns": null,
+          "title": "Data Analytics Lead · Snowflake, SQL, Python · analytics engineering & data pipelines · PhD",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lzhao-byte",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lzhao-byte gives the location Portland, OR"
+        },
+        {
+          "id": "maimuna-akter",
+          "name": "Maimuna Akter",
+          "pronouns": null,
+          "title": "Data Analyst | BI and Visualization | Power BI, Tableau, SQL, Python | Renewable, Environmental & Manufacturing Analytics",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/maimina-akter/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/maimunarahman041-netizen",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/maimunarahman041-netizen gives the location Portland, Oregon"
+        },
+        {
+          "id": "michael-williams",
+          "name": "Michael Williams",
+          "pronouns": null,
+          "title": "Government policy analyst pivoting to private sector data analytics, AI engineering, and Machine Learning. PhD in Prevention Science and MPA from WSU. ",
+          "city": "Portland, OR.",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/michael-williams-ph-d-mpa-02a34a411/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mwilliams2-stack",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mwilliams2-stack gives the location Portland, OR."
+        },
+        {
+          "id": "nicholas-schwenne",
+          "name": "Nicholas  Schwenne",
+          "pronouns": null,
+          "title": "Data Engineer at Cognixia",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/nicholas-schwenne-32056b124/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/nschwenne",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/nicholas-schwenne-32056b124/",
+              "note": "linkedin profile linked from https://github.com/nschwenne profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/nschwenne gives the location Portland, Oregon"
+        },
+        {
+          "id": "paul-re",
+          "name": "Paul Re",
+          "pronouns": null,
+          "title": "I am a data analyst and software developer with a background in chemistry.  I am interested in science, data analytics, visualization, iOS, Python, and Perl",
+          "city": "Portland, Ore",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/paulrefalo",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/paulrefalo gives the location Portland, Ore"
+        },
+        {
+          "id": "ryan-schostag",
+          "name": "Ryan Schostag",
+          "pronouns": null,
+          "title": "Data Engineer | Python, FastAPI, Azure, Databricks | I automate data workflows and pipelines.",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ryanschostag/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ryanschostag",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ryanschostag gives the location Portland, Oregon"
+        },
+        {
+          "id": "shawn-alpay",
+          "name": "Shawn Alpay",
+          "pronouns": null,
+          "title": "I'm a Business Intelligence Architect.  I'm also a songwriter, cellist, and audio engineer.  It's confusing.",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/shawn-alpay-3819528b/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/shawnalpay",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/shawnalpay gives the location Portland, OR"
+        },
+        {
+          "id": "chris-tycer",
+          "name": "Chris Tycer",
+          "pronouns": null,
+          "title": "Data Analyst with 18+ years in analytics, forecasting, and supply chain optimization.",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/christycer/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tycerch",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tycerch gives the location Portland, Oregon"
+        },
+        {
+          "id": "yu-te",
+          "name": "Yu Te",
+          "pronouns": null,
+          "title": "Health Informatics data engineer, full stack developer",
+          "city": "2000 NE 42nd Ave, PMB 262, Portland, OR 97213",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/yute8",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/yute8 gives the location 2000 NE 42nd Ave, PMB 262, Portland, OR 97213"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "healthsparq",
+      "name": "Healthsparq",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "adila-abdulwahid",
+          "name": "Adila Abdulwahid",
+          "pronouns": null,
+          "title": "I am a graduate of The University of Chicago. I am currently working full time as a Data Engineer at Healthsparq while pursuing a Masters in Data Science",
+          "city": "Portland",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Adila-spec",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Adila-spec gives the location Portland"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "akshita-poonia",
+          "name": "Akshita Poonia",
+          "pronouns": null,
+          "title": "Big Data Engineer at Amazon Web Services",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/akshita-poonia/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Akshitapoonia",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/akshita-poonia/",
+              "note": "linkedin search result: Akshita Poonia - Amazon Web Services (AWS), Portland"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Akshitapoonia gives the location Portland, Oregon"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "wex-inc",
+      "name": "WEX INC",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alicia-lister",
+          "name": "Alicia Lister",
+          "pronouns": null,
+          "title": "Sr. Manager of analytics team primarily focused on the Revenue domain. Tech stack includes: Snowflake, Dataiku, Tableau",
+          "city": "Portland, ME",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AliciaLister",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AliciaLister gives the location Portland, ME"
+        },
+        {
+          "id": "rangith-mamillapalli",
+          "name": "Rangith Mamillapalli",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "South Portland",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rmamilapalli",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rmamilapalli gives the location South Portland"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sunday",
+      "name": "Sunday",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ian-rosado",
+          "name": "Ian Rosado",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ianrosado/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Ian-Rosado",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Ian-Rosado gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "thinkful",
+      "name": "Thinkful",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "natalie-seaman",
+          "name": "Natalie Seaman",
+          "pronouns": null,
+          "title": " I am a prospective Data Analyst who will be graduating from @Thinkful’s Data Analytics program in January where I have studied Excel, SQL, Tableau, and Python",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/natalie-seaman1989/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Natalie-Seaman",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/317581544/",
+              "source": "only member named Natalie Seaman among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/natalie-seaman1989/",
+              "note": "linkedin profile linked from https://github.com/Natalie-Seaman profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Natalie-Seaman gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "wex",
+      "name": "WEX",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kyle-bolduc",
+          "name": "Kyle Bolduc",
+          "pronouns": null,
+          "title": "Global Service Operations |  Business Intelligence Engineer 4",
+          "city": "Portland, ME",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kylebolduc/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/W446222",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/kylebolduc/",
+              "note": "linkedin search result: Kyle Bolduc - Business Intelligence Analyst 4; snippet: works at WEX, Saco, Maine"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/W446222 gives the location Portland, ME"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "langlinais-consulting-llc",
+      "name": "Langlinais Consulting, LLC",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "austin-langlinais",
+          "name": "Austin Langlinais",
+          "pronouns": null,
+          "title": "Data Scientist by choice, Data Engineer by necessity  ",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/alanglinais7",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/alanglinais7",
+              "source": "https://github.com/alanglinais7 profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/alanglinais7 gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "edf",
+      "name": "EDF",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andy-kingston",
+          "name": "Andy Kingston",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Portland Road",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://uk.linkedin.com/in/andy-kingston-460906142"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/andykingston-edf",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://uk.linkedin.com/in/andy-kingston-460906142",
+              "note": "linkedin search result: Andy Kingston - Head of UKCS Strategy & Transformation - HSBC; snippet: past Data Engineer at EDF (UK), Greater Brighton and Hove Area"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/andykingston-edf gives the location Portland Road"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ruggable",
+      "name": "Ruggable",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "braulio-gonzalez",
+          "name": "Braulio Gonzalez",
+          "pronouns": null,
+          "title": "Data Engineer Manger",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/brauliog",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/brauliog gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "m-financial-group",
+      "name": "M Financial Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chase-dalton",
+          "name": "Chase Dalton",
+          "pronouns": null,
+          "title": "Data Analyst with over 10 years of analytics experience using Power BI, Tableau, Python, and SQL for ETL, data analysis, and data visualization. ",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/chase-dalton/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/chase-dalton",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/chase-dalton/",
+              "note": "linkedin profile linked from https://github.com/chase-dalton profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/chase-dalton gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "unum",
+      "name": "Unum",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-benedict",
+          "name": "Daniel Benedict",
+          "pronouns": null,
+          "title": "Data Engineer and Tableau Administrator",
+          "city": "Portland, Maine",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/danbenedict2501/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/daniel2501",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/danbenedict2501/",
+              "note": "linkedin search result: Daniel Benedict - Senior Data Engineer; Portland; Tableau Server certified (record: Tableau Administrator); handle number 2501 matches github daniel2501; employer Unum not confirmed, now IDEXX"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/daniel2501 gives the location Portland, Maine"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "jumpcloud",
+      "name": "JumpCloud",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "danny-voils",
+          "name": "Danny Voils",
+          "pronouns": null,
+          "title": "Data Engineer 2",
+          "city": "Portland Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dvoilsjc",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/77536142/",
+              "source": "only member named Danny Voils among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dvoilsjc gives the location Portland Oregon"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rs21",
+      "name": "RS21",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "eric-weinerman",
+          "name": "Eric Weinerman",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/eric-weinerman-64915b20/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ericw-rs21",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/eric-weinerman-64915b20/",
+              "note": "linkedin search result: Eric Weinerman - Data Integration Architect; snippet: past experience at RS21, now Senior Data Engineer at Filevine"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ericw-rs21 gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "northwest-data-consulting",
+      "name": "Northwest Data Consulting",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "guy-cutting",
+          "name": "Guy Cutting",
+          "pronouns": null,
+          "title": "Data engineer and scientist. MS in Systems Science. Specialties in AI/ML deployment and mod/sim.",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gdcutting",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/417108419/",
+              "source": "only member named Guy Cutting among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gdcutting gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "1091pictures",
+      "name": "1091pictures",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jeff-huth",
+          "name": "Jeff Huth",
+          "pronouns": null,
+          "title": "Data engineer and architect ",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jeffhuth-streamwise",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/drinkdata",
+              "source": "https://github.com/jeffhuth-streamwise profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jeffhuth-streamwise gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "labware",
+      "name": "LabWare",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kendra-butalep",
+          "name": "Kendra Butalep",
+          "pronouns": null,
+          "title": "Data Analyst/Engineer at LabWare Analytics",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kbutalep",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kbutalep gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "logical-position",
+      "name": "Logical Position",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "li-tan",
+          "name": "Li Tan",
+          "pronouns": null,
+          "title": "Data Engineer at Logical Position",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/litan1106",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/litanpdx",
+              "source": "https://github.com/litan1106 profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/litan1106 gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "grand-canyon-university",
+      "name": "Grand Canyon University",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "william-maxwell-burchett",
+          "name": "William Maxwell Burchett",
+          "pronouns": null,
+          "title": "Production Analyst  BS in Applied Business Analytics - Grand Canyon University    ",
+          "city": "Portland, OR Area",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/max-burchett/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/maxburchett",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/maxburchett gives the location Portland, OR Area"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "mntn",
+      "name": "MNTN",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marcus-hartman",
+          "name": "Marcus Hartman",
+          "pronouns": null,
+          "title": "SQL Data Engineer",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mhartman-mntn",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/198337619/",
+              "source": "only member named Marcus Hartman among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mhartman-mntn gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "philneiman",
+      "name": "philneiman",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "phillip-neiman",
+          "name": "Phillip Neiman",
+          "pronouns": null,
+          "title": "Hello! I'm a passionate Data Engineer experienced in multiple industries with a knack for turning raw data into valuable insights. ",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/philneiman/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/pneiman1",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/pneiman1 gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "northeastern-university",
+      "name": "Northeastern University",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alva-ayiteyadjin",
+          "name": "Alva Ayitey-Adjin",
+          "pronouns": null,
+          "title": "Data Analyst | Healthcare Analytics | Financial Inclusion | Machine Learning | Python, R, SQL, Power BI, Tableau",
+          "city": "Portland, Maine",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alva-ayitey-adjin/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/reluv17",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/reluv17 gives the location Portland, Maine"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "nike",
+      "name": "NIKE",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "srivathsan-jagannathan",
+          "name": "Srivathsan Jagannathan",
+          "pronouns": null,
+          "title": "Data Engineer | PySpark | Databricks | Creator of MetricStacker - KPI, anomaly detection & data profiling framework | Raspberry Pi NAS & home lab projects",
+          "city": "Portland,  Or",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/srivathsan82",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/srivathsan82 gives the location Portland,  Or"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "objectcomputing",
+      "name": "objectcomputing",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jim-tyhurst",
+          "name": "Jim Tyhurst",
+          "pronouns": null,
+          "title": "Data Engineer at @objectcomputing ",
+          "city": "Portland, Oregon, United States",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jimtyhurst/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tyhurstj-oci",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/jimtyhurst",
+              "source": "https://github.com/tyhurstj-oci profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/jimtyhurst/",
+              "note": "linkedin profile linked from https://github.com/tyhurstj-oci profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tyhurstj-oci gives the location Portland, Oregon, United States"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ochin",
+      "name": "OCHIN",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "william-barth",
+          "name": "William Barth",
+          "pronouns": null,
+          "title": "Business Intelligence Analyst",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/william-ochin",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/william-ochin gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cloudera",
+      "name": "Cloudera",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "will-dailey",
+          "name": "Will Dailey",
+          "pronouns": null,
+          "title": "Data Engineer and Educator",
+          "city": "Portland, Oregon",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/wmdailey/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/wmdailey",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/wmdailey/",
+              "note": "linkedin search result: Will Dailey - Cloudera; slug matches github wmdailey; CDP administrator, data engineer, instructor; West Linn"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/wmdailey gives the location Portland, Oregon"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "mantl",
+      "name": "MANTL",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Portland"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "zeph-schafer",
+          "name": "Zeph Schafer",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Portland, OR",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/zephschafer",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/ZephyrSchafer",
+              "source": "https://github.com/zephschafer profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/zephschafer gives the location Portland, OR"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "freshpaint",
+      "name": "Freshpaint",
+      "type": "vendor",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer",
+          "url": "https://builtin.com/job/analytics-engineer/7289517",
+          "source": "Built In",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Build, model, and maintain analytics-ready datasets (primarily in dbt)",
+          "job_poster": null,
+          "posted_date": "2025-12-06",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Ad requires 2+ years of dbt modelling. Remote US only; headquarters San Francisco. Included because a search snippet tied it to Portland, not confirmed."
+    },
+    {
+      "id": "fisher-investments",
+      "name": "Fisher Investments",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Camas"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "job_board_scanned",
+          "url": "https://jobs-fishercareers.icims.com/jobs/14925/senior-data-engineer/job",
+          "note": "data engineer ads in Camas WA mention Databricks; dbt not seen in snippets"
+        }
+      ],
+      "people": [
+        {
+          "id": "mark-norland",
+          "name": "Mark Norland",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Portland Data + AI Meetup",
+              "title": "Organiser, Portland Data + AI May Session",
+              "date": "2026-05",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-portland-data-ai-meetup-presents-portland-data-ai-may-session/",
+              "content_id": "portland-data-ai-meetuporganiser-portland-data-ai-may-sessio",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "named as event organiser for the in-person May 2026 session in Beaverton",
+              "topics": [
+                "community",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-portland-data-ai-meetup-presents-portland-data-ai-may-session/",
+              "note": "organiser: Organiser, Portland Data + AI May Session"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from the Portland data community to a dbt meetup",
+          "past_chapter_talks": [],
+          "notes": "Organiser of the Portland Data + AI Meetup in Beaverton. City not stated on a profile."
+        }
+      ],
+      "notes": "Camas, WA is within about an hour of Portland."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/portland-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/portland-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Built In Portland analytics jobs",
+        "url": "https://builtin.com/jobs/portland/data-analytics/analytics?page=16",
+        "yielded": false,
+        "note": "page returned no job results when fetched"
+      },
+      {
+        "name": "Built In Freshpaint Analytics Engineer ad",
+        "url": "https://builtin.com/job/analytics-engineer/7289517",
+        "yielded": true,
+        "note": "dbt named twice; remote US only"
+      },
+      {
+        "name": "Portland Data + AI Meetup (Databricks user groups)",
+        "url": "https://usergroups.databricks.com/portland-data-ai-meetup/",
+        "yielded": true,
+        "note": "organiser and 2026 events; databricks focused, no dbt talk"
+      },
+      {
+        "name": "Portland Data + AI May Session",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-portland-data-ai-meetup-presents-portland-data-ai-may-session/",
+        "yielded": true,
+        "note": "one vendor talk, not dbt"
+      },
+      {
+        "name": "Portland Data + AI October Session",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-portland-data-ai-meetup-presents-portland-data-ai-meetup-october-session/",
+        "yielded": true,
+        "note": "upcoming; Steve Moody already on file"
+      },
+      {
+        "name": "R-Ladies PDX about page",
+        "url": "https://rladies-pdx.rbind.io/about/",
+        "yielded": false,
+        "note": "no organisers named"
+      },
+      {
+        "name": "Fisher Careers data engineer ads (search results)",
+        "url": "https://jobs-fishercareers.icims.com/jobs/17439/data-engineer/job",
+        "yielded": false,
+        "note": "snippets did not mention dbt"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "dbt World Circuit: Portland",
+      "date": "2025-06-26",
+      "venue": "InterWorks @ Kiln, 1120 Southeast Madison Street, Portland, OR",
+      "url": "https://www.meetup.com/portland-dbt-meetup/events/308415355/",
+      "organisers": [
+        "Leona"
+      ],
+      "attendees": 18,
+      "talks": [
+        {
+          "speaker": "Paige Berry",
+          "company": "dbt Labs",
+          "title": "For Builders, by Builders: The Latest Tools from dbt Labs",
+          "topics": [
+            "dbt product updates"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Portland dbt Meetup",
+      "url": "https://www.meetup.com/portland-dbt-meetup/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "Portland Data + AI Meetup",
+      "url": "https://www.meetup.com/portland-data-ai-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Oregon Data Community",
+      "url": "https://www.meetup.com/oregonsql/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Portland Azure Data User Group",
+      "url": "https://www.meetup.com/portland-azure-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "PyData PDX",
+      "url": "https://www.meetup.com/PyData-PDX/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Data Engineering Happy Hour Portland",
+      "url": "https://www.meetup.com/data-engineering-happy-hour-portland/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "R-Ladies PDX",
+      "url": "https://www.meetup.com/rladies-pdx/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Portland AI/ML/Data Developer Group",
+      "url": "https://www.meetup.com/aittg-portland/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Portland SQL Server User Group",
+      "url": "https://www.meetup.com/Portland-SQL-Server-User-Group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "PDX Data Visualization",
+      "url": "https://www.meetup.com/pdx-data-visualization/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Portland Fabric User Group",
+      "url": "https://www.meetup.com/portland-fabric-power-bi-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Portland Analytics Club",
+      "url": "https://www.meetup.com/ac-pdx/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women in Tech",
+      "url": "https://www.meetup.com/meetup-group-bpcklrba/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women in Big Data - NorthWest",
+      "url": "https://www.meetup.com/women-in-big-data-northwest/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Portland Data + AI Meetup",
+      "url": "https://usergroups.databricks.com/portland-data-ai-meetup/",
+      "note": "meets at Beaverton City Library; Databricks focused"
+    },
+    {
+      "name": "R-Ladies PDX",
+      "url": "https://meetup.com/rladies-pdx",
+      "note": "contact pdx@rladies.org per its about page; no active data events checked"
+    },
+    {
+      "name": "Portland Women in Technology",
+      "url": "https://en.wikipedia.org/wiki/Portland_Women_in_Technology",
+      "note": "dissolved April 2024, returned January 2026 as a grassroots group with 1-2 events a month"
+    }
+  ]
+}

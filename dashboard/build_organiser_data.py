@@ -13,9 +13,11 @@ from collections import Counter, defaultdict
 DASHBOARD_DIR = os.path.dirname(os.path.abspath(__file__))
 ANALYSIS_DIR = os.path.dirname(DASHBOARD_DIR)
 sys.path.insert(0, os.path.join(ANALYSIS_DIR, "research"))
-from validate import MESSAGING_TYPES, reachable
+from validate import MESSAGING_TYPES, reachable  # noqa: E402
+
 SOURCE_GLOB = os.environ.get(
-    "ORGANISER_SOURCE_GLOB", os.path.join(ANALYSIS_DIR, "*", "*_dbt_companies.json")
+    "ORGANISER_SOURCE_GLOB",
+    os.path.join(ANALYSIS_DIR, "contacts", "*", "*_dbt_companies.json"),
 )
 OUTPUT_FILE = os.environ.get(
     "ORGANISER_OUTPUT_FILE",
@@ -27,7 +29,11 @@ OUTPUT_FILE = os.environ.get(
 CHAPTERS = {
     "berlin": {"label": "Berlin", "goal": "speakers", "area": "Europe"},
     "lithuania": {"label": "Vilnius", "goal": "attendees", "area": "Europe"},
-    "kuala_lumpur": {"label": "Kuala Lumpur", "goal": "speakers", "area": "Asia-Pacific"},
+    "kuala_lumpur": {
+        "label": "Kuala Lumpur",
+        "goal": "speakers",
+        "area": "Asia-Pacific",
+    },
     "paris": {"label": "Paris", "goal": "speakers", "area": "Europe"},
     "seattle": {"label": "Seattle", "goal": "speakers", "area": "North America"},
     "sydney": {"label": "Sydney", "goal": "speakers", "area": "Asia-Pacific"},
@@ -45,8 +51,16 @@ CHAPTERS = {
     "sofia": {"label": "Sofia", "goal": "speakers", "area": "Europe"},
     "belgium": {"label": "Belgium", "goal": "speakers", "area": "Europe"},
     "new_york": {"label": "New York", "goal": "speakers", "area": "North America"},
-    "san_francisco": {"label": "San Francisco", "goal": "speakers", "area": "North America"},
-    "salt_lake_city": {"label": "Salt Lake City", "goal": "speakers", "area": "North America"},
+    "san_francisco": {
+        "label": "San Francisco",
+        "goal": "speakers",
+        "area": "North America",
+    },
+    "salt_lake_city": {
+        "label": "Salt Lake City",
+        "goal": "speakers",
+        "area": "North America",
+    },
     "singapore": {"label": "Singapore", "goal": "speakers", "area": "Asia-Pacific"},
     "tokyo": {"label": "Tokyo", "goal": "speakers", "area": "Asia-Pacific"},
     "seoul": {"label": "Seoul", "goal": "speakers", "area": "Asia-Pacific"},
@@ -66,7 +80,11 @@ CHAPTERS = {
     "china": {"label": "China", "goal": "both", "area": "Asia-Pacific"},
     "cluj": {"label": "Cluj", "goal": "both", "area": "Europe"},
     "dallas": {"label": "Dallas", "goal": "both", "area": "North America"},
-    "washington_dc": {"label": "Washington DC", "goal": "both", "area": "North America"},
+    "washington_dc": {
+        "label": "Washington DC",
+        "goal": "both",
+        "area": "North America",
+    },
     "denver": {"label": "Denver", "goal": "both", "area": "North America"},
     "detroit": {"label": "Detroit", "goal": "both", "area": "North America"},
     "dubai": {"label": "Dubai", "goal": "both", "area": "Middle East & Africa"},
@@ -74,7 +92,11 @@ CHAPTERS = {
     "florianopolis": {"label": "Floripa", "goal": "both", "area": "Latin America"},
     "halifax": {"label": "Halifax", "goal": "both", "area": "North America"},
     "helsinki": {"label": "Helsinki", "goal": "both", "area": "Europe"},
-    "ho_chi_minh_city": {"label": "Ho Chi Minh City", "goal": "both", "area": "Asia-Pacific"},
+    "ho_chi_minh_city": {
+        "label": "Ho Chi Minh City",
+        "goal": "both",
+        "area": "Asia-Pacific",
+    },
     "houston": {"label": "Houston", "goal": "both", "area": "North America"},
     "lagos": {"label": "Lagos", "goal": "both", "area": "Middle East & Africa"},
     "los_angeles": {"label": "Los Angeles", "goal": "both", "area": "North America"},
@@ -102,22 +124,47 @@ CHAPTERS = {
     "wellington": {"label": "Wellington", "goal": "both", "area": "Asia-Pacific"},
 }
 
-AREA_ORDER = ["Europe", "North America", "Latin America", "Asia-Pacific", "Middle East & Africa", "Other"]
+AREA_ORDER = [
+    "Europe",
+    "North America",
+    "Latin America",
+    "Asia-Pacific",
+    "Middle East & Africa",
+    "Other",
+]
 # placeholder company ids that stand for "no employer", so they never link chapters
 PLACEHOLDER_COMPANY_IDS = {"independent"}
 
 # staff at dbt Labs (formerly Fishtown Analytics) and Fivetran are labelled, not excluded: they can speak, but organisers should know
-VENDOR_LABELS = [(re.compile(r"\bdbt labs\b|\bfishtown analytics\b|^dbt(\s*\(|$)", re.I), "dbt Labs"), (re.compile(r"\bfivetran\b", re.I), "Fivetran")]
+VENDOR_LABELS = [
+    (
+        re.compile(r"\bdbt labs\b|\bfishtown analytics\b|^dbt(\s*\(|$)", re.I),
+        "dbt Labs",
+    ),
+    (re.compile(r"\bfivetran\b", re.I), "Fivetran"),
+]
 
 
 def vendor_label(company_name):
-    return next((label for pattern, label in VENDOR_LABELS if pattern.search(company_name or "")), None)
+    return next(
+        (
+            label
+            for pattern, label in VENDOR_LABELS
+            if pattern.search(company_name or "")
+        ),
+        None,
+    )
 
 
 TIER_ORDER = {"1": 0, "2": 1, "backup": 2, "3": 3, "connector": 4, "organiser": 5}
 # within a tier, emerging voices (publish, but no talk yet) come before proven speakers:
 # the meetup wants to give first-time speakers a chance. See research/README.md §3, "Outreach order".
-LEAD_ORDER = {"emerging_voice": 0, "proven_speaker": 1, "featured": 2, "no_public_content": 3}
+LEAD_ORDER = {
+    "emerging_voice": 0,
+    "proven_speaker": 1,
+    "featured": 2,
+    "no_public_content": 3,
+}
 LEAD_REASONS = {
     "emerging_voice": "first-time speaker: publishes, no talk yet",
     "proven_speaker": "proven speaker",
@@ -157,7 +204,11 @@ def shape_person(person, company, label):
             if t != "community" and t not in topics:
                 topics.append(t)
     talk_angle = person["suggested_talk_angle"] or next(
-        (e["suggested_talk_angle"] for e in person["speaker_evidence"] if e["suggested_talk_angle"]),
+        (
+            e["suggested_talk_angle"]
+            for e in person["speaker_evidence"]
+            if e["suggested_talk_angle"]
+        ),
         None,
     )
     dbt_items = sum(1 for e in evidence if e["mentions_dbt"])
@@ -176,9 +227,13 @@ def shape_person(person, company, label):
     elif tier in ("backup", "connector", "organiser"):
         speaker_reasons.append(tier)
     if dbt_items:
-        speaker_reasons.append(f"{dbt_items} public dbt item{'s' if dbt_items > 1 else ''}")
+        speaker_reasons.append(
+            f"{dbt_items} public dbt item{'s' if dbt_items > 1 else ''}"
+        )
     elif evidence:
-        speaker_reasons.append(f"{len(evidence)} public item{'s' if len(evidence) > 1 else ''}, none on dbt")
+        speaker_reasons.append(
+            f"{len(evidence)} public item{'s' if len(evidence) > 1 else ''}, none on dbt"
+        )
 
     attendee_reasons = []
     if person["based_in_region"] is True:
@@ -201,7 +256,11 @@ def shape_person(person, company, label):
         "level": person["level"],
         "linkedin": person["linkedin_urls"][0] if person["linkedin_urls"] else None,
         "linkedin_confidence": person["linkedin_confidence"],
-        "contacts": [{"type": u["type"], "url": u["url"]} for u in person["profile_urls"] if u["type"] in MESSAGING_TYPES],
+        "contacts": [
+            {"type": u["type"], "url": u["url"]}
+            for u in person["profile_urls"]
+            if u["type"] in MESSAGING_TYPES
+        ],
         "reachable": reachable(person),
         "confidence": person["confidence"],
         "speaker_potential": fit["speaker_potential"],
@@ -273,7 +332,12 @@ def shape_company(company, people_count):
         "vendor": vendor_label(company["name"]),
         "stack": company["stack_signals"],
         "jobs": [
-            {"title": j["title"], "url": j["url"], "posted_date": j["posted_date"], "last_seen": j["last_seen"]}
+            {
+                "title": j["title"],
+                "url": j["url"],
+                "posted_date": j["posted_date"],
+                "last_seen": j["last_seen"],
+            }
             for j in company["job_postings"]
         ],
         "dbt_job_count": len(dbt_jobs),
@@ -292,7 +356,12 @@ def topic_coverage(vocabulary, past_meetups, people):
                 last_covered[t] = latest_date([last_covered.get(t), meetup["date"]])
     leads = Counter(t for p in people for t in p["topics"])
     return [
-        {"topic": t, "past_talks": past[t], "last_covered": last_covered.get(t), "leads": leads[t]}
+        {
+            "topic": t,
+            "past_talks": past[t],
+            "last_covered": last_covered.get(t),
+            "leads": leads[t],
+        }
         for t in vocabulary
         if t != "community"
     ]
@@ -332,10 +401,18 @@ def build_chapter(path):
         "caveats": data["metadata"]["caveats"],
         "channels": data["community_channels"],
         "past_meetups": [
-            {"name": m["name"], "date": m["date"], "url": m["url"], "attendees": m["attendees"], "talks": m["talks"]}
+            {
+                "name": m["name"],
+                "date": m["date"],
+                "url": m["url"],
+                "attendees": m["attendees"],
+                "talks": m["talks"],
+            }
             for m in past_meetups
         ],
-        "topics": topic_coverage(data["metadata"]["topic_vocabulary"], data["past_meetups"], people),
+        "topics": topic_coverage(
+            data["metadata"]["topic_vocabulary"], data["past_meetups"], people
+        ),
         "people": sorted(people, key=lambda p: p["speaker_rank"]),
         "companies": companies,
     }
@@ -354,12 +431,19 @@ def mark_cross_chapter(chapters):
         for p in ch["people"]:
             p["also_in"] = sorted(person_chapters[p["id"]] - {ch["label"]})
         for c in ch["companies"]:
-            c["also_in"] = sorted(company_chapters[c["id"]] - {ch["label"]}) if c["id"] not in PLACEHOLDER_COMPANY_IDS else []
+            c["also_in"] = (
+                sorted(company_chapters[c["id"]] - {ch["label"]})
+                if c["id"] not in PLACEHOLDER_COMPANY_IDS
+                else []
+            )
 
 
 def build_output(source_glob=SOURCE_GLOB):
     paths = sorted(p for p in glob.glob(source_glob) if "/.venv/" not in p)
-    chapters = sorted((build_chapter(p) for p in paths), key=lambda c: (AREA_ORDER.index(c["area"]), c["label"]))
+    chapters = sorted(
+        (build_chapter(p) for p in paths),
+        key=lambda c: (AREA_ORDER.index(c["area"]), c["label"]),
+    )
     mark_cross_chapter(chapters)
     return {"chapters": chapters}
 

@@ -21,7 +21,18 @@ a person gets a link of a type only when exactly one link of that type matches.
 links from the person's own GitHub social accounts are high confidence; links from event, speaker or author pages are medium.
 """
 
-import concurrent.futures, glob, hashlib, html, json, os, re, subprocess, sys, unicodedata, urllib.parse, urllib.request
+import concurrent.futures
+import glob
+import hashlib
+import html
+import json
+import os
+import re
+import subprocess
+import sys
+import unicodedata
+import urllib.parse
+import urllib.request
 from collections import Counter
 from validate import reachable
 from rejected import load_rejected, is_rejected
@@ -30,20 +41,61 @@ UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
 SKIP = ("linkedin.com", "medium.com")  # medium answers 429 to scripted fetches
 NEAR = 300  # characters between a name and its profile link on event and speaker pages
 PROFILE = [  # type, pattern, canonical url
-    ("linkedin", re.compile(r"(?:[a-z]{2,3}\.)?linkedin\.com/in/([A-Za-z0-9\-_%.]+)", re.I), "https://www.linkedin.com/in/{}/"),
-    ("x", re.compile(r"(?:www\.)?(?:x|twitter)\.com/(?!intent|share|home|search|hashtag|i/)@?([A-Za-z0-9_]{2,15})(?![A-Za-z0-9_/])", re.I), "https://x.com/{}"),
-    ("bluesky", re.compile(r"bsky\.app/profile/([A-Za-z0-9.\-]+)", re.I), "https://bsky.app/profile/{}"),
-    ("xing", re.compile(r"xing\.com/profile/([A-Za-z0-9_\-]+)", re.I), "https://www.xing.com/profile/{}"),
-    ("sessionize", re.compile(r"sessionize\.com/(?!api|app|s/)([A-Za-z0-9\-_.]+)/?(?![A-Za-z0-9\-_./])", re.I), "https://sessionize.com/{}"),
-    ("github", re.compile(r"github\.com/(?!orgs|sponsors|topics|features|about)([A-Za-z0-9\-]+)/?(?![A-Za-z0-9\-_./])", re.I), "https://github.com/{}"),
+    (
+        "linkedin",
+        re.compile(r"(?:[a-z]{2,3}\.)?linkedin\.com/in/([A-Za-z0-9\-_%.]+)", re.I),
+        "https://www.linkedin.com/in/{}/",
+    ),
+    (
+        "x",
+        re.compile(
+            r"(?:www\.)?(?:x|twitter)\.com/(?!intent|share|home|search|hashtag|i/)@?([A-Za-z0-9_]{2,15})(?![A-Za-z0-9_/])",
+            re.I,
+        ),
+        "https://x.com/{}",
+    ),
+    (
+        "bluesky",
+        re.compile(r"bsky\.app/profile/([A-Za-z0-9.\-]+)", re.I),
+        "https://bsky.app/profile/{}",
+    ),
+    (
+        "xing",
+        re.compile(r"xing\.com/profile/([A-Za-z0-9_\-]+)", re.I),
+        "https://www.xing.com/profile/{}",
+    ),
+    (
+        "sessionize",
+        re.compile(
+            r"sessionize\.com/(?!api|app|s/)([A-Za-z0-9\-_.]+)/?(?![A-Za-z0-9\-_./])",
+            re.I,
+        ),
+        "https://sessionize.com/{}",
+    ),
+    (
+        "github",
+        re.compile(
+            r"github\.com/(?!orgs|sponsors|topics|features|about)([A-Za-z0-9\-]+)/?(?![A-Za-z0-9\-_./])",
+            re.I,
+        ),
+        "https://github.com/{}",
+    ),
 ]
 URL = re.compile(r"""https?://[^\s"'<>)\]]+""")
 OWN = re.compile(r"""<a\b[^>]*?href=["']([^"']+)["'][^>]*>(.*?)</a>""", re.I | re.S)
-TAG = re.compile(r"""<a\b[^>]*?href=["']([^"']+)["'][^>]*>(.*?)</a>|<script.*?</script>|<style.*?</style>|<[^>]+>""", re.I | re.S)
+TAG = re.compile(
+    r"""<a\b[^>]*?href=["']([^"']+)["'][^>]*>(.*?)</a>|<script.*?</script>|<style.*?</style>|<[^>]+>""",
+    re.I | re.S,
+)
 
 
 def norm(s):
-    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
+    s = (
+        unicodedata.normalize("NFKD", s or "")
+        .encode("ascii", "ignore")
+        .decode()
+        .lower()
+    )
     return re.sub(r"[^a-z0-9 ]", " ", s)
 
 
@@ -52,7 +104,9 @@ def fold(text):
     out = []
     for ch in text:
         a = unicodedata.normalize("NFKD", ch).encode("ascii", "ignore").decode()
-        out.append(a[0].lower() if a and a[0].isalnum() else (ch if ch.isalpha() else " "))
+        out.append(
+            a[0].lower() if a and a[0].isalnum() else (ch if ch.isalpha() else " ")
+        )
     return "".join(out)
 
 
@@ -74,7 +128,7 @@ def same_handle(a, b):
 
 
 def people():
-    for f in sorted(glob.glob("*/*_dbt_companies.json")):
+    for f in sorted(glob.glob("contacts/*/*_dbt_companies.json")):
         for c in json.load(open(f))["companies"]:
             for p in c["people"]:
                 yield f, p
@@ -96,14 +150,23 @@ def own_pages(p, cache):
         for href, label in OWN.findall(page_text(u, cache)):
             words = norm(re.sub(r"<[^>]+>", " ", label)).split()
             full = urllib.parse.urljoin(u, html.unescape(href)).split("#")[0]
-            if (len(words) <= 5 and tok[0] in words and tok[1] in words and full.startswith("http")
-                    and urllib.parse.urlparse(full).netloc.split(".")[-2:] == site and full.rstrip("/") != u.rstrip("/") and full not in out):
+            if (
+                len(words) <= 5
+                and tok[0] in words
+                and tok[1] in words
+                and full.startswith("http")
+                and urllib.parse.urlparse(full).netloc.split(".")[-2:] == site
+                and full.rstrip("/") != u.rstrip("/")
+                and full not in out
+            ):
                 out.append(full)
     return out
 
 
 def github_login(u):
-    m = re.match(r"https?://(?:www\.)?github\.com/([A-Za-z0-9-]+)/?$", u) or re.match(r"https?://api\.github\.com/users/([A-Za-z0-9-]+)", u)
+    m = re.match(r"https?://(?:www\.)?github\.com/([A-Za-z0-9-]+)/?$", u) or re.match(
+        r"https?://api\.github\.com/users/([A-Za-z0-9-]+)", u
+    )
     return m.group(1) if m else None
 
 
@@ -114,13 +177,31 @@ def page_text(url, cache):
     text = ""
     try:
         m = re.search(r"meetup\.com/[^/]+/events/(\d+)", url)
-        if m:  # meetup pages render client-side; the gql2 api returns the event description
-            body = json.dumps({"query": "query($id:ID!){event(id:$id){description}}", "variables": {"id": m.group(1)}}).encode()
-            req = urllib.request.Request("https://www.meetup.com/gql2", body, {"content-type": "application/json", "user-agent": UA})
-            text = (json.load(urllib.request.urlopen(req, timeout=20)).get("data") or {}).get("event", {}).get("description") or ""
+        # meetup pages render client-side; the gql2 api returns the event description
+        if m:
+            body = json.dumps(
+                {
+                    "query": "query($id:ID!){event(id:$id){description}}",
+                    "variables": {"id": m.group(1)},
+                }
+            ).encode()
+            req = urllib.request.Request(
+                "https://www.meetup.com/gql2",
+                body,
+                {"content-type": "application/json", "user-agent": UA},
+            )
+            text = (
+                json.load(urllib.request.urlopen(req, timeout=20)).get("data") or {}
+            ).get("event", {}).get("description") or ""
         else:
-            req = urllib.request.Request(url, headers={"user-agent": UA, "accept-language": "en"})
-            text = urllib.request.urlopen(req, timeout=20).read(3_000_000).decode("utf-8", "ignore")
+            req = urllib.request.Request(
+                url, headers={"user-agent": UA, "accept-language": "en"}
+            )
+            text = (
+                urllib.request.urlopen(req, timeout=20)
+                .read(3_000_000)
+                .decode("utf-8", "ignore")
+            )
     except Exception:
         text = ""
     open(path, "w", encoding="utf-8").write(text)
@@ -128,22 +209,32 @@ def page_text(url, cache):
 
 
 GITHUB_USERS = "{%s}"
-GITHUB_USER = 'u%d: user(login: %s) { socialAccounts(first: 10) { nodes { url } } twitterUsername websiteUrl bio }'
-LINK_IN_TEXT = re.compile(r"(?:https?://)?(?:[a-z]{2,3}\.|www\.)?(?:linkedin\.com/in/[^\s,;)\"'<>|]+|xing\.com/profile/[A-Za-z0-9_\-]+|(?:x|twitter)\.com/[A-Za-z0-9_]+|bsky\.app/profile/[^\s,;)\"'<>|]+)", re.I)
+GITHUB_USER = "u%d: user(login: %s) { socialAccounts(first: 10) { nodes { url } } twitterUsername websiteUrl bio }"
+LINK_IN_TEXT = re.compile(
+    r"(?:https?://)?(?:[a-z]{2,3}\.|www\.)?(?:linkedin\.com/in/[^\s,;)\"'<>|]+|xing\.com/profile/[A-Za-z0-9_\-]+|(?:x|twitter)\.com/[A-Za-z0-9_]+|bsky\.app/profile/[^\s,;)\"'<>|]+)",
+    re.I,
+)
 
 
 def github_accounts(logins):
     """{login: [urls]} for the accounts each github user lists: linked accounts, the x username, the website field and
     profile links written in the bio, all in the user's own words. one graphql call covers 50 users. a login missing
-    from the result failed and is retried on the next run instead of being cached as a profile with no accounts."""
+    from the result failed and is retried on the next run instead of being cached as a profile with no accounts.
+    """
     out = {}
     for i in range(0, len(logins), 50):
-        batch = logins[i:i + 50]
-        query = GITHUB_USERS % " ".join(GITHUB_USER % (j, json.dumps(login)) for j, login in enumerate(batch))
+        batch = logins[i : i + 50]
+        query = GITHUB_USERS % " ".join(
+            GITHUB_USER % (j, json.dumps(login)) for j, login in enumerate(batch)
+        )
         for attempt in range(4):
-            r = subprocess.run(["gh", "api", "graphql", "-f", f"query={query}"], capture_output=True, text=True)
+            r = subprocess.run(
+                ["gh", "api", "graphql", "-f", f"query={query}"],
+                capture_output=True,
+                text=True,
+            )
             try:
-                data = (json.loads(r.stdout or "{}").get("data") or {})
+                data = json.loads(r.stdout or "{}").get("data") or {}
             except ValueError:
                 data = {}
             if data:
@@ -153,9 +244,20 @@ def github_accounts(logins):
             if f"u{j}" not in data:
                 continue
             u = data[f"u{j}"] or {}  # null: the account no longer exists
-            urls = [a["url"] for a in ((u.get("socialAccounts") or {}).get("nodes") or [])]
-            urls += [f"https://x.com/{u['twitterUsername']}"] if u.get("twitterUsername") else []
-            urls += [s if s.startswith("http") else "https://" + s for s in LINK_IN_TEXT.findall(" ".join([u.get("websiteUrl") or "", u.get("bio") or ""]))]
+            urls = [
+                a["url"] for a in ((u.get("socialAccounts") or {}).get("nodes") or [])
+            ]
+            urls += (
+                [f"https://x.com/{u['twitterUsername']}"]
+                if u.get("twitterUsername")
+                else []
+            )
+            urls += [
+                s if s.startswith("http") else "https://" + s
+                for s in LINK_IN_TEXT.findall(
+                    " ".join([u.get("websiteUrl") or "", u.get("bio") or ""])
+                )
+            ]
             out[login] = list(dict.fromkeys(urls))
     return out
 
@@ -177,19 +279,36 @@ def api_links(text):
     d = d.get("user", d) if isinstance(d, dict) else {}
     out = []
     if d.get("twitter_screen_name") or d.get("twitter_username"):
-        out.append("https://x.com/" + (d.get("twitter_screen_name") or d.get("twitter_username")))
+        out.append(
+            "https://x.com/"
+            + (d.get("twitter_screen_name") or d.get("twitter_username"))
+        )
     if d.get("linkedin_id"):
         out.append("https://www.linkedin.com/in/" + d["linkedin_id"])
     if d.get("github_login_name") or d.get("github_username"):
-        out.append("https://github.com/" + (d.get("github_login_name") or d.get("github_username")))
+        out.append(
+            "https://github.com/"
+            + (d.get("github_login_name") or d.get("github_username"))
+        )
     return out
 
 
-OWN_TYPES = {"sessionize", "website", "velog", "devto", "note", "substack"}  # profile pages to read like the person's own page
+OWN_TYPES = {
+    "sessionize",
+    "website",
+    "velog",
+    "devto",
+    "note",
+    "substack",
+}  # profile pages to read like the person's own page
 
 
 def own_profiles(p):
-    return [u["url"] for u in p["profile_urls"] if u["type"] in OWN_TYPES and not any(d in u["url"] for d in SKIP)]
+    return [
+        u["url"]
+        for u in p["profile_urls"]
+        if u["type"] in OWN_TYPES and not any(d in u["url"] for d in SKIP)
+    ]
 
 
 def classify(url):
@@ -203,29 +322,61 @@ def classify(url):
 def embedded(text):
     """(name, profile url) pairs from speaker and host records that bevy and luma pages carry in their page data."""
     out = []
-    for m in re.finditer(r'"first_name":"([^"]*)","last_name":"([^"]*)"', text):  # bevy speakers
-        rec = text[m.end():m.end() + 3000].split('"first_name":')[0]
+    for m in re.finditer(
+        r'"first_name":"([^"]*)","last_name":"([^"]*)"', text
+    ):  # bevy speakers
+        rec = text[m.end() : m.end() + 3000].split('"first_name":')[0]
         name = json.loads(f'"{m.group(1)} {m.group(2)}"')
         li = re.search(r'"personal_linkedin_page":"([^"]+)"', rec)
         tw = re.search(r'"personal_twitter":"([^"]+)"', rec)
         if li:
-            out.append((name, li.group(1) if "linkedin.com" in li.group(1) else "https://www.linkedin.com/in/" + li.group(1).strip("/")))
+            out.append(
+                (
+                    name,
+                    (
+                        li.group(1)
+                        if "linkedin.com" in li.group(1)
+                        else "https://www.linkedin.com/in/" + li.group(1).strip("/")
+                    ),
+                )
+            )
         if tw:
-            out.append((name, tw.group(1) if "/" in tw.group(1) else "https://x.com/" + tw.group(1).lstrip("@")))
+            out.append(
+                (
+                    name,
+                    (
+                        tw.group(1)
+                        if "/" in tw.group(1)
+                        else "https://x.com/" + tw.group(1).lstrip("@")
+                    ),
+                )
+            )
     m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', text, re.S)
     if m and "luma" in text[:5000].lower():
+
         def walk(o):
             if isinstance(o, dict):
                 if isinstance(o.get("name"), str):
                     if (o.get("linkedin_handle") or "").startswith("/in/"):
-                        out.append((o["name"], "https://www.linkedin.com" + o["linkedin_handle"]))
+                        out.append(
+                            (
+                                o["name"],
+                                "https://www.linkedin.com" + o["linkedin_handle"],
+                            )
+                        )
                     if o.get("twitter_handle"):
-                        out.append((o["name"], "https://x.com/" + o["twitter_handle"].lstrip("@")))
+                        out.append(
+                            (
+                                o["name"],
+                                "https://x.com/" + o["twitter_handle"].lstrip("@"),
+                            )
+                        )
                 for v in o.values():
                     walk(v)
             elif isinstance(o, list):
                 for v in o:
                     walk(v)
+
         try:
             walk(json.loads(m.group(1)))
         except ValueError:
@@ -237,7 +388,7 @@ def links_on(text):
     """the page as plain text, plus every profile link with its position in that text and its link text."""
     plain, links, last = [], [], 0
     for m in TAG.finditer(text):
-        plain.append(html.unescape(text[last:m.start()]))
+        plain.append(html.unescape(text[last : m.start()]))
         pos = sum(map(len, plain))
         if m.group(1):
             label = html.unescape(re.sub(r"<[^>]+>", " ", m.group(2)))
@@ -266,8 +417,11 @@ def name_spans(folded, p):
     tok = tokens(p["name"])
     pats = []
     if tok:
-        f, l = map(re.escape, tok)
-        pats += [rf"(?<![a-z0-9]){f}[a-z]*\W{{1,3}}(?:[a-z.]+\W{{1,3}}){{0,2}}{l}(?![a-z0-9])", rf"(?<![a-z0-9]){l}\W{{1,3}}{f}(?![a-z0-9])"]
+        first, last = map(re.escape, tok)
+        pats += [
+            rf"(?<![a-z0-9]){first}[a-z]*\W{{1,3}}(?:[a-z.]+\W{{1,3}}){{0,2}}{last}(?![a-z0-9])",
+            rf"(?<![a-z0-9]){last}\W{{1,3}}{first}(?![a-z0-9])",
+        ]
     native = re.sub(r"\s*\(.*?\)", "", p["name"]).strip()
     if re.search(r"[぀-ヿ一-鿿가-힯]", native):
         pats.append(re.escape(native))
@@ -284,7 +438,7 @@ def slug_fits_name(slug, p):
     if len(t) < 2:
         return False
     if s.startswith(t[0]):
-        rest = s[len(t[0]):]
+        rest = s[len(t[0]) :]
         return len(rest) <= 4 or any(rest.startswith(x[:2]) for x in t[1:])
     if s.startswith(t[0][:3]) and t[-1] in s:  # a short first name: jennlisborg
         return True
@@ -299,14 +453,23 @@ def matches_name(text, tok):
 def fetch(cache):
     os.makedirs(cache, exist_ok=True)
     jobs, gh = set(), {}
-    for f, p in people():  # everyone, so check can compare the rules with links already on file
-        for u in evidence_urls(p) + [x["url"] for x in p["profile_urls"] if x["type"] == "github"]:
+    for (
+        f,
+        p,
+    ) in (
+        people()
+    ):  # everyone, so check can compare the rules with links already on file
+        for u in evidence_urls(p) + [
+            x["url"] for x in p["profile_urls"] if x["type"] == "github"
+        ]:
             login = github_login(u)
             if login:
                 gh.setdefault(login, None)
             elif u.startswith("http") and not any(d in u for d in SKIP):
                 jobs.add(u)
-        jobs |= set(own_profiles(p)) | {a for a in map(profile_api, (x["url"] for x in p["profile_urls"])) if a}
+        jobs |= set(own_profiles(p)) | {
+            a for a in map(profile_api, (x["url"] for x in p["profile_urls"])) if a
+        }
     with concurrent.futures.ThreadPoolExecutor(8) as pool:
         list(pool.map(lambda u: page_text(u, cache), sorted(jobs)))
         own = sorted({u for f, p in people() for u in own_pages(p, cache)})
@@ -317,14 +480,20 @@ def fetch(cache):
     known.update(github_accounts(new))
     gh = {login: known.get(login) for login in gh}
     json.dump({k: v for k, v in known.items() if v is not None}, open(known_path, "w"))
-    print(f"github: {len(new)} accounts looked up, {len(gh) - len(new)} reused from the cache", flush=True)
-    print(f"fetched {len(jobs)} pages, {len(own)} own pages and {len(gh)} github accounts into {cache}")
+    print(
+        f"github: {len(new)} accounts looked up, {len(gh) - len(new)} reused from the cache",
+        flush=True,
+    )
+    print(
+        f"fetched {len(jobs)} pages, {len(own)} own pages and {len(gh)} github accounts into {cache}"
+    )
 
 
 def candidates(cache, everyone=False):
     """{(file, person id): {type: (url, source, confidence, rule)}} for people still missing that type, or everyone when checking."""
     gh = json.load(open(os.path.join(cache, "github.json")))
-    on_page = {}  # page url -> everyone whose evidence uses it, so a link can be checked against all of them
+    # page url -> everyone whose evidence uses it, so a link can be checked against all of them
+    on_page = {}
     for f, p in people():
         for u in evidence_urls(p):
             on_page.setdefault(u, {})[p["id"]] = p
@@ -333,26 +502,51 @@ def candidates(cache, everyone=False):
         tok, hs = tokens(p["name"]), handles(p)
         hits = {}  # type -> {url: (source, confidence, rule)}
         mine_pages = set(own_pages(p, cache)) | set(own_profiles(p))
-        for prof in p["profile_urls"]:  # the person's own github, qiita or zenn account lists their other accounts
+        for prof in p[
+            "profile_urls"
+        ]:  # the person's own github, qiita or zenn account lists their other accounts
             login = github_login(prof["url"]) if prof["type"] == "github" else None
-            listed = gh.get(login) or [] if login else api_links(page_text(profile_api(prof["url"]), cache)) if profile_api(prof["url"]) else []
+            listed = (
+                gh.get(login) or []
+                if login
+                else (
+                    api_links(page_text(profile_api(prof["url"]), cache))
+                    if profile_api(prof["url"])
+                    else []
+                )
+            )
             for s in listed:
                 c = classify(s)
                 if c and c[0] != prof["type"]:
-                    hits.setdefault(c[0], {})[c[2]] = (f"{prof['url']} profile", "high", "own profile")
+                    hits.setdefault(c[0], {})[c[2]] = (
+                        f"{prof['url']} profile",
+                        "high",
+                        "own profile",
+                    )
         for u in evidence_urls(p) + sorted(mine_pages):
             login = github_login(u)
             if login and gh.get(login):
                 for s in gh[login]:
                     c = classify(s)
                     if c and c[0] != "github":
-                        hits.setdefault(c[0], {})[c[2]] = (f"github.com/{login} social accounts", "high", "github")
+                        hits.setdefault(c[0], {})[c[2]] = (
+                            f"github.com/{login} social accounts",
+                            "high",
+                            "github",
+                        )
                 continue
             if not u.startswith("http") or any(d in u for d in SKIP):
                 continue
             if u not in parsed:
                 text = page_text(u, cache)
-                parsed[u] = links_on(text) if re.search(r"linkedin\.com/in/|xing\.com/profile/|x\.com/|twitter\.com/|bsky\.app|sessionize\.com/|github\.com/|personal_linkedin_page|linkedin_handle", text) else ("", [])
+                parsed[u] = (
+                    links_on(text)
+                    if re.search(
+                        r"linkedin\.com/in/|xing\.com/profile/|x\.com/|twitter\.com/|bsky\.app|sessionize\.com/|github\.com/|personal_linkedin_page|linkedin_handle",
+                        text,
+                    )
+                    else ("", [])
+                )
             plain, links = parsed[u]
             if not links:
                 continue
@@ -361,28 +555,58 @@ def candidates(cache, everyone=False):
             mine = name_spans(folded, p)
             theirs = [s for o in others for s in name_spans(folded, o)]
             for pos, (kind, slug, canon), label in links:
-                if any(matches_name(slug, tokens(o["name"])) or matches_name(label, tokens(o["name"])) for o in others if tokens(o["name"]) != tok):
+                if any(
+                    matches_name(slug, tokens(o["name"]))
+                    or matches_name(label, tokens(o["name"]))
+                    for o in others
+                    if tokens(o["name"]) != tok
+                ):
                     continue
                 rule = None
                 if matches_name(slug, tok) or matches_name(label, tok):
                     rule = "name"
-                elif u in mine_pages and sum(x[0] == kind for _, x, _ in links) == 1 and (kind == "linkedin" or slug_fits_name(slug, p)):
+                elif (
+                    u in mine_pages
+                    and sum(x[0] == kind for _, x, _ in links) == 1
+                    and (kind == "linkedin" or slug_fits_name(slug, p))
+                ):
                     rule = "own page"
                 elif any(same_handle(slug, h) for h in hs):
                     rule = "handle"
                 elif mine and slug_fits_name(slug, p):
                     d = min(min(abs(pos - a), abs(pos - b)) for a, b in mine)
-                    d_other = min([min(abs(pos - a), abs(pos - b)) for a, b in theirs] or [10**9])
-                    same = [q for q, x, _ in links if x[0] == kind and min(min(abs(q - a), abs(q - b)) for a, b in mine) < d]
+                    d_other = min(
+                        [min(abs(pos - a), abs(pos - b)) for a, b in theirs] or [10**9]
+                    )
+                    same = [
+                        q
+                        for q, x, _ in links
+                        if x[0] == kind
+                        and min(min(abs(q - a), abs(q - b)) for a, b in mine) < d
+                    ]
                     if d <= NEAR and d < d_other and not same:
                         rule = "nearby"
                 if rule:
                     hits.setdefault(kind, {}).setdefault(canon, (u, "medium", rule))
-        out = {k: (url, *v) for k, urls in hits.items() if len(urls) == 1 for url, v in urls.items()}
-        if not everyone:  # a link already on file is not new, and a rejected one is never offered again
-            have = {classify(u)[2] for u in p["linkedin_urls"] + [x["url"] for x in p["profile_urls"]] if classify(u)}
+        out = {
+            k: (url, *v)
+            for k, urls in hits.items()
+            if len(urls) == 1
+            for url, v in urls.items()
+        }
+        # a link already on file is not new, and a rejected one is never offered again
+        if not everyone:
+            have = {
+                classify(u)[2]
+                for u in p["linkedin_urls"] + [x["url"] for x in p["profile_urls"]]
+                if classify(u)
+            }
             folder = os.path.basename(os.path.dirname(os.path.abspath(f)))
-            out = {k: v for k, v in out.items() if v[0] not in have and not is_rejected(rejected, folder, p["id"], v[0])}
+            out = {
+                k: v
+                for k, v in out.items()
+                if v[0] not in have and not is_rejected(rejected, folder, p["id"], v[0])
+            }
         if not everyone:
             if p["has_linkedin"]:
                 out.pop("linkedin", None)
@@ -407,13 +631,17 @@ def check(cache):
                 agree[rule] += 1
             else:
                 disagree.append((key, rule, url, p["linkedin_urls"]))
-    print(f"agree with links on file, by rule: {dict(agree)}; disagree: {len(disagree)}")
+    print(
+        f"agree with links on file, by rule: {dict(agree)}; disagree: {len(disagree)}"
+    )
     for key, rule, url, have in disagree:
         print(f"  disagree {key[1]} ({rule}): {url} vs {have}")
     new = candidates(cache)
     for (f, pid), hits in sorted(new.items()):
         for kind, (url, source, conf, rule) in hits.items():
-            print(f"new {f.split('/')[0]}/{pid} {kind} ({rule}): {url}  from {source}")
+            print(
+                f"new {os.path.basename(os.path.dirname(f))}/{pid} {kind} ({rule}): {url}  from {source}"
+            )
     print(f"{sum(len(h) for h in new.values())} new links for {len(new)} people")
 
 
@@ -434,13 +662,18 @@ def apply(cache):
                         p["has_linkedin"] = True
                         p["linkedin_confidence"] = conf
                     else:
-                        p["profile_urls"].append({"type": kind, "url": url, "source": source})
+                        p["profile_urls"].append(
+                            {"type": kind, "url": url, "source": source}
+                        )
                     p["evidence"].append({"url": url, "note": note})
         allp = [p for c in d["companies"] for p in c["people"]]
         m = d["metadata"]["counts"]
         m["people_with_linkedin"] = sum(p["has_linkedin"] for p in allp)
         m["people_with_contact"] = sum(map(reachable, allp))
-        open(f, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
+        open(f, "w").write(
+            json.dumps(d, ensure_ascii=False, indent=2)
+            + ("\n" if raw.endswith("\n") else "")
+        )
         n = sum(len(h) for h in found.values())
         total += n
         print(f"{f}: {n} profile links added")
