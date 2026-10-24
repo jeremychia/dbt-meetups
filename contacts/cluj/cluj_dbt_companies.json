@@ -1,0 +1,1889 @@
+{
+  "metadata": {
+    "title": "Cluj-Napoca dbt companies and people for the Cluj dbt Meetup",
+    "generated_at": "2026-10-12",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Cluj-Napoca companies using dbt, and people who could speak at or attend the Cluj dbt Meetup.",
+    "version": 4,
+    "schema_version": 4,
+    "region": "Cluj-Napoca (Cluj dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: local job boards (lucrezi.ro, hipo.ro) return unrelated pages when fetched, so search snippets were the only signal there.",
+      "Lesson: company career pages and the Francisco Partners portfolio board gave readable dbt job text; builtin.com Romania lists were remote or Bucharest only.",
+      "Lesson: recruiter ads (Human Direct) hide the client name, so the employer has to be matched from the description.",
+      "Lesson: no Romanian-language dbt blog or local dbt talk turned up in about 30 calls.",
+      "v4 (2026-10-12): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets. Verify before outreach.",
+      "The Human Direct ad does not name its client. It is filed under Accesa because Accesa's own Senior Analytics Engineer ad in a Teradata to BigQuery migration and its Cluj headquarters match. Unconfirmed.",
+      "The 8x8 ad shows no posted date (6+ months old). The Flutter ad shows none either.",
+      "Andrei Daneasa's region is unverified: a talk at DevTalks Cluj-Napoca is shown, but no employer office or stated city.",
+      "IBM and Tecknoworks dbt mentions come from search snippets only. The ad pages could not be fetched or showed no dbt text.",
+      "No first-time speakers found."
+    ],
+    "counts": {
+      "companies": 14,
+      "people": 24,
+      "job_postings": 4,
+      "companies_with_job_postings": 4,
+      "speaker_evidence_items": 16,
+      "unique_content_items": 4,
+      "people_with_linkedin": 5,
+      "people_with_contact": 21,
+      "people_who_spoke_at_this_chapter": 0,
+      "internal_vinted": 0,
+      "level": {
+        "working": 23,
+        "leadership": 1
+      },
+      "speaker_potential": {
+        "medium": 16,
+        "low": 8
+      },
+      "attendee_potential": {
+        "medium": 24
+      },
+      "priority_tier": {
+        "connector": 15,
+        "3": 8,
+        "2": 1
+      },
+      "watchlist_companies": 7,
+      "past_meetups": 0,
+      "lead_type": {
+        "proven_speaker": 16,
+        "no_public_content": 8
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "conference_or_meetup_agenda": 16,
+        "github": 8
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 15,
+      "data warehouse & platforms": 1,
+      "tools & ecosystem": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca",
+        "Cluj"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sebastian-brestin",
+          "name": "Sebastian Breştin",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/184082793/",
+              "source": "https://www.meetup.com/events/298607351/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Cluj-Napoca",
+              "title": "organiser, PyData Cluj-Napoca",
+              "date": "2024-02-01",
+              "url": "https://www.meetup.com/pydata-cluj-napoca/events/298607351/",
+              "content_id": "pydata-clujnapocaorganiser-pydata-clujnapoca",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-cluj-napoca/events/298607351/",
+              "note": "organiser: organiser, PyData Cluj-Napoca"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "bustan-bogdanioan",
+          "name": "Bustan Bogdan-Ioan",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/283696966/",
+              "source": "https://www.meetup.com/events/305896646/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Cluj-Napoca",
+              "title": "organiser, PyData Cluj-Napoca",
+              "date": "2025-02-13",
+              "url": "https://www.meetup.com/pydata-cluj-napoca/events/305896646/",
+              "content_id": "pydata-clujnapocaorganiser-pydata-clujnapoca",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-cluj-napoca/events/305896646/",
+              "note": "organiser: organiser, PyData Cluj-Napoca"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "adela-muresan",
+          "name": "Adela Muresan",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/384776701/",
+              "source": "https://www.meetup.com/events/299171446/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Cluj Data & AI",
+              "title": "organiser, Cluj Data & AI",
+              "date": "2024-03-04",
+              "url": "https://www.meetup.com/cluj-data-ai/events/299171446/",
+              "content_id": "cluj-data-aiorganiser-cluj-data-ai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/cluj-data-ai/events/299171446/",
+              "note": "organiser: organiser, Cluj Data & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "sorin-marian",
+          "name": "Sorin Marian",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/273838070/",
+              "source": "https://www.meetup.com/events/313277125/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Cluj Data & AI",
+              "title": "organiser, Cluj Data & AI",
+              "date": "2026-02-25",
+              "url": "https://www.meetup.com/cluj-data-ai/events/313277125/",
+              "content_id": "cluj-data-aiorganiser-cluj-data-ai",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/cluj-data-ai/events/313277125/",
+              "note": "organiser: organiser, Cluj Data & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "melania-moldovan",
+          "name": "Melania Moldovan",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/228190911/",
+              "source": "https://www.meetup.com/events/299010173/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2024-02-12",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299010173/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299010173/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "ramona-gherghel",
+          "name": "Ramona Gherghel",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/248697707/",
+              "source": "https://www.meetup.com/events/299010173/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2024-02-12",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299010173/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299010173/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "gina-lupu",
+          "name": "Gina Lupu",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/127294762/",
+              "source": "https://www.meetup.com/events/299010173/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2024-02-12",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299010173/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299010173/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "ioana-chiorean",
+          "name": "Ioana Chiorean",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/14249258/",
+              "source": "https://www.meetup.com/events/299748011/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2024-03-20",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299748011/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/299748011/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "cristina-gogozan",
+          "name": "Cristina Gogozan",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/356595461/",
+              "source": "https://www.meetup.com/events/303412868/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2024-09-19",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/303412868/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/303412868/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "sonialucia-ariton",
+          "name": "Sonia-Lucia Ariton",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/303703794/",
+              "source": "https://www.meetup.com/events/304791287/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2024-12-05",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/304791287/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/304791287/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "roxana-buciu",
+          "name": "Roxana Buciu",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/371620985/",
+              "source": "https://www.meetup.com/events/306885154/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2025-03-27",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/306885154/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/306885154/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "elena-pop",
+          "name": "Elena Pop",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/390647881/",
+              "source": "https://www.meetup.com/events/311164026/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2025-09-30",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/311164026/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/311164026/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "adelina-chiorean",
+          "name": "Adelina Chiorean",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/452379848/",
+              "source": "https://www.meetup.com/events/311520028/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2025-10-23",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/311520028/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/311520028/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "romina-baila",
+          "name": "Romina Baila",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/406666595/",
+              "source": "https://www.meetup.com/events/314991250/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2026-06-09",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/314991250/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/314991250/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "patrick-boros",
+          "name": "Patrick Boros",
+          "pronouns": null,
+          "title": "Associate Data Engineer | Master of Research - Cyber-Physical Systems      | BsE - Engineering Physics    ",
+          "city": "Cluj-Napoca, Romania",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Patboro",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Patboro gives the location Cluj-Napoca, Romania"
+        },
+        {
+          "id": "armin-g",
+          "name": "Armin G",
+          "pronouns": null,
+          "title": "Data Engineer | GIS Developer",
+          "city": "Cluj-Napoca",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/armin-gheorghina-41934310b/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/armingheorghina",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/armingheorghina gives the location Cluj-Napoca"
+        },
+        {
+          "id": "miruna-samboan",
+          "name": "Miruna Samboan",
+          "pronouns": null,
+          "title": "Data Engineer | Software Engineer",
+          "city": "Cluj-Napoca, Romania",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/miruna-samboan/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mirunasamboan",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/miruna-samboan/",
+              "note": "linkedin profile linked from https://github.com/mirunasamboan profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mirunasamboan gives the location Cluj-Napoca, Romania"
+        },
+        {
+          "id": "sergiu-rotaru",
+          "name": "Sergiu Rotaru",
+          "pronouns": null,
+          "title": "Data Analytics Consultant - Freelancer ♦ Tableau Forum Ambassador ♦ Initiator & Co-Leader #RomanianDATATribe bit.ly/3qMI0da",
+          "city": "Cluj-Napoca, Romania",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/sergiurotaru01",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/SergiuRotaru6",
+              "source": "https://github.com/sergiurotaru01 profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/sergiurotaru01 gives the location Cluj-Napoca, Romania"
+        },
+        {
+          "id": "raluca-florea",
+          "name": "Raluca Florea",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/3867694/",
+              "source": "https://www.meetup.com/events/283258468/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Women in Tech Cluj",
+              "title": "organiser, Women in Tech Cluj",
+              "date": "2022-01-25",
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/283258468/",
+              "content_id": "women-in-tech-clujorganiser-women-in-tech-cluj",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/women-in-tech-cluj/events/283258468/",
+              "note": "organiser: organiser, Women in Tech Cluj"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sita",
+      "name": "SITA",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "vasiu-alexandru",
+          "name": "Vasiu Alexandru",
+          "pronouns": null,
+          "title": "Senior Data Engineer, Ex-Bolt",
+          "city": "Cluj-Napoca, Romania",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alexandru-vasiu-32b889100/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/alexvasiu",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/alexandru-vasiu-32b889100/",
+              "note": "linkedin search result: Alexandru Vasiu - Senior Data Engineer; snippet: Senior Data Engineer at SITA 2024-2025 (name order swapped)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/alexvasiu gives the location Cluj-Napoca, Romania"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "flutter-entertainment",
+      "name": "Flutter Entertainment",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "juan-fernandez",
+          "name": "Juan Fernandez",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Cluj-Napoca, România",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/juanf-sportsbet",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/juanf-sportsbet gives the location Cluj-Napoca, România"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "pwc-romania",
+      "name": "PwC Romania",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "csabazsolt-papai",
+          "name": "Csaba-Zsolt Pápai",
+          "pronouns": null,
+          "title": "Senior Associate Data Engineer at PwC Romania, passionate about transforming data into actionable insights",
+          "city": "Cluj-Napoca",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/papaizsolt-engineer/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/papaizsolti02",
+              "source": "github user search by location"
+            },
+            {
+              "type": "github",
+              "url": "https://github.com/zsolt-papai-sagdigital",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/papaizsolti02 gives the location Cluj-Napoca | github profile https://github.com/zsolt-papai-sagdigital gives the location Cluj-Napoca"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rebeldot",
+      "name": "RebelDot",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mihai-petric",
+          "name": "Mihai Petric",
+          "pronouns": null,
+          "title": "Lead Data Engineer",
+          "city": "Cluj-Napoca, Romania",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rbl-mihai-petric",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rbl-mihai-petric gives the location Cluj-Napoca, Romania"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sag-digital",
+      "name": "SAG Digital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://2025.techsylvania.com/why-dbt-labs-is-betting-big-on-romania-a-vision-for-local-talent-global-impact/",
+          "note": "interview: two dbt Labs teams in Romania, Cluj and Bucharest"
+        },
+        {
+          "type": "talk",
+          "url": "https://2025.techsylvania.com/satellite-events/attend/",
+          "note": "dbt Labs hosted a Data on Tap happy hour at Techsylvania 2025"
+        }
+      ],
+      "people": [],
+      "notes": "Vendor with engineering teams in Cluj. A Romania-based Senior Software Engineer II ad appeared in search at https://job-boards.greenhouse.io/dbtlabsinc/jobs/4668292005 but could not be fetched."
+    },
+    {
+      "id": "8x8",
+      "name": "8x8",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Matillion",
+        "Airflow",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://careers.franciscopartners.com/companies/8x8/jobs/68121748-sr-data-engineer",
+          "source": "Francisco Partners portfolio careers board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficient in dbt (data build tool) for data transformations and model management",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Ad is for the Cluj office, Data Management Group. Ad required dbt."
+    },
+    {
+      "id": "accesa",
+      "name": "Accesa",
+      "type": "outsourcing",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "BigQuery",
+        "Dataform",
+        "dbt",
+        "Teradata"
+      ],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Client is not named in the ad. Matched to Accesa from its description (Cluj headquarters, Oradea office, Senior Analytics Engineer in a Teradata to BigQuery migration). Unconfirmed. dbt is an alternative to Dataform here."
+    },
+    {
+      "id": "betfair-romania-flutter-entertainment",
+      "name": "Betfair Romania (Flutter Entertainment)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Spark",
+        "Airflow",
+        "Kafka",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - FanDuel (Hybrid & Remote)",
+          "url": "https://www.betfairromania.ro/jobs/jr140503/senior-data-engineer-fanduel-hybrid/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Hands-on experience with modern data tools such as Airflow, Spark, dbt, Kafka, or Databricks.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Flutter Entertainment is already on file; this is its Cluj development hub. dbt is one of several named tools."
+    },
+    {
+      "id": "ibm",
+      "name": "IBM",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Data Vault",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer - Snowflake",
+          "url": "https://themuse.com/jobs/ibm/data-engineer-snowflake-5101fa",
+          "source": "The Muse",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search snippet: Snowflake, DBT, Data Vault, Azure Cloud; client locations include Cluj-Napoca",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Role base is Bucharest with client locations including Cluj-Napoca. Ad page returned 404 when fetched, so dbt comes from the snippet."
+    },
+    {
+      "id": "tecknoworks",
+      "name": "Tecknoworks",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Airflow",
+        "Spark",
+        "AWS",
+        "Azure"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer | Turning Raw Data into Gold (B2B or CIM)",
+          "url": "https://www.lucrezi.ro/munca/data-engineer--turning-raw-data-into-gold-b2b-or-cim-ronvb3fad5afc35061c8",
+          "source": "lucrezi.ro",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search snippet: Python, SQL, Apache Spark, Airflow, DBT, AWS and Azure",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt comes from a search snippet only. A job-feed page for the same title listed Iasi and Timisoara roles without dbt text."
+    },
+    {
+      "id": "btelligent",
+      "name": "b.telligent",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Cluj-Napoca"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "blog_scanned",
+          "url": "https://www.btelligent.com/en/company-locations/romania",
+          "note": "Cluj site opened 2022; Snowflake and SAP blog post; no dbt mention"
+        }
+      ],
+      "people": [],
+      "notes": "Data consultancy with a Cluj office. dbt use not verified."
+    },
+    {
+      "id": "ids-consulting",
+      "name": "IDS Consulting",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.devtalks.ro/10-devtalks-cluj-napoca-2025",
+          "note": "Snowflake talk at DevTalks Cluj-Napoca 2025 by its Cloud & Data Architect"
+        }
+      ],
+      "people": [
+        {
+          "id": "andrei-daneasa",
+          "name": "Andrei Dăneasă",
+          "pronouns": null,
+          "title": "Cloud & Data Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/andreidaneasa/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "DevTalks Cluj-Napoca 2025",
+              "title": "Snowflake demystified: from myths to hands-on in 30 minutes",
+              "date": "2025-09-25",
+              "url": "https://www.devtalks.ro/10-devtalks-cluj-napoca-2025",
+              "content_id": "devtalks-clujnapoca-2025snowflake-demystified-from-myths-to",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "main stage talk on the Snowflake cloud data platform for developers",
+              "topics": [
+                "data warehouse & platforms",
+                "tools & ecosystem"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.devtalks.ro/10-devtalks-cluj-napoca-2025",
+              "note": "talk: Snowflake demystified: from myths to hands-on in 30 minutes"
+            },
+            {
+              "url": "https://www.linkedin.com/in/andreidaneasa/",
+              "note": "linkedin search result: Andrei Daneasa - Cloud & Data architect; snippet ties to IDS Consulting and Snowflake talks"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "from raw Snowflake to modelled data: where dbt fits for developers new to the cloud data platform",
+          "past_chapter_talks": [],
+          "notes": "Location unverified: in-person talk at a Cluj conference, employer office not confirmed."
+        }
+      ],
+      "notes": "dbt use not verified."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/cluj-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/cluj-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Techsylvania 2025 dbt Labs interview",
+        "url": "https://2025.techsylvania.com/why-dbt-labs-is-betting-big-on-romania-a-vision-for-local-talent-global-impact/",
+        "yielded": true,
+        "note": "dbt Labs has two engineering teams in Romania, Cluj and Bucharest"
+      },
+      {
+        "name": "Techsylvania 2025 satellite events",
+        "url": "https://2025.techsylvania.com/satellite-events/attend/",
+        "yielded": true,
+        "note": "dbt Labs Data on Tap happy hour in Cluj"
+      },
+      {
+        "name": "DevTalks Cluj-Napoca 2025 agenda",
+        "url": "https://www.devtalks.ro/10-devtalks-cluj-napoca-2025",
+        "yielded": true,
+        "note": "one Snowflake talk, one data lake talk, no dbt talk"
+      },
+      {
+        "name": "builtin.com Romania data engineer jobs",
+        "url": "https://builtin.com/jobs/eu/romania/data-analytics/search/data-engineer?page=2",
+        "yielded": false,
+        "note": "no Cluj-located dbt roles on the page"
+      },
+      {
+        "name": "lucrezi.ro job pages",
+        "url": "https://www.lucrezi.ro/munca/data-engineer--turning-raw-data-into-gold-b2b-or-cim-ronvb3fad5afc35061c8",
+        "yielded": false,
+        "note": "page fetch showed unrelated listings"
+      },
+      {
+        "name": "b.telligent Romania page",
+        "url": "https://www.btelligent.com/en/company-locations/romania",
+        "yielded": true,
+        "note": "Cluj site since 2022, Snowflake blog, no dbt mention"
+      },
+      {
+        "name": "Human Direct Senior Analytics Engineer",
+        "url": "https://www.humandirect.eu/jobs/2026-09/senior-analytics-engineer",
+        "yielded": true,
+        "note": "Cluj hybrid ad, dbt named as an alternative to Dataform"
+      },
+      {
+        "name": "Francisco Partners careers, 8x8",
+        "url": "https://careers.franciscopartners.com/companies/8x8/jobs/68121748-sr-data-engineer",
+        "yielded": true,
+        "note": "Cluj ad requires dbt"
+      },
+      {
+        "name": "Betfair Romania careers",
+        "url": "https://www.betfairromania.ro/jobs/jr140503/senior-data-engineer-fanduel-hybrid/",
+        "yielded": true,
+        "note": "Cluj ad names dbt"
+      }
+    ]
+  },
+  "past_meetups": [],
+  "community_channels": [
+    {
+      "name": "Cluj dbt Meetup",
+      "url": "https://www.meetup.com/cluj-dbt-meetup/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "PyData Cluj-Napoca",
+      "url": "https://www.meetup.com/PyData-Cluj-Napoca/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Cluj Data & AI",
+      "url": "https://www.meetup.com/cluj-data-ai/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women in Tech Cluj",
+      "url": "https://www.meetup.com/women-in-tech-cluj/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Data Natives, Cluj-Napoca",
+      "url": "https://www.meetup.com/data-natives-cluj-napoca/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Cluj Data Scientists & Engineers",
+      "url": "https://www.meetup.com/Cluj-Data-Scientists-Engineers/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Techsylvania (Cluj conference)",
+      "url": "https://2025.techsylvania.com/",
+      "note": "annual June conference in Cluj; dbt Labs ran a satellite event in 2025"
+    },
+    {
+      "name": "DevTalks Cluj-Napoca",
+      "url": "https://www.devtalks.ro/10-devtalks-cluj-napoca-2025",
+      "note": "annual September developer conference with a few data talks"
+    },
+    {
+      "name": "Women in Data Science Romania (Think Tank 360)",
+      "url": "https://www.romania-insider.com/life/women-data-science-romania-fourth-edition-spring-2024",
+      "note": "national event, no Cluj chapter found"
+    }
+  ]
+}

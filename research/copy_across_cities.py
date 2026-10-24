@@ -7,13 +7,29 @@ full name and the same employer, so "Independent / no company" never matches. th
 so rejected_matches.json and the location check still apply.
 """
 
-import glob, json, os, re, subprocess, sys, tempfile, unicodedata
+import glob
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+import unicodedata
 from collections import defaultdict
 from validate import reachable
 
 
 def norm(s):
-    return " ".join(re.sub(r"[^a-z ]", " ", unicodedata.normalize("NFKD", re.sub(r"\(.*?\)", "", s or "")).encode("ascii", "ignore").decode().lower()).split())
+    return " ".join(
+        re.sub(
+            r"[^a-z ]",
+            " ",
+            unicodedata.normalize("NFKD", re.sub(r"\(.*?\)", "", s or ""))
+            .encode("ascii", "ignore")
+            .decode()
+            .lower(),
+        ).split()
+    )
 
 
 def employer(s):
@@ -22,7 +38,7 @@ def employer(s):
 
 def matches():
     have, need = defaultdict(list), []
-    for f in sorted(glob.glob("*/*_dbt_companies.json")):
+    for f in sorted(glob.glob("contacts/*/*_dbt_companies.json")):
         for c in json.load(open(f))["companies"]:
             for p in c["people"]:
                 row = (f, p, norm(p["name"]), employer(c["name"]))
@@ -34,10 +50,22 @@ def matches():
     for f, p, name, emp in need:
         if len(name.split()) < 2 or not emp or "independent" in emp:
             continue
-        found = {o["linkedin_urls"][0]: of for of, o, _, oe in have.get(name, []) if of != f and oe and (emp == oe or emp in oe or oe in emp)}
-        if len(found) == 1:  # two different profiles for one name and employer is a miss
+        found = {
+            o["linkedin_urls"][0]: of
+            for of, o, _, oe in have.get(name, [])
+            if of != f and oe and (emp == oe or emp in oe or oe in emp)
+        }
+        if (
+            len(found) == 1
+        ):  # two different profiles for one name and employer is a miss
             url, of = next(iter(found.items()))
-            out.setdefault(f, {})[p["id"]] = {"linkedin_url": url, "evidence": f"same name and employer as the record in {os.path.dirname(of)}", "confidence": "medium", "based_in_region": None, "city": None}
+            out.setdefault(f, {})[p["id"]] = {
+                "linkedin_url": url,
+                "evidence": f"same name and employer as the record in {os.path.dirname(of)}",
+                "confidence": "medium",
+                "based_in_region": None,
+                "city": None,
+            }
     return out
 
 
@@ -50,5 +78,15 @@ if __name__ == "__main__":
         for f, patch in found.items():
             with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as t:
                 json.dump(patch, t)
-            subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "apply_contacts.py"), f, t.name], check=True)
+            subprocess.run(
+                [
+                    sys.executable,
+                    os.path.join(
+                        os.path.dirname(os.path.abspath(__file__)), "apply_contacts.py"
+                    ),
+                    f,
+                    t.name,
+                ],
+                check=True,
+            )
             os.unlink(t.name)

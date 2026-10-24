@@ -1,0 +1,5297 @@
+{
+  "metadata": {
+    "title": "Prague dbt companies and people for the Prague dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Prague companies using dbt, and people who could speak at or attend the Prague dbt Meetup.",
+    "version": 3,
+    "schema_version": 4,
+    "region": "Prague (Prague dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: jobs.cz keyword filter for dbt is noisy (returns therapy and analyst ads); each ad has to be opened and checked for the word dbt.",
+      "Lesson: jobs.cz ad pages redirect to a company subdomain and often return only the page header; siemens careers site returned the full text.",
+      "Lesson: search results for Prague dbt people are mostly linkedin snippets, which cannot be read; no first-time speaker was confirmed.",
+      "Lesson: aijobs.net, startupjobs.cz and nexer ad links from search were expired or redirected."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "Only 3 dbt job ads were read and confirmed; most jobs.cz hits could not be read in full.",
+      "Sky ad was already removed in July 2025; kept as evidence of past dbt use only.",
+      "No new first-time or proven speakers with in-region evidence were confirmed in about 30 calls."
+    ],
+    "counts": {
+      "companies": 51,
+      "people": 79,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 34,
+      "unique_content_items": 13,
+      "people_with_linkedin": 41,
+      "people_with_contact": 63,
+      "people_who_spoke_at_this_chapter": 13,
+      "internal_vinted": 0,
+      "level": {
+        "working": 68,
+        "leadership": 11
+      },
+      "speaker_potential": {
+        "high": 14,
+        "medium": 29,
+        "low": 36
+      },
+      "attendee_potential": {
+        "high": 29,
+        "medium": 50
+      },
+      "priority_tier": {
+        "2": 8,
+        "connector": 15,
+        "3": 51,
+        "1": 5
+      },
+      "watchlist_companies": 44,
+      "past_meetups": 4,
+      "lead_type": {
+        "proven_speaker": 41,
+        "no_public_content": 38
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 13,
+        "conference_or_meetup_agenda": 29,
+        "github": 36,
+        "women_in_data_community": 2
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 15,
+      "data warehouse & platforms": 15,
+      "data engineering": 9,
+      "business intelligence": 4,
+      "genai & llm": 2,
+      "analytics engineering": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "strv",
+      "name": "STRV",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jozef-reginac",
+          "name": "Jozef Reginac",
+          "pronouns": null,
+          "title": "STRV",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jozefreginac/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/jozefreginac/",
+              "note": "linkedin search result: Jozef Reginac - Lead Data Engineer - Second Foundation; snippet: previously at STRV leading data science, hosted dbt meetups at STRV, Prague"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jozefreginac/",
+              "note": "location (medium): linkedin search result: Jozef Reginac - Lead Data Engineer - Second Foundation; snippet: previously at STRV leading data science, hosted dbt meetups at STRV, Prague https://www.linkedin.com/in/jozefreginac/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-15",
+              "talk_title": "Essay on Data Product",
+              "topics": [
+                "data modeling",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": "location (medium): linkedin search result: Jozef Reginac - Lead Data Engineer - Second Foundation; snippet: previously at STRV leading data science, hosted dbt meetups at STRV, Prague https://www.linkedin.com/in/jozefreginac/"
+        },
+        {
+          "id": "jan-maly",
+          "name": "Jan Maly",
+          "pronouns": null,
+          "title": "STRV",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/237501541/",
+              "source": "only member named Jan Maly among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-15",
+              "talk_title": "Running Python Scripts Directly From Your dbt Projects",
+              "topics": [
+                "dbt product features"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "independent",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "simon-podhajsky",
+          "name": "Simon Podhajsky",
+          "pronouns": null,
+          "title": null,
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/239956524/",
+              "source": "only member named Šimon Podhajský among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-15",
+              "talk_title": "Data Modeling as the First Data Hire",
+              "topics": [
+                "data modeling",
+                "career development"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "barbora-maroto",
+          "name": "Barbora Maroto",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/407400436/",
+              "source": "https://www.meetup.com/events/308965231/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Prague dbt Meetup",
+              "title": "organiser, Prague dbt Meetup",
+              "date": "2025-09-16",
+              "url": "https://www.meetup.com/prague-dbt-meetup-group/events/308965231/",
+              "content_id": "prague-dbt-meetuporganiser-prague-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/prague-dbt-meetup-group/events/308965231/",
+              "note": "organiser: organiser, Prague dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "michal-vilimek",
+          "name": "Michal Vilimek",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/michalvilimek/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/417520886/",
+              "source": "https://www.meetup.com/events/314453646/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Prague dbt Meetup",
+              "title": "organiser, Prague dbt Meetup",
+              "date": "2026-05-28",
+              "url": "https://www.meetup.com/prague-dbt-meetup-group/events/314453646/",
+              "content_id": "prague-dbt-meetuporganiser-prague-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/prague-dbt-meetup-group/events/314453646/",
+              "note": "organiser: organiser, Prague dbt Meetup"
+            },
+            {
+              "url": "https://www.linkedin.com/in/michalvilimek/",
+              "note": "linkedin profile linked from https://www.meetup.com/prague-dbt-meetup-group/events/314453646/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-05-28",
+              "talk_title": "Running dbt in a Highly Regulated Enterprise",
+              "topics": [
+                "data governance"
+              ]
+            }
+          ],
+          "notes": "organiser of an in-person local data group | location (high): linkedin search result: Michal Mike Vilímek - Senior Data Engineer (Snowflake/dbt Cloud) @ Philip Morris International, Prague https://www.linkedin.com/in/michalvilimek/ | merged duplicate record 'Mike Vilimek' (mike-vilimek)"
+        },
+        {
+          "id": "bara-kalacova",
+          "name": "Bára Kalačová",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/365380898/",
+              "source": "https://www.meetup.com/events/299190709/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Prague Data Punkers",
+              "title": "organiser, Prague Data Punkers",
+              "date": "2024-03-06",
+              "url": "https://www.meetup.com/data-punkers/events/299190709/",
+              "content_id": "prague-data-punkersorganiser-prague-data-punkers",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-punkers/events/299190709/",
+              "note": "organiser: organiser, Prague Data Punkers"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "karolina-e",
+          "name": "Karolina E",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Prague Data Punkers",
+              "title": "organiser, Prague Data Punkers",
+              "date": "2024-03-06",
+              "url": "https://www.meetup.com/data-punkers/events/299190709/",
+              "content_id": "prague-data-punkersorganiser-prague-data-punkers",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-punkers/events/299190709/",
+              "note": "organiser: organiser, Prague Data Punkers"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "giuliano-giannetti",
+          "name": "Giuliano Giannetti",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/261759470/",
+              "source": "https://www.meetup.com/events/299190709/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Prague Data Punkers",
+              "title": "organiser, Prague Data Punkers",
+              "date": "2024-03-06",
+              "url": "https://www.meetup.com/data-punkers/events/299190709/",
+              "content_id": "prague-data-punkersorganiser-prague-data-punkers",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-punkers/events/299190709/",
+              "note": "organiser: organiser, Prague Data Punkers"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jan-pipek",
+          "name": "Jan Pipek",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/223364576/",
+              "source": "https://www.meetup.com/events/298421104/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Prague",
+              "title": "organiser, PyData Prague",
+              "date": "2024-01-24",
+              "url": "https://www.meetup.com/pydata-prague/events/298421104/",
+              "content_id": "pydata-pragueorganiser-pydata-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-prague/events/298421104/",
+              "note": "organiser: organiser, PyData Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jiri-bajer",
+          "name": "Jiri Bajer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/239074103/",
+              "source": "https://www.meetup.com/events/300451488/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Prague",
+              "title": "organiser, PyData Prague",
+              "date": "2024-04-23",
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "content_id": "pydata-pragueorganiser-pydata-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "note": "organiser: organiser, PyData Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "ondrej-kokes",
+          "name": "Ondřej Kokeš",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/156078452/",
+              "source": "https://www.meetup.com/events/300451488/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Prague",
+              "title": "organiser, PyData Prague",
+              "date": "2024-04-23",
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "content_id": "pydata-pragueorganiser-pydata-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "note": "organiser: organiser, PyData Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jakub-urban",
+          "name": "Jakub Urban",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/230150957/",
+              "source": "https://www.meetup.com/events/300451488/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Prague",
+              "title": "organiser, PyData Prague",
+              "date": "2024-04-23",
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "content_id": "pydata-pragueorganiser-pydata-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "note": "organiser: organiser, PyData Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "sena-s",
+          "name": "Sena S",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Prague",
+              "title": "organiser, PyData Prague",
+              "date": "2024-04-23",
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "content_id": "pydata-pragueorganiser-pydata-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-prague/events/300451488/",
+              "note": "organiser: organiser, PyData Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "adam-krenek",
+          "name": "Adam Křenek",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/259706018/",
+              "source": "https://www.meetup.com/events/302432072/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Prague",
+              "title": "organiser, PyData Prague",
+              "date": "2024-08-28",
+              "url": "https://www.meetup.com/pydata-prague/events/302432072/",
+              "content_id": "pydata-pragueorganiser-pydata-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-prague/events/302432072/",
+              "note": "organiser: organiser, PyData Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jan-bleha",
+          "name": "Jan Bleha",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/477308240/",
+              "source": "https://www.meetup.com/events/313906538/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Databricks User Group Prague",
+              "title": "organiser, Databricks User Group Prague",
+              "date": "2026-04-21",
+              "url": "https://www.meetup.com/databricks-user-group-prague/events/313906538/",
+              "content_id": "databricks-user-group-pragueorganiser-databricks-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-user-group-prague/events/313906538/",
+              "note": "organiser: organiser, Databricks User Group Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "stepan-resl",
+          "name": "Štěpán Rešl",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/stepan-resl/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Czech Fabric User Group",
+              "title": "organiser, Czech Fabric User Group",
+              "date": "2026-03-31",
+              "url": "https://www.meetup.com/czech-fabric-user-group/events/313415340/",
+              "content_id": "czech-fabric-user-grouporganiser-czech-fabric-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/czech-fabric-user-group/events/313415340/",
+              "note": "organiser: organiser, Czech Fabric User Group"
+            },
+            {
+              "url": "https://www.linkedin.com/in/stepan-resl/",
+              "note": "linkedin profile linked from https://www.meetup.com/czech-fabric-user-group/events/313415340/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jaroslav-petrak",
+          "name": "Jaroslav Petrák",
+          "pronouns": null,
+          "title": "Data Analyst/Data Engineer with nearly 3 years of work experience with academic background in Data Science & AI.",
+          "city": "Prague, Czechia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ing-jaroslav-petr%C3%A1k-msc-7b9704264/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Jaroslav-Petrak",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Jaroslav-Petrak gives the location Prague, Czechia"
+        },
+        {
+          "id": "marco-genca",
+          "name": "Marco Genca",
+          "pronouns": null,
+          "title": "Data Engineer with Strong Teradata Experience,  approaching Python and 3D in Blender galaxy.",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/marco-genca-5b89ba18/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Marco334",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/marco-genca-5b89ba18/",
+              "note": "linkedin profile linked from https://github.com/Marco334 profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Marco334 gives the location Prague"
+        },
+        {
+          "id": "tomas-haidinger",
+          "name": "Tomáš Haidinger",
+          "pronouns": null,
+          "title": "Self-learning Data Engineer with passion for SQL, Python and good data architecture.",
+          "city": "Prague, Czech Republic",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/TomasHaidinger",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/TomasHaidinger gives the location Prague, Czech Republic"
+        },
+        {
+          "id": "vaclav-benda",
+          "name": "Vaclav Benda",
+          "pronouns": null,
+          "title": "Junior Data Engineer/Data Analyst | SQL Server, Python, ETL, Data Warehousing, Reporting & Data Modeling",
+          "city": "Praha, Czech Republic",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/vaclav-benda/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/VaclavBenda",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/VaclavBenda gives the location Praha, Czech Republic"
+        },
+        {
+          "id": "damir-alenov",
+          "name": "Damir Alenov",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/domikalen/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/domikalen",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/domikalen gives the location Prague"
+        },
+        {
+          "id": "jan-mikes",
+          "name": "Jan Mikeš",
+          "pronouns": null,
+          "title": "Full Stack Developer & Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fararr",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fararr gives the location Prague"
+        },
+        {
+          "id": "jan-milacek",
+          "name": "Jan Miláček",
+          "pronouns": null,
+          "title": "Business Intelligence & Data Engineering Consultant | Power BI • Azure • Python • SQL | Prague",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/milacek/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jan-milacek",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jan-milacek gives the location Prague"
+        },
+        {
+          "id": "lesil-britto-c-s",
+          "name": "LESIL BRITTO C S",
+          "pronouns": null,
+          "title": "I'm an experienced Data Engineer. And I'm passionate in creating and maintaining data pipelines for big data projects. I'm good in SQL and Python programming.",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lesilcheruvathoor",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lesilcheruvathoor gives the location Prague"
+        },
+        {
+          "id": "lukas-kotrbaty",
+          "name": "Lukáš Kotrbatý",
+          "pronouns": null,
+          "title": "Software & Data Engineer | Specializing in Java, Python & Cloud Solutions",
+          "city": "Prague, Czech Republic",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lukas-kotrbaty/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lukaskotrbaty",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lukaskotrbaty gives the location Prague, Czech Republic"
+        },
+        {
+          "id": "martin-tupy",
+          "name": "Martin Tupy",
+          "pronouns": null,
+          "title": "Software and Data engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/martintupy",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/martintupy gives the location Prague"
+        },
+        {
+          "id": "mykola-bezrukyi",
+          "name": "Mykola Bezrukyi",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Czechia, Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mbezrukyi/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mbezrukyi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mbezrukyi gives the location Czechia, Prague"
+        },
+        {
+          "id": "bogdan-romenskii",
+          "name": "Bogdan Romenskii",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://linkedin.com/in/rmnsk/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rmnskb",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rmnskb gives the location Prague"
+        },
+        {
+          "id": "ufuk-ceyhanli",
+          "name": "Ufuk CEYHANLI",
+          "pronouns": null,
+          "title": "Analytics Engineering Manager  ",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ufukceyhanli"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ufukceyhanli",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ufukceyhanli gives the location Prague"
+        },
+        {
+          "id": "ekaterina-vasileva",
+          "name": "Ekaterina Vasileva",
+          "pronouns": null,
+          "title": "Business Intelligence (BI) Data Analyst & Engineer in banking and security services",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ekaterina-vasileva-99219a166/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/woaiot5",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/woaiot5 gives the location Prague"
+        },
+        {
+          "id": "valeriia-kurinna",
+          "name": "Valeriia Kurinna",
+          "pronouns": null,
+          "title": "analytics engineer specializing in k8s & devops;  art cr: @sesshom0ru.",
+          "city": "Prague, CZ",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/wsawa/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/wsawa-q",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/wsawa-q gives the location Prague, CZ"
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "productboard",
+      "name": "Productboard",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "honza-rasa",
+          "name": "Honza Rasa",
+          "pronouns": null,
+          "title": "Productboard",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/267662821/",
+              "source": "only member named Honza Řasa among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-09-15",
+              "talk_title": "Boosting DX With Automated Data Sandbox Macro",
+              "topics": [
+                "developer workflow",
+                "orchestration & ci/cd"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "essencemediacom",
+      "name": "EssenceMediacom",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "arthur-mills",
+          "name": "Arthur Mills",
+          "pronouns": null,
+          "title": "EssenceMediacom",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/372462211/",
+              "source": "only member named Arthur Mills among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-05",
+              "talk_title": "How to Deliver Data Products Fast With dbt",
+              "topics": [
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "gamee",
+      "name": "GAMEE",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "veronika-peskova",
+          "name": "Veronika Peskova",
+          "pronouns": null,
+          "title": "GAMEE",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-05",
+              "talk_title": "Cheater detection: tackling a moving target with data",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "revoltbi",
+      "name": "RevoltBI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "matej-novak",
+          "name": "Matej Novak",
+          "pronouns": null,
+          "title": "RevoltBI",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/novakmates/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/novakmates/",
+              "note": "linkedin search result: Matěj Novák - Revolt BI - We get data to people; snippet: Česká Lípa, dbt Certified Developer, Google Professional Data Engineer"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-10-05",
+              "talk_title": "27 clinics, 12 systems, 1 solution: integration using dbt",
+              "topics": [
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "stephan-durry",
+          "name": "Stephan Durry",
+          "pronouns": null,
+          "title": "dbt Labs",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/369451010/",
+              "source": "https://www.meetup.com/events/308965231/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "For Builders, by Builders - The latest tools from dbt Labs",
+              "topics": [
+                "dbt product updates"
+              ]
+            },
+            {
+              "date": "2026-05-28",
+              "talk_title": "For Builders, by Builders - What's news at dbt Labs",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "golemiocz",
+      "name": "golemio.cz",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "klara-horakova-chvalova",
+          "name": "Klára Horáková Chvalová",
+          "pronouns": null,
+          "title": "Analytics Engineer, golemio.cz",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/474866400/",
+              "source": "only member named Klára Horáková Chvalová among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "Helping Prague to become a smart city",
+              "topics": [
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "msd",
+      "name": "MSD",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ondrej-zdrazil",
+          "name": "Ondrej Zdrazil",
+          "pronouns": null,
+          "title": "MSD",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "MSD's data curation journey",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "pavel-mihulka",
+          "name": "Pavel Mihulka",
+          "pronouns": null,
+          "title": "MSD",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/480936776/",
+              "source": "only member named Pavel Mihulka among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "MSD's data curation journey",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "philip-morris-international",
+      "name": "Philip Morris International",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-champion-microsoft-mvp",
+      "name": "dbt Champion & Microsoft MVP",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sam-debruyn",
+          "name": "Sam Debruyn",
+          "pronouns": null,
+          "title": "dbt Champion & Microsoft MVP",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/186807757/",
+              "source": "https://www.meetup.com/events/314453646/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2026-05-28",
+              "talk_title": "From Fabric to Fantastic: How dbt Makes Your Lakehouses and Warehouses Shine",
+              "topics": [
+                "modern data stack",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Prague dbt Meetup speaker"
+    },
+    {
+      "id": "billigence",
+      "name": "Billigence",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jan-laznicka",
+          "name": "Jan Láznička",
+          "pronouns": null,
+          "title": "Data Engineering Team Lead",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/laznickajan/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "DEV Hands-on Meetup: dbt Projects in Snowflake",
+              "date": "2025-08-20",
+              "url": "https://usergroups.snowflake.com/e/m8psbt/",
+              "content_id": "praguedev-handson-meetup-dbt-projects-in-snowflake",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake Prague User Group: Holiday Roundtable Edition, hosted by Sazka",
+              "date": "2025-12-03",
+              "url": "https://usergroups.snowflake.com/e/mbgsve/",
+              "content_id": "praguesnowflake-prague-user-group-holiday-roundtable-edition",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake Summit 2025 Highlights & Smart Ways to Use Snowflake",
+              "date": "2025-06-11",
+              "url": "https://usergroups.snowflake.com/e/mvtr49/",
+              "content_id": "praguesnowflake-summit-2025-highlights-smart-ways-to-use-sno",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m8psbt/",
+              "note": "talk: DEV Hands-on Meetup: dbt Projects in Snowflake"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/mbgsve/",
+              "note": "talk: Snowflake Prague User Group: Holiday Roundtable Edition, hosted by Sazka"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/mvtr49/",
+              "note": "talk: Snowflake Summit 2025 Highlights & Smart Ways to Use Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "jan-difko",
+          "name": "Jan Difko",
+          "pronouns": null,
+          "title": "Cloud Data Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jan-difko-ba615314a/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake in Action: Prague User Group hosted by Everpure",
+              "date": "2026-04-22",
+              "url": "https://usergroups.snowflake.com/e/mrvezk/",
+              "content_id": "praguesnowflake-in-action-prague-user-group-hosted-by-everpu",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake Prague User Group: Holiday Roundtable Edition, hosted by Sazka",
+              "date": "2025-12-03",
+              "url": "https://usergroups.snowflake.com/e/mbgsve/",
+              "content_id": "praguesnowflake-prague-user-group-holiday-roundtable-edition",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mrvezk/",
+              "note": "talk: Snowflake in Action: Prague User Group hosted by Everpure"
+            },
+            {
+              "url": "https://usergroups.snowflake.com/e/mbgsve/",
+              "note": "talk: Snowflake Prague User Group: Holiday Roundtable Edition, hosted by Sazka"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "michael-kapr",
+          "name": "Michael Kapr",
+          "pronouns": null,
+          "title": "CTO",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake Summit 2025 Highlights & Smart Ways to Use Snowflake",
+              "date": "2025-06-11",
+              "url": "https://usergroups.snowflake.com/e/mvtr49/",
+              "content_id": "praguesnowflake-summit-2025-highlights-smart-ways-to-use-sno",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mvtr49/",
+              "note": "talk: Snowflake Summit 2025 Highlights & Smart Ways to Use Snowflake"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "everpure",
+      "name": "Everpure",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-vojtek",
+          "name": "Daniel Vojtek",
+          "pronouns": null,
+          "title": "SW Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/daniel-vojtek-59383212/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake in Action: Prague User Group hosted by Everpure",
+              "date": "2026-04-22",
+              "url": "https://usergroups.snowflake.com/e/mrvezk/",
+              "content_id": "praguesnowflake-in-action-prague-user-group-hosted-by-everpu",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mrvezk/",
+              "note": "talk: Snowflake in Action: Prague User Group hosted by Everpure"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bart-wrobel",
+          "name": "Bart Wrobel",
+          "pronouns": null,
+          "title": "Senior Partner Solution Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bwrobel/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake in Action: Prague User Group hosted by Everpure",
+              "date": "2026-04-22",
+              "url": "https://usergroups.snowflake.com/e/mrvezk/",
+              "content_id": "praguesnowflake-in-action-prague-user-group-hosted-by-everpu",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mrvezk/",
+              "note": "talk: Snowflake in Action: Prague User Group hosted by Everpure"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "dhl-supply-chain",
+      "name": "DHL Supply Chain",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jan-klaska",
+          "name": "Jan Klaška",
+          "pronouns": null,
+          "title": "Head of Data Platforms & Operations",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jan-klaska-4a19447/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake Prague User Group: Holiday Roundtable Edition, hosted by Sazka",
+              "date": "2025-12-03",
+              "url": "https://usergroups.snowflake.com/e/mbgsve/",
+              "content_id": "praguesnowflake-prague-user-group-holiday-roundtable-edition",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mbgsve/",
+              "note": "talk: Snowflake Prague User Group: Holiday Roundtable Edition, hosted by Sazka"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "targito",
+      "name": "Targito",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jan-bastyr",
+          "name": "Jan Baštýř",
+          "pronouns": null,
+          "title": "CEO",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/janbastyr/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague",
+              "title": "Snowflake Summit 2025 Highlights & Smart Ways to Use Snowflake",
+              "date": "2025-06-11",
+              "url": "https://usergroups.snowflake.com/e/mvtr49/",
+              "content_id": "praguesnowflake-summit-2025-highlights-smart-ways-to-use-sno",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mvtr49/",
+              "note": "talk: Snowflake Summit 2025 Highlights & Smart Ways to Use Snowflake"
+            },
+            {
+              "url": "https://www.linkedin.com/in/janbastyr/",
+              "note": "linkedin search result: Jan Baštýř - CEO at Targito, Prague, Czechia"
+            },
+            {
+              "url": "https://www.linkedin.com/in/janbastyr/",
+              "note": "location (high): linkedin search result: Jan Baštýř - CEO at Targito, Prague, Czechia https://www.linkedin.com/in/janbastyr/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (high): linkedin search result: Jan Baštýř - CEO at Targito, Prague, Czechia https://www.linkedin.com/in/janbastyr/"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "economia-publishing-house",
+      "name": "Economia Publishing House",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ales-vojir",
+          "name": "Aleš Vojíř",
+          "pronouns": null,
+          "title": "Head of Data Journalism and Data Visualization",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alesvojir/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Tableau User Group",
+              "title": "Data Stories from the Czech Media: A Tableau Public Showcase",
+              "date": "2025-06-10",
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "content_id": "prague-tableau-user-groupdata-stories-from-the-czech-media-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "note": "talk: Data Stories from the Czech Media: A Tableau Public Showcase"
+            },
+            {
+              "url": "https://www.linkedin.com/in/alesvojir/",
+              "note": "linkedin search result: Ales Vojir - Head of Data Journalism and ... (Economia); name without diacritics"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "evropa-v-datech-index-prosperity-ceska",
+      "name": "Evropa v datech, Index prosperity Česka",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tomas-ostrcil",
+          "name": "Tomáš Ostrčil",
+          "pronouns": null,
+          "title": "Editor-in-Chief",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Tableau User Group",
+              "title": "Data Stories from the Czech Media: A Tableau Public Showcase",
+              "date": "2025-06-10",
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "content_id": "prague-tableau-user-groupdata-stories-from-the-czech-media-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "note": "talk: Data Stories from the Czech Media: A Tableau Public Showcase"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "denik",
+      "name": "Denik",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "irena-honsnejmanova",
+          "name": "Irena Honsnejmanová",
+          "pronouns": null,
+          "title": "Data journalist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Tableau User Group",
+              "title": "Data Stories from the Czech Media: A Tableau Public Showcase",
+              "date": "2025-06-10",
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "content_id": "prague-tableau-user-groupdata-stories-from-the-czech-media-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "note": "talk: Data Stories from the Czech Media: A Tableau Public Showcase"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "economia",
+      "name": "Economia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "vit-svoboda",
+          "name": "Vít Svoboda",
+          "pronouns": null,
+          "title": "Data Analyst / Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Tableau User Group",
+              "title": "Data Stories from the Czech Media: A Tableau Public Showcase",
+              "date": "2025-06-10",
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "content_id": "prague-tableau-user-groupdata-stories-from-the-czech-media-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mb4u8p/",
+              "note": "talk: Data Stories from the Czech Media: A Tableau Public Showcase"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "datamole",
+      "name": "Datamole",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jan-lukany",
+          "name": "Jan Lukány",
+          "pronouns": null,
+          "title": "ML-Engineering Team Lead",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jan-luk%C3%A1ny-63760085/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Databricks User Group",
+              "title": "2nd Databricks User Group Prague",
+              "date": "2026-04-21",
+              "url": "https://usergroups.databricks.com/e/mck7rp/",
+              "content_id": "prague-databricks-user-group2nd-databricks-user-group-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mck7rp/",
+              "note": "talk: 2nd Databricks User Group Prague"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jan-luk%C3%A1ny-63760085/",
+              "note": "linkedin search result: Jan Lukány - ML/Data Engineer; snippet: ML Engineering Team Lead at Datamole since 2024, Databricks event speaker, studied at FIT CTU Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jakub-augustin",
+          "name": "Jakub Augustín",
+          "pronouns": null,
+          "title": "Sr. Solutions Architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jakub-augustin/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Databricks User Group",
+              "title": "2nd Databricks User Group Prague",
+              "date": "2026-04-21",
+              "url": "https://usergroups.databricks.com/e/mck7rp/",
+              "content_id": "prague-databricks-user-group2nd-databricks-user-group-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mck7rp/",
+              "note": "talk: 2nd Databricks User Group Prague"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jakub-augustin/",
+              "note": "linkedin search result: Databricks User Group Prague meetup page lists Jakub Augustin, Databricks, speaking on Genie and Genie Code, with this linkedin link"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "mews",
+      "name": "Mews",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jiri-vinarek",
+          "name": "Jiří Vinárek",
+          "pronouns": null,
+          "title": "Staff Data Scientist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/248716364/",
+              "source": "only member named Jiri Vinarek among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Databricks User Group",
+              "title": "2nd Databricks User Group Prague",
+              "date": "2026-04-21",
+              "url": "https://usergroups.databricks.com/e/mck7rp/",
+              "content_id": "prague-databricks-user-group2nd-databricks-user-group-prague",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/mck7rp/",
+              "note": "talk: 2nd Databricks User Group Prague"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "adastra",
+      "name": "Adastra",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lukas-vosecky",
+          "name": "Lukáš Vosecký",
+          "pronouns": null,
+          "title": "Databricks Competency Leader",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lukas-vosecky/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Databricks User Group",
+              "title": "Databricks User Group - Data & AI Summit 2026 Highlights",
+              "date": "2026-06-25",
+              "url": "https://usergroups.databricks.com/e/myx68s/",
+              "content_id": "prague-databricks-user-groupdatabricks-user-group-data-ai-su",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "genai & llm",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/myx68s/",
+              "note": "talk: Databricks User Group - Data & AI Summit 2026 Highlights"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "george-pirvu",
+          "name": "George Pirvu",
+          "pronouns": null,
+          "title": "Databricks Partner Manager",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pirvugeorge/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Prague Databricks User Group",
+              "title": "Databricks User Group - Data & AI Summit 2026 Highlights",
+              "date": "2026-06-25",
+              "url": "https://usergroups.databricks.com/e/myx68s/",
+              "content_id": "prague-databricks-user-groupdatabricks-user-group-data-ai-su",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms",
+                "genai & llm",
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/e/myx68s/",
+              "note": "talk: Databricks User Group - Data & AI Summit 2026 Highlights"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "seznamcz-as",
+      "name": "Seznam.cz, a.s.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ilia-maksimenko",
+          "name": "Ilia Maksimenko",
+          "pronouns": null,
+          "title": "Data engineer with passion to data",
+          "city": "Prague, Czechia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/abesgui/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AbesGUI",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/abesgui/",
+              "note": "linkedin search result: Ilia Maksimenko - Software Engineer @ Mastercard; slug matches github AbesGUI; snippet: data engineer at Seznam.cz 2022-2025"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AbesGUI gives the location Prague, Czechia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "kbc",
+      "name": "KBC",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "adam-kure",
+          "name": "Adam Kuře",
+          "pronouns": null,
+          "title": "Data engineer working mostly on private repos outside of GitHub. Posted here are projects done for fun, ",
+          "city": "Prague, Czechia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/adamkure/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AdamKure",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AdamKure gives the location Prague, Czechia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "deutsche-bank",
+      "name": "Deutsche Bank",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "amrita-kaur",
+          "name": "Amrita Kaur",
+          "pronouns": null,
+          "title": "With over 11 years of experience in the field of Business Intelligence, I am a seasoned Senior Business Intelligence Developer, Consultant, and Administrator. ",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/AmritaKaurTech",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/AmritaKaurTech gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "futureproof-sro",
+      "name": "futureproof s.r.o.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jan-stepanek",
+          "name": "Jan Štěpánek",
+          "pronouns": null,
+          "title": "A hands-on IT manager entering recruitment. Developed a passion for sourcing. Focusing on BI / DWH / BigData / Analytics",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Jstepy",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Jstepy gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "open-to-opportunities",
+      "name": "Open to opportunities",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "zhanara-zeinesheva",
+          "name": "Zhanara Zeinesheva",
+          "pronouns": null,
+          "title": "Data Analyst | Bridging Data & Strategy | Transformation and Automation | MSc in Finance and Data Analytics",
+          "city": "Prague, Czech Republic ",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/zhanara-zeinesheva-618236a3/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ZhanaraZeinesheva",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ZhanaraZeinesheva gives the location Prague, Czech Republic "
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "teradata",
+      "name": "Teradata",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "florian-kerlogot",
+          "name": "Florian Kerlogot",
+          "pronouns": null,
+          "title": "Lead AI/Data engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fkerlo07",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fkerlo07 gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "databrothers",
+      "name": "DataBrothers",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "filip-kucera",
+          "name": "Filip Kučera",
+          "pronouns": null,
+          "title": "Fabric Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fkucera-databrothers",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/479770230/",
+              "source": "only member named Filip Kučera among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fkucera-databrothers gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "mcl",
+      "name": "mcl",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "george-park",
+          "name": "George Park",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/georgeparkmck",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/276278761/",
+              "source": "only member named George Park among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/georgeparkmck gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "immunai",
+      "name": "Immunai",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jiri-novotny",
+          "name": "Jiri Novotny",
+          "pronouns": null,
+          "title": "Data Engineer @ Immunai",
+          "city": "Prague, Czech Republic",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gorgitko",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gorgitko gives the location Prague, Czech Republic"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "merck",
+      "name": "Merck",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jindrich-mynarz",
+          "name": "Jindřich Mynarz",
+          "pronouns": null,
+          "title": "Linked data engineer",
+          "city": "Prague, Czech Republic",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jindrichmynarz/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jindrichmynarz",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/jindrichmynarz/",
+              "note": "linkedin search result: Jindřich Mynarz - Knowledge Graphs & Semantic Engineering lead at MSD Czech Republic (MSD is Merck outside US); linked data engineer"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jindrichmynarz gives the location Prague, Czech Republic"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "absa",
+      "name": "ABSA",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ladislav-sulak",
+          "name": "Ladislav Sulak",
+          "pronouns": null,
+          "title": "Big Data Engineer",
+          "city": "Prague, CZ",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ladislav-sulak/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lsulak",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/ladislav-sulak/",
+              "note": "linkedin search result: Ladislav Sulak - Absa Group; Prague"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lsulak gives the location Prague, CZ"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "loreal-sympulse",
+      "name": "L'Oréal & Sympulse",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "martin-harnik",
+          "name": "Martin Harník",
+          "pronouns": null,
+          "title": "Data Engineer & AI Developer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/martin-harnik"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/martinharnik",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/martinharnik gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "blindspotai",
+      "name": "blindspot-ai",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "maksym-balatsko",
+          "name": "Maksym Balatsko",
+          "pronouns": null,
+          "title": "Software and Data engineer. Built ML models before it was cool. Passionate about databases and all things data-driven.",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://linkedin.com/in/maksym-balatsko"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mbalatsko",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mbalatsko gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "principal-sro",
+      "name": "Principal s.r.o.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michael-princ",
+          "name": "Michael Princ",
+          "pronouns": null,
+          "title": "Experienced Business Intelligence Consultant with a demonstrated history of working in the information technology and services industry.",
+          "city": "Prague, Czech Republic",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/michaelprinc/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/michaelprinc",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/michaelprinc gives the location Prague, Czech Republic"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "datasentics",
+      "name": "Datasentics",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marek-papay",
+          "name": "Marek Papay",
+          "pronouns": null,
+          "title": "AI-native Data Engineer | Databricks, PySpark, SQL | Building scalable, modern data platforms in the cloud",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/marek-papay-a6276a140/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mpapy",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mpapy gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "datamoleai",
+      "name": "datamole-ai",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ondrej-profant",
+          "name": "Ondrej Profant",
+          "pronouns": null,
+          "title": "Python ML/Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ondrej-profant/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ondrej-profant-dtml",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ondrej-profant-dtml gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "etnetera-activate",
+      "name": "Etnetera Activate",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "pavol-grofcik",
+          "name": "Pavol Grofčík",
+          "pronouns": null,
+          "title": "Data Engineer @ Data Team Activate",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/pgrofcik",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/478257306/",
+              "source": "only member named pavol.grofcik among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/pgrofcik gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "eit",
+      "name": "EIT",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "robert-eckhaus",
+          "name": "Róbert Eckhaus",
+          "pronouns": null,
+          "title": "Big Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://cz.linkedin.com/in/eckhausr"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/reckhaus-eit",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://cz.linkedin.com/in/eckhausr",
+              "note": "linkedin search result: Róbert Eckhaus - Principal Data Engineer at EmbedIT (EIT), previously Senior Big Data Engineer, Prague, Czechia"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/reckhaus-eit gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "silpo",
+      "name": "Silpo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "oleksandr-shynkarov",
+          "name": "Oleksandr Shynkarov",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/shynkary/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/shinkaryov",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/shynkary/",
+              "note": "linkedin profile linked from https://github.com/shinkaryov profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/shinkaryov gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "merkle",
+      "name": "Merkle",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "pavel-bobkov",
+          "name": "Pavel Bobkov",
+          "pronouns": null,
+          "title": "Data Engineer. Skilled in various platforms with a notable affection for Databricks.  ",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/shtyler",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/pbobkov",
+              "source": "https://github.com/shtyler profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/shtyler gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "alma-career",
+      "name": "Alma Career",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "dominik-sluka",
+          "name": "Dominik Sluka",
+          "pronouns": null,
+          "title": "Business Intelligence Analyst/Developer",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/dominiksluka/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/slud00",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/slud00 gives the location Prague"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "zasilkovna-packeta-group",
+      "name": "Zásilkovna (Packeta Group)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://www.jobs.cz/rpd/2001408338/",
+          "source": "jobs.cz",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Znalost dbt nebo podobného transformačního frameworku",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "full-time, Praha - Libeň"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt listed under advantages."
+    },
+    {
+      "id": "siemens-sro",
+      "name": "Siemens s.r.o.",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Apache Airflow",
+        "SSIS"
+      ],
+      "job_postings": [
+        {
+          "title": "Marketing Data Engineer - (m/f/d)",
+          "url": "https://jobs.siemens.com/cs_CZ/externaljobs/JobDetail/514655",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficiency in working with data processing tools such as Apache Airflow, dbt or SSIS is a requirement.",
+          "job_poster": null,
+          "posted_date": "2026-07-20",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://www.jobs.cz/prace/praha/?q%5B%5D=dbt",
+          "note": "jobs.cz lists Marketing Data Engineer and Marketing Data Analyst in Praha - Stodulky under the dbt filter; analyst ad text not read"
+        }
+      ],
+      "people": [],
+      "notes": "dbt is one of several alternative tools."
+    },
+    {
+      "id": "sky",
+      "name": "Sky",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Jinja",
+        "BigQuery",
+        "Looker",
+        "Tableau"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Analyst",
+          "url": "https://builtin.com/job/data-analyst/6485791",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Skills or experience in DBT and Jinja, BigQuery, big data, Python, or data visualization tools like Looker and Tableau would be an advantage.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "in-office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad removed 2025-07-25."
+    },
+    {
+      "id": "keboola",
+      "name": "Keboola",
+      "type": "vendor",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Keboola"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "company_blog",
+          "url": "https://keboola.com/blog/7-reasons-why-we-integrated-dbt-into-keboola",
+          "note": "keboola integrated dbt into its transformation layer"
+        },
+        {
+          "type": "webinar",
+          "url": "https://www.keboola.com/webinars/workshop-dbt-for-experts",
+          "note": "dbt for experts workshop, 2023-03-07, host Martin Fisher"
+        },
+        {
+          "type": "webinar",
+          "url": "https://www.keboola.com/webinars/workshop-dbt-for-beginners",
+          "note": "dbt for beginners workshop"
+        }
+      ],
+      "people": [],
+      "notes": "data platform vendor with a Prague engineering team per search snippet; strong dbt content."
+    },
+    {
+      "id": "tmobile-czech-republic",
+      "name": "T-Mobile Czech Republic",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "GCP"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://cz.linkedin.com/in/martina-zapletal",
+          "note": "search snippet of a profile describing dbt and GCP adoption at T-Mobile Czech Republic; person not recorded because the snippet was not read"
+        }
+      ],
+      "people": [],
+      "notes": "dbt use seen only in a search snippet."
+    },
+    {
+      "id": "wids-prague",
+      "name": "WiDS Prague",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Prague"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://luma.com/wids-prague-conference",
+          "note": "past women in data science conference organised by Deepnote; talks on NLP and product data analysis"
+        }
+      ],
+      "people": [
+        {
+          "id": "tereza-vankova",
+          "name": "Tereza Vankova",
+          "pronouns": null,
+          "title": "Host, WiDS Prague conference",
+          "city": "Prague",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tereza-vankova/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Prague conference",
+              "title": "WiDS Prague conference host",
+              "date": null,
+              "url": "https://luma.com/wids-prague-conference",
+              "content_id": "wids-prague-conferencewids-prague-conference-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a host of the conference",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/wids-prague-conference",
+              "note": "organiser: WiDS Prague conference host"
+            },
+            {
+              "url": "https://www.linkedin.com/in/tereza-vankova/",
+              "note": "linkedin search result: result titled 'Tereza Černá - Czechia' at slug tereza-vankova; the same slug has a post by the ReactGirls founder, and widsworldwide.org names Tereza Vaňková as WiDS Prague ambassador and Deepnote engineer who founded ReactGirls"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce women speakers in prague data",
+          "past_chapter_talks": [],
+          "notes": "listed as host on the luma event page; employer not shown"
+        },
+        {
+          "id": "lubomir-kovarik",
+          "name": "Lubomir Kovarik",
+          "pronouns": null,
+          "title": "Host, WiDS Prague conference",
+          "city": "Prague",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lubomirkovarik/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "WiDS Prague conference",
+              "title": "WiDS Prague conference host",
+              "date": null,
+              "url": "https://luma.com/wids-prague-conference",
+              "content_id": "wids-prague-conferencewids-prague-conference-host",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "listed as a host of the conference",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://luma.com/wids-prague-conference",
+              "note": "organiser: WiDS Prague conference host"
+            },
+            {
+              "url": "https://www.linkedin.com/in/lubomirkovarik/",
+              "note": "linkedin search result: Lubomír Kovařík - Sales Manager - Deepnote; search snippet states Prague and WiDS Prague ambassador"
+            },
+            {
+              "url": "https://www.linkedin.com/in/lubomirkovarik/",
+              "note": "location (medium): linkedin search result: Lubomír Kovařík - Sales Manager - Deepnote; search snippet states Prague and WiDS Prague ambassador https://www.linkedin.com/in/lubomirkovarik/"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introduce speakers from prague data science events",
+          "past_chapter_talks": [],
+          "notes": "listed as host on the luma event page; employer not shown | location (medium): linkedin search result: Lubomír Kovařík - Sales Manager - Deepnote; search snippet states Prague and WiDS Prague ambassador https://www.linkedin.com/in/lubomirkovarik/"
+        }
+      ],
+      "notes": "data science focus, little dbt overlap."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/prague-dbt-meetup-group/",
+    "past_meetups_derived_from": "enriched/prague-dbt-meetup-group.json",
+    "checked": [
+      {
+        "name": "jobs.cz dbt filter",
+        "url": "https://www.jobs.cz/prace/praha/?q%5B%5D=dbt",
+        "yielded": true,
+        "note": "noisy; one ad confirmed to mention dbt (Zasilkovna)"
+      },
+      {
+        "name": "Siemens careers",
+        "url": "https://jobs.siemens.com/cs_CZ/externaljobs/JobDetail/514655",
+        "yielded": true,
+        "note": "dbt named among tools in a Prague ad"
+      },
+      {
+        "name": "builtin.com Sky ad",
+        "url": "https://builtin.com/job/data-analyst/6485791",
+        "yielded": true,
+        "note": "removed ad, dbt as an advantage"
+      },
+      {
+        "name": "startupjobs.cz",
+        "url": "https://www.startupjobs.cz/nabidky?q=dbt",
+        "yielded": false,
+        "note": "no ads rendered; linked dbt ad expired"
+      },
+      {
+        "name": "Databricks Meetup, FIT CTU 2026-04-21",
+        "url": "https://fit.cvut.cz/en/life-at-fit/fit-live/events/24631-databricks-meetup",
+        "yielded": false,
+        "note": "all three speakers already on file"
+      },
+      {
+        "name": "Analytics Pioneers Prague meetup",
+        "url": "https://www.meetup.com/de-de/analytics-pioneers-prague/",
+        "yielded": false,
+        "note": "digital analytics, online, no dbt"
+      },
+      {
+        "name": "Data Point Prague 2026 sessionize",
+        "url": "https://sessionize.com/data-point-prague-2026/",
+        "yielded": false,
+        "note": "call for speakers page only, no agenda"
+      },
+      {
+        "name": "WiDS Prague conference on Luma",
+        "url": "https://luma.com/wids-prague-conference",
+        "yielded": true,
+        "note": "hosts and speakers listed, mostly data science, undated"
+      },
+      {
+        "name": "Keboola dbt workshop",
+        "url": "https://www.keboola.com/webinars/workshop-dbt-for-experts",
+        "yielded": true,
+        "note": "2023 webinar, speaker location not shown"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Prague dbt Meetup (in-person)",
+      "date": "2022-09-15",
+      "venue": "STRV, Rohanské nábřeží 678/23, Prague",
+      "url": "https://www.meetup.com/prague-dbt-meetup-group/events/288037399/",
+      "organisers": [
+        "Aneta Stepankova"
+      ],
+      "attendees": 64,
+      "talks": [
+        {
+          "speaker": "Jozef Reginac",
+          "company": "STRV",
+          "title": "Essay on Data Product",
+          "topics": [
+            "data modeling",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Jan Maly",
+          "company": "STRV",
+          "title": "Running Python Scripts Directly From Your dbt Projects",
+          "topics": [
+            "dbt product features"
+          ]
+        },
+        {
+          "speaker": "Simon Podhajsky",
+          "company": null,
+          "title": "Data Modeling as the First Data Hire",
+          "topics": [
+            "data modeling",
+            "career development"
+          ]
+        },
+        {
+          "speaker": "Honza Rasa",
+          "company": "Productboard",
+          "title": "Boosting DX With Automated Data Sandbox Macro",
+          "topics": [
+            "developer workflow",
+            "orchestration & ci/cd"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Prague dbt Breakfast by STRV",
+      "date": "2023-10-05",
+      "venue": "STRV, Rohanské nábřeží 678/23, Prague",
+      "url": "https://www.meetup.com/prague-dbt-meetup-group/events/296210504/",
+      "organisers": [
+        "Aneta Stepankova"
+      ],
+      "attendees": 52,
+      "talks": [
+        {
+          "speaker": "Arthur Mills",
+          "company": "EssenceMediacom",
+          "title": "How to Deliver Data Products Fast With dbt",
+          "topics": [
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Veronika Peskova",
+          "company": "GAMEE",
+          "title": "Cheater detection: tackling a moving target with data",
+          "topics": [
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Matej Novak",
+          "company": "RevoltBI",
+          "title": "27 clinics, 12 systems, 1 solution: integration using dbt",
+          "topics": [
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Prague dbt meetup",
+      "date": "2025-09-16",
+      "venue": "MSD IT, FIVE Building, Na Valentince 3336/4, Prague",
+      "url": "https://www.meetup.com/prague-dbt-meetup-group/events/308965231/",
+      "organisers": [
+        "Stephan Durry",
+        "Barbora Maroto"
+      ],
+      "attendees": 48,
+      "talks": [
+        {
+          "speaker": "Stephan Durry",
+          "company": "dbt Labs",
+          "title": "For Builders, by Builders - The latest tools from dbt Labs",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Klára Horáková Chvalová",
+          "company": "Analytics Engineer, golemio.cz",
+          "title": "Helping Prague to become a smart city",
+          "topics": [
+            "data modeling"
+          ]
+        },
+        {
+          "speaker": "Ondrej Zdrazil, Pavel Mihulka",
+          "company": "MSD",
+          "title": "MSD's data curation journey",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Prague dbt meetup",
+      "date": "2026-05-28",
+      "venue": "Philip Morris, Karlovo nám. 2097, Prague",
+      "url": "https://www.meetup.com/prague-dbt-meetup-group/events/314453646/",
+      "organisers": [
+        "Stephan Durry",
+        "Michal Vilimek"
+      ],
+      "attendees": 48,
+      "talks": [
+        {
+          "speaker": "Stephan Durry",
+          "company": "dbt Labs",
+          "title": "For Builders, by Builders - What's news at dbt Labs",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Mike Vilimek",
+          "company": "Philip Morris International",
+          "title": "Running dbt in a Highly Regulated Enterprise",
+          "topics": [
+            "data governance"
+          ]
+        },
+        {
+          "speaker": "Sam Debruyn",
+          "company": "dbt Champion & Microsoft MVP",
+          "title": "From Fabric to Fantastic: How dbt Makes Your Lakehouses and Warehouses Shine",
+          "topics": [
+            "modern data stack",
+            "dbt best practices"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Prague dbt Meetup",
+      "url": "https://www.meetup.com/prague-dbt-meetup-group/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "Microsoft Power BI User Group Czechia",
+      "url": "https://www.meetup.com/microsoft-power-bi-user-group-czechia/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Prague Data Punkers",
+      "url": "https://www.meetup.com/data-punkers/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "PyData Prague",
+      "url": "https://www.meetup.com/PyData-Prague/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Databricks User Group Prague",
+      "url": "https://www.meetup.com/databricks-user-group-prague/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Prague Data & AI Enthusiasts",
+      "url": "https://www.meetup.com/datamole/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Analytics Pioneers Prague",
+      "url": "https://www.meetup.com/Analytics-Pioneers-Prague/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Czech Fabric User Group",
+      "url": "https://www.meetup.com/czech-fabric-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Snowflake Prague User Group",
+      "url": "https://www.meetup.com/snowflake-prague-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "WiDS Prague (organised by Deepnote)",
+      "url": "https://www.widsworldwide.org/events/event/wids-prague/",
+      "note": "women in data science regional event"
+    },
+    {
+      "name": "PyLadies Prague",
+      "url": "https://ep2024.europython.eu/pyladies-social",
+      "note": "only seen on europython pages; no local event page read"
+    }
+  ]
+}

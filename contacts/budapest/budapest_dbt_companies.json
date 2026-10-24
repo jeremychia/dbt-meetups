@@ -1,0 +1,5475 @@
+{
+  "metadata": {
+    "title": "Budapest dbt companies and people for the Budapest dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Budapest companies using dbt, and people who could speak at or attend the Budapest dbt Meetup.",
+    "version": 3,
+    "schema_version": 4,
+    "region": "Budapest (Budapest dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: web search results for Budapest are dominated by job boards; blog and author searches in English and Hungarian returned almost nothing.",
+      "Lesson: budapestdata.hu speaker pages fetch well; the detailed schedule and sessionize pages do not.",
+      "Lesson: cvonline.hu and allianz ad links were dead on fetch; search snippets only."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets. Verify before outreach.",
+      "Balázs Máté's talk was seen only as a search snippet; event, date and location are unconfirmed.",
+      "Instructure and Allianz ads may be closed.",
+      "No first-time speakers (people with writing but no talk) were found."
+    ],
+    "counts": {
+      "companies": 43,
+      "people": 88,
+      "job_postings": 6,
+      "companies_with_job_postings": 6,
+      "speaker_evidence_items": 24,
+      "unique_content_items": 12,
+      "people_with_linkedin": 30,
+      "people_with_contact": 64,
+      "people_who_spoke_at_this_chapter": 14,
+      "internal_vinted": 0,
+      "level": {
+        "leadership": 8,
+        "working": 80
+      },
+      "speaker_potential": {
+        "high": 15,
+        "low": 51,
+        "medium": 22
+      },
+      "attendee_potential": {
+        "medium": 85,
+        "high": 1,
+        "low": 2
+      },
+      "priority_tier": {
+        "2": 15,
+        "1": 2,
+        "3": 56,
+        "connector": 15
+      },
+      "watchlist_companies": 36,
+      "past_meetups": 7,
+      "lead_type": {
+        "proven_speaker": 37,
+        "no_public_content": 51
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 14,
+        "github": 50,
+        "conference_or_meetup_agenda": 23,
+        "linkedin_search": 2
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 18,
+      "data warehouse & platforms": 5,
+      "data governance": 2,
+      "orchestration & ci/cd": 1,
+      "performance & scale": 1,
+      "dbt best practices": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "hiflylabs",
+      "name": "Hiflylabs",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Fivetran",
+        "Looker",
+        "AWS",
+        "GCP",
+        "Airflow"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer",
+          "url": "https://builtin.com/job/senior-analytics-engineer/7034346",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Some of these are standard AWS or GCP platform services, some are even more modern ones, like Snowflake, dbt, Fivetran, or Looker.",
+          "job_poster": null,
+          "posted_date": "2025-12-03",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote or in-office"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "case_study",
+          "url": "https://partners.getdbt.com/english/directory/partner/1540724/hiflylabs",
+          "note": "dbt Labs partner directory entry for Hiflylabs, Budapest (page content did not load; seen in search result)"
+        }
+      ],
+      "people": [
+        {
+          "id": "andras-zimmer",
+          "name": "Andras Zimmer",
+          "pronouns": null,
+          "title": "CTO, Hiflylabs",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/331049137/",
+              "source": "only member named András Zimmer among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-05-10",
+              "talk_title": "Two-week dev cycles in a DW -- agility is reality with open source",
+              "topics": [
+                "dbt fundamentals",
+                "tools & ecosystem",
+                "performance & scale"
+              ]
+            },
+            {
+              "date": "2023-02-21",
+              "talk_title": "Predictions on the Modern Data Stack for 2023",
+              "topics": [
+                "industry trends",
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mark-rittman",
+          "name": "Mark Rittman",
+          "pronouns": null,
+          "title": "CEO, Rittman Analytics & Analytics Engineer, Hiflylabs",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-05-10",
+              "talk_title": "Super-performant interactive dashboards on huge datasets with dbt, Firebolt and Looker",
+              "topics": [
+                "performance & scale",
+                "business intelligence",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "son-n-nguyen",
+          "name": "Son N. Nguyen",
+          "pronouns": null,
+          "title": "CEO, Rittman Analytics & Analytics Engineer, Hiflylabs",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-05-10",
+              "talk_title": "Super-performant interactive dashboards on huge datasets with dbt, Firebolt and Looker",
+              "topics": [
+                "performance & scale",
+                "business intelligence",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "zsombor-foldesi",
+          "name": "Zsombor Földesi",
+          "pronouns": null,
+          "title": "Senior Analytics Engineer, Hiflylabs",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/247098695/",
+              "source": "https://www.meetup.com/events/288927081/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-11-10",
+              "talk_title": "From Stored Procedures to dbt",
+              "topics": [
+                "dbt migration & adoption",
+                "modern data stack"
+              ]
+            },
+            {
+              "date": "2023-09-28",
+              "talk_title": "How Python on Databricks gives antigravity to dbt?",
+              "topics": [
+                "dbt product features",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "tibor-kusztos",
+          "name": "Tibor Kusztós",
+          "pronouns": null,
+          "title": "Analytics Engineer, Hiflylabs",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/361318155/",
+              "source": "only member named Tibor Kusztós among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-03-13",
+              "talk_title": "Avoid the Avalanche: Practical dbt tips for your Snowflake workflows",
+              "topics": [
+                "performance & scale",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mihaly-bodnar",
+          "name": "Mihaly Bodnar",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mihaly-bodnar",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mihaly-bodnar gives the location Budapest"
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker | already on file; added a dbt job ad."
+    },
+    {
+      "id": "lightdash",
+      "name": "Lightdash",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "oliver-laslett",
+          "name": "Oliver Laslett",
+          "pronouns": null,
+          "title": "Co-Founder & CTO, Lightdash",
+          "city": "San Francisco",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/olaslett/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/olaslett/",
+              "note": "linkedin search result: Oliver Laslett - Co-Founder & CTO @ Lightdash; San Francisco"
+            },
+            {
+              "url": "https://www.linkedin.com/in/olaslett/",
+              "note": "location (high): linkedin search result: Oliver Laslett - Co-Founder & CTO @ Lightdash; San Francisco https://www.linkedin.com/in/olaslett/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2022-11-10",
+              "talk_title": "BI as code: How to 10x your productivity as an analytics engineer",
+              "topics": [
+                "business intelligence",
+                "orchestration & ci/cd",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": "location (high): linkedin search result: Oliver Laslett - Co-Founder & CTO @ Lightdash; San Francisco https://www.linkedin.com/in/olaslett/"
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "head-of-analytics-engineering-hiflylabs",
+      "name": "Head of Analytics Engineering (Hiflylabs)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marton-hubay",
+          "name": "Márton Hubay",
+          "pronouns": null,
+          "title": "Co-founder & CTO (Infinite Lambda), Managing Director (BI Consulting), Head of Analytics Engineering (Hiflylabs)",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/193641239/",
+              "source": "only member named Márton Hubay among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-02-21",
+              "talk_title": "Predictions on the Modern Data Stack for 2023",
+              "topics": [
+                "industry trends",
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "bence-arato",
+          "name": "Bence Arató",
+          "pronouns": null,
+          "title": "Co-founder & CTO (Infinite Lambda), Managing Director (BI Consulting), Head of Analytics Engineering (Hiflylabs)",
+          "city": null,
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/13744736/",
+              "source": "https://www.meetup.com/events/291133656/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2024-06-11",
+              "url": "https://www.meetup.com/pyladies-budapest/events/301293915/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/301293915/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-02-21",
+              "talk_title": "Predictions on the Modern Data Stack for 2023",
+              "topics": [
+                "industry trends",
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": "organiser of an in-person local data group | merged duplicate record 'Arató Bence' (arato-bence)"
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "hotjar",
+      "name": "Hotjar",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ben-kulcsar",
+          "name": "Ben Kulcsar",
+          "pronouns": null,
+          "title": "Senior Data Engineer, Hotjar",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/381695354/",
+              "source": "https://www.meetup.com/events/295732824/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-09-28",
+              "talk_title": "Do you really need real-time data?",
+              "topics": [
+                "orchestration & ci/cd",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "data-vault-20-expert",
+      "name": "Data Vault 2.0 expert",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "balazs-ragalyi",
+          "name": "Balázs Ragályi",
+          "pronouns": null,
+          "title": "Senior Data and Analytics Engineer, Data Vault 2.0 expert",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/414078007/",
+              "source": "only member named Balázs Ragályi among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-03-05",
+              "talk_title": "Data Vault + dbt: What makes this combo work?",
+              "topics": [
+                "data modeling",
+                "modern data stack",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "open-source-contributor",
+      "name": "Open Source Contributor",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "peter-szecsi",
+          "name": "Péter Szécsi",
+          "pronouns": null,
+          "title": "Data Architect, Open Source Contributor",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/263650381/",
+              "source": "only member named Péter Szécsi among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-03-05",
+              "talk_title": "Journey into the Cosmos: Integration of dbt and Apache Airflow",
+              "topics": [
+                "orchestration & ci/cd",
+                "tools & ecosystem"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "senior-data-and-analytics-engineer",
+      "name": "Senior Data and Analytics Engineer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "laci-pataki",
+          "name": "Laci Pataki",
+          "pronouns": null,
+          "title": "Senior Data and Analytics Engineer",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-25",
+              "talk_title": "Switching the query engine under a dbt project - Lessons from the migration trenches",
+              "topics": [
+                "dbt migration & adoption",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "xebia",
+      "name": "Xebia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "juan-perafan",
+          "name": "Juan Perafan",
+          "pronouns": null,
+          "title": "Analytics Engineer consultant, Xebia",
+          "city": "Utrecht",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "sessionize",
+              "url": "https://sessionize.com/jmperafan",
+              "source": "search for Juan Manuel Perafan, Xebia analytics engineer, speaker; handle jmperafan"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://sessionize.com/jmperafan",
+              "note": "profile found by search: Juan Manuel Perafan - Analytics Engineer at Xebia, Utrecht (snippet)"
+            },
+            {
+              "url": "https://sessionize.com/jmperafan",
+              "note": "location (medium): search result: Juan Manuel Perafan - Analytics Engineer at Xebia, Utrecht (snippet) https://sessionize.com/jmperafan"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-09-25",
+              "talk_title": "How to supercharge your dbt Testing - Best Practices & Pitfalls",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": "location (medium): search result: Juan Manuel Perafan - Analytics Engineer at Xebia, Utrecht (snippet) https://sessionize.com/jmperafan"
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "duckdb-labs",
+      "name": "DuckDB Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gabor-szarnyas",
+          "name": "Gábor Szárnyas",
+          "pronouns": null,
+          "title": "Developer Relations Advocate and Technical Writer, DuckDB Labs",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/24512502/",
+              "source": "https://www.meetup.com/events/306236538/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-03-13",
+              "talk_title": "DuckDB: Run dbt build with sub-second execution times",
+              "topics": [
+                "developer workflow",
+                "performance & scale",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Budapest dbt Meetup speaker"
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "emma-mac",
+          "name": "Emma Mac",
+          "pronouns": null,
+          "title": "Community & Developer Relations Specialist",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest",
+              "title": "Snowflake Community Hungary - June meetup",
+              "date": "2026-06-16",
+              "url": "https://usergroups.snowflake.com/e/m98bdc/",
+              "content_id": "budapestsnowflake-community-hungary-june-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m98bdc/",
+              "note": "talk: Snowflake Community Hungary - June meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "daniel-laszlo-toth",
+          "name": "Daniel Laszlo Toth",
+          "pronouns": null,
+          "title": "Senior Solution Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/256622525/",
+              "source": "only member named Dániel Tóth among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest",
+              "title": "Snowflake Community Hungary - June meetup",
+              "date": "2026-06-16",
+              "url": "https://usergroups.snowflake.com/e/m98bdc/",
+              "content_id": "budapestsnowflake-community-hungary-june-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m98bdc/",
+              "note": "talk: Snowflake Community Hungary - June meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "howden",
+      "name": "Howden",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "levente-illyes",
+          "name": "Levente Illyes",
+          "pronouns": null,
+          "title": "Data architect",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/levente-ilyes-974884112/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest",
+              "title": "Snowflake Community Hungary - June meetup",
+              "date": "2026-06-16",
+              "url": "https://usergroups.snowflake.com/e/m98bdc/",
+              "content_id": "budapestsnowflake-community-hungary-june-meetup",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/m98bdc/",
+              "note": "talk: Snowflake Community Hungary - June meetup"
+            },
+            {
+              "url": "https://www.linkedin.com/in/levente-ilyes-974884112/",
+              "note": "linkedin search result: Levente Ilyes - Howden, A Chart Industries Company; data and analytics, dbt project; name variant (Ilyes)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "google-cloud",
+      "name": "Google Cloud",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "riccardo-carlesso",
+          "name": "Riccardo Carlesso",
+          "pronouns": null,
+          "title": "Developer Advocate at Google Cloud",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/riccardocarlesso/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "GDG Cloud Budapest",
+              "title": "Learn about SRE & deploying Landing Zone via Fabric FAST",
+              "date": "2024-09-17",
+              "url": "https://gdg.community.dev/e/mzv59a/",
+              "content_id": "gdg-cloud-budapestlearn-about-sre-deploying-landing-zone-via",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/e/mzv59a/",
+              "note": "talk: Learn about SRE & deploying Landing Zone via Fabric FAST"
+            },
+            {
+              "url": "https://www.linkedin.com/in/riccardocarlesso/",
+              "note": "linkedin profile linked from https://gdg.community.dev/e/mzv59a/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "deutsche-telekom-it-solutions-hungary",
+      "name": "Deutsche Telekom IT Solutions Hungary",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest",
+        "Debrecen",
+        "Pécs",
+        "Szeged"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Terraform",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Snowflake Data Engineer (REF4498U)",
+          "url": "https://jobs.smartrecruiters.com/DeutscheTelekomITSolutions/744000074011541-senior-snowflake-data-engineer-ref4498u-",
+          "source": "SmartRecruiters company page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Proficient in SQL for Snowflake, dbt, and data modeling (star/snowflake schema, views, materialized views)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote only within Hungary"
+        }
+      ],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tamas-szebeni",
+          "name": "Tamás Szebeni",
+          "pronouns": null,
+          "title": "Google Certified Cloud Architect and Security Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tamas-szebeni-3b277955/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "GDG Cloud Budapest",
+              "title": "Learn about SRE & deploying Landing Zone via Fabric FAST",
+              "date": "2024-09-17",
+              "url": "https://gdg.community.dev/e/mzv59a/",
+              "content_id": "gdg-cloud-budapestlearn-about-sre-deploying-landing-zone-via",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/e/mzv59a/",
+              "note": "talk: Learn about SRE & deploying Landing Zone via Fabric FAST"
+            },
+            {
+              "url": "https://www.linkedin.com/in/tamas-szebeni-3b277955/",
+              "note": "linkedin profile linked from https://gdg.community.dev/e/mzv59a/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "already on file; added a dbt job ad that lists dbt in requirements."
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "samriddhi-bhatnagar",
+          "name": "Samriddhi Bhatnagar",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/380256395/",
+              "source": "https://www.meetup.com/events/311055238/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Future of Data: Budapest",
+              "title": "organiser, Future of Data: Budapest",
+              "date": "2025-10-15",
+              "url": "https://www.meetup.com/futureofdata-budapest/events/311055238/",
+              "content_id": "future-of-data-budapestorganiser-future-of-data-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/futureofdata-budapest/events/311055238/",
+              "note": "organiser: organiser, Future of Data: Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "pyladies-budapest",
+          "name": "PyLadies Budapest",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/388935578/",
+              "source": "https://www.meetup.com/events/298838163/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2024-02-22",
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "bojte-berta",
+          "name": "Böjte Berta",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/184916492/",
+              "source": "https://www.meetup.com/events/298838163/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2024-02-22",
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "kriszta-kozmarenge",
+          "name": "Kriszta Kozma-Renge",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/391121145/",
+              "source": "https://www.meetup.com/events/298838163/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2024-02-22",
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "windhager-eszter",
+          "name": "Windhager Eszter",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/14046281/",
+              "source": "https://www.meetup.com/events/298838163/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2024-02-22",
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/298838163/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "eszter-peter",
+          "name": "Eszter Péter",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/343737303/",
+              "source": "https://www.meetup.com/events/301293915/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2024-06-11",
+              "url": "https://www.meetup.com/pyladies-budapest/events/301293915/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/301293915/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "buhin-alba",
+          "name": "Buhin Alba",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/448692918/",
+              "source": "https://www.meetup.com/events/314346683/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyLadies Budapest",
+              "title": "organiser, PyLadies Budapest",
+              "date": "2026-05-07",
+              "url": "https://www.meetup.com/pyladies-budapest/events/314346683/",
+              "content_id": "pyladies-budapestorganiser-pyladies-budapest",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pyladies-budapest/events/314346683/",
+              "note": "organiser: organiser, PyLadies Budapest"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "gabor-gollnhofer",
+          "name": "Gábor Gollnhofer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/87004472/",
+              "source": "https://www.meetup.com/events/314053745/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Snowflake User Group",
+              "title": "organiser, Budapest Snowflake User Group",
+              "date": "2026-04-15",
+              "url": "https://www.meetup.com/snowflake-community-hungary/events/314053745/",
+              "content_id": "budapest-snowflake-user-grouporganiser-budapest-snowflake-us",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-community-hungary/events/314053745/",
+              "note": "organiser: organiser, Budapest Snowflake User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "eniko-gollnhofer",
+          "name": "Enikő Gollnhofer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/480232788/",
+              "source": "https://www.meetup.com/events/314889201/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Snowflake User Group",
+              "title": "organiser, Budapest Snowflake User Group",
+              "date": "2026-06-16",
+              "url": "https://www.meetup.com/snowflake-community-hungary/events/314889201/",
+              "content_id": "budapest-snowflake-user-grouporganiser-budapest-snowflake-us",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/snowflake-community-hungary/events/314889201/",
+              "note": "organiser: organiser, Budapest Snowflake User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "roberta-varga",
+          "name": "Roberta Varga",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/402197170/",
+              "source": "https://www.meetup.com/events/310967224/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Data & Analytics Meetup",
+              "title": "organiser, Budapest Data & Analytics Meetup",
+              "date": "2025-10-08",
+              "url": "https://www.meetup.com/budapest-data-meetup/events/310967224/",
+              "content_id": "budapest-data-analytics-meetuporganiser-budapest-data-analyt",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/budapest-data-meetup/events/310967224/",
+              "note": "organiser: organiser, Budapest Data & Analytics Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "datapao-kft",
+          "name": "DATAPAO Kft",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/437688242/",
+              "source": "https://www.meetup.com/events/304265555/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Databricks Community Hungary",
+              "title": "organiser, Databricks Community Hungary",
+              "date": "2024-11-28",
+              "url": "https://www.meetup.com/databricks-community-hungary/events/304265555/",
+              "content_id": "databricks-community-hungaryorganiser-databricks-community-h",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/databricks-community-hungary/events/304265555/",
+              "note": "organiser: organiser, Databricks Community Hungary"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "zsolt-domjan",
+          "name": "Zsolt Domján",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/135998342/",
+              "source": "https://www.meetup.com/events/306700086/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Databricks Meetup Group",
+              "title": "organiser, Budapest Databricks Meetup Group",
+              "date": "2025-04-01",
+              "url": "https://www.meetup.com/budapest-databricks-meetup-group/events/306700086/",
+              "content_id": "budapest-databricks-meetup-grouporganiser-budapest-databrick",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/budapest-databricks-meetup-group/events/306700086/",
+              "note": "organiser: organiser, Budapest Databricks Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "zicherman-zoltan",
+          "name": "Zicherman Zoltan",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/468247126/",
+              "source": "https://www.meetup.com/events/306700086/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Databricks Meetup Group",
+              "title": "organiser, Budapest Databricks Meetup Group",
+              "date": "2025-04-01",
+              "url": "https://www.meetup.com/budapest-databricks-meetup-group/events/306700086/",
+              "content_id": "budapest-databricks-meetup-grouporganiser-budapest-databrick",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/budapest-databricks-meetup-group/events/306700086/",
+              "note": "organiser: organiser, Budapest Databricks Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "anita-barat",
+          "name": "Anita Barát",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/481200492/",
+              "source": "https://www.meetup.com/events/314675421/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Databricks Meetup Group",
+              "title": "organiser, Budapest Databricks Meetup Group",
+              "date": "2026-05-27",
+              "url": "https://www.meetup.com/budapest-databricks-meetup-group/events/314675421/",
+              "content_id": "budapest-databricks-meetup-grouporganiser-budapest-databrick",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/budapest-databricks-meetup-group/events/314675421/",
+              "note": "organiser: organiser, Budapest Databricks Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "katona-kristof",
+          "name": "Katona Kristóf",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/456808849/",
+              "source": "https://www.meetup.com/events/306006359/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Budapest Power BI Meetup Group",
+              "title": "organiser, Budapest Power BI Meetup Group",
+              "date": "2025-03-04",
+              "url": "https://www.meetup.com/budapest-power-bi-meetup/events/306006359/",
+              "content_id": "budapest-power-bi-meetup-grouporganiser-budapest-power-bi-me",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/budapest-power-bi-meetup/events/306006359/",
+              "note": "organiser: organiser, Budapest Power BI Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "callum-gadd",
+          "name": "Callum Gadd",
+          "pronouns": null,
+          "title": "An amateur Comedian and somewhat professional Data engineer. ",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/CalGadd",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/CalGadd gives the location Budapest"
+        },
+        {
+          "id": "dariya-baigereyeva",
+          "name": "Dariya Baigereyeva",
+          "pronouns": null,
+          "title": "Detail-oriented entry data analyst with a strong foundation in IT asset lifecycle management, data analytics, workflow design, and documentation.",
+          "city": "Budapest,Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/dariya-baigereyeva-772820261/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/DariyaB01",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/DariyaB01 gives the location Budapest,Hungary"
+        },
+        {
+          "id": "istvan-rozsa",
+          "name": "Istvan Rozsa",
+          "pronouns": null,
+          "title": "I’m a data analyst & software engineer specializing in building and designing web based solutions and analytics for different type of companies in Hungary.",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/IstvnRozsa",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/IstvnRozsa",
+              "source": "https://github.com/IstvnRozsa profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/IstvnRozsa gives the location Budapest"
+        },
+        {
+          "id": "javid-mahmudov",
+          "name": "Javid Mahmudov",
+          "pronouns": null,
+          "title": "Mid-level Data Engineer at TCS Hungary  ",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Javid-98",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Javid-98 gives the location Budapest, Hungary"
+        },
+        {
+          "id": "adam-toth",
+          "name": "Adam Toth",
+          "pronouns": null,
+          "title": "Principal Data Engineer at DAA",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/adam-jetsmart",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/adam-jetsmart gives the location Budapest, Hungary"
+        },
+        {
+          "id": "aleksandr-vdovenko",
+          "name": "Aleksandr Vdovenko",
+          "pronouns": null,
+          "title": "Data Analyst | Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/alexvdo24",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/alexvdo24 gives the location Budapest"
+        },
+        {
+          "id": "amadea-fejes",
+          "name": "Amadea Fejes",
+          "pronouns": null,
+          "title": "Data Engineer, Software Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/amadeafejes",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/203104973/",
+              "source": "only member named Amadea Fejes among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/amadeafejes gives the location Budapest"
+        },
+        {
+          "id": "daniel-sef",
+          "name": "Daniel Sef",
+          "pronouns": null,
+          "title": "Data Engineer / Software Engineer interested in data architectures, streaming systems, machine learning, deep learning and Digital Products.",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/danielsef",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/danielsef",
+              "source": "https://github.com/danielsef profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/danielsef gives the location Budapest"
+        },
+        {
+          "id": "bela-ezsias",
+          "name": "Bela Ezsias",
+          "pronouns": null,
+          "title": "Back-end/data engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ezsi",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/101253552/",
+              "source": "only member named Bela Ezsias among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ezsi gives the location Budapest"
+        },
+        {
+          "id": "fanni-jako",
+          "name": "Fanni Jakó",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/fannijako/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fannijako",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fannijako gives the location Budapest"
+        },
+        {
+          "id": "hardikkumar-mistry",
+          "name": "Hardikkumar Mistry",
+          "pronouns": null,
+          "title": "Cloud & Big Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hardikkumar-mistry/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/hardikkumarmistry",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/hardikkumar-mistry/",
+              "note": "linkedin profile linked from https://github.com/hardikkumarmistry profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/hardikkumarmistry gives the location Budapest"
+        },
+        {
+          "id": "farkas-balazs",
+          "name": "Farkas Balázs",
+          "pronouns": null,
+          "title": "Remote Data Engineer, IT Security és Frontend fejlesztő pozíciók nálam!    Ha érdekel bármelyik, LinkedIn-en elérsz:  https://www.linkedin.com/in/farkas-bal%C3%",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/farkas-bal%C3%/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/iambalii",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/farkas-bal%C3%/",
+              "note": "linkedin profile linked from https://github.com/iambalii profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/iambalii gives the location Budapest"
+        },
+        {
+          "id": "kiss-jozsef",
+          "name": "Kiss József",
+          "pronouns": null,
+          "title": "Self-taught data engineer with a passion for Python.",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/joco-kiss/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jocokiss",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jocokiss gives the location Budapest"
+        },
+        {
+          "id": "kincso-toth",
+          "name": "Kincső Tóth",
+          "pronouns": null,
+          "title": "Junior Data Engineer | Computer Engineer graduate from BME",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kincsototh",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kincsototh gives the location Budapest"
+        },
+        {
+          "id": "keegan-johnson",
+          "name": "Keegan Johnson",
+          "pronouns": null,
+          "title": "Data Scientist | Analytics Engineer | Power BI & R/Python   Currently based in Europe, open to remote roles globally.",
+          "city": "Houston | Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kmj0084/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kmj0084",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/kmj0084/",
+              "note": "linkedin profile linked from https://github.com/kmj0084 profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kmj0084 gives the location Houston | Budapest"
+        },
+        {
+          "id": "daniel-koller",
+          "name": "Daniel Koller",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kollerdaniel",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kollerdaniel gives the location Budapest"
+        },
+        {
+          "id": "kusnyerik-tamas",
+          "name": "Kusnyerik Tamás",
+          "pronouns": null,
+          "title": "Data engineer",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kusnyerik97",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kusnyerik97 gives the location Budapest, Hungary"
+        },
+        {
+          "id": "richard-illyes",
+          "name": "Richard Illyés",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/midoriyama0323",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/midoriyama0323 gives the location Budapest"
+        },
+        {
+          "id": "hajiyev-nijat",
+          "name": "Hajiyev Nijat",
+          "pronouns": null,
+          "title": "Currently working as a Data Analyst at ExxonMobil. Possessing a master's degree from the University of Buckingham. Completed Google's Data Analytics Professiona",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/nijat-hajiyev-1a128a179/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/nicat3795",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/nicat3795 gives the location Budapest"
+        },
+        {
+          "id": "kistof-rozgonyi",
+          "name": "Kistóf Rozgonyi",
+          "pronouns": null,
+          "title": "Satellite operator | Data Engineer",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rstofi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rstofi gives the location Budapest, Hungary"
+        },
+        {
+          "id": "patrik-szigeti",
+          "name": "Patrik Szigeti",
+          "pronouns": null,
+          "title": "Senior Data Analyst @ Revolut 🚀, MS in Business Analytics @ CEU 💻",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/szigony",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/szigony_",
+              "source": "https://github.com/szigony profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/szigony gives the location Budapest, Hungary"
+        },
+        {
+          "id": "gorisi-deepak-reddy",
+          "name": "Gorisi Deepak Reddy",
+          "pronouns": null,
+          "title": "Hi, I'm Deepak     Data Analyst / BI Developer based in Budapest, building toward Analytics Engineering and AI Engineering.  ",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/deepak-reddy-038582223"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/thedeepakreddy",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/thedeepakreddy gives the location Budapest"
+        },
+        {
+          "id": "lili-kornelia-toth",
+          "name": "Lili Kornélia Tóth",
+          "pronouns": null,
+          "title": "Data Analyst | Business Intelligence | People Analytics | Power BI, SQL, Python",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lili-kornelia-toth-a83228268/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tothlilikornelia",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tothlilikornelia gives the location Budapest"
+        },
+        {
+          "id": "yana-kel",
+          "name": "Yana Kel",
+          "pronouns": null,
+          "title": "Data Analyst with a background in B2B banking and business analytics. Skilled in SQL, Python/Pandas, BI and analytical data workflows.",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/yana-kel-201570127"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/yana0330-kel",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/yana0330-kel gives the location Budapest"
+        },
+        {
+          "id": "istvan-mikko-szabo",
+          "name": "Istvan Mikko Szabo",
+          "pronouns": null,
+          "title": "Principal Analytics Engineer",
+          "city": "Hungary",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://hu.linkedin.com/in/istvanmikkoszabo"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "linkedin_search"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "analytics engineering career and dbt certification",
+          "past_chapter_talks": [],
+          "notes": "search snippet shows dbt Fundamentals certification and 'Hungary'; no public content found."
+        }
+      ],
+      "notes": "people whose employer is not shown."
+    },
+    {
+      "id": "ericsson",
+      "name": "Ericsson",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "imad-uddin",
+          "name": "Imad Uddin",
+          "pronouns": null,
+          "title": "Data Engineer @ Ericsson | MSc in AI | Building scalable data systems, ML solutions & turning coffee into clean code ☕",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/imaduddin6945/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ImadImadBudapest",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ImadImadBudapest gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "epam",
+      "name": "Epam",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "subhan-hagverdiyev",
+          "name": "Subhan Hagverdiyev",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/subhan-hagverdiyev-853481103/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/SubhanHakverdiyev",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/SubhanHakverdiyev gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "datapao",
+      "name": "DATAPAO",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ali-madatov",
+          "name": "Ali Madatov",
+          "pronouns": null,
+          "title": "Data Engineer | Software Engineer",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ali-madatov-55717a196/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ali-madatov",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/ali-madatov-55717a196/",
+              "note": "linkedin profile linked from https://github.com/ali-madatov profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ali-madatov gives the location Budapest, Hungary"
+        },
+        {
+          "id": "dominik-gulacsy",
+          "name": "Dominik GULACSY",
+          "pronouns": null,
+          "title": "Data Engineer @DATAPAO",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dgulacsy",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/DominikGulacsy",
+              "source": "https://github.com/dgulacsy profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dgulacsy gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ekata",
+      "name": "Ekata",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniel-berecz",
+          "name": "Dániel Berecz",
+          "pronouns": null,
+          "title": "Data engineer",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/bereczdaniel",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/bereczdaniel gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "freelance",
+      "name": "Freelance",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "balazs-katona",
+          "name": "Balázs Katona",
+          "pronouns": null,
+          "title": "Senior Business Intelligence Consultant",
+          "city": "Budapest, Hungary | Munich, Deutschland",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/blzskatona",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/blzskatona gives the location Budapest, Hungary | Munich, Deutschland"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "united-consult",
+      "name": "United Consult",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nanasi-daniel",
+          "name": "Nánási Dániel",
+          "pronouns": null,
+          "title": "Cloud & Big Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/nanasidaniel/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/danielnanasi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/danielnanasi gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "onbased",
+      "name": "onbased",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "akos-belakovics",
+          "name": "Ákos Belákovics",
+          "pronouns": null,
+          "title": "I am a professional data engineer. I am passionate about building integrated software systems.",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/defned",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/213248820/",
+              "source": "only member named Ákos Belákovics among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/defned gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "proment-solutions-kft",
+      "name": "ProMent Solutions Kft.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gyorgy-dezsenyi",
+          "name": "György Dezsényi",
+          "pronouns": null,
+          "title": "AI & Data Engineer | Fullstack Developer and Co-Founder @ProMent-Solutions ",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dzsny",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dzsny gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "contract",
+      "name": "Contract",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "istvan-darvas",
+          "name": "Istvan Darvas",
+          "pronouns": null,
+          "title": "System Architect / Platform Engineer / Software & Data Engineer / DevOps",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/istvandarvas/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fireking77",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/151278582/",
+              "source": "only member named Istvan Darvas among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/istvandarvas/",
+              "note": "linkedin profile linked from https://github.com/fireking77 profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fireking77 gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "tmrw",
+      "name": "TMRW",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gabor-csizmadia",
+          "name": "Gabor Csizmadia",
+          "pronouns": null,
+          "title": "DevOps Engineer  Data Analyst  Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/gabor-csizmadia-129ab434/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gabor-tmrw",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gabor-tmrw gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "robert-bosch-gmbh",
+      "name": "Robert Bosch GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gyorgy-katona",
+          "name": "György Katona",
+          "pronouns": null,
+          "title": "Data Engineer at Bosch Hungary, Working in the Autonomous Driving Industry",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/georgekatona",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/georgekatona gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "prezicom-kft",
+      "name": "Prezi.com Kft",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gergo-szekely",
+          "name": "Gergo Szekely",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gergoszekely",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gergoszekely gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rockabi",
+      "name": "rockaBI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "vokany-gergo",
+          "name": "Vokány Gergő",
+          "pronouns": null,
+          "title": "Founder @rockaBIhu | Data, BI&AI Consultant | Building analytics, automation & AI-ready data products",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/gergovokany"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gergovokany",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gergovokany gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "yext-inc",
+      "name": "Yext Inc.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "peter-fulop",
+          "name": "Peter Fulop",
+          "pronouns": null,
+          "title": "Senior Data Engineer building scalable data platforms and practical AI-assisted engineering workflows. I write about architecture, reliability, and leadership.",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/fuloppeter/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ipeterfulop",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/peterfulopme",
+              "source": "https://github.com/ipeterfulop profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ipeterfulop gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "exxonmobil",
+      "name": "ExxonMobil",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kanan-mammadli",
+          "name": "Kanan Mammadli",
+          "pronouns": null,
+          "title": "Data Engineer | MSc in Data Analytics @ Ca' Foscari    ",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kanan-mli",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kanan-mli gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "keta-datasoft-kft",
+      "name": "KETA DataSoft Kft.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hegyi-szabolcs",
+          "name": "Hegyi Szabolcs",
+          "pronouns": null,
+          "title": "I'm an experienced Senor Data Engineer from Budapest, Hungary.",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/szabolcs-hegyi-2260b11/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ketabruce",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ketabruce gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sanofi-chinoin",
+      "name": "Sanofi (Chinoin)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "peter-komaromi",
+          "name": "Peter Komaromi",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kompeet",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kompeet gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sanofi",
+      "name": "Sanofi",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "levent-ergul",
+          "name": "Levent  Ergul",
+          "pronouns": null,
+          "title": "Data Engineer @Sanofi    MSc - Management Engineering",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/leventergul/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lergul",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/leventergul/",
+              "note": "linkedin profile linked from https://github.com/lergul profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lergul gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "thermofisher-scientific",
+      "name": "ThermoFisher scientific",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "marouane-skandaji",
+          "name": "Marouane Skandaji",
+          "pronouns": null,
+          "title": "Big Data Engineer  - Data Operations & Automation",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/marouane-skandaji",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/321754617/",
+              "source": "only member named Marouane Skandaji among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/marouane-skandaji gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "mol",
+      "name": "MOL",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "miklos-kiss",
+          "name": "Miklós Kiss",
+          "pronouns": null,
+          "title": "Electrical Engineer MsC | Data Engineer at MOL Group",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/miklos-kiss/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mijki",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mijki gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ibm",
+      "name": "IBM",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jozsef-rideg",
+          "name": "Jozsef Rideg",
+          "pronouns": null,
+          "title": "👨‍💻 Data Engineer | 📊 Data & 🤖AI | 🐍 Python, 🐘 SQL | 📊 📈 ➡️ 💰 Writing data pipelines to create business value",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ridegjozsef/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ridegjoe",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ridegjoe gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "egroup-ict-software",
+      "name": "E-Group ICT Software",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bence-nagy",
+          "name": "Bence Nagy",
+          "pronouns": null,
+          "title": "Software development:  Database developer  Data engineer",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/snetzy95",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/snetzy95 gives the location Budapest"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "accenture",
+      "name": "Accenture",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tibor-laszlo-janosi",
+          "name": "Tibor Laszlo Janosi",
+          "pronouns": null,
+          "title": "Senior Data Engineer / Architect        [ AWS | Azure Data Services, Snowflake, Databricks, Spark, Python & SQL ]",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/janositiborlaszlo/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tjanosi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tjanosi gives the location Budapest, Hungary"
+        },
+        {
+          "id": "tamas-stefanovits",
+          "name": "Tamás Stefanovits",
+          "pronouns": null,
+          "title": "Data Engineer.",
+          "city": "Budapest, Hungary",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tstefanovits",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/219619988/",
+              "source": "only member named Tamás Stefanovits among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tstefanovits gives the location Budapest, Hungary"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bitrise",
+      "name": "Bitrise",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Airflow",
+        "AWS",
+        "GCP"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Data Engineer",
+          "url": "https://portfoliojobs.partechpartners.com/companies/bitrise/jobs/48158324-senior-data-engineer",
+          "source": "Partech portfolio jobs board",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Being confident using dbt, Airflow, BigQuery, and cloud technologies like AWS or GCP.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote (candidates in Hungary)"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://hu.linkedin.com/in/balazsmate",
+          "note": "search snippet: Bitrise runs dbt in production with 1,200+ models on BigQuery and an 8-person data team; speaker named as Balázs Máté. Original talk page not found."
+        }
+      ],
+      "people": [
+        {
+          "id": "balazs-mate",
+          "name": "Balázs Máté",
+          "pronouns": null,
+          "title": "Staff Data Engineer",
+          "city": "Budapest",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://hu.linkedin.com/in/balazsmate"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "linkedin_search"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "unknown",
+              "title": "How Bitrise runs dbt in production: fast, cheap CI beyond Slim CI",
+              "date": null,
+              "url": "https://hu.linkedin.com/in/balazsmate",
+              "content_id": "unknownhow-bitrise-runs-dbt-in-production-fast-cheap-ci-beyo",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "search snippet describes a talk on dbt CI at scale on BigQuery; event not identified",
+              "topics": [
+                "orchestration & ci/cd",
+                "performance & scale",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://hu.linkedin.com/in/balazsmate",
+              "note": "talk: How Bitrise runs dbt in production: fast, cheap CI beyond Slim CI"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "how bitrise runs dbt ci fast and cheap on a 1,200-model bigquery project",
+          "past_chapter_talks": [],
+          "notes": "location only 'Hungary' in snippets; talk event, date and url not found. verify before outreach."
+        }
+      ],
+      "notes": "company founded in Budapest. the job ad is 6+ months old and may be closed."
+    },
+    {
+      "id": "instructure",
+      "name": "Instructure",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "AWS",
+        "Python",
+        "Spark",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (Enterprise Systems)",
+          "url": "https://api.huntr.co/job/6644601f9515e00053777a73",
+          "source": "huntr job mirror",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "designing, developing, and extending dbt code to extend the Enterprise Dimensional Model",
+          "job_poster": null,
+          "posted_date": "2024-05",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad dates from May 2024 and is probably closed; the page was seen only as a search snippet."
+    },
+    {
+      "id": "allianz-technology-se-hungary",
+      "name": "Allianz Technology SE Hungary",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Oracle"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://internal-careers.allianz.com/job/Budapest-Data-Engineer-1087/1387521333/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "search snippet: preparing Oracle systems for migration to dbt and Snowflake",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "posting is closed ('no longer available'); dbt text came from a search snippet only."
+    },
+    {
+      "id": "bluebird",
+      "name": "Bluebird",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "medallion architecture"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer – Analytics & BI",
+          "url": "https://bluebird.hu/it-allasok-es-it-projektek/data-engineer-analytics-bi-allas-14296/",
+          "source": "bluebird.hu",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Work with medallion architecture and tools such as dbt",
+          "job_poster": null,
+          "posted_date": "2026-08-14",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "flexible hybrid"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "it recruiter; the end client is not named. dbt is listed as optional."
+    },
+    {
+      "id": "generali-biztosito",
+      "name": "Generali Biztosító",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+          "note": "speaker page, Budapest Data+AI Forum 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "vincze-peter",
+          "name": "Vincze Péter",
+          "pronouns": null,
+          "title": "(title not shown)",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest Data+AI Forum 2026",
+              "title": "Adatplatform megújítás a Generali Biztosítónál",
+              "date": "2026-05",
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "content_id": "budapest-dataai-forum-2026adatplatform-megujitas-a-generali",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "data platform renewal at Generali Biztosító",
+              "topics": [
+                "data governance",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "note": "talk: Adatplatform megújítás a Generali Biztosítónál"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "platform renewal and data governance at a large insurer",
+          "past_chapter_talks": [],
+          "notes": "location from an in-person talk at a Budapest conference and a Hungarian employer; verify."
+        }
+      ],
+      "notes": "no dbt evidence; kept for the speaker."
+    },
+    {
+      "id": "4ig-nyrt",
+      "name": "4iG Nyrt",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Budapest"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+          "note": "speaker page, Budapest Data+AI Forum 2026"
+        }
+      ],
+      "people": [
+        {
+          "id": "gergely-szucs",
+          "name": "Gergely Szűcs",
+          "pronouns": null,
+          "title": "(title not shown)",
+          "city": "Budapest",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/gergely-sz%C5%B1cs-347097147/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Budapest Data+AI Forum 2026",
+              "title": "Adatvagyon konszolidáció egy folyamatosan változó cégstruktúrában",
+              "date": "2026-05",
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "content_id": "budapest-dataai-forum-2026adatvagyon-konszolidacio-egy-folya",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "data asset consolidation in a changing company structure",
+              "topics": [
+                "data warehouse & platforms",
+                "data governance"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+              "note": "talk: Adatvagyon konszolidáció egy folyamatosan változó cégstruktúrában"
+            },
+            {
+              "url": "https://www.linkedin.com/in/gergely-sz%C5%B1cs-347097147/",
+              "note": "linkedin search result: Gergely Szűcs - 4iG Nyrt., Budapest, data leader (Budapest Data Forum speaker)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "consolidating data assets when the company structure keeps changing",
+          "past_chapter_talks": [],
+          "notes": "location from an in-person talk at a Budapest conference and a Hungarian employer; verify."
+        }
+      ],
+      "notes": "no dbt evidence; kept for the speaker."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/budapest-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/budapest-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Hiflylabs ad on builtin.com",
+        "url": "https://builtin.com/job/senior-analytics-engineer/7034346",
+        "yielded": true,
+        "note": "dbt in ad text"
+      },
+      {
+        "name": "Deutsche Telekom IT Solutions SmartRecruiters ad",
+        "url": "https://jobs.smartrecruiters.com/DeutscheTelekomITSolutions/744000074011541-senior-snowflake-data-engineer-ref4498u-",
+        "yielded": true,
+        "note": "dbt required"
+      },
+      {
+        "name": "Bluebird ad",
+        "url": "https://bluebird.hu/it-allasok-es-it-projektek/data-engineer-analytics-bi-allas-14296/",
+        "yielded": true,
+        "note": "dbt optional"
+      },
+      {
+        "name": "Budapest Data+AI Forum 2026 data speakers",
+        "url": "https://budapestdata.hu/en/dai2026/data-speakers/",
+        "yielded": true,
+        "note": "two new local speakers on governance and platforms; no dbt talks"
+      },
+      {
+        "name": "Budapest Data+AI Forum detailed schedule and program",
+        "url": "https://budapestdata.hu/en/dai2026/detailed-schedule/",
+        "yielded": false,
+        "note": "fetch returned navigation only"
+      },
+      {
+        "name": "Budapest BI Forum 2025 call for speakers",
+        "url": "https://sessionize.com/budapestbi25",
+        "yielded": false,
+        "note": "no speaker list"
+      },
+      {
+        "name": "Budapest Data Meetup, dbt ecosystem event 2023",
+        "url": "https://www.meetup.com/budapest-data-meetup/events/295733306/",
+        "yielded": false,
+        "note": "online, 2023, speakers not Budapest-based and already older than 2 years"
+      },
+      {
+        "name": "WiDS Budapest 2025 (Corvinus)",
+        "url": "https://www.uni-corvinus.hu/post/event/women-in-data-science-budapest-is-back/?lang=en",
+        "yielded": false,
+        "note": "academic data science line-up, not dbt-relevant; speakers Petra Viola (Google) and Anikó Hannák (Zurich)"
+      },
+      {
+        "name": "Allianz careers ad",
+        "url": "https://internal-careers.allianz.com/job/Budapest-Data-Engineer-1087/1387521333/",
+        "yielded": false,
+        "note": "posting removed"
+      },
+      {
+        "name": "cvonline.hu ads",
+        "url": "https://www.cvonline.hu/en/allas/analytics-engineering-chapter-lead-1848724",
+        "yielded": false,
+        "note": "404 on fetch"
+      },
+      {
+        "name": "GitHub balazs-mate",
+        "url": "https://github.com/balazs-mate",
+        "yielded": false,
+        "note": "no location, no dbt content"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Budapest dbt Meetup (first edition)",
+      "date": "2022-05-10",
+      "venue": "Hubhub, 26 Király Street, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/284955175/",
+      "organisers": [
+        "Dóra Rajtmár",
+        "Fanni Mayer",
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 101,
+      "talks": [
+        {
+          "speaker": "Andras Zimmer",
+          "company": "CTO, Hiflylabs",
+          "title": "Two-week dev cycles in a DW -- agility is reality with open source",
+          "topics": [
+            "dbt fundamentals",
+            "tools & ecosystem",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Mark Rittman & Son N. Nguyen",
+          "company": "CEO, Rittman Analytics & Analytics Engineer, Hiflylabs",
+          "title": "Super-performant interactive dashboards on huge datasets with dbt, Firebolt and Looker",
+          "topics": [
+            "performance & scale",
+            "business intelligence",
+            "modern data stack"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Budapest dbt Meetup (in-person)",
+      "date": "2022-11-10",
+      "venue": "The Spot Budapest, Király utca 26, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/288927081/",
+      "organisers": [
+        "Dóra Rajtmár"
+      ],
+      "attendees": 106,
+      "talks": [
+        {
+          "speaker": "Zsombor Földesi",
+          "company": "Senior Analytics Engineer, Hiflylabs",
+          "title": "From Stored Procedures to dbt",
+          "topics": [
+            "dbt migration & adoption",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Oliver Laslett",
+          "company": "Co-Founder & CTO, Lightdash",
+          "title": "BI as code: How to 10x your productivity as an analytics engineer",
+          "topics": [
+            "business intelligence",
+            "orchestration & ci/cd",
+            "performance & scale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Budapest dbt Meetup (in-person)",
+      "date": "2023-02-21",
+      "venue": "The Spot Budapest, Király utca 26, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/291133656/",
+      "organisers": [
+        "Dóra Rajtmár"
+      ],
+      "attendees": 84,
+      "talks": [
+        {
+          "speaker": "Márton Hubay, Bence Arató, András Zimmer",
+          "company": "Co-founder & CTO (Infinite Lambda), Managing Director (BI Consulting), Head of Analytics Engineering (Hiflylabs)",
+          "title": "Predictions on the Modern Data Stack for 2023",
+          "topics": [
+            "industry trends",
+            "modern data stack",
+            "performance & scale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Budapest dbt Meetup (in-person)",
+      "date": "2023-09-28",
+      "venue": "The Spot Budapest, Király utca 26, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/295732824/",
+      "organisers": [
+        "Hiflylabs"
+      ],
+      "attendees": 83,
+      "talks": [
+        {
+          "speaker": "Zsombor Földesi",
+          "company": "Lead Data Engineer, Hiflylabs",
+          "title": "How Python on Databricks gives antigravity to dbt?",
+          "topics": [
+            "dbt product features",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Ben Kulcsar",
+          "company": "Senior Data Engineer, Hotjar",
+          "title": "Do you really need real-time data?",
+          "topics": [
+            "orchestration & ci/cd",
+            "modern data stack"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Budapest dbt Meetup (in-person)",
+      "date": "2024-03-05",
+      "venue": "The Spot Budapest, Király utca 26, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/298859990/",
+      "organisers": [
+        "Hiflylabs"
+      ],
+      "attendees": 131,
+      "talks": [
+        {
+          "speaker": "Balázs Ragályi",
+          "company": "Senior Data and Analytics Engineer, Data Vault 2.0 expert",
+          "title": "Data Vault + dbt: What makes this combo work?",
+          "topics": [
+            "data modeling",
+            "modern data stack",
+            "dbt best practices"
+          ]
+        },
+        {
+          "speaker": "Péter Szécsi",
+          "company": "Data Architect, Open Source Contributor",
+          "title": "Journey into the Cosmos: Integration of dbt and Apache Airflow",
+          "topics": [
+            "orchestration & ci/cd",
+            "tools & ecosystem"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Budapest dbt Meetup (in-person)",
+      "date": "2024-09-25",
+      "venue": "Create26, Király, 1061, Unit 26, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/302956469/",
+      "organisers": [
+        "Hiflylabs"
+      ],
+      "attendees": 66,
+      "talks": [
+        {
+          "speaker": "Laci Pataki",
+          "company": "Senior Data and Analytics Engineer",
+          "title": "Switching the query engine under a dbt project - Lessons from the migration trenches",
+          "topics": [
+            "dbt migration & adoption",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Juan Perafan",
+          "company": "Analytics Engineer consultant, Xebia",
+          "title": "How to supercharge your dbt Testing - Best Practices & Pitfalls",
+          "topics": [
+            "data quality & testing",
+            "dbt best practices"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "#7 Budapest dbt Meetup (in-person)",
+      "date": "2025-03-13",
+      "venue": "Create26, Király, 1061, Unit 26, Budapest",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/events/306236538/",
+      "organisers": [
+        "Hiflylabs"
+      ],
+      "attendees": 73,
+      "talks": [
+        {
+          "speaker": "Gábor Szárnyas",
+          "company": "Developer Relations Advocate and Technical Writer, DuckDB Labs",
+          "title": "DuckDB: Run dbt build with sub-second execution times",
+          "topics": [
+            "developer workflow",
+            "performance & scale",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Tibor Kusztós",
+          "company": "Analytics Engineer, Hiflylabs",
+          "title": "Avoid the Avalanche: Practical dbt tips for your Snowflake workflows",
+          "topics": [
+            "performance & scale",
+            "dbt best practices"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Budapest dbt Meetup",
+      "url": "https://www.meetup.com/budapest-dbt-meetup/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "Future of Data: Budapest",
+      "url": "https://www.meetup.com/futureofdata-budapest/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Data Immigrant's Green Reliable Software Meetup",
+      "url": "https://www.meetup.com/data-immigrants-green-reliable-software-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "PyLadies Budapest",
+      "url": "https://www.meetup.com/pyladies-budapest/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Budapest Snowflake User Group",
+      "url": "https://www.meetup.com/snowflake-community-hungary/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Budapest Data & Analytics Meetup",
+      "url": "https://www.meetup.com/budapest-data-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Databricks Community Hungary",
+      "url": "https://www.meetup.com/databricks-community-hungary/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Budapest Databricks Meetup Group",
+      "url": "https://www.meetup.com/budapest-databricks-meetup-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Budapest Power BI Meetup Group",
+      "url": "https://www.meetup.com/budapest-power-bi-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Women Techmakers Budapest",
+      "url": "https://meetup.com/wtmbudapest",
+      "note": "seen in search result; not read"
+    },
+    {
+      "name": "WiDS Budapest (Corvinus University)",
+      "url": "https://widsbudapest.org/",
+      "note": "annual event; organiser is the university"
+    },
+    {
+      "name": "Data Natives, Budapest",
+      "url": "https://www.meetup.com/big-data-budapest/",
+      "note": "1,491 members per search snippet"
+    }
+  ]
+}
