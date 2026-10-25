@@ -9,13 +9,29 @@ from the second record. sharing a first and last name is not enough: Maria Aleja
 Franco are two people.
 """
 
-import glob, json, re, subprocess, sys, unicodedata
+import glob
+import json
+import re
+import subprocess
+import sys
+import unicodedata
 from collections import Counter
 from assemble import standard_counts
 
 
 def tokens(name):
-    return [x for x in re.sub(r"[^a-z ]", " ", unicodedata.normalize("NFKD", re.sub(r"\(.*?\)", "", name)).encode("ascii", "ignore").decode().lower()).split() if len(x) > 1]
+    return [
+        x
+        for x in re.sub(
+            r"[^a-z ]",
+            " ",
+            unicodedata.normalize("NFKD", re.sub(r"\(.*?\)", "", name))
+            .encode("ascii", "ignore")
+            .decode()
+            .lower(),
+        ).split()
+        if len(x) > 1
+    ]
 
 
 def same_person(a, b):
@@ -25,8 +41,10 @@ def same_person(a, b):
 
 
 def keys(p):
-    return ["li:" + re.sub(r"^.*linkedin\.com/in/", "", u).split("?")[0].strip("/").lower() for u in p["linkedin_urls"]] + \
-           ["pu:" + u["url"].lower().rstrip("/") for u in p["profile_urls"]]
+    return [
+        "li:" + re.sub(r"^.*linkedin\.com/in/", "", u).split("?")[0].strip("/").lower()
+        for u in p["linkedin_urls"]
+    ] + ["pu:" + u["url"].lower().rstrip("/") for u in p["profile_urls"]]
 
 
 def first_shared(d):
@@ -51,7 +69,11 @@ def resolve(path):
         a, b, k = found
         if same_person(a["name"], b["name"]):
             keep, drop = (a, b) if "github" not in a["sourced_via"] else (b, a)
-            subprocess.run(["python3", "research/merge_people.py", path, keep["id"], drop["id"]], capture_output=True, check=True)
+            subprocess.run(
+                ["python3", "research/merge_people.py", path, keep["id"], drop["id"]],
+                capture_output=True,
+                check=True,
+            )
             print(f"{path}: merged {drop['name']} into {keep['name']}")
             merged += 1
         else:
@@ -59,20 +81,39 @@ def resolve(path):
             for c in d["companies"]:
                 for p in c["people"]:
                     if p["id"] == b["id"]:
-                        p["linkedin_urls"] = [u for u in p["linkedin_urls"] if "li:" + re.sub(r"^.*linkedin\.com/in/", "", u).split("?")[0].strip("/").lower() != k]
-                        p["profile_urls"] = [u for u in p["profile_urls"] if "pu:" + u["url"].lower().rstrip("/") != k]
+                        p["linkedin_urls"] = [
+                            u
+                            for u in p["linkedin_urls"]
+                            if "li:"
+                            + re.sub(r"^.*linkedin\.com/in/", "", u)
+                            .split("?")[0]
+                            .strip("/")
+                            .lower()
+                            != k
+                        ]
+                        p["profile_urls"] = [
+                            u
+                            for u in p["profile_urls"]
+                            if "pu:" + u["url"].lower().rstrip("/") != k
+                        ]
                         p["has_linkedin"] = bool(p["linkedin_urls"])
-                        if not p["has_linkedin"] and p.get("linkedin_confidence") in ("high", "medium"):
+                        if not p["has_linkedin"] and p.get("linkedin_confidence") in (
+                            "high",
+                            "medium",
+                        ):
                             p["linkedin_confidence"] = "low"
             d["metadata"]["counts"] = standard_counts(d)
-            open(path, "w").write(json.dumps(d, ensure_ascii=False, indent=2) + ("\n" if raw.endswith("\n") else ""))
+            open(path, "w").write(
+                json.dumps(d, ensure_ascii=False, indent=2)
+                + ("\n" if raw.endswith("\n") else "")
+            )
             print(f"{path}: {k[3:]} kept on {a['name']}, removed from {b['name']}")
             unlinked += 1
     return merged, unlinked
 
 
 if __name__ == "__main__":
-    files = sys.argv[1:] or sorted(glob.glob("*/*_dbt_companies.json"))
+    files = sys.argv[1:] or sorted(glob.glob("contacts/*/*_dbt_companies.json"))
     totals = Counter()
     for f in files:
         m, u = resolve(f)

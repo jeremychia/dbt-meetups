@@ -1,0 +1,3622 @@
+{
+  "metadata": {
+    "title": "Bratislava dbt companies and people for the Bratislava dbt Meetup Group",
+    "generated_at": "2026-10-12",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Bratislava companies using dbt, and people who could speak at or attend the Bratislava dbt Meetup Group.",
+    "version": 4,
+    "schema_version": 4,
+    "region": "Bratislava (Bratislava dbt Meetup Group)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: profesia.sk, startup.jobs and careers.ey.com return 403 or expired pages to fetches, so job ads could only be recorded from search snippets.",
+      "Lesson: ics.science.upjs.sk and kosiceitvalley.sk list Kosice in the Cloud speakers with employer and abstract, and they cover dbt talks in Slovakia.",
+      "Lesson: Slovak-language searches for dbt returned almost nothing new; English queries with a company name worked better.",
+      "Lesson: the Databricks user group pages returned 404 on fetch, so the Bratislava event date rests on a search snippet.",
+      "v4 (2026-10-12): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "Job ads were not opened (403, expired or 404), so dbt_signal rests on search snippets and is medium at most.",
+      "Andrea Hronska Huzvarova spoke in Kosice, which is far outside the Bratislava region, so her location is unknown.",
+      "The Databricks Bratislava event date (12 May, taken as 2026) comes from a search snippet only."
+    ],
+    "counts": {
+      "companies": 23,
+      "people": 42,
+      "job_postings": 3,
+      "companies_with_job_postings": 3,
+      "speaker_evidence_items": 40,
+      "unique_content_items": 16,
+      "people_with_linkedin": 20,
+      "people_with_contact": 27,
+      "people_who_spoke_at_this_chapter": 15,
+      "internal_vinted": 0,
+      "level": {
+        "leadership": 8,
+        "working": 34
+      },
+      "speaker_potential": {
+        "high": 21,
+        "medium": 11,
+        "low": 10
+      },
+      "attendee_potential": {
+        "low": 4,
+        "medium": 36,
+        "high": 2
+      },
+      "priority_tier": {
+        "2": 17,
+        "1": 3,
+        "connector": 7,
+        "3": 15
+      },
+      "watchlist_companies": 18,
+      "past_meetups": 6,
+      "lead_type": {
+        "proven_speaker": 31,
+        "no_public_content": 11
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 15,
+        "conference_or_meetup_agenda": 31,
+        "github": 10
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "analytics engineering": 20,
+      "business intelligence": 10,
+      "community": 7,
+      "data warehouse & platforms": 2,
+      "data quality & testing": 1,
+      "dbt best practices": 1,
+      "dbt migration & adoption": 1,
+      "data modeling": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "alma-career",
+      "name": "Alma Career",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "radek-tomsej",
+          "name": "Radek Tomsej",
+          "pronouns": null,
+          "title": "Head of Data Engineering, Alma Career",
+          "city": "Prague",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tomsej/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #1",
+              "date": "2023-06-22",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-1",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/tomsej/",
+              "note": "linkedin search result: Radek Tomsej - Alma Career Czechia; Prague"
+            },
+            {
+              "url": "https://www.linkedin.com/in/tomsej/",
+              "note": "location (high): linkedin search result: Radek Tomsej - Alma Career Czechia; Prague https://www.linkedin.com/in/tomsej/"
+            },
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "note": "talk: Bratislava dbt Meetup #1"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-22",
+              "talk_title": "What on Earth is dbt?",
+              "topics": [
+                "dbt fundamentals",
+                "team & org design",
+                "analytics engineering"
+              ]
+            }
+          ],
+          "notes": "location (high): linkedin search result: Radek Tomsej - Alma Career Czechia; Prague https://www.linkedin.com/in/tomsej/ | speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+    },
+    {
+      "id": "slido",
+      "name": "Slido",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michal-kolacek",
+          "name": "Michal Kolacek",
+          "pronouns": null,
+          "title": "Head of Analytics Engineering, Slido",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #1",
+              "date": "2023-06-22",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-1",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "note": "talk: Bratislava dbt Meetup #1"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-22",
+              "talk_title": "dbt: Unleashing the Data Fever",
+              "topics": [
+                "dbt migration & adoption",
+                "team & org design"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "alina-serhiienko",
+          "name": "Alina Serhiienko",
+          "pronouns": null,
+          "title": "Analytics Engineer, Slido",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #2",
+              "date": "2023-11-23",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-2",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+              "note": "talk: Bratislava dbt Meetup #2"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-23",
+              "talk_title": "Fighting the Fear of Change: My Shift from a Marketer to an Analytics Engineer",
+              "topics": [
+                "career development",
+                "team & org design",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "daniela-barokova",
+          "name": "Daniela Barokova",
+          "pronouns": null,
+          "title": "Analytics Engineer, Slido",
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/daniela-barokova-82004487/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #3",
+              "date": "2024-04-25",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-3",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "note": "talk: Bratislava dbt Meetup #3"
+            },
+            {
+              "url": "https://www.linkedin.com/in/daniela-barokova-82004487/",
+              "note": "linkedin search result: Daniela Barokova - Slido; Bratislava"
+            },
+            {
+              "url": "https://www.linkedin.com/in/daniela-barokova-82004487/",
+              "note": "location (high): linkedin search result: Daniela Barokova - Slido; Bratislava https://www.linkedin.com/in/daniela-barokova-82004487/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-25",
+              "talk_title": "Leveraging dbt Tooling to Speed up Development and Deployment",
+              "topics": [
+                "orchestration & ci/cd",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (high): linkedin search result: Daniela Barokova - Slido; Bratislava https://www.linkedin.com/in/daniela-barokova-82004487/"
+        },
+        {
+          "id": "tomas-sirny",
+          "name": "Tomas Sirny",
+          "pronouns": null,
+          "title": "Senior Data Architect, Slido",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/149850442/",
+              "source": "only member named Tomas Sirny among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #5",
+              "date": "2025-05-21",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-5",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+              "note": "talk: Bratislava dbt Meetup #5"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-05-21",
+              "talk_title": "Migrating a dbt Project Between Cloud Datastores",
+              "topics": [
+                "dbt migration & adoption",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "michaela-truchanova",
+          "name": "Michaela Truchanová",
+          "pronouns": null,
+          "title": "Analytics Engineer, Slido",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #6",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/311517084/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-6",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/311517084/",
+              "note": "talk: Bratislava dbt Meetup #6"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-11-05",
+              "talk_title": "What is Personalisation without Data?",
+              "topics": [
+                "domain-specific use cases",
+                "data governance"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+    },
+    {
+      "id": "infinite-lambda",
+      "name": "Infinite Lambda",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Fivetran"
+      ],
+      "job_postings": [
+        {
+          "title": "EU I Analytics Engineer",
+          "url": "https://builtin.com/job/eu-i-analytics-engineer/7998588",
+          "source": "builtin.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Possesses experience with dbt, Snowflake, and Fivetran.",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "remote"
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://ics.science.upjs.sk/adui/?p=3387",
+          "note": "Infinite Lambda co-organised Kosice in the Cloud vol. 8, with a dbt testing talk"
+        },
+        {
+          "type": "job_board",
+          "url": "https://www.profesia.sk/hu/allas/infinite-lambda-limited/O4105337",
+          "note": "Infinite Lambda advertises on profesia.sk, so it hires in Slovakia"
+        }
+      ],
+      "people": [
+        {
+          "id": "tomas-janotik",
+          "name": "Tomas Janotik",
+          "pronouns": null,
+          "title": "Senior Analytics Engineer, Infinite Lambda",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/395040126/",
+              "source": "https://www.meetup.com/events/294078151/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #3",
+              "date": "2024-04-25",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-3",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #4",
+              "date": "2024-11-20",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-4",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #5",
+              "date": "2025-05-21",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-5",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #1",
+              "date": "2023-06-22",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-1",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "note": "talk: Bratislava dbt Meetup #3"
+            },
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "note": "talk: Bratislava dbt Meetup #4"
+            },
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+              "note": "talk: Bratislava dbt Meetup #5"
+            },
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "note": "talk: Bratislava dbt Meetup #1"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-06-22",
+              "talk_title": "How dbt helps you sleep at night",
+              "topics": [
+                "data quality & testing"
+              ]
+            },
+            {
+              "date": "2024-11-20",
+              "talk_title": "Don't panic: What to do when your data breaks / Managing data incidents",
+              "topics": [
+                "data quality & testing"
+              ]
+            },
+            {
+              "date": "2024-11-20",
+              "talk_title": "Semantic layers / Semantic layers beyond the hype",
+              "topics": [
+                "semantic layer",
+                "industry trends"
+              ]
+            },
+            {
+              "date": "2025-05-21",
+              "talk_title": "Taming Unstructured Data with AI",
+              "topics": [
+                "dbt product features",
+                "data modeling",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "viktoria-horvath",
+          "name": "Viktoria Horvath",
+          "pronouns": null,
+          "title": "Analytics Engineer, Infinite Lambda",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #5",
+              "date": "2025-05-21",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-5",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #2",
+              "date": "2023-11-23",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-2",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+              "note": "talk: Bratislava dbt Meetup #5"
+            },
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+              "note": "talk: Bratislava dbt Meetup #2"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-23",
+              "talk_title": "Modern Data Stack vs Modern Data People",
+              "topics": [
+                "team & org design",
+                "modern data stack",
+                "career development"
+              ]
+            },
+            {
+              "date": "2025-05-21",
+              "talk_title": "Project Adam: How to Get Your Data Career Started",
+              "topics": [
+                "career development",
+                "team & org design",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "milan-spal",
+          "name": "Milan Spal",
+          "pronouns": null,
+          "title": "Analytics Engineer, Infinite Lambda",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/406719965/",
+              "source": "only member named Milan Spál among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #3",
+              "date": "2024-04-25",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-3",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "note": "talk: Bratislava dbt Meetup #3"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-25",
+              "talk_title": "Blue/Green Deployments: How to Play and Win the Release Game",
+              "topics": [
+                "orchestration & ci/cd",
+                "dbt best practices",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "andrea-hronska-huzvarova",
+          "name": "Andrea Hronska Huzvarova",
+          "pronouns": null,
+          "title": "Analytics Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/andrea-hronska-huzvarova/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Kosice in the Cloud vol. 8",
+              "title": "Test Smarter, Not Harder: Practical dbt Testing for Analytics Teams",
+              "date": "2026-03-25",
+              "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+              "content_id": "kosice-in-the-cloud-vol-8test-smarter-not-harder-practical-d",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "hands-on walkthrough of custom dbt tests and packages on a sample project",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+              "note": "talk: Test Smarter, Not Harder: Practical dbt Testing for Analytics Teams"
+            },
+            {
+              "url": "https://www.linkedin.com/in/andrea-hronska-huzvarova/",
+              "note": "linkedin search result: Andrea Hronska Huzvarova - GymBeam; Slovakia; dbt testing talk, past Infinite Lambda link in context"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "practical dbt testing beyond basic checks, with dbt-utils and dbt-expectations",
+          "past_chapter_talks": [],
+          "notes": "spoke in Kosice; home city not stated."
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker | ad does not name a city; company description lists Slovakia among its teams."
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sean-mcintyre",
+          "name": "Sean McIntyre",
+          "pronouns": null,
+          "title": "Senior Solutions Architect, dbt Labs",
+          "city": "Vienna",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/boxysean/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/boxysean/",
+              "note": "linkedin search result: Sean McIntyre - dbt Labs; Vienna, Austria"
+            },
+            {
+              "url": "https://www.linkedin.com/in/boxysean/",
+              "note": "location (high): linkedin search result: Sean McIntyre - dbt Labs; Vienna, Austria https://www.linkedin.com/in/boxysean/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2023-11-23",
+              "talk_title": "How dbt Helps You Sleep at Night (Part 2)",
+              "topics": [
+                "data quality & testing",
+                "dbt best practices"
+              ]
+            }
+          ],
+          "notes": "location (high): linkedin search result: Sean McIntyre - dbt Labs; Vienna, Austria https://www.linkedin.com/in/boxysean/"
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+    },
+    {
+      "id": "strv",
+      "name": "STRV",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jozef-reginac",
+          "name": "Jozef Regináč",
+          "pronouns": null,
+          "title": "Director of Data Science Engineering & Data Engineer, STRV",
+          "city": "Prague",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jozefreginac/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #3",
+              "date": "2024-04-25",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-3",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "note": "talk: Bratislava dbt Meetup #3"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jozefreginac/",
+              "note": "linkedin search result: Jozef Reginac - Lead Data Engineer - Second Foundation; snippet ties to STRV data team and Bratislava data meetups; Prague"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jozefreginac/",
+              "note": "location (medium): linkedin search result: Jozef Reginac - Lead Data Engineer - Second Foundation; snippet ties to STRV data team and Bratislava data meetups; Prague https://www.linkedin.com/in/jozefreginac/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-25",
+              "talk_title": "Level up the modern data stack with dbt and DuckDB kit",
+              "topics": [
+                "dbt product features",
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (medium): linkedin search result: Jozef Reginac - Lead Data Engineer - Second Foundation; snippet ties to STRV data team and Bratislava data meetups; Prague https://www.linkedin.com/in/jozefreginac/"
+        },
+        {
+          "id": "pavel-jezek",
+          "name": "Pavel Ježek",
+          "pronouns": null,
+          "title": "Director of Data Science Engineering & Data Engineer, STRV",
+          "city": "Brno",
+          "based_in_region": false,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pavel-jezek/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #3",
+              "date": "2024-04-25",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-3",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+              "note": "talk: Bratislava dbt Meetup #3"
+            },
+            {
+              "url": "https://www.linkedin.com/in/pavel-jezek/",
+              "note": "linkedin search result: Pavel Ježek; search summary says Senior Data Engineer at STRV, based in Brno. Several other Pavel Ježek profiles exist, so check"
+            },
+            {
+              "url": "https://www.linkedin.com/in/pavel-jezek/",
+              "note": "location (medium): linkedin search result: Pavel Ježek; search summary says Senior Data Engineer at STRV, based in Brno. Several other Pavel Ježek profiles exist, so check https://www.linkedin.com/in/pavel-jezek/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-04-25",
+              "talk_title": "Level up the modern data stack with dbt and DuckDB kit",
+              "topics": [
+                "dbt product features",
+                "modern data stack",
+                "performance & scale"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (medium): linkedin search result: Pavel Ježek; search summary says Senior Data Engineer at STRV, based in Brno. Several other Pavel Ježek profiles exist, so check https://www.linkedin.com/in/pavel-jezek/"
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+    },
+    {
+      "id": "analytics-tech-lead-infinite-lambda",
+      "name": "Analytics Tech Lead (Infinite Lambda)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "daniela-karasova",
+          "name": "Daniela Karasova",
+          "pronouns": null,
+          "title": "Analytics Engineering Lead (Slido), Cloud Data Architect (EMARK), Analytics Tech Lead (Infinite Lambda)",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #4",
+              "date": "2024-11-20",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-4",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "note": "talk: Bratislava dbt Meetup #4"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-11-20",
+              "talk_title": "Don't panic: What to do when your data breaks / Managing data incidents",
+              "topics": [
+                "data quality & testing"
+              ]
+            },
+            {
+              "date": "2024-11-20",
+              "talk_title": "Semantic layers / Semantic layers beyond the hype",
+              "topics": [
+                "semantic layer",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "gergely-foldi",
+          "name": "Gergely Földi",
+          "pronouns": null,
+          "title": "Analytics Engineering Lead (Slido), Cloud Data Architect (EMARK), Analytics Tech Lead (Infinite Lambda)",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/gergelyfoldi/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #4",
+              "date": "2024-11-20",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-4",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "note": "talk: Bratislava dbt Meetup #4"
+            },
+            {
+              "url": "https://www.linkedin.com/in/gergelyfoldi/",
+              "note": "linkedin search result: Gergely Földi - Infinite Lambda"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-11-20",
+              "talk_title": "Don't panic: What to do when your data breaks / Managing data incidents",
+              "topics": [
+                "data quality & testing"
+              ]
+            },
+            {
+              "date": "2024-11-20",
+              "talk_title": "Semantic layers / Semantic layers beyond the hype",
+              "topics": [
+                "semantic layer",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+    },
+    {
+      "id": "muziker",
+      "name": "Muziker",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lukas-kozelnicky",
+          "name": "Lukáš Kozelnický",
+          "pronouns": null,
+          "title": "Senior Data Engineer, Muziker",
+          "city": "Bratislava",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #6",
+              "date": "2025-11-05",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/311517084/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-6",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/311517084/",
+              "note": "talk: Bratislava dbt Meetup #6"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-11-05",
+              "talk_title": "Enterprise dbt at Scale: Multi-Country E-Commerce Data Architecture with ClickHouse",
+              "topics": [
+                "performance & scale",
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "employer of a past Bratislava dbt Meetup Group speaker"
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "radovan-kavicky",
+          "name": "Radovan Kavicky",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/radovankavicky/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/6689157/",
+              "source": "https://www.meetup.com/events/299329330/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Slovakia & Bratislava",
+              "title": "organiser, PyData Slovakia & Bratislava",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/",
+              "content_id": "pydata-slovakia-bratislavaorganiser-pydata-slovakia-bratisla",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/",
+              "note": "organiser: organiser, PyData Slovakia & Bratislava"
+            },
+            {
+              "url": "https://www.linkedin.com/in/radovankavicky/",
+              "note": "linkedin profile linked from https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "richard-kavicky",
+          "name": "Richard Kavicky",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/218206544/",
+              "source": "https://www.meetup.com/events/299329330/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Slovakia & Bratislava",
+              "title": "organiser, PyData Slovakia & Bratislava",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/",
+              "content_id": "pydata-slovakia-bratislavaorganiser-pydata-slovakia-bratisla",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/",
+              "note": "organiser: organiser, PyData Slovakia & Bratislava"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "peter-koson",
+          "name": "Peter Kosoň",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/257200051/",
+              "source": "https://www.meetup.com/events/299329330/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "PyData Slovakia & Bratislava",
+              "title": "organiser, PyData Slovakia & Bratislava",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/",
+              "content_id": "pydata-slovakia-bratislavaorganiser-pydata-slovakia-bratisla",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/pydata-slovakia-bratislava/events/299329330/",
+              "note": "organiser: organiser, PyData Slovakia & Bratislava"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "simona-laqua-willigens",
+          "name": "Simona Laqua Willigens",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/480896185/",
+              "source": "https://www.meetup.com/events/314531161/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Bratislava Databricks User Group",
+              "title": "organiser, Bratislava Databricks User Group",
+              "date": "2026-05-12",
+              "url": "https://www.meetup.com/bratislava-databricks-user-group/events/314531161/",
+              "content_id": "bratislava-databricks-user-grouporganiser-bratislava-databri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-databricks-user-group/events/314531161/",
+              "note": "organiser: organiser, Bratislava Databricks User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "geri-plamenova",
+          "name": "Geri Plamenova",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/334364098/",
+              "source": "https://www.meetup.com/events/304145033/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "organiser, Bratislava dbt Meetup Group",
+              "date": "2024-11-20",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "content_id": "bratislava-dbt-meetup-grouporganiser-bratislava-dbt-meetup-g",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+              "note": "organiser: organiser, Bratislava dbt Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "rafaela-de-freitas-izabel",
+          "name": "Rafaela De Freitas Izabel",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Bratislava Tableau User Group",
+              "title": "organiser, Bratislava Tableau User Group",
+              "date": "2026-01-15",
+              "url": "https://usergroups.tableau.com/e/mmsyfc/",
+              "content_id": "bratislava-tableau-user-grouporganiser-bratislava-tableau-us",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mmsyfc/",
+              "note": "organiser: organiser, Bratislava Tableau User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "vishal-pitchiah",
+          "name": "Vishal Pitchiah",
+          "pronouns": null,
+          "title": "Finance and data analyst. I build ETL pipelines, Snowflake warehouses and Power BI dashboards with Python and SQL. M.Sc. Finance, TUKE.",
+          "city": "Bratislava, Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/15vishal-p",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/15vishal-p gives the location Bratislava, Slovakia"
+        },
+        {
+          "id": "juraj-palka",
+          "name": "Juraj Pálka",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Bratislava, Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://sk.linkedin.com/in/juraj-palka"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/JurajPalka",
+              "source": "github user search by location"
+            },
+            {
+              "type": "github",
+              "url": "https://github.com/palka-juraj-takeda",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://sk.linkedin.com/in/juraj-palka",
+              "note": "linkedin search result: Juraj Palka - Predicta s.r.o. (CZ); Bratislava, Slovakia"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/JurajPalka gives the location Bratislava, Slovakia | github profile https://github.com/palka-juraj-takeda gives the location Bratislava"
+        },
+        {
+          "id": "agustin-luengo",
+          "name": "Agustin Luengo",
+          "pronouns": null,
+          "title": "Data Engineer.",
+          "city": "Bratislava, Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/agust%C3%ADn-luengo/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/agustinluengo",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/agustinluengo gives the location Bratislava, Slovakia"
+        },
+        {
+          "id": "tomas-farkas",
+          "name": "Tomas Farkas",
+          "pronouns": null,
+          "title": "Data engineer, developer, architect, administrator. ",
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/funes79",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/funes79 gives the location Bratislava"
+        },
+        {
+          "id": "gheorghe-dimulescu",
+          "name": "Gheorghe Dimulescu",
+          "pronouns": null,
+          "title": "Business Intelligence Developer",
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gdimulescu",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gdimulescu gives the location Bratislava"
+        },
+        {
+          "id": "martin-novak",
+          "name": "Martin Novák",
+          "pronouns": null,
+          "title": "data engineer · Python & SQL · football on weekends",
+          "city": "Bratislava, Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/heeklb6",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/heeklb6 gives the location Bratislava, Slovakia"
+        },
+        {
+          "id": "viki-karolova",
+          "name": "Viki Karolova",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #1",
+              "date": "2023-06-22",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-1",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+              "note": "talk: Bratislava dbt Meetup #1"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "sean-mc",
+          "name": "Sean Mc",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/sean-mcintyre-07375863/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava dbt Meetup Group",
+              "title": "Bratislava dbt Meetup #2",
+              "date": "2023-11-23",
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+              "content_id": "bratislava-dbt-meetup-groupbratislava-dbt-meetup-2",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+              "note": "talk: Bratislava dbt Meetup #2"
+            },
+            {
+              "url": "https://www.linkedin.com/in/sean-mcintyre-07375863/",
+              "note": "linkedin search result: Sean McIntyre - dbt Labs; his post 'Bratislava dbt Meetup #2, Nov 23 2023' says he spoke at that meetup (traveled to Slovakia)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "data-tailors",
+      "name": "Data Tailors",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nicole-derzakova",
+          "name": "Nicole Derzakova",
+          "pronouns": null,
+          "title": "Data Analyst",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Apr'25 - In-person meeting",
+              "date": "2025-04-24",
+              "url": "https://usergroups.tableau.com/e/mbmn8q/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Jan'25 - In-person meeting Agentforce Community Tour Bratislava, SVK",
+              "date": "2025-01-30",
+              "url": "https://usergroups.tableau.com/e/mw9ae6/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-j",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Jan'26 - In-person meeting",
+              "date": "2026-01-15",
+              "url": "https://usergroups.tableau.com/e/mmsyfc/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-j",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mbmn8q/",
+              "note": "talk: Bratislava Tableau User Group Apr'25 - In-person meeting"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mw9ae6/",
+              "note": "talk: Bratislava Tableau User Group Jan'25 - In-person meeting Agentforce Community Tour Bratislava, SVK"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mmsyfc/",
+              "note": "talk: Bratislava Tableau User Group Jan'26 - In-person meeting"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "mondelez-international",
+      "name": "Mondelēz International",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "pavol-hromadka",
+          "name": "Pavol Hromadka",
+          "pronouns": null,
+          "title": "D&A Visualization Platforms Manager",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pavol-hromadka-9915132b/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Apr'25 - In-person meeting",
+              "date": "2025-04-24",
+              "url": "https://usergroups.tableau.com/e/mbmn8q/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Apr'26 - In-person meeting",
+              "date": "2026-04-09",
+              "url": "https://usergroups.tableau.com/e/mm3jhy/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Jan'25 - In-person meeting Agentforce Community Tour Bratislava, SVK",
+              "date": "2025-01-30",
+              "url": "https://usergroups.tableau.com/e/mw9ae6/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-j",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mbmn8q/",
+              "note": "talk: Bratislava Tableau User Group Apr'25 - In-person meeting"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mm3jhy/",
+              "note": "talk: Bratislava Tableau User Group Apr'26 - In-person meeting"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mw9ae6/",
+              "note": "talk: Bratislava Tableau User Group Jan'25 - In-person meeting Agentforce Community Tour Bratislava, SVK"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "peter-macejka",
+          "name": "Peter Macejka",
+          "pronouns": null,
+          "title": "Sales Tech Lead DACH/CEE",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/peter-macejka/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group July 2026 - In-person meeting",
+              "date": "2026-07-30",
+              "url": "https://usergroups.tableau.com/e/mnm2yr/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-j",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mnm2yr/",
+              "note": "talk: Bratislava Tableau User Group July 2026 - In-person meeting"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "matthew-turner",
+          "name": "Matthew Turner",
+          "pronouns": null,
+          "title": "Prime Account Executive",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/matthew-turner-2005b64b/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Apr'26 - In-person meeting",
+              "date": "2026-04-09",
+              "url": "https://usergroups.tableau.com/e/mm3jhy/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mm3jhy/",
+              "note": "talk: Bratislava Tableau User Group Apr'26 - In-person meeting"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "accenture",
+      "name": "Accenture",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "katarina-gotzmannova",
+          "name": "Katarina Gotzmannova",
+          "pronouns": null,
+          "title": "Visual Analytics Developer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/katgotjob/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Apr'26 - In-person meeting",
+              "date": "2026-04-09",
+              "url": "https://usergroups.tableau.com/e/mm3jhy/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-a",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Bratislava Tableau User Group",
+              "title": "Bratislava Tableau User Group Jan'26 - In-person meeting",
+              "date": "2026-01-15",
+              "url": "https://usergroups.tableau.com/e/mmsyfc/",
+              "content_id": "bratislava-tableau-user-groupbratislava-tableau-user-group-j",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mm3jhy/",
+              "note": "talk: Bratislava Tableau User Group Apr'26 - In-person meeting"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mmsyfc/",
+              "note": "talk: Bratislava Tableau User Group Jan'26 - In-person meeting"
+            },
+            {
+              "url": "https://www.linkedin.com/in/katgotjob/",
+              "note": "linkedin profile linked from https://usergroups.tableau.com/e/mm3jhy/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ramfisortega",
+      "name": "RamfisOrtega",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ramfis-ortega",
+          "name": "Ramfis Ortega",
+          "pronouns": null,
+          "title": "Data Engineer skilled in building data pipelines, ETL workflows, and real-time streaming using AWS, Databricks, and Kafka.",
+          "city": "Bratislava Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ramfis-ortega"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/RamfisOrtega",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/RamfisOrtega gives the location Bratislava Slovakia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "gohealth",
+      "name": "GoHealth",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "breno-riba",
+          "name": "Breno Riba",
+          "pronouns": null,
+          "title": "Graduate in Computer Science and master graduate in Distributed Systems. Software & Data Engineer with several years of experience.",
+          "city": "Bratislava, Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/brenoriba/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/brenoriba",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/brenoriba/",
+              "note": "linkedin profile linked from https://github.com/brenoriba profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/brenoriba gives the location Bratislava, Slovakia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "oddity",
+      "name": "Oddity",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "yevhen-khmelevskyi",
+          "name": "Yevhen Khmelevskyi",
+          "pronouns": null,
+          "title": "Python developer and Data Engineer",
+          "city": "Bratislava, Slovakia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/khmelevskyi-yevhen/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/khmelevskyi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/khmelevskyi gives the location Bratislava, Slovakia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "swiss-re",
+      "name": "Swiss Re",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "martin-melisek",
+          "name": "Martin Melišek",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/melisekm",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/melisekm gives the location Bratislava"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "takeda",
+      "name": "Takeda",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "kanadevia-inova",
+      "name": "Kanadevia Inova",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake",
+        "Streamlit",
+        "Power BI"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://startup.jobs/data-engineer-kanadevia-inova-8924589",
+          "source": "startup.jobs",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "strong hands-on familiarity with Snowflake, SQL, and DBT operational workflows",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid, 2 days home office"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "ad seen in a search snippet only; the page returned 403."
+    },
+    {
+      "id": "ey",
+      "name": "EY",
+      "type": "consultancy",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer",
+          "url": "https://careers.ey.com/ey/job/Bratislava-Junior-Data-Engineer-811-02/1406129733/",
+          "source": "company careers page",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "practical experience or strong theoretical understanding of Databricks and dbt",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [
+        {
+          "type": "job_board",
+          "url": "https://www.profesia.sk/praca/ey-ernst-young/O5306376?search_id=4bf0869e-c61b-4105-b46a-7b1779b91fdd",
+          "note": "same ad on profesia.sk; 403 on fetch"
+        }
+      ],
+      "people": [],
+      "notes": "careers page now says the job is no longer available."
+    },
+    {
+      "id": "adastra",
+      "name": "Adastra",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+          "note": "co-organised the first Databricks user group Bratislava event"
+        }
+      ],
+      "people": [
+        {
+          "id": "luboslav-gabal",
+          "name": "Luboslav Gabal",
+          "pronouns": null,
+          "title": "Adastra",
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/luboslavgabal/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Bratislava, first event",
+              "title": "Transitioning from legacy ecosystems to Databricks Lakehouse",
+              "date": "2026-05-12",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "content_id": "databricks-user-group-bratislava-first-eventtransitioning-fr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "migration talk at the first Bratislava Databricks user group",
+              "topics": [
+                "dbt migration & adoption",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "note": "talk: Transitioning from legacy ecosystems to Databricks Lakehouse"
+            },
+            {
+              "url": "https://www.linkedin.com/in/luboslavgabal/",
+              "note": "linkedin search result: Luboslav Gabal - Adastra; snippet ties to Databricks user group in Bratislava"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "moving from legacy warehouses to a lakehouse, and where dbt fits",
+          "past_chapter_talks": [],
+          "notes": "in-person talk at a local event plus a local employer office (README section 6, medium)."
+        }
+      ],
+      "notes": "no dbt evidence found; a data consultancy with a Slovak office (ADASTRA Slovakia ads)."
+    },
+    {
+      "id": "multitude",
+      "name": "Multitude",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+          "note": "employee spoke at the Bratislava Databricks user group"
+        }
+      ],
+      "people": [
+        {
+          "id": "peter-karas",
+          "name": "Peter Karas",
+          "pronouns": null,
+          "title": null,
+          "city": "Bratislava",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/peterkaras/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Databricks User Group Bratislava, first event",
+              "title": "Beyond the Diagram: The Concrete Decisions Behind Each Medallion Layer",
+              "date": "2026-05-12",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "content_id": "databricks-user-group-bratislava-first-eventbeyond-the-diagr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "layer-by-layer modelling decisions in a medallion architecture",
+              "topics": [
+                "data modeling",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+              "note": "talk: Beyond the Diagram: The Concrete Decisions Behind Each Medallion Layer"
+            },
+            {
+              "url": "https://www.linkedin.com/in/peterkaras/",
+              "note": "linkedin search result: Peter Karas - Multitude; Bratislava Metropolitan Area (from snippet)"
+            },
+            {
+              "url": "https://www.linkedin.com/in/peterkaras/",
+              "note": "location (medium): linkedin search result: Peter Karas - Multitude; Bratislava Metropolitan Area (from snippet) https://www.linkedin.com/in/peterkaras/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": "concrete design decisions in each medallion layer",
+          "past_chapter_talks": [],
+          "notes": "title and city not seen; spoke in Bratislava. | location (medium): linkedin search result: Peter Karas - Multitude; Bratislava Metropolitan Area (from snippet) https://www.linkedin.com/in/peterkaras/"
+        }
+      ],
+      "notes": "no dbt evidence found."
+    },
+    {
+      "id": "kosice-it-valley",
+      "name": "Kosice IT Valley",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Kosice"
+      ],
+      "local_presence": "none",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://ics.science.upjs.sk/adui/?p=3387",
+          "note": "runs Kosice in the Cloud, which hosts dbt talks"
+        }
+      ],
+      "people": [
+        {
+          "id": "dominik-simco",
+          "name": "Dominik Simco",
+          "pronouns": null,
+          "title": "Technical Talent Acquisition and Community Expert",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "host",
+              "event": "Kosice in the Cloud vol. 8",
+              "title": "Host and moderator",
+              "date": "2026-03",
+              "url": "https://ics.science.upjs.sk/adui/?p=3387",
+              "content_id": "kosice-in-the-cloud-vol-8host-and-moderator",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "hosted the meetup that included a dbt testing talk",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://ics.science.upjs.sk/adui/?p=3387",
+              "note": "host: Host and moderator"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "introductions to Slovak data speakers",
+          "past_chapter_talks": [],
+          "notes": "host and moderator of Kosice in the Cloud vol. 8; city not stated."
+        }
+      ],
+      "notes": "outside the Bratislava region; useful for introductions to Slovak speakers."
+    },
+    {
+      "id": "aj-ty-v-it",
+      "name": "Aj Ty v IT",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Bratislava"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "community_page",
+          "url": "https://slovakwomenintech.ajtyvit.sk/en/about-the-conference/",
+          "note": "organises Slovak Women in Tech and the Women in IT Awards in Bratislava"
+        }
+      ],
+      "people": [],
+      "notes": "women in IT community; not data specific."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/bratislava-dbt-meetup-group/",
+    "past_meetups_derived_from": "enriched/bratislava-dbt-meetup-group.json",
+    "checked": [
+      {
+        "name": "profesia.sk search results",
+        "url": "https://www.profesia.sk/en/work/data-engineer/",
+        "yielded": false,
+        "note": "ad pages return 403; only snippets seen (EY junior data engineer mentions dbt)"
+      },
+      {
+        "name": "careers.ey.com junior data engineer Bratislava",
+        "url": "https://careers.ey.com/ey/job/Bratislava-Junior-Data-Engineer-811-02/1406129733/",
+        "yielded": true,
+        "note": "ad no longer available; snippet says Databricks and dbt"
+      },
+      {
+        "name": "startup.jobs Kanadevia Inova",
+        "url": "https://startup.jobs/data-engineer-kanadevia-inova-8924589",
+        "yielded": true,
+        "note": "fetch blocked; search snippet shows dbt, Snowflake, Streamlit, Power BI"
+      },
+      {
+        "name": "builtin.com Infinite Lambda EU Analytics Engineer",
+        "url": "https://builtin.com/job/eu-i-analytics-engineer/7998588",
+        "yielded": true,
+        "note": "dbt required; ad removed 2026-03-27; locations not named"
+      },
+      {
+        "name": "Kosice in the Cloud vol. 8",
+        "url": "https://ics.science.upjs.sk/adui/?p=3387",
+        "yielded": true,
+        "note": "dbt testing talk by Infinite Lambda analytics engineer"
+      },
+      {
+        "name": "Kosice IT Valley event page",
+        "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+        "yielded": true,
+        "note": "date, speakers and moderator"
+      },
+      {
+        "name": "dev.events Slovakia data meetups",
+        "url": "https://dev.events/meetups/EU/SK/data",
+        "yielded": false,
+        "note": "only online events listed"
+      },
+      {
+        "name": "Databricks user group Bratislava first event (search result)",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-databricks-user-group-bratislava-presents-first-databricks-user-group-bratislava/",
+        "yielded": true,
+        "note": "organisers and two speakers seen in snippet; page itself 404"
+      },
+      {
+        "name": "Slovak Women in Tech conference",
+        "url": "https://slovakwomenintech.ajtyvit.sk/en/about-the-conference/",
+        "yielded": true,
+        "note": "women in tech community; 2025 conference not held, awards held instead"
+      },
+      {
+        "name": "Medium, dev.to, substack and github searches for Bratislava dbt authors",
+        "url": "https://github.com/dbt-labs/dbt-utils",
+        "yielded": false,
+        "note": "no Slovak authors found"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "Bratislava dbt Meetup #1",
+      "date": "2023-06-22",
+      "venue": "The Spot, Bottova 2/A, Bratislava-Staré Mesto",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/294078151/",
+      "organisers": [
+        "Bratislava dbt Meetup Group"
+      ],
+      "attendees": 52,
+      "talks": [
+        {
+          "speaker": "Radek Tomsej",
+          "company": "Head of Data Engineering, Alma Career",
+          "title": "What on Earth is dbt?",
+          "topics": [
+            "dbt fundamentals",
+            "team & org design",
+            "analytics engineering"
+          ]
+        },
+        {
+          "speaker": "Michal Kolacek",
+          "company": "Head of Analytics Engineering, Slido",
+          "title": "dbt: Unleashing the Data Fever",
+          "topics": [
+            "dbt migration & adoption",
+            "team & org design"
+          ]
+        },
+        {
+          "speaker": "Tomas Janotik",
+          "company": "Senior Analytics Engineer, Infinite Lambda",
+          "title": "How dbt helps you sleep at night",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bratislava dbt Meetup #2",
+      "date": "2023-11-23",
+      "venue": "HubHub Twin City C, Mlynské nivy 16, Bratislava-Staré Mesto",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/297070008/",
+      "organisers": [
+        "Bratislava dbt Meetup Group"
+      ],
+      "attendees": 53,
+      "talks": [
+        {
+          "speaker": "Viktoria Horvath",
+          "company": "Analytics Engineer, Infinite Lambda",
+          "title": "Modern Data Stack vs Modern Data People",
+          "topics": [
+            "team & org design",
+            "modern data stack",
+            "career development"
+          ]
+        },
+        {
+          "speaker": "Alina Serhiienko",
+          "company": "Analytics Engineer, Slido",
+          "title": "Fighting the Fear of Change: My Shift from a Marketer to an Analytics Engineer",
+          "topics": [
+            "career development",
+            "team & org design",
+            "dbt migration & adoption"
+          ]
+        },
+        {
+          "speaker": "Sean McIntyre",
+          "company": "Senior Solutions Architect, dbt Labs",
+          "title": "How dbt Helps You Sleep at Night (Part 2)",
+          "topics": [
+            "data quality & testing",
+            "dbt best practices"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bratislava dbt Meetup #3",
+      "date": "2024-04-25",
+      "venue": "The Spot, Bottova 2/A, Bratislava-Staré Mesto",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/300049817/",
+      "organisers": [
+        "Bratislava dbt Meetup Group"
+      ],
+      "attendees": 43,
+      "talks": [
+        {
+          "speaker": "Milan Spal",
+          "company": "Analytics Engineer, Infinite Lambda",
+          "title": "Blue/Green Deployments: How to Play and Win the Release Game",
+          "topics": [
+            "orchestration & ci/cd",
+            "dbt best practices",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Daniela Barokova",
+          "company": "Analytics Engineer, Slido",
+          "title": "Leveraging dbt Tooling to Speed up Development and Deployment",
+          "topics": [
+            "orchestration & ci/cd",
+            "performance & scale"
+          ]
+        },
+        {
+          "speaker": "Jozef Regináč & Pavel Ježek",
+          "company": "Director of Data Science Engineering & Data Engineer, STRV",
+          "title": "Level up the modern data stack with dbt and DuckDB kit",
+          "topics": [
+            "dbt product features",
+            "modern data stack",
+            "performance & scale"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bratislava dbt Meetup #4",
+      "date": "2024-11-20",
+      "venue": "HB Reavis Twin City C, Mlynské Nivy 12, Bratislava",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/304145033/",
+      "organisers": [
+        "Geri Plamenova"
+      ],
+      "attendees": 53,
+      "talks": [
+        {
+          "speaker": "Daniela Karasova, Tomas Janotik, Gergely Földi",
+          "company": "Analytics Engineering Lead (Slido), Cloud Data Architect (EMARK), Analytics Tech Lead (Infinite Lambda)",
+          "title": "Don't panic: What to do when your data breaks / Managing data incidents",
+          "topics": [
+            "data quality & testing"
+          ]
+        },
+        {
+          "speaker": "Daniela Karasova, Tomas Janotik, Gergely Földi",
+          "company": "Analytics Engineering Lead (Slido), Cloud Data Architect (EMARK), Analytics Tech Lead (Infinite Lambda)",
+          "title": "Semantic layers / Semantic layers beyond the hype",
+          "topics": [
+            "semantic layer",
+            "industry trends"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bratislava dbt Meetup #5",
+      "date": "2025-05-21",
+      "venue": "Apollo Business Center II, Block A, Prievozská 4, Bratislava",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/307283258/",
+      "organisers": [
+        "Geri Plamenova"
+      ],
+      "attendees": 64,
+      "talks": [
+        {
+          "speaker": "Viktória Horváth",
+          "company": "Analytics Engineer, Infinite Lambda",
+          "title": "Project Adam: How to Get Your Data Career Started",
+          "topics": [
+            "career development",
+            "team & org design",
+            "industry trends"
+          ]
+        },
+        {
+          "speaker": "Tomáš Janotík",
+          "company": "Cloud Data Architect, EMARK",
+          "title": "Taming Unstructured Data with AI",
+          "topics": [
+            "dbt product features",
+            "data modeling",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Tomas Sirny",
+          "company": "Senior Data Architect, Slido",
+          "title": "Migrating a dbt Project Between Cloud Datastores",
+          "topics": [
+            "dbt migration & adoption",
+            "modern data stack"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bratislava dbt Meetup #6",
+      "date": "2025-11-05",
+      "venue": "The Spot, Bottova 2/A, Bratislava-Staré Mesto",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/events/311517084/",
+      "organisers": [
+        "Geri Plamenova"
+      ],
+      "attendees": 74,
+      "talks": [
+        {
+          "speaker": "Lukáš Kozelnický",
+          "company": "Senior Data Engineer, Muziker",
+          "title": "Enterprise dbt at Scale: Multi-Country E-Commerce Data Architecture with ClickHouse",
+          "topics": [
+            "performance & scale",
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Michaela Truchanová",
+          "company": "Analytics Engineer, Slido",
+          "title": "What is Personalisation without Data?",
+          "topics": [
+            "domain-specific use cases",
+            "data governance"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Bratislava dbt Meetup Group",
+      "url": "https://www.meetup.com/bratislava-dbt-meetup-group/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "PyData Slovakia & Bratislava",
+      "url": "https://www.meetup.com/pydata-slovakia-bratislava/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Bratislava Databricks User Group",
+      "url": "https://www.meetup.com/bratislava-databricks-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Databricks User Group Bratislava",
+      "url": "https://usergroups.databricks.com/databricks-user-group-bratislava/",
+      "note": "first in-person event 12 May with Adastra, 52 RSVPs"
+    },
+    {
+      "name": "Kosice in the Cloud",
+      "url": "https://www.kosiceitvalley.sk/en/events/kosice-in-the-cloud-vol-8/",
+      "note": "Kosice meetup series with dbt talks; outside the region but a source of speakers"
+    },
+    {
+      "name": "Slovak Women in Tech (Aj Ty v IT)",
+      "url": "https://slovakwomenintech.ajtyvit.sk/en/about-the-conference/",
+      "note": "women in IT conference since 2022 and Women in IT Awards in Bratislava"
+    }
+  ]
+}

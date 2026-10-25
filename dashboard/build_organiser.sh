@@ -1,5 +1,5 @@
 #!/bin/bash
-# Regenerates organiser/organiser_data.json from every */*_dbt_companies.json, then embeds it into organiser/index.html.
+# Regenerates organiser/organiser_data.json from every contacts/*/*_dbt_companies.json, then embeds it into organiser/index.html.
 # Run this after any <region>_dbt_companies.json changes. It is separate from the Meetup pipeline.
 set -euo pipefail
 cd "$(dirname "$0")"

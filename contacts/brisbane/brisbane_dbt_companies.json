@@ -1,0 +1,4285 @@
+{
+  "metadata": {
+    "title": "Brisbane dbt companies and people for the Brisbane dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Brisbane companies using dbt, and people who could speak at or attend the Brisbane dbt Meetup.",
+    "version": 3,
+    "schema_version": 4,
+    "region": "Brisbane (Brisbane dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: Brisbane job ad pages on randstad, talentinternational, employmenthero and smartjobs.qld had expired (410 or 404) by fetch time, so dbt evidence is from search snippets only.",
+      "Lesson: seek.com.au and ziprecruiter.com.au return 403 to fetch; only snippets are usable.",
+      "Lesson: Snowflake and Databricks user group event pages (usergroups.snowflake.com, usergroups.databricks.com) list local speakers with employers and are the best Brisbane speaker source found.",
+      "Lesson: searches for Brisbane-based dbt bloggers returned no author with a stated Brisbane location."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and snippets; verify before outreach.",
+      "dbt job ads were seen only in search snippets because the ad pages had expired; posted dates are unknown.",
+      "No first-time speaker with stated Brisbane location was found."
+    ],
+    "counts": {
+      "companies": 37,
+      "people": 65,
+      "job_postings": 2,
+      "companies_with_job_postings": 2,
+      "speaker_evidence_items": 28,
+      "unique_content_items": 14,
+      "people_with_linkedin": 29,
+      "people_with_contact": 49,
+      "people_who_spoke_at_this_chapter": 5,
+      "internal_vinted": 0,
+      "level": {
+        "working": 57,
+        "leadership": 8
+      },
+      "speaker_potential": {
+        "high": 7,
+        "medium": 22,
+        "low": 36
+      },
+      "attendee_potential": {
+        "medium": 63,
+        "low": 1,
+        "high": 1
+      },
+      "priority_tier": {
+        "2": 3,
+        "1": 2,
+        "3": 50,
+        "connector": 10
+      },
+      "watchlist_companies": 34,
+      "past_meetups": 5,
+      "lead_type": {
+        "proven_speaker": 29,
+        "no_public_content": 36
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 5,
+        "conference_or_meetup_agenda": 26,
+        "github": 37
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 10,
+      "business intelligence": 7,
+      "data warehouse & platforms": 6,
+      "analytics engineering": 3,
+      "data engineering": 2,
+      "genai & llm": 1,
+      "dbt migration & adoption": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "morgans-financials",
+      "name": "Morgans Financials",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nick-bragg",
+          "name": "Nick Bragg",
+          "pronouns": null,
+          "title": "Data and Analytics Architect, Morgans Financials",
+          "city": "Brisbane",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-08-29",
+              "talk_title": "Morgans Financials' data journey with dbt",
+              "topics": [
+                "data modeling"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "subhankar-dasgupta",
+          "name": "Subhankar Dasgupta",
+          "pronouns": null,
+          "title": "Head of Integration, Morgans Financials",
+          "city": "Brisbane",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane dbt Meetup",
+              "title": "Brisbane dbt Meetup",
+              "date": "2024-11-27",
+              "url": "https://www.meetup.com/brisbane-dbt-meetup/events/304405811/",
+              "content_id": "brisbane-dbt-meetupbrisbane-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/brisbane-dbt-meetup/events/304405811/",
+              "note": "talk: Brisbane dbt Meetup"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-11-27",
+              "talk_title": "Business value delivered through integration of dbt & Snowflake",
+              "topics": [
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "employer of a past Brisbane dbt Meetup speaker"
+    },
+    {
+      "id": "picklebet",
+      "name": "Picklebet",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "alex-stenlake",
+          "name": "Alex Stenlake",
+          "pronouns": null,
+          "title": "Head of Data/Analytics, Picklebet",
+          "city": "Brisbane",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/243241471/",
+              "source": "only member named Alex Stenlake among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history",
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane dbt Meetup",
+              "title": "Brisbane dbt Meetup",
+              "date": "2024-11-27",
+              "url": "https://www.meetup.com/brisbane-dbt-meetup/events/304405811/",
+              "content_id": "brisbane-dbt-meetupbrisbane-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/brisbane-dbt-meetup/events/304405811/",
+              "note": "talk: Brisbane dbt Meetup"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 2,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2024-11-27",
+              "talk_title": "From Reactive to Proactive: Improving DBT Pipeline Health with Observability",
+              "topics": [
+                "data quality & testing"
+              ]
+            }
+          ],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": "employer of a past Brisbane dbt Meetup speaker"
+    },
+    {
+      "id": "virgin-australia",
+      "name": "Virgin Australia",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "nathan-bowen",
+          "name": "Nathan Bowen",
+          "pronouns": null,
+          "title": "Virgin Australia",
+          "city": "Brisbane",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/303752237/",
+              "source": "only member named Nathan Bowen among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-10-28",
+              "talk_title": "Virgin Australia's dbt and Databricks journey",
+              "topics": [
+                "modern data stack"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Brisbane dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "shabbir-khanbhai",
+          "name": "Shabbir Khanbhai",
+          "pronouns": null,
+          "title": "Solutions Architect, dbt Labs",
+          "city": "Sydney",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/shabbir-khanbhai-772b10ba/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "low"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/shabbir-khanbhai-772b10ba/",
+              "note": "linkedin search result: Shabbir Khanbhai - dbt Labs; Sydney"
+            },
+            {
+              "url": "https://www.linkedin.com/in/shabbir-khanbhai-772b10ba/",
+              "note": "location (high): linkedin search result: Shabbir Khanbhai - dbt Labs; Sydney https://www.linkedin.com/in/shabbir-khanbhai-772b10ba/"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-10-28",
+              "talk_title": "Recap of Coalesce Vegas event",
+              "topics": [
+                "dbt product updates",
+                "industry trends"
+              ]
+            }
+          ],
+          "notes": "location (high): linkedin search result: Shabbir Khanbhai - dbt Labs; Sydney https://www.linkedin.com/in/shabbir-khanbhai-772b10ba/"
+        }
+      ],
+      "notes": "employer of a past Brisbane dbt Meetup speaker"
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gilbert-quevauvilliers",
+          "name": "Gilbert Quevauvilliers",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Guavaq",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/197611815/",
+              "source": "only member named Gilbert Quevauvilliers among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda",
+            "github"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Data Analytics & AI",
+              "title": "(Hybrid) Unlocking the Power of Microsoft Fabric: From Data to Insights",
+              "date": "2024-06-11",
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/301306603/",
+              "content_id": "brisbane-data-analytics-aihybrid-unlocking-the-power-of-micr",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/301306603/",
+              "note": "talk: (Hybrid) Unlocking the Power of Microsoft Fabric: From Data to Insights"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | github profile https://github.com/Guavaq gives the location Brisbane, Australia"
+        },
+        {
+          "id": "craig-bryden",
+          "name": "Craig Bryden",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/craigbryden/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Data Analytics & AI",
+              "title": "(Hybrid) Analytics Lifecycle Management in Microsoft Fabric",
+              "date": "2024-08-21",
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/302379008/",
+              "content_id": "brisbane-data-analytics-aihybrid-analytics-lifecycle-managem",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "analytics engineering"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/302379008/",
+              "note": "talk: (Hybrid) Analytics Lifecycle Management in Microsoft Fabric"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "andy-holt",
+          "name": "Andy Holt",
+          "pronouns": null,
+          "title": "Visualisation Lead",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/andy-holt-7494002a/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Brisbane Tableau User Group | Tableau Agent Special  - Get your prompts ready!",
+              "date": "2025-03-06",
+              "url": "https://usergroups.tableau.com/e/mgr243/",
+              "content_id": "brisbane-tableau-user-groupbrisbane-tableau-user-group-table",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Level Up Your Tableau Look: Themes, Colours & the New Tableau Next!",
+              "date": "2025-09-18",
+              "url": "https://usergroups.tableau.com/e/mb8n9g/",
+              "content_id": "brisbane-tableau-user-grouplevel-up-your-tableau-look-themes",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mgr243/",
+              "note": "talk: Brisbane Tableau User Group | Tableau Agent Special  - Get your prompts ready!"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mb8n9g/",
+              "note": "talk: Level Up Your Tableau Look: Themes, Colours & the New Tableau Next!"
+            },
+            {
+              "url": "https://www.linkedin.com/in/andy-holt-7494002a/",
+              "note": "linkedin search result: Andy Holt - Visualisation Lead - Woolworths Group, Brisbane; role matches the Visualisation Lead listed on the Brisbane Tableau User Group page"
+            },
+            {
+              "url": "https://www.linkedin.com/in/andy-holt-7494002a/",
+              "note": "location (medium): linkedin search result: Andy Holt - Visualisation Lead - Woolworths Group, Brisbane; role matches the Visualisation Lead listed on the Brisbane Tableau User Group page https://www.linkedin.com/in/andy-holt-7494002a/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (medium): linkedin search result: Andy Holt - Visualisation Lead - Woolworths Group, Brisbane; role matches the Visualisation Lead listed on the Brisbane Tableau User Group page https://www.linkedin.com/in/andy-holt-7494002a/"
+        },
+        {
+          "id": "asraful-islam",
+          "name": "Asraful Islam",
+          "pronouns": null,
+          "title": "Data Analyst Freelance",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Brisbane Tableau User Group | Tableau Agent Special  - Get your prompts ready!",
+              "date": "2025-03-06",
+              "url": "https://usergroups.tableau.com/e/mgr243/",
+              "content_id": "brisbane-tableau-user-groupbrisbane-tableau-user-group-table",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mgr243/",
+              "note": "talk: Brisbane Tableau User Group | Tableau Agent Special  - Get your prompts ready!"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "alexander-waleczek",
+          "name": "Alexander Waleczek",
+          "pronouns": null,
+          "title": "Analytics Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "x",
+              "url": "https://x.com/genetis",
+              "source": "https://usergroups.tableau.com/e/m5gyz6/"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Brisbane Tableau User Group: Special Overseas Guest Event - August 1, 2024",
+              "date": "2024-08-01",
+              "url": "https://usergroups.tableau.com/e/m5gyz6/",
+              "content_id": "brisbane-tableau-user-groupbrisbane-tableau-user-group-speci",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/m5gyz6/",
+              "note": "talk: Brisbane Tableau User Group: Special Overseas Guest Event - August 1, 2024"
+            },
+            {
+              "url": "https://x.com/genetis",
+              "note": "x profile linked from https://usergroups.tableau.com/e/m5gyz6/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "david-alzamendi",
+          "name": "David Alzamendi",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/184954850/",
+              "source": "https://www.meetup.com/events/299027767/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane Data Analytics & AI",
+              "title": "organiser, Brisbane Data Analytics & AI",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/299027767/",
+              "content_id": "brisbane-data-analytics-aiorganiser-brisbane-data-analytics",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/299027767/",
+              "note": "organiser: organiser, Brisbane Data Analytics & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "henry-rooney",
+          "name": "Henry Rooney",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/327464055/",
+              "source": "https://www.meetup.com/events/299027767/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane Data Analytics & AI",
+              "title": "organiser, Brisbane Data Analytics & AI",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/299027767/",
+              "content_id": "brisbane-data-analytics-aiorganiser-brisbane-data-analytics",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/299027767/",
+              "note": "organiser: organiser, Brisbane Data Analytics & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "darren-dawson",
+          "name": "Darren Dawson",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/97709212/",
+              "source": "https://www.meetup.com/events/299027767/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane Data Analytics & AI",
+              "title": "organiser, Brisbane Data Analytics & AI",
+              "date": "2024-02-21",
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/299027767/",
+              "content_id": "brisbane-data-analytics-aiorganiser-brisbane-data-analytics",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/299027767/",
+              "note": "organiser: organiser, Brisbane Data Analytics & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "stefan-chetty",
+          "name": "Stefan Chetty",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/158342812/",
+              "source": "https://www.meetup.com/events/312044504/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane Data Analytics & AI",
+              "title": "organiser, Brisbane Data Analytics & AI",
+              "date": "2025-12-04",
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/312044504/",
+              "content_id": "brisbane-data-analytics-aiorganiser-brisbane-data-analytics",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-analytics-and-ai/events/312044504/",
+              "note": "organiser: organiser, Brisbane Data Analytics & AI"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "warwick-rudd",
+          "name": "Warwick Rudd",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/161934542/",
+              "source": "https://www.meetup.com/events/298175181/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Platform Downunder Meetup Group",
+              "title": "organiser, Data Platform Downunder Meetup Group",
+              "date": "2024-01-16",
+              "url": "https://www.meetup.com/data-platform-downunder-meetup-group/events/298175181/",
+              "content_id": "data-platform-downunder-meetup-grouporganiser-data-platform",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-platform-downunder-meetup-group/events/298175181/",
+              "note": "organiser: organiser, Data Platform Downunder Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "martin-catherall",
+          "name": "Martin Catherall",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/18647341/",
+              "source": "https://www.meetup.com/events/310029248/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Platform Downunder Meetup Group",
+              "title": "organiser, Data Platform Downunder Meetup Group",
+              "date": "2025-08-12",
+              "url": "https://www.meetup.com/data-platform-downunder-meetup-group/events/310029248/",
+              "content_id": "data-platform-downunder-meetup-grouporganiser-data-platform",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/data-platform-downunder-meetup-group/events/310029248/",
+              "note": "organiser: organiser, Data Platform Downunder Meetup Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "reza-rad",
+          "name": "Reza Rad",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/124500852/",
+              "source": "https://www.meetup.com/events/305872146/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Queensland Power BI and Fabric User Group",
+              "title": "organiser, Queensland Power BI and Fabric User Group",
+              "date": "2025-02-24",
+              "url": "https://www.meetup.com/queensland-power-bi-user-group/events/305872146/",
+              "content_id": "queensland-power-bi-and-fabric-user-grouporganiser-queenslan",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/queensland-power-bi-user-group/events/305872146/",
+              "note": "organiser: organiser, Queensland Power BI and Fabric User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "wilbur-tong",
+          "name": "Wilbur Tong",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/360672749/",
+              "source": "https://www.meetup.com/events/306694084/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane Databricks User Group",
+              "title": "organiser, Brisbane Databricks User Group",
+              "date": "2025-03-25",
+              "url": "https://www.meetup.com/brisbane-databricks-user-group/events/306694084/",
+              "content_id": "brisbane-databricks-user-grouporganiser-brisbane-databricks",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/brisbane-databricks-user-group/events/306694084/",
+              "note": "organiser: organiser, Brisbane Databricks User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jared-bagnall",
+          "name": "Jared Bagnall",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/317372489/",
+              "source": "https://www.meetup.com/events/311330942/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane Databricks User Group",
+              "title": "organiser, Brisbane Databricks User Group",
+              "date": "2025-11-13",
+              "url": "https://www.meetup.com/brisbane-databricks-user-group/events/311330942/",
+              "content_id": "brisbane-databricks-user-grouporganiser-brisbane-databricks",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/brisbane-databricks-user-group/events/311330942/",
+              "note": "organiser: organiser, Brisbane Databricks User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "albert-cheng",
+          "name": "Albert Cheng",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/363361862/",
+              "source": "https://www.meetup.com/events/311336385/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Brisbane dbt Meetup",
+              "title": "organiser, Brisbane dbt Meetup",
+              "date": "2025-10-28",
+              "url": "https://www.meetup.com/brisbane-dbt-meetup/events/311336385/",
+              "content_id": "brisbane-dbt-meetuporganiser-brisbane-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/brisbane-dbt-meetup/events/311336385/",
+              "note": "organiser: organiser, Brisbane dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "cody-hou",
+          "name": "Cody Hou",
+          "pronouns": null,
+          "title": "Analytics Engineer & Data Scientist | dbt • Python • SQL • BigQuery • Power BI | Building reliable data pipelines",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/cody-hou"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/DataCody",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/DataCody gives the location Brisbane"
+        },
+        {
+          "id": "david-martinez",
+          "name": "David Martinez",
+          "pronouns": null,
+          "title": "Welcome, I'm a 29 year old programmer, and been programming since November 2022. Python - SQL - Linux.         Data Engineer in the making.",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Davidooj1",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Davidooj1 gives the location Brisbane"
+        },
+        {
+          "id": "pawan-parackal",
+          "name": "Pawan Parackal",
+          "pronouns": null,
+          "title": "ML/Data Engineer. Streaming systems, anomaly detection, model evaluation. IEEE-published. Grad Cert Data Science, UQ.",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/pawan-parackal-a50b891aa/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/PawanParackal",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/PawanParackal gives the location Brisbane"
+        },
+        {
+          "id": "samad-zaheer",
+          "name": "Samad Zaheer",
+          "pronouns": null,
+          "title": "Data Scientist & Analyst | Master of IT (Data Science) @ QUT Brisbane | Python · SQL · Power BI · Tableau | ML & Geospatial Analytics",
+          "city": "Brisbane, QLD, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/samadzaheer"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/SamadZaheer",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/SamadZaheer gives the location Brisbane, QLD, Australia"
+        },
+        {
+          "id": "vijay-jayanna-kodlipet",
+          "name": "Vijay Jayanna Kodlipet",
+          "pronouns": null,
+          "title": "Lead Data Engineer ",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/vijay-jayanna-kodlipet-68854388/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Vijay-Jayanna",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/vijay-jayanna-kodlipet-68854388/",
+              "note": "linkedin search result: Vijay Jayanna Kodlipet - Stanwell Corporation Limited; Lead Data Engineer based in Brisbane (snippet)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Vijay-Jayanna gives the location Brisbane"
+        },
+        {
+          "id": "adrian-ong",
+          "name": "Adrian Ong",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/adrian-ong-eng",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/adrian-ong-eng gives the location Brisbane"
+        },
+        {
+          "id": "benjamin-obaje",
+          "name": "Benjamin Obaje",
+          "pronouns": null,
+          "title": "Accomplished Business Intelligence (BI) and Data Insights Analyst with a proven track record of leveraging data to drive business outcomes. ",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/benobaj",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/benobaj gives the location Brisbane"
+        },
+        {
+          "id": "albert-betancur",
+          "name": "Albert Betancur",
+          "pronouns": null,
+          "title": "Scientist | Python/R Developer | Data Engineer",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dazabe",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dazabe gives the location Brisbane, Australia"
+        },
+        {
+          "id": "dave-hirschfeld",
+          "name": "Dave Hirschfeld",
+          "pronouns": null,
+          "title": "Full-Stack Analytics Engineer",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dhirschfeld",
+              "source": "github user search by location"
+            },
+            {
+              "type": "bluesky",
+              "url": "https://bsky.app/profile/dhirschfeld.bsky.social",
+              "source": "https://github.com/dhirschfeld profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://bsky.app/profile/dhirschfeld.bsky.social",
+              "note": "bluesky profile linked from https://github.com/dhirschfeld profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dhirschfeld gives the location Brisbane, Australia"
+        },
+        {
+          "id": "udit-jadli",
+          "name": "Udit Jadli",
+          "pronouns": null,
+          "title": "Data Analyst building ML pipelines & BI dashboards (Python, SQL, XGBoost) · Open to Data Eng/Analytics roles",
+          "city": "Brisbane, Queensland, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jadliudit97/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jadliudit",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jadliudit gives the location Brisbane, Queensland, Australia"
+        },
+        {
+          "id": "justin-zingsheim",
+          "name": "Justin Zingsheim",
+          "pronouns": null,
+          "title": "AI-accelerated Data Engineer · Brisbane. Azure data platforms, pipelines & CI/CD by trade; a live production AI agent and public MCP server as proof.",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jtzingsheim/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jtzingsheim1",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jtzingsheim1 gives the location Brisbane, Australia"
+        },
+        {
+          "id": "kyle-bern",
+          "name": "Kyle Bern",
+          "pronouns": null,
+          "title": "Bachelor of Computer Science,  Software Development & Data Analysis,    Cyber Engineer @ Commonwealth Bank  Data Engineer @ Westpac Bank",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/kyle-bern/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/kylebern",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/kylebern gives the location Brisbane, Australia"
+        },
+        {
+          "id": "mikael-nuutinen",
+          "name": "Mikael Nuutinen",
+          "pronouns": null,
+          "title": "Data Analyst | Analytics Engineer | SQL · Python · Azure | MDS @ QUT",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mikanuutinen9/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mnuutinen9",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mnuutinen9 gives the location Brisbane"
+        },
+        {
+          "id": "sara-fedorov",
+          "name": "Sara Fedorov",
+          "pronouns": null,
+          "title": "Data engineer | exploring CLIs",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/oliviaalvarez71173",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/oliviaalvarez71173 gives the location Brisbane"
+        },
+        {
+          "id": "yenny-maya",
+          "name": "Yenny Maya",
+          "pronouns": null,
+          "title": "IT Analyst → Data Analytics | SQL • Python • Reporting | Brisbane, AU",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/ yenny-maya"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/yenny-maya",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/yenny-maya gives the location Brisbane, Australia"
+        },
+        {
+          "id": "zimin-lee",
+          "name": "Zimin Lee",
+          "pronouns": null,
+          "title": "Data Analyst with a Master's in Data Analytics majoring in Statistical Data Science.",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/zimin-lee-93bb16198/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ziminlee",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ziminlee gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "dominos",
+      "name": "Domino's",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bianca-gilchrist",
+          "name": "Bianca Gilchrist",
+          "pronouns": null,
+          "title": "Data Literacy & Visualisation Lead & Snowflake Data Hero of the Year",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/biancagilchrist/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane",
+              "title": "Brisbane Snowflake User Group",
+              "date": "2026-08-26",
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "content_id": "brisbanebrisbane-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "note": "talk: Brisbane Snowflake User Group"
+            },
+            {
+              "url": "https://www.linkedin.com/in/biancagilchrist/",
+              "note": "linkedin search result: Bianca Gilchrist - Domino's"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "senior-consultant",
+      "name": "Senior Consultant",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "brad-de-bruyns",
+          "name": "Brad de Bruyns",
+          "pronouns": null,
+          "title": "Vivanti",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/bradley-de-bruyns-70111891/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane",
+              "title": "Brisbane Snowflake User Group",
+              "date": "2026-08-26",
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "content_id": "brisbanebrisbane-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "note": "talk: Brisbane Snowflake User Group"
+            },
+            {
+              "url": "https://www.linkedin.com/in/bradley-de-bruyns-70111891/",
+              "note": "linkedin search result: Bradley De Bruyns - Vivanti Consulting; Senior Consultant, Brisbane City (snippet); name variant"
+            },
+            {
+              "url": "https://www.linkedin.com/in/bradley-de-bruyns-70111891/",
+              "note": "location (medium): linkedin search result: Bradley De Bruyns - Vivanti Consulting; Senior Consultant, Brisbane City (snippet); name variant https://www.linkedin.com/in/bradley-de-bruyns-70111891/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (medium): linkedin search result: Bradley De Bruyns - Vivanti Consulting; Senior Consultant, Brisbane City (snippet); name variant https://www.linkedin.com/in/bradley-de-bruyns-70111891/"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "majid-miri",
+          "name": "Majid Miri",
+          "pronouns": null,
+          "title": "Senior Solution Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/39774232/",
+              "source": "only member named Majid Miri among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane",
+              "title": "Brisbane Snowflake User Group",
+              "date": "2026-08-26",
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "content_id": "brisbanebrisbane-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "note": "talk: Brisbane Snowflake User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "yuqi-zheng",
+          "name": "Yuqi Zheng",
+          "pronouns": null,
+          "title": "Associate Solution Engineer",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane",
+              "title": "Brisbane Snowflake User Group",
+              "date": "2026-08-26",
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "content_id": "brisbanebrisbane-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "note": "talk: Brisbane Snowflake User Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        },
+        {
+          "id": "raj-sharma",
+          "name": "Raj Sharma",
+          "pronouns": null,
+          "title": "Regional Sales Director",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/rajondex/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane",
+              "title": "Brisbane Snowflake User Group",
+              "date": "2026-08-26",
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "content_id": "brisbanebrisbane-snowflake-user-group",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.snowflake.com/e/mpptkj/",
+              "note": "talk: Brisbane Snowflake User Group"
+            },
+            {
+              "url": "https://www.linkedin.com/in/rajondex/",
+              "note": "linkedin search result: Raj. Sharma - Snowflake; search summary: Greater Brisbane Area, sales leadership"
+            },
+            {
+              "url": "https://www.linkedin.com/in/rajondex/",
+              "note": "location (medium): linkedin search result: Raj. Sharma - Snowflake; search summary: Greater Brisbane Area, sales leadership https://www.linkedin.com/in/rajondex/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives | location (medium): linkedin search result: Raj. Sharma - Snowflake; search summary: Greater Brisbane Area, sales leadership https://www.linkedin.com/in/rajondex/"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "data-changemakers",
+      "name": "Data ChangeMakers",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "frederic-fery",
+          "name": "Frederic Fery",
+          "pronouns": null,
+          "title": "Co Founder",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/frederic-fery/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Brisbane Tableau User Group | Tableau Agent Special  - Get your prompts ready!",
+              "date": "2025-03-06",
+              "url": "https://usergroups.tableau.com/e/mgr243/",
+              "content_id": "brisbane-tableau-user-groupbrisbane-tableau-user-group-table",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            },
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Level Up Your Tableau Look: Themes, Colours & the New Tableau Next!",
+              "date": "2025-09-18",
+              "url": "https://usergroups.tableau.com/e/mb8n9g/",
+              "content_id": "brisbane-tableau-user-grouplevel-up-your-tableau-look-themes",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/mgr243/",
+              "note": "talk: Brisbane Tableau User Group | Tableau Agent Special  - Get your prompts ready!"
+            },
+            {
+              "url": "https://usergroups.tableau.com/e/mb8n9g/",
+              "note": "talk: Level Up Your Tableau Look: Themes, Colours & the New Tableau Next!"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "hogolytics",
+      "name": "Hogolytics",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "shahab-hoghooghi",
+          "name": "Shahab Hoghooghi",
+          "pronouns": null,
+          "title": "Founder & Director - Senior Power BI Developer",
+          "city": null,
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Tableau User Group",
+              "title": "Brisbane Tableau User Group: Special Overseas Guest Event - August 1, 2024",
+              "date": "2024-08-01",
+              "url": "https://usergroups.tableau.com/e/m5gyz6/",
+              "content_id": "brisbane-tableau-user-groupbrisbane-tableau-user-group-speci",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.tableau.com/e/m5gyz6/",
+              "note": "talk: Brisbane Tableau User Group: Special Overseas Guest Event - August 1, 2024"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "tetratech",
+      "name": "TetraTech",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "matt-maxwell",
+          "name": "Matt Maxwell",
+          "pronouns": null,
+          "title": "Data engineer",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/FirstOnTheLeft",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/FirstOnTheLeft gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sswconsulting",
+      "name": "SSWConsulting",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "gabby-ward-ssw",
+          "name": "Gabby Ward [SSW]",
+          "pronouns": null,
+          "title": "SSW Data Engineer I |  Inventing the future one data pipeline at a time  ssw.com.au/people/gabby-ward",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/gabrielle-ward-a5b08b168"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/GabbyWard",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/GabbyWard gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "fourmoo",
+      "name": "FourMoo",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [],
+      "notes": null
+    },
+    {
+      "id": "compare-the-market",
+      "name": "Compare the Market",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "kapil-khatri",
+          "name": "Kapil Khatri",
+          "pronouns": null,
+          "title": "Graduate Data Engineer",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Khatri-byte",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/284890678/",
+              "source": "only member named Kapil Khatri among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Khatri-byte gives the location Brisbane"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "rio-tinto",
+      "name": "Rio Tinto",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ethan-phan",
+          "name": "Ethan Phan",
+          "pronouns": null,
+          "title": "PACE Data Engineer",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ethan-rio",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/330028991/",
+              "source": "only member named Ethan Phan among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ethan-rio gives the location Brisbane"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "paradigm-bi",
+      "name": "Paradigm BI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mike-allen",
+          "name": "Mike Allen",
+          "pronouns": null,
+          "title": "Technical Business Analyst, quondam coder, polymath of no note whatsoever. Data, Analysis and Business Intelligence. Doing smarter things with IT",
+          "city": "Brisbane, Queensland, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mike-allen/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/MikeAinOz",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/mike-allen/",
+              "note": "linkedin search result: Mike Allen - Paradigm BI; Brisbane"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/MikeAinOz gives the location Brisbane, Queensland, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cr-digital",
+      "name": "CR Digital",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "umut-demirhan",
+          "name": "Umut Demirhan",
+          "pronouns": null,
+          "title": "Data Analyst / Analytics Engineer    Business Analytics (MBusAn)  SQL • Python • Power BI • KQL • Microsoft Fabric",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/demirhanemmett/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Umut-Demirhan-MBusAn",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Umut-Demirhan-MBusAn gives the location Brisbane"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "data-engineer",
+      "name": "Data Engineer",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "viktoriia-protopopova",
+          "name": "Viktoriia  Protopopova",
+          "pronouns": null,
+          "title": "Data Engineer with 3+years' experience and 5 years in IT",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/victoria-protopopova-48bb33205/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Vikentiij",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/victoria-protopopova-48bb33205/",
+              "note": "linkedin profile linked from https://github.com/Vikentiij profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Vikentiij gives the location Brisbane"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "cognizant-servian",
+      "name": "Cognizant Servian",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "patrick-ha",
+          "name": "Patrick Ha",
+          "pronouns": null,
+          "title": "Data Engineer @Cognizant-Servian  ",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/sy-tri-ha/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/ZadeTheExplorer",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/sy-tri-ha/",
+              "note": "linkedin profile linked from https://github.com/ZadeTheExplorer profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/ZadeTheExplorer gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "queensland-university-of-technology",
+      "name": "Queensland University of Technology",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "chris-baldwin",
+          "name": "Chris Baldwin",
+          "pronouns": null,
+          "title": "Data Engineer @ QUT.",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://linkedin.com/in/baldwicc"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/baldwicc",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/baldwicc gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "biedw",
+      "name": "biEDW",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "brett-edwards",
+          "name": "Brett Edwards",
+          "pronouns": null,
+          "title": "Business Intelligence, Data Analytics, Data Warehousing developer in Brisbane, Australia.",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/brettedwards/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/brettedwards",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/brettedwards gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "entain",
+      "name": "Entain",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "hamish-mac",
+          "name": "Hamish Mac",
+          "pronouns": null,
+          "title": "Data Engineer at Entain in Brisbane.  Love engineering data platforms and coding in golang, rust, scala and python.",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/elusivenode",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/HamishMacDona20",
+              "source": "https://github.com/elusivenode profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/elusivenode gives the location Brisbane"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sas-sassoftware",
+      "name": "SAS (@sassoftware)",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "falko-schulz",
+          "name": "Falko Schulz",
+          "pronouns": null,
+          "title": "Falko Schulz is Distinguished Software Developer in the SAS Business Intelligence Research and Development division.",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/falkoschulz",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/falko_schulz",
+              "source": "https://github.com/falkoschulz profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/falkoschulz gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "ntt-data",
+      "name": "NTT Data",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "lalith-badiger",
+          "name": "Lalith Badiger",
+          "pronouns": null,
+          "title": "Data & Analytics Consultant | Master of Data Science | Google Cloud Certified: Professional Data Engineer & Professional Machine Learning Engineer",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/lalithbv/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/lalithbv",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/lalithbv/",
+              "note": "linkedin search result: Lalith Badiger - Data Engineer; snippet: past Data & Analytics Consultant at NTT Ltd, now ORS Group"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/lalithbv gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "taaurus",
+      "name": "Taaurus",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "michael-hammond",
+          "name": "Michael Hammond",
+          "pronouns": null,
+          "title": "Asset and Data Engineer",
+          "city": "Brisbane, QLD",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/michael-b-hammond/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/mickyyyyyy",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/michael-b-hammond/",
+              "note": "linkedin profile linked from https://github.com/mickyyyyyy profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/mickyyyyyy gives the location Brisbane, QLD"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "flightcentre",
+      "name": "FlightCentre",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "ritesh-kumar-asre",
+          "name": "Ritesh Kumar Asre",
+          "pronouns": null,
+          "title": "Senior Business Intelligence Leader",
+          "city": "Brisbane Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/rkasre",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/rkasre gives the location Brisbane Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sarath-boppudi",
+      "name": "Sarath Boppudi",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sarath-boppudi",
+          "name": "Sarath Boppudi",
+          "pronouns": null,
+          "title": "Sarath is a Solutions Architect at BiTQ. With over 10 years of experience in Data Warehouse and Analytics.",
+          "city": "Brisbane, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://linkedin.com/in/sarathboppudi"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/sandman153",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/BoppudiSarath",
+              "source": "https://github.com/sandman153 profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/sandman153 gives the location Brisbane, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "flight-centre-travel-group",
+      "name": "Flight Centre Travel Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "silpi-dutta",
+          "name": "Silpi Dutta",
+          "pronouns": null,
+          "title": "Senior Data Engineer",
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/silpi-dutta-a48602112/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/silpidutta29",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/silpi-dutta-a48602112/",
+              "note": "linkedin search result: Silpi Dutta - Greater Brisbane Area; Senior Data Engineer at Flight Centre Travel Group (snippet)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/silpidutta29 gives the location Brisbane"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "eagers-automotive",
+      "name": "Eagers Automotive",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "simon-mac",
+          "name": "Simon Mac",
+          "pronouns": null,
+          "title": "👋 Hi, I'm a Data Engineer and BI Developer. I specialise in ETL pipelines, data modelling, report building, and developing scalable BI solutions.",
+          "city": "Brisbane Queensland",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/smaccormack",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/smaccormack gives the location Brisbane Queensland"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "propel-health-ai",
+      "name": "Propel Health AI",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "vinh-thai-nguyen",
+          "name": "Vinh Thai Nguyen",
+          "pronouns": null,
+          "title": "Data Scientist / Data Engineer / Medical Imaging",
+          "city": "Brisbane, QLD, Australia",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/thaivinhnguyen",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/thaivinhnguyen gives the location Brisbane, QLD, Australia"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bizcubed",
+      "name": "BizCubed",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andrew-c",
+          "name": "Andrew C",
+          "pronouns": null,
+          "title": "Data Engineer  Brisbane, Australia",
+          "city": "Brisbane Queensland",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/xenides",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/xenides gives the location Brisbane Queensland"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "queensland-government-department-via-randstad",
+      "name": "Queensland Government Department (via Randstad)",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Databricks",
+        "Data Vault 2.0"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer (contract to 2026-06-30)",
+          "url": "https://randstad.com.au/jobs/analytics-engineer-business-intelligence_brisbane_44844024",
+          "source": "randstad.com.au",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design, develop, and maintain data models in dbt for structured, scalable analytics using Data Vault 2.0 methods",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid, Brisbane city or remote in Australia"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "department not named in the ad; ad page expired when fetched."
+    },
+    {
+      "id": "flowlogic",
+      "name": "FlowLogic",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Databricks"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://employmenthero.com/jobs/position/flowlogic-data-engineer-bigus",
+          "source": "employmenthero.com",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "design, build, and maintain data infrastructure and analytics pipelines using modern data tools including Databricks, Amazon Quick Suite, and DBT",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "dbt seen in search snippet only; ad page returned 404."
+    },
+    {
+      "id": "vivanti",
+      "name": "Vivanti",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Snowflake"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://www.meetup.com/brisbane-dbt-meetup/",
+          "note": "hosted the Brisbane dbt Meetup in October 2025"
+        },
+        {
+          "type": "talk",
+          "url": "https://usergroups.snowflake.com/events/details/snowflake-brisbane-presents-brisbane-snowflake-user-group/",
+          "note": "Brad de Bruyns spoke at Brisbane Snowflake User Group 2026-08-26"
+        }
+      ],
+      "people": [],
+      "notes": "data cloud consultancy with a Brisbane office; dbt use not verified."
+    },
+    {
+      "id": "servco",
+      "name": "Servco",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+          "note": "Servco Australia presented a Databricks ML pricing engine at the Brisbane Databricks group"
+        }
+      ],
+      "people": [
+        {
+          "id": "jason-cairns",
+          "name": "Jason Cairns",
+          "pronouns": null,
+          "title": null,
+          "city": "Brisbane",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jason-cairns-042504351/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Brisbane Databricks Community Chapter: Building Agentic Apps",
+              "title": "Going from Zero to ML in the Age of AI",
+              "date": "2026-09-29",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+              "content_id": "brisbane-databricks-community-chapter-building-agentic-appsg",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Servco's Databricks ML pricing engine.",
+              "topics": [
+                "data engineering",
+                "genai & llm"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+              "note": "talk: Going from Zero to ML in the Age of AI"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jason-cairns-042504351/",
+              "note": "linkedin search result: Jason Cairns - ML Engineer at Servco; Brisbane"
+            },
+            {
+              "url": "https://www.linkedin.com/in/jason-cairns-042504351/",
+              "note": "location (high): linkedin search result: Jason Cairns - ML Engineer at Servco; Brisbane https://www.linkedin.com/in/jason-cairns-042504351/"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "from zero to a production data and ML platform at a mid-size company",
+          "past_chapter_talks": [],
+          "notes": "talk is Databricks and ML, not dbt; employer office location not confirmed. | location (high): linkedin search result: Jason Cairns - ML Engineer at Servco; Brisbane https://www.linkedin.com/in/jason-cairns-042504351/"
+        }
+      ],
+      "notes": "no dbt evidence."
+    },
+    {
+      "id": "new-hope-group",
+      "name": "New Hope Group",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+          "note": "fireside chat on moving to Databricks, 2026-09-29"
+        }
+      ],
+      "people": [
+        {
+          "id": "anthony-kelly",
+          "name": "Anthony Kelly",
+          "pronouns": null,
+          "title": null,
+          "city": "Brisbane",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "panel",
+              "event": "Brisbane Databricks Community Chapter: Building Agentic Apps",
+              "title": "Fireside chat on the move to Databricks",
+              "date": "2026-09-29",
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+              "content_id": "brisbane-databricks-community-chapter-building-agentic-appsf",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "New Hope Group's journey to Databricks.",
+              "topics": [
+                "dbt migration & adoption",
+                "data warehouse & platforms"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "medium"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+              "note": "panel: Fireside chat on the move to Databricks"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": "lessons from moving a large company's data platform to Databricks",
+          "past_chapter_talks": [],
+          "notes": "panel on Databricks migration, not dbt; employer office location not confirmed."
+        }
+      ],
+      "notes": "no dbt evidence."
+    },
+    {
+      "id": "idea-11",
+      "name": "Idea 11",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Brisbane"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [
+        "Databricks"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+          "note": "partner on the Databricks migration panel, 2026-09-29"
+        }
+      ],
+      "people": [],
+      "notes": "representative not named."
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/brisbane-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/brisbane-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "Randstad Australia job ads",
+        "url": "https://randstad.com.au/jobs/analytics-engineer-business-intelligence_brisbane_44844024",
+        "yielded": true,
+        "note": "snippet shows dbt and Data Vault 2.0 role for a Queensland Government department; page returned 410"
+      },
+      {
+        "name": "Employment Hero FlowLogic ad",
+        "url": "https://employmenthero.com/jobs/position/flowlogic-data-engineer-bigus",
+        "yielded": true,
+        "note": "snippet lists Databricks and dbt; page returned 404"
+      },
+      {
+        "name": "Seek dbt jobs",
+        "url": "https://au.seek.com/dbt-jobs",
+        "yielded": false,
+        "note": "403 on fetch"
+      },
+      {
+        "name": "Brisbane Snowflake User Group",
+        "url": "https://usergroups.snowflake.com/events/details/snowflake-brisbane-presents-brisbane-snowflake-user-group/",
+        "yielded": true,
+        "note": "speaker list for 2026-08-26, all already on file except Vivanti as a company"
+      },
+      {
+        "name": "Brisbane Databricks Community Chapter",
+        "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+        "yielded": true,
+        "note": "speakers from Servco and New Hope Group, 2026-09-29"
+      },
+      {
+        "name": "dbt community spotlight",
+        "url": "https://docs.getdbt.com/community/spotlight",
+        "yielded": false,
+        "note": "no Brisbane member found"
+      },
+      {
+        "name": "Brisbane dbt Meetup",
+        "url": "https://www.meetup.com/brisbane-dbt-meetup/",
+        "yielded": true,
+        "note": "Oct 2025 event hosted at Vivanti with 28 attendees"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "dbt Hands On - Getting Started in Brisbane",
+      "date": "2023-05-18",
+      "venue": "KeyData, 344 Queen St, Brisbane City",
+      "url": "https://www.meetup.com/brisbane-dbt-meetup/events/293419413/",
+      "organisers": [
+        "Brisbane dbt Meetup"
+      ],
+      "attendees": null,
+      "talks": []
+    },
+    {
+      "name": "Brisbane dbt Meetup",
+      "date": "2024-02-21",
+      "venue": "Grand Central Hotel, 270 Ann St, Brisbane City",
+      "url": "https://www.meetup.com/brisbane-dbt-meetup/events/298898462/",
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 44,
+      "talks": [
+        {
+          "speaker": null,
+          "company": "dbt Labs",
+          "title": "Announcements on latest and greatest in DBT",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": null,
+          "company": null,
+          "title": "Customer Knowledge / Experience sharing",
+          "topics": [
+            "community"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Brisbane dbt Meetup",
+      "date": "2024-08-29",
+      "venue": "Morgan's Financials, Level 29, Riverside Centre, 123 Eagle St, Brisbane",
+      "url": "https://www.meetup.com/brisbane-dbt-meetup/events/302301153/",
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 44,
+      "talks": [
+        {
+          "speaker": "Nick Bragg",
+          "company": "Data and Analytics Architect, Morgans Financials",
+          "title": "Morgans Financials' data journey with dbt",
+          "topics": [
+            "data modeling"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Brisbane dbt Meetup",
+      "date": "2024-11-27",
+      "venue": "Morgan's Financials, Level 29, Riverside Centre, 123 Eagle St, Brisbane",
+      "url": "https://www.meetup.com/brisbane-dbt-meetup/events/304405811/",
+      "organisers": [
+        "dbt Labs (Super Organizer)"
+      ],
+      "attendees": 31,
+      "talks": [
+        {
+          "speaker": "Subhankar Dasgupta",
+          "company": "Head of Integration, Morgans Financials",
+          "title": "Business value delivered through integration of dbt & Snowflake",
+          "topics": [
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Alex Stenlake",
+          "company": "Head of Data/Analytics, Picklebet",
+          "title": "From Reactive to Proactive: Improving DBT Pipeline Health with Observability",
+          "topics": [
+            "data quality & testing"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Brisbane dbt Meetup (in-person) - Oct 2025",
+      "date": "2025-10-28",
+      "venue": "Vivianti Consulting, Level 23/300 Queen St, Brisbane",
+      "url": "https://www.meetup.com/brisbane-dbt-meetup/events/311336385/",
+      "organisers": [
+        "Albert Cheng"
+      ],
+      "attendees": 30,
+      "talks": [
+        {
+          "speaker": "Nathan Bowen",
+          "company": "Virgin Australia",
+          "title": "Virgin Australia's dbt and Databricks journey",
+          "topics": [
+            "modern data stack"
+          ]
+        },
+        {
+          "speaker": "Shabbir Khanbhai",
+          "company": "Solutions Architect, dbt Labs",
+          "title": "Recap of Coalesce Vegas event",
+          "topics": [
+            "dbt product updates",
+            "industry trends"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Brisbane dbt Meetup",
+      "url": "https://www.meetup.com/brisbane-dbt-meetup/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "Data Professionals Meetup by Practiv",
+      "url": "https://www.meetup.com/data-professionals-meetup-by-practiv/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Brisbane Data Analytics & AI",
+      "url": "https://www.meetup.com/data-analytics-and-ai/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Data Platform Downunder Meetup Group",
+      "url": "https://www.meetup.com/data-platform-downunder-meetup-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Queensland Advanced Analytics",
+      "url": "https://www.meetup.com/queensland-advanced-analytics/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Queensland Power BI and Fabric User Group",
+      "url": "https://www.meetup.com/queensland-power-bi-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Brisbane Databricks User Group",
+      "url": "https://www.meetup.com/brisbane-databricks-user-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Queensland Power BI User Group",
+      "url": "https://community.fabric.microsoft.com/group/pbi_queensland_power_bi_user_group",
+      "note": "local Power BI group, possible audience"
+    },
+    {
+      "name": "Brisbane Databricks Community Chapter",
+      "url": "https://usergroups.databricks.com/events/details/databricks-user-groups-brisbane-databricks-community-chapter-presents-brisbane-databricks-building-agentic-apps/",
+      "note": "runs events in Brisbane; Sep 2026 event"
+    },
+    {
+      "name": "Salesforce Women in Tech Group Brisbane",
+      "url": "https://trailblazercommunitygroups.com/brisbane-au-women-in-tech-group",
+      "note": "women in tech community; Salesforce focus, includes an analytics edition event"
+    }
+  ]
+}

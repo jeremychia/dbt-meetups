@@ -1,0 +1,4824 @@
+{
+  "metadata": {
+    "title": "Vienna dbt companies and people for the Vienna dbt Meetup",
+    "generated_at": "2026-10-06",
+    "prepared_for": "Jeremy Chia (dbt meetups)",
+    "purpose": "Find Vienna companies using dbt, and people who could speak at or attend the Vienna dbt Meetup.",
+    "version": 3,
+    "schema_version": 4,
+    "region": "Vienna (Vienna dbt Meetup)",
+    "method": [
+      "v1 (2026-10-06): first build from the chapter history: every past chapter speaker, added by the assembler from the enriched meetup file.",
+      "v2 (2026-10-06): people pass with research/find_local_speakers.py and no lookups: speakers and organisers of local data groups and bevy chapters, and github data people with a town in the region. speakers keep an unverified location.",
+      "v3 (2026-10-06): research run: about 30 web calls, one at a time, for companies using dbt, dbt job ads, first-time and proven speakers and community connectors; every link was checked before merging.",
+      "Lesson: job-board search snippets give dbt wording, but devjobs.at and aijobs.net block fetching.",
+      "Lesson: Google Cloud Meetup pages on gdg.community.dev list full speaker lines.",
+      "Lesson: searches for Vienna first-time speakers (blogs, Medium, GitHub) returned nothing region-linked."
+    ],
+    "field_definitions": {
+      "metadata.region": "the meetup chapter this dataset serves",
+      "metadata.schema_version": "shared schema version used by every <region>_dbt_companies.json file (see research/README.md §4)",
+      "companies.type": "employer | consultancy | vendor | outsourcing | recruiter | community | independent | other",
+      "companies.watchlist": "true for companies checked but not yet showing in-region dbt work (unconfirmed local presence, or weak/none dbt signal); kept so they are not re-researched",
+      "companies.excluded_from_outreach": "true for companies deliberately not approached (e.g. dbt Labs staff who already speak regularly)",
+      "companies.local_presence": "confirmed | not_confirmed | none — whether the company has people/roles in the region",
+      "companies.dbt_signal": "strong = public post/case study/talk, or dbt required / core stack in a job ad; medium = dbt listed among alternatives, tagged by a job board's skill extraction, or seen only in a snippet; nice-to-have = listed as a plus; weak = unverified; none = stack appears to be non-dbt, or not applicable",
+      "companies.other_evidence.type": "article | talk | case_study | oss | job_posting | careers | company_blog | conference_talk | meetup | podcast | news | profile | blog_scanned (blog checked, even if nothing relevant) | other",
+      "companies.job_postings.dbt_mentioned_in_text": "true = dbt seen in the ad text (or tagged from the text by the job board); null = only seen in a search snippet about the ad",
+      "companies.job_postings.posted_date": "date shown on the job board (YYYY-MM-DD), null if unknown",
+      "companies.job_postings.last_seen": "last run in which the ad was still listed",
+      "companies.job_postings.job_family / work_mode": "as labelled by the job board (e.g. Analytics Engineer; Remote/Hybrid/On-site); null if not labelled",
+      "companies.people.id": "kebab-case ASCII name, stable across runs",
+      "companies.people.city / based_in_region": "city as seen publicly; based_in_region true = evidence they are in the region, false = evidence elsewhere, null = unverified",
+      "companies.people.level": "leadership if the title contains Head/Director/VP/Chief/Founder/C-level/Manager/Lead, otherwise working",
+      "companies.people.confidence": "High = name + title + company visible in a public source; Medium = indirect evidence; Low = weak evidence",
+      "companies.people.linkedin_confidence": "high = name + company/role in the search result title; medium = indirect or name variant; low = searched, not found; not_searched",
+      "companies.people.profile_urls": "other public professional profiles, as [{type, url, source}]; meetup, x and bluesky profiles can take a message, the others show the person's work: type is one of github, meetup, zenn, qiita, velog, medium, devto, substack, ithome, sessionize, x, bluesky, website, note; source is the page that ties the profile to the person. never an email address or phone number",
+      "companies.people.mentions_dbt": "true if any of the person's public content (or profile snippet) mentions dbt; false if content found without dbt; null if unknown",
+      "companies.people.meetup_fit.speaker_potential": "high = has given a dbt talk, 2+ public talks, spoke at this chapter before, or priority_tier 1; medium = some public content; low = none found",
+      "companies.people.meetup_fit.attendee_potential": "high = in region and public dbt content (or confirmed practitioner at a strong-dbt company); medium = in-region/unknown data practitioner; low = outside the region or weak identification",
+      "companies.people.internal_vinted": "true for Vinted colleagues (kept for completeness, not outreach targets)",
+      "companies.people.priority_tier": "1 = strong recent lead: a proven speaker with a relevant recent talk, or an emerging_voice in (or not known to be outside) the region with authored content from 2024 onwards; 2 = good lead / needs verification / older content / relevant talk at another meetup; 3 = peripheral, off-topic or remote; organiser / backup / connector = special roles",
+      "companies.people.past_chapter_talks": "talks this person gave at this chapter's own meetups, matched by name",
+      "companies.people.speaker_evidence.type": "talk | panel | podcast | article | case_study | oss | interview | organiser | host | post | profile",
+      "companies.people.speaker_evidence.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.speaker_evidence.content_id": "stable id; an item with several authors appears under each of them with the same content_id",
+      "companies.people.speaker_evidence.url_precision": "direct = the item itself; overview_page = a listing/homepage where the item appears",
+      "past_meetups.talks.topics": "1-3 topics, most relevant first, only from metadata.topic_vocabulary (pipeline/enrich.py::TOPIC_VOCABULARY); organiser/host/profile entries are tagged 'community'",
+      "companies.people.lead_type": "proven_speaker = has given a talk, panel or podcast, or spoke at this chapter; emerging_voice = has authored public content (blog post, article, newsletter, open-source project, LinkedIn post) but no talk found yet — a priority for first-time speaker invitations; featured = only quoted or profiled in someone else's content (case study, interview, team feature); no_public_content = none found",
+      "companies.people.pronouns": "pronouns exactly as the person publishes them (e.g. on a speaker listing, bio or profile headline); null when not self-stated. Never inferred from names, photos or third-person wording",
+      "companies.people.sourced_via": "channels through which the person was found (list): company_blog_scan | case_study | conference_or_meetup_agenda | data_berlin_meetup | women_in_data_community | chapter_meetup_history | newsletter_or_blog | podcast | github | linkedin_search | job_ad_company_search | other"
+    },
+    "caveats": [
+      "Titles and employers of past speakers come from the meetup talk text; verify before outreach.",
+      "Speakers found through local groups have an unverified location: a talk at a local event does not show where someone lives.",
+      "Titles, employers and cities come from public pages and search snippets; verify before outreach.",
+      "Most job ads were seen only in search-result summaries; Bitpanda and kununu pages could not be opened, so they may be closed.",
+      "No first-time speakers found: no author with a Vienna location and dbt content turned up.",
+      "One linkedin.com page was fetched by mistake (it returned an error and nothing was used)."
+    ],
+    "counts": {
+      "companies": 26,
+      "people": 74,
+      "job_postings": 7,
+      "companies_with_job_postings": 7,
+      "speaker_evidence_items": 42,
+      "unique_content_items": 15,
+      "people_with_linkedin": 22,
+      "people_with_contact": 62,
+      "people_who_spoke_at_this_chapter": 8,
+      "internal_vinted": 0,
+      "level": {
+        "working": 70,
+        "leadership": 4
+      },
+      "speaker_potential": {
+        "high": 10,
+        "low": 24,
+        "medium": 40
+      },
+      "attendee_potential": {
+        "medium": 70,
+        "high": 4
+      },
+      "priority_tier": {
+        "1": 10,
+        "3": 27,
+        "connector": 37
+      },
+      "watchlist_companies": 17,
+      "past_meetups": 2,
+      "lead_type": {
+        "proven_speaker": 47,
+        "no_public_content": 27
+      },
+      "people_with_self_stated_pronouns": 0,
+      "sourced_via": {
+        "chapter_meetup_history": 8,
+        "github": 24,
+        "conference_or_meetup_agenda": 39,
+        "other": 2,
+        "women_in_data_community": 1
+      }
+    },
+    "topic_vocabulary_source": "pipeline/enrich.py::TOPIC_VOCABULARY",
+    "topic_vocabulary": [
+      "dbt best practices",
+      "dbt fundamentals",
+      "dbt product features",
+      "dbt product updates",
+      "dbt migration & adoption",
+      "data modeling",
+      "data quality & testing",
+      "data governance",
+      "data mesh",
+      "data engineering",
+      "analytics engineering",
+      "business intelligence",
+      "semantic layer",
+      "orchestration & ci/cd",
+      "performance & scale",
+      "modern data stack",
+      "tools & ecosystem",
+      "developer workflow",
+      "project structure",
+      "genai & llm",
+      "team & org design",
+      "career development",
+      "community",
+      "industry trends",
+      "domain-specific use cases",
+      "data warehouse & platforms"
+    ],
+    "topic_counts": {
+      "community": 39,
+      "modern data stack": 2,
+      "business intelligence": 1,
+      "data governance": 1,
+      "data engineering": 1,
+      "dbt best practices": 1,
+      "data warehouse & platforms": 1
+    }
+  },
+  "companies": [
+    {
+      "id": "btelligent",
+      "name": "b.telligent",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "felix-behrendt",
+          "name": "Felix Behrendt",
+          "pronouns": null,
+          "title": "Consultant, b.telligent",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-04-03",
+              "talk_title": "More Than Just Jinja: dbt Macros",
+              "topics": [
+                "developer workflow"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Vienna dbt Meetup speaker"
+    },
+    {
+      "id": "dbt-labs",
+      "name": "dbt Labs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sean-mcintyre",
+          "name": "Sean McIntyre",
+          "pronouns": null,
+          "title": "Senior Solution Architect, dbt Labs",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/16707891/",
+              "source": "https://www.meetup.com/events/306678132/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-04-03",
+              "talk_title": "What's New from dbt",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "mark-porter",
+          "name": "Mark Porter",
+          "pronouns": null,
+          "title": "CTO, dbt Labs",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/marklovestech/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/marklovestech/",
+              "note": "linkedin search result: Mark Porter - Building Cognition CTO/Coder/TechGeek; former MongoDB CTO; dbt Labs CTO appointment post links to this profile"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "What's New from dbt",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Vienna dbt Meetup speaker"
+    },
+    {
+      "id": "meisterlabs",
+      "name": "MeisterLabs",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sandra-merkel",
+          "name": "Sandra Merkel",
+          "pronouns": null,
+          "title": "Analytics Director, MeisterLabs",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/186124690/",
+              "source": "https://www.meetup.com/events/306678132/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-04-03",
+              "talk_title": "Meister's Journey to Self-Serve Analytics",
+              "topics": [
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "juan-sebastian-suarez-valencia",
+          "name": "Juan Sebastián SUAREZ VALENCIA",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/juan-meister",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "high"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/juan-meister gives the location Vienna, Austria"
+        }
+      ],
+      "notes": "employer of a past Vienna dbt Meetup speaker"
+    },
+    {
+      "id": "gostudent",
+      "name": "GoStudent",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "martin-finnsell",
+          "name": "Martin Finn-Sell",
+          "pronouns": null,
+          "title": "Senior Data Scientist, GoStudent",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/419910808/",
+              "source": "https://www.meetup.com/events/310578496/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "Moving from Self-Managed dbt to dbt Cloud",
+              "topics": [
+                "dbt product features",
+                "dbt migration & adoption"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Vienna dbt Meetup speaker"
+    },
+    {
+      "id": "sclable",
+      "name": "sclable",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "sumeyye-suri",
+          "name": "Sümeyye Suri",
+          "pronouns": null,
+          "title": "Data Analyst, sclable; DevOps Specialist, sclable",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/sumeyyesuri/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/sumeyyesuri/",
+              "note": "linkedin search result: Sümeyye Suri - sclable; Data Analyst at sclable"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "Building Our Internal Data Ecosystem: From Raw Data to Business Insights",
+              "topics": [
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "manfred-krieger",
+          "name": "Manfred Krieger",
+          "pronouns": null,
+          "title": "Data Analyst, sclable; DevOps Specialist, sclable",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/423463888/",
+              "source": "only member named Manfred Krieger  among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "Building Our Internal Data Ecosystem: From Raw Data to Business Insights",
+              "topics": [
+                "business intelligence"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Vienna dbt Meetup speaker"
+    },
+    {
+      "id": "microsoft-fabric",
+      "name": "Microsoft Fabric",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "charles-webb",
+          "name": "Charles Webb",
+          "pronouns": null,
+          "title": "Principal PM Manager, Microsoft Fabric",
+          "city": "Vienna",
+          "based_in_region": null,
+          "level": "leadership",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "chapter_meetup_history"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [
+            {
+              "date": "2025-09-16",
+              "talk_title": "Real-World Success & Roadmap Ahead: Accelerating Analytics with Microsoft Fabric + dbt",
+              "topics": [
+                "dbt product updates"
+              ]
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notes": "employer of a past Vienna dbt Meetup speaker"
+    },
+    {
+      "id": "independent-no-company",
+      "name": "Independent / no company",
+      "type": "independent",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "mario-schnalzenberger",
+          "name": "Mario Schnalzenberger",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mario-schnalzenberger/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "Microsoft Fabric & Power BI Meetup | Meetup #4 | Linz Edition",
+              "date": "2026-01-15",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/312680746/",
+              "content_id": "microsoft-fabric-user-group-austriamicrosoft-fabric-power-bi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "business intelligence"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/312680746/",
+              "note": "talk: Microsoft Fabric & Power BI Meetup | Meetup #4 | Linz Edition"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "torsten-strau",
+          "name": "Torsten Strauß",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/torsten-strauss/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "Microsoft Fabric & Power BI Meetup #9 | Wien",
+              "date": "2026-08-20",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/315612027/",
+              "content_id": "microsoft-fabric-user-group-austriamicrosoft-fabric-power-bi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/315612027/",
+              "note": "talk: Microsoft Fabric & Power BI Meetup #9 | Wien"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "jasmin-simader",
+          "name": "Jasmin Simader",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/jasmin-simader/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "Microsoft Fabric & Power BI Meetup #10 | Linz",
+              "date": "2026-09-17",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/315512698/",
+              "content_id": "microsoft-fabric-user-group-austriamicrosoft-fabric-power-bi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "speaker named in the event record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/315512698/",
+              "note": "talk: Microsoft Fabric & Power BI Meetup #10 | Linz"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "speaker at a local data group; location unverified, since a talk at a local event does not show where someone lives; linkedin linked from the event record"
+        },
+        {
+          "id": "markus-ehrenmullerjensen",
+          "name": "Markus Ehrenmüller-Jensen",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/190634794/",
+              "source": "https://www.meetup.com/events/307215809/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Community Austria",
+              "title": "organiser, Data Community Austria",
+              "date": "2025-04-22",
+              "url": "https://www.meetup.com/datacommunityat/events/307215809/",
+              "content_id": "data-community-austriaorganiser-data-community-austria",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/datacommunityat/events/307215809/",
+              "note": "organiser: organiser, Data Community Austria"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "wolfgang-strasser",
+          "name": "Wolfgang Strasser",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/215178139/",
+              "source": "https://www.meetup.com/events/314705642/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data Community Austria",
+              "title": "organiser, Data Community Austria",
+              "date": "2026-05-28",
+              "url": "https://www.meetup.com/datacommunityat/events/314705642/",
+              "content_id": "data-community-austriaorganiser-data-community-austria",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/datacommunityat/events/314705642/",
+              "note": "organiser: organiser, Data Community Austria"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "nick-ferry",
+          "name": "Nick Ferry",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/403336648/",
+              "source": "https://www.meetup.com/events/297832346/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data, Cloud and AI in Vienna",
+              "title": "organiser, Data, Cloud and AI in Vienna",
+              "date": "2024-01-09",
+              "url": "https://www.meetup.com/big-data-developers-in-vienna/events/297832346/",
+              "content_id": "data-cloud-and-ai-in-viennaorganiser-data-cloud-and-ai-in-vi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/big-data-developers-in-vienna/events/297832346/",
+              "note": "organiser: organiser, Data, Cloud and AI in Vienna"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "sonia-singh",
+          "name": "Sonia Singh",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/295072695/",
+              "source": "https://www.meetup.com/events/297915632/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Data, Cloud and AI in Vienna",
+              "title": "organiser, Data, Cloud and AI in Vienna",
+              "date": "2024-02-14",
+              "url": "https://www.meetup.com/big-data-developers-in-vienna/events/297915632/",
+              "content_id": "data-cloud-and-ai-in-viennaorganiser-data-cloud-and-ai-in-vi",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/big-data-developers-in-vienna/events/297915632/",
+              "note": "organiser: organiser, Data, Cloud and AI in Vienna"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "laura-vana",
+          "name": "Laura Vana",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/145424142/",
+              "source": "https://www.meetup.com/events/298773410/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies+ Vienna",
+              "title": "organiser, R-Ladies+ Vienna",
+              "date": "2024-02-15",
+              "url": "https://www.meetup.com/rladies-vienna/events/298773410/",
+              "content_id": "rladies-viennaorganiser-rladies-vienna",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-vienna/events/298773410/",
+              "note": "organiser: organiser, R-Ladies+ Vienna"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "ursula-laa",
+          "name": "Ursula Laa",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/239519731/",
+              "source": "https://www.meetup.com/events/298773410/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies+ Vienna",
+              "title": "organiser, R-Ladies+ Vienna",
+              "date": "2024-02-15",
+              "url": "https://www.meetup.com/rladies-vienna/events/298773410/",
+              "content_id": "rladies-viennaorganiser-rladies-vienna",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-vienna/events/298773410/",
+              "note": "organiser: organiser, R-Ladies+ Vienna"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "theresa-scharlhirsch",
+          "name": "Theresa Scharl-Hirsch",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/327305450/",
+              "source": "https://www.meetup.com/events/305841789/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies+ Vienna",
+              "title": "organiser, R-Ladies+ Vienna",
+              "date": "2025-02-20",
+              "url": "https://www.meetup.com/rladies-vienna/events/305841789/",
+              "content_id": "rladies-viennaorganiser-rladies-vienna",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/rladies-vienna/events/305841789/",
+              "note": "organiser: organiser, R-Ladies+ Vienna"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "rigerta-demiri",
+          "name": "Rigerta Demiri",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/229279512/",
+              "source": "https://www.meetup.com/events/298324726/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup",
+              "title": "organiser, Vienna Data Engineering Meetup",
+              "date": "2024-01-24",
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/298324726/",
+              "content_id": "vienna-data-engineering-meetuporganiser-vienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/298324726/",
+              "note": "organiser: organiser, Vienna Data Engineering Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "davor-martinovic",
+          "name": "Davor Martinovic",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/50322312/",
+              "source": "https://www.meetup.com/events/305475700/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup",
+              "title": "organiser, Vienna Data Engineering Meetup",
+              "date": "2025-01-22",
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/305475700/",
+              "content_id": "vienna-data-engineering-meetuporganiser-vienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/305475700/",
+              "note": "organiser: organiser, Vienna Data Engineering Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "thorsten-steuer",
+          "name": "Thorsten Steuer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/408197271/",
+              "source": "https://www.meetup.com/events/314660249/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup",
+              "title": "organiser, Vienna Data Engineering Meetup",
+              "date": "2026-05-21",
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/314660249/",
+              "content_id": "vienna-data-engineering-meetuporganiser-vienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/314660249/",
+              "note": "organiser: organiser, Vienna Data Engineering Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "boris-perkovic",
+          "name": "Boris Perkovic",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/402280342/",
+              "source": "https://www.meetup.com/events/314660249/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup",
+              "title": "organiser, Vienna Data Engineering Meetup",
+              "date": "2026-05-21",
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/314660249/",
+              "content_id": "vienna-data-engineering-meetuporganiser-vienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/314660249/",
+              "note": "organiser: organiser, Vienna Data Engineering Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "georg-heiler",
+          "name": "Georg Heiler",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/183420354/",
+              "source": "https://www.meetup.com/events/314660249/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup",
+              "title": "organiser, Vienna Data Engineering Meetup",
+              "date": "2026-05-21",
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/314660249/",
+              "content_id": "vienna-data-engineering-meetuporganiser-vienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/314660249/",
+              "note": "organiser: organiser, Vienna Data Engineering Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "karl-ivo-sokolov",
+          "name": "Karl Ivo Sokolov",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/405028890/",
+              "source": "https://www.meetup.com/events/296946669/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Austria Snowflake Data Cloud Group",
+              "title": "organiser, Austria Snowflake Data Cloud Group",
+              "date": "2024-01-18",
+              "url": "https://www.meetup.com/austria-snowflake-data-cloud-group/events/296946669/",
+              "content_id": "austria-snowflake-data-cloud-grouporganiser-austria-snowflak",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/austria-snowflake-data-cloud-group/events/296946669/",
+              "note": "organiser: organiser, Austria Snowflake Data Cloud Group"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "thomas-lindner",
+          "name": "Thomas Lindner",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/388593272/",
+              "source": "https://www.meetup.com/events/306678132/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna dbt Meetup",
+              "title": "organiser, Vienna dbt Meetup",
+              "date": "2025-04-03",
+              "url": "https://www.meetup.com/vienna-dbt-meetup/events/306678132/",
+              "content_id": "vienna-dbt-meetuporganiser-vienna-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-dbt-meetup/events/306678132/",
+              "note": "organiser: organiser, Vienna dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "johannes-schauer",
+          "name": "Johannes Schauer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/420527944/",
+              "source": "https://www.meetup.com/events/306678132/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna dbt Meetup",
+              "title": "organiser, Vienna dbt Meetup",
+              "date": "2025-04-03",
+              "url": "https://www.meetup.com/vienna-dbt-meetup/events/306678132/",
+              "content_id": "vienna-dbt-meetuporganiser-vienna-dbt-meetup",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-dbt-meetup/events/306678132/",
+              "note": "organiser: organiser, Vienna dbt Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "florian-thurk",
+          "name": "Florian Thürk",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/363372939/",
+              "source": "https://www.meetup.com/events/298696429/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2024-02-05",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/298696429/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/298696429/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "francesca-conselvan",
+          "name": "Francesca Conselvan",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/215309433/",
+              "source": "https://www.meetup.com/events/298696429/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2024-02-05",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/298696429/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/298696429/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "zoltan-c-toth",
+          "name": "Zoltan C. Toth",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/4971255/",
+              "source": "https://www.meetup.com/events/298696429/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2024-02-05",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/298696429/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/298696429/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "wolfgang-wulf-weidinger",
+          "name": "Wolfgang 'Wulf' Weidinger",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/204333994/",
+              "source": "https://www.meetup.com/events/299629312/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2024-03-18",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/299629312/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/299629312/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "mohamed-auf",
+          "name": "Mohamed Auf",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/280241246/",
+              "source": "https://www.meetup.com/events/299629312/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2024-03-18",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/299629312/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/299629312/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "mari-plaza",
+          "name": "Mari Plaza",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/191801835/",
+              "source": "https://www.meetup.com/events/299434053/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2024-04-19",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/299434053/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/299434053/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "gabor-bekes",
+          "name": "Gábor Békés",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/194984347/",
+              "source": "https://www.meetup.com/events/304971584/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2025-01-10",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/304971584/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/304971584/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "philipp-mascherbauer",
+          "name": "Philipp Mascherbauer",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/375481203/",
+              "source": "https://www.meetup.com/events/305494891/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2025-02-22",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/305494891/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/305494891/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "nescho-topalov",
+          "name": "Nescho Topalov",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/422025089/",
+              "source": "https://www.meetup.com/events/311929318/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2025-12-05",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/311929318/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/311929318/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "jacqueline-berger",
+          "name": "Jacqueline Berger",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/282474130/",
+              "source": "https://www.meetup.com/events/314178349/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2026-04-29",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/314178349/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/314178349/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "stefanie-blaschke",
+          "name": "Stefanie Blaschke",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/stefanie-blaschke/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/182530219/",
+              "source": "https://www.meetup.com/events/314178349/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Science Group Meetup",
+              "title": "organiser, Vienna Data Science Group Meetup",
+              "date": "2026-04-29",
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/314178349/",
+              "content_id": "vienna-data-science-group-meetuporganiser-vienna-data-scienc",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/vienna-data-science-group-meetup/events/314178349/",
+              "note": "organiser: organiser, Vienna Data Science Group Meetup"
+            },
+            {
+              "url": "https://www.linkedin.com/in/stefanie-blaschke/",
+              "note": "linkedin profile linked from https://www.meetup.com/vienna-data-science-group-meetup/events/314178349/ (name match)"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "patrick-oliver-mohr",
+          "name": "Patrick Oliver Mohr",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/217109502/",
+              "source": "https://www.meetup.com/events/297696205/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Analytics Pioneers Wien",
+              "title": "organiser, Analytics Pioneers Wien",
+              "date": "2024-01-05",
+              "url": "https://www.meetup.com/analytics-pioneers-wien/events/297696205/",
+              "content_id": "analytics-pioneers-wienorganiser-analytics-pioneers-wien",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/analytics-pioneers-wien/events/297696205/",
+              "note": "organiser: organiser, Analytics Pioneers Wien"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "laura-szepesi",
+          "name": "Laura Szepesi",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/306098974/",
+              "source": "https://www.meetup.com/events/313035956/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "DACH Excel & Power BI Meetup",
+              "title": "organiser, DACH Excel & Power BI Meetup",
+              "date": "2026-04-16",
+              "url": "https://www.meetup.com/dach-excel-powerbi-meetup/events/313035956/",
+              "content_id": "dach-excel-power-bi-meetuporganiser-dach-excel-power-bi-meet",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/dach-excel-powerbi-meetup/events/313035956/",
+              "note": "organiser: organiser, DACH Excel & Power BI Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "tanja-kuhn",
+          "name": "Tanja Kuhn",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/216128098/",
+              "source": "https://www.meetup.com/events/313509587/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "DACH Excel & Power BI Meetup",
+              "title": "organiser, DACH Excel & Power BI Meetup",
+              "date": "2026-05-06",
+              "url": "https://www.meetup.com/dach-excel-powerbi-meetup/events/313509587/",
+              "content_id": "dach-excel-power-bi-meetuporganiser-dach-excel-power-bi-meet",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/dach-excel-powerbi-meetup/events/313509587/",
+              "note": "organiser: organiser, DACH Excel & Power BI Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "rene-martin",
+          "name": "Rene Martin",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/214445216/",
+              "source": "https://www.meetup.com/events/313616101/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "DACH Excel & Power BI Meetup",
+              "title": "organiser, DACH Excel & Power BI Meetup",
+              "date": "2026-06-10",
+              "url": "https://www.meetup.com/dach-excel-powerbi-meetup/events/313616101/",
+              "content_id": "dach-excel-power-bi-meetuporganiser-dach-excel-power-bi-meet",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/dach-excel-powerbi-meetup/events/313616101/",
+              "note": "organiser: organiser, DACH Excel & Power BI Meetup"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "nina-weisheidinger",
+          "name": "Nina Weisheidinger",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/370681438/",
+              "source": "https://www.meetup.com/events/311227534/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "organiser, Microsoft Fabric User Group Austria",
+              "date": "2025-10-16",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/311227534/",
+              "content_id": "microsoft-fabric-user-group-austriaorganiser-microsoft-fabri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/311227534/",
+              "note": "organiser: organiser, Microsoft Fabric User Group Austria"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "karin-szilagyi",
+          "name": "Karin Szilágyi",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/474082249/",
+              "source": "https://www.meetup.com/events/311227534/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "organiser, Microsoft Fabric User Group Austria",
+              "date": "2025-10-16",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/311227534/",
+              "content_id": "microsoft-fabric-user-group-austriaorganiser-microsoft-fabri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/311227534/",
+              "note": "organiser: organiser, Microsoft Fabric User Group Austria"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "benedict-albrecht",
+          "name": "Benedict Albrecht",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/407720416/",
+              "source": "https://www.meetup.com/events/311227534/ (host or RSVP)"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "organiser, Microsoft Fabric User Group Austria",
+              "date": "2025-10-16",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/311227534/",
+              "content_id": "microsoft-fabric-user-group-austriaorganiser-microsoft-fabri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/311227534/",
+              "note": "organiser: organiser, Microsoft Fabric User Group Austria"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "franz-eder",
+          "name": "Franz Eder",
+          "pronouns": null,
+          "title": null,
+          "city": null,
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/263686686/",
+              "source": "only member named Franz Eder among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Microsoft Fabric User Group Austria",
+              "title": "organiser, Microsoft Fabric User Group Austria",
+              "date": "2025-12-01",
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/312095284/",
+              "content_id": "microsoft-fabric-user-group-austriaorganiser-microsoft-fabri",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "host of the event in the meetup record",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/events/312095284/",
+              "note": "organiser: organiser, Microsoft Fabric User Group Austria"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "organiser of an in-person local data group"
+        },
+        {
+          "id": "felix-korbelius",
+          "name": "Felix Korbelius",
+          "pronouns": null,
+          "title": "Renewable Energy & Data Engineer.",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/FelixKoTU",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/FelixKoTU gives the location Vienna"
+        },
+        {
+          "id": "krishna-suresh",
+          "name": "KRISHNA SURESH",
+          "pronouns": null,
+          "title": "Data analyst & researcher at WU Vienna | NLP, machine learning, and disclosure analytics | Exploring corporate governance and regulatory data    ",
+          "city": "VIENNA, AUSTRIA",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/KRISHNASURESH96",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/KRISHNASURESH96 gives the location VIENNA, AUSTRIA"
+        },
+        {
+          "id": "mario-caushi",
+          "name": "Mario Caushi",
+          "pronouns": null,
+          "title": "MSc Data Science @ TU Wien | Software & Data Engineer | .NET, Data Engineering & Machine Learning  ",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/mario-caushi"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/MarioCaushi",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/MarioCaushi gives the location Vienna, Austria"
+        },
+        {
+          "id": "sahebeh-dadboud",
+          "name": "Sahebeh Dadboud",
+          "pronouns": null,
+          "title": "Data Engineer/Data Scientist",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/SahebehDadboud",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/SahebehDadboud gives the location Vienna, Austria"
+        },
+        {
+          "id": "shlomi-k",
+          "name": "Shlomi K",
+          "pronouns": null,
+          "title": "Experienced Data Engineer with a wide skillset.  Passionate about building solutions that really add value to people's lives.",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/shlomk"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/Shlomi153",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/Shlomi153 gives the location Vienna"
+        },
+        {
+          "id": "oleksii-vykaliuk",
+          "name": "Oleksii Vykaliuk",
+          "pronouns": null,
+          "title": "Software/data engineer interested in geospatial tech.",
+          "city": "Ukraine, Kyiv -> Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/alekzvik/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/alekzvik",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/alekzvik gives the location Ukraine, Kyiv -> Vienna, Austria"
+        },
+        {
+          "id": "dmitry-chernyshov",
+          "name": "Dmitry Chernyshov",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/dochernyshov",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/dochernyshov gives the location Vienna"
+        },
+        {
+          "id": "eray-yuztyurk",
+          "name": "Eray Yuztyurk",
+          "pronouns": null,
+          "title": "Data Engineer | SQL • Python • ETL • Data Modeling | AI/ML     >>>>>>>>>> Curious by nature, committed to learning and building meaningful data-driven solutions",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/erayyuztyurk"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/eray-yuztyurk",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/eray-yuztyurk gives the location Vienna"
+        },
+        {
+          "id": "francesco-fusco",
+          "name": "Francesco Fusco",
+          "pronouns": null,
+          "title": "I am a data engineer/scientist with background in the fields of control systems engineering, signal processing, statistical time-series modelling.",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/franfusco/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/fuscof85",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/382798747/",
+              "source": "only member named Francesco Fusco among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/franfusco/",
+              "note": "linkedin profile linked from https://github.com/fuscof85 profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/fuscof85 gives the location Vienna"
+        },
+        {
+          "id": "gavril-vazharov",
+          "name": "Gavril Vazharov",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/gvazharov",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/gvazharov gives the location Vienna"
+        },
+        {
+          "id": "h-ezgi-karakas",
+          "name": "H Ezgi Karakas",
+          "pronouns": null,
+          "title": "-Data Engineer  -Cancer Researcher (PhD)  ",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hezgikarakasschuller/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/hezgikarakas",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/411815886/",
+              "source": "only member named H. Ezgi Karakas Schüller among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/hezgikarakasschuller/",
+              "note": "linkedin profile linked from https://github.com/hezgikarakas profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/hezgikarakas gives the location Vienna, Austria"
+        },
+        {
+          "id": "katerina-p",
+          "name": "Katerina P",
+          "pronouns": null,
+          "title": "Data & Analytics Engineer,  Sociologist,  Environmentalist",
+          "city": "Wien ",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/katerinaprasilova93",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/katerinaprasilova93 gives the location Wien "
+        },
+        {
+          "id": "nikita-libman",
+          "name": "Nikita Libman",
+          "pronouns": null,
+          "title": "Data engineer,  Master in Mininig Engineering (2023)  Dipl. Ing. in Tunneling (2018)  ",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/nikita-libman/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "medium",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/nikitalibman",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/nikita-libman/",
+              "note": "linkedin search result: Nikita Libman - Data Engineer, Vienna, Austria; master in mining engineering matches the github record"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/nikitalibman gives the location Vienna, Austria"
+        },
+        {
+          "id": "sourabh-chauhan",
+          "name": "Sourabh Chauhan",
+          "pronouns": null,
+          "title": "I am a Senior Data Engineer with 5+ years of industry experience. In the past, I did research in Physics and in Astrophysics at University of Minnesota.",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/sourabhsc",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/chauhanssourabh",
+              "source": "https://github.com/sourabhsc profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/sourabhsc gives the location Vienna, Austria"
+        },
+        {
+          "id": "zain-haidar",
+          "name": "Zain Haidar",
+          "pronouns": null,
+          "title": "Hi everybody! I am a Business Intelligence | Data Analyst | Microsoft PowerBI Developer currently working in Vienna. I am passionate about data visualization an",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/zain-haidar/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/zainhaidar16",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/389453878/",
+              "source": "only member named Zain Haidar among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/zain-haidar/",
+              "note": "linkedin profile linked from https://github.com/zainhaidar16 profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/zainhaidar16 gives the location Vienna, Austria"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "radancy",
+      "name": "Radancy",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "bougouma-fall",
+          "name": "Bougouma Fall",
+          "pronouns": null,
+          "title": "Data Engineer",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "not_searched",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/BuguFall",
+              "source": "github user search by location"
+            },
+            {
+              "type": "meetup",
+              "url": "https://www.meetup.com/members/268330200/",
+              "source": "only member named Bougouma Fall among hosts and RSVPs of this city's meetup groups"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/BuguFall gives the location Vienna, Austria"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bearingpoint",
+      "name": "BearingPoint",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "roland-jahn",
+          "name": "Roland Jähn",
+          "pronouns": null,
+          "title": "Senior Business Consultant in Financial Services with a long history in performance management, data warehousing, business intelligence, managerial accounting",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/roland-j%C3%A4hn-2589179/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/RolandJaehn",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/roland-j%C3%A4hn-2589179/",
+              "note": "linkedin search result: Roland Jähn - BearingPoint; Vienna (Wien), Austria"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/RolandJaehn gives the location Vienna, Austria"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "eversport",
+      "name": "eversport",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "andres-espinal",
+          "name": "Andrés Espinal",
+          "pronouns": null,
+          "title": "Sr. Data Engineer | BI Analyst | MSc. Big Data Management & Analytics",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/andr%C3%A9s-espinal-08a145106"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/andresespinalh",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/andresespinalh gives the location Vienna, Austria"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "austrian-academy-of-sciences",
+      "name": "Austrian Academy of Sciences",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "christian-lendl",
+          "name": "Christian Lendl",
+          "pronouns": null,
+          "title": "Research Data Engineer",
+          "city": "Vienna, Austria",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/d-c-h-r-i-s",
+              "source": "github user search by location"
+            },
+            {
+              "type": "bluesky",
+              "url": "https://bsky.app/profile/dchr.is",
+              "source": "https://github.com/d-c-h-r-i-s profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://bsky.app/profile/dchr.is",
+              "note": "bluesky profile linked from https://github.com/d-c-h-r-i-s profile (own profile match)"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/d-c-h-r-i-s gives the location Vienna, Austria"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "innovative-decisions-inc",
+      "name": "Innovative Decisions, Inc.",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "jared-beekman",
+          "name": "Jared Beekman",
+          "pronouns": null,
+          "title": "Certified Analytics Professional with 6+ years of experience working as a researcher and analyst for top-tier university and management consulting firm.",
+          "city": "Vienna, VA",
+          "based_in_region": false,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/jbeekman18",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/jbeekman18 gives the location Vienna, VA"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "wien-energie-gmbh",
+      "name": "Wien Energie GmbH",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "thomas-brothaler",
+          "name": "Thomas Bröthaler",
+          "pronouns": null,
+          "title": "Data Engineer in the Energy Sector",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://at.linkedin.com/in/thomas-broethaler"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/thomas-broethaler",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/thomas-broethaler gives the location Vienna"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "united-tech",
+      "name": "United Tech",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "maxim-humeniuk",
+          "name": "Maxim Humeniuk",
+          "pronouns": null,
+          "title": "ex JS ❤️  currently Data Engineer 🗂️ road to SRE 🚘",
+          "city": "Austria, Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/maksym-humeniuk-24l7/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tiger24l7",
+              "source": "github user search by location"
+            },
+            {
+              "type": "x",
+              "url": "https://x.com/tiger24l7",
+              "source": "https://github.com/tiger24l7 profile"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tiger24l7 gives the location Austria, Vienna"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "sphinx-it",
+      "name": "Sphinx IT",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "weak",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [],
+      "people": [
+        {
+          "id": "tom-lieber",
+          "name": "Tom Lieber",
+          "pronouns": null,
+          "title": "Has worked in IT since 1997 in various roles, starting as a developer and DBA, data engineer and product owner, team leader and now as external consultant.",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tom-lieber-50ab4929/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [
+            {
+              "type": "github",
+              "url": "https://github.com/tomlieber",
+              "source": "github user search by location"
+            }
+          ],
+          "meetup_fit": {
+            "speaker_potential": "low",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "github"
+          ],
+          "mentions_dbt": null,
+          "speaker_evidence": [],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://www.linkedin.com/in/tom-lieber-50ab4929/",
+              "note": "linkedin search result: Tom Lieber - Sphinx IT Consulting, Vienna"
+            }
+          ],
+          "confidence": "High",
+          "internal_vinted": false,
+          "priority_tier": 3,
+          "suggested_talk_angle": null,
+          "past_chapter_talks": [],
+          "notes": "github profile https://github.com/tomlieber gives the location Vienna"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "id": "bluecode",
+      "name": "Bluecode",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "BigQuery",
+        "Looker",
+        "Fivetran",
+        "Dagster"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer / Data Analyst (m/f/d)",
+          "url": "https://jobs.jamjarinvestments.com/companies/bluecode-2/jobs/86906458-analytics-engineer-data-analyst-m-f-d",
+          "source": "investor job board (jamjar)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Design, build, and maintain our transformation layer in dbt on BigQuery",
+          "job_poster": null,
+          "posted_date": "2026-07-20",
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid / remote within EU"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Ad lists Innsbruck or Vienna. Listed as Blue Code International AG on devjobs.at."
+    },
+    {
+      "id": "bitpanda",
+      "name": "Bitpanda",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Analytics Engineer, dbt (Business Intelligence)",
+          "url": "https://en.devjobs.at/job/ee7b3634374fc44d706ab743e291fe86",
+          "source": "devjobs.at",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "ensure data quality with dbt and Python (search-result summary; page returned 403)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid / onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Same role also on efinancialcareers and speedinvest portfolio boards; those pages returned 404 or were not fetched, so the ad may be closed."
+    },
+    {
+      "id": "kununu",
+      "name": "kununu",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Core",
+        "BigQuery"
+      ],
+      "job_postings": [
+        {
+          "title": "Senior Analytics Engineer (12-month maternity cover)",
+          "url": "https://en.devjobs.at/job/c1f269342563866b6e96381f5b36bc3d",
+          "source": "devjobs.at",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "work at scale with BigQuery and dbt Core (CLI) (search-result summary; page returned 403)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Salary range 70-85k gross per year on the ad."
+    },
+    {
+      "id": "volksbank-wien-ag",
+      "name": "VOLKSBANK WIEN AG",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer",
+          "url": "https://en.devjobs.at/job/638ac3c2b41f06e43e0ec9fcf5fb4f49",
+          "source": "devjobs.at",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "modeling, transformation and documentation of data models using dbt as a framework (search-result summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": ""
+    },
+    {
+      "id": "helvetia-versicherungen-ag",
+      "name": "Helvetia Versicherungen AG",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "SQL",
+        "Python"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineer / Analytics Engineer",
+          "url": "https://www.karriere.at/jobs/7840154",
+          "source": "karriere.at",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "Development and operation of modern data solutions with SQL, dbt and Python",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "full-time, remote available"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "URL is a karriere.at listing page where the ad appeared."
+    },
+    {
+      "id": "rewe-group-osterreich",
+      "name": "REWE Group Österreich",
+      "type": "employer",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "nice-to-have",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Junior Data Engineer CRM",
+          "url": "https://mynejo.com/de-at/job/-junior-data-engineer-crm~1ab0bba8-4611-440d-b743-654ccfb4e18b",
+          "source": "mynejo (aggregator, page now 410 gone)",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "hands-on experience with dbt desirable; Snowflake (search-result summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": "hybrid / onsite"
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Also 4 REWE Group Österreich ads on devjobs.at came up for dbt and Snowflake; not opened."
+    },
+    {
+      "id": "siemens-personaldienstleistungen-gmbh",
+      "name": "Siemens Personaldienstleistungen GmbH",
+      "type": "recruiter",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "dbt",
+        "Snowflake"
+      ],
+      "job_postings": [
+        {
+          "title": "Data Engineering Specialist",
+          "url": "https://en.devjobs.at/job/e12b00d88ffff5ea8eb3fbf586ba67b1",
+          "source": "devjobs.at",
+          "linkedin_company_name": null,
+          "dbt_mentioned_in_text": true,
+          "dbt_snippet": "design and development of data pipelines and models using Snowflake and dbt (search-result summary)",
+          "job_poster": null,
+          "posted_date": null,
+          "last_seen": "2026-10-06",
+          "job_family": null,
+          "work_mode": null
+        }
+      ],
+      "other_evidence": [],
+      "people": [],
+      "notes": "Agency ad, Vienna/Linz; end client not named."
+    },
+    {
+      "id": "karriereat",
+      "name": "karriere.at",
+      "type": "employer",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt Core",
+        "Google Cloud",
+        "BigQuery",
+        "Dataplex"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+          "note": "Google Cloud Meetup #27, 21 Nov 2024: data platform on Google Cloud with dbt models and Dataplex governance."
+        }
+      ],
+      "people": [
+        {
+          "id": "tanja-simon",
+          "name": "Tanja Simon",
+          "pronouns": null,
+          "title": "Head of Data Services",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "leadership",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tanja-simon-ts/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "high"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Google Cloud Meetup #27 (Vienna)",
+              "title": "From Ingestion to Insights: Data Lifecycle on the karriere.at Platform",
+              "date": "2024-11-21",
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+              "content_id": "google-cloud-meetup-27-viennafrom-ingestion-to-insights-data",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Spoke on the data lifecycle at karriere.at, using dbt models and Dataplex governance.",
+              "topics": [
+                "data governance",
+                "data engineering",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+              "note": "talk: From Ingestion to Insights: Data Lifecycle on the karriere.at Platform"
+            },
+            {
+              "url": "https://www.linkedin.com/in/tanja-simon-ts/",
+              "note": "linkedin search result: Tanja Simon - karriere.at GmbH; Data & Analytics leader, Vienna, Austria"
+            },
+            {
+              "url": "https://www.linkedin.com/in/tanja-simon-ts/",
+              "note": "location (high): linkedin search result: Tanja Simon - karriere.at GmbH; Data & Analytics leader, Vienna, Austria https://www.linkedin.com/in/tanja-simon-ts/"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "dbt models, governance and reporting on a Google Cloud data platform",
+          "past_chapter_talks": [],
+          "notes": "Speaking at a Vienna event in Nov 2024; employer office in Vienna not verified, so location left unknown. Meetup page lists role as Head of Data Services. | location (high): linkedin search result: Tanja Simon - karriere.at GmbH; Data & Analytics leader, Vienna, Austria https://www.linkedin.com/in/tanja-simon-ts/"
+        }
+      ],
+      "notes": "Linz-based job board; Vienna office not verified."
+    },
+    {
+      "id": "happtiq",
+      "name": "happtiq",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "strong",
+      "stack_signals": [
+        "dbt",
+        "Google Cloud"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "talk",
+          "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+          "note": "Co-organised Google Cloud Meetup #27 in Vienna; consultant spoke on a dbt platform at karriere.at."
+        }
+      ],
+      "people": [
+        {
+          "id": "tin-oroz",
+          "name": "Tin Oroz",
+          "pronouns": null,
+          "title": "Data & AI Consultant",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/tin-oroz/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "high",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "proven_speaker",
+          "sourced_via": [
+            "conference_or_meetup_agenda"
+          ],
+          "mentions_dbt": true,
+          "speaker_evidence": [
+            {
+              "type": "talk",
+              "event": "Google Cloud Meetup #27 (Vienna)",
+              "title": "Building a Modern Data Platform leveraging dbt: From Architecture to Deployment",
+              "date": "2024-11-21",
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+              "content_id": "google-cloud-meetup-27-viennabuilding-a-modern-data-platform",
+              "co_authors": [],
+              "mentions_dbt": true,
+              "description": "Presented karriere.at's data platform architecture and how dbt Core fits in.",
+              "topics": [
+                "dbt best practices",
+                "data warehouse & platforms",
+                "modern data stack"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "direct",
+              "confidence": "high"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+              "note": "talk: Building a Modern Data Platform leveraging dbt: From Architecture to Deployment"
+            },
+            {
+              "url": "https://www.linkedin.com/in/tin-oroz/",
+              "note": "linkedin search result: GDG Cloud Vienna Google Cloud Meetup #27 event page (gdg.community.dev) lists Tin Oroz, Data & AI Consultant, happtiq, with this linkedin link next to his talk"
+            }
+          ],
+          "confidence": "Medium",
+          "internal_vinted": false,
+          "priority_tier": 1,
+          "suggested_talk_angle": "architecture and deployment of a dbt platform on Google Cloud",
+          "past_chapter_talks": [],
+          "notes": "Employer happtiq as listed on the meetup page. Location not verified."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "posedio",
+      "name": "Posedio",
+      "type": "consultancy",
+      "watchlist": true,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "not_confirmed",
+      "dbt_signal": "medium",
+      "stack_signals": [
+        "Google Cloud",
+        "data engineering"
+      ],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://at.linkedin.com/in/kosticn",
+          "note": "search-result snippet of a post on Vienna Data Engineering Meetup #10 credits Posedio colleagues with organising and sponsoring (page not fetched)"
+        },
+        {
+          "type": "talk",
+          "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+          "note": "Co-organised Google Cloud Meetup #27."
+        }
+      ],
+      "people": [
+        {
+          "id": "hannah-ahorner",
+          "name": "Hannah Ahorner",
+          "pronouns": null,
+          "title": "Organiser, Vienna Data Engineering Meetup",
+          "city": "Vienna",
+          "based_in_region": true,
+          "level": "working",
+          "linkedin_urls": [
+            "https://www.linkedin.com/in/hannah-ahorner-508459154/"
+          ],
+          "has_linkedin": true,
+          "linkedin_confidence": "high",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup organiser",
+              "title": "Vienna Data Engineering Meetup organiser",
+              "date": null,
+              "url": "https://at.linkedin.com/in/kosticn",
+              "content_id": "vienna-data-engineering-meetup-organiservienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vienna Data Engineering Meetup organiser",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://at.linkedin.com/in/kosticn",
+              "note": "organiser: Vienna Data Engineering Meetup organiser"
+            },
+            {
+              "url": "https://www.linkedin.com/in/hannah-ahorner-508459154/",
+              "note": "linkedin search result: Hannah Ahorner - Posedio GmbH, Vienna, Austria"
+            },
+            {
+              "url": "https://www.linkedin.com/in/hannah-ahorner-508459154/",
+              "note": "location (high): linkedin search result: Hannah Ahorner - Posedio GmbH, Vienna, Austria https://www.linkedin.com/in/hannah-ahorner-508459154/"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "connect us to local data engineers and speakers",
+          "past_chapter_talks": [],
+          "notes": "Organiser named in a search-result snippet; location and role not confirmed. No LinkedIn lookup done. | location (high): linkedin search result: Hannah Ahorner - Posedio GmbH, Vienna, Austria https://www.linkedin.com/in/hannah-ahorner-508459154/"
+        },
+        {
+          "id": "marianne-rieder",
+          "name": "Marianne Rieder",
+          "pronouns": null,
+          "title": "Organiser, Vienna Data Engineering Meetup",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "other"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "Vienna Data Engineering Meetup organiser",
+              "title": "Vienna Data Engineering Meetup organiser",
+              "date": null,
+              "url": "https://at.linkedin.com/in/kosticn",
+              "content_id": "vienna-data-engineering-meetup-organiservienna-data-engineer",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "Vienna Data Engineering Meetup organiser",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://at.linkedin.com/in/kosticn",
+              "note": "organiser: Vienna Data Engineering Meetup organiser"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "connect us to local data engineers and speakers",
+          "past_chapter_talks": [],
+          "notes": "Organiser named in a search-result snippet; location and role not confirmed. No LinkedIn lookup done."
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "rladies-vienna",
+      "name": "R-Ladies Vienna",
+      "type": "community",
+      "watchlist": false,
+      "excluded_from_outreach": false,
+      "cities": [
+        "Vienna"
+      ],
+      "local_presence": "confirmed",
+      "dbt_signal": "none",
+      "stack_signals": [],
+      "job_postings": [],
+      "other_evidence": [
+        {
+          "type": "other",
+          "url": "https://rladies.org/chapters/austria-vienna",
+          "note": "chapter page; organised by Laura Vana (already on file) and Jenny Fan"
+        }
+      ],
+      "people": [
+        {
+          "id": "jenny-fan",
+          "name": "Jenny Fan",
+          "pronouns": null,
+          "title": "Co-organiser, R-Ladies Vienna",
+          "city": null,
+          "based_in_region": null,
+          "level": "working",
+          "linkedin_urls": [],
+          "has_linkedin": false,
+          "linkedin_confidence": "low",
+          "profile_urls": [],
+          "meetup_fit": {
+            "speaker_potential": "medium",
+            "attendee_potential": "medium"
+          },
+          "lead_type": "no_public_content",
+          "sourced_via": [
+            "women_in_data_community"
+          ],
+          "mentions_dbt": false,
+          "speaker_evidence": [
+            {
+              "type": "organiser",
+              "event": "R-Ladies Vienna chapter organiser",
+              "title": "R-Ladies Vienna chapter organiser",
+              "date": null,
+              "url": "https://rladies.org/chapters/austria-vienna",
+              "content_id": "rladies-vienna-chapter-organiserrladies-vienna-chapter-organ",
+              "co_authors": [],
+              "mentions_dbt": false,
+              "description": "R-Ladies Vienna chapter organiser",
+              "topics": [
+                "community"
+              ],
+              "suggested_talk_angle": null,
+              "url_precision": "overview_page",
+              "confidence": "low"
+            }
+          ],
+          "attendee_signal": null,
+          "evidence": [
+            {
+              "url": "https://rladies.org/chapters/austria-vienna",
+              "note": "organiser: R-Ladies Vienna chapter organiser"
+            }
+          ],
+          "confidence": "Low",
+          "internal_vinted": false,
+          "priority_tier": "connector",
+          "suggested_talk_angle": "connect us to local data engineers and speakers",
+          "past_chapter_talks": [],
+          "notes": "Organiser named in a search-result snippet; location and role not confirmed. No LinkedIn lookup done."
+        }
+      ],
+      "notes": ""
+    }
+  ],
+  "sources": {
+    "chapter_past_events": "https://www.meetup.com/vienna-dbt-meetup/",
+    "past_meetups_derived_from": "enriched/vienna-dbt-meetup.json",
+    "checked": [
+      {
+        "name": "devjobs.at (dbt searches)",
+        "url": "https://en.devjobs.at/jobs/fivetran",
+        "yielded": true,
+        "note": "ads surfaced via search; pages return 403 to fetch"
+      },
+      {
+        "name": "karriere.at",
+        "url": "https://www.karriere.at/jobs/7840154",
+        "yielded": true,
+        "note": "Helvetia ad with dbt in the text"
+      },
+      {
+        "name": "Google Cloud Meetup #27 page",
+        "url": "https://gdg.community.dev/events/details/google-gdg-cloud-vienna-presents-google-cloud-meetup-27/",
+        "yielded": true,
+        "note": "two dbt-related talks, karriere.at platform"
+      },
+      {
+        "name": "Vienna Data Engineering Meetup, 2nd event",
+        "url": "https://www.meetup.com/vienna-data-engineering-meetup/events/292867396/",
+        "yielded": false,
+        "note": "May 2023, older than 2 years; speakers already on file or outside window"
+      },
+      {
+        "name": "University of Vienna Women in Science 2024",
+        "url": "https://datascience.univie.ac.at/events/women-in-science-2024",
+        "yielded": false,
+        "note": "researcher profiles only, no dbt relevance"
+      },
+      {
+        "name": "wearedevelopers Vienna meetup list",
+        "url": "https://www.wearedevelopers.com/magazine/223-7-great-tech-meetups-in-vienna",
+        "yielded": true,
+        "note": "meetup group urls"
+      },
+      {
+        "name": "R-Ladies Vienna",
+        "url": "https://rladies.org/chapters/austria-vienna",
+        "yielded": true,
+        "note": "organiser names"
+      }
+    ]
+  },
+  "past_meetups": [
+    {
+      "name": "First Vienna dbt Meetup! (in-person)",
+      "date": "2025-04-03",
+      "venue": "MeisterLabs, Mariahilferstraße 97/4, Vienna",
+      "url": "https://www.meetup.com/vienna-dbt-meetup/events/306678132/",
+      "organisers": [
+        "Sean McIntyre",
+        "Sandra Merkel",
+        "Johannes Schauer"
+      ],
+      "attendees": 33,
+      "talks": [
+        {
+          "speaker": "Felix Behrendt",
+          "company": "Consultant, b.telligent",
+          "title": "More Than Just Jinja: dbt Macros",
+          "topics": [
+            "developer workflow"
+          ]
+        },
+        {
+          "speaker": "Sean McIntyre",
+          "company": "Senior Solution Architect, dbt Labs",
+          "title": "What's New from dbt",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Sandra Merkel",
+          "company": "Analytics Director, MeisterLabs",
+          "title": "Meister's Journey to Self-Serve Analytics",
+          "topics": [
+            "business intelligence"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Second Vienna dbt Meetup with dbt Labs CTO: FabCon Edition (in person)",
+      "date": "2025-09-16",
+      "venue": "Sclable Business Solutions GmbH, Marc-Aurel-Straße 10-12, Vienna",
+      "url": "https://www.meetup.com/vienna-dbt-meetup/events/310578496/",
+      "organisers": [
+        "Sean McIntyre",
+        "Johannes Schauer",
+        "katia.bore"
+      ],
+      "attendees": 45,
+      "talks": [
+        {
+          "speaker": "Martin Finn-Sell",
+          "company": "Senior Data Scientist, GoStudent",
+          "title": "Moving from Self-Managed dbt to dbt Cloud",
+          "topics": [
+            "dbt product features",
+            "dbt migration & adoption"
+          ]
+        },
+        {
+          "speaker": "Mark Porter",
+          "company": "CTO, dbt Labs",
+          "title": "What's New from dbt",
+          "topics": [
+            "dbt product updates"
+          ]
+        },
+        {
+          "speaker": "Sümeyye Suri, Manfred Krieger",
+          "company": "Data Analyst, sclable; DevOps Specialist, sclable",
+          "title": "Building Our Internal Data Ecosystem: From Raw Data to Business Insights",
+          "topics": [
+            "business intelligence"
+          ]
+        },
+        {
+          "speaker": "Charles Webb",
+          "company": "Principal PM Manager, Microsoft Fabric",
+          "title": "Real-World Success & Roadmap Ahead: Accelerating Analytics with Microsoft Fabric + dbt",
+          "topics": [
+            "dbt product updates"
+          ]
+        }
+      ]
+    }
+  ],
+  "community_channels": [
+    {
+      "name": "Vienna dbt Meetup",
+      "url": "https://www.meetup.com/vienna-dbt-meetup/",
+      "note": "the chapter itself"
+    },
+    {
+      "name": "Data Community Austria",
+      "url": "https://www.meetup.com/datacommunityat/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Data, Cloud and AI in Vienna",
+      "url": "https://www.meetup.com/Big-Data-Developers-in-Vienna/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "R-Ladies+ Vienna",
+      "url": "https://www.meetup.com/rladies-vienna/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "The Vienna Data Strategy Forum",
+      "url": "https://www.meetup.com/the-vienna-data-strategy-forum/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Vienna Data Engineering Meetup",
+      "url": "https://www.meetup.com/vienna-data-engineering-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Austria Snowflake Data Cloud Group",
+      "url": "https://www.meetup.com/austria-snowflake-data-cloud-group/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Vienna Data Science Group Meetup",
+      "url": "https://www.meetup.com/vienna-data-science-group-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Analytics Pioneers Wien",
+      "url": "https://www.meetup.com/Analytics-Pioneers-Wien/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "DACH Excel & Power BI Meetup",
+      "url": "https://www.meetup.com/dach-excel-powerbi-meetup/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "Microsoft Fabric User Group Austria",
+      "url": "https://www.meetup.com/microsoft-fabric-user-group-austria/",
+      "note": "local data group found by groupSearch"
+    },
+    {
+      "name": "GDG Cloud Vienna",
+      "url": "https://gdg.community.dev/gdg-cloud-vienna",
+      "note": "Google Cloud meetups co-run by happtiq and Posedio"
+    },
+    {
+      "name": "R-Ladies Vienna",
+      "url": "https://rladies.org/chapters/austria-vienna",
+      "note": "R community, women in data"
+    },
+    {
+      "name": "PyLadies Vienna",
+      "url": "https://www.meetup.com/pyladies-vienna",
+      "note": "Python mentorship for women; no dbt link seen"
+    }
+  ]
+}
