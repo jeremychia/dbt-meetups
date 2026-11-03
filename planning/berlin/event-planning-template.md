@@ -124,6 +124,7 @@
 ## Resources
 - Slides template: [link] (make a fresh copy per event — do not copy past slides)
 - Running-a-meetup reference guide: [link]
+- Hosting at your own company (approvals, room, building entry, IT, food, paying back costs): [hosting-at-your-company.md](../hosting-at-your-company.md)
 
 ---
 
